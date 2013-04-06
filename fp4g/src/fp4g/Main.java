@@ -5,13 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import fp4g.data.Define;
-import fp4g.data.Scope;
+import fp4g.data.IScope;
+import fp4g.data.MapScope;
 import fp4g.data.Type;
 import fp4g.generator.Generator;
 import fp4g.generator.Utils;
 import fp4g.parser.FastPrototyping4Game;
 import fp4g.parser.ParseException;
-
+//TODO [egyware] Es un todo global, pero cambiar en todas parte que se use mapScope por IScope
 public class Main {
 	private static String outDirectory = ".";
 	private static String inputFile;
@@ -41,11 +42,11 @@ public class Main {
 		      System.out.println(String.format("Reading from %s",inputFile));      
 		      try
 		      {
-		        Scope global = new Scope();
-		        global.set("RenderSystem" ,new Define("GdxRenderManager",Type.SYSTEM,new Scope(),1));
-		        global.set("EntitySystem" ,new Define("EntityManager"   ,Type.SYSTEM,new Scope(),2));
-		        global.set("SoundSystem"  ,new Define("SoundManager"    ,Type.SYSTEM,new Scope(),3));
-		        global.set("PhysicsSystem",new Define("PhysicsManager"  ,Type.SYSTEM,new Scope(),4));
+		        MapScope global = new MapScope();
+		        global.set("RenderSystem" ,new Define("GdxRenderManager",Type.SYSTEM,new MapScope(),1));
+		        global.set("EntitySystem" ,new Define("EntityManager"   ,Type.SYSTEM,new MapScope(),2));
+		        global.set("SoundSystem"  ,new Define("SoundManager"    ,Type.SYSTEM,new MapScope(),3));
+		        global.set("PhysicsSystem",new Define("PhysicsManager"  ,Type.SYSTEM,new MapScope(),4));
 		        	
 	
 		        global.set("name","GameApp");
@@ -64,12 +65,12 @@ public class Main {
 		        	};	        
 		        for(String c[]:components)
 		        {
-		        	global.set(c[0],new Define(c[0],Type.BEHAVIOR,new Scope()));
+		        	global.set(c[0],new Define(c[0],Type.BEHAVIOR,new MapScope()));
 		        	Utils.setFamilyComponents(c[0],c[1]);
 		        }
 		        
 		        System.out.println("Parsing ...");
-		        Scope game = parser.game(global); 
+		        IScope game = parser.game(global); 
 		        System.out.println("...Ok!");
 		        Generator gen = new Generator(game);
 		        System.out.println("Generating...");

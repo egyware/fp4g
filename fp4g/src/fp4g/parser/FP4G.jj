@@ -5,6 +5,10 @@
  }PARSER_BEGIN(FastPrototyping4Game)package fp4g.parser;
 import java.util.LinkedList;
 import fp4g.data.*;
+import static fp4g.Log.ErrType;
+import static fp4g.Log.WarnType;
+import static fp4g.Log.InfoType;
+import static fp4g.Log.Show;
 
 public class FastPrototyping4Game{   
  
@@ -76,38 +80,38 @@ TOKEN: /* Identificador */
 }
 
 
-Scope game(Scope init_value) :
+IScope game(IScope init_value) :
 {
-  Scope object;}
+  IScope object;}
 {
   < DEFINE > < GAME > object = prototype_object_set(init_value) < EOF >
   { return object;}}
 
-Scope prototype_object_set(Scope init_value) :
+IScope prototype_object_set(IScope init_value) :
 {
   	int line = 0; 	
 }
 {
   < ABRE_COR > values(init_value) <CIERRA_COR >
   {
-    init_value.setLine(line);
+    //init_value.setLine(line);
     return init_value;
   } 
 }
 
-Scope prototype_object(Scope parent) :
+IScope prototype_object(IScope parent) :
 {  	
-  	Scope scope = new Scope(parent);
+  	IScope scope = new MapScope(parent);
   	int line = 0;}
 {
   line = < ABRE_COR >.beginLine values(scope) <CIERRA_COR >
   {
-     scope.setLine(line);
+     //scope.setLine(line);
      return scope;
   } 
 }
 
-void value(Scope local):
+void value(IScope local):
 {
   String key;
   Object value;  
@@ -122,27 +126,27 @@ void value(Scope local):
 		
 }
 
-void  inline_prototype_object(Scope local):
+void  inline_prototype_object(IScope local):
 {
   String key;  
-  Scope inline;
-  Scope last;
+  IScope inline;
+  IScope last;
 }
 {
   	key = < IDENTIFIER >.image  	{
   	  //trata de acceder a una instancia local, y si no existe la crea. La idea es crear un objeto rapidamente
-  	  inline = (Scope)local.localGet(key);
+  	  inline = (IScope)local.localGet(key);
   	  if(inline == null) //si no existe, lo creo de inmediato
-  	  {		inline = new Scope(local);
+  	  {		inline = new MapScope(local);
 		local.set(key,inline);
 		key = null;		
   	  }
   	  last = inline;  	}
   	(  	  <DOT>	key = <IDENTIFIER >.image
   	  {
-  	    Scope c = (Scope)local.localGet(key);
+  	    IScope c = (IScope)local.localGet(key);
   	    if(c == null)
-  	    {  	      c = new Scope(last);		  last.set(key,c);
+  	    {  	      c = new MapScope(last);		  last.set(key,c);
 		  key = null;		  
 		}
 		last = c;		
@@ -150,32 +154,42 @@ void  inline_prototype_object(Scope local):
   	)*
   	< EQUAL > prototype_object_set(last)   }
 
-void start(Scope local):
+void start(IScope local):
 {
   String stateGame;
   int line = 0;}
 {	line = < START >.beginLine stateGame = <IDENTIFIER >.image
 	{
 	  Object value = local.get(stateGame);
-	  if(value != null && value instanceof Define)
-	  {	      Define startState = (Define)value; 
-		  Start start = Start.Set(startState);		  
-		  if(start != null)
-		  {
-		    start.setLine(line);			local.add(start);			
-		  }
-		  else
-		  {
-		     //TODO lanzar un error acá
-		  }		  	  		}
+	  if(value != null)
+	  {
+	    Start start = null;  	  	if(value instanceof Define)
+	  	{	      Define startState = (Define)value; 
+		  start = Start.Set(startState);		}
+		else if(value instanceof Add)
+		{
+		  Add startCustomState = (Add)value;
+		  start = Start.Set(startCustomState); 		}
 		else
 	 	{
-			 //TODO lanzar un error acá
+	 	  	//No se esperaba esto acá			 
+			 Show(ErrType.ExpectedAddDefineStart,line);
 	 	}
+	 	if(start != null)
+		{
+		   start.setLine(line);
+		   local.add(start);			
+		}
+		else
+		{
+		  //No se esperaba esto acá
+		   Show(ErrType.NotExpectedType,line);
+		}
 	 }	 
-}
+	}
+}  
 
-Function function(Scope local):
+Function function(IScope local):
 {
   Object args[] = null;
   String functionName;
@@ -189,7 +203,7 @@ Function function(Scope local):
  	}
  	else
  	{		return f;
- 	}  }}Object[] params(Scope local):
+ 	}  }}Object[] params(IScope local):
 {
   LinkedList<Object > list = new LinkedList<Object >();
 }
@@ -199,7 +213,7 @@ Function function(Scope local):
   }
 }
 
-void param(LinkedList<Object > list, Scope local):
+void param(LinkedList<Object > list, IScope local):
 {
   Object value;}
 {
@@ -207,19 +221,19 @@ void param(LinkedList<Object > list, Scope local):
   {	list.add(value);
   }}
 
-void values(Scope local):
+void values(IScope local):
 { 
 }
 {  
   value(local) [< COMA > values(local)]   
 }
 
-void define(Scope parent):
+void define(IScope parent):
 { 
   String factoryName;
   String basedName = null;
   Type factoryType;
-  Scope local = null;
+  IScope local = null;
   int line = 0;  }
 {
   line = < DEFINE >.beginLine  (
@@ -233,16 +247,17 @@ void define(Scope parent):
   {    	Define.Set(factoryType,factoryName,basedName,parent,local,line); 
   }
 }
-Add add(Scope parent):
+Add add(IScope parent):
 {  
   Type factoryType;
   Token factoryName;
-  Scope local = null;
+  IScope local = null;
   int line = 0;
 }
 {
    line = < ADD >.beginLine 
    (      < SYSTEM > { factoryType =  Type.SYSTEM; }
+     |< STATE >  { factoryType = Type.STATE;  }   
      |< BEHAVIOR > { factoryType =  Type.BEHAVIOR; }
      |< ENTITY > { factoryType =  Type.ENTITY; }
      |< GOAL > { factoryType =  Type.GOAL; }
@@ -254,7 +269,7 @@ Add add(Scope parent):
       return add;
    }}
 
-Object expresion(Scope local):
+Object expresion(IScope local):
 {
   Object value = null;
   Token t;

@@ -2,11 +2,15 @@
 package fp4g.parser;
 import java.util.LinkedList;
 import fp4g.data.*;
+import static fp4g.Log.ErrType;
+import static fp4g.Log.WarnType;
+import static fp4g.Log.InfoType;
+import static fp4g.Log.Show;
 
 public class FastPrototyping4Game implements FastPrototyping4GameConstants {
 
-  final public Scope game(Scope init_value) throws ParseException {
-  Scope object;
+  final public IScope game(IScope init_value) throws ParseException {
+  IScope object;
     jj_consume_token(DEFINE);
     jj_consume_token(GAME);
     object = prototype_object_set(init_value);
@@ -15,28 +19,28 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Scope prototype_object_set(Scope init_value) throws ParseException {
+  final public IScope prototype_object_set(IScope init_value) throws ParseException {
         int line = 0;
     jj_consume_token(ABRE_COR);
     values(init_value);
     jj_consume_token(CIERRA_COR);
-    init_value.setLine(line);
+    //init_value.setLine(line);
     {if (true) return init_value;}
     throw new Error("Missing return statement in function");
   }
 
-  final public Scope prototype_object(Scope parent) throws ParseException {
-        Scope scope = new Scope(parent);
+  final public IScope prototype_object(IScope parent) throws ParseException {
+        IScope scope = new MapScope(parent);
         int line = 0;
     line = jj_consume_token(ABRE_COR).beginLine;
     values(scope);
     jj_consume_token(CIERRA_COR);
-     scope.setLine(line);
+     //scope.setLine(line);
      {if (true) return scope;}
     throw new Error("Missing return statement in function");
   }
 
-  final public void value(Scope local) throws ParseException {
+  final public void value(IScope local) throws ParseException {
   String key;
   Object value;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -74,16 +78,16 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     }
   }
 
-  final public void inline_prototype_object(Scope local) throws ParseException {
+  final public void inline_prototype_object(IScope local) throws ParseException {
   String key;
-  Scope inline;
-  Scope last;
+  IScope inline;
+  IScope last;
     key = jj_consume_token(IDENTIFIER).image;
           //trata de acceder a una instancia local, y si no existe la crea. La idea es crear un objeto rapidamente
-          inline = (Scope)local.localGet(key);
+          inline = (IScope)local.localGet(key);
           if(inline == null) //si no existe, lo creo de inmediato
           {
-                inline = new Scope(local);
+                inline = new MapScope(local);
                 local.set(key,inline);
                 key = null;
           }
@@ -100,10 +104,10 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       }
       jj_consume_token(DOT);
       key = jj_consume_token(IDENTIFIER).image;
-            Scope c = (Scope)local.localGet(key);
+            IScope c = (IScope)local.localGet(key);
             if(c == null)
             {
-              c = new Scope(last);
+              c = new MapScope(last);
                   last.set(key,c);
                   key = null;
                 }
@@ -113,33 +117,44 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     prototype_object_set(last);
   }
 
-  final public void start(Scope local) throws ParseException {
+  final public void start(IScope local) throws ParseException {
   String stateGame;
   int line = 0;
     line = jj_consume_token(START).beginLine;
     stateGame = jj_consume_token(IDENTIFIER).image;
           Object value = local.get(stateGame);
-          if(value != null && value instanceof Define)
+          if(value != null)
           {
+            Start start = null;
+                if(value instanceof Define)
+                {
               Define startState = (Define)value;
-                  Start start = Start.Set(startState);
-                  if(start != null)
-                  {
-                    start.setLine(line);
-                        local.add(start);
-                  }
-                  else
-                  {
-                     //TODO lanzar un error acá
-                  }
+                  start = Start.Set(startState);
+                }
+                else if(value instanceof Add)
+                {
+                  Add startCustomState = (Add)value;
+                  start = Start.Set(startCustomState);
                 }
                 else
                 {
-                         //TODO lanzar un error acá
+                        //No se esperaba esto acá			 
+                         Show(ErrType.ExpectedAddDefineStart,line);
                 }
+                if(start != null)
+                {
+                   start.setLine(line);
+                   local.add(start);
+                }
+                else
+                {
+                  //No se esperaba esto acá
+                   Show(ErrType.NotExpectedType,line);
+                }
+         }
   }
 
-  final public Function function(Scope local) throws ParseException {
+  final public Function function(IScope local) throws ParseException {
   Object args[] = null;
   String functionName;
     functionName = jj_consume_token(IDENTIFIER).image;
@@ -172,7 +187,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Object[] params(Scope local) throws ParseException {
+  final public Object[] params(IScope local) throws ParseException {
   LinkedList<Object > list = new LinkedList<Object >();
     param(list,local);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -188,13 +203,13 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public void param(LinkedList<Object > list, Scope local) throws ParseException {
+  final public void param(LinkedList<Object > list, IScope local) throws ParseException {
   Object value;
     value = expresion(local);
         list.add(value);
   }
 
-  final public void values(Scope local) throws ParseException {
+  final public void values(IScope local) throws ParseException {
     value(local);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case COMA:
@@ -207,11 +222,11 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     }
   }
 
-  final public void define(Scope parent) throws ParseException {
+  final public void define(IScope parent) throws ParseException {
   String factoryName;
   String basedName = null;
   Type factoryType;
-  Scope local = null;
+  IScope local = null;
   int line = 0;
     line = jj_consume_token(DEFINE).beginLine;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -254,16 +269,20 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
         Define.Set(factoryType,factoryName,basedName,parent,local,line);
   }
 
-  final public Add add(Scope parent) throws ParseException {
+  final public Add add(IScope parent) throws ParseException {
   Type factoryType;
   Token factoryName;
-  Scope local = null;
+  IScope local = null;
   int line = 0;
     line = jj_consume_token(ADD).beginLine;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case SYSTEM:
       jj_consume_token(SYSTEM);
                    factoryType =  Type.SYSTEM;
+      break;
+    case STATE:
+      jj_consume_token(STATE);
+                   factoryType = Type.STATE;
       break;
     case BEHAVIOR:
       jj_consume_token(BEHAVIOR);
@@ -297,7 +316,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public Object expresion(Scope local) throws ParseException {
+  final public Object expresion(IScope local) throws ParseException {
   Object value = null;
   Token t;
   int line = 0;
@@ -381,6 +400,11 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     return false;
   }
 
+  private boolean jj_3_3() {
+    if (jj_3R_3()) return true;
+    return false;
+  }
+
   private boolean jj_3_2() {
     if (jj_3R_2()) return true;
     return false;
@@ -394,11 +418,6 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       if (jj_3R_4()) { jj_scanpos = xsp; break; }
     }
     if (jj_scan_token(EQUAL)) return true;
-    return false;
-  }
-
-  private boolean jj_3_3() {
-    if (jj_3R_3()) return true;
     return false;
   }
 
@@ -427,7 +446,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x2008400,0x0,0x0,0x4008000,0x40000000,0x40000000,0x43300,0x10000,0x43200,0x4000000,0x0,0x4008000,};
+      jj_la1_0 = new int[] {0x2008400,0x0,0x0,0x4008000,0x40000000,0x40000000,0x43300,0x10000,0x43300,0x4000000,0x0,0x4008000,};
    }
    private static void jj_la1_init_1() {
       jj_la1_1 = new int[] {0x0,0x4000,0x1,0x401e,0x0,0x0,0x0,0x0,0x0,0x0,0x1e,0x4000,};

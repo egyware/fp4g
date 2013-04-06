@@ -3,9 +3,9 @@ package fp4g.generator;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JExpression;
 
-import fp4g.data.Scope;
+import fp4g.data.IScope;
 
 public interface ScopeVisitor
 {
-	public void visitor(JExpression dataVar,JBlock block,Scope scope, String key, Object value);		
+	public void visitor(JExpression dataVar,JBlock block,IScope scope, String key, Object value);		
 }

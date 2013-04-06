@@ -19,18 +19,23 @@ import com.sun.codemodel.JPackage;
 import com.sun.codemodel.JType;
 import com.sun.codemodel.JVar;
 
+import static fp4g.Log.ErrType;
+import static fp4g.Log.WarnType;
+import static fp4g.Log.InfoType;
+import static fp4g.Log.Show;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.Function;
-import fp4g.data.Log;
-import fp4g.data.Scope;
+import fp4g.data.IScope;
+import fp4g.data.MapScope;
 import fp4g.data.Type;
+
 
 public class EntityGenerator {
 	private static JPackage entityPack = null;
 	private final JCodeModel jcm;
 	private final String defineName;
-	private final Scope defineScope;
+	private final IScope defineScope;
 
 	public EntityGenerator(Define define) {
 		jcm = Utils.getJCM();
@@ -77,9 +82,7 @@ public class EntityGenerator {
 			entityVar = createBlock.decl(entityClass, "entity", inv);
 		}
 
-		// Utils.assignScope(entityVar, block, defineScope,
-		// defineCustomAction);
-		for (Entry<String, Object> entry : defineScope.EntrySet()) {
+		for (Entry<String, Object> entry : defineScope.toArray()) {
 			// String key = entry.getKey();
 			Object value = entry.getValue();
 
@@ -88,7 +91,7 @@ public class EntityGenerator {
 				// el objeto field
 				// block.add((JStatement) field.assign(expr));
 				// TODO decidir que hacer con esto
-			} else if (value instanceof Scope) {
+			} else if (value instanceof IScope) {
 				// assignScope(field,block,(Scope)value,action);
 				// TODO decidir que hacer...
 			} else if (value instanceof Function) {
@@ -97,19 +100,19 @@ public class EntityGenerator {
 			} else if (value instanceof Add) {
 				Add add = (Add) value;
 				String addName = add.getName();
-				Scope addScope = add.getScope();
+				IScope addScope = add.getScope();
 				Type addType = add.getType();
 				Define addDefine = (Define) defineScope.get(addName);
 
 				if (addDefine == null) {
-					// TODO [egyware] warning: No se encontró una definición
+					//warning: No se encontró una definición
 					// previa al componente %s, se omitirá y se asumirá que ya
 					// existe
-					// Log.Show(Log.TypeLog.WarningType, 2,add);
+					Show(WarnType.NotFoundDefine,add);
 				}
 				if (addDefine != null && addDefine.getType() != addType) {
 					// No coinciden los tipos
-					Log.Show(Log.TypeLog.ErrorType, 1, add);
+					Show(ErrType.DontMatchTypes, add);
 					continue;
 				}				
 				switch (addType) {

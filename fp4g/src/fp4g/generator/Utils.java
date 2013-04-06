@@ -20,12 +20,13 @@ import com.sun.codemodel.JVar;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.Function;
-import fp4g.data.Scope;
+import fp4g.data.IScope;
+import fp4g.data.MapScope;
 import fp4g.data.Start;
 import fp4g.data.Type;
 import fp4g.data.Value;
 
-//TODO cambiar nombres...
+//TODO [egyware] cambiar nombres...
 public class Utils {
 	public static String gamePackageName = "";
 	public static String componentsPackageName = "com.apollo.components";
@@ -48,10 +49,23 @@ public class Utils {
 			Object b = o2.getValue();
 			Type typeA = null, typeB = null;
 			int vA = -1, vB = -1;
-			int valorA = map.get((a instanceof Function) ? Function.class : a
-					.getClass());
-			int valorB = map.get((b instanceof Function) ? Function.class : b
-					.getClass());
+			
+			int valorA,valorB;
+			{
+				Integer A = map.get((a instanceof Function) ? Function.class : a
+						.getClass());
+				Integer B = map.get((b instanceof Function) ? Function.class : b
+						.getClass());
+				if(A != null)				
+					valorA = A;				
+				else				
+					valorA = 0;
+				if(B != null)				
+					valorB = B;				
+				else				
+					valorB = 0;
+			}
+			
 				
 			if (a instanceof Define) {
 				typeA = ((Define) a).getType();
@@ -117,7 +131,7 @@ public class Utils {
 	private static ScopeVisitor defaultVisitor = new ScopeVisitor() {
 
 		@Override
-		public void visitor(JExpression dataVar, JBlock block, Scope scope,
+		public void visitor(JExpression dataVar, JBlock block, IScope scope,
 				String key, Object value) {
 			JFieldRef field = dataVar.ref(key);
 
@@ -127,8 +141,8 @@ public class Utils {
 			if (expr != null) {
 				// el objeto field
 				block.assign(field, expr);
-			} else if (value instanceof Scope) {
-				assingScope(field, block, (Scope) value, this);
+			} else if (value instanceof IScope) {
+				assingScope(field, block, (MapScope) value, this);
 			} else if (value instanceof Function) {
 				Function f = (Function) value;
 				JExpression expr1 = f.call(null, block, scope);
@@ -152,12 +166,12 @@ public class Utils {
 	}
 
 	public static JExpression addDefClass(JClass dataClass, String name,
-			Scope addScope, JBlock block) {
+			IScope addScope, JBlock block) {
 		return addDefClass(dataClass, name, addScope, block, null);
 	}
 
 	public static JExpression addDefClass(JClass dataClass, String name,
-			Scope addScope, JBlock block, JExpression expr) {
+			IScope addScope, JBlock block, JExpression expr) {
 		JInvocation newInv = JExpr._new(dataClass);
 		if (expr != null) {
 			newInv.arg(expr);
@@ -189,13 +203,13 @@ public class Utils {
 	}
 
 	public static void assingScope(JExpression dataVar, JBlock block,
-			Scope scope) {
+			IScope scope) {
 		assingScope(dataVar, block, scope, defaultVisitor);
 	}
 
 	public static void assingScope(JExpression dataVar, JBlock block,
-			Scope scope, ScopeVisitor visitor) {
-		for (Entry<String, Object> entry : scope.EntrySet()) {
+			IScope scope, ScopeVisitor visitor) {
+		for (Entry<String, Object> entry : scope.toArray()) {
 			String key = entry.getKey();
 			Object value = entry.getValue();
 			visitor.visitor(dataVar, block, scope, key, value);

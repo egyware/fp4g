@@ -2,6 +2,10 @@
 package fp4g.parser;
 import java.util.LinkedList;
 import fp4g.data.*;
+import static fp4g.Log.ErrType;
+import static fp4g.Log.WarnType;
+import static fp4g.Log.InfoType;
+import static fp4g.Log.Show;
 
 /** Token Manager. */
 public class FastPrototyping4GameTokenManager implements FastPrototyping4GameConstants

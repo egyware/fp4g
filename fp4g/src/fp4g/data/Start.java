@@ -1,13 +1,13 @@
 package fp4g.data;
 
 public class Start extends Value{
-	private Define start;
-	private Start(Define _start){
-		super(String.format("Start %s", _start.name));
+	private String start;
+	private Start(String _start){
+		super(String.format("Start %s", _start));
 		start = _start;
 		
 	}
-	public Define getStart()
+	public String getStartName()
 	{
 		return start;
 	}
@@ -15,7 +15,18 @@ public class Start extends Value{
 	{
 		if(define.getType() == Type.STATE)
 		{
-			return new Start(define);
+			return new Start(define.getName());
+		}
+		else
+		{
+			return null;
+		}
+	}
+	public static Start Set(Add add)
+	{
+		if(add.getType() == Type.STATE)
+		{
+			return new Start(add.getName());
 		}
 		else
 		{

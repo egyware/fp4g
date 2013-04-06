@@ -29,12 +29,15 @@ import com.sun.codemodel.JPackage;
 import com.sun.codemodel.JType;
 import com.sun.codemodel.JVar;
 
+import static fp4g.Log.ErrType;
+import static fp4g.Log.WarnType;
+import static fp4g.Log.InfoType;
+import static fp4g.Log.Show;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.Function;
-import fp4g.data.Log;
-import fp4g.data.Log.TypeLog;
-import fp4g.data.Scope;
+import fp4g.data.IScope;
+import fp4g.data.MapScope;
 import fp4g.data.Type;
 
 public class StateGenerator {
@@ -43,8 +46,8 @@ public class StateGenerator {
 	private ScopeVisitor entityVisitor = new ScopeVisitor(){
 
 		@Override
-		public void visitor(JExpression dataVar, JBlock block,Scope scope, String key, Object value) {
-			if(value instanceof Scope) //es otro scope
+		public void visitor(JExpression dataVar, JBlock block,IScope scope, String key, Object value) {
+			if(value instanceof IScope) //es otro scope
 			{	
 				JClass _familyClass    = jcm.ref(String.format("%s.%s",Utils.componentsPackageName,Utils.getFamilyByComponent(key)));
 				JClass _componentClass = jcm.ref(String.format("%s.%s",Utils.componentsPackageName,key));
@@ -53,16 +56,16 @@ public class StateGenerator {
 				{
 					inv = JExpr.cast(_componentClass, inv);
 				}	
-				Scope child = (Scope)value;
+				IScope child = (IScope)value;
 				if(child.size() > 0)
 				{
 					JBlock subBlock = block.block();
 					inv = subBlock.decl(_componentClass, String.format("_%s_component",key), inv);
-					Utils.assingScope(inv,subBlock,(Scope)value);
+					Utils.assingScope(inv,subBlock,(MapScope)value);
 				}
 				else
 				{
-					Utils.assingScope(inv,block,(Scope)value);
+					Utils.assingScope(inv,block,(MapScope)value);
 				}
 								
 			}			
@@ -78,7 +81,7 @@ public class StateGenerator {
 	public JDefinedClass generate() throws JClassAlreadyExistsException, ClassNotFoundException {
 		// sistema a construir
 		String stateName = state.getName();
-		Scope stateScope = state.getScope();
+		IScope stateScope = state.getScope();
 		JPackage gamePack = Utils.getGamePackage();
 		JDefinedClass stateClass = gamePack._class(JMod.PUBLIC|JMod.FINAL, stateName);		
 		stateClass._extends(GameState.class);
@@ -172,7 +175,7 @@ public class StateGenerator {
 				case STATE:
 					// No se esperaba Define State, se ignora, cambie a otro
 					// nivel
-					Log.Show(TypeLog.WarningType, 1,define);
+					Show(WarnType.ExpectedDefine,define);
 					break;
 				default:
 					break;
@@ -187,11 +190,11 @@ public class StateGenerator {
 				Add add = (Add) value;
 				Type addType = add.getType();
 				String addName = add.getName();
-				Scope addScope = add.getScope();
+				IScope addScope = add.getScope();
 				Define define = (Define) stateScope.get(addName);
 				if (define == null) {
 					// no se ha encontrado la variable correcta
-					Log.Show(Log.TypeLog.ErrorType, 2,add);
+					Show(ErrType.NotFoundVar,add);
 					break;
 				}
 
@@ -274,7 +277,7 @@ public class StateGenerator {
 						if (world == null) {
 							// no se ha definido el sistema de entidades en este
 							// state
-							Log.Show(Log.TypeLog.ErrorType, 3,add);
+							Show(ErrType.NotFoundEntitySystem,add);
 							break;
 						}
 						Class<?> entity = Entity.class;
@@ -300,7 +303,7 @@ public class StateGenerator {
 					}
 				} else {
 					// No coinciden los tipos
-					Log.Show(Log.TypeLog.ErrorType, 1,add);
+					Show(ErrType.DontMatchTypes,add);
 				}
 			} else {
 				// TODO mostrar error....

@@ -59,7 +59,7 @@ public abstract class Function extends Value{
 	 * @param _method
 	 * @return
 	 */
-	public abstract JExpression call(JDefinedClass _class, JBlock block, Scope scope);
+	public abstract JExpression call(JDefinedClass _class, JBlock block, IScope scope);
 	
 	public static Function buildFunction(String functionName,Object args[])
 	{
@@ -99,7 +99,7 @@ public abstract class Function extends Value{
 		}
 
 		@Override
-		public JExpression call(JDefinedClass _class,JBlock block,Scope scope) {
+		public JExpression call(JDefinedClass _class,JBlock block,IScope scope) {
 			try
 			{
 				String gameName = (String) scope.superGet("name"); //try get gameName
@@ -140,7 +140,7 @@ public abstract class Function extends Value{
 		}
 
 		@Override
-		public JExpression call(JDefinedClass _class, JBlock block,	Scope scope) {
+		public JExpression call(JDefinedClass _class, JBlock block,	IScope scope) {
 			try
 			{				
 				JCodeModel jcm = Utils.getJCM();
@@ -192,7 +192,7 @@ public abstract class Function extends Value{
 		}
 
 		@Override
-		public JExpression call(JDefinedClass _class, JBlock block, Scope scope) {
+		public JExpression call(JDefinedClass _class, JBlock block, IScope scope) {
 			try
 			{
 				String gameName = (String) scope.superGet("name"); //try get gameName
@@ -221,7 +221,7 @@ public abstract class Function extends Value{
 		}
 
 		@Override
-		public JExpression call(JDefinedClass _class, JBlock block, Scope scope) {
+		public JExpression call(JDefinedClass _class, JBlock block, IScope scope) {
 			try
 			{
 				String gameName = (String) scope.superGet("name"); //try get gameName
@@ -250,7 +250,7 @@ public abstract class Function extends Value{
 		}
 
 		@Override
-		public JExpression call(JDefinedClass _class, JBlock block, Scope scope) {
+		public JExpression call(JDefinedClass _class, JBlock block, IScope scope) {
 			try
 			{
 				String gameName = (String) scope.superGet("name"); //try get gameName

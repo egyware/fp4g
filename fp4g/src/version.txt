@@ -1,6 +1,12 @@
+:::0.1.10 (prototipo)
++ Permite Estados personalizados (definidos fuera del generador) para usarlos debe usar Add State CustomNameState
 + Se agregaron más funciones getSound,getMusic,getTexture todas variantes de getSprite
-F El generador no puede deducir el orden de los sistemas, se dejo un mensaje para establecerlo manualmente
+F El generador no puede deducir el orden de los sistemas
+C Se realizo un cambio interno para mejorar la forma que se muestran los mensajes de error/advertencia/información
 C Ahora loadState realiza unload en el metodo unload de la clase actual.
+P Hacer que los Managers envien mensajes
+P falta los operadores +-/* etc.. etc..
+P las demas operaciones
 :::0.1.9 (prototipo)
 + Si no se especifica el componente a crear, el generador asume que existe.
 + Ya no depende del proyecto a crear, para detectar los componentes. Sin embargo se pueden agregar componentes inexistentes.

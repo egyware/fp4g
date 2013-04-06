@@ -2,15 +2,15 @@ package fp4g.data;
 
 
 public class Define extends Value implements Cloneable{	
-	private Scope scope;	
+	private IScope scope;	
 	private Type type;
 	
-	public Define(String _name,Type _type,Scope _scope){
+	public Define(String _name,Type _type,IScope _scope){
 		super(_name);
 		scope = _scope;
 		type = _type;
 	}
-	public Define(String _name,Type _type,Scope _scope,int ordinal){
+	public Define(String _name,Type _type,IScope _scope,int ordinal){
 		super(_name,ordinal);
 		scope = _scope;
 		type = _type;
@@ -25,7 +25,7 @@ public class Define extends Value implements Cloneable{
 		return type;
 	}
 	
-	public Scope getScope()
+	public IScope getScope()
 	{
 		return scope;
 	}
@@ -37,7 +37,7 @@ public class Define extends Value implements Cloneable{
 		return clone;		
 	}
 	
-	public static void Set(Type _type,String _name, String _based,Scope _local ,Scope _properties,int line)
+	public static void Set(Type _type,String _name, String _based,IScope _local ,IScope _properties,int line)
 	{	
 		//si está definida, hay que clonar entonces...
 		Define factory;
@@ -64,7 +64,7 @@ public class Define extends Value implements Cloneable{
 				}
 				else
 				{
-					_properties.write(factory.scope);
+					_properties.writeAndOverride(factory.scope);
 				}
 			}
 			catch(ClassCastException e)
@@ -88,7 +88,7 @@ public class Define extends Value implements Cloneable{
 				//establecemos la nueva variable
 				_local.set(_name, factory);
 				//sobreescribimos sus propiedades clonadas				_
-				_properties.write(factory.scope);
+				_properties.writeAndOverride(factory.scope);
 			}
 			catch(ClassCastException e)
 			{

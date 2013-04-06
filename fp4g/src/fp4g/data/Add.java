@@ -8,17 +8,17 @@ package fp4g.data;
  *
  */
 public class Add extends Value{	
-	private Scope scope;	
+	private IScope scope;	
 	private Type type;	
-	public Add(String _name,Type _type, Scope _scope)
+	public Add(String _name,Type _type, IScope _scope)
 	{
 		super(_name);
-		scope = (_scope == null)?new Scope():_scope;
+		scope = (_scope == null)?new MapScope():_scope;
 		type = _type;
 		
 	}
 		
-	public Scope getScope(){
+	public IScope getScope(){
 		return scope;
 	}
 	

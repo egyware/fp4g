@@ -1,8 +1,12 @@
 package fp4g.generator;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Map.Entry;
+
+import com.apollo.managers.GameManager;
 import com.apollo.managers.graphics.Sprite;
 import com.apollo.managers.graphics.SpriteLoader;
-import com.apollo.managers.states.GameManager;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.sun.codemodel.JBlock;
@@ -13,25 +17,27 @@ import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JFieldVar;
-import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JMethod;
+import com.sun.codemodel.JMod;
 import com.sun.codemodel.JPackage;
 import com.sun.codemodel.JType;
+
+import static fp4g.Log.ErrType;
+import static fp4g.Log.WarnType;
+import static fp4g.Log.InfoType;
+import static fp4g.Log.Show;
+import fp4g.data.Add;
 import fp4g.data.Define;
-import fp4g.data.Scope;
+import fp4g.data.IScope;
 import fp4g.data.Start;
 import fp4g.data.Type;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Map.Entry;
 
 public class Generator
 {
   private final JCodeModel jcm = Utils.getJCM();
-  private Scope game;
+  private IScope game;
   
-  public Generator(Scope _game)
+  public Generator(IScope _game)
   {
     this.game = _game;
   } 
@@ -69,9 +75,10 @@ public class Generator
     createBlock.assign(assetManagerVar, JExpr._new(this.jcm.ref(AssetManager.class)));
     createBlock.add(assetManagerVar.invoke("setLoader").arg(this.jcm.ref(Sprite.class).staticRef("class")).arg(JExpr._new(this.jcm.ref(SpriteLoader.class)).arg(fileResolverVar)));
     
-    for (Map.Entry entry : this.game.EntrySet())
+    
+    for (Entry<String, Object> entry : game.toArray())
     {
-      String key = String.format("_%s", new Object[] { entry.getKey() });
+      String key = String.format("_%s", entry.getKey());
       Object value = entry.getValue();
       
       if ((!key.equalsIgnoreCase("_name")) && (!key.equalsIgnoreCase("_width")) && (!key.equalsIgnoreCase("_height")))
@@ -96,10 +103,42 @@ public class Generator
           }
           
         }
+        else if ((value instanceof Add))
+        {
+        	Add add = (Add)value;        	
+			String addName = add.getName();
+			//IScope addScope = add.getScope();
+			Type addType = add.getType();
+			Define addDefine = (Define) game.get(addName);
+			if(addDefine == null)
+			{
+				//no está definido, se asume que existe				
+				Show(WarnType.CustomAddState,add);
+			}
+			else
+			{
+				//No se esperaba esta combinación
+				Show(WarnType.NotExpectedThis,add);
+				Show(WarnType.NotExpectedThis,addDefine);				
+								
+			}
+			switch(addType)
+			{
+			case STATE:
+				JClass state = jcm.ref(String.format("%s.%s",gamePack.name(),addName));				
+				JFieldVar var = gameClass.field(JMod.PRIVATE, state, String.format("_%s",addName));	            
+	            createBlock.assign(var, JExpr._new(state));
+				break;
+				default:
+					Show(ErrType.NotExpectedType,add);					
+			}
+			
+        	
+        }
         else if ((value instanceof Start))
         {
           Start start = (Start)value;
-          createBlock.directStatement(String.format("start(_%s);", new Object[] { start.getStart().getName() }));
+          createBlock.directStatement(String.format("start(_%s);",  start.getStartName()));
         } 
       } 
     } 
