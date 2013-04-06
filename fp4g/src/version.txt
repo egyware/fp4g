@@ -1,0 +1,89 @@
++ Se agregaron más funciones getSound,getMusic,getTexture todas variantes de getSprite
+F El generador no puede deducir el orden de los sistemas, se dejo un mensaje para establecerlo manualmente
+C Ahora loadState realiza unload en el metodo unload de la clase actual.
+:::0.1.9 (prototipo)
++ Si no se especifica el componente a crear, el generador asume que existe.
++ Ya no depende del proyecto a crear, para detectar los componentes. Sin embargo se pueden agregar componentes inexistentes.
+C Algunas clases y variables generadas que pasaron a ser finals con motivos de optimización de lo compilado además que no requieren ser modificadas a lo largo de la ejecución de programa
+B El generador no puede deducir el orden de los sistemas, se dejo un mensaje para establecerlo manualmente
+P Hacer que los Managers envien mensajes
+P falta los operadores +-/* etc.. etc..
+P las demas operaciones
+:::0.1.8 (prototipo)
++ Ahora se puede invocar desde la linea de comandos
+- Se quito de Apollo la posibilidad que un Entity pase de activo/inactivo
+B El generador no puede deducir el orden de los sistemas, se dejo un mensaje para establecerlo manualmente
+P Hacer que los Managers envien mensajes
+P falta los operadores +-/* etc.. etc..
+P las demas operaciones
+:::0.1.7 (prototype)
++ Se agrego la posibilidad de hacer bloques inline, que hace más legible el codigo cuando se desea establecer un valor a algo que tiene una profundidad mayor
+B El generador no puede deducir el orden de los sistemas, se dejo un mensaje para establecerlo manualmente
+P Para el engine, detectar que Entity está activo o nó esto puede ser manual atravez de un mensaje
+P Hacer que los Managers envien mensajes
+P falta los operadores +-/* etc.. etc..
+P las demas operaciones
+:::0.1.6 (prototype)
++ Se pueden modificar los valores publicos de ciertos componentes 
++ Se agregaron funciones, sin embargo estás funcionan como parches al lenguaje (hasta ahora)
++ Al engine, se agrego el Asset Sprite además la funcion que permite cargarlos loadAssets y getSprite
++ Asset Manager agregado y puesto globalmente en la clase <NombreJuego>
+F Se le quito responsabilidades a World(Apollo) para que la actualición de sistemas o managers fuese encargado el GameState
+F Actualmente el generador puede generar las modifaciones que se realizaron para las primeras pruebas
+F Para Apollo se puede establecer externamente un EntityManager
+B El generador no puede deducir el orden de los sistemas, se dejo un mensaje para establecerlo manualmente
+P Para el engine, detectar que Entity está activo o nó esto puede ser manual atravez de un mensaje
+P Hacer que los Managers envien mensajes
+P falta los operadores +-/* etc.. etc..
+P las demas operaciones
+:::0.1.5 (prototype)
++ Se agrego al engine capacidad de leer una animación
+B los Entity por defecto no se actualizan
+B Se probo el prototipo, pero le faltaban cosas por agregar
+B Apollo ya tiene por defecto agregado un EntityManager
+P Para el engine, detectar que Entity está activo o nó esto puede ser manual atravez de un mensaje
+P Hacer que los Managers envien mensajes
+P un Asset Manager
+P falta los operadores +-/* etc.. etc..
+P detectar funciones
+P las demas operaciones
+:::0.1.4 (prototype)
+C Se corrigieron algunos detalles, ya se está generando codigo para los componentes...
+C Se agrego Apollo al proyecto, que tiene un gran de cosas definidas
+P falta los operadores +-/* etc.. etc..
+P detectar funciones
+P las demas operaciones
+:::0.1.3 (prototype)
+C Si no se define nada en Define/Add de un sistema especifico ya no se genera el objeto Def
+C Se dividio la clase Generator, en State y Entity Generator para aumentar la mantención del software
+P falta los operadores +-/* etc.. etc..
+P detectar funciones
+P las demas operaciones
+:::0.1.2 (prototype)
++ Se prototipo mostrar mensajes de errores, sin embargo aún quedan muuchos pendientes...
++ Se orden las definiciones según prioridad
++ Se agrega la funcionalidad ADD/DEFINE ENTITY
+C se cambiaron algunas keywords GAMEOBJECT por ENTITY y COMPONENT por BEHAVIOR
+P falta los operadores +-/* etc.. etc..
+P detectar funciones
+P las demas operaciones
+:::0.1.1 (prototype)
++ START agregado como una nueva sentencia
++ prototipar la generación (ADD SYSTEM/DEFINE STATE/START)
+F Ahora define dejará de ser global a pasar ser local...
+F Bugs corregidos a la hora de sobreescribir el define y el add
+P ordenar los sistemas por orden de prioridad
+P falta los operadores +-/* etc.. etc..
+P detectar funciones
+P las demas operaciones
+:::0.1 (prototype)
++ Objetos prototipos [ values ] funcionado
++ DEFINE GAME [...] funcionando
++ variables funcionando
++ literales bool, int, decimal, string funcionando
++ ADD/DEFINE prototipados, otros por agregar
+P falta los operadores +-/* etc.. etc..
+P detectar funciones
+P las demas operaciones
+P prototipar la generación
+

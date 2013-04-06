@@ -1,0 +1,280 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.17+ wizard for JavaCC 1.5.0+
+ */options{  JDK_VERSION = "1.5";
+  IGNORE_CASE = true;    static = false;
+ }PARSER_BEGIN(FastPrototyping4Game)package fp4g.parser;
+import java.util.LinkedList;
+import fp4g.data.*;
+
+public class FastPrototyping4Game{   
+ 
+}PARSER_END(FastPrototyping4Game)SKIP :{  " "| "\r"| "\t"
+| "\n"
+}
+
+SPECIAL_TOKEN : /* comentarios */
+{
+	<SINGLE_LINE_COMMENT: "//" ( ~["\n","\r"] )* ("\n" | "\r" | "\r\n") >
+|	<MULTI_LINE_COMMENT: "/*" ( ~["*"] | ("*")+ ~["*","/"] )* ("*")+ "/" >
+}
+
+  
+
+TOKEN: /* keywords */
+{
+    < GAME: "GAME" >  
+|   < STATE: "STATE" >
+|   < SYSTEM: "SYSTEM" >
+|   < DEFINE: "DEFINE" >
+|   < MESSAGE: "MESSAGE" >
+|   < BEHAVIOR: "BEHAVIOR" >
+|   < ENTITY: "ENTITY" > 
+
+|   < ON: "ON" >
+|	< ADD: "ADD" >
+|   < BASE: "BASE" >
+|   < SEND: "SEND" >
+|   < GOAL: "GOAL" >
+|   < GROUP: "GROUP" >
+|   < ACCION: "ACCION" >
+| 	< REMOVE: "REMOVE" >
+|   < DEGROUP: "DEGROUP" >
+| 	< SUBSCRIBER: "SUBSCRIBER" >
+| 	< UNSUBSCRIBER: "UNSUBSCRIBER" >
+|	< START: "START" >	
+}
+
+TOKEN: /* Separadores */
+{
+  < ABRE_COR: "[" >
+| < ABRE_PAR: "(" >
+| < CIERRA_COR: "]" >
+| < CIERRA_PAR: ")" >
+| < COMA: "," >
+| < EQUAL: "=" >
+| < DOT: "." >
+}TOKEN : /* Literales */{  < INT_LITERAL : (< DIGIT >)+ >
+| < DECIMAL_LITERAL : (< DIGIT >)*"."(< DIGIT >)+ >
+| < STRING_LITERAL : "\""(~["\""])*"\"" >
+| < BOOL_LITERAL : "true"|"false" > | < #DIGIT : [ "0"-"9" ] >}
+
+TOKEN : /* OPERATORS */
+{
+  < PLUS : "+" >
+| < MINUS : "-" >
+| < MULTIPLY : "*" >
+| < DIVIDE : "/" >
+| < AND : "AND" >
+| < OR : "OR" >
+| < XOR : "XOR" >
+| < NOT : "NOT" >
+}
+
+TOKEN: /* Identificador */
+{
+  	< IDENTIFIER : [ "a"-"z","A"-"Z","_" ]([ "a"-"b","A"-"Z","_","0"-"9" ])* >
+}
+
+
+Scope game(Scope init_value) :
+{
+  Scope object;}
+{
+  < DEFINE > < GAME > object = prototype_object_set(init_value) < EOF >
+  { return object;}}
+
+Scope prototype_object_set(Scope init_value) :
+{
+  	int line = 0; 	
+}
+{
+  < ABRE_COR > values(init_value) <CIERRA_COR >
+  {
+    init_value.setLine(line);
+    return init_value;
+  } 
+}
+
+Scope prototype_object(Scope parent) :
+{  	
+  	Scope scope = new Scope(parent);
+  	int line = 0;}
+{
+  line = < ABRE_COR >.beginLine values(scope) <CIERRA_COR >
+  {
+     scope.setLine(line);
+     return scope;
+  } 
+}
+
+void value(Scope local):
+{
+  String key;
+  Object value;  
+}
+{ 	
+	value = add(local) { local.add(value); }	
+	| define(local)
+	| start(local)
+	| LOOKAHEAD(2) key = < IDENTIFIER >.image < EQUAL > value = expresion(local) { local.set(key,value); }
+	| LOOKAHEAD(2) inline_prototype_object(local) 	 
+	| value = function(local) { local.add(value);	}
+		
+}
+
+void  inline_prototype_object(Scope local):
+{
+  String key;  
+  Scope inline;
+  Scope last;
+}
+{
+  	key = < IDENTIFIER >.image  	{
+  	  //trata de acceder a una instancia local, y si no existe la crea. La idea es crear un objeto rapidamente
+  	  inline = (Scope)local.localGet(key);
+  	  if(inline == null) //si no existe, lo creo de inmediato
+  	  {		inline = new Scope(local);
+		local.set(key,inline);
+		key = null;		
+  	  }
+  	  last = inline;  	}
+  	(  	  <DOT>	key = <IDENTIFIER >.image
+  	  {
+  	    Scope c = (Scope)local.localGet(key);
+  	    if(c == null)
+  	    {  	      c = new Scope(last);		  last.set(key,c);
+		  key = null;		  
+		}
+		last = c;		
+  	  }   		  		
+  	)*
+  	< EQUAL > prototype_object_set(last)   }
+
+void start(Scope local):
+{
+  String stateGame;
+  int line = 0;}
+{	line = < START >.beginLine stateGame = <IDENTIFIER >.image
+	{
+	  Object value = local.get(stateGame);
+	  if(value != null && value instanceof Define)
+	  {	      Define startState = (Define)value; 
+		  Start start = Start.Set(startState);		  
+		  if(start != null)
+		  {
+		    start.setLine(line);			local.add(start);			
+		  }
+		  else
+		  {
+		     //TODO lanzar un error acá
+		  }		  	  		}
+		else
+	 	{
+			 //TODO lanzar un error acá
+	 	}
+	 }	 
+}
+
+Function function(Scope local):
+{
+  Object args[] = null;
+  String functionName;
+}{  
+  functionName = < IDENTIFIER >.image < ABRE_PAR > [args = params(local)]< CIERRA_PAR >
+  {
+ 	Function f = Function.buildFunction(functionName,args);
+ 	if(f == null)
+ 	{		//TODO lanzar un error acá indicando que la funcion descrita no se encontró
+		return null;
+ 	}
+ 	else
+ 	{		return f;
+ 	}  }}Object[] params(Scope local):
+{
+  LinkedList<Object > list = new LinkedList<Object >();
+}
+{
+  param(list,local) [< COMA > params(local)]
+  {	return list.toArray();
+  }
+}
+
+void param(LinkedList<Object > list, Scope local):
+{
+  Object value;}
+{
+  value = expresion(local)
+  {	list.add(value);
+  }}
+
+void values(Scope local):
+{ 
+}
+{  
+  value(local) [< COMA > values(local)]   
+}
+
+void define(Scope parent):
+{ 
+  String factoryName;
+  String basedName = null;
+  Type factoryType;
+  Scope local = null;
+  int line = 0;  }
+{
+  line = < DEFINE >.beginLine  (
+     < STATE  > { factoryType =  Type.STATE;  }      |< SYSTEM > { factoryType =  Type.SYSTEM; }
+    |< BEHAVIOR > { factoryType =  Type.BEHAVIOR; }
+    |< ENTITY > { factoryType =  Type.ENTITY; }
+    |< GOAL > { factoryType =  Type.GOAL;  }
+  )
+  [< BASE > basedName = < IDENTIFIER >.image ]
+  factoryName = < IDENTIFIER >.image  local = prototype_object(parent)
+  {    	Define.Set(factoryType,factoryName,basedName,parent,local,line); 
+  }
+}
+Add add(Scope parent):
+{  
+  Type factoryType;
+  Token factoryName;
+  Scope local = null;
+  int line = 0;
+}
+{
+   line = < ADD >.beginLine 
+   (      < SYSTEM > { factoryType =  Type.SYSTEM; }
+     |< BEHAVIOR > { factoryType =  Type.BEHAVIOR; }
+     |< ENTITY > { factoryType =  Type.ENTITY; }
+     |< GOAL > { factoryType =  Type.GOAL; }
+   )
+   factoryName = < IDENTIFIER > [ local = prototype_object(parent) ]
+   {
+     Add add = new Add(factoryName.image, factoryType,local);
+     add.setLine(line);
+      return add;
+   }}
+
+Object expresion(Scope local):
+{
+  Object value = null;
+  Token t;
+  int line = 0;
+}
+{	
+	(	    t = < INT_LITERAL > { value = Integer.parseInt(t.image);  }
+		| t = < DECIMAL_LITERAL > { value = Double.parseDouble(t.image); }
+		| t = < STRING_LITERAL >	 { value = t.image.substring(1,t.image.length()-1); }			
+		| t = < BOOL_LITERAL > { value = Boolean.parseBoolean(t.image); }
+		| LOOKAHEAD(2) value = function(local)
+		| t = < IDENTIFIER > { value = local.get(t.image); }		   
+		| value = prototype_object(local)
+		| value = add(local)
+			
+	)
+	{
+	  if(value instanceof Value)
+	  {	  	((Value)value).setLine(getToken(0).beginLine);
+	  }
+	  return value;
+	}
+}
