@@ -10,14 +10,16 @@ public class GameManager implements ApplicationListener {
 	private GameState current;
 	private final Array<GameState> states;
 	
+	
+	
 	public GameManager()
 	{
-		states = new Array<GameState>();
+		states = new Array<GameState>();		
 	}
 	
 	public void start(GameState next)
 	{
-		current = states.peek();
+		current = states.size > 0?states.peek():null;
 		if(current != null)
 		{
 			current.exit();
@@ -84,7 +86,7 @@ public class GameManager implements ApplicationListener {
 			current.unloadState();
 			states.pop(); //retiro
 		}		
-		current = states.peek();
+		current = states.size > 0?states.peek():null;
 		if(current != null)
 		{
 			current.resume();
