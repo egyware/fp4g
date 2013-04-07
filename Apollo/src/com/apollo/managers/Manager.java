@@ -9,7 +9,7 @@ import com.apollo.messages.Message;
 import com.apollo.messages.Signal;
 import com.apollo.messages.Slot;
 
-public abstract class Manager implements ISystem{
+public abstract class Manager implements Slot{
 	protected World world;
 		
 	/**
@@ -46,8 +46,7 @@ public abstract class Manager implements ISystem{
 	@Override
 	public void onMessage(Message m) {
 	}
-
-	@Override
+	
 	public <T extends Message> Signal signal(Class<T> clazz) {
 		return Signal.nullSignal;
 	}
