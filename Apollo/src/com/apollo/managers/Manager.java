@@ -9,26 +9,14 @@ import com.apollo.messages.Message;
 import com.apollo.messages.Signal;
 import com.apollo.messages.Slot;
 
-public abstract class Manager implements Slot{
+public abstract class Manager implements ISystem{
 	protected World world;
-	
+		
 	/**
-	 * Permite al Manager recibir un mensaje 
-	 * @param m Mensaje que puede ser procesado por este manager
+	 * Inicializa el Manager
 	 */
-	public void onMessage(Message m)
-	{		
+	public void initialize() {
 	}
-	/**
-	 * Permite obtener la señal según el mensaje a enviar
-	 * @param clazz tipo de la señal
-	 * @return Retorna la señal deseada, sino devuelve nullSignal
-	 */
-	public <T extends Message> Signal signal(Class<T> clazz)
-	{
-		return Signal.nullSignal;
-	}
-	
 	
 	public void added(Entity e) {		
 	}
@@ -37,9 +25,6 @@ public abstract class Manager implements Slot{
 	}
 
 	public void update(float delta) {		
-	}
-
-	public void initialize() {
 	}
 
 	public void setWorld(World world) {
@@ -57,5 +42,13 @@ public abstract class Manager implements Slot{
 			ManagerInjector.injectorManager.inject(this, fields[i]);
 		}
 	}
+	
+	@Override
+	public void onMessage(Message m) {
+	}
 
+	@Override
+	public <T extends Message> Signal signal(Class<T> clazz) {
+		return Signal.nullSignal;
+	}
 }

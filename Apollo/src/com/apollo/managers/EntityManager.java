@@ -5,13 +5,15 @@ import java.util.Map;
 
 import com.apollo.Component;
 import com.apollo.Entity;
+import com.apollo.messages.CreateEntityMessage;
+import com.apollo.messages.Message;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
 public class EntityManager extends Manager {
 	private Bag<Entity> entities;
 	private Map<Class<? extends Component>, Bag<Entity>> entitiesByComponentType;
-
+	
 	public EntityManager() {
 		entities = new Bag<Entity>();
 		entitiesByComponentType = new HashMap<Class<? extends Component>, Bag<Entity>>();
@@ -74,6 +76,18 @@ public class EntityManager extends Manager {
 			Entity entity = entities.get(i);
 			entity.update(delta);
 		}
+	}
+	
+	public void onMessage(Message m)
+	{
+		if(m instanceof CreateEntityMessage)
+		{
+			CreateEntityMessage cem = (CreateEntityMessage)m;
+			Entity novo = world.createEntity(cem.name);
+			world.addEntity(novo);
+			cem.entity = novo;
+		}
+		//TODO [egyware] ignorar los demás
 	}
 
 }

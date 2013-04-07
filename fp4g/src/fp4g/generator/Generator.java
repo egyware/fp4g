@@ -99,7 +99,7 @@ public class Generator
             JDefinedClass state = sg.generate();
             JFieldVar var = gameClass.field(4, state, key, expr);
             
-            createBlock.assign(var, JExpr._new(state));
+            createBlock.assign(var, JExpr._new(state).arg(JExpr._this()));
           }
           
         }
@@ -127,7 +127,7 @@ public class Generator
 			case STATE:
 				JClass state = jcm.ref(String.format("%s.%s",gamePack.name(),addName));				
 				JFieldVar var = gameClass.field(JMod.PRIVATE, state, String.format("_%s",addName));	            
-	            createBlock.assign(var, JExpr._new(state));
+	            createBlock.assign(var, JExpr._new(state).arg(JExpr._this()));
 				break;
 				default:
 					Show(ErrType.NotExpectedType,add);					

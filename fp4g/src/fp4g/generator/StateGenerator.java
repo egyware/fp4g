@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import com.apollo.Entity;
 import com.apollo.World;
 import com.apollo.managers.EntityManager;
+import com.apollo.managers.GameManager;
 import com.apollo.managers.GameState;
 import com.apollo.managers.GdxRenderManager;
 import com.apollo.managers.PhysicsManager;
@@ -95,7 +96,7 @@ public class StateGenerator {
 		JVar delta = update.param(jcm.FLOAT, "delta");
 		update.annotate(Override.class);
 		
-		JFieldVar world = stateClass.field(JMod.PUBLIC, World.class, "world");		
+		JFieldVar world = stateClass.field(JMod.PRIVATE, World.class, "world");		
 		JInvocation updateWorld = world.invoke("update").arg(delta);		
 		{
 			JBlock block = update.body();
@@ -110,7 +111,8 @@ public class StateGenerator {
 		
 		
 		JMethod constructor = stateClass.constructor(JMod.PUBLIC);
-		constructor.body().assign(world, JExpr._new(world.type()));
+		JVar gameManagerVar = constructor.param(GameManager.class, "gameManager");
+		constructor.body().assign(world, JExpr._new(world.type()).arg(gameManagerVar));
 		
 
 //		JMethod resize = stateClass.method(JMod.PRIVATE, jcm.VOID, "resize");

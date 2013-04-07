@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.apollo.managers.EntityManager;
+import com.apollo.managers.GameManager;
 import com.apollo.managers.Manager;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
@@ -13,6 +14,7 @@ public class World {
 	public static boolean DEBUG;
 	
 	private EntityManager entityManager;
+	private final GameManager gameManager;
 
 	private Bag<Entity> added;
 	private Bag<Manager> addedManagers;
@@ -23,8 +25,9 @@ public class World {
 	
 	private Map<String,EntityBuilder> entityBuildersByType;
 
-	public World() {
+	public World(GameManager game) {
 		entityManager = new EntityManager();
+		gameManager = game;
 		
 		added = new Bag<Entity>();
 		addedManagers = new Bag<Manager>();
@@ -39,6 +42,11 @@ public class World {
 
 	public EntityManager getEntityManager() {
 		return entityManager;
+	}
+	
+	public GameManager getGameManager()
+	{
+		return gameManager;
 	}
 	
 	public void addEntity(Entity e) {
