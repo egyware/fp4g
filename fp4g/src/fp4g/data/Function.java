@@ -21,6 +21,9 @@ import com.sun.codemodel.JPackage;
 import com.sun.codemodel.JType;
 
 import fp4g.generator.Utils;
+import fp4g.Log;
+import static fp4g.Log.Show;
+
 
 
 /**
@@ -100,9 +103,10 @@ public abstract class Function extends Value{
 
 		@Override
 		public JExpression call(JDefinedClass _class,JBlock block,IScope scope) {
+			Object value =  scope.superGet("name");
 			try
 			{
-				String gameName = (String) scope.superGet("name"); //try get gameName
+				String gameName = (String)value; //try get gameName
 				JPackage _pack = Utils.getGamePackage();					
 				JDefinedClass _game = _pack._getClass(gameName);
 				
@@ -111,8 +115,9 @@ public abstract class Function extends Value{
 				return expr;			
 			}
 			catch(ClassCastException ex)
-			{				
-				//TODO lanzar error del generador
+			{	
+				Show(Log.ErrType.CannotCastVar,this);
+				Show(Log.ErrType.CannotCastVar,value);				
 				ex.printStackTrace();
 			}			
 			return null;			
@@ -141,12 +146,13 @@ public abstract class Function extends Value{
 
 		@Override
 		public JExpression call(JDefinedClass _class, JBlock block,	IScope scope) {
+			Object value = scope.superGet("name");
 			try
 			{				
 				JCodeModel jcm = Utils.getJCM();
 				JMethod load = _class.getMethod("load",_void);
 				block = load.body();
-				String gameName = (String)scope.superGet("name");
+				String gameName = (String)value;
 				JPackage _pack = Utils.getGamePackage();					
 				JDefinedClass _game = _pack._getClass(gameName);
 				
@@ -154,33 +160,34 @@ public abstract class Function extends Value{
 				{
 					block.add(_game.staticInvoke("loadAsset").arg(entry.getKey()).arg(jcm.ref(entry.getValue()).staticRef("class")));
 				}
-				JBlock disposeMethod = searchDispose(_class);
-				for(Entry<String, Class<?>> entry: assets.entrySet())
-				{
-					disposeMethod.add(_game.staticInvoke("unloadAsset").arg(entry.getKey()));
-				}
+//				JBlock disposeMethod = searchDispose(_class);
+//				for(Entry<String, Class<?>> entry: assets.entrySet())
+//				{
+//					disposeMethod.add(_game.staticInvoke("unloadAsset").arg(entry.getKey()));
+//				}
 				block.staticInvoke(_game, "loadAssets");
 				
 			}catch(ClassCastException ex)
 			{
-				//TODO lanzar error del generador	
-				ex.printStackTrace();
+				Show(Log.ErrType.ErrorCallFunction,this);
+				Show(Log.ErrType.CannotCastVar,value);
+				//ex.printStackTrace();
 			}
 			
 			return null;
 		}
 
-		private JBlock searchDispose(JDefinedClass _class) {
-			JBlock block = null;
-			for(final JMethod m:_class.methods())
-			{
-				if(m.name().equalsIgnoreCase("unload"))
-				{
-					block = m.body();
-				}
-			}
-			return block;
-		}
+//		private JBlock searchDispose(JDefinedClass _class) {
+//			JBlock block = null;
+//			for(final JMethod m:_class.methods())
+//			{
+//				if(m.name().equalsIgnoreCase("unload"))
+//				{
+//					block = m.body();
+//				}
+//			}
+//			return block;
+//		}
 		
 	}
 	private static class GetSound extends Function
@@ -193,9 +200,10 @@ public abstract class Function extends Value{
 
 		@Override
 		public JExpression call(JDefinedClass _class, JBlock block, IScope scope) {
+			Object value = scope.superGet("name");
 			try
 			{
-				String gameName = (String) scope.superGet("name"); //try get gameName
+				String gameName = (String) value; //try get gameName
 				JPackage _pack = Utils.getGamePackage();					
 				JDefinedClass _game = _pack._getClass(gameName);
 				
@@ -204,9 +212,11 @@ public abstract class Function extends Value{
 				return expr;			
 			}
 			catch(ClassCastException ex)
-			{				
-				//TODO lanzar error del generador
-				ex.printStackTrace();
+			{	
+				Show(Log.ErrType.ErrorCallFunction,this);
+				Show(Log.ErrType.CannotCastVar,value);
+				
+				//ex.printStackTrace();
 			}			
 			return null;
 		}
@@ -222,9 +232,10 @@ public abstract class Function extends Value{
 
 		@Override
 		public JExpression call(JDefinedClass _class, JBlock block, IScope scope) {
+			Object value = scope.superGet("name");
 			try
 			{
-				String gameName = (String) scope.superGet("name"); //try get gameName
+				String gameName = (String)value; //try get gameName
 				JPackage _pack = Utils.getGamePackage();					
 				JDefinedClass _game = _pack._getClass(gameName);
 				
@@ -234,8 +245,8 @@ public abstract class Function extends Value{
 			}
 			catch(ClassCastException ex)
 			{				
-				//TODO lanzar error del generador
-				ex.printStackTrace();
+				Show(Log.ErrType.ErrorCallFunction,this);
+				Show(Log.ErrType.CannotCastVar,value);
 			}			
 			return null;
 		}
@@ -251,9 +262,10 @@ public abstract class Function extends Value{
 
 		@Override
 		public JExpression call(JDefinedClass _class, JBlock block, IScope scope) {
+			Object value = scope.superGet("name");
 			try
 			{
-				String gameName = (String) scope.superGet("name"); //try get gameName
+				String gameName = (String) value; //try get gameName
 				JPackage _pack = Utils.getGamePackage();					
 				JDefinedClass _game = _pack._getClass(gameName);
 				
@@ -263,8 +275,8 @@ public abstract class Function extends Value{
 			}
 			catch(ClassCastException ex)
 			{				
-				//TODO lanzar error del generador
-				ex.printStackTrace();
+				Show(Log.ErrType.ErrorCallFunction,this);
+				Show(Log.ErrType.CannotCastVar,value);
 			}			
 			return null;
 		}

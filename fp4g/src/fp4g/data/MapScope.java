@@ -20,7 +20,7 @@ import fp4g.generator.Utils;
 public final class MapScope extends Value implements Cloneable, IScope{
 	private HashMap<String, Object> values = new HashMap<String,Object>();
 	private int last_insert = 0;
-	private IScope parent;
+	private final IScope parent;
 	
 	public MapScope()
 	{	

@@ -1,4 +1,4 @@
-package com.apollo.messages;
+package com.apollo;
 
 
 /**

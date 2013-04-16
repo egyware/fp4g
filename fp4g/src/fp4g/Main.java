@@ -12,7 +12,7 @@ import fp4g.generator.Generator;
 import fp4g.generator.Utils;
 import fp4g.parser.FastPrototyping4Game;
 import fp4g.parser.ParseException;
-//TODO [egyware] Es un todo global, pero cambiar en todas parte que se use mapScope por IScope
+
 public class Main {
 	private static String outDirectory = ".";
 	private static String inputFile;

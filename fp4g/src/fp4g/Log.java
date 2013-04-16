@@ -5,23 +5,39 @@ import java.io.PrintStream;
 import fp4g.data.Value;
 
 public class Log {	
-	public static enum WarnType
+	private static interface MessageType
+	{		
+	}
+	public static enum WarnType implements MessageType
 	{
 		ExpectedDefine,
 		NotFoundDefine,
 		CustomAddState, 
 		NotExpectedThis,
 	}
-	public static enum ErrType
+	public static enum ErrType implements MessageType
 	{	
 		DontMatchTypes,
 		NotFoundVar,
 		NotFoundEntitySystem, 
 		NotExpectedType,
-		ExpectedAddDefineStart
+		ExpectedAddDefineStart,
+		CannotCastVar, 
+		ErrorCallFunction
 	}
-	public static enum InfoType
+	public static enum InfoType implements MessageType
 	{	
+	}
+	public static <T extends MessageType> void Show(T type,Object v)
+	{
+		if(v instanceof Value)
+		{
+			Show(type,v);
+		}
+		else
+		{
+			//TODO [egyware] No es un error que tiene asociado una linea
+		}
 	}
 	public static void Show(ErrType type,Value line)
 	{

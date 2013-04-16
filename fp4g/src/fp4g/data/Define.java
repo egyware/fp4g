@@ -1,5 +1,9 @@
 package fp4g.data;
 
+import fp4g.Log;
+import static fp4g.Log.Show;
+
+
 
 public class Define extends Value implements Cloneable{	
 	private IScope scope;	
@@ -76,12 +80,14 @@ public class Define extends Value implements Cloneable{
 		}
 		else
 		{			
+			Object value = _local.get(_based);
 			try
 			{
-				Define f = (Define)_local.get(_based);
+				Define f = (Define)value;
 				if(f.type != _type)
 				{
-					//TODO lanzar otro error acá
+					Show(Log.ErrType.DontMatchTypes,line);
+					Show(Log.ErrType.DontMatchTypes,f);
 				}
 				factory = f.clone();
 				factory.setLine(line);
@@ -92,8 +98,8 @@ public class Define extends Value implements Cloneable{
 			}
 			catch(ClassCastException e)
 			{
-				//TODO error lanzar un error acá
-				e.printStackTrace();
+				Show(Log.ErrType.CannotCastVar,line);
+				Show(Log.ErrType.CannotCastVar,value);				
 				return;
 			} 
 			catch (CloneNotSupportedException e) {
