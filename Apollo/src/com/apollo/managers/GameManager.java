@@ -1,6 +1,6 @@
 package com.apollo.managers;
 
-import com.apollo.messages.Message;
+import com.apollo.Message;
 import com.apollo.messages.Signal;
 import com.apollo.messages.Slot;
 import com.badlogic.gdx.ApplicationListener;

@@ -1,5 +1,7 @@
 package com.apollo.messages;
 
+import com.apollo.Message;
+
 public interface Slot{
 	
 	/**

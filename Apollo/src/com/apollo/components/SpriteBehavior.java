@@ -4,6 +4,7 @@ import com.apollo.Layer;
 import com.apollo.World;
 import com.apollo.components.spatial.Spatial;
 import com.apollo.managers.graphics.Sprite;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -12,7 +13,11 @@ public class SpriteBehavior extends Spatial<SpriteBatch>
 {		
 	public final Vector2 position = new Vector2();
 	private Sprite sequence;
-	private float current_time;
+	private Animation current_sequence;
+	private float current_time;	
+	private String current_id;
+	private boolean flip_x;
+	private boolean flip_y;
 		
 	public static class Def
 	{			
@@ -21,7 +26,8 @@ public class SpriteBehavior extends Spatial<SpriteBatch>
 		public Sprite sequence;
 	}	
 	public SpriteBehavior(World world)
-	{	 
+	{	
+		
 	}
 	public SpriteBehavior(World world,Def def)
 	{	
@@ -29,12 +35,18 @@ public class SpriteBehavior extends Spatial<SpriteBatch>
 		position.set(def.position);
 		if(def.animation == null)
 		{
-			sequence.setFirstAnimation();
+			current_sequence = sequence.getFirstAnimation();
 		}	
 		else
 		{
-			sequence.setAnimation(def.animation);			
+			current_sequence = sequence.getAnimation(def.animation);			
 		}
+	}
+	
+	public void flip(boolean x, boolean y)
+	{
+		flip_x = x;
+		flip_y = y;
 	}
 	
 	@Override
@@ -51,8 +63,36 @@ public class SpriteBehavior extends Spatial<SpriteBatch>
 
 	@Override
 	public void render(SpriteBatch graphicsContext) {
-		TextureRegion current_region = sequence.getKeyFrame(current_time,true);		
+		TextureRegion current_region = sequence.getKeyFrame(current_sequence,current_time,true);
+		if(flip_x && !current_region.isFlipX())
+		{
+			current_region.flip(true, false);			
+		}
+		else if(!flip_x && current_region.isFlipX())			
+		{
+			current_region.flip(true, false);
+		}
+		if(flip_y && !current_region.isFlipY())
+		{
+			current_region.flip(false,true);			
+		}
+		else if(!flip_y && current_region.isFlipY())			
+		{
+			current_region.flip(false,true);
+		}		
 		graphicsContext.draw(current_region, position.x, position.y);		
+	}
+	public void setAnimation(String animation) {
+		if(current_id == null)
+		{
+			current_id = animation;
+			current_sequence = sequence.getAnimation(animation);
+		}
+		else if(!current_id.equals(animation))
+		{
+			current_id = animation;
+			current_sequence = sequence.getAnimation(animation);
+		}
 	}
 	
 

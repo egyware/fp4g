@@ -13,15 +13,12 @@ import com.badlogic.gdx.utils.OrderedMap;
 public class Sprite {
 	public static final int DEFAULT_DURATION = 200; //100 ms
 	private OrderedMap<String,Animation> animations;
-	private Animation current_sequence;
 	
 	private Sprite()
 	{
 		animations = new OrderedMap<String,Animation>();
 	}
 	
-	
-
 	public static Sprite build(FileHandle resolve, TextureAtlas atlas) {
 		String txt = resolve.readString();
 		String animations[] = txt.split("[\n\r]+");
@@ -69,15 +66,8 @@ public class Sprite {
 		return animation;
 	}
 	
-	public void setAnimation(String id) {
-		Animation sequence = animations.get(id);
-		if (sequence != null) {
-			//current_name = id;
-			current_sequence = sequence;
-		}
-	}
-	public void setFirstAnimation() {
-		current_sequence = animations.values().next();		
+	public Animation getFirstAnimation() {
+		return animations.values().next();		
 	}
 	public void addAnimation(String id, Animation s) {
 		animations.put(id, s);
@@ -88,7 +78,7 @@ public class Sprite {
 		return animations.get(id);		
 	}
 
-	public TextureRegion getKeyFrame(float current_time,boolean loop) {		
+	public TextureRegion getKeyFrame(Animation current_sequence,float current_time,boolean loop) {		
 		return current_sequence.getKeyFrame(current_time,loop);
 	}
 

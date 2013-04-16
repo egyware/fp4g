@@ -5,8 +5,8 @@ import java.util.Map;
 
 import com.apollo.Component;
 import com.apollo.Entity;
+import com.apollo.Message;
 import com.apollo.messages.CreateEntityMessage;
-import com.apollo.messages.Message;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 

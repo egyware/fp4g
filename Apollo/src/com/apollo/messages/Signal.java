@@ -1,5 +1,7 @@
 package com.apollo.messages;
 
+import com.apollo.Message;
+
 public interface Signal {
 	//TODO [egyware] agregar excepciones cuando alguien se trate de hacer acciones en esta señal
 	public static final Signal nullSignal = new Signal(){

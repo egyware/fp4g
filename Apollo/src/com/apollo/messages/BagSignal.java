@@ -1,5 +1,6 @@
 package com.apollo.messages;
 
+import com.apollo.Message;
 import com.apollo.utils.Bag;
 
 public final class BagSignal implements Signal {

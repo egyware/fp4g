@@ -3,9 +3,9 @@ package com.apollo.managers;
 import java.lang.reflect.Field;
 
 import com.apollo.Entity;
+import com.apollo.Message;
 import com.apollo.World;
 import com.apollo.annotate.ManagerInjector;
-import com.apollo.messages.Message;
 import com.apollo.messages.Signal;
 import com.apollo.messages.Slot;
 
