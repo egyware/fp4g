@@ -274,8 +274,8 @@ public class StateGenerator {
 						}
 						break;
 					}
-					case ENTITY: {
-						// TODO no se detecta si existe esta factory....
+					case ENTITY: 
+					{						
 						if (world == null) {
 							// no se ha definido el sistema de entidades en este
 							// state

@@ -58,9 +58,9 @@ public class Define extends Value implements Cloneable{
 					case GOAL:
 					case ENTITY:
 						factory = new Define(_name,_type,_properties);
-						factory.setLine(line);
-						//TODO no se definio globalmente
+						factory.setLine(line);						
 						_local.set(_name,factory);
+						//TODO Revisar si algunas cosas deben definirse localmente al estado o al juego
 						break;				
 					default:
 						break;

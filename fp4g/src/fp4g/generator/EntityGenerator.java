@@ -1,5 +1,7 @@
 package fp4g.generator;
 
+import static fp4g.Log.Show;
+
 import java.util.Map.Entry;
 
 import com.apollo.Entity;
@@ -19,15 +21,12 @@ import com.sun.codemodel.JPackage;
 import com.sun.codemodel.JType;
 import com.sun.codemodel.JVar;
 
-import static fp4g.Log.ErrType;
-import static fp4g.Log.WarnType;
-import static fp4g.Log.InfoType;
-import static fp4g.Log.Show;
+import fp4g.Log.ErrType;
+import fp4g.Log.WarnType;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.Function;
 import fp4g.data.IScope;
-import fp4g.data.MapScope;
 import fp4g.data.Type;
 
 
@@ -159,7 +158,8 @@ public class EntityGenerator {
 					// block.add(addManagerInv);
 					break;
 				default:
-					// TODO no se esperaba esta wea...
+					// no se esperaba esta wea...
+					Show(WarnType.NotExpectedThis,add);
 					break;
 
 				}
