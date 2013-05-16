@@ -7,7 +7,7 @@ import java.io.IOException;
 import fp4g.data.Define;
 import fp4g.data.IScope;
 import fp4g.data.MapScope;
-import fp4g.data.Type;
+import fp4g.data.FactoryType;
 import fp4g.generator.Generator;
 import fp4g.generator.Utils;
 import fp4g.parser.FastPrototyping4Game;
@@ -43,10 +43,10 @@ public class Main {
 		      try
 		      {
 		        MapScope global = new MapScope();
-		        global.set("RenderSystem" ,new Define("GdxRenderManager",Type.SYSTEM,new MapScope(),1));
-		        global.set("EntitySystem" ,new Define("EntityManager"   ,Type.SYSTEM,new MapScope(),2));
-		        global.set("SoundSystem"  ,new Define("SoundManager"    ,Type.SYSTEM,new MapScope(),3));
-		        global.set("PhysicsSystem",new Define("PhysicsManager"  ,Type.SYSTEM,new MapScope(),4));
+		        global.set("RenderSystem" ,new Define("GdxRenderManager",FactoryType.SYSTEM,new MapScope(),1));
+		        global.set("EntitySystem" ,new Define("EntityManager"   ,FactoryType.SYSTEM,new MapScope(),2));
+		        global.set("SoundSystem"  ,new Define("SoundManager"    ,FactoryType.SYSTEM,new MapScope(),3));
+		        global.set("PhysicsSystem",new Define("PhysicsManager"  ,FactoryType.SYSTEM,new MapScope(),4));
 		        	
 	
 		        global.set("name","GameApp");
@@ -61,11 +61,11 @@ public class Main {
 		        		{"PlatformBodyBehavior","BodyBehavior"},
 		        		{"CitizenBodyBehavior","BodyBehavior"},		        				        		
 		        		{"PlayerBodyBehavior","BodyBehavior"},
-		        		{"DestroyerBodyBehavior","BodyBehavior"},
+		        		{"DestroyerBodyBehavior","BodyBehavior"},		        		
 		        	};	        
 		        for(String c[]:components)
 		        {
-		        	global.set(c[0],new Define(c[0],Type.BEHAVIOR,new MapScope()));
+		        	global.set(c[0],new Define(c[0],FactoryType.BEHAVIOR,new MapScope()));
 		        	Utils.setFamilyComponents(c[0],c[1]);
 		        }
 		        

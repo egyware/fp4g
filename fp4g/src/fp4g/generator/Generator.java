@@ -30,7 +30,7 @@ import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.IScope;
 import fp4g.data.Start;
-import fp4g.data.Type;
+import fp4g.data.FactoryType;
 
 public class Generator
 {
@@ -92,8 +92,8 @@ public class Generator
         else if ((value instanceof Define))
         {
           Define define = (Define)value;
-          Type stateType = define.getType();
-          if (stateType == Type.STATE)
+          FactoryType stateType = define.getType();
+          if (stateType == FactoryType.STATE)
           {
             StateGenerator sg = new StateGenerator(define);
             JDefinedClass state = sg.generate();
@@ -108,7 +108,7 @@ public class Generator
         	Add add = (Add)value;        	
 			String addName = add.getName();
 			//IScope addScope = add.getScope();
-			Type addType = add.getType();
+			FactoryType addType = add.getType();
 			Define addDefine = (Define) game.get(addName);
 			if(addDefine == null)
 			{
@@ -150,8 +150,11 @@ public class Generator
     if (!outDir.exists())
     {
       outDir.mkdirs();
-    } 
-    this.jcm.build(outDir);
+    }
+    
+    
+    
+    jcm.build(outDir);    
     System.out.println("Generados en " + outDir.getAbsolutePath());
   } 
 } 

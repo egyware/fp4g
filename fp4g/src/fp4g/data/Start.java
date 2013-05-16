@@ -13,7 +13,7 @@ public class Start extends Value{
 	}
 	public static Start Set(Define define)
 	{
-		if(define.getType() == Type.STATE)
+		if(define.getType() == FactoryType.STATE)
 		{
 			return new Start(define.getName());
 		}
@@ -24,7 +24,7 @@ public class Start extends Value{
 	}
 	public static Start Set(Add add)
 	{
-		if(add.getType() == Type.STATE)
+		if(add.getType() == FactoryType.STATE)
 		{
 			return new Start(add.getName());
 		}

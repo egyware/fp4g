@@ -14,4 +14,5 @@ import com.apollo.Message;
 public class CreateEntityMessage implements Message {
 	public String name;
 	public Entity entity;
+	public Object[] args;
 }

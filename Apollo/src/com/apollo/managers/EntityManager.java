@@ -83,7 +83,7 @@ public class EntityManager extends Manager {
 		if(m instanceof CreateEntityMessage)
 		{
 			CreateEntityMessage cem = (CreateEntityMessage)m;
-			Entity novo = world.createEntity(cem.name);
+			Entity novo = world.createEntity(cem.name,cem.args);
 			world.addEntity(novo);
 			cem.entity = novo;
 		}

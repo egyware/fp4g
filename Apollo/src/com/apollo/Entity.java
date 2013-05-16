@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.apollo.messages.Slot;
+import com.apollo.messages.MessageReceiver;
 import com.apollo.utils.Bag;
 
 /**
@@ -16,7 +16,7 @@ public final class Entity {
 	protected World world;
 	private Bag<Component> components;
 	private Map<Class<? extends Component>, Component> componentsByType;
-	private Map<Class<? extends Message>,Bag<Slot>> handlersByEventType;
+	private Map<Class<? extends Message>,Bag<MessageReceiver>> handlersByEventType;
 	private boolean deleted;
 
 	public Entity(World world) {
@@ -103,13 +103,13 @@ public final class Entity {
 	 * @param eventType Class of Message Type
 	 * @param listener
 	 */
-	public <T extends Message> void addEventHandler(Class<T> eventType, Slot listener) {
+	public <T extends Message> void addEventHandler(Class<T> eventType, MessageReceiver listener) {
 		if(handlersByEventType == null)
-			handlersByEventType = new HashMap<Class<? extends Message>,Bag<Slot>>();
+			handlersByEventType = new HashMap<Class<? extends Message>,Bag<MessageReceiver>>();
 		
-		Bag<Slot> listeners = handlersByEventType.get(eventType);
+		Bag<MessageReceiver> listeners = handlersByEventType.get(eventType);
 		if(listeners == null) {
-			listeners = new Bag<Slot>();
+			listeners = new Bag<MessageReceiver>();
 			handlersByEventType.put(eventType,listeners);
 		}
 		listeners.add(listener);
@@ -122,17 +122,17 @@ public final class Entity {
 	 */	
 	public <T extends Message> void fireEvent(T eventType) {
 		if(handlersByEventType != null) {
-			Bag<Slot> handlers = handlersByEventType.get(eventType.getClass());
+			Bag<MessageReceiver> handlers = handlersByEventType.get(eventType.getClass());
 			if(handlers != null) {
 				for(int i = 0; handlers.size() > i; i++) {					
-					Slot handler = handlers.get(i);
+					MessageReceiver handler = handlers.get(i);
 					handler.onMessage(eventType);										
 				}
 			}
 		}
 	}
 	
-	public Map<Class<? extends Message>, Bag<Slot>> getAllEventHandlers() {
+	public Map<Class<? extends Message>, Bag<MessageReceiver>> getAllEventHandlers() {
 		return handlersByEventType;
 	}
 	

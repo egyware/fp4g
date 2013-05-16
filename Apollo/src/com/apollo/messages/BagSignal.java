@@ -3,11 +3,11 @@ package com.apollo.messages;
 import com.apollo.Message;
 import com.apollo.utils.Bag;
 
-public final class BagSignal implements Signal {
-	private final Bag<Slot> receivers;
+public final class BagSignal implements MessageSender {
+	private final Bag<MessageReceiver> receivers;
 	public BagSignal()
 	{
-		receivers = new Bag<Slot>();
+		receivers = new Bag<MessageReceiver>();
 	}
 	/* (non-Javadoc)
 	 * @see com.apollo.ISignal#send(T)
@@ -15,7 +15,7 @@ public final class BagSignal implements Signal {
 	@Override
 	public void send(Message message)
 	{		
-		for(Slot slot: receivers)
+		for(MessageReceiver slot: receivers)
 		{
 			slot.onMessage(message);
 		}	
@@ -24,7 +24,7 @@ public final class BagSignal implements Signal {
 	 * @see com.apollo.ISignal#subscribe(com.apollo.Slot)
 	 */
 	@Override
-	public void subscribe(Slot slot)
+	public void addMessageReceiver(MessageReceiver slot)
 	{
 		receivers.add(slot);		
 	}
@@ -32,7 +32,7 @@ public final class BagSignal implements Signal {
 	 * @see com.apollo.ISignal#unsubscribe(com.apollo.Slot)
 	 */
 	@Override
-	public void unsubscribe(Slot slot)
+	public void removeMessangeReceiver(MessageReceiver slot)
 	{
 		receivers.remove(slot);
 	}

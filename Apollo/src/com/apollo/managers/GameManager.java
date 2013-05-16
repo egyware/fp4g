@@ -1,14 +1,14 @@
 package com.apollo.managers;
 
 import com.apollo.Message;
-import com.apollo.messages.Signal;
-import com.apollo.messages.Slot;
+import com.apollo.messages.MessageSender;
+import com.apollo.messages.MessageReceiver;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 
 // estas clases están temporalmente en este paquete hasta su reubicación
-public class GameManager implements ApplicationListener,Slot {
+public class GameManager implements ApplicationListener,MessageReceiver {
 	private GameState next;
 	private GameState current;
 	private final Array<GameState> states;
@@ -154,8 +154,8 @@ public class GameManager implements ApplicationListener,Slot {
 	}
 
 	
-	public <T extends Message> Signal signal(Class<T> clazz) {
-		return Signal.nullSignal;
+	public <T extends Message> MessageSender signal(Class<T> clazz) {
+		return MessageSender.nullSignal;
 	}
 
 }

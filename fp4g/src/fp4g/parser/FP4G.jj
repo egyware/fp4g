@@ -25,42 +25,47 @@ SPECIAL_TOKEN : /* comentarios */
   
 
 TOKEN: /* keywords */
-{
-    < GAME: "GAME" >  
-|   < STATE: "STATE" >
-|   < SYSTEM: "SYSTEM" >
-|   < DEFINE: "DEFINE" >
-|   < MESSAGE: "MESSAGE" >
-|   < BEHAVIOR: "BEHAVIOR" >
-|   < ENTITY: "ENTITY" > 
+{      
+    < DEFINE     : "DEFINE" >
+|	< ADD        : "ADD" >
+|   < ON         : "ON" >
+|   < SEND       : "SEND" >
+|   < GROUP      : "GROUP" >
+| 	< SUBSCRIBE  : "SUBSCRIBE" >
+|   < UNSUBSCRIBE: "UNSUBSCRIBE" >
+|	< START      : "START" >
+|   < RESUME     : "RESUME" >
+|   < PAUSE      : "PAUSE" >
+|   < EXIT       : "EXIT" >
 
-|   < ON: "ON" >
-|	< ADD: "ADD" >
-|   < BASE: "BASE" >
-|   < SEND: "SEND" >
-|   < GOAL: "GOAL" >
-|   < GROUP: "GROUP" >
-|   < ACCION: "ACCION" >
-| 	< REMOVE: "REMOVE" >
-|   < DEGROUP: "DEGROUP" >
-| 	< SUBSCRIBER: "SUBSCRIBER" >
-| 	< UNSUBSCRIBER: "UNSUBSCRIBER" >
-|	< START: "START" >	
+}
+
+TOKEN: /* auxiliars keywords */
+{    < SYSTEM  : "SYSTEM" >
+|   < GAME    : "GAME" >  
+|   < STATE   : "STATE" >
+|   < BEHAVIOR: "BEHAVIOR" >
+|   < ENTITY  : "ENTITY" >
+|   < GOAL    : "GOAL" >
+|   < MESSAGE : "MESSAGE" >
+|   < BASE    : "BASE" >
+|   < TO      : "TO" >
+|   < SOURCE  : "SOURCE" >	
 }
 
 TOKEN: /* Separadores */
 {
-  < ABRE_COR: "[" >
-| < ABRE_PAR: "(" >
+  < ABRE_COR  : "[" >
+| < ABRE_PAR  : "(" >
 | < CIERRA_COR: "]" >
 | < CIERRA_PAR: ")" >
-| < COMA: "," >
-| < EQUAL: "=" >
-| < DOT: "." >
-}TOKEN : /* Literales */{  < INT_LITERAL : (< DIGIT >)+ >
+| < COMA      : "," >
+| < EQUAL     : "=" >
+| < DOT       : "." >
+}TOKEN : /* Literales */{  < INT_LITERAL 	: (< DIGIT >)+ >
 | < DECIMAL_LITERAL : (< DIGIT >)*"."(< DIGIT >)+ >
-| < STRING_LITERAL : "\""(~["\""])*"\"" >
-| < BOOL_LITERAL : "true"|"false" > | < #DIGIT : [ "0"-"9" ] >}
+| < STRING_LITERAL  : "\""(~["\""])*"\""  > {  matchedToken.image = image.substring(1,lengthOfMatch-1);}
+| < BOOL_LITERAL 	: "true"|"false" > | < #DIGIT 			: [ "0"-"9" ] >}
 
 TOKEN : /* OPERATORS */
 {
@@ -93,8 +98,7 @@ IScope prototype_object_set(IScope init_value) :
 }
 {
   < ABRE_COR > values(init_value) <CIERRA_COR >
-  {
-    //init_value.setLine(line);
+  {    
     return init_value;
   } 
 }
@@ -113,8 +117,8 @@ IScope prototype_object(IScope parent) :
 
 void value(IScope local):
 {
-  String key;
-  Object value;  
+   String key;
+   Object value;  
 }
 { 	
 	value = add(local) { local.add(value); }	
@@ -126,11 +130,13 @@ void value(IScope local):
 		
 }
 
+
+
 void  inline_prototype_object(IScope local):
 {
-  String key;  
-  IScope inline;
-  IScope last;
+    String key;  
+    IScope inline;
+    IScope last;
 }
 {
   	key = < IDENTIFIER >.image  	{
@@ -154,10 +160,41 @@ void  inline_prototype_object(IScope local):
   	)*
   	< EQUAL > prototype_object_set(last)   }
 
+void send(IScope local):
+{
+  String messageType;
+  String to;
+  IScope contents;
+  int line = 0;  
+}
+{
+  	line = < SEND >.beginLine messageType = < IDENTIFIER >.image < TO > to = < IDENTIFIER >.image contents = prototype_object(local) 
+  	{
+  	  Send send = new Send(messageType,local, to, contents);
+  	  send.setLine(line);
+  	  local.add(send);
+  	} 
+}
+
+void on(IScope local):
+{
+    String messageType;
+    IScope code;
+    int line = 0;
+}
+{
+  line = < ON >.beginLine messageType = <IDENTIFIER >.image code = prototype_object(local)
+  {
+    On on = new On(messageType,local,code);
+    on.setLine(line);
+    local.add(on);
+  }
+}
+
 void start(IScope local):
 {
-  String stateGame;
-  int line = 0;}
+    String stateGame;
+    int line = 0;}
 {	line = < START >.beginLine stateGame = <IDENTIFIER >.image
 	{
 	  Object value = local.get(stateGame);
@@ -191,14 +228,19 @@ void start(IScope local):
 
 Function function(IScope local):
 {
-  Object args[] = null;
-  String functionName;
+    Object args[] = null;
+    String functionName;
+    Token functionToken;
+    int line = 0;
+    
 }{  
-  functionName = < IDENTIFIER >.image < ABRE_PAR > [args = params(local)]< CIERRA_PAR >
+  functionToken = < IDENTIFIER > < ABRE_PAR > [args = params(local)]< CIERRA_PAR >
   {
+    functionName = functionToken.image;
+    line = functionToken.beginLine;
  	Function f = Function.buildFunction(functionName,args);
  	if(f == null)
- 	{		//TODO lanzar un error acá indicando que la funcion descrita no se encontró
+ 	{ 	  		Show(ErrType.NotDefineFuction,line);
 		return null;
  	}
  	else
@@ -208,7 +250,7 @@ Function function(IScope local):
   LinkedList<Object > list = new LinkedList<Object >();
 }
 {
-  param(list,local) [< COMA > params(local)]
+  param(list,local) ( < COMA > param(list,local) )*
   {	return list.toArray();
   }
 }
@@ -224,23 +266,23 @@ void param(LinkedList<Object > list, IScope local):
 void values(IScope local):
 { 
 }
-{  
-  value(local) [< COMA > values(local)]   
+{
+   value(local) ( LOOKAHEAD(2) < COMA > value(local) )* [< COMA >]       
 }
 
 void define(IScope parent):
 { 
   String factoryName;
   String basedName = null;
-  Type factoryType;
+  FactoryType factoryType;
   IScope local = null;
   int line = 0;  }
 {
   line = < DEFINE >.beginLine  (
-     < STATE  > { factoryType =  Type.STATE;  }      |< SYSTEM > { factoryType =  Type.SYSTEM; }
-    |< BEHAVIOR > { factoryType =  Type.BEHAVIOR; }
-    |< ENTITY > { factoryType =  Type.ENTITY; }
-    |< GOAL > { factoryType =  Type.GOAL;  }
+     < STATE  >  { factoryType   =  FactoryType.STATE;  }      |< SYSTEM >  { factoryType   =  FactoryType.SYSTEM; }
+    |< BEHAVIOR >{ factoryType   =  FactoryType.BEHAVIOR; }
+    |< ENTITY >  { factoryType   =  FactoryType.ENTITY; }
+    |< GOAL >    { factoryType   =  FactoryType.GOAL;  }
   )
   [< BASE > basedName = < IDENTIFIER >.image ]
   factoryName = < IDENTIFIER >.image  local = prototype_object(parent)
@@ -249,18 +291,18 @@ void define(IScope parent):
 }
 Add add(IScope parent):
 {  
-  Type factoryType;
+  FactoryType factoryType;
   Token factoryName;
   IScope local = null;
   int line = 0;
 }
 {
    line = < ADD >.beginLine 
-   (      < SYSTEM > { factoryType =  Type.SYSTEM; }
-     |< STATE >  { factoryType = Type.STATE;  }   
-     |< BEHAVIOR > { factoryType =  Type.BEHAVIOR; }
-     |< ENTITY > { factoryType =  Type.ENTITY; }
-     |< GOAL > { factoryType =  Type.GOAL; }
+   (       < STATE  > { factoryType   =  FactoryType.STATE;  }  
+    |< SYSTEM > { factoryType   =  FactoryType.SYSTEM; }
+    |< BEHAVIOR > { factoryType =  FactoryType.BEHAVIOR; }
+    |< ENTITY > { factoryType   =  FactoryType.ENTITY; }
+    |< GOAL >   { factoryType   =  FactoryType.GOAL;  }
    )
    factoryName = < IDENTIFIER > [ local = prototype_object(parent) ]
    {
@@ -278,7 +320,7 @@ Object expresion(IScope local):
 {	
 	(	    t = < INT_LITERAL > { value = Integer.parseInt(t.image);  }
 		| t = < DECIMAL_LITERAL > { value = Double.parseDouble(t.image); }
-		| t = < STRING_LITERAL >	 { value = t.image.substring(1,t.image.length()-1); }			
+		| t = < STRING_LITERAL >	 { value = t.image; }			
 		| t = < BOOL_LITERAL > { value = Boolean.parseBoolean(t.image); }
 		| LOOKAHEAD(2) value = function(local)
 		| t = < IDENTIFIER > { value = local.get(t.image); }		   

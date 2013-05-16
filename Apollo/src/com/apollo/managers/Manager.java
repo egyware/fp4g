@@ -6,10 +6,10 @@ import com.apollo.Entity;
 import com.apollo.Message;
 import com.apollo.World;
 import com.apollo.annotate.ManagerInjector;
-import com.apollo.messages.Signal;
-import com.apollo.messages.Slot;
+import com.apollo.messages.MessageSender;
+import com.apollo.messages.MessageReceiver;
 
-public abstract class Manager implements Slot{
+public abstract class Manager implements MessageReceiver{
 	protected World world;
 		
 	/**
@@ -47,7 +47,7 @@ public abstract class Manager implements Slot{
 	public void onMessage(Message m) {
 	}
 	
-	public <T extends Message> Signal signal(Class<T> clazz) {
-		return Signal.nullSignal;
+	public <T extends Message> MessageSender signal(Class<T> clazz) {
+		return MessageSender.nullSignal;
 	}
 }

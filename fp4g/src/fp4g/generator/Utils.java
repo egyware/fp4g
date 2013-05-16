@@ -23,7 +23,7 @@ import fp4g.data.Function;
 import fp4g.data.IScope;
 import fp4g.data.MapScope;
 import fp4g.data.Start;
-import fp4g.data.Type;
+import fp4g.data.FactoryType;
 import fp4g.data.Value;
 
 //TODO [egyware] cambiar nombres...
@@ -47,7 +47,7 @@ public class Utils {
 		public int compare(Entry<String, Object> o1, Entry<String, Object> o2) {
 			Object a = o1.getValue();
 			Object b = o2.getValue();
-			Type typeA = null, typeB = null;
+			FactoryType typeA = null, typeB = null;
 			int vA = -1, vB = -1;
 			
 			int valorA,valorB;

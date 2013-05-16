@@ -27,7 +27,7 @@ import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.Function;
 import fp4g.data.IScope;
-import fp4g.data.Type;
+import fp4g.data.FactoryType;
 
 
 public class EntityGenerator {
@@ -100,7 +100,7 @@ public class EntityGenerator {
 				Add add = (Add) value;
 				String addName = add.getName();
 				IScope addScope = add.getScope();
-				Type addType = add.getType();
+				FactoryType addType = add.getType();
 				Define addDefine = (Define) defineScope.get(addName);
 
 				if (addDefine == null) {

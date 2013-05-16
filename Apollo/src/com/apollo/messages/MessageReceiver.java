@@ -2,7 +2,7 @@ package com.apollo.messages;
 
 import com.apollo.Message;
 
-public interface Slot{
+public interface MessageReceiver{
 	
 	/**
 	 * Slot que permite recibir cualquier tipo de señal o mensaje

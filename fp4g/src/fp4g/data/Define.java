@@ -7,24 +7,24 @@ import static fp4g.Log.Show;
 
 public class Define extends Value implements Cloneable{	
 	private IScope scope;	
-	private Type type;
+	private FactoryType type;	
 	
-	public Define(String _name,Type _type,IScope _scope){
+	public Define(String _name,FactoryType _type,IScope _scope){
 		super(_name);
 		scope = _scope;
 		type = _type;
 	}
-	public Define(String _name,Type _type,IScope _scope,int ordinal){
+	public Define(String _name,FactoryType _type,IScope _scope,int ordinal){
 		super(_name,ordinal);
 		scope = _scope;
 		type = _type;
 	}
-	public Define(String name,Type type){
+	public Define(String name,FactoryType type){
 		this(name,type, null);
 	}
 		
 	
-	public Type getType()
+	public FactoryType getType()
 	{
 		return type;
 	}
@@ -41,7 +41,7 @@ public class Define extends Value implements Cloneable{
 		return clone;		
 	}
 	
-	public static void Set(Type _type,String _name, String _based,IScope _local ,IScope _properties,int line)
+	public static void Set(FactoryType _type,String _name, String _based,IScope _local ,IScope _properties,int line)
 	{	
 		//si está definida, hay que clonar entonces...
 		Define factory;

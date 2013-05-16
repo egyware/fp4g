@@ -2,9 +2,9 @@ package com.apollo.messages;
 
 import com.apollo.Message;
 
-public interface Signal {
+public interface MessageSender {
 	//TODO [egyware] agregar excepciones cuando alguien se trate de hacer acciones en esta señal
-	public static final Signal nullSignal = new Signal(){
+	public static final MessageSender nullSignal = new MessageSender(){
 
 		@Override
 		public void send(Message message) {
@@ -13,13 +13,13 @@ public interface Signal {
 		}
 
 		@Override
-		public void subscribe(Slot slot) {
+		public void addMessageReceiver(MessageReceiver slot) {
 			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
-		public void unsubscribe(Slot slot) {
+		public void removeMessangeReceiver(MessageReceiver slot) {
 			// TODO Auto-generated method stub
 			
 		}
@@ -28,8 +28,8 @@ public interface Signal {
 	
 	public void send(Message message);
 
-	public void subscribe(Slot slot);
+	public void addMessageReceiver(MessageReceiver slot);
 
-	public void unsubscribe(Slot slot);
+	public void removeMessangeReceiver(MessageReceiver slot);
 	
 }

@@ -9,8 +9,8 @@ package fp4g.data;
  */
 public class Add extends Value{	
 	private IScope scope;	
-	private Type type;	
-	public Add(String _name,Type _type, IScope _scope)
+	private FactoryType type;	
+	public Add(String _name,FactoryType _type, IScope _scope)
 	{
 		super(_name);
 		scope = (_scope == null)?new MapScope():_scope;
@@ -22,7 +22,7 @@ public class Add extends Value{
 		return scope;
 	}
 	
-	public Type getType()
+	public FactoryType getType()
 	{
 		return type;
 	}	

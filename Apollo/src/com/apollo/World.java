@@ -86,14 +86,15 @@ public class World {
 		entityBuildersByType.put(entityBuilder.getEntityBuildName(), entityBuilder);
 	}
 
+	
 	public EntityBuilder getEntityBuilder(String builderType) {
 		return entityBuildersByType.get(builderType);
 	}
-
-	public Entity createEntity(String builderType) {
-		EntityBuilder entityBuilder = entityBuildersByType.get(builderType);
+	
+	public Entity createEntity(String builderType,Object ...args) {
+		EntityBuilder entityBuilder = getEntityBuilder(builderType);
 		if(entityBuilder != null) {
-			return entityBuilder.buildEntity(this);
+			return entityBuilder.buildEntity(this,args);
 		}
 		return null;
 	}

@@ -39,7 +39,7 @@ import fp4g.data.Define;
 import fp4g.data.Function;
 import fp4g.data.IScope;
 import fp4g.data.MapScope;
-import fp4g.data.Type;
+import fp4g.data.FactoryType;
 
 public class StateGenerator {
 	private final JCodeModel jcm;
@@ -160,7 +160,7 @@ public class StateGenerator {
 				stateClass.field(JMod.PRIVATE, typeValue, key, expr);
 			} else if (value instanceof Define) {
 				Define define = (Define) value;
-				Type defineType = define.getType();
+				FactoryType defineType = define.getType();
 				
 				switch (defineType) {
 				case ENTITY:
@@ -190,7 +190,7 @@ public class StateGenerator {
 				}				
 			} else if (value instanceof Add) {
 				Add add = (Add) value;
-				Type addType = add.getType();
+				FactoryType addType = add.getType();
 				String addName = add.getName();
 				IScope addScope = add.getScope();
 				Define define = (Define) stateScope.get(addName);

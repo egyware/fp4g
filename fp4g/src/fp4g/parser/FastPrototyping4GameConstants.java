@@ -15,85 +15,89 @@ public interface FastPrototyping4GameConstants {
   /** RegularExpression Id. */
   int MULTI_LINE_COMMENT = 6;
   /** RegularExpression Id. */
-  int GAME = 7;
+  int DEFINE = 7;
   /** RegularExpression Id. */
-  int STATE = 8;
+  int ADD = 8;
   /** RegularExpression Id. */
-  int SYSTEM = 9;
+  int ON = 9;
   /** RegularExpression Id. */
-  int DEFINE = 10;
+  int SEND = 10;
   /** RegularExpression Id. */
-  int MESSAGE = 11;
+  int GROUP = 11;
   /** RegularExpression Id. */
-  int BEHAVIOR = 12;
+  int SUBSCRIBE = 12;
   /** RegularExpression Id. */
-  int ENTITY = 13;
+  int UNSUBSCRIBE = 13;
   /** RegularExpression Id. */
-  int ON = 14;
+  int START = 14;
   /** RegularExpression Id. */
-  int ADD = 15;
+  int RESUME = 15;
   /** RegularExpression Id. */
-  int BASE = 16;
+  int PAUSE = 16;
   /** RegularExpression Id. */
-  int SEND = 17;
+  int EXIT = 17;
   /** RegularExpression Id. */
-  int GOAL = 18;
+  int SYSTEM = 18;
   /** RegularExpression Id. */
-  int GROUP = 19;
+  int GAME = 19;
   /** RegularExpression Id. */
-  int ACCION = 20;
+  int STATE = 20;
   /** RegularExpression Id. */
-  int REMOVE = 21;
+  int BEHAVIOR = 21;
   /** RegularExpression Id. */
-  int DEGROUP = 22;
+  int ENTITY = 22;
   /** RegularExpression Id. */
-  int SUBSCRIBER = 23;
+  int GOAL = 23;
   /** RegularExpression Id. */
-  int UNSUBSCRIBER = 24;
+  int MESSAGE = 24;
   /** RegularExpression Id. */
-  int START = 25;
+  int BASE = 25;
   /** RegularExpression Id. */
-  int ABRE_COR = 26;
+  int TO = 26;
   /** RegularExpression Id. */
-  int ABRE_PAR = 27;
+  int SOURCE = 27;
   /** RegularExpression Id. */
-  int CIERRA_COR = 28;
+  int ABRE_COR = 28;
   /** RegularExpression Id. */
-  int CIERRA_PAR = 29;
+  int ABRE_PAR = 29;
   /** RegularExpression Id. */
-  int COMA = 30;
+  int CIERRA_COR = 30;
   /** RegularExpression Id. */
-  int EQUAL = 31;
+  int CIERRA_PAR = 31;
   /** RegularExpression Id. */
-  int DOT = 32;
+  int COMA = 32;
   /** RegularExpression Id. */
-  int INT_LITERAL = 33;
+  int EQUAL = 33;
   /** RegularExpression Id. */
-  int DECIMAL_LITERAL = 34;
+  int DOT = 34;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 35;
+  int INT_LITERAL = 35;
   /** RegularExpression Id. */
-  int BOOL_LITERAL = 36;
+  int DECIMAL_LITERAL = 36;
   /** RegularExpression Id. */
-  int DIGIT = 37;
+  int STRING_LITERAL = 37;
   /** RegularExpression Id. */
-  int PLUS = 38;
+  int BOOL_LITERAL = 38;
   /** RegularExpression Id. */
-  int MINUS = 39;
+  int DIGIT = 39;
   /** RegularExpression Id. */
-  int MULTIPLY = 40;
+  int PLUS = 40;
   /** RegularExpression Id. */
-  int DIVIDE = 41;
+  int MINUS = 41;
   /** RegularExpression Id. */
-  int AND = 42;
+  int MULTIPLY = 42;
   /** RegularExpression Id. */
-  int OR = 43;
+  int DIVIDE = 43;
   /** RegularExpression Id. */
-  int XOR = 44;
+  int AND = 44;
   /** RegularExpression Id. */
-  int NOT = 45;
+  int OR = 45;
   /** RegularExpression Id. */
-  int IDENTIFIER = 46;
+  int XOR = 46;
+  /** RegularExpression Id. */
+  int NOT = 47;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 48;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -107,25 +111,27 @@ public interface FastPrototyping4GameConstants {
     "\"\\n\"",
     "<SINGLE_LINE_COMMENT>",
     "<MULTI_LINE_COMMENT>",
+    "\"DEFINE\"",
+    "\"ADD\"",
+    "\"ON\"",
+    "\"SEND\"",
+    "\"GROUP\"",
+    "\"SUBSCRIBE\"",
+    "\"UNSUBSCRIBE\"",
+    "\"START\"",
+    "\"RESUME\"",
+    "\"PAUSE\"",
+    "\"EXIT\"",
+    "\"SYSTEM\"",
     "\"GAME\"",
     "\"STATE\"",
-    "\"SYSTEM\"",
-    "\"DEFINE\"",
-    "\"MESSAGE\"",
     "\"BEHAVIOR\"",
     "\"ENTITY\"",
-    "\"ON\"",
-    "\"ADD\"",
-    "\"BASE\"",
-    "\"SEND\"",
     "\"GOAL\"",
-    "\"GROUP\"",
-    "\"ACCION\"",
-    "\"REMOVE\"",
-    "\"DEGROUP\"",
-    "\"SUBSCRIBER\"",
-    "\"UNSUBSCRIBER\"",
-    "\"START\"",
+    "\"MESSAGE\"",
+    "\"BASE\"",
+    "\"TO\"",
+    "\"SOURCE\"",
     "\"[\"",
     "\"(\"",
     "\"]\"",
