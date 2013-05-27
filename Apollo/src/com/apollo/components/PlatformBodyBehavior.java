@@ -24,6 +24,7 @@ public class PlatformBodyBehavior extends BodyBehavior {
 	private Body circle;
 	private Body box;
 	private RevoluteJoint motor;
+
 	public static class Def
 	{
 		public int ratio = 5;
@@ -91,8 +92,8 @@ public class PlatformBodyBehavior extends BodyBehavior {
 			RevoluteJointDef motorDef = new RevoluteJointDef();
 		    motorDef.initialize(box,circle,circle.getWorldCenter());
 		    //motorDef.maxMotorTorque = 1000.0f;//!\todo puede ser un parametro
-		    //motorDef.motorSpeed = 0.0f;//velocidad 0 inicial
-		    motorDef.enableMotor = false;//true; //pues claro motor :)		    
+		    motorDef.motorSpeed = 0.0f;//velocidad 0 inicial
+		    motorDef.enableMotor = true; //pues claro motor :)		    
 		    motor = (RevoluteJoint)world.createJoint(motorDef);
 		}	
 	}
@@ -123,7 +124,19 @@ public class PlatformBodyBehavior extends BodyBehavior {
 	}
 	@Override
 	public void setPosition(float x, float y) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
+	}
+	
+	
+	public void move(float desiredVel){
+		//mantener velocidad
+		Vector2 vel = circle.getLinearVelocity();				
+		float velChange = desiredVel - vel.x;	
+		float impulse = (box.getMass() + circle.getMass()) * velChange;		
+		Vector2 worldCenter = circle.getWorldCenter();
+		circle.applyLinearImpulse(impulse, 0, worldCenter.x,worldCenter.y);		
+		if(desiredVel == 0){
+			circle.setAngularVelocity(0);
+		}
 	}
 }

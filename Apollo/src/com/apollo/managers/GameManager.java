@@ -3,6 +3,7 @@ package com.apollo.managers;
 import com.apollo.Message;
 import com.apollo.messages.MessageSender;
 import com.apollo.messages.MessageReceiver;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
@@ -13,8 +14,6 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 	private GameState current;
 	private final Array<GameState> states;
 	
-	
-	
 	public GameManager()
 	{
 		states = new Array<GameState>();		
@@ -22,6 +21,7 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 	
 	public void start(GameState next)
 	{
+		Gdx.app.log("GameCycleLife", String.format("start: %s",next.getClass().getSimpleName()));
 		current = states.size > 0?states.peek():null;
 		if(current != null)
 		{
@@ -42,7 +42,7 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 			}
 			else
 			{
-				//TODO error
+				//TODO [egyware] error, de que? no se que...
 			}
 		}
 		current.enter();
@@ -51,6 +51,7 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 	
 	public void nextState(GameState _next)
 	{
+		Gdx.app.log("GameCycleLife", String.format("next: %s",_next.getClass().getSimpleName()));
 		next = _next;
 	}	
 	/**
@@ -59,6 +60,7 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 	 */
 	public void pauseState(GameState next)
 	{
+		Gdx.app.log("GameCycleLife", String.format("pause: %s",next.getClass().getSimpleName()));
 		//se asume que existe un contexto actual y guardado en  states...
 		if(current != null)
 		{
@@ -82,6 +84,7 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 	}
 	public void resumeState()
 	{
+		Gdx.app.log("GameCycleLife", String.format("resume"));
 		//se asume que existe un contexto actual y guardado en  states...
 		if(current != null)
 		{
@@ -98,12 +101,13 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 
 	@Override
 	public void create() {
-		// TODO Auto-generated method stub
-
+		Gdx.app.setLogLevel(Application.LOG_INFO);
+		Gdx.app.log("AppCycleLife", "create");
 	}
 
 	@Override
-	public void dispose() {		
+	public void dispose() {	
+		Gdx.app.log("AppCycleLife", "dispose");	
 		if(current != null)
 		{
 			current.exit();
@@ -114,7 +118,8 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 	}
 
 	@Override
-	public void pause() {		
+	public void pause() {	
+		Gdx.app.log("AppCycleLife", "pause");	
 		if(current != null)
 		{
 			current.pause();			
@@ -136,12 +141,13 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 
 	@Override
 	public void resize(int arg0, int arg1) {
-		// TODO Auto-generated method stub
+		Gdx.app.log("AppCycleLife", "resize");
 
 	}
 
 	@Override
 	public void resume() {
+		Gdx.app.log("AppCycleLife", "resume");
 		if(current != null)
 		{
 			current.resume();			
