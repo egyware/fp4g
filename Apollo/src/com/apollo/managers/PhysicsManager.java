@@ -24,8 +24,12 @@ public class PhysicsManager extends Manager implements ContactListener{
 	private final ContactMessage contactMessage;
 	
 	public PhysicsManager()
+	{
+		this(Vector2.Zero);
+	}
+	public PhysicsManager(Vector2 gravity)
 	{		
-		world = new World(new Vector2(0,-10), true);
+		world = new World(gravity, true);
 		world.setContactListener(this);
 		contactMessage = new ContactMessage();
 

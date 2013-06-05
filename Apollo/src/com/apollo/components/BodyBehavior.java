@@ -9,20 +9,23 @@ import com.badlogic.gdx.physics.box2d.Body;
  * @author egyware
  *
  */
-public abstract class BodyBehavior extends Component {	
+public abstract class BodyBehavior extends Transform {
+	private Vector2 position = new Vector2();
+	
+	
 	public abstract Body getBody();
-	public abstract Vector2 getPosition();
 	public abstract void setPosition(float x,float y);
-	public abstract float getAngle();
+	public abstract void setRotation(float angleRadians);
+	public abstract void update(float dt);
 	
-	
+	//helpers
+	public Vector2 getPosition(){
+		position.set(x,y);
+		return position;
+	}
 	public final void setPosition(Vector2 vector)
 	{
 		setPosition(vector.x,vector.y);
 	}	
 	
-	public Class<BodyBehavior> getType()
-	{
-		return BodyBehavior.class;
-	}	
 }

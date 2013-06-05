@@ -105,27 +105,6 @@ public class PlatformBodyBehavior extends BodyBehavior {
 	public Body getBody() {		
 		return box;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.apollo.components.BodyBehavior#getPosition()
-	 */
-	@Override
-	public Vector2 getPosition() {	
-		return circle.getPosition().cpy().mul(INV_SCALE);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.apollo.components.BodyBehavior#getAngle()
-	 */
-	@Override
-	public float getAngle() {
-		//regresa angulo 0, no deberia rotar..
-		return 0;
-	}
-	@Override
-	public void setPosition(float x, float y) {
-		// TODO Auto-generated method stub		
-	}
 	
 	
 	public void move(float desiredVel){
@@ -138,5 +117,22 @@ public class PlatformBodyBehavior extends BodyBehavior {
 		if(desiredVel == 0){
 			circle.setAngularVelocity(0);
 		}
+	}
+	@Override
+	public void setPosition(float x, float y) {
+		// TODO Auto-generated method stub		
+	}
+	
+	public void setRotation(float angleRadians) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void update(float dt)
+	{
+		//actualizando transformación
+		rotation = circle.getAngle();
+		Vector2 pos = circle.getPosition();
+		x = pos.x * INV_SCALE;
+		y = pos.y * INV_SCALE;
 	}
 }
