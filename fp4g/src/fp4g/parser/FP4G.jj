@@ -13,13 +13,13 @@ import static fp4g.Log.Show;
 public class FastPrototyping4Game{   
  
 }PARSER_END(FastPrototyping4Game)SKIP :{  " "| "\r"| "\t"
-| "\n"
 }
 
 SPECIAL_TOKEN : /* comentarios */
 {
-	<SINGLE_LINE_COMMENT: "//" ( ~["\n","\r"] )* ("\n" | "\r" | "\r\n") >
-|	<MULTI_LINE_COMMENT: "/*" ( ~["*"] | ("*")+ ~["*","/"] )* ("*")+ "/" >
+	< SINGLE_LINE_COMMENT: "//" ( ~["\n","\r"] )* ("\n" | "\r" | "\r\n") >
+|	< MULTI_LINE_COMMENT: "/*" ( ~["*"] | ("*")+ ~["*","/"] )* ("*")+ "/" >
+| 	< EOL: "\n" >
 }
 
   
@@ -267,7 +267,7 @@ void values(IScope local):
 { 
 }
 {
-   value(local) ( LOOKAHEAD(2) < COMA > value(local) )* [< COMA >]       
+   value(local) ( LOOKAHEAD(2) < COMA > value(local) )* [ < COMA > ]       
 }
 
 void define(IScope parent):
@@ -318,12 +318,13 @@ Object expresion(IScope local):
   int line = 0;
 }
 {	
-	(	    t = < INT_LITERAL > { value = Integer.parseInt(t.image);  }
+	(	      t = < INT_LITERAL > { value = Integer.parseInt(t.image);  }
 		| t = < DECIMAL_LITERAL > { value = Double.parseDouble(t.image); }
 		| t = < STRING_LITERAL >	 { value = t.image; }			
 		| t = < BOOL_LITERAL > { value = Boolean.parseBoolean(t.image); }
 		| LOOKAHEAD(2) value = function(local)
-		| t = < IDENTIFIER > { value = local.get(t.image); }		   
+		| LOOKAHEAD(2) t = < IDENTIFIER > { value = local.get(t.image); }
+		//| t = < IDENTIFIER > { value = array(local); }		   
 		| value = prototype_object(local)
 		| value = add(local)
 			

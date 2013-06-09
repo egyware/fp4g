@@ -11,9 +11,11 @@ public interface FastPrototyping4GameConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int SINGLE_LINE_COMMENT = 5;
+  int SINGLE_LINE_COMMENT = 4;
   /** RegularExpression Id. */
-  int MULTI_LINE_COMMENT = 6;
+  int MULTI_LINE_COMMENT = 5;
+  /** RegularExpression Id. */
+  int EOL = 6;
   /** RegularExpression Id. */
   int DEFINE = 7;
   /** RegularExpression Id. */
@@ -108,9 +110,9 @@ public interface FastPrototyping4GameConstants {
     "\" \"",
     "\"\\r\"",
     "\"\\t\"",
-    "\"\\n\"",
     "<SINGLE_LINE_COMMENT>",
     "<MULTI_LINE_COMMENT>",
+    "\"\\n\"",
     "\"DEFINE\"",
     "\"ADD\"",
     "\"ON\"",

@@ -102,6 +102,9 @@ public class SpriteBehavior extends Spatial<SpriteBatch>
 			current_sequence = sequence.getAnimation(animation);
 		}
 	}
+	public boolean isAnimationFinished() {
+		return sequence.isAnimationFinished(current_sequence,current_time);
+	}
 	
 
 	

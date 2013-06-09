@@ -135,4 +135,8 @@ public class PlatformBodyBehavior extends BodyBehavior {
 		x = pos.x * INV_SCALE;
 		y = pos.y * INV_SCALE;
 	}
+	@Override
+	public Vector2 getRawPosition() {		
+		return circle.getPosition();
+	}
 }

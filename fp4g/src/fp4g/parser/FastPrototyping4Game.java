@@ -366,7 +366,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INT_LITERAL:
       t = jj_consume_token(INT_LITERAL);
-                                  value = Integer.parseInt(t.image);
+                                    value = Integer.parseInt(t.image);
       break;
     case DECIMAL_LITERAL:
       t = jj_consume_token(DECIMAL_LITERAL);
@@ -384,12 +384,11 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       jj_la1[10] = jj_gen;
       if (jj_2_4(2)) {
         value = function(local);
+      } else if (jj_2_5(2)) {
+        t = jj_consume_token(IDENTIFIER);
+                                                    value = local.get(t.image);
       } else {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case IDENTIFIER:
-          t = jj_consume_token(IDENTIFIER);
-                                       value = local.get(t.image);
-          break;
         case ABRE_COR:
           value = prototype_object(local);
           break;
@@ -437,6 +436,13 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     try { return !jj_3_4(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(3, xla); }
+  }
+
+  private boolean jj_2_5(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_5(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(4, xla); }
   }
 
   private boolean jj_3R_8() {
@@ -495,6 +501,11 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
 
   private boolean jj_3R_14() {
     if (jj_scan_token(START)) return true;
+    return false;
+  }
+
+  private boolean jj_3_5() {
+    if (jj_scan_token(IDENTIFIER)) return true;
     return false;
   }
 
@@ -562,9 +573,9 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       jj_la1_0 = new int[] {0x4180,0x0,0x0,0x10000100,0x0,0x0,0xf40000,0x2000000,0xf40000,0x10000000,0x0,0x10000100,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x10000,0x4,0x10078,0x1,0x1,0x0,0x0,0x0,0x0,0x78,0x10000,};
+      jj_la1_1 = new int[] {0x0,0x10000,0x4,0x10078,0x1,0x1,0x0,0x0,0x0,0x0,0x78,0x0,};
    }
-  final private JJCalls[] jj_2_rtns = new JJCalls[4];
+  final private JJCalls[] jj_2_rtns = new JJCalls[5];
   private boolean jj_rescan = false;
   private int jj_gc = 0;
 
@@ -792,7 +803,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
 
   private void jj_rescan_token() {
     jj_rescan = true;
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 5; i++) {
     try {
       JJCalls p = jj_2_rtns[i];
       do {
@@ -803,6 +814,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
             case 1: jj_3_2(); break;
             case 2: jj_3_3(); break;
             case 3: jj_3_4(); break;
+            case 4: jj_3_5(); break;
           }
         }
         p = p.next;

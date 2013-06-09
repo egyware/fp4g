@@ -46,4 +46,8 @@ public class Sprite{
 		return current_sequence.getKeyFrame(current_time,loop);
 	}
 
+	public boolean isAnimationFinished(Animation current_sequence, float current_time) {
+		return current_sequence.isAnimationFinished(current_time);		
+	}
+
 }

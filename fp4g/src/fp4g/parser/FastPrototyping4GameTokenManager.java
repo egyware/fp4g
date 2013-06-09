@@ -141,6 +141,8 @@ private int jjMoveStringLiteralDfa0_0()
 {
    switch(curChar)
    {
+      case 10:
+         return jjStopAtPos(0, 6);
       case 40:
          return jjStopAtPos(0, 29);
       case 41:
@@ -676,12 +678,12 @@ private int jjMoveNfa_0(int startState, int curPos)
                      jjCheckNAddStates(5, 7);
                   break;
                case 18:
-                  if ((0x2400L & l) != 0L && kind > 5)
-                     kind = 5;
+                  if ((0x2400L & l) != 0L && kind > 4)
+                     kind = 4;
                   break;
                case 19:
-                  if (curChar == 10 && kind > 5)
-                     kind = 5;
+                  if (curChar == 10 && kind > 4)
+                     kind = 4;
                   break;
                case 20:
                   if (curChar == 13)
@@ -712,8 +714,8 @@ private int jjMoveNfa_0(int startState, int curPos)
                      jjCheckNAddTwoStates(26, 27);
                   break;
                case 27:
-                  if (curChar == 47 && kind > 6)
-                     kind = 6;
+                  if (curChar == 47 && kind > 5)
+                     kind = 5;
                   break;
                case 28:
                   if ((0x3ff000000000000L & l) == 0L)
@@ -882,7 +884,7 @@ static final long[] jjtoSkip = {
    0x7eL, 
 };
 static final long[] jjtoSpecial = {
-   0x60L, 
+   0x70L, 
 };
 protected SimpleCharStream input_stream;
 private final int[] jjrounds = new int[31];
@@ -994,7 +996,7 @@ public Token getNextToken()
    jjimageLen = 0;
 
    try { input_stream.backup(0);
-      while (curChar <= 32 && (0x100002600L & (1L << curChar)) != 0L)
+      while (curChar <= 32 && (0x100002200L & (1L << curChar)) != 0L)
          curChar = input_stream.BeginToken();
    }
    catch (java.io.IOException e1) { continue EOFLoop; }

@@ -1,7 +1,5 @@
-package fp4g.parser;
+package fp4g.data;
 
-import fp4g.data.IScope;
-import fp4g.data.Value;
 
 public class Send extends Value {
 	private String messageType;
