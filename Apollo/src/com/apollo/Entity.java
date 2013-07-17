@@ -14,27 +14,29 @@ import com.apollo.utils.Bag;
  */
 public final class Entity {
 	protected World world;
-	private Bag<Component> components;
-	private Map<Class<? extends Component>, Component> componentsByType;
+	private Bag<Behavior> components;
+	private Map<Class<? extends Behavior>, Behavior> componentsByType;
 	private Map<Class<? extends Message>,Bag<MessageReceiver>> handlersByEventType;
+	private Map<String,Variable<?>> variables;
 	private boolean deleted;
 
 	public Entity(World world) {
 		this.world = world;
-		components = new Bag<Component>();
-		componentsByType = new LinkedHashMap<Class<? extends Component>, Component>();
+		components = new Bag<Behavior>();
+		componentsByType = new LinkedHashMap<Class<? extends Behavior>, Behavior>();
+		variables = new LinkedHashMap<String,Variable<?>>();
 	}
 
-	public void setComponent(Component component) {		
+	public void setBehavior(Behavior component) {		
 		component.setOwner(this);
 		components.add(component);
 		componentsByType.put(component.getType(), component);		
 	}
 	
-	public void removeComponent(Class<? extends Component> clazz) {
-		Component component = getComponent(clazz);
+	public void removeBehavior(Class<? extends Behavior> clazz) {
+		Behavior component = getBehavior(clazz);
 		if(component!=null) {
-			removeComponent(component);
+			removeBehavior(component);
 		}
 	}
 	
@@ -42,11 +44,9 @@ public final class Entity {
 	 * Remove a Component
 	 * @param component to remove
 	 */
-	public void removeComponent(Component component) {
+	public void removeBehavior(Behavior component) {
 		components.remove(component);
-		componentsByType.remove(component);
-		
-		world.getEntityManager().removeComponent(component, this);
+		componentsByType.remove(component);	
 	}
 	
 	/** 
@@ -70,11 +70,11 @@ public final class Entity {
 		}
 	}
 
-	public <T extends Component> T getComponent(Class<T> type) {
+	public <T extends Behavior> T getBehavior(Class<T> type) {
 		return type.cast(componentsByType.get(type));
 	}
 	
-	public Bag<Component> getComponents() {
+	public Bag<Behavior> getBehaviors() {
 		return components;
 	}
 
@@ -143,5 +143,13 @@ public final class Entity {
 	public void addToWorld() {
 		world.addEntity(this);
 	}
-
+	
+	public Variable<?> getVariable(String name)
+	{
+		return variables.get(name);
+	}
+	public void setVariable(String name,Variable<?> var)
+	{
+		variables.put(name,var);		
+	}
 }

@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import com.apollo.annotate.ComponentInjector;
 import com.apollo.managers.EntityManager;
 
-public abstract class Component{
+public abstract class Behavior{
 	protected Entity owner;
 
 	public World getWorld() {
@@ -24,7 +24,7 @@ public abstract class Component{
 		return owner;
 	}
 
-	public Class<? extends Component> getType() {
+	public Class<? extends Behavior> getType() {
 		return this.getClass();
 	}
 
@@ -34,8 +34,8 @@ public abstract class Component{
 	public void update(float delta) {
 	}
 
-	public <T extends Component> T getComponentFromOwner(Class<T> family) {
-		return owner.getComponent(family);
+	public <T extends Behavior> T getComponentFromOwner(Class<T> family) {
+		return owner.getBehavior(family);
 	}
 
 	public void uninitialize() {
@@ -51,7 +51,7 @@ public abstract class Component{
 				ComponentInjector.injectorTaggedEntity.inject(fields[i], this);
 			}
 			clazz = clazz.getSuperclass();
-		} while (clazz != Component.class);
+		} while (clazz != Behavior.class);
 	}
 
 }

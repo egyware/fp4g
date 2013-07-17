@@ -1,10 +1,10 @@
 package com.apollo.components.spatial;
 
-import com.apollo.Component;
+import com.apollo.Behavior;
 import com.apollo.Layer;
 import com.apollo.utils.Bag;
 
-public abstract class Spatial<T> extends Component {
+public abstract class Spatial<T> extends Behavior {
 	
 	public abstract Layer getLayer();
 	
@@ -20,6 +20,10 @@ public abstract class Spatial<T> extends Component {
 		}
 		bucket.add(this);
 	}
+	public void removeFromRenderBuckets(Bag<Bag<Spatial<T>>> buckets) {
+		Bag<Spatial<T>> bucket = buckets.get(getLayerId());	
+		bucket.remove(this);
+	}
 	
 	@Override
 	public void initialize() {
@@ -32,7 +36,7 @@ public abstract class Spatial<T> extends Component {
 	public abstract void render(T graphicsContext);
 
 	@Override
-	public Class<? extends Component> getType() {
+	public Class<? extends Behavior> getType() {
 		return Spatial.class;
 	}
 

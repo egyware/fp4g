@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import com.apollo.ApolloException;
-import com.apollo.Component;
+import com.apollo.Behavior;
 import com.apollo.Entity;
 import com.apollo.managers.Manager;
 import com.apollo.managers.TagManager;
@@ -14,13 +14,14 @@ public abstract class ComponentInjector<T> {
 
 	
 	
-	public static ComponentInjector<Component> injectorComponent = new ComponentInjector<Component>(InjectComponent.class) {
-		@Override			
-		Component getInjectionObject(Component component, Field field) {
+	public static ComponentInjector<Behavior> injectorComponent = new ComponentInjector<Behavior>(InjectComponent.class) {
+		@Override		
+		@SuppressWarnings("unchecked")
+		Behavior getInjectionObject(Behavior component, Field field) {
 			InjectComponent inject = field.getAnnotation(InjectComponent.class);
-			Class<? extends Component> clazz = inject.value(); //familia
-			Class<? extends Component> fieldClazz = Class.class.cast(field.getType());
-			if(clazz == Component.class)
+			Class<? extends Behavior> clazz = inject.value(); //familia
+			Class<? extends Behavior> fieldClazz = Class.class.cast(field.getType());
+			if(clazz == Behavior.class)
 			{
 				return component.getComponentFromOwner(fieldClazz);
 			}
@@ -37,14 +38,15 @@ public abstract class ComponentInjector<T> {
 	
 	public static ComponentInjector<Manager> injectorManager = new ComponentInjector<Manager>(InjectManager.class) {
 		@Override
-		Manager getInjectionObject(Component component, Field field) {
+		@SuppressWarnings("unchecked")
+		Manager getInjectionObject(Behavior component, Field field) {
 			return component.getWorld().getManager(Class.class.cast(field.getType()));
 		}
 	};
 	
 	public static ComponentInjector<Entity> injectorTaggedEntity = new ComponentInjector<Entity>(InjectTaggedEntity.class) {
 		@Override
-		Entity getInjectionObject(Component component, Field field) {
+		Entity getInjectionObject(Behavior component, Field field) {
 			InjectTaggedEntity annotation = field.getAnnotation(InjectTaggedEntity.class);
 			String tag = annotation.value();
 			TagManager tagManager = component.getWorld().getManager(TagManager.class);
@@ -64,7 +66,7 @@ public abstract class ComponentInjector<T> {
 		this.clazz = clazz;
 	}
 	
-	public void inject(Field field, Component component) {
+	public void inject(Field field, Behavior component) {
 		Annotation annotation = field.getAnnotation(clazz);
 		if(annotation!=null && clazz.isAssignableFrom(clazz)) {
 			T object = getInjectionObject(component, field);
@@ -82,9 +84,9 @@ public abstract class ComponentInjector<T> {
 		}
 	}
 	
-	abstract T getInjectionObject(Component component, Field field);
+	abstract T getInjectionObject(Behavior component, Field field);
 
-	public ComponentInjector<Component> getInjectorComponent() {
+	public ComponentInjector<Behavior> getInjectorComponent() {
 		return injectorComponent;
 	}
 

@@ -3,7 +3,6 @@ package com.apollo.managers;
 import com.apollo.Entity;
 import com.apollo.components.spatial.Spatial;
 import com.apollo.utils.Bag;
-import com.apollo.utils.ImmutableBag;
 
 public class RenderManager<T> extends Manager {
 	private Bag<Bag<Spatial<T>>> buckets;
@@ -22,27 +21,9 @@ public class RenderManager<T> extends Manager {
 		renderBuckets(context);
 	}
 
-	private void resetBuckets() {
-		for (int i = 0; buckets.size() > i; i++) {
-			Bag<Spatial<T>> bag = buckets.get(i);
-			if (bag != null) {
-				bag.clear();
-			}
-		}
-	}
-
-	private void addSpatialsToBuckets() {
-		EntityManager em = world.getEntityManager();
-		ImmutableBag<Entity> spatialEntities = em.getEntitiesByComponentType(Spatial.class);
-
-		for (int i = 0; spatialEntities.size() > i; i++) {
-			Entity entity = spatialEntities.get(i);
-			addEntitySpatialsToBuckets(entity);
-		}
-	}
-
+	@SuppressWarnings("unchecked")
 	private void addEntitySpatialsToBuckets(Entity entity) {
-		Spatial<T> spatial = entity.getComponent(Spatial.class);
+		Spatial<T> spatial = entity.getBehavior(Spatial.class);
 		if (spatial != null) {
 			spatial.addToRenderBuckets(buckets);
 		}
@@ -62,15 +43,16 @@ public class RenderManager<T> extends Manager {
 
 	@Override
 	public void added(Entity e) {
-		//resetBuckets();
-		//addSpatialsToBuckets();
 		addEntitySpatialsToBuckets(e);
 	}
 
 	@Override
-	public void removed(Entity e) {
-		resetBuckets();
-		addSpatialsToBuckets();
+	@SuppressWarnings("unchecked")	
+	public void removed(Entity entity) {
+		Spatial<T> spatial = entity.getBehavior(Spatial.class);
+		if (spatial != null) {
+			spatial.removeFromRenderBuckets(buckets);
+		}	
 	}
 
 }

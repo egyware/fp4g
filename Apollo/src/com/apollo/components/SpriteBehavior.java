@@ -95,11 +95,13 @@ public class SpriteBehavior extends Spatial<SpriteBatch>
 		{
 			current_id = animation;
 			current_sequence = sequence.getAnimation(animation);
+			current_time = 0;
 		}
 		else if(!current_id.equals(animation))
 		{
 			current_id = animation;
 			current_sequence = sequence.getAnimation(animation);
+			current_time = 0;
 		}
 	}
 	public boolean isAnimationFinished() {

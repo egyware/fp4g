@@ -1,10 +1,10 @@
 package com.apollo.components;
 
-import com.apollo.Component;
+import com.apollo.Behavior;
 import com.apollo.utils.TrigLUT;
 import com.apollo.utils.Utils;
 
-public abstract class Transform extends Component {
+public abstract class Transform extends Behavior {
 	//estos campos deben ser actualizados
 	protected float x;
 	protected float y;

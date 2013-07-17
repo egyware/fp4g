@@ -83,7 +83,7 @@ public class World {
 		entityBuildersByType.put(builderType, entityBuilder);
 	}
 	public void setEntityBuilder(EntityBuilder entityBuilder) {
-		entityBuildersByType.put(entityBuilder.getEntityBuildName(), entityBuilder);
+		entityBuildersByType.put(entityBuilder.getEntityBuilderName(), entityBuilder);
 	}
 
 	

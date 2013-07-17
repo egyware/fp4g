@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class GdxRenderManager extends RenderManager<SpriteBatch> {
 	private Camera camera; 
 
+	public GdxRenderManager(SpriteBatch batch)
+	{
+		super(batch);
+	}
 	
 	public GdxRenderManager() {
 		super(new SpriteBatch());
