@@ -1,5 +1,6 @@
 package fp4g;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,8 +9,13 @@ import fp4g.data.Define;
 import fp4g.data.IScope;
 import fp4g.data.MapScope;
 import fp4g.data.FactoryType;
-import fp4g.generator.Generator;
+import fp4g.new_generator.Generator;
 import fp4g.generator.Utils;
+import fp4g.new_data.Game;
+import fp4g.new_data.managers.EntityManager;
+import fp4g.new_data.managers.PhysicsManager;
+import fp4g.new_data.managers.RenderManager;
+import fp4g.new_data.managers.SoundManager;
 import fp4g.parser.FastPrototyping4Game;
 import fp4g.parser.ParseException;
 
@@ -42,40 +48,44 @@ public class Main {
 		      System.out.println(String.format("Reading from %s",inputFile));      
 		      try
 		      {
-		        MapScope global = new MapScope();
-		        global.set("RenderSystem" ,new Define("GdxRenderManager",FactoryType.SYSTEM,new MapScope(),1));
-		        global.set("EntitySystem" ,new Define("EntityManager"   ,FactoryType.SYSTEM,new MapScope(),2));
-		        global.set("SoundSystem"  ,new Define("SoundManager"    ,FactoryType.SYSTEM,new MapScope(),3));
-		        global.set("PhysicsSystem",new Define("PhysicsManager"  ,FactoryType.SYSTEM,new MapScope(),4));
-		        	
-	
-		        global.set("name","GameApp");
-		        global.set("width",640);
-		        global.set("height",480);
-		        global.set("debug",false);
-		        
-		        //agregar componentes
+		    	Game gameConf = new Game();
+		    	gameConf.name = "GameApp";
+		    	gameConf.width = 640;
+		    	gameConf.height = 480;
+		    	gameConf.debug = false;
+		    	
+		    	gameConf.addManager("RenderSystem", new RenderManager());
+		    	gameConf.addManager("EntitySystem", new EntityManager());
+		    	gameConf.addManager("SoundSystem",  new SoundManager());
+		    	gameConf.addManager("PhysicsSystem",new PhysicsManager());
+		    	
+		        //agregar componentes		    	
 		        String components[][] = 
 		        	{
-		        		{"SpriteBehavior","spatial.Spatial"},
-		        		{"PlatformBodyBehavior","BodyBehavior"},
-		        		{"CitizenBodyBehavior","BodyBehavior"},		        				        		
-		        		{"PlayerBodyBehavior","BodyBehavior"},
-		        		{"DestroyerBodyBehavior","BodyBehavior"},		        		
+		        		{"BodyBehavior"},
+		        		{"spatial.Spatial"},
+		        		{"SpriteBehavior","spatial.Spatial"},		        			        		
 		        	};	        
 		        for(String c[]:components)
 		        {
-		        	global.set(c[0],new Define(c[0],FactoryType.BEHAVIOR,new MapScope()));
-		        	Utils.setFamilyComponents(c[0],c[1]);
+		        	if(c.length == 1)
+		        	{
+		        		gameConf.addBehavior(c[0]);
+		        	}
+		        	else
+		        	{
+		        		gameConf.addBehavior(c[0],c[1]);
+		        	}
 		        }
+
+		        System.out.println(String.format("Parsing: %s",inputFile));
+		        parser.game(gameConf);
+		        System.out.println(String.format("Parsing complete: %s",inputFile));
 		        
-		        System.out.println("Parsing ...");
-		        IScope game = parser.game(global); 
-		        System.out.println("...Ok!");
-		        Generator gen = new Generator(game);
 		        System.out.println("Generating...");
-		        gen.generate(outDirectory);
-		        System.out.println("...Ok!");	        
+		        Generator.generate(gameConf, new File(outDirectory));
+		        System.out.println("...Ok!");		        
+	        
 		      }
 		      catch (Exception e)
 		      {

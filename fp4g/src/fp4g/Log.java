@@ -5,7 +5,7 @@ import java.io.PrintStream;
 import fp4g.data.Value;
 
 public class Log {	
-	private static interface MessageType
+	protected static interface MessageType
 	{
 		public String getMessage();
 		
@@ -15,12 +15,12 @@ public class Log {
 		ExpectedDefine("No se esperaba Define State, se ignora, cambie a otro nivel"),
 		NotFoundDefine("No se encontró una definición previa, se omitirá y se asumirá que existe"),
 		CustomAddState, 
-		NotExpectedThis;
+		NotExpectedThis, ParentBehaviorNull;
 		
 		private String message;
 		private WarnType()
 		{
-			this("warning no detallado");
+			message = this.name();
 		}
 		private WarnType(String msg)		
 		{		
@@ -41,12 +41,15 @@ public class Log {
 		NotExpectedType("No se esperaba ese tipo"),
 		ExpectedAddDefineStart("Se esperaba Define/ADD State en Start"),
 		CannotCastVar(""), 
-		ErrorCallFunction("Error al llamar la función");
+		ErrorCallFunction("Error al llamar la función"),
+		BehaviorNull,
+		BasedExcepted,
+		UnknowError;
 		
 		private String message;
 		private ErrType()
 		{
-			this("error no detallado");
+			message = this.name();
 		}
 		private ErrType(String msg)		
 		{		
@@ -65,7 +68,7 @@ public class Log {
 		private String message;
 		private InfoType()
 		{
-			this("info no detallado");
+			message = this.name();
 		}
 		private InfoType(String msg)		
 		{		
@@ -76,6 +79,10 @@ public class Log {
 		public String getMessage() {			
 			return message;		
 		}
+	}
+	public static <T extends MessageType> void Show(T type)
+	{
+		Show(type,0);
 	}
 	public static <T extends MessageType> void Show(T type,Object v)
 	{
@@ -111,7 +118,7 @@ public class Log {
 	public static void Show(InfoType type,int line)
 	{
 		Info(type,line);		
-	}
+	}	
 	private static void Info(final InfoType type,final int line) {
 		final String format = "%d: info%03d %s";
 		final PrintStream out = System.out;

@@ -4,7 +4,7 @@
   IGNORE_CASE = true;    static = false;
  }PARSER_BEGIN(FastPrototyping4Game)package fp4g.parser;
 import java.util.LinkedList;
-import fp4g.data.*;
+import fp4g.data.*;import fp4g.new_data.*;
 import static fp4g.Log.ErrType;
 import static fp4g.Log.WarnType;
 import static fp4g.Log.InfoType;
@@ -13,13 +13,13 @@ import static fp4g.Log.Show;
 public class FastPrototyping4Game{   
  
 }PARSER_END(FastPrototyping4Game)SKIP :{  " "| "\r"| "\t"
+| "\n"
 }
 
 SPECIAL_TOKEN : /* comentarios */
 {
 	< SINGLE_LINE_COMMENT: "//" ( ~["\n","\r"] )* ("\n" | "\r" | "\r\n") >
 |	< MULTI_LINE_COMMENT: "/*" ( ~["*"] | ("*")+ ~["*","/"] )* ("*")+ "/" >
-| 	< EOL: "\n" >
 }
 
   
@@ -41,7 +41,7 @@ TOKEN: /* keywords */
 }
 
 TOKEN: /* auxiliars keywords */
-{    < SYSTEM  : "SYSTEM" >
+{    < MANAGER  : "MANAGER" >
 |   < GAME    : "GAME" >  
 |   < STATE   : "STATE" >
 |   < BEHAVIOR: "BEHAVIOR" >
@@ -85,12 +85,253 @@ TOKEN: /* Identificador */
 }
 
 
-IScope game(IScope init_value) :
+Game game(Game game) :
+{ }
 {
-  IScope object;}
+  < DEFINE > < GAME > game.name = < IDENTIFIER >.image < ABRE_COR > game_values(game) < CIERRA_COR > < EOF >
+  {
+    return game;      } }
+
+void game_values(Game game):
+{   }
 {
-  < DEFINE > < GAME > object = prototype_object_set(init_value) < EOF >
-  { return object;}}
+   game_value(game) ( LOOKAHEAD(2) < COMA > game_value(game) )* [ < COMA > ]       
+}
+
+void game_value(Game game):
+{
+  //Ahora ADD tiene la responsabilidad de agregar las cosas}
+{
+  	game_add(game)
+  | game_define(game) 
+}
+ /*	
+	| define(local)
+	| start(local)
+	| LOOKAHEAD(2) key = < IDENTIFIER >.image < EQUAL > value = expresion(local) { local.set(key,value); }
+	| LOOKAHEAD(2) inline_prototype_object(local) 	 
+	| value = function(local) { local.add(value);	}*/
+
+void game_define(Game game):
+{
+  String factoryName;
+  String basedName = null;
+  FactoryType factoryType;
+  //TODO basedName por hacer
+  //TODO recuperar lineas
+  int line = 0;}
+{
+  	(  	  line = < DEFINE >.beginLine  	
+   	  (   	    < STATE  >  { factoryType   =  FactoryType.STATE;  }  
+	   |< MANAGER > { factoryType   =  FactoryType.SYSTEM; }
+       |< BEHAVIOR >{ factoryType   =  FactoryType.BEHAVIOR; }
+       |< ENTITY >  { factoryType   =  FactoryType.ENTITY; }
+       |< GOAL >    { factoryType   =  FactoryType.GOAL;  }
+      )
+      factoryName = < IDENTIFIER >.image  
+      [< BASE > basedName = < IDENTIFIER >.image ]
+    )
+    {
+      	GameState state = null;
+      	Entity entity = null;
+    	switch(factoryType)
+    	{			case STATE:
+				state = new GameState.Generated(game,factoryName);
+				game.addGameState(state);
+			break;
+			case SYSTEM:
+				//TODO definir aún
+			break;
+       		case BEHAVIOR:
+       			if(basedName != null)
+       			{
+       			   Show(ErrType.BasedExcepted,line);       			}
+       			else
+       			{       			  
+       				//TODO hacer behaviors, basados en otros
+				}
+       		break;
+       		case ENTITY:
+       			if(basedName != null)
+       			{
+       			  	//TODO falta hacer basados en otros
+       			}
+       			else
+       			{					entity = new Entity.Define(game,factoryName);					
+       			}       			  			       			      			    
+       		break;
+       		case GOAL:
+       			//TODO definir aún
+       		break;       		
+    	}
+    	//custom code
+    	jj_consume_token(ABRE_COR);
+		switch(factoryType)
+    	{
+			case STATE:
+				state_values(state);
+			break;
+			case SYSTEM:
+				//TODO definir aún
+			break;
+       		case BEHAVIOR:
+       			//TODO definir aún
+       		break;
+       		case ENTITY:
+       			entity_values(entity);			    
+       		break;
+       		case GOAL:
+       			//TODO definir aún
+       		break;
+        }		
+    	//custom code
+    	jj_consume_token(CIERRA_COR);  	}    
+}
+
+ /*
+{
+  
+ 
+  
+  
+  {    
+	Define.Set(factoryType,factoryName,basedName,parent,local,line); 
+  }
+}*/
+
+
+void game_add(Game game):
+{
+  FactoryType factoryType;
+  String name;
+  //TODO redecidir que diablos tendrá ahora ADD
+  //IScope local = null;
+  int line = 0; //TODO rehabilitar lineas  
+}
+{
+   line = < ADD >.beginLine 
+   (
+     < STATE  >  { factoryType  =  FactoryType.STATE;  } //agrega stados personalizados
+    |< BEHAVIOR >{ factoryType  =  FactoryType.BEHAVIOR; } //permite agregar behaviors ya definidos    
+    |< GOAL >    { factoryType  =  FactoryType.GOAL;  } //agrega metas, globales
+   )
+   name = < IDENTIFIER >.image //[ local = add_values(game) ]
+   {     
+     switch(factoryType)
+     {		case STATE:
+			game.add(new GameState.Custom(game,name));
+		break;		
+		case BEHAVIOR:
+			//TODO falta definir padre, si es que hay
+			game.addBehavior(name);
+		break;		
+		case GOAL:
+			//TODO por hacer, metas no definidas aún
+		break;
+		default:
+			Show(ErrType.UnknowError);
+		break;
+     }
+   }	
+}
+
+void state_values(GameState state):
+{}
+{
+   state_value(state) ( LOOKAHEAD(2) < COMA > state_value(state) )* [ < COMA > ]     }
+void state_value(GameState state):
+{
+  String key = null; 
+}
+{ 	
+	[key = < IDENTIFIER >.image <EQUAL >]state_add(state,key)
+  | state_define(state)		
+}
+void state_add(GameState state,String key):
+{  
+  FactoryType factoryType;
+  String name;
+  //TODO recuperar lineas
+  int line = 0;
+}
+{
+   line = < ADD >.beginLine 
+   (       
+     < MANAGER > { factoryType   =  FactoryType.SYSTEM; }    
+    |< ENTITY > { factoryType   =  FactoryType.ENTITY; }
+    |< GOAL >   { factoryType   =  FactoryType.GOAL;  }
+   )
+   name = < IDENTIFIER >.image // [ local = prototype_object(parent) ] //TODO recuperar el ADD datos 
+   {
+    	switch(factoryType)
+    	{			
+			case SYSTEM:
+				Manager manager = state.getDefinedManager(name); //suena tonto, pero busca en los sistemas definidos				
+				state.addManager(manager.add(),key);
+			break;			
+			case ENTITY:
+				Entity entity = state.getDefinedEntity(name);				
+				state.addEntity(entity.add(),name);
+			break;
+			case GOAL:
+				//TODO por hacer aún
+				//state.addGoal(name,key);
+			break;
+			default:
+				Show(ErrType.UnknowError);
+			break;
+    	} 
+   }
+}
+void state_define(GameState state):
+{}
+{	< COMA >
+}
+
+void entity_values(Entity entity):
+{
+}
+{
+  entity_value(entity) ( LOOKAHEAD(2) < COMA > entity_value(entity) )* [ < COMA > ]  
+}
+void entity_value(Entity entity):
+{
+}
+{
+  entity_add(entity)  
+}
+
+void entity_add(Entity entity):
+{  
+  FactoryType factoryType;
+  String name;  
+  int line = 0;
+}
+{
+   line = < ADD >.beginLine 
+   (
+    < BEHAVIOR > { factoryType =  FactoryType.BEHAVIOR; }    
+   )
+   name = < IDENTIFIER >.image // [ local = prototype_object(parent) ] //TODO add T_T
+   {
+     switch(factoryType)
+     {
+        case BEHAVIOR:
+        	Behavior behavior = entity.getDefinedBehavior(name);
+        	if(behavior == null)
+        	{				Show(ErrType.BehaviorNull,line);
+        	}
+        	else
+        	{        	  
+        		entity.addBehavior(behavior);
+       		}
+        break;		default:
+			Show(ErrType.UnknowError);
+		break;
+     }
+   }
+}
+
 
 IScope prototype_object_set(IScope init_value) :
 {
@@ -109,8 +350,7 @@ IScope prototype_object(IScope parent) :
   	int line = 0;}
 {
   line = < ABRE_COR >.beginLine values(scope) <CIERRA_COR >
-  {
-     //scope.setLine(line);
+  {     
      return scope;
   } 
 }
@@ -279,7 +519,7 @@ void define(IScope parent):
   int line = 0;  }
 {
   line = < DEFINE >.beginLine  (
-     < STATE  >  { factoryType   =  FactoryType.STATE;  }      |< SYSTEM >  { factoryType   =  FactoryType.SYSTEM; }
+     < STATE  >  { factoryType   =  FactoryType.STATE;  }      |< MANAGER >  { factoryType   =  FactoryType.SYSTEM; }
     |< BEHAVIOR >{ factoryType   =  FactoryType.BEHAVIOR; }
     |< ENTITY >  { factoryType   =  FactoryType.ENTITY; }
     |< GOAL >    { factoryType   =  FactoryType.GOAL;  }
@@ -299,7 +539,7 @@ Add add(IScope parent):
 {
    line = < ADD >.beginLine 
    (       < STATE  > { factoryType   =  FactoryType.STATE;  }  
-    |< SYSTEM > { factoryType   =  FactoryType.SYSTEM; }
+    |< MANAGER > { factoryType   =  FactoryType.SYSTEM; }
     |< BEHAVIOR > { factoryType =  FactoryType.BEHAVIOR; }
     |< ENTITY > { factoryType   =  FactoryType.ENTITY; }
     |< GOAL >   { factoryType   =  FactoryType.GOAL;  }

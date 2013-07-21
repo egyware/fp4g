@@ -1,0 +1,10 @@
+package fp4g.new_data;
+
+/**
+ * Esta clase está encargada de guardar los eventos, que se pueden generar 
+ * @author Edgardo
+ *
+ */
+public class Event {
+	//TODO Falta como se codificará la acción del evento
+}

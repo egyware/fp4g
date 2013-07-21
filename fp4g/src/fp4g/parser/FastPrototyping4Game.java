@@ -2,6 +2,7 @@
 package fp4g.parser;
 import java.util.LinkedList;
 import fp4g.data.*;
+import fp4g.new_data.*;
 import static fp4g.Log.ErrType;
 import static fp4g.Log.WarnType;
 import static fp4g.Log.InfoType;
@@ -9,14 +10,366 @@ import static fp4g.Log.Show;
 
 public class FastPrototyping4Game implements FastPrototyping4GameConstants {
 
-  final public IScope game(IScope init_value) throws ParseException {
-  IScope object;
+  final public Game game(Game game) throws ParseException {
     jj_consume_token(DEFINE);
     jj_consume_token(GAME);
-    object = prototype_object_set(init_value);
+    game.name = jj_consume_token(IDENTIFIER).image;
+    jj_consume_token(ABRE_COR);
+    game_values(game);
+    jj_consume_token(CIERRA_COR);
     jj_consume_token(0);
-    {if (true) return object;}
+    {if (true) return game;}
     throw new Error("Missing return statement in function");
+  }
+
+  final public void game_values(Game game) throws ParseException {
+    game_value(game);
+    label_1:
+    while (true) {
+      if (jj_2_1(2)) {
+        ;
+      } else {
+        break label_1;
+      }
+      jj_consume_token(COMA);
+      game_value(game);
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case COMA:
+      jj_consume_token(COMA);
+      break;
+    default:
+      jj_la1[0] = jj_gen;
+      ;
+    }
+  }
+
+  final public void game_value(Game game) throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ADD:
+      game_add(game);
+      break;
+    case DEFINE:
+      game_define(game);
+      break;
+    default:
+      jj_la1[1] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+  }
+
+ /*	
+	| define(local)
+	| start(local)
+	| LOOKAHEAD(2) key = < IDENTIFIER >.image < EQUAL > value = expresion(local) { local.set(key,value); }
+	| LOOKAHEAD(2) inline_prototype_object(local) 	 
+	| value = function(local) { local.add(value);	}*/
+  final public void game_define(Game game) throws ParseException {
+  String factoryName;
+  String basedName = null;
+  FactoryType factoryType;
+  //TODO basedName por hacer
+  //TODO recuperar lineas
+  int line = 0;
+    line = jj_consume_token(DEFINE).beginLine;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case STATE:
+      jj_consume_token(STATE);
+                          factoryType   =  FactoryType.STATE;
+      break;
+    case MANAGER:
+      jj_consume_token(MANAGER);
+                          factoryType   =  FactoryType.SYSTEM;
+      break;
+    case BEHAVIOR:
+      jj_consume_token(BEHAVIOR);
+                      factoryType   =  FactoryType.BEHAVIOR;
+      break;
+    case ENTITY:
+      jj_consume_token(ENTITY);
+                      factoryType   =  FactoryType.ENTITY;
+      break;
+    case GOAL:
+      jj_consume_token(GOAL);
+                      factoryType   =  FactoryType.GOAL;
+      break;
+    default:
+      jj_la1[2] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    factoryName = jj_consume_token(IDENTIFIER).image;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case BASE:
+      jj_consume_token(BASE);
+      basedName = jj_consume_token(IDENTIFIER).image;
+      break;
+    default:
+      jj_la1[3] = jj_gen;
+      ;
+    }
+        GameState state = null;
+        Entity entity = null;
+        switch(factoryType)
+        {
+                        case STATE:
+                                state = new GameState.Generated(game,factoryName);
+                                game.addGameState(state);
+                        break;
+                        case SYSTEM:
+                                //TODO definir aún
+                        break;
+                case BEHAVIOR:
+                        if(basedName != null)
+                        {
+                           Show(ErrType.BasedExcepted,line);
+                        }
+                        else
+                        {
+                                //TODO hacer behaviors, basados en otros
+                                }
+                break;
+                case ENTITY:
+                        if(basedName != null)
+                        {
+                                //TODO falta hacer basados en otros
+                        }
+                        else
+                        {
+                                        entity = new Entity.Define(game,factoryName);
+                        }
+                break;
+                case GOAL:
+                        //TODO definir aún
+                break;
+        }
+        //custom code
+        jj_consume_token(ABRE_COR);
+                switch(factoryType)
+        {
+                        case STATE:
+                                state_values(state);
+                        break;
+                        case SYSTEM:
+                                //TODO definir aún
+                        break;
+                case BEHAVIOR:
+                        //TODO definir aún
+                break;
+                case ENTITY:
+                        entity_values(entity);
+                break;
+                case GOAL:
+                        //TODO definir aún
+                break;
+        }
+        //custom code
+        jj_consume_token(CIERRA_COR);
+  }
+
+ /*
+{
+  
+ 
+  
+  
+  {    
+	Define.Set(factoryType,factoryName,basedName,parent,local,line); 
+  }
+}*/
+  final public void game_add(Game game) throws ParseException {
+  FactoryType factoryType;
+  String name;
+  //TODO redecidir que diablos tendrá ahora ADD
+  //IScope local = null;
+  int line = 0;
+    line = jj_consume_token(ADD).beginLine;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case STATE:
+      jj_consume_token(STATE);
+                   factoryType  =  FactoryType.STATE;
+      break;
+    case BEHAVIOR:
+      jj_consume_token(BEHAVIOR);
+                   factoryType  =  FactoryType.BEHAVIOR;
+      break;
+    case GOAL:
+      jj_consume_token(GOAL);
+                   factoryType  =  FactoryType.GOAL;
+      break;
+    default:
+      jj_la1[4] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    name = jj_consume_token(IDENTIFIER).image;
+     switch(factoryType)
+     {
+                case STATE:
+                        game.add(new GameState.Custom(game,name));
+                break;
+                case BEHAVIOR:
+                        //TODO falta definir padre, si es que hay
+                        game.addBehavior(name);
+                break;
+                case GOAL:
+                        //TODO por hacer, metas no definidas aún
+                break;
+                default:
+                        Show(ErrType.UnknowError);
+                break;
+     }
+  }
+
+  final public void state_values(GameState state) throws ParseException {
+    state_value(state);
+    label_2:
+    while (true) {
+      if (jj_2_2(2)) {
+        ;
+      } else {
+        break label_2;
+      }
+      jj_consume_token(COMA);
+      state_value(state);
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case COMA:
+      jj_consume_token(COMA);
+      break;
+    default:
+      jj_la1[5] = jj_gen;
+      ;
+    }
+  }
+
+  final public void state_value(GameState state) throws ParseException {
+  String key = null;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ADD:
+    case IDENTIFIER:
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case IDENTIFIER:
+        key = jj_consume_token(IDENTIFIER).image;
+        jj_consume_token(EQUAL);
+        break;
+      default:
+        jj_la1[6] = jj_gen;
+        ;
+      }
+      state_add(state,key);
+      break;
+    case COMA:
+      state_define(state);
+      break;
+    default:
+      jj_la1[7] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+  }
+
+  final public void state_add(GameState state,String key) throws ParseException {
+  FactoryType factoryType;
+  String name;
+  //TODO recuperar lineas
+  int line = 0;
+    line = jj_consume_token(ADD).beginLine;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case MANAGER:
+      jj_consume_token(MANAGER);
+                   factoryType   =  FactoryType.SYSTEM;
+      break;
+    case ENTITY:
+      jj_consume_token(ENTITY);
+                  factoryType   =  FactoryType.ENTITY;
+      break;
+    case GOAL:
+      jj_consume_token(GOAL);
+                  factoryType   =  FactoryType.GOAL;
+      break;
+    default:
+      jj_la1[8] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    name = jj_consume_token(IDENTIFIER).image;
+        switch(factoryType)
+        {
+                        case SYSTEM:
+                                Manager manager = state.getDefinedManager(name); //suena tonto, pero busca en los sistemas definidos				
+                                state.addManager(manager.add(),key);
+                        break;
+                        case ENTITY:
+                                Entity entity = state.getDefinedEntity(name);
+                                state.addEntity(entity.add(),name);
+                        break;
+                        case GOAL:
+                                //TODO por hacer aún
+                                //state.addGoal(name,key);
+                        break;
+                        default:
+                                Show(ErrType.UnknowError);
+                        break;
+        }
+  }
+
+  final public void state_define(GameState state) throws ParseException {
+    jj_consume_token(COMA);
+  }
+
+  final public void entity_values(Entity entity) throws ParseException {
+    entity_value(entity);
+    label_3:
+    while (true) {
+      if (jj_2_3(2)) {
+        ;
+      } else {
+        break label_3;
+      }
+      jj_consume_token(COMA);
+      entity_value(entity);
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case COMA:
+      jj_consume_token(COMA);
+      break;
+    default:
+      jj_la1[9] = jj_gen;
+      ;
+    }
+  }
+
+  final public void entity_value(Entity entity) throws ParseException {
+    entity_add(entity);
+  }
+
+  final public void entity_add(Entity entity) throws ParseException {
+  FactoryType factoryType;
+  String name;
+  int line = 0;
+    line = jj_consume_token(ADD).beginLine;
+    jj_consume_token(BEHAVIOR);
+                   factoryType =  FactoryType.BEHAVIOR;
+    name = jj_consume_token(IDENTIFIER).image;
+     switch(factoryType)
+     {
+        case BEHAVIOR:
+                Behavior behavior = entity.getDefinedBehavior(name);
+                if(behavior == null)
+                {
+                                Show(ErrType.BehaviorNull,line);
+                }
+                else
+                {
+                        entity.addBehavior(behavior);
+                }
+        break;
+                default:
+                        Show(ErrType.UnknowError);
+                break;
+     }
   }
 
   final public IScope prototype_object_set(IScope init_value) throws ParseException {
@@ -34,7 +387,6 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     line = jj_consume_token(ABRE_COR).beginLine;
     values(scope);
     jj_consume_token(CIERRA_COR);
-     //scope.setLine(line);
      {if (true) return scope;}
     throw new Error("Missing return statement in function");
   }
@@ -54,13 +406,13 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       start(local);
       break;
     default:
-      jj_la1[0] = jj_gen;
-      if (jj_2_1(2)) {
+      jj_la1[10] = jj_gen;
+      if (jj_2_4(2)) {
         key = jj_consume_token(IDENTIFIER).image;
         jj_consume_token(EQUAL);
         value = expresion(local);
                                                                                        local.set(key,value);
-      } else if (jj_2_2(2)) {
+      } else if (jj_2_5(2)) {
         inline_prototype_object(local);
       } else {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -69,7 +421,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
                                     local.add(value);
           break;
         default:
-          jj_la1[1] = jj_gen;
+          jj_la1[11] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -91,15 +443,15 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
                 key = null;
           }
           last = inline;
-    label_1:
+    label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case DOT:
         ;
         break;
       default:
-        jj_la1[2] = jj_gen;
-        break label_1;
+        jj_la1[12] = jj_gen;
+        break label_4;
       }
       jj_consume_token(DOT);
       key = jj_consume_token(IDENTIFIER).image;
@@ -198,7 +550,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       args = params(local);
       break;
     default:
-      jj_la1[3] = jj_gen;
+      jj_la1[13] = jj_gen;
       ;
     }
     jj_consume_token(CIERRA_PAR);
@@ -220,15 +572,15 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
   final public Object[] params(IScope local) throws ParseException {
   LinkedList<Object > list = new LinkedList<Object >();
     param(list,local);
-    label_2:
+    label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case COMA:
         ;
         break;
       default:
-        jj_la1[4] = jj_gen;
-        break label_2;
+        jj_la1[14] = jj_gen;
+        break label_5;
       }
       jj_consume_token(COMA);
       param(list,local);
@@ -245,12 +597,12 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
 
   final public void values(IScope local) throws ParseException {
     value(local);
-    label_3:
+    label_6:
     while (true) {
-      if (jj_2_3(2)) {
+      if (jj_2_6(2)) {
         ;
       } else {
-        break label_3;
+        break label_6;
       }
       jj_consume_token(COMA);
       value(local);
@@ -260,7 +612,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       jj_consume_token(COMA);
       break;
     default:
-      jj_la1[5] = jj_gen;
+      jj_la1[15] = jj_gen;
       ;
     }
   }
@@ -277,9 +629,9 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       jj_consume_token(STATE);
                    factoryType   =  FactoryType.STATE;
       break;
-    case SYSTEM:
-      jj_consume_token(SYSTEM);
-                   factoryType   =  FactoryType.SYSTEM;
+    case MANAGER:
+      jj_consume_token(MANAGER);
+                    factoryType   =  FactoryType.SYSTEM;
       break;
     case BEHAVIOR:
       jj_consume_token(BEHAVIOR);
@@ -294,7 +646,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
                    factoryType   =  FactoryType.GOAL;
       break;
     default:
-      jj_la1[6] = jj_gen;
+      jj_la1[16] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -304,7 +656,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       basedName = jj_consume_token(IDENTIFIER).image;
       break;
     default:
-      jj_la1[7] = jj_gen;
+      jj_la1[17] = jj_gen;
       ;
     }
     factoryName = jj_consume_token(IDENTIFIER).image;
@@ -323,9 +675,9 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       jj_consume_token(STATE);
                     factoryType   =  FactoryType.STATE;
       break;
-    case SYSTEM:
-      jj_consume_token(SYSTEM);
-                  factoryType   =  FactoryType.SYSTEM;
+    case MANAGER:
+      jj_consume_token(MANAGER);
+                   factoryType   =  FactoryType.SYSTEM;
       break;
     case BEHAVIOR:
       jj_consume_token(BEHAVIOR);
@@ -340,7 +692,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
                   factoryType   =  FactoryType.GOAL;
       break;
     default:
-      jj_la1[8] = jj_gen;
+      jj_la1[18] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -350,7 +702,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       local = prototype_object(parent);
       break;
     default:
-      jj_la1[9] = jj_gen;
+      jj_la1[19] = jj_gen;
       ;
     }
      Add add = new Add(factoryName.image, factoryType,local);
@@ -381,10 +733,10 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
                                          value = Boolean.parseBoolean(t.image);
       break;
     default:
-      jj_la1[10] = jj_gen;
-      if (jj_2_4(2)) {
+      jj_la1[20] = jj_gen;
+      if (jj_2_7(2)) {
         value = function(local);
-      } else if (jj_2_5(2)) {
+      } else if (jj_2_8(2)) {
         t = jj_consume_token(IDENTIFIER);
                                                     value = local.get(t.image);
       } else {
@@ -396,7 +748,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
           value = add(local);
           break;
         default:
-          jj_la1[11] = jj_gen;
+          jj_la1[21] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -445,109 +797,216 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     finally { jj_save(4, xla); }
   }
 
-  private boolean jj_3R_8() {
-    if (jj_3R_12()) return true;
+  private boolean jj_2_6(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_6(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(5, xla); }
+  }
+
+  private boolean jj_2_7(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_7(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(6, xla); }
+  }
+
+  private boolean jj_2_8(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_8(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(7, xla); }
+  }
+
+  private boolean jj_3R_14() {
+    if (jj_3R_23()) return true;
     return false;
   }
 
-  private boolean jj_3R_5() {
+  private boolean jj_3_4() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(EQUAL)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_20() {
+    if (jj_3R_28()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_19() {
+    if (jj_3R_27()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_18() {
+    if (jj_3R_26()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_11() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_8()) {
+    if (jj_3R_18()) {
     jj_scanpos = xsp;
-    if (jj_3R_9()) {
+    if (jj_3R_19()) {
     jj_scanpos = xsp;
-    if (jj_3R_10()) {
+    if (jj_3R_20()) {
     jj_scanpos = xsp;
-    if (jj_3_1()) {
+    if (jj_3_4()) {
     jj_scanpos = xsp;
-    if (jj_3_2()) {
+    if (jj_3_5()) {
     jj_scanpos = xsp;
+    if (jj_3R_21()) return true;
+    }
+    }
+    }
+    }
+    }
+    return false;
+  }
+
+  private boolean jj_3_6() {
+    if (jj_scan_token(COMA)) return true;
     if (jj_3R_11()) return true;
-    }
-    }
-    }
-    }
-    }
     return false;
   }
 
   private boolean jj_3_3() {
     if (jj_scan_token(COMA)) return true;
-    if (jj_3R_5()) return true;
+    if (jj_3R_9()) return true;
     return false;
   }
 
-  private boolean jj_3R_4() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3R_7()) { jj_scanpos = xsp; break; }
-    }
-    if (jj_scan_token(EQUAL)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_13() {
-    if (jj_scan_token(DEFINE)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_12() {
-    if (jj_scan_token(ADD)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_14() {
+  private boolean jj_3R_28() {
     if (jj_scan_token(START)) return true;
     return false;
   }
 
-  private boolean jj_3_5() {
-    if (jj_scan_token(IDENTIFIER)) return true;
+  private boolean jj_3R_27() {
+    if (jj_scan_token(DEFINE)) return true;
     return false;
   }
 
-  private boolean jj_3_4() {
-    if (jj_3R_6()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_7() {
+  private boolean jj_3R_17() {
     if (jj_scan_token(DOT)) return true;
     return false;
   }
 
-  private boolean jj_3R_11() {
-    if (jj_3R_6()) return true;
+  private boolean jj_3R_16() {
+    if (jj_scan_token(ADD)) return true;
     return false;
   }
 
-  private boolean jj_3R_6() {
+  private boolean jj_3R_23() {
+    if (jj_scan_token(DEFINE)) return true;
+    return false;
+  }
+
+  private boolean jj_3_2() {
+    if (jj_scan_token(COMA)) return true;
+    if (jj_3R_8()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_12() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(ABRE_PAR)) return true;
     return false;
   }
 
-  private boolean jj_3_2() {
-    if (jj_3R_4()) return true;
+  private boolean jj_3R_25() {
+    if (jj_scan_token(ADD)) return true;
     return false;
   }
 
-  private boolean jj_3_1() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(EQUAL)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_10() {
-    if (jj_3R_14()) return true;
+  private boolean jj_3R_22() {
+    if (jj_scan_token(ADD)) return true;
     return false;
   }
 
   private boolean jj_3R_9() {
-    if (jj_3R_13()) return true;
+    if (jj_3R_16()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_24() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_8() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_15()) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(32)) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3R_15() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_24()) jj_scanpos = xsp;
+    if (jj_3R_25()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_10() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_17()) { jj_scanpos = xsp; break; }
+    }
+    if (jj_scan_token(EQUAL)) return true;
+    return false;
+  }
+
+  private boolean jj_3_1() {
+    if (jj_scan_token(COMA)) return true;
+    if (jj_3R_7()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_26() {
+    if (jj_scan_token(ADD)) return true;
+    return false;
+  }
+
+  private boolean jj_3_8() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_7() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_13()) {
+    jj_scanpos = xsp;
+    if (jj_3R_14()) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3R_13() {
+    if (jj_3R_22()) return true;
+    return false;
+  }
+
+  private boolean jj_3_7() {
+    if (jj_3R_12()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_21() {
+    if (jj_3R_12()) return true;
+    return false;
+  }
+
+  private boolean jj_3_5() {
+    if (jj_3R_10()) return true;
     return false;
   }
 
@@ -562,7 +1021,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
   private Token jj_scanpos, jj_lastpos;
   private int jj_la;
   private int jj_gen;
-  final private int[] jj_la1 = new int[12];
+  final private int[] jj_la1 = new int[22];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -570,12 +1029,12 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x4180,0x0,0x0,0x10000100,0x0,0x0,0xf40000,0x2000000,0xf40000,0x10000000,0x0,0x10000100,};
+      jj_la1_0 = new int[] {0x0,0x180,0xf40000,0x2000000,0xb00000,0x0,0x0,0x100,0xc40000,0x0,0x4180,0x0,0x0,0x10000100,0x0,0x0,0xf40000,0x2000000,0xf40000,0x10000000,0x0,0x10000100,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x10000,0x4,0x10078,0x1,0x1,0x0,0x0,0x0,0x0,0x78,0x0,};
+      jj_la1_1 = new int[] {0x1,0x0,0x0,0x0,0x0,0x1,0x10000,0x10001,0x0,0x1,0x0,0x10000,0x4,0x10078,0x1,0x1,0x0,0x0,0x0,0x0,0x78,0x0,};
    }
-  final private JJCalls[] jj_2_rtns = new JJCalls[5];
+  final private JJCalls[] jj_2_rtns = new JJCalls[8];
   private boolean jj_rescan = false;
   private int jj_gc = 0;
 
@@ -590,7 +1049,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 12; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -605,7 +1064,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 12; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -616,7 +1075,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 12; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -627,7 +1086,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 12; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -637,7 +1096,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 12; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -647,7 +1106,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 12; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -764,7 +1223,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 12; i++) {
+    for (int i = 0; i < 22; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -803,7 +1262,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
 
   private void jj_rescan_token() {
     jj_rescan = true;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 8; i++) {
     try {
       JJCalls p = jj_2_rtns[i];
       do {
@@ -815,6 +1274,9 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
             case 2: jj_3_3(); break;
             case 3: jj_3_4(); break;
             case 4: jj_3_5(); break;
+            case 5: jj_3_6(); break;
+            case 6: jj_3_7(); break;
+            case 7: jj_3_8(); break;
           }
         }
         p = p.next;

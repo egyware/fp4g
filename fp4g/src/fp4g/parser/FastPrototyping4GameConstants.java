@@ -11,11 +11,9 @@ public interface FastPrototyping4GameConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int SINGLE_LINE_COMMENT = 4;
+  int SINGLE_LINE_COMMENT = 5;
   /** RegularExpression Id. */
-  int MULTI_LINE_COMMENT = 5;
-  /** RegularExpression Id. */
-  int EOL = 6;
+  int MULTI_LINE_COMMENT = 6;
   /** RegularExpression Id. */
   int DEFINE = 7;
   /** RegularExpression Id. */
@@ -39,7 +37,7 @@ public interface FastPrototyping4GameConstants {
   /** RegularExpression Id. */
   int EXIT = 17;
   /** RegularExpression Id. */
-  int SYSTEM = 18;
+  int MANAGER = 18;
   /** RegularExpression Id. */
   int GAME = 19;
   /** RegularExpression Id. */
@@ -110,9 +108,9 @@ public interface FastPrototyping4GameConstants {
     "\" \"",
     "\"\\r\"",
     "\"\\t\"",
+    "\"\\n\"",
     "<SINGLE_LINE_COMMENT>",
     "<MULTI_LINE_COMMENT>",
-    "\"\\n\"",
     "\"DEFINE\"",
     "\"ADD\"",
     "\"ON\"",
@@ -124,7 +122,7 @@ public interface FastPrototyping4GameConstants {
     "\"RESUME\"",
     "\"PAUSE\"",
     "\"EXIT\"",
-    "\"SYSTEM\"",
+    "\"MANAGER\"",
     "\"GAME\"",
     "\"STATE\"",
     "\"BEHAVIOR\"",
