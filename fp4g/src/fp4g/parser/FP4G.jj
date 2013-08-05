@@ -4,8 +4,8 @@
   IGNORE_CASE = true;    static = false;
  }PARSER_BEGIN(FastPrototyping4Game)package fp4g.parser;
 import java.util.LinkedList;
-import fp4g.data.*;import fp4g.new_data.*;
-import static fp4g.Log.ErrType;
+import fp4g.data.*;
+import fp4g.data.define.*;import static fp4g.Log.ErrType;
 import static fp4g.Log.WarnType;
 import static fp4g.Log.InfoType;
 import static fp4g.Log.Show;
@@ -36,6 +36,7 @@ TOKEN: /* keywords */
 |	< START      : "START" >
 |   < RESUME     : "RESUME" >
 |   < PAUSE      : "PAUSE" >
+|   < USING      : "USING" > 
 |   < EXIT       : "EXIT" >
 
 }
@@ -62,6 +63,7 @@ TOKEN: /* Separadores */
 | < COMA      : "," >
 | < EQUAL     : "=" >
 | < DOT       : "." >
+| < DOTCOMA   : ";" >
 }TOKEN : /* Literales */{  < INT_LITERAL 	: (< DIGIT >)+ >
 | < DECIMAL_LITERAL : (< DIGIT >)*"."(< DIGIT >)+ >
 | < STRING_LITERAL  : "\""(~["\""])*"\""  > {  matchedToken.image = image.substring(1,lengthOfMatch-1);}
@@ -85,25 +87,45 @@ TOKEN: /* Identificador */
 }
 
 
-Game game(Game game) :
-{ }
-{
-  < DEFINE > < GAME > game.name = < IDENTIFIER >.image < ABRE_COR > game_values(game) < CIERRA_COR > < EOF >
-  {
-    return game;      } }
-
-void game_values(Game game):
-{   }
-{
-   game_value(game) ( LOOKAHEAD(2) < COMA > game_value(game) )* [ < COMA > ]       
+void usings(Game game):
+{  
+}
+{	using(game) ( LOOKAHEAD(2) < DOTCOMA > using(game) )* [ < DOTCOMA > ]
 }
 
-void game_value(Game game):
+void using(Game game):
 {
-  //Ahora ADD tiene la responsabilidad de agregar las cosas}
+   //TODO: Por hacer los usings...
+}
 {
-  	game_add(game)
-  | game_define(game) 
+  	< USING > <MANAGER >|< STATE >|< BEHAVIOR >|< ENTITY >| < GOAL >|< MESSAGE >
+}
+
+void game(Game game):
+{}
+{
+  [	usings(game) ]//using opcional  < DEFINE > <GAME > game.name = < IDENTIFIER >.image <ABRE_COR > [values(game)] <CIERRA_COR > <EOF >  
+}
+
+
+
+void values(Define define):
+{   }
+{
+   value(define) ( LOOKAHEAD(2) < COMA > value(define) )* [ < COMA > ]       
+}
+
+
+void value(Define define):
+{
+  String key;
+  Object value;
+}
+{
+  	add(define,null)
+  | define(define)
+  | on(define)
+  | key = < IDENTIFIER >.image < EQUAL > add(define,key)
 }
  /*	
 	| define(local)
@@ -112,361 +134,80 @@ void game_value(Game game):
 	| LOOKAHEAD(2) inline_prototype_object(local) 	 
 	| value = function(local) { local.add(value);	}*/
 
-void game_define(Game game):
+void add(Define define,String keyName):
 {
-  String factoryName;
+  int line = 0;
+  ObjectType type = null;
+  String name;
+}
+{
+   line = < ADD >.beginLine 
+   (
+     < STATE  >   { type  =  ObjectType.STATE;  }  
+    |< MANAGER >  { type  =  ObjectType.MANAGER; }
+    |< BEHAVIOR > { type  =  ObjectType.BEHAVIOR; }
+    |< ENTITY >   { type  =  ObjectType.ENTITY; }
+    |< GOAL >     { type  =  ObjectType.GOAL;  }
+   )
+   name = < IDENTIFIER >.image
+   {
+     Add add = new Add(type,name,keyName);     
+     add.setLine(line);
+     define.addADD(add);     
+   }   
+}
+void define(Define parent):
+{ 
+  String name;
   String basedName = null;
-  FactoryType factoryType;
-  //TODO basedName por hacer
-  //TODO recuperar lineas
-  int line = 0;}
-{
-  	(  	  line = < DEFINE >.beginLine  	
-   	  (   	    < STATE  >  { factoryType   =  FactoryType.STATE;  }  
-	   |< MANAGER > { factoryType   =  FactoryType.SYSTEM; }
-       |< BEHAVIOR >{ factoryType   =  FactoryType.BEHAVIOR; }
-       |< ENTITY >  { factoryType   =  FactoryType.ENTITY; }
-       |< GOAL >    { factoryType   =  FactoryType.GOAL;  }
-      )
-      factoryName = < IDENTIFIER >.image  
-      [< BASE > basedName = < IDENTIFIER >.image ]
-    )
-    {
-      	GameState state = null;
-      	Entity entity = null;
-    	switch(factoryType)
-    	{			case STATE:
-				state = new GameState.Generated(game,factoryName);
-				game.addGameState(state);
-			break;
-			case SYSTEM:
-				//TODO definir aún
-			break;
-       		case BEHAVIOR:
-       			if(basedName != null)
-       			{
-       			   Show(ErrType.BasedExcepted,line);       			}
-       			else
-       			{       			  
-       				//TODO hacer behaviors, basados en otros
-				}
-       		break;
-       		case ENTITY:
-       			if(basedName != null)
-       			{
-       			  	//TODO falta hacer basados en otros
-       			}
-       			else
-       			{					entity = new Entity.Define(game,factoryName);					
-       			}       			  			       			      			    
-       		break;
-       		case GOAL:
-       			//TODO definir aún
-       		break;       		
-    	}
-    	//custom code
-    	jj_consume_token(ABRE_COR);
-		switch(factoryType)
-    	{
-			case STATE:
-				state_values(state);
-			break;
-			case SYSTEM:
-				//TODO definir aún
-			break;
-       		case BEHAVIOR:
-       			//TODO definir aún
-       		break;
-       		case ENTITY:
-       			entity_values(entity);			    
-       		break;
-       		case GOAL:
-       			//TODO definir aún
-       		break;
-        }		
-    	//custom code
-    	jj_consume_token(CIERRA_COR);  	}    
-}
-
- /*
-{
-  
- 
-  
-  
-  {    
-	Define.Set(factoryType,factoryName,basedName,parent,local,line); 
-  }
-}*/
-
-
-void game_add(Game game):
-{
-  FactoryType factoryType;
-  String name;
-  //TODO redecidir que diablos tendrá ahora ADD
-  //IScope local = null;
-  int line = 0; //TODO rehabilitar lineas  
-}
-{
-   line = < ADD >.beginLine 
-   (
-     < STATE  >  { factoryType  =  FactoryType.STATE;  } //agrega stados personalizados
-    |< BEHAVIOR >{ factoryType  =  FactoryType.BEHAVIOR; } //permite agregar behaviors ya definidos    
-    |< GOAL >    { factoryType  =  FactoryType.GOAL;  } //agrega metas, globales
-   )
-   name = < IDENTIFIER >.image //[ local = add_values(game) ]
-   {     
-     switch(factoryType)
-     {		case STATE:
-			game.add(new GameState.Custom(game,name));
-		break;		
-		case BEHAVIOR:
-			//TODO falta definir padre, si es que hay
-			game.addBehavior(name);
-		break;		
-		case GOAL:
-			//TODO por hacer, metas no definidas aún
-		break;
-		default:
-			Show(ErrType.UnknowError);
-		break;
-     }
-   }	
-}
-
-void state_values(GameState state):
-{}
-{
-   state_value(state) ( LOOKAHEAD(2) < COMA > state_value(state) )* [ < COMA > ]     }
-void state_value(GameState state):
-{
-  String key = null; 
-}
-{ 	
-	[key = < IDENTIFIER >.image <EQUAL >]state_add(state,key)
-  | state_define(state)		
-}
-void state_add(GameState state,String key):
-{  
-  FactoryType factoryType;
-  String name;
-  //TODO recuperar lineas
+  ObjectType factoryType;
   int line = 0;
+  Define define = null;
 }
 {
-   line = < ADD >.beginLine 
-   (       
-     < MANAGER > { factoryType   =  FactoryType.SYSTEM; }    
-    |< ENTITY > { factoryType   =  FactoryType.ENTITY; }
-    |< GOAL >   { factoryType   =  FactoryType.GOAL;  }
-   )
-   name = < IDENTIFIER >.image // [ local = prototype_object(parent) ] //TODO recuperar el ADD datos 
-   {
-    	switch(factoryType)
-    	{			
-			case SYSTEM:
-				Manager manager = state.getDefinedManager(name); //suena tonto, pero busca en los sistemas definidos				
-				state.addManager(manager.add(),key);
-			break;			
-			case ENTITY:
-				Entity entity = state.getDefinedEntity(name);				
-				state.addEntity(entity.add(),name);
-			break;
-			case GOAL:
-				//TODO por hacer aún
-				//state.addGoal(name,key);
-			break;
-			default:
-				Show(ErrType.UnknowError);
-			break;
-    	} 
-   }
-}
-void state_define(GameState state):
-{}
-{	< COMA >
-}
-
-void entity_values(Entity entity):
-{
-}
-{
-  entity_value(entity) ( LOOKAHEAD(2) < COMA > entity_value(entity) )* [ < COMA > ]  
-}
-void entity_value(Entity entity):
-{
-}
-{
-  entity_add(entity)  
-}
-
-void entity_add(Entity entity):
-{  
-  FactoryType factoryType;
-  String name;  
-  int line = 0;
-}
-{
-   line = < ADD >.beginLine 
-   (
-    < BEHAVIOR > { factoryType =  FactoryType.BEHAVIOR; }    
-   )
-   name = < IDENTIFIER >.image // [ local = prototype_object(parent) ] //TODO add T_T
-   {
-     switch(factoryType)
-     {
-        case BEHAVIOR:
-        	Behavior behavior = entity.getDefinedBehavior(name);
-        	if(behavior == null)
-        	{				Show(ErrType.BehaviorNull,line);
-        	}
-        	else
-        	{        	  
-        		entity.addBehavior(behavior);
-       		}
-        break;		default:
-			Show(ErrType.UnknowError);
-		break;
-     }
-   }
-}
-
-
-IScope prototype_object_set(IScope init_value) :
-{
-  	int line = 0; 	
-}
-{
-  < ABRE_COR > values(init_value) <CIERRA_COR >
-  {    
-    return init_value;
-  } 
-}
-
-IScope prototype_object(IScope parent) :
-{  	
-  	IScope scope = new MapScope(parent);
-  	int line = 0;}
-{
-  line = < ABRE_COR >.beginLine values(scope) <CIERRA_COR >
-  {     
-     return scope;
-  } 
-}
-
-void value(IScope local):
-{
-   String key;
-   Object value;  
-}
-{ 	
-	value = add(local) { local.add(value); }	
-	| define(local)
-	| start(local)
-	| LOOKAHEAD(2) key = < IDENTIFIER >.image < EQUAL > value = expresion(local) { local.set(key,value); }
-	| LOOKAHEAD(2) inline_prototype_object(local) 	 
-	| value = function(local) { local.add(value);	}
-		
-}
-
-
-
-void  inline_prototype_object(IScope local):
-{
-    String key;  
-    IScope inline;
-    IScope last;
-}
-{
-  	key = < IDENTIFIER >.image  	{
-  	  //trata de acceder a una instancia local, y si no existe la crea. La idea es crear un objeto rapidamente
-  	  inline = (IScope)local.localGet(key);
-  	  if(inline == null) //si no existe, lo creo de inmediato
-  	  {		inline = new MapScope(local);
-		local.set(key,inline);
-		key = null;		
-  	  }
-  	  last = inline;  	}
-  	(  	  <DOT>	key = <IDENTIFIER >.image
-  	  {
-  	    IScope c = (IScope)local.localGet(key);
-  	    if(c == null)
-  	    {  	      c = new MapScope(last);		  last.set(key,c);
-		  key = null;		  
-		}
-		last = c;		
-  	  }   		  		
-  	)*
-  	< EQUAL > prototype_object_set(last)   }
-
-void send(IScope local):
-{
-  String messageType;
-  String to;
-  IScope contents;
-  int line = 0;  
-}
-{
-  	line = < SEND >.beginLine messageType = < IDENTIFIER >.image < TO > to = < IDENTIFIER >.image contents = prototype_object(local) 
-  	{
-  	  Send send = new Send(messageType,local, to, contents);
-  	  send.setLine(line);
-  	  local.add(send);
-  	} 
-}
-
-void on(IScope local):
-{
-    String messageType;
-    IScope code;
-    int line = 0;
-}
-{
-  line = < ON >.beginLine messageType = <IDENTIFIER >.image code = prototype_object(local)
+  	line = < DEFINE >.beginLine
+  (
+     < STATE  >  { factoryType   =  ObjectType.STATE;  }  
+    |< MANAGER > { factoryType   =  ObjectType.MANAGER; }
+    |< BEHAVIOR >{ factoryType   =  ObjectType.BEHAVIOR; }
+    |< ENTITY >  { factoryType   =  ObjectType.ENTITY; }
+    |< GOAL >    { factoryType   =  ObjectType.GOAL;  }
+  )
+  [< BASE > basedName = < IDENTIFIER >.image ]
+  name = < IDENTIFIER >.image 
   {
-    On on = new On(messageType,local,code);
-    on.setLine(line);
-    local.add(on);
+    switch(factoryType)
+    {		case STATE:
+			define = new GameState(name);
+		break;
+		case MANAGER:
+			///TODO: define = new Manager(name);
+		break;
+		case BEHAVIOR:
+			///TODO: define = new Behavior();
+			
+		break;
+		case ENTITY:
+			define = new Entity(name);
+		break;
+		case GOAL:
+			define = new Goal(name);
+		break;
+    }
+    define.setLine(line);
   }
+  <  ABRE_COR > values(define) < CIERRA_COR >
+  {
+    parent.addDefine(define);  }
+  
 }
 
-void start(IScope local):
+void on(Define define):
+{}
 {
-    String stateGame;
-    int line = 0;}
-{	line = < START >.beginLine stateGame = <IDENTIFIER >.image
-	{
-	  Object value = local.get(stateGame);
-	  if(value != null)
-	  {
-	    Start start = null;  	  	if(value instanceof Define)
-	  	{	      Define startState = (Define)value; 
-		  start = Start.Set(startState);		}
-		else if(value instanceof Add)
-		{
-		  Add startCustomState = (Add)value;
-		  start = Start.Set(startCustomState); 		}
-		else
-	 	{
-	 	  	//No se esperaba esto acá			 
-			 Show(ErrType.ExpectedAddDefineStart,line);
-	 	}
-	 	if(start != null)
-		{
-		   start.setLine(line);
-		   local.add(start);			
-		}
-		else
-		{
-		  //No se esperaba esto acá
-		   Show(ErrType.NotExpectedType,line);
-		}
-	 }	 
-	}
-}  
+  	< ON > <IDENTIFIER > }
 
-Function function(IScope local):
+/*Function function(IScope local):
 {
     Object args[] = null;
     String functionName;
@@ -485,7 +226,7 @@ Function function(IScope local):
  	}
  	else
  	{		return f;
- 	}  }}Object[] params(IScope local):
+ 	}  }}*//*Object[] params(IScope local):
 {
   LinkedList<Object > list = new LinkedList<Object >();
 }
@@ -493,65 +234,17 @@ Function function(IScope local):
   param(list,local) ( < COMA > param(list,local) )*
   {	return list.toArray();
   }
-}
+}*/
 
-void param(LinkedList<Object > list, IScope local):
+/*void param(LinkedList<Object > list, IScope local):
 {
   Object value;}
 {
   value = expresion(local)
   {	list.add(value);
-  }}
-
-void values(IScope local):
-{ 
-}
-{
-   value(local) ( LOOKAHEAD(2) < COMA > value(local) )* [ < COMA > ]       
-}
-
-void define(IScope parent):
-{ 
-  String factoryName;
-  String basedName = null;
-  FactoryType factoryType;
-  IScope local = null;
-  int line = 0;  }
-{
-  line = < DEFINE >.beginLine  (
-     < STATE  >  { factoryType   =  FactoryType.STATE;  }      |< MANAGER >  { factoryType   =  FactoryType.SYSTEM; }
-    |< BEHAVIOR >{ factoryType   =  FactoryType.BEHAVIOR; }
-    |< ENTITY >  { factoryType   =  FactoryType.ENTITY; }
-    |< GOAL >    { factoryType   =  FactoryType.GOAL;  }
-  )
-  [< BASE > basedName = < IDENTIFIER >.image ]
-  factoryName = < IDENTIFIER >.image  local = prototype_object(parent)
-  {    	Define.Set(factoryType,factoryName,basedName,parent,local,line); 
-  }
-}
-Add add(IScope parent):
-{  
-  FactoryType factoryType;
-  Token factoryName;
-  IScope local = null;
-  int line = 0;
-}
-{
-   line = < ADD >.beginLine 
-   (       < STATE  > { factoryType   =  FactoryType.STATE;  }  
-    |< MANAGER > { factoryType   =  FactoryType.SYSTEM; }
-    |< BEHAVIOR > { factoryType =  FactoryType.BEHAVIOR; }
-    |< ENTITY > { factoryType   =  FactoryType.ENTITY; }
-    |< GOAL >   { factoryType   =  FactoryType.GOAL;  }
-   )
-   factoryName = < IDENTIFIER > [ local = prototype_object(parent) ]
-   {
-     Add add = new Add(factoryName.image, factoryType,local);
-     add.setLine(line);
-      return add;
-   }}
-
-Object expresion(IScope local):
+  }}*/
+/*
+Object expresion(String keyName):
 {
   Object value = null;
   Token t;
@@ -562,11 +255,11 @@ Object expresion(IScope local):
 		| t = < DECIMAL_LITERAL > { value = Double.parseDouble(t.image); }
 		| t = < STRING_LITERAL >	 { value = t.image; }			
 		| t = < BOOL_LITERAL > { value = Boolean.parseBoolean(t.image); }
-		| LOOKAHEAD(2) value = function(local)
+		//| LOOKAHEAD(2) value = function(local)
 		| LOOKAHEAD(2) t = < IDENTIFIER > { value = local.get(t.image); }
 		//| t = < IDENTIFIER > { value = array(local); }		   
-		| value = prototype_object(local)
-		| value = add(local)
+		//| value = prototype_object(local)
+		| value = add(keyName)
 			
 	)
 	{
@@ -575,4 +268,4 @@ Object expresion(IScope local):
 	  }
 	  return value;
 	}
-}
+}*/

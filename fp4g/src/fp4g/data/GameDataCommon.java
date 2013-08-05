@@ -1,4 +1,6 @@
-package fp4g.new_data;
+package fp4g.data;
+
+import fp4g.data.define.Entity;
 
 /**
  * Clase común que agrega algunas funciones relevantes

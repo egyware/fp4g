@@ -1,4 +1,4 @@
-package fp4g.new_data;
+package fp4g.data;
 
 /**
  * Esta clase está encargada de guardar los eventos, que se pueden generar 

@@ -115,5 +115,8 @@ public class PhysicsManager extends Manager implements ContactListener{
 	public void rayCast(RayCastCallback callback, Vector2 p1, Vector2 p2) {
 		world.rayCast(callback, p1,p2);		
 	}
+	public void deleteWorld() {
+		world.dispose();		
+	}
 	
 }

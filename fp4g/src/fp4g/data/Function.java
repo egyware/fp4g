@@ -20,7 +20,6 @@ import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JPackage;
 import com.sun.codemodel.JType;
 
-import fp4g.generator.Utils;
 import fp4g.Log;
 import static fp4g.Log.Show;
 
@@ -107,12 +106,12 @@ public abstract class Function extends Value{
 			try
 			{
 				String gameName = (String)value; //try get gameName
-				JPackage _pack = Utils.getGamePackage();					
-				JDefinedClass _game = _pack._getClass(gameName);
-				
-				JExpression expr = _game.staticInvoke("getAsset").arg((String)args[0]);
-								
-				return expr;			
+//				JPackage _pack = Utils.getGamePackage();					
+//				JDefinedClass _game = _pack._getClass(gameName);
+//				
+//				JExpression expr = _game.staticInvoke("getAsset").arg((String)args[0]);
+//								
+//				return expr;			
 			}
 			catch(ClassCastException ex)
 			{	
@@ -149,23 +148,23 @@ public abstract class Function extends Value{
 			Object value = scope.superGet("name");
 			try
 			{				
-				JCodeModel jcm = Utils.getJCM();
+				//JCodeModel jcm = Utils.getJCM();
 				JMethod load = _class.getMethod("load",_void);
 				block = load.body();
 				String gameName = (String)value;
-				JPackage _pack = Utils.getGamePackage();					
-				JDefinedClass _game = _pack._getClass(gameName);
-				
-				for(Entry<String, Class<?>> entry: assets.entrySet())
-				{
-					block.add(_game.staticInvoke("loadAsset").arg(entry.getKey()).arg(jcm.ref(entry.getValue()).staticRef("class")));
-				}
-//				JBlock disposeMethod = searchDispose(_class);
+				//JPackage _pack = Utils.getGamePackage();					
+//				JDefinedClass _game = _pack._getClass(gameName);
+//				
 //				for(Entry<String, Class<?>> entry: assets.entrySet())
 //				{
-//					disposeMethod.add(_game.staticInvoke("unloadAsset").arg(entry.getKey()));
+//					//block.add(_game.staticInvoke("loadAsset").arg(entry.getKey()).arg(jcm.ref(entry.getValue()).staticRef("class")));
 //				}
-				block.staticInvoke(_game, "loadAssets");
+////				JBlock disposeMethod = searchDispose(_class);
+////				for(Entry<String, Class<?>> entry: assets.entrySet())
+////				{
+////					disposeMethod.add(_game.staticInvoke("unloadAsset").arg(entry.getKey()));
+////				}
+//				block.staticInvoke(_game, "loadAssets");
 				
 			}catch(ClassCastException ex)
 			{
@@ -204,12 +203,12 @@ public abstract class Function extends Value{
 			try
 			{
 				String gameName = (String) value; //try get gameName
-				JPackage _pack = Utils.getGamePackage();					
-				JDefinedClass _game = _pack._getClass(gameName);
-				
-				JExpression expr = _game.staticInvoke("getAsset").arg((String)args[0]);
-								
-				return expr;			
+				//JPackage _pack = Utils.getGamePackage();					
+//				JDefinedClass _game = _pack._getClass(gameName);
+//				
+//				JExpression expr = _game.staticInvoke("getAsset").arg((String)args[0]);
+//								
+//				return expr;			
 			}
 			catch(ClassCastException ex)
 			{	
@@ -236,12 +235,12 @@ public abstract class Function extends Value{
 			try
 			{
 				String gameName = (String)value; //try get gameName
-				JPackage _pack = Utils.getGamePackage();					
-				JDefinedClass _game = _pack._getClass(gameName);
-				
-				JExpression expr = _game.staticInvoke("getAsset").arg((String)args[0]);
-								
-				return expr;			
+//				JPackage _pack = Utils.getGamePackage();					
+//				JDefinedClass _game = _pack._getClass(gameName);
+//				
+//				JExpression expr = _game.staticInvoke("getAsset").arg((String)args[0]);
+//								
+//				return expr;			
 			}
 			catch(ClassCastException ex)
 			{				
@@ -266,12 +265,12 @@ public abstract class Function extends Value{
 			try
 			{
 				String gameName = (String) value; //try get gameName
-				JPackage _pack = Utils.getGamePackage();					
-				JDefinedClass _game = _pack._getClass(gameName);
+				//JPackage _pack = Utils.getGamePackage();					
+				//JDefinedClass _game = _pack._getClass(gameName);
 				
-				JExpression expr = _game.staticInvoke("getAsset").arg((String)args[0]);
+				//JExpression expr = _game.staticInvoke("getAsset").arg((String)args[0]);
 								
-				return expr;			
+				//return ;			
 			}
 			catch(ClassCastException ex)
 			{				

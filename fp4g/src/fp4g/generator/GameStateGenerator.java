@@ -7,13 +7,12 @@ import java.util.Map;
 import fp4g.data.IGameData;
 import freemarker.template.Configuration;
 
-public class GoalGenerator extends Generator {
+public class GameStateGenerator extends Generator {
 
 	@Override
 	protected void generateData(Map<String,Object> options,Configuration cfg, IGameData gameData, File path)
-			throws IOException {
-		// TODO Auto-generated method stub
+	throws IOException {
+	
 		
 	}
-
 }

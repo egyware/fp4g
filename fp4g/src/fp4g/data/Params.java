@@ -1,6 +1,5 @@
 package fp4g.data;
 
-public class Start{
-
+public class Params {
 
 }

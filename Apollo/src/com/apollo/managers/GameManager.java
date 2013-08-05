@@ -21,6 +21,7 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 	
 	public void start(GameState next)
 	{
+		this.next = null;
 		Gdx.app.log("GameCycleLife", String.format("start: %s",next.getClass().getSimpleName()));
 		current = states.size > 0?states.peek():null;
 		if(current != null)
@@ -140,7 +141,7 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 	}
 
 	@Override
-	public void resize(int arg0, int arg1) {
+	public void resize(int x,int y) {
 		Gdx.app.log("AppCycleLife", "resize");
 
 	}

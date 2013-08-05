@@ -17,14 +17,14 @@ public final class Entity {
 	private Bag<Behavior> components;
 	private Map<Class<? extends Behavior>, Behavior> componentsByType;
 	private Map<Class<? extends Message>,Bag<MessageReceiver>> handlersByEventType;
-	private Map<String,Variable<?>> variables;
+	private Map<String,Var<?>> variables;
 	private boolean deleted;
 
 	public Entity(World world) {
 		this.world = world;
 		components = new Bag<Behavior>();
 		componentsByType = new LinkedHashMap<Class<? extends Behavior>, Behavior>();
-		variables = new LinkedHashMap<String,Variable<?>>();
+		variables = new LinkedHashMap<String,Var<?>>();
 	}
 
 	public void setBehavior(Behavior component) {		
@@ -144,11 +144,11 @@ public final class Entity {
 		world.addEntity(this);
 	}
 	
-	public Variable<?> getVariable(String name)
+	public Var<?> getVariable(String name)
 	{
 		return variables.get(name);
 	}
-	public void setVariable(String name,Variable<?> var)
+	public void setVariable(String name,Var<?> var)
 	{
 		variables.put(name,var);		
 	}

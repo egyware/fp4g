@@ -7,24 +7,25 @@ package fp4g.data;
  * @author egyware
  *
  */
-public class Add extends Value{	
-	private IScope scope;	
-	private FactoryType type;	
-	public Add(String _name,FactoryType _type, IScope _scope)
+public class Add extends Code{		
+	private ObjectType type;
+	public String name;	
+	public String varName;
+	public Groups params; //TODO por definir
+	public Add(ObjectType type,String name)
 	{
-		super(_name);
-		scope = (_scope == null)?new MapScope():_scope;
-		type = _type;
+		this(type,name,null);		
+	}		
 		
+	public Add(ObjectType type, String name, String varName) {
+		this.type = type;
+		this.name = name;
+		this.varName = varName;
 	}
-		
-	public IScope getScope(){
-		return scope;
-	}
-	
-	public FactoryType getType()
+
+	public ObjectType getType()
 	{
 		return type;
-	}	
-	
+	}
+
 }

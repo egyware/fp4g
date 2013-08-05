@@ -1,4 +1,4 @@
-package fp4g.new_data;
+package fp4g.data;
 
 public class Var<T> {
 	public String name;

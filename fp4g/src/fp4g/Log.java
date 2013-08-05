@@ -15,7 +15,7 @@ public class Log {
 		ExpectedDefine("No se esperaba Define State, se ignora, cambie a otro nivel"),
 		NotFoundDefine("No se encontró una definición previa, se omitirá y se asumirá que existe"),
 		CustomAddState, 
-		NotExpectedThis, ParentBehaviorNull;
+		NotExpectedThis, ParentBehaviorNull, NotImplement;
 		
 		private String message;
 		private WarnType()

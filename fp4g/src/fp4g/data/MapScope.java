@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import fp4g.generator.Utils;
 
 /**
  * Esta clase permite guardar variables, definiciones, adiciones, mensajes, etc...
@@ -126,7 +125,7 @@ public final class MapScope extends Value implements Cloneable, IScope{
 	public Entry<String, Object>[] toArray() {
 		Entry<String,Object> array[] = new Entry[values.size()];
 		values.entrySet().toArray(array); 
-		Arrays.sort(array, Utils.Sort());
+		//Arrays.sort(array, Utils.Sort());
 		return array;
 	}
 

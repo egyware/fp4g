@@ -28,10 +28,7 @@ public class GdxRenderManager extends RenderManager<SpriteBatch> {
 	@Override
 	public void update(float delta)
 	{		
-		context.setProjectionMatrix(camera.combined);
-		context.begin();
-		render(context);
-        context.end();		
+		render(context);        		
 	}
 
 	

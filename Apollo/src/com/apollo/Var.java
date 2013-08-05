@@ -1,13 +1,13 @@
 package com.apollo;
 
-public final class Variable<T> {
+public final class Var<T> {
 	private T value;
 	
-	public Variable(T t)
+	public Var(T t)
 	{
 		value = t;
 	}
-	public Variable()
+	public Var()
 	{	
 	}
 	

@@ -1,10 +1,18 @@
-package fp4g.new_data;
+package fp4g.data.define;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import fp4g.data.Add;
+import fp4g.data.Behavior;
+import fp4g.data.Define;
+import fp4g.data.Event;
+import fp4g.data.Manager;
+import fp4g.data.ObjectType;
+import fp4g.data.On;
+import fp4g.data.Param;
 import static fp4g.Log.Show;
 import static fp4g.Log.ErrType;
 import static fp4g.Log.WarnType;
@@ -14,8 +22,7 @@ import static fp4g.Log.InfoType;
  * @author Edgardo
  *
  */
-public class Game extends GameDataCommon {
-	public String name;
+public class Game extends Define  {	
 	public int width = 640;
 	public int height = 480;
 	public boolean debug = false;
@@ -23,21 +30,20 @@ public class Game extends GameDataCommon {
 	//datos que contiene un juego, todo esto es visto de manera global
 	public List<GameState> gameStates;
 	public List<Entity> entities;	
-	public List<Goal> goals;
-	public List<Event> events;	
-	public List<Param> parameters;
+	public List<Goal> goals;	
 	
 	public Map<String,Manager> managersByName;
 	public Map<String,Entity> entitiesByName;
 	public Map<String,Behavior> behaviorsByName;
 	public Map<String,Goal> goalsByName;
 	
+	
 	public Game()
 	{
+		super(ObjectType.GAME,"game");
 		gameStates = new LinkedList<GameState>();
 		entities = new LinkedList<Entity>();		
 		goals = new LinkedList<Goal>();		
-		parameters = new LinkedList<Param>();
 		
 		managersByName = new HashMap<String,Manager>();		
 		entitiesByName = new HashMap<String,Entity>();
@@ -71,6 +77,11 @@ public class Game extends GameDataCommon {
 	{
 		behaviorsByName.put(name, bhvr);
 	}
+	public void addEntity(Entity entity)
+	{
+		entities.add(entity);
+		entitiesByName.put(entity.name, entity);
+	}
 	
 	/**
 	 * Agrega y clasifica los valores que se van leyendo
@@ -92,13 +103,64 @@ public class Game extends GameDataCommon {
 	public Manager getDefinedManager(String name) {
 		return managersByName.get(name);		
 	}
-	@Override
+	//@Override
 	public Behavior getDefinedBehavior(String name) {	
 		return behaviorsByName.get(name);
 	}
 
 	public Entity getDefinedEntity(String name) {
 		return entitiesByName.get(name);
+	}
+
+	@Override
+	public void addADD(Add code) {
+		switch(code.getType())
+		{	
+			case MANAGER:
+			case GAME:
+			case ENTITY:
+			case BEHAVIOR:
+				Show(ErrType.NotExpectedType,code);
+				break;
+			case GOAL:
+				//TODO
+				break;
+			case STATE:
+				//TODO
+				break;
+			default:
+				break;		
+		}		
+	}
+
+	@Override
+	public void addDefine(Define define) {
+		switch(define.getType())
+		{
+			case GAME:
+			case ASSET:
+			case MANAGER:
+			case BEHAVIOR:			
+				Show(ErrType.NotExpectedType,define);
+				break;			
+			case ENTITY:
+				entities.add((Entity) define);
+				break;			
+			case GOAL:
+				goals.add((Goal) define);
+				break;
+			case STATE:
+				gameStates.add((GameState) define);
+				break;
+			default:
+				break;		
+		}		
+	}
+
+	@Override
+	public void addOn(On on) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

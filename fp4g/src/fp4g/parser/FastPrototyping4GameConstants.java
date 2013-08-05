@@ -35,69 +35,73 @@ public interface FastPrototyping4GameConstants {
   /** RegularExpression Id. */
   int PAUSE = 16;
   /** RegularExpression Id. */
-  int EXIT = 17;
+  int USING = 17;
   /** RegularExpression Id. */
-  int MANAGER = 18;
+  int EXIT = 18;
   /** RegularExpression Id. */
-  int GAME = 19;
+  int MANAGER = 19;
   /** RegularExpression Id. */
-  int STATE = 20;
+  int GAME = 20;
   /** RegularExpression Id. */
-  int BEHAVIOR = 21;
+  int STATE = 21;
   /** RegularExpression Id. */
-  int ENTITY = 22;
+  int BEHAVIOR = 22;
   /** RegularExpression Id. */
-  int GOAL = 23;
+  int ENTITY = 23;
   /** RegularExpression Id. */
-  int MESSAGE = 24;
+  int GOAL = 24;
   /** RegularExpression Id. */
-  int BASE = 25;
+  int MESSAGE = 25;
   /** RegularExpression Id. */
-  int TO = 26;
+  int BASE = 26;
   /** RegularExpression Id. */
-  int SOURCE = 27;
+  int TO = 27;
   /** RegularExpression Id. */
-  int ABRE_COR = 28;
+  int SOURCE = 28;
   /** RegularExpression Id. */
-  int ABRE_PAR = 29;
+  int ABRE_COR = 29;
   /** RegularExpression Id. */
-  int CIERRA_COR = 30;
+  int ABRE_PAR = 30;
   /** RegularExpression Id. */
-  int CIERRA_PAR = 31;
+  int CIERRA_COR = 31;
   /** RegularExpression Id. */
-  int COMA = 32;
+  int CIERRA_PAR = 32;
   /** RegularExpression Id. */
-  int EQUAL = 33;
+  int COMA = 33;
   /** RegularExpression Id. */
-  int DOT = 34;
+  int EQUAL = 34;
   /** RegularExpression Id. */
-  int INT_LITERAL = 35;
+  int DOT = 35;
   /** RegularExpression Id. */
-  int DECIMAL_LITERAL = 36;
+  int DOTCOMA = 36;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 37;
+  int INT_LITERAL = 37;
   /** RegularExpression Id. */
-  int BOOL_LITERAL = 38;
+  int DECIMAL_LITERAL = 38;
   /** RegularExpression Id. */
-  int DIGIT = 39;
+  int STRING_LITERAL = 39;
   /** RegularExpression Id. */
-  int PLUS = 40;
+  int BOOL_LITERAL = 40;
   /** RegularExpression Id. */
-  int MINUS = 41;
+  int DIGIT = 41;
   /** RegularExpression Id. */
-  int MULTIPLY = 42;
+  int PLUS = 42;
   /** RegularExpression Id. */
-  int DIVIDE = 43;
+  int MINUS = 43;
   /** RegularExpression Id. */
-  int AND = 44;
+  int MULTIPLY = 44;
   /** RegularExpression Id. */
-  int OR = 45;
+  int DIVIDE = 45;
   /** RegularExpression Id. */
-  int XOR = 46;
+  int AND = 46;
   /** RegularExpression Id. */
-  int NOT = 47;
+  int OR = 47;
   /** RegularExpression Id. */
-  int IDENTIFIER = 48;
+  int XOR = 48;
+  /** RegularExpression Id. */
+  int NOT = 49;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 50;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -121,6 +125,7 @@ public interface FastPrototyping4GameConstants {
     "\"START\"",
     "\"RESUME\"",
     "\"PAUSE\"",
+    "\"USING\"",
     "\"EXIT\"",
     "\"MANAGER\"",
     "\"GAME\"",
@@ -139,6 +144,7 @@ public interface FastPrototyping4GameConstants {
     "\",\"",
     "\"=\"",
     "\".\"",
+    "\";\"",
     "<INT_LITERAL>",
     "<DECIMAL_LITERAL>",
     "<STRING_LITERAL>",

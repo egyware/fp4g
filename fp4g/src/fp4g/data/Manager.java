@@ -1,4 +1,5 @@
-package fp4g.new_data;
+package fp4g.data;
+
 
 /**
  * Encapsula un Manager
@@ -6,7 +7,12 @@ package fp4g.new_data;
  * @author Edgardo
  *
  */
-public abstract class Manager {
+public abstract class Manager extends Define {
+	
+	public Manager(String name) {
+		super(ObjectType.MANAGER, name);		 
+	}
+
 	public String name;	
 
 	public Manager add() {

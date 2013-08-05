@@ -2,7 +2,7 @@
 package fp4g.parser;
 import java.util.LinkedList;
 import fp4g.data.*;
-import fp4g.new_data.*;
+import fp4g.data.define.*;
 import static fp4g.Log.ErrType;
 import static fp4g.Log.WarnType;
 import static fp4g.Log.InfoType;
@@ -10,20 +10,8 @@ import static fp4g.Log.Show;
 
 public class FastPrototyping4Game implements FastPrototyping4GameConstants {
 
-  final public Game game(Game game) throws ParseException {
-    jj_consume_token(DEFINE);
-    jj_consume_token(GAME);
-    game.name = jj_consume_token(IDENTIFIER).image;
-    jj_consume_token(ABRE_COR);
-    game_values(game);
-    jj_consume_token(CIERRA_COR);
-    jj_consume_token(0);
-    {if (true) return game;}
-    throw new Error("Missing return statement in function");
-  }
-
-  final public void game_values(Game game) throws ParseException {
-    game_value(game);
+  final public void usings(Game game) throws ParseException {
+    using(game);
     label_1:
     while (true) {
       if (jj_2_1(2)) {
@@ -31,12 +19,12 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       } else {
         break label_1;
       }
-      jj_consume_token(COMA);
-      game_value(game);
+      jj_consume_token(DOTCOMA);
+      using(game);
     }
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case COMA:
-      jj_consume_token(COMA);
+    case DOTCOMA:
+      jj_consume_token(DOTCOMA);
       break;
     default:
       jj_la1[0] = jj_gen;
@@ -44,16 +32,109 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     }
   }
 
-  final public void game_value(Game game) throws ParseException {
+  final public void using(Game game) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case ADD:
-      game_add(game);
+    case USING:
+      jj_consume_token(USING);
+      jj_consume_token(MANAGER);
       break;
-    case DEFINE:
-      game_define(game);
+    case STATE:
+      jj_consume_token(STATE);
+      break;
+    case BEHAVIOR:
+      jj_consume_token(BEHAVIOR);
+      break;
+    case ENTITY:
+      jj_consume_token(ENTITY);
+      break;
+    case GOAL:
+      jj_consume_token(GOAL);
+      break;
+    case MESSAGE:
+      jj_consume_token(MESSAGE);
       break;
     default:
       jj_la1[1] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+  }
+
+  final public void game(Game game) throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case USING:
+    case STATE:
+    case BEHAVIOR:
+    case ENTITY:
+    case GOAL:
+    case MESSAGE:
+      usings(game);
+      break;
+    default:
+      jj_la1[2] = jj_gen;
+      ;
+    }
+    jj_consume_token(DEFINE);
+    jj_consume_token(GAME);
+    game.name = jj_consume_token(IDENTIFIER).image;
+    jj_consume_token(ABRE_COR);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case DEFINE:
+    case ADD:
+    case ON:
+    case IDENTIFIER:
+      values(game);
+      break;
+    default:
+      jj_la1[3] = jj_gen;
+      ;
+    }
+    jj_consume_token(CIERRA_COR);
+    jj_consume_token(0);
+  }
+
+  final public void values(Define define) throws ParseException {
+    value(define);
+    label_2:
+    while (true) {
+      if (jj_2_2(2)) {
+        ;
+      } else {
+        break label_2;
+      }
+      jj_consume_token(COMA);
+      value(define);
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case COMA:
+      jj_consume_token(COMA);
+      break;
+    default:
+      jj_la1[4] = jj_gen;
+      ;
+    }
+  }
+
+  final public void value(Define define) throws ParseException {
+  String key;
+  Object value;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ADD:
+      add(define,null);
+      break;
+    case DEFINE:
+      define(define);
+      break;
+    case ON:
+      on(define);
+      break;
+    case IDENTIFIER:
+      key = jj_consume_token(IDENTIFIER).image;
+      jj_consume_token(EQUAL);
+      add(define,key);
+      break;
+    default:
+      jj_la1[5] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -65,701 +146,115 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
 	| LOOKAHEAD(2) key = < IDENTIFIER >.image < EQUAL > value = expresion(local) { local.set(key,value); }
 	| LOOKAHEAD(2) inline_prototype_object(local) 	 
 	| value = function(local) { local.add(value);	}*/
-  final public void game_define(Game game) throws ParseException {
-  String factoryName;
-  String basedName = null;
-  FactoryType factoryType;
-  //TODO basedName por hacer
-  //TODO recuperar lineas
+  final public void add(Define define,String keyName) throws ParseException {
   int line = 0;
-    line = jj_consume_token(DEFINE).beginLine;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case STATE:
-      jj_consume_token(STATE);
-                          factoryType   =  FactoryType.STATE;
-      break;
-    case MANAGER:
-      jj_consume_token(MANAGER);
-                          factoryType   =  FactoryType.SYSTEM;
-      break;
-    case BEHAVIOR:
-      jj_consume_token(BEHAVIOR);
-                      factoryType   =  FactoryType.BEHAVIOR;
-      break;
-    case ENTITY:
-      jj_consume_token(ENTITY);
-                      factoryType   =  FactoryType.ENTITY;
-      break;
-    case GOAL:
-      jj_consume_token(GOAL);
-                      factoryType   =  FactoryType.GOAL;
-      break;
-    default:
-      jj_la1[2] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
-    factoryName = jj_consume_token(IDENTIFIER).image;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case BASE:
-      jj_consume_token(BASE);
-      basedName = jj_consume_token(IDENTIFIER).image;
-      break;
-    default:
-      jj_la1[3] = jj_gen;
-      ;
-    }
-        GameState state = null;
-        Entity entity = null;
-        switch(factoryType)
-        {
-                        case STATE:
-                                state = new GameState.Generated(game,factoryName);
-                                game.addGameState(state);
-                        break;
-                        case SYSTEM:
-                                //TODO definir aún
-                        break;
-                case BEHAVIOR:
-                        if(basedName != null)
-                        {
-                           Show(ErrType.BasedExcepted,line);
-                        }
-                        else
-                        {
-                                //TODO hacer behaviors, basados en otros
-                                }
-                break;
-                case ENTITY:
-                        if(basedName != null)
-                        {
-                                //TODO falta hacer basados en otros
-                        }
-                        else
-                        {
-                                        entity = new Entity.Define(game,factoryName);
-                        }
-                break;
-                case GOAL:
-                        //TODO definir aún
-                break;
-        }
-        //custom code
-        jj_consume_token(ABRE_COR);
-                switch(factoryType)
-        {
-                        case STATE:
-                                state_values(state);
-                        break;
-                        case SYSTEM:
-                                //TODO definir aún
-                        break;
-                case BEHAVIOR:
-                        //TODO definir aún
-                break;
-                case ENTITY:
-                        entity_values(entity);
-                break;
-                case GOAL:
-                        //TODO definir aún
-                break;
-        }
-        //custom code
-        jj_consume_token(CIERRA_COR);
-  }
-
- /*
-{
-  
- 
-  
-  
-  {    
-	Define.Set(factoryType,factoryName,basedName,parent,local,line); 
-  }
-}*/
-  final public void game_add(Game game) throws ParseException {
-  FactoryType factoryType;
+  ObjectType type = null;
   String name;
-  //TODO redecidir que diablos tendrá ahora ADD
-  //IScope local = null;
-  int line = 0;
     line = jj_consume_token(ADD).beginLine;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case STATE:
       jj_consume_token(STATE);
-                   factoryType  =  FactoryType.STATE;
+                    type  =  ObjectType.STATE;
+      break;
+    case MANAGER:
+      jj_consume_token(MANAGER);
+                    type  =  ObjectType.MANAGER;
       break;
     case BEHAVIOR:
       jj_consume_token(BEHAVIOR);
-                   factoryType  =  FactoryType.BEHAVIOR;
+                    type  =  ObjectType.BEHAVIOR;
+      break;
+    case ENTITY:
+      jj_consume_token(ENTITY);
+                    type  =  ObjectType.ENTITY;
       break;
     case GOAL:
       jj_consume_token(GOAL);
-                   factoryType  =  FactoryType.GOAL;
+                    type  =  ObjectType.GOAL;
       break;
     default:
-      jj_la1[4] = jj_gen;
+      jj_la1[6] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
     name = jj_consume_token(IDENTIFIER).image;
-     switch(factoryType)
-     {
-                case STATE:
-                        game.add(new GameState.Custom(game,name));
-                break;
-                case BEHAVIOR:
-                        //TODO falta definir padre, si es que hay
-                        game.addBehavior(name);
-                break;
-                case GOAL:
-                        //TODO por hacer, metas no definidas aún
-                break;
-                default:
-                        Show(ErrType.UnknowError);
-                break;
-     }
+     Add add = new Add(type,name,keyName);
+     add.setLine(line);
+     define.addADD(add);
   }
 
-  final public void state_values(GameState state) throws ParseException {
-    state_value(state);
-    label_2:
-    while (true) {
-      if (jj_2_2(2)) {
-        ;
-      } else {
-        break label_2;
-      }
-      jj_consume_token(COMA);
-      state_value(state);
-    }
+  final public void define(Define parent) throws ParseException {
+  String name;
+  String basedName = null;
+  ObjectType factoryType;
+  int line = 0;
+  Define define = null;
+    line = jj_consume_token(DEFINE).beginLine;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case COMA:
-      jj_consume_token(COMA);
+    case STATE:
+      jj_consume_token(STATE);
+                   factoryType   =  ObjectType.STATE;
       break;
-    default:
-      jj_la1[5] = jj_gen;
-      ;
-    }
-  }
-
-  final public void state_value(GameState state) throws ParseException {
-  String key = null;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case ADD:
-    case IDENTIFIER:
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case IDENTIFIER:
-        key = jj_consume_token(IDENTIFIER).image;
-        jj_consume_token(EQUAL);
-        break;
-      default:
-        jj_la1[6] = jj_gen;
-        ;
-      }
-      state_add(state,key);
+    case MANAGER:
+      jj_consume_token(MANAGER);
+                   factoryType   =  ObjectType.MANAGER;
       break;
-    case COMA:
-      state_define(state);
+    case BEHAVIOR:
+      jj_consume_token(BEHAVIOR);
+                   factoryType   =  ObjectType.BEHAVIOR;
+      break;
+    case ENTITY:
+      jj_consume_token(ENTITY);
+                   factoryType   =  ObjectType.ENTITY;
+      break;
+    case GOAL:
+      jj_consume_token(GOAL);
+                   factoryType   =  ObjectType.GOAL;
       break;
     default:
       jj_la1[7] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
-  }
-
-  final public void state_add(GameState state,String key) throws ParseException {
-  FactoryType factoryType;
-  String name;
-  //TODO recuperar lineas
-  int line = 0;
-    line = jj_consume_token(ADD).beginLine;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case MANAGER:
-      jj_consume_token(MANAGER);
-                   factoryType   =  FactoryType.SYSTEM;
-      break;
-    case ENTITY:
-      jj_consume_token(ENTITY);
-                  factoryType   =  FactoryType.ENTITY;
-      break;
-    case GOAL:
-      jj_consume_token(GOAL);
-                  factoryType   =  FactoryType.GOAL;
-      break;
-    default:
-      jj_la1[8] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
-    name = jj_consume_token(IDENTIFIER).image;
-        switch(factoryType)
-        {
-                        case SYSTEM:
-                                Manager manager = state.getDefinedManager(name); //suena tonto, pero busca en los sistemas definidos				
-                                state.addManager(manager.add(),key);
-                        break;
-                        case ENTITY:
-                                Entity entity = state.getDefinedEntity(name);
-                                state.addEntity(entity.add(),name);
-                        break;
-                        case GOAL:
-                                //TODO por hacer aún
-                                //state.addGoal(name,key);
-                        break;
-                        default:
-                                Show(ErrType.UnknowError);
-                        break;
-        }
-  }
-
-  final public void state_define(GameState state) throws ParseException {
-    jj_consume_token(COMA);
-  }
-
-  final public void entity_values(Entity entity) throws ParseException {
-    entity_value(entity);
-    label_3:
-    while (true) {
-      if (jj_2_3(2)) {
-        ;
-      } else {
-        break label_3;
-      }
-      jj_consume_token(COMA);
-      entity_value(entity);
-    }
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case COMA:
-      jj_consume_token(COMA);
-      break;
-    default:
-      jj_la1[9] = jj_gen;
-      ;
-    }
-  }
-
-  final public void entity_value(Entity entity) throws ParseException {
-    entity_add(entity);
-  }
-
-  final public void entity_add(Entity entity) throws ParseException {
-  FactoryType factoryType;
-  String name;
-  int line = 0;
-    line = jj_consume_token(ADD).beginLine;
-    jj_consume_token(BEHAVIOR);
-                   factoryType =  FactoryType.BEHAVIOR;
-    name = jj_consume_token(IDENTIFIER).image;
-     switch(factoryType)
-     {
-        case BEHAVIOR:
-                Behavior behavior = entity.getDefinedBehavior(name);
-                if(behavior == null)
-                {
-                                Show(ErrType.BehaviorNull,line);
-                }
-                else
-                {
-                        entity.addBehavior(behavior);
-                }
-        break;
-                default:
-                        Show(ErrType.UnknowError);
-                break;
-     }
-  }
-
-  final public IScope prototype_object_set(IScope init_value) throws ParseException {
-        int line = 0;
-    jj_consume_token(ABRE_COR);
-    values(init_value);
-    jj_consume_token(CIERRA_COR);
-    {if (true) return init_value;}
-    throw new Error("Missing return statement in function");
-  }
-
-  final public IScope prototype_object(IScope parent) throws ParseException {
-        IScope scope = new MapScope(parent);
-        int line = 0;
-    line = jj_consume_token(ABRE_COR).beginLine;
-    values(scope);
-    jj_consume_token(CIERRA_COR);
-     {if (true) return scope;}
-    throw new Error("Missing return statement in function");
-  }
-
-  final public void value(IScope local) throws ParseException {
-   String key;
-   Object value;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case ADD:
-      value = add(local);
-                             local.add(value);
-      break;
-    case DEFINE:
-      define(local);
-      break;
-    case START:
-      start(local);
-      break;
-    default:
-      jj_la1[10] = jj_gen;
-      if (jj_2_4(2)) {
-        key = jj_consume_token(IDENTIFIER).image;
-        jj_consume_token(EQUAL);
-        value = expresion(local);
-                                                                                       local.set(key,value);
-      } else if (jj_2_5(2)) {
-        inline_prototype_object(local);
-      } else {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case IDENTIFIER:
-          value = function(local);
-                                    local.add(value);
-          break;
-        default:
-          jj_la1[11] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
-      }
-    }
-  }
-
-  final public void inline_prototype_object(IScope local) throws ParseException {
-    String key;
-    IScope inline;
-    IScope last;
-    key = jj_consume_token(IDENTIFIER).image;
-          //trata de acceder a una instancia local, y si no existe la crea. La idea es crear un objeto rapidamente
-          inline = (IScope)local.localGet(key);
-          if(inline == null) //si no existe, lo creo de inmediato
-          {
-                inline = new MapScope(local);
-                local.set(key,inline);
-                key = null;
-          }
-          last = inline;
-    label_4:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case DOT:
-        ;
-        break;
-      default:
-        jj_la1[12] = jj_gen;
-        break label_4;
-      }
-      jj_consume_token(DOT);
-      key = jj_consume_token(IDENTIFIER).image;
-            IScope c = (IScope)local.localGet(key);
-            if(c == null)
-            {
-              c = new MapScope(last);
-                  last.set(key,c);
-                  key = null;
-                }
-                last = c;
-    }
-    jj_consume_token(EQUAL);
-    prototype_object_set(last);
-  }
-
-  final public void send(IScope local) throws ParseException {
-  String messageType;
-  String to;
-  IScope contents;
-  int line = 0;
-    line = jj_consume_token(SEND).beginLine;
-    messageType = jj_consume_token(IDENTIFIER).image;
-    jj_consume_token(TO);
-    to = jj_consume_token(IDENTIFIER).image;
-    contents = prototype_object(local);
-          Send send = new Send(messageType,local, to, contents);
-          send.setLine(line);
-          local.add(send);
-  }
-
-  final public void on(IScope local) throws ParseException {
-    String messageType;
-    IScope code;
-    int line = 0;
-    line = jj_consume_token(ON).beginLine;
-    messageType = jj_consume_token(IDENTIFIER).image;
-    code = prototype_object(local);
-    On on = new On(messageType,local,code);
-    on.setLine(line);
-    local.add(on);
-  }
-
-  final public void start(IScope local) throws ParseException {
-    String stateGame;
-    int line = 0;
-    line = jj_consume_token(START).beginLine;
-    stateGame = jj_consume_token(IDENTIFIER).image;
-          Object value = local.get(stateGame);
-          if(value != null)
-          {
-            Start start = null;
-                if(value instanceof Define)
-                {
-              Define startState = (Define)value;
-                  start = Start.Set(startState);
-                }
-                else if(value instanceof Add)
-                {
-                  Add startCustomState = (Add)value;
-                  start = Start.Set(startCustomState);
-                }
-                else
-                {
-                        //No se esperaba esto acá			 
-                         Show(ErrType.ExpectedAddDefineStart,line);
-                }
-                if(start != null)
-                {
-                   start.setLine(line);
-                   local.add(start);
-                }
-                else
-                {
-                  //No se esperaba esto acá
-                   Show(ErrType.NotExpectedType,line);
-                }
-         }
-  }
-
-  final public Function function(IScope local) throws ParseException {
-    Object args[] = null;
-    String functionName;
-    Token functionToken;
-    int line = 0;
-    functionToken = jj_consume_token(IDENTIFIER);
-    jj_consume_token(ABRE_PAR);
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case ADD:
-    case ABRE_COR:
-    case INT_LITERAL:
-    case DECIMAL_LITERAL:
-    case STRING_LITERAL:
-    case BOOL_LITERAL:
-    case IDENTIFIER:
-      args = params(local);
-      break;
-    default:
-      jj_la1[13] = jj_gen;
-      ;
-    }
-    jj_consume_token(CIERRA_PAR);
-    functionName = functionToken.image;
-    line = functionToken.beginLine;
-        Function f = Function.buildFunction(functionName,args);
-        if(f == null)
-        {
-                Show(ErrType.NotDefineFuction,line);
-                {if (true) return null;}
-        }
-        else
-        {
-                {if (true) return f;}
-        }
-    throw new Error("Missing return statement in function");
-  }
-
-  final public Object[] params(IScope local) throws ParseException {
-  LinkedList<Object > list = new LinkedList<Object >();
-    param(list,local);
-    label_5:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case COMA:
-        ;
-        break;
-      default:
-        jj_la1[14] = jj_gen;
-        break label_5;
-      }
-      jj_consume_token(COMA);
-      param(list,local);
-    }
-        {if (true) return list.toArray();}
-    throw new Error("Missing return statement in function");
-  }
-
-  final public void param(LinkedList<Object > list, IScope local) throws ParseException {
-  Object value;
-    value = expresion(local);
-        list.add(value);
-  }
-
-  final public void values(IScope local) throws ParseException {
-    value(local);
-    label_6:
-    while (true) {
-      if (jj_2_6(2)) {
-        ;
-      } else {
-        break label_6;
-      }
-      jj_consume_token(COMA);
-      value(local);
-    }
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case COMA:
-      jj_consume_token(COMA);
-      break;
-    default:
-      jj_la1[15] = jj_gen;
-      ;
-    }
-  }
-
-  final public void define(IScope parent) throws ParseException {
-  String factoryName;
-  String basedName = null;
-  FactoryType factoryType;
-  IScope local = null;
-  int line = 0;
-    line = jj_consume_token(DEFINE).beginLine;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case STATE:
-      jj_consume_token(STATE);
-                   factoryType   =  FactoryType.STATE;
-      break;
-    case MANAGER:
-      jj_consume_token(MANAGER);
-                    factoryType   =  FactoryType.SYSTEM;
-      break;
-    case BEHAVIOR:
-      jj_consume_token(BEHAVIOR);
-                   factoryType   =  FactoryType.BEHAVIOR;
-      break;
-    case ENTITY:
-      jj_consume_token(ENTITY);
-                   factoryType   =  FactoryType.ENTITY;
-      break;
-    case GOAL:
-      jj_consume_token(GOAL);
-                   factoryType   =  FactoryType.GOAL;
-      break;
-    default:
-      jj_la1[16] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BASE:
       jj_consume_token(BASE);
       basedName = jj_consume_token(IDENTIFIER).image;
       break;
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[8] = jj_gen;
       ;
     }
-    factoryName = jj_consume_token(IDENTIFIER).image;
-    local = prototype_object(parent);
-        Define.Set(factoryType,factoryName,basedName,parent,local,line);
+    name = jj_consume_token(IDENTIFIER).image;
+    switch(factoryType)
+    {
+                case STATE:
+                        define = new GameState(name);
+                break;
+                case MANAGER:
+                        ///TODO: define = new Manager(name);
+                break;
+                case BEHAVIOR:
+                        ///TODO: define = new Behavior();
+
+                break;
+                case ENTITY:
+                        define = new Entity(name);
+                break;
+                case GOAL:
+                        define = new Goal(name);
+                break;
+    }
+    define.setLine(line);
+    jj_consume_token(ABRE_COR);
+    values(define);
+    jj_consume_token(CIERRA_COR);
+    parent.addDefine(define);
   }
 
-  final public Add add(IScope parent) throws ParseException {
-  FactoryType factoryType;
-  Token factoryName;
-  IScope local = null;
-  int line = 0;
-    line = jj_consume_token(ADD).beginLine;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case STATE:
-      jj_consume_token(STATE);
-                    factoryType   =  FactoryType.STATE;
-      break;
-    case MANAGER:
-      jj_consume_token(MANAGER);
-                   factoryType   =  FactoryType.SYSTEM;
-      break;
-    case BEHAVIOR:
-      jj_consume_token(BEHAVIOR);
-                    factoryType =  FactoryType.BEHAVIOR;
-      break;
-    case ENTITY:
-      jj_consume_token(ENTITY);
-                  factoryType   =  FactoryType.ENTITY;
-      break;
-    case GOAL:
-      jj_consume_token(GOAL);
-                  factoryType   =  FactoryType.GOAL;
-      break;
-    default:
-      jj_la1[18] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
-    factoryName = jj_consume_token(IDENTIFIER);
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case ABRE_COR:
-      local = prototype_object(parent);
-      break;
-    default:
-      jj_la1[19] = jj_gen;
-      ;
-    }
-     Add add = new Add(factoryName.image, factoryType,local);
-     add.setLine(line);
-      {if (true) return add;}
-    throw new Error("Missing return statement in function");
-  }
-
-  final public Object expresion(IScope local) throws ParseException {
-  Object value = null;
-  Token t;
-  int line = 0;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case INT_LITERAL:
-      t = jj_consume_token(INT_LITERAL);
-                                    value = Integer.parseInt(t.image);
-      break;
-    case DECIMAL_LITERAL:
-      t = jj_consume_token(DECIMAL_LITERAL);
-                                            value = Double.parseDouble(t.image);
-      break;
-    case STRING_LITERAL:
-      t = jj_consume_token(STRING_LITERAL);
-                                                   value = t.image;
-      break;
-    case BOOL_LITERAL:
-      t = jj_consume_token(BOOL_LITERAL);
-                                         value = Boolean.parseBoolean(t.image);
-      break;
-    default:
-      jj_la1[20] = jj_gen;
-      if (jj_2_7(2)) {
-        value = function(local);
-      } else if (jj_2_8(2)) {
-        t = jj_consume_token(IDENTIFIER);
-                                                    value = local.get(t.image);
-      } else {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case ABRE_COR:
-          value = prototype_object(local);
-          break;
-        case ADD:
-          value = add(local);
-          break;
-        default:
-          jj_la1[21] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
-      }
-    }
-          if(value instanceof Value)
-          {
-                ((Value)value).setLine(getToken(0).beginLine);
-          }
-          {if (true) return value;}
-    throw new Error("Missing return statement in function");
+  final public void on(Define define) throws ParseException {
+    jj_consume_token(ON);
+    jj_consume_token(IDENTIFIER);
   }
 
   private boolean jj_2_1(int xla) {
@@ -776,237 +271,93 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     finally { jj_save(1, xla); }
   }
 
-  private boolean jj_2_3(int xla) {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return !jj_3_3(); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(2, xla); }
-  }
-
-  private boolean jj_2_4(int xla) {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return !jj_3_4(); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(3, xla); }
-  }
-
-  private boolean jj_2_5(int xla) {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return !jj_3_5(); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(4, xla); }
-  }
-
-  private boolean jj_2_6(int xla) {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return !jj_3_6(); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(5, xla); }
-  }
-
-  private boolean jj_2_7(int xla) {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return !jj_3_7(); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(6, xla); }
-  }
-
-  private boolean jj_2_8(int xla) {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    try { return !jj_3_8(); }
-    catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(7, xla); }
-  }
-
-  private boolean jj_3R_14() {
-    if (jj_3R_23()) return true;
-    return false;
-  }
-
-  private boolean jj_3_4() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(EQUAL)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_20() {
-    if (jj_3R_28()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_19() {
-    if (jj_3R_27()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_18() {
-    if (jj_3R_26()) return true;
+  private boolean jj_3R_8() {
+    if (jj_3R_12()) return true;
     return false;
   }
 
   private boolean jj_3R_11() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_18()) {
-    jj_scanpos = xsp;
-    if (jj_3R_19()) {
-    jj_scanpos = xsp;
-    if (jj_3R_20()) {
-    jj_scanpos = xsp;
-    if (jj_3_4()) {
-    jj_scanpos = xsp;
-    if (jj_3_5()) {
-    jj_scanpos = xsp;
-    if (jj_3R_21()) return true;
-    }
-    }
-    }
-    }
-    }
+    if (jj_scan_token(DEFINE)) return true;
     return false;
   }
 
-  private boolean jj_3_6() {
-    if (jj_scan_token(COMA)) return true;
+  private boolean jj_3R_7() {
     if (jj_3R_11()) return true;
     return false;
   }
 
-  private boolean jj_3_3() {
-    if (jj_scan_token(COMA)) return true;
-    if (jj_3R_9()) return true;
+  private boolean jj_3R_3() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_5()) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(21)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(22)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(23)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(24)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(25)) return true;
+    }
+    }
+    }
+    }
+    }
     return false;
   }
 
-  private boolean jj_3R_28() {
-    if (jj_scan_token(START)) return true;
+  private boolean jj_3R_5() {
+    if (jj_scan_token(USING)) return true;
     return false;
   }
 
-  private boolean jj_3R_27() {
-    if (jj_scan_token(DEFINE)) return true;
+  private boolean jj_3R_12() {
+    if (jj_scan_token(ON)) return true;
     return false;
   }
 
-  private boolean jj_3R_17() {
-    if (jj_scan_token(DOT)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_16() {
+  private boolean jj_3R_10() {
     if (jj_scan_token(ADD)) return true;
     return false;
   }
 
-  private boolean jj_3R_23() {
-    if (jj_scan_token(DEFINE)) return true;
+  private boolean jj_3_1() {
+    if (jj_scan_token(DOTCOMA)) return true;
+    if (jj_3R_3()) return true;
     return false;
   }
 
   private boolean jj_3_2() {
     if (jj_scan_token(COMA)) return true;
-    if (jj_3R_8()) return true;
+    if (jj_3R_4()) return true;
     return false;
   }
 
-  private boolean jj_3R_12() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(ABRE_PAR)) return true;
+  private boolean jj_3R_4() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_6()) {
+    jj_scanpos = xsp;
+    if (jj_3R_7()) {
+    jj_scanpos = xsp;
+    if (jj_3R_8()) {
+    jj_scanpos = xsp;
+    if (jj_3R_9()) return true;
+    }
+    }
+    }
     return false;
   }
 
-  private boolean jj_3R_25() {
-    if (jj_scan_token(ADD)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_22() {
-    if (jj_scan_token(ADD)) return true;
+  private boolean jj_3R_6() {
+    if (jj_3R_10()) return true;
     return false;
   }
 
   private boolean jj_3R_9() {
-    if (jj_3R_16()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_24() {
     if (jj_scan_token(IDENTIFIER)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_8() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_15()) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(32)) return true;
-    }
-    return false;
-  }
-
-  private boolean jj_3R_15() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_24()) jj_scanpos = xsp;
-    if (jj_3R_25()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_10() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3R_17()) { jj_scanpos = xsp; break; }
-    }
-    if (jj_scan_token(EQUAL)) return true;
-    return false;
-  }
-
-  private boolean jj_3_1() {
-    if (jj_scan_token(COMA)) return true;
-    if (jj_3R_7()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_26() {
-    if (jj_scan_token(ADD)) return true;
-    return false;
-  }
-
-  private boolean jj_3_8() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_7() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_13()) {
-    jj_scanpos = xsp;
-    if (jj_3R_14()) return true;
-    }
-    return false;
-  }
-
-  private boolean jj_3R_13() {
-    if (jj_3R_22()) return true;
-    return false;
-  }
-
-  private boolean jj_3_7() {
-    if (jj_3R_12()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_21() {
-    if (jj_3R_12()) return true;
-    return false;
-  }
-
-  private boolean jj_3_5() {
-    if (jj_3R_10()) return true;
     return false;
   }
 
@@ -1021,7 +372,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
   private Token jj_scanpos, jj_lastpos;
   private int jj_la;
   private int jj_gen;
-  final private int[] jj_la1 = new int[22];
+  final private int[] jj_la1 = new int[9];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1029,12 +380,12 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x0,0x180,0xf40000,0x2000000,0xb00000,0x0,0x0,0x100,0xc40000,0x0,0x4180,0x0,0x0,0x10000100,0x0,0x0,0xf40000,0x2000000,0xf40000,0x10000000,0x0,0x10000100,};
+      jj_la1_0 = new int[] {0x0,0x3e20000,0x3e20000,0x380,0x0,0x380,0x1e80000,0x1e80000,0x4000000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x1,0x0,0x0,0x0,0x0,0x1,0x10000,0x10001,0x0,0x1,0x0,0x10000,0x4,0x10078,0x1,0x1,0x0,0x0,0x0,0x0,0x78,0x0,};
+      jj_la1_1 = new int[] {0x10,0x0,0x0,0x40000,0x2,0x40000,0x0,0x0,0x0,};
    }
-  final private JJCalls[] jj_2_rtns = new JJCalls[8];
+  final private JJCalls[] jj_2_rtns = new JJCalls[2];
   private boolean jj_rescan = false;
   private int jj_gc = 0;
 
@@ -1049,7 +400,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1064,7 +415,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1075,7 +426,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1086,7 +437,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1096,7 +447,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1106,7 +457,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1218,12 +569,12 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[49];
+    boolean[] la1tokens = new boolean[51];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 22; i++) {
+    for (int i = 0; i < 9; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -1235,7 +586,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
         }
       }
     }
-    for (int i = 0; i < 49; i++) {
+    for (int i = 0; i < 51; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
@@ -1262,7 +613,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
 
   private void jj_rescan_token() {
     jj_rescan = true;
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 2; i++) {
     try {
       JJCalls p = jj_2_rtns[i];
       do {
@@ -1271,12 +622,6 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
           switch (i) {
             case 0: jj_3_1(); break;
             case 1: jj_3_2(); break;
-            case 2: jj_3_3(); break;
-            case 3: jj_3_4(); break;
-            case 4: jj_3_5(); break;
-            case 5: jj_3_6(); break;
-            case 6: jj_3_7(); break;
-            case 7: jj_3_8(); break;
           }
         }
         p = p.next;

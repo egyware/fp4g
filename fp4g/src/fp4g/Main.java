@@ -4,29 +4,28 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 
-import fp4g.data.Define;
-import fp4g.data.IScope;
-import fp4g.data.MapScope;
-import fp4g.data.FactoryType;
-import fp4g.new_generator.Generator;
-import fp4g.generator.Utils;
-import fp4g.new_data.Game;
-import fp4g.new_data.managers.EntityManager;
-import fp4g.new_data.managers.PhysicsManager;
-import fp4g.new_data.managers.RenderManager;
-import fp4g.new_data.managers.SoundManager;
+import fp4g.data.define.Game;
+import fp4g.data.managers.EntityManager;
+import fp4g.data.managers.PhysicsManager;
+import fp4g.data.managers.RenderManager;
+import fp4g.data.managers.SoundManager;
+import fp4g.generator.Generator;
 import fp4g.parser.FastPrototyping4Game;
 import fp4g.parser.ParseException;
 
 public class Main {
 	private static String outDirectory = ".";
 	private static String inputFile;
+	private static HashMap<String,Object> options = new HashMap<>();
 	/**
 	 * 
 	 * @param args
 	 */
 	public static void main(String[] args)  throws ParseException {
+		options.put("package", "game"); //por defecto
+		options.put("debug", "false"); //por defecto
 		if(params(args))
 		{
 			if(inputFile == null)
@@ -83,7 +82,7 @@ public class Main {
 		        System.out.println(String.format("Parsing complete: %s",inputFile));
 		        
 		        System.out.println("Generating...");
-		        Generator.generate(gameConf, new File(outDirectory));
+		        //Generator.generate(options,gameConf, new File(outDirectory));
 		        System.out.println("...Ok!");		        
 	        
 		      }
@@ -130,8 +129,8 @@ public class Main {
 		{
 			final String cmd = args[i];
 			if(cmd.startsWith("-p"))
-			{
-				Utils.gamePackageName = args[++i];				
+			{				
+				options.put("package", args[++i]);
 			}else
 			if(cmd.startsWith("-out"))
 			{
