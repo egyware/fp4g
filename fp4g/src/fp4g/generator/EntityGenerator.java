@@ -13,7 +13,9 @@ import java.util.Map;
 
 import static fp4g.Log.Show;
 import fp4g.Log.ErrType;
+import fp4g.data.Add;
 import fp4g.data.Behavior;
+import fp4g.data.Code;
 import fp4g.data.IGameData;
 import fp4g.data.define.Entity;
 import freemarker.template.Configuration;
@@ -25,12 +27,11 @@ public class EntityGenerator extends Generator {
 	private static File entityPackageDir;
 
 	@Override
-	protected void generateData(Map<String,Object> options,Configuration cfg, IGameData gameData, File path) 
+	protected void generateData(Map<String,Object> options,Configuration cfg, Code gameData, File path) 
 	throws IOException, TemplateException
 	{
 		Entity entity = (Entity)gameData;		
-		Template temp = cfg.getTemplate("EntityBuilder.ftl"); 
-	
+		Template temp = cfg.getTemplate("EntityBuilder.ftl");	
 		
 		HashMap<String,Object> root = new HashMap<>();
 		HashMap<String,Object> clazz = new HashMap<>();
@@ -39,21 +40,17 @@ public class EntityGenerator extends Generator {
 		root.put("class",clazz);
 		root.put("autodoc", autodoc);
 		
-//		//agregar behaviors
-//		if(entity instanceof Entity.Define)
-//		{
-//			Entity.Define define = (Entity.Define)entity;
-//			List<String> behaviors = new LinkedList<>(); 
-//			for(Behavior bhvr:define.behaviors)
-//			{
-//				behaviors.add(bhvr.name);
-//			}
-//			root.put("behaviors", behaviors);
-//		}
-//		else
-//		{
-//			Show(ErrType.NotExpectedType,entity);
-//		}
+		//agregar behaviors
+				
+		List<String> behaviors = new LinkedList<>(); 
+		for(Add addBhvr:entity.addBehaviors)
+		{
+			//TODO falta usar variable
+			//TODO falta usar parametros
+			behaviors.add(addBhvr.name);
+		}
+		
+		root.put("behaviors", behaviors);
 		//agregar imports!		
 		List<String> imports = new LinkedList<>();
 		String arrayImports[] = new String[]

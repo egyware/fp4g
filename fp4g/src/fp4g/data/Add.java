@@ -11,7 +11,7 @@ public class Add extends Code{
 	private ObjectType type;
 	public String name;	
 	public String varName;
-	public Groups params; //TODO por definir
+	public ExprList params; //TODO por definir
 	public Add(ObjectType type,String name)
 	{
 		this(type,name,null);		

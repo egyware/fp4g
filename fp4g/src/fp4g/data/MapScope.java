@@ -16,7 +16,7 @@ import java.util.Set;
  * @author egyware
  *
  */
-public final class MapScope extends Value implements Cloneable, IScope{
+public final class MapScope extends Code implements Cloneable, IScope{
 	private HashMap<String, Object> values = new HashMap<String,Object>();
 	private int last_insert = 0;
 	private final IScope parent;
@@ -28,7 +28,7 @@ public final class MapScope extends Value implements Cloneable, IScope{
 	
 	public MapScope(IScope _parent)
 	{	
-		super("Scope");
+		//super("Scope");
 		parent = _parent;
 	}
 	

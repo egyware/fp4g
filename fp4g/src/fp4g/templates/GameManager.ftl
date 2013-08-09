@@ -23,7 +23,8 @@ public class ${class.name} extends GameManager {
 		assetManager.setLoader(Sprite.class,new SpriteLoader(fileResolver));		
 	}
 	
-	@Override void resize(int w,int h)
+	@Override 
+	public void resize(int w,int h)
 	{
 		<#if start_state??>
 		//iniciando el juego 

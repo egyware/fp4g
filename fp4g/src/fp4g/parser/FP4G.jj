@@ -98,7 +98,7 @@ void using(Game game):
    //TODO: Por hacer los usings...
 }
 {
-  	< USING > <MANAGER >|< STATE >|< BEHAVIOR >|< ENTITY >| < GOAL >|< MESSAGE >
+  	< USING > (<MANAGER >|< STATE >|< BEHAVIOR >|< ENTITY >| < GOAL >|< MESSAGE >) <  IDENTIFIER >
 }
 
 void game(Game game):
@@ -139,6 +139,8 @@ void add(Define define,String keyName):
   int line = 0;
   ObjectType type = null;
   String name;
+  Add add;
+ // List<?> exprlist;
 }
 {
    line = < ADD >.beginLine 
@@ -151,10 +153,11 @@ void add(Define define,String keyName):
    )
    name = < IDENTIFIER >.image
    {
-     Add add = new Add(type,name,keyName);     
+     add = new Add(type,name,keyName);     
      add.setLine(line);
      define.addADD(add);     
-   }   
+   }
+   [ exprlist() ]
 }
 void define(Define parent):
 { 
@@ -188,7 +191,7 @@ void define(Define parent):
 			
 		break;
 		case ENTITY:
-			define = new Entity(name);
+			define = new Entity(name,parent);
 		break;
 		case GOAL:
 			define = new Goal(name);
@@ -207,6 +210,19 @@ void on(Define define):
 {
   	< ON > <IDENTIFIER > }
 
+void exprlist():
+{
+  ExprList exprList = new ExprList();
+  Expresion expr;}
+{	< ABRE_PAR > expr = expresion() { exprList.add(expr);} ( < COMA > expr = expresion() { exprList.add(expr);} )* <CIERRA_PAR >
+}
+Expresion expresion():
+{
+}
+{	< INT_LITERAL >
+	{
+	  	return null;	}
+}
 /*Function function(IScope local):
 {
     Object args[] = null;

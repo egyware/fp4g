@@ -29,7 +29,7 @@ import static fp4g.Log.Show;
  * @author egyware
  *
  */
-public abstract class Function extends Value{
+public abstract class Function extends Code{
 	private static HashMap<String,Class<? extends Function>> functions = new HashMap<String,Class<? extends Function>>();
 		
 	static
@@ -46,7 +46,7 @@ public abstract class Function extends Value{
 	protected final Object args[];
 	public Function(String name,Object _args[])
 	{
-		super (name);
+		//super (name);
 		args = _args;		
 	}
 	/**

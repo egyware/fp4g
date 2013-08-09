@@ -53,36 +53,36 @@ public class Main {
 		    	gameConf.height = 480;
 		    	gameConf.debug = false;
 		    	
-		    	gameConf.addManager("RenderSystem", new RenderManager());
-		    	gameConf.addManager("EntitySystem", new EntityManager());
-		    	gameConf.addManager("SoundSystem",  new SoundManager());
-		    	gameConf.addManager("PhysicsSystem",new PhysicsManager());
+//		    	gameConf.addDefine(new RenderManager());
+//		    	gameConf.addDefine(new EntityManager());
+//		    	gameConf.addDefine(new SoundManager());
+//		    	gameConf.addDefine(new PhysicsManager());
 		    	
 		        //agregar componentes		    	
-		        String components[][] = 
-		        	{
-		        		{"BodyBehavior"},
-		        		{"spatial.Spatial"},
-		        		{"SpriteBehavior","spatial.Spatial"},		        			        		
-		        	};	        
-		        for(String c[]:components)
-		        {
-		        	if(c.length == 1)
-		        	{
-		        		gameConf.addBehavior(c[0]);
-		        	}
-		        	else
-		        	{
-		        		gameConf.addBehavior(c[0],c[1]);
-		        	}
-		        }
+//		        String components[][] = 
+//		        	{
+//		        		{"BodyBehavior"},
+//		        		{"spatial.Spatial"},
+//		        		{"SpriteBehavior","spatial.Spatial"},		        			        		
+//		        	};	        
+//		        for(String c[]:components)
+//		        {
+//		        	if(c.length == 1)
+//		        	{
+//		        		gameConf.addBehavior(c[0]);
+//		        	}
+//		        	else
+//		        	{
+//		        		gameConf.addBehavior(c[0],c[1]);
+//		        	}
+//		        }
 
 		        System.out.println(String.format("Parsing: %s",inputFile));
 		        parser.game(gameConf);
 		        System.out.println(String.format("Parsing complete: %s",inputFile));
 		        
 		        System.out.println("Generating...");
-		        //Generator.generate(options,gameConf, new File(outDirectory));
+		        Generator.generate(options,gameConf, new File(outDirectory));
 		        System.out.println("...Ok!");		        
 	        
 		      }

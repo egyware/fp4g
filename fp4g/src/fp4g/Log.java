@@ -2,7 +2,7 @@ package fp4g;
 
 import java.io.PrintStream;
 
-import fp4g.data.Value;
+import fp4g.data.Code;
 
 public class Log {	
 	protected static interface MessageType
@@ -11,8 +11,8 @@ public class Log {
 		
 	}
 	public static enum WarnType implements MessageType
-	{	
-		ExpectedDefine("No se esperaba Define State, se ignora, cambie a otro nivel"),
+	{			
+		MissingDefineAdd("No se encontro un Define para el Add"),
 		NotFoundDefine("No se encontró una definición previa, se omitirá y se asumirá que existe"),
 		CustomAddState, 
 		NotExpectedThis, ParentBehaviorNull, NotImplement;
@@ -86,7 +86,7 @@ public class Log {
 	}
 	public static <T extends MessageType> void Show(T type,Object v)
 	{
-		if(v instanceof Value)
+		if(v instanceof Code)
 		{
 			Show(type,v);
 		}
@@ -95,15 +95,15 @@ public class Log {
 			//TODO [egyware] No es un error que tiene asociado una linea
 		}
 	}
-	public static void Show(ErrType type,Value line)
+	public static void Show(ErrType type,Code line)
 	{
 		Error(type,line.getLine());
 	}
-	public static void Show(WarnType type,Value line)
+	public static void Show(WarnType type,Code line)
 	{
 		Warning(type,line.getLine());		
 	}
-	public static void Show(InfoType type,Value line)
+	public static void Show(InfoType type,Code line)
 	{
 		Info(type,line.getLine());		
 	}

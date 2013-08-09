@@ -138,6 +138,12 @@ public class GameState extends Define{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean isDefined(ObjectType type, String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 //	public static class Custom extends GameState
 //	{

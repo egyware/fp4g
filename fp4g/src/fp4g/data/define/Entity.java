@@ -1,35 +1,49 @@
 package fp4g.data.define;
 
-import java.util.HashMap;
+import static fp4g.Log.Show;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
+import fp4g.Log.ErrType;
+import fp4g.Log.WarnType;
 import fp4g.data.Add;
 import fp4g.data.Define;
-import fp4g.data.GameDataCommon;
 import fp4g.data.ObjectType;
 import fp4g.data.On;
 
 public class Entity extends Define{	
-	public GameDataCommon parent;
-	public String name;
-	//public abstract Entity add();
+	public List<Add> addBehaviors;
 	
 	
-	public Entity(String name) {
-		super(ObjectType.ENTITY, name);		 
+	public Entity(String name,Define parent) {
+		super(ObjectType.ENTITY, name,parent);
+		
+		addBehaviors = new LinkedList<>();
 	}
 	
-//	public Entity(GameDataCommon parent,String name){
-//		this.name = name;
-//		this.parent = parent;
-//	}
-
 	@Override
 	public void addADD(Add code) {
-		// TODO Auto-generated method stub
-		
+		switch(code.getType())
+		{
+		case ASSET:			
+		case ENTITY:		
+		case GAME:			
+		case GOAL:			
+		case MANAGER:			
+		case STATE:
+			Show(ErrType.NotExpectedType,code);
+			break;
+		case BEHAVIOR:	
+			if(!isDefined(ObjectType.BEHAVIOR,code.name))
+			{
+				Show(WarnType.MissingDefineAdd,code);
+			}
+			addBehaviors.add(code);
+			break;			
+		default:
+			break;		 
+		}		
 	}
 
 
@@ -44,6 +58,19 @@ public class Entity extends Define{
 	public void addOn(On on) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean isDefined(ObjectType type,String name) {
+		if(parent != null)
+		{
+			//preguntamos más arriba, debido que Entity no acepta definiciones ;)
+			return parent.isDefined(type,name);
+		}
+		else
+		{
+			return false;
+		}				
 	}
 	
 //	public static class Define extends Entity

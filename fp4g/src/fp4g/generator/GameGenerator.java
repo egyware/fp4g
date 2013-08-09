@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import fp4g.data.Code;
 import fp4g.data.IGameData;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
@@ -21,7 +22,7 @@ import freemarker.template.TemplateException;
 public class GameGenerator extends Generator {
 
 	@Override
-	protected void generateData(Map<String,Object> options,Configuration cfg,IGameData gameData, File path) throws IOException, TemplateException {
+	protected void generateData(Map<String,Object> options,Configuration cfg,Code gameData, File path) throws IOException, TemplateException {
 		Game game = (Game)gameData;
 		
 		Template temp = cfg.getTemplate("GameManager.ftl"); 
@@ -56,10 +57,10 @@ public class GameGenerator extends Generator {
 		temp.process(root, out);  
 		System.out.println(String.format("Generado: %s/%s.java",packageNameDir, game.name));
 		
-//		for(Entity entity: game.entities)
-//		{
-//			Generator.generate(options, entity, path);
-//		}
+		for(Entity entity: game.entities)
+		{
+			Generator.generate(options, entity, path);
+		}
 		
 	}
 

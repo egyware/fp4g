@@ -33,4 +33,9 @@ public class Goal extends Define {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public boolean isDefined(ObjectType type, String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

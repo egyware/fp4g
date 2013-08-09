@@ -33,9 +33,9 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
   }
 
   final public void using(Game game) throws ParseException {
+    jj_consume_token(USING);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case USING:
-      jj_consume_token(USING);
+    case MANAGER:
       jj_consume_token(MANAGER);
       break;
     case STATE:
@@ -58,16 +58,12 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
+    jj_consume_token(IDENTIFIER);
   }
 
   final public void game(Game game) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case USING:
-    case STATE:
-    case BEHAVIOR:
-    case ENTITY:
-    case GOAL:
-    case MESSAGE:
       usings(game);
       break;
     default:
@@ -150,6 +146,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
   int line = 0;
   ObjectType type = null;
   String name;
+  Add add;
     line = jj_consume_token(ADD).beginLine;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case STATE:
@@ -178,9 +175,17 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       throw new ParseException();
     }
     name = jj_consume_token(IDENTIFIER).image;
-     Add add = new Add(type,name,keyName);
+     add = new Add(type,name,keyName);
      add.setLine(line);
      define.addADD(add);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ABRE_PAR:
+      exprlist();
+      break;
+    default:
+      jj_la1[7] = jj_gen;
+      ;
+    }
   }
 
   final public void define(Define parent) throws ParseException {
@@ -212,7 +217,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
                    factoryType   =  ObjectType.GOAL;
       break;
     default:
-      jj_la1[7] = jj_gen;
+      jj_la1[8] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -222,7 +227,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       basedName = jj_consume_token(IDENTIFIER).image;
       break;
     default:
-      jj_la1[8] = jj_gen;
+      jj_la1[9] = jj_gen;
       ;
     }
     name = jj_consume_token(IDENTIFIER).image;
@@ -239,7 +244,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
 
                 break;
                 case ENTITY:
-                        define = new Entity(name);
+                        define = new Entity(name,parent);
                 break;
                 case GOAL:
                         define = new Goal(name);
@@ -255,6 +260,35 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
   final public void on(Define define) throws ParseException {
     jj_consume_token(ON);
     jj_consume_token(IDENTIFIER);
+  }
+
+  final public void exprlist() throws ParseException {
+  ExprList exprList = new ExprList();
+  Expresion expr;
+    jj_consume_token(ABRE_PAR);
+    expr = expresion();
+                                          exprList.add(expr);
+    label_3:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case COMA:
+        ;
+        break;
+      default:
+        jj_la1[10] = jj_gen;
+        break label_3;
+      }
+      jj_consume_token(COMA);
+      expr = expresion();
+                                                                                               exprList.add(expr);
+    }
+    jj_consume_token(CIERRA_PAR);
+  }
+
+  final public Expresion expresion() throws ParseException {
+    jj_consume_token(INT_LITERAL);
+                {if (true) return null;}
+    throw new Error("Missing return statement in function");
   }
 
   private boolean jj_2_1(int xla) {
@@ -276,8 +310,8 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     return false;
   }
 
-  private boolean jj_3R_11() {
-    if (jj_scan_token(DEFINE)) return true;
+  private boolean jj_3R_12() {
+    if (jj_scan_token(ON)) return true;
     return false;
   }
 
@@ -286,35 +320,8 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     return false;
   }
 
-  private boolean jj_3R_3() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_5()) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(21)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(22)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(23)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(24)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(25)) return true;
-    }
-    }
-    }
-    }
-    }
-    return false;
-  }
-
-  private boolean jj_3R_5() {
+  private boolean jj_3R_4() {
     if (jj_scan_token(USING)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_12() {
-    if (jj_scan_token(ON)) return true;
     return false;
   }
 
@@ -325,17 +332,22 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
 
   private boolean jj_3_1() {
     if (jj_scan_token(DOTCOMA)) return true;
-    if (jj_3R_3()) return true;
+    if (jj_3R_4()) return true;
     return false;
   }
 
   private boolean jj_3_2() {
     if (jj_scan_token(COMA)) return true;
-    if (jj_3R_4()) return true;
+    if (jj_3R_5()) return true;
     return false;
   }
 
-  private boolean jj_3R_4() {
+  private boolean jj_3R_11() {
+    if (jj_scan_token(DEFINE)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_5() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_6()) {
@@ -372,7 +384,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
   private Token jj_scanpos, jj_lastpos;
   private int jj_la;
   private int jj_gen;
-  final private int[] jj_la1 = new int[9];
+  final private int[] jj_la1 = new int[11];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -380,10 +392,10 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x0,0x3e20000,0x3e20000,0x380,0x0,0x380,0x1e80000,0x1e80000,0x4000000,};
+      jj_la1_0 = new int[] {0x0,0x3e80000,0x20000,0x380,0x0,0x380,0x1e80000,0x40000000,0x1e80000,0x4000000,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x10,0x0,0x0,0x40000,0x2,0x40000,0x0,0x0,0x0,};
+      jj_la1_1 = new int[] {0x10,0x0,0x0,0x40000,0x2,0x40000,0x0,0x0,0x0,0x0,0x2,};
    }
   final private JJCalls[] jj_2_rtns = new JJCalls[2];
   private boolean jj_rescan = false;
@@ -400,7 +412,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -415,7 +427,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -426,7 +438,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -437,7 +449,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -447,7 +459,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -457,7 +469,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -574,7 +586,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 11; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

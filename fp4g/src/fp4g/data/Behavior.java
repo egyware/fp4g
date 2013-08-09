@@ -10,6 +10,6 @@ import java.util.List;
 public class Behavior {
 	public Behavior parent;
 	public String name;
-	public List<Param> parameters;
+	public ExprList parameters;
 	
 }

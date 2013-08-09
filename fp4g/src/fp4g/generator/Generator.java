@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import fp4g.data.Code;
 import fp4g.data.IGameData;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -29,7 +30,7 @@ public abstract class Generator {
 			return generator.newInstance();
 		}
 	}
-	public static void generate(Map<String,Object> options,IGameData gameData, File path){
+	public static void generate(Map<String,Object> options,Code gameData, File path){
 		
 		packageName = (String) options.get("package");
 		packageNameDir = packageName.replace('.', '/');
@@ -74,5 +75,5 @@ public abstract class Generator {
 		}
 		
 	}
-	protected abstract void generateData(Map<String, Object> options,Configuration cfg, IGameData gameData, File path) throws IOException, TemplateException ;	
+	protected abstract void generateData(Map<String, Object> options,Configuration cfg, Code gameData, File path) throws IOException, TemplateException ;	
 }
