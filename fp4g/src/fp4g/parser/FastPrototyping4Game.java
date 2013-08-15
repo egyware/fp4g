@@ -3,6 +3,7 @@ package fp4g.parser;
 import java.util.LinkedList;
 import fp4g.data.*;
 import fp4g.data.define.*;
+import fp4g.data.expresion.*;
 import static fp4g.Log.ErrType;
 import static fp4g.Log.WarnType;
 import static fp4g.Log.InfoType;
@@ -147,6 +148,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
   ObjectType type = null;
   String name;
   Add add;
+  ExprList exprList;
     line = jj_consume_token(ADD).beginLine;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case STATE:
@@ -180,7 +182,10 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
      define.addADD(add);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ABRE_PAR:
-      exprlist();
+      jj_consume_token(ABRE_PAR);
+      exprList = exprlist();
+                                          add.addParams(exprList);
+      jj_consume_token(CIERRA_PAR);
       break;
     default:
       jj_la1[7] = jj_gen;
@@ -194,6 +199,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
   ObjectType factoryType;
   int line = 0;
   Define define = null;
+  NameList list = null;
     line = jj_consume_token(DEFINE).beginLine;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case STATE:
@@ -234,7 +240,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     switch(factoryType)
     {
                 case STATE:
-                        define = new GameState(name);
+                        define = new GameState(name,parent);
                 break;
                 case MANAGER:
                         ///TODO: define = new Manager(name);
@@ -251,6 +257,17 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
                 break;
     }
     define.setLine(line);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ABRE_PAR:
+      jj_consume_token(ABRE_PAR);
+      list = nameList();
+      jj_consume_token(CIERRA_PAR);
+                define.setNameList(list);
+      break;
+    default:
+      jj_la1[10] = jj_gen;
+      ;
+    }
     jj_consume_token(ABRE_COR);
     values(define);
     jj_consume_token(CIERRA_COR);
@@ -262,12 +279,9 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     jj_consume_token(IDENTIFIER);
   }
 
-  final public void exprlist() throws ParseException {
-  ExprList exprList = new ExprList();
-  Expresion expr;
-    jj_consume_token(ABRE_PAR);
-    expr = expresion();
-                                          exprList.add(expr);
+  final public NameList nameList() throws ParseException {
+        NameList list = new NameList();
+    declareVar(list);
     label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -275,19 +289,171 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
         ;
         break;
       default:
-        jj_la1[10] = jj_gen;
+        jj_la1[11] = jj_gen;
         break label_3;
       }
       jj_consume_token(COMA);
-      expr = expresion();
-                                                                                               exprList.add(expr);
+      declareVar(list);
     }
-    jj_consume_token(CIERRA_PAR);
+        {if (true) return list;}
+    throw new Error("Missing return statement in function");
   }
 
+  final public void declareVar(NameList list) throws ParseException {
+        String varName;
+        String declType;
+    varName = jj_consume_token(IDENTIFIER).image;
+    jj_consume_token(DOBLEDOT);
+    declType = jj_consume_token(IDENTIFIER).image;
+                list.add(varName,declType);
+  }
+
+  final public ExprList exprlist() throws ParseException {
+  ExprList exprList = new ExprList();
+  Expresion expr;
+    expr = expresion();
+                             exprList.add(expr);
+    label_4:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case COMA:
+        ;
+        break;
+      default:
+        jj_la1[12] = jj_gen;
+        break label_4;
+      }
+      jj_consume_token(COMA);
+      expr = expresion();
+                                                                                  exprList.add(expr);
+    }
+                {if (true) return exprList;}
+    throw new Error("Missing return statement in function");
+  }
+
+/* expresiones de lua
+exp ::= prefixexp
+exp ::= nil | false | true (Literales)
+exp ::= Number             (Numero)
+exp ::= String             (String)
+exp ::= functiondef        (funcion, nop, esto no lo tiene Fp4g)
+exp ::= tableconstructor   (constructor, nop, esto tampoco)
+exp ::= ‘...’              (...)
+exp ::= exp binop exp      (expresion operador binario, claro que si :C)
+exp ::= unop exp           (operador unario, expresion)
+prefixexp ::= var | functioncall | ‘(’ exp ‘)’ (variable o llamada a funcion, vaya que hay tipos de expresiones)
+*/
   final public Expresion expresion() throws ParseException {
-    jj_consume_token(INT_LITERAL);
-                {if (true) return null;}
+        String image;
+        //aux var
+        FunctionCall call = null;
+        ExprList exprList = null;
+        Expresion expr = null;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case MINUS:
+    case NOT:
+      expr = unaryOp();
+                           {if (true) return expr;}
+      break;
+    case INT_LITERAL:
+      //expr = binaryOp() { return expr; } |
+              image = jj_consume_token(INT_LITERAL).image;
+                                        {if (true) return new Literal<Integer>(Integer.parseInt(image));}
+      break;
+    case DECIMAL_LITERAL:
+      image = jj_consume_token(DECIMAL_LITERAL).image;
+                                            {if (true) return new Literal<Float>(Float.parseFloat(image));}
+      break;
+    case BOOL_LITERAL:
+      image = jj_consume_token(BOOL_LITERAL).image;
+                                          {if (true) return new Literal<Boolean>(Boolean.parseBoolean(image));}
+      break;
+    case STRING_LITERAL:
+      image = jj_consume_token(STRING_LITERAL).image;
+                                           {if (true) return new Literal<String>(image);}
+      break;
+    default:
+      jj_la1[14] = jj_gen;
+      if (jj_2_3(2)) {
+        image = jj_consume_token(IDENTIFIER).image;
+                                       call = new FunctionCall(image);
+        jj_consume_token(ABRE_PAR);
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case INT_LITERAL:
+        case DECIMAL_LITERAL:
+        case STRING_LITERAL:
+        case BOOL_LITERAL:
+        case MINUS:
+        case NOT:
+        case IDENTIFIER:
+          exprList = exprlist();
+                                                                                                               call.addParams(exprList);
+          break;
+        default:
+          jj_la1[13] = jj_gen;
+          ;
+        }
+        jj_consume_token(CIERRA_PAR);
+      } else {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case IDENTIFIER:
+          image = jj_consume_token(IDENTIFIER).image;
+                                       {if (true) return new VarExpr(image);}
+          break;
+        default:
+          jj_la1[15] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+      }
+    }
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Expresion unaryOp() throws ParseException {
+  UnaryOp.Type type;
+   Expresion expr;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NOT:
+      jj_consume_token(NOT);
+                          type = UnaryOp.Type.Not;
+      break;
+    case MINUS:
+      jj_consume_token(MINUS);
+                            type = UnaryOp.Type.Minus;
+      break;
+    default:
+      jj_la1[16] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    expr = expresion();
+                 {if (true) return new UnaryOp(type,expr);}
+    throw new Error("Missing return statement in function");
+  }
+
+//TODO PROBLEMAS CON RECURSIVIDAD
+  final public Expresion binaryOp() throws ParseException {
+        BinaryOp.Type type;
+        Expresion left;
+        Expresion right;
+    left = expresion();
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case PLUS:
+      jj_consume_token(PLUS);
+                           type = BinaryOp.Type.Plus;
+      break;
+    case MINUS:
+      jj_consume_token(MINUS);
+                            type = BinaryOp.Type.Minus;
+      break;
+    default:
+      jj_la1[17] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    right = expresion();
+                {if (true) return new BinaryOp(type,left,right);}
     throw new Error("Missing return statement in function");
   }
 
@@ -305,13 +471,58 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     finally { jj_save(1, xla); }
   }
 
-  private boolean jj_3R_8() {
-    if (jj_3R_12()) return true;
+  private boolean jj_2_3(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_3(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(2, xla); }
+  }
+
+  private boolean jj_3R_5() {
+    if (jj_scan_token(USING)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_11() {
+    if (jj_scan_token(ADD)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_13() {
+    if (jj_scan_token(ON)) return true;
+    return false;
+  }
+
+  private boolean jj_3_1() {
+    if (jj_scan_token(DOTCOMA)) return true;
+    if (jj_3R_5()) return true;
     return false;
   }
 
   private boolean jj_3R_12() {
-    if (jj_scan_token(ON)) return true;
+    if (jj_scan_token(DEFINE)) return true;
+    return false;
+  }
+
+  private boolean jj_3_2() {
+    if (jj_scan_token(COMA)) return true;
+    if (jj_3R_6()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_6() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_7()) {
+    jj_scanpos = xsp;
+    if (jj_3R_8()) {
+    jj_scanpos = xsp;
+    if (jj_3R_9()) {
+    jj_scanpos = xsp;
+    if (jj_3R_10()) return true;
+    }
+    }
+    }
     return false;
   }
 
@@ -320,56 +531,24 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     return false;
   }
 
-  private boolean jj_3R_4() {
-    if (jj_scan_token(USING)) return true;
-    return false;
-  }
-
   private boolean jj_3R_10() {
-    if (jj_scan_token(ADD)) return true;
+    if (jj_scan_token(IDENTIFIER)) return true;
     return false;
   }
 
-  private boolean jj_3_1() {
-    if (jj_scan_token(DOTCOMA)) return true;
-    if (jj_3R_4()) return true;
-    return false;
-  }
-
-  private boolean jj_3_2() {
-    if (jj_scan_token(COMA)) return true;
-    if (jj_3R_5()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_11() {
-    if (jj_scan_token(DEFINE)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_5() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_6()) {
-    jj_scanpos = xsp;
-    if (jj_3R_7()) {
-    jj_scanpos = xsp;
-    if (jj_3R_8()) {
-    jj_scanpos = xsp;
-    if (jj_3R_9()) return true;
-    }
-    }
-    }
-    return false;
-  }
-
-  private boolean jj_3R_6() {
-    if (jj_3R_10()) return true;
+  private boolean jj_3_3() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(ABRE_PAR)) return true;
     return false;
   }
 
   private boolean jj_3R_9() {
-    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_3R_13()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_8() {
+    if (jj_3R_12()) return true;
     return false;
   }
 
@@ -384,7 +563,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
   private Token jj_scanpos, jj_lastpos;
   private int jj_la;
   private int jj_gen;
-  final private int[] jj_la1 = new int[11];
+  final private int[] jj_la1 = new int[18];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -392,12 +571,12 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x0,0x3e80000,0x20000,0x380,0x0,0x380,0x1e80000,0x40000000,0x1e80000,0x4000000,0x0,};
+      jj_la1_0 = new int[] {0x0,0x3e80000,0x20000,0x380,0x0,0x380,0x1e80000,0x40000000,0x1e80000,0x4000000,0x40000000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x10,0x0,0x0,0x40000,0x2,0x40000,0x0,0x0,0x0,0x0,0x2,};
+      jj_la1_1 = new int[] {0x10,0x0,0x0,0x80000,0x2,0x80000,0x0,0x0,0x0,0x0,0x0,0x2,0x2,0xc13c0,0x413c0,0x80000,0x41000,0x1800,};
    }
-  final private JJCalls[] jj_2_rtns = new JJCalls[2];
+  final private JJCalls[] jj_2_rtns = new JJCalls[3];
   private boolean jj_rescan = false;
   private int jj_gc = 0;
 
@@ -412,7 +591,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -427,7 +606,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -438,7 +617,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -449,7 +628,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -459,7 +638,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -469,7 +648,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -581,12 +760,12 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[51];
+    boolean[] la1tokens = new boolean[52];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 11; i++) {
+    for (int i = 0; i < 18; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -598,7 +777,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
         }
       }
     }
-    for (int i = 0; i < 51; i++) {
+    for (int i = 0; i < 52; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
@@ -625,7 +804,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
 
   private void jj_rescan_token() {
     jj_rescan = true;
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 3; i++) {
     try {
       JJCalls p = jj_2_rtns[i];
       do {
@@ -634,6 +813,7 @@ public class FastPrototyping4Game implements FastPrototyping4GameConstants {
           switch (i) {
             case 0: jj_3_1(); break;
             case 1: jj_3_2(); break;
+            case 2: jj_3_3(); break;
           }
         }
         p = p.next;

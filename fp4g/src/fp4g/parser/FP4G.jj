@@ -5,7 +5,8 @@
  }PARSER_BEGIN(FastPrototyping4Game)package fp4g.parser;
 import java.util.LinkedList;
 import fp4g.data.*;
-import fp4g.data.define.*;import static fp4g.Log.ErrType;
+import fp4g.data.define.*;
+import fp4g.data.expresion.*;import static fp4g.Log.ErrType;
 import static fp4g.Log.WarnType;
 import static fp4g.Log.InfoType;
 import static fp4g.Log.Show;
@@ -64,6 +65,7 @@ TOKEN: /* Separadores */
 | < EQUAL     : "=" >
 | < DOT       : "." >
 | < DOTCOMA   : ";" >
+| < DOBLEDOT       : ":" >
 }TOKEN : /* Literales */{  < INT_LITERAL 	: (< DIGIT >)+ >
 | < DECIMAL_LITERAL : (< DIGIT >)*"."(< DIGIT >)+ >
 | < STRING_LITERAL  : "\""(~["\""])*"\""  > {  matchedToken.image = image.substring(1,lengthOfMatch-1);}
@@ -140,7 +142,7 @@ void add(Define define,String keyName):
   ObjectType type = null;
   String name;
   Add add;
- // List<?> exprlist;
+  ExprList exprList;
 }
 {
    line = < ADD >.beginLine 
@@ -157,7 +159,7 @@ void add(Define define,String keyName):
      add.setLine(line);
      define.addADD(add);     
    }
-   [ exprlist() ]
+   [ < ABRE_PAR > exprList = exprlist() { add.addParams(exprList);} < CIERRA_PAR >]
 }
 void define(Define parent):
 { 
@@ -166,6 +168,7 @@ void define(Define parent):
   ObjectType factoryType;
   int line = 0;
   Define define = null;
+  NameList list = null;
 }
 {
   	line = < DEFINE >.beginLine
@@ -181,7 +184,7 @@ void define(Define parent):
   {
     switch(factoryType)
     {		case STATE:
-			define = new GameState(name);
+			define = new GameState(name,parent);
 		break;
 		case MANAGER:
 			///TODO: define = new Manager(name);
@@ -199,6 +202,11 @@ void define(Define parent):
     }
     define.setLine(line);
   }
+  [
+  	<ABRE_PAR > list = nameList() <CIERRA_PAR >
+  	{		define.setNameList(list);
+  	}
+  ]
   <  ABRE_COR > values(define) < CIERRA_COR >
   {
     parent.addDefine(define);  }
@@ -210,78 +218,91 @@ void on(Define define):
 {
   	< ON > <IDENTIFIER > }
 
-void exprlist():
+NameList nameList():
+{
+  	NameList list = new NameList();  
+}
+{
+  declareVar(list) ( < COMA > declareVar(list) )*
+  {
+	return list;  }
+}
+
+void declareVar(NameList list):
+{
+  	String varName;
+  	String declType;
+}
+{
+  	varName = < IDENTIFIER >.image <DOBLEDOT > declType = < IDENTIFIER >.image
+  	{
+  	  	list.add(varName,declType);  	}}
+
+ExprList exprlist():
 {
   ExprList exprList = new ExprList();
   Expresion expr;}
-{	< ABRE_PAR > expr = expresion() { exprList.add(expr);} ( < COMA > expr = expresion() { exprList.add(expr);} )* <CIERRA_PAR >
+{	expr = expresion() { exprList.add(expr);} ( < COMA > expr = expresion() { exprList.add(expr);} )*
+	{
+	  	return exprList;	}
 }
+/* expresiones de lua
+exp ::= prefixexp
+exp ::= nil | false | true (Literales)
+exp ::= Number             (Numero)
+exp ::= String             (String)
+exp ::= functiondef        (funcion, nop, esto no lo tiene Fp4g)
+exp ::= tableconstructor   (constructor, nop, esto tampoco)
+exp ::= ‘...’              (...)
+exp ::= exp binop exp      (expresion operador binario, claro que si :C)
+exp ::= unop exp           (operador unario, expresion)
+prefixexp ::= var | functioncall | ‘(’ exp ‘)’ (variable o llamada a funcion, vaya que hay tipos de expresiones)
+*/
 Expresion expresion():
 {
-}
-{	< INT_LITERAL >
-	{
-	  	return null;	}
-}
-/*Function function(IScope local):
-{
-    Object args[] = null;
-    String functionName;
-    Token functionToken;
-    int line = 0;
-    
-}{  
-  functionToken = < IDENTIFIER > < ABRE_PAR > [args = params(local)]< CIERRA_PAR >
-  {
-    functionName = functionToken.image;
-    line = functionToken.beginLine;
- 	Function f = Function.buildFunction(functionName,args);
- 	if(f == null)
- 	{ 	  		Show(ErrType.NotDefineFuction,line);
-		return null;
- 	}
- 	else
- 	{		return f;
- 	}  }}*//*Object[] params(IScope local):
-{
-  LinkedList<Object > list = new LinkedList<Object >();
+  	String image;
+  	//aux var
+  	FunctionCall call = null;
+  	ExprList exprList = null;
+  	Expresion expr = null;
 }
 {
-  param(list,local) ( < COMA > param(list,local) )*
-  {	return list.toArray();
-  }
-}*/
+  	expr = unaryOp() { return expr; } |
+  	//expr = binaryOp() { return expr; } |	image = < INT_LITERAL >.image { return new Literal<Integer>(Integer.parseInt(image)); } |
+	image = < DECIMAL_LITERAL >.image { return new Literal<Float>(Float.parseFloat(image)); } |
+	image = < BOOL_LITERAL >.image	{ return new Literal<Boolean>(Boolean.parseBoolean(image)); } |	
+	image = < STRING_LITERAL >.image { return new Literal<String>(image); } |
+	LOOKAHEAD(2)
+	image = < IDENTIFIER >.image { call = new FunctionCall(image); } < ABRE_PAR >[ exprList = exprlist() { call.addParams(exprList); } ] < CIERRA_PAR > |
+	image = < IDENTIFIER >.image { return new VarExpr(image);} 
+}
 
-/*void param(LinkedList<Object > list, IScope local):
+Expresion unaryOp():
 {
-  Object value;}
+  UnaryOp.Type type;
+   Expresion expr;}
 {
-  value = expresion(local)
-  {	list.add(value);
-  }}*/
-/*
-Object expresion(String keyName):
+  	(  	  
+	  	< NOT > { type = UnaryOp.Type.Not; } |
+	  	< MINUS > { type = UnaryOp.Type.Minus; }
+ 	)
+  	expr = expresion()
+  	{
+  	  	 return new UnaryOp(type,expr);
+  	}  	  	}
+
+//TODO PROBLEMAS CON RECURSIVIDAD
+Expresion binaryOp():
 {
-  Object value = null;
-  Token t;
-  int line = 0;
-}
-{	
-	(	      t = < INT_LITERAL > { value = Integer.parseInt(t.image);  }
-		| t = < DECIMAL_LITERAL > { value = Double.parseDouble(t.image); }
-		| t = < STRING_LITERAL >	 { value = t.image; }			
-		| t = < BOOL_LITERAL > { value = Boolean.parseBoolean(t.image); }
-		//| LOOKAHEAD(2) value = function(local)
-		| LOOKAHEAD(2) t = < IDENTIFIER > { value = local.get(t.image); }
-		//| t = < IDENTIFIER > { value = array(local); }		   
-		//| value = prototype_object(local)
-		| value = add(keyName)
-			
-	)
+  	BinaryOp.Type type;
+  	Expresion left;
+  	Expresion right;}
+{
+  	left = expresion()
+  	(
+	  	< PLUS > { type = BinaryOp.Type.Plus; } |
+	  	< MINUS > { type = BinaryOp.Type.Minus; }	)
+	right = expresion()
 	{
-	  if(value instanceof Value)
-	  {	  	((Value)value).setLine(getToken(0).beginLine);
-	  }
-	  return value;
-	}
-}*/
+		return new BinaryOp(type,left,right);
+	} 	}

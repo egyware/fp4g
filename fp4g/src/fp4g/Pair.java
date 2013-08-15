@@ -1,4 +1,4 @@
-package fp4g.data;
+package fp4g;
 
 public class Pair<A, B> {
 	public A a;

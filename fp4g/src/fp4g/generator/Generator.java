@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import fp4g.data.Code;
-import fp4g.data.IGameData;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.TemplateException;
@@ -17,6 +16,7 @@ public abstract class Generator {
 	public static String packageName = "";
 	public static String packageNameDir = "";
 	public static File packageDir;
+	public static boolean isDebug;
 	//generadores disponibles
 	public enum Available {		
 		Entity(EntityGenerator.class),Event(EventGenerator.class),Game(GameGenerator.class),GameState(GameStateGenerator.class),Goal(GoalGenerator.class);
@@ -35,6 +35,7 @@ public abstract class Generator {
 		packageName = (String) options.get("package");
 		packageNameDir = packageName.replace('.', '/');
 		packageDir = new File(path,packageNameDir);
+		isDebug = (Boolean) options.get("debug");
 		if(!packageDir.exists())
 		{
 			packageDir.mkdirs();
@@ -48,11 +49,8 @@ public abstract class Generator {
 		cfg.setIncompatibleImprovements(new Version(2, 3, 20));
 		
 		Class<?> clazz = gameData.getClass();		
-		if(clazz.isMemberClass())
-		{
-			clazz = clazz.getSuperclass();
-		}		
 		Available available =  Available.valueOf(clazz.getSimpleName());
+				
 		if(available != null)
 		{
 			try {
@@ -74,6 +72,13 @@ public abstract class Generator {
 			throw new RuntimeException("Epa, generador incorrecto");
 		}
 		
+	}
+	protected static String uncap_first(String string)
+	{
+		StringBuilder uncap_string = new StringBuilder();
+		uncap_string.append(Character.toLowerCase(string.charAt(0)));
+		uncap_string.append(string.substring(1));
+		return uncap_string.toString();
 	}
 	protected abstract void generateData(Map<String, Object> options,Configuration cfg, Code gameData, File path) throws IOException, TemplateException ;	
 }

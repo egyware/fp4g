@@ -15,6 +15,7 @@ import fp4g.data.Code;
 import fp4g.data.IGameData;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
+import fp4g.data.define.GameState;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -25,8 +26,7 @@ public class GameGenerator extends Generator {
 	protected void generateData(Map<String,Object> options,Configuration cfg,Code gameData, File path) throws IOException, TemplateException {
 		Game game = (Game)gameData;
 		
-		Template temp = cfg.getTemplate("GameManager.ftl"); 
-	
+		Template temp = cfg.getTemplate("GameManager.ftl"); 	
 		
 		HashMap<String,Object> root = new HashMap<>();
 		HashMap<String,Object> clazz = new HashMap<>();
@@ -61,7 +61,10 @@ public class GameGenerator extends Generator {
 		{
 			Generator.generate(options, entity, path);
 		}
-		
+		for(GameState state: game.states)
+		{
+			Generator.generate(options, state, path);
+		}		
 	}
 
 }

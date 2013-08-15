@@ -75,33 +75,35 @@ public interface FastPrototyping4GameConstants {
   /** RegularExpression Id. */
   int DOTCOMA = 36;
   /** RegularExpression Id. */
-  int INT_LITERAL = 37;
+  int DOBLEDOT = 37;
   /** RegularExpression Id. */
-  int DECIMAL_LITERAL = 38;
+  int INT_LITERAL = 38;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 39;
+  int DECIMAL_LITERAL = 39;
   /** RegularExpression Id. */
-  int BOOL_LITERAL = 40;
+  int STRING_LITERAL = 40;
   /** RegularExpression Id. */
-  int DIGIT = 41;
+  int BOOL_LITERAL = 41;
   /** RegularExpression Id. */
-  int PLUS = 42;
+  int DIGIT = 42;
   /** RegularExpression Id. */
-  int MINUS = 43;
+  int PLUS = 43;
   /** RegularExpression Id. */
-  int MULTIPLY = 44;
+  int MINUS = 44;
   /** RegularExpression Id. */
-  int DIVIDE = 45;
+  int MULTIPLY = 45;
   /** RegularExpression Id. */
-  int AND = 46;
+  int DIVIDE = 46;
   /** RegularExpression Id. */
-  int OR = 47;
+  int AND = 47;
   /** RegularExpression Id. */
-  int XOR = 48;
+  int OR = 48;
   /** RegularExpression Id. */
-  int NOT = 49;
+  int XOR = 49;
   /** RegularExpression Id. */
-  int IDENTIFIER = 50;
+  int NOT = 50;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 51;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -145,6 +147,7 @@ public interface FastPrototyping4GameConstants {
     "\"=\"",
     "\".\"",
     "\";\"",
+    "\":\"",
     "<INT_LITERAL>",
     "<DECIMAL_LITERAL>",
     "<STRING_LITERAL>",

@@ -13,11 +13,15 @@ import java.util.Map;
 
 import static fp4g.Log.Show;
 import fp4g.Log.ErrType;
+import fp4g.Pair;
 import fp4g.data.Add;
 import fp4g.data.Behavior;
 import fp4g.data.Code;
+import fp4g.data.Expresion;
 import fp4g.data.IGameData;
 import fp4g.data.define.Entity;
+import fp4g.data.expresion.Literal;
+import fp4g.data.expresion.VarExpr;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -40,14 +44,56 @@ public class EntityGenerator extends Generator {
 		root.put("class",clazz);
 		root.put("autodoc", autodoc);
 		
+		//agregar parametros de entrada
+		if(entity.list != null)
+		{
+			//lo veo un poco consumidor de recursos, pero bueno...
+			List<Map<String,Object>> pair = new LinkedList<>();
+			for(Pair<String,String> par: entity.list)
+			{
+				Map<String,Object> el = new HashMap<String,Object>(2);
+				el.put("name", par.a);
+				el.put("type", par.b);
+				pair.add(el);
+			}
+			root.put("params",pair);
+		}
+		
 		//agregar behaviors
 				
-		List<String> behaviors = new LinkedList<>(); 
+		List<HashMap<String,Object>> behaviors = new LinkedList<>(); 
 		for(Add addBhvr:entity.addBehaviors)
 		{
-			//TODO falta usar variable
-			//TODO falta usar parametros
-			behaviors.add(addBhvr.name);
+			HashMap<String,Object> bhvr = new HashMap<>();
+			bhvr.put("name", addBhvr.name);
+			if(addBhvr.varName != null)
+			{
+				bhvr.put("varName", addBhvr.varName);
+			}
+			else
+			{
+				StringBuilder varName = new StringBuilder();
+				varName.append(addBhvr.name.toLowerCase().charAt(0));
+				varName.append(addBhvr.name.substring(1));
+				bhvr.put("varName", varName.toString());
+			}			
+			if(addBhvr.params != null)
+			{	
+				List<String> params = new LinkedList<>();
+				for(Expresion expr: addBhvr.params)
+				{					
+					if(expr instanceof VarExpr)
+					{					
+						params.add(((VarExpr) expr).varName);
+					}
+					if(expr instanceof Literal)
+					{					
+						params.add(((Literal) expr).value.toString());
+					}
+				}
+				bhvr.put("params",params);				
+			}			
+			behaviors.add(bhvr);
 		}
 		
 		root.put("behaviors", behaviors);
@@ -61,14 +107,11 @@ public class EntityGenerator extends Generator {
 		};
 		Arrays.sort(arrayImports);
 		Collections.addAll(imports, arrayImports);
-//		if(entity instanceof Entity.Define)
-//		{
-//			Entity.Define define = (Entity.Define)entity;
-//			for(Behavior bhvr:define.behaviors)
-//			{
-//				imports.add(String.format("com.apollo.components.%s",bhvr.name));
-//			}			
-//		}
+		
+		for(Add addBhvr:entity.addBehaviors)
+		{
+			imports.add(String.format("com.apollo.components.%s",addBhvr.name));
+		}
 		clazz.put("imports", imports);		
 		
 		if(entityPackageDir == null)
@@ -82,7 +125,6 @@ public class EntityGenerator extends Generator {
 		Writer out = new FileWriter(new File(entityPackageDir,String.format("%sBuilder.java",entity.name)));
 		temp.process(root, out);  
 		System.out.println(String.format("Generado: %s/entity/%sBuilder.java",packageNameDir, entity.name));
-		
 		
 	}
 

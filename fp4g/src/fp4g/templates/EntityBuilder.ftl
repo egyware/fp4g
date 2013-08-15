@@ -19,12 +19,19 @@ public class ${class.name}Builder implements EntityBuilder
 	@Override
 	public Entity buildEntity(World world, Object... params)
 	{ 
+		<#if params??>
+		//parametros de entrada!
+		<#list params as param>
+		${param.type} ${param.name} = (${param.type})params[${param_index}];
+		</#list>	
+		</#if>
+		
 		Entity entity = new Entity(world);
 		
 		<#if behaviors??>
 		//crear los behaviors
 		<#list behaviors as behavior>
-		${behavior} ${behavior?uncap_first} = new ${behavior}(); //TODO agregar paremetros de entrada a ${behavior}		
+		${behavior.name} ${behavior.varName} = new ${behavior.name}(<#if behavior.params??><#list behavior.params as param>${param}<#if param_has_next>, </#if></#list></#if>);		 		
 		</#list>
 		<#else>
 		//TODO: Se te olvido agregar los Behaviors?
@@ -33,7 +40,7 @@ public class ${class.name}Builder implements EntityBuilder
 		//añadir las instancias
 		<#if behaviors??>
 		<#list behaviors as behavior>
-		entity.setBehavior(${behavior?uncap_first});		
+		entity.setBehavior(${behavior.varName});				
 		</#list>
 		</#if>
 		

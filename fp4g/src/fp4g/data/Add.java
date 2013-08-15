@@ -11,7 +11,7 @@ public class Add extends Code{
 	private ObjectType type;
 	public String name;	
 	public String varName;
-	public ExprList params; //TODO por definir
+	public ExprList params;
 	public Add(ObjectType type,String name)
 	{
 		this(type,name,null);		
@@ -21,6 +21,11 @@ public class Add extends Code{
 		this.type = type;
 		this.name = name;
 		this.varName = varName;
+	}
+	
+	public void addParams(ExprList params)
+	{
+		this.params = params;
 	}
 
 	public ObjectType getType()

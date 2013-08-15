@@ -1,0 +1,27 @@
+<project name="FP4G" default="generate" basedir=".">
+    <property name="src" location="src" />
+	<property name="package" value="fp4g/parser" />
+ 
+    <path id="classpath">
+        <pathelement location="libs/antlr4.jar" />
+        <pathelement location="bin" />
+    </path>
+ 
+    <target name="generate" depends="clean">
+        <mkdir dir="${src}/${package}" />
+        <java classname="org.antlr.v4.Tool" classpathref="classpath" fork="true">
+            <arg value="-o" />
+            <arg path="${src}/${package}" />
+            <arg value="-lib" />
+            <arg path="${src}/${package}" />            
+ 
+            <arg value="${src}/${package}/FP4G.g" />
+        </java>
+    </target> 
+    
+ 
+    <target name="clean">
+        <delete file="${scr}/${package}/FP4G*.java" />
+    	<delete file="${scr}/${package}/*.tokens"  />
+    </target>
+</project>

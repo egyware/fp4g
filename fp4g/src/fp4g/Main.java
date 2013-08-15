@@ -25,7 +25,7 @@ public class Main {
 	 */
 	public static void main(String[] args)  throws ParseException {
 		options.put("package", "game"); //por defecto
-		options.put("debug", "false"); //por defecto
+		options.put("debug", false); //por defecto
 		if(params(args))
 		{
 			if(inputFile == null)

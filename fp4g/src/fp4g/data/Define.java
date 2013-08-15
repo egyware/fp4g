@@ -4,6 +4,7 @@ public abstract class Define extends Code{
 	public ObjectType type;
 	public String name;
 	public Define parent;
+	public NameList list;
 	
 	public Define(ObjectType type,String name)
 	{
@@ -25,6 +26,9 @@ public abstract class Define extends Code{
 	public String getName()
 	{
 		return name;
+	}
+	public void setNameList(NameList list) {
+		this.list = list;		
 	}
 	
 	
@@ -50,5 +54,4 @@ public abstract class Define extends Code{
 	 * @return
 	 */
 	public abstract boolean isDefined(ObjectType type,String name);
-	
 }

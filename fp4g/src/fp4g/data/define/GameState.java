@@ -1,142 +1,63 @@
 package fp4g.data.define;
 
-import java.util.HashMap;
+import static fp4g.Log.Show;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
+import fp4g.Log.ErrType;
 import fp4g.data.Add;
-import fp4g.data.Behavior;
 import fp4g.data.Define;
-import fp4g.data.Manager;
 import fp4g.data.ObjectType;
 import fp4g.data.On;
-import fp4g.data.Pair;
 
 public class GameState extends Define{
-	public String name;
-	
-	public List<Entity> entities;
-	public List<Pair<String,Entity>> entitiesWithPar;	
+	public List<Add> addEntities;
+	public List<Add> addManagers;
 
-	public List<Goal> goals;
-	public List<Pair<String,Goal>> goalsWithPar;
-	
-	public List<Manager> managers;
-	public List<Pair<String,Manager>> managersWithPar;
-	
-	public Map<String,Manager> managersDefined;	
-	public Map<String,Entity> entitiesDefined;
-	public Map<String,Behavior> behaviorsDefined;
-	
-	private Game game;
-
-	public GameState(String name) {
-		super(ObjectType.STATE, name);		 
+	public GameState(String name,Define parent) {
+		super(ObjectType.STATE, name,parent);
+		
+		addEntities = new LinkedList<>();
+		addManagers = new LinkedList<>();
 	}
 	
-//	public GameState(Game game,String name)
-//	{
-//		this.game = game;
-//		this.name = name;
-//		
-//		entities = new LinkedList<>();
-//		goals = new LinkedList<>();
-//		managers = new LinkedList<>();
-//		entitiesWithPar = new LinkedList<>();
-//		goalsWithPar = new LinkedList<>();
-//		managersWithPar = new LinkedList<>();
-//		
-//		managersDefined = new HashMap<>();
-//		entitiesDefined = new HashMap<>();
-//		behaviorsDefined = new HashMap<>();
-//	}
-	
-//	@Override
-//	public Manager getDefinedManager(String name)
-//	{
-//		Manager find = managersDefined.get(name);
-//		if(find == null)
-//		{
-//			find = game.getDefinedManager(name);
-//		}
-//		return find;
-//	}
-//	@Override
-//	public Entity getDefinedEntity(String name)
-//	{
-//		Entity find = entitiesDefined.get(name);
-//		if(find == null)
-//		{
-//			find = game.getDefinedEntity(name);
-//		}
-//		return find;
-//	}
-//	@Override
-//	public Behavior getDefinedBehavior(String name)
-//	{
-//		Behavior find = behaviorsDefined.get(name);
-//		if(find == null)
-//		{
-//			find = game.getDefinedBehavior(name);
-//		}
-//		return find;
-//	}
-	
-	public void addManager(Manager manager,String key)
-	{
-		if(key != null)
-		{
-			managersWithPar.add(new Pair<String, Manager>(key,manager));
-		}
-		else
-		{
-			managers.add(manager);
-		}
-	}
-	public void addEntity(Entity entity,String key)
-	{
-		if(key != null)
-		{
-			entitiesWithPar.add(new Pair<String, Entity>(key,entity));
-		}
-		else
-		{
-			entities.add(entity);
-		}
-	}
-	public void addGoal(Goal goal,String key)
-	{
-		if(key != null)
-		{
-			goalsWithPar.add(new Pair<String, Goal>(key,goal));
-		}
-		else
-		{
-			goals.add(goal);
-		}
-	}
-	public void add(String name,Object value)
-	{
-		throw new RuntimeException("No implementado aún");
-	}
-
 	@Override
 	public void addADD(Add code) {
-		// TODO Auto-generated method stub
-		
+		switch(code.getType())
+		{
+		case ASSET:		
+		case BEHAVIOR:
+		case GAME:
+		case STATE:
+			Show(ErrType.NotExpectedType,code);
+			break;
+		case ENTITY:
+			addEntities.add(code);
+			break;
+		case GOAL:
+			//TODO: No implementado aún
+				throw new RuntimeException("No implementado");
+			//break;
+		case MANAGER:
+			addManagers.add(code);
+			break;
+		default:
+			Show(ErrType.UnknowError,code);
+			break;			
+		}		
 	}
 
 	@Override
 	public void addDefine(Define define) {
 		// TODO Auto-generated method stub
-		
+		throw new RuntimeException("No implementado");
 	}
 
 	@Override
 	public void addOn(On on) {
 		// TODO Auto-generated method stub
-		
+		throw new RuntimeException("No implementado");
 	}
 
 	@Override

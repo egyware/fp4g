@@ -74,21 +74,21 @@ public final class ${class.name} extends GameState{
 		//entityBuilders
 		<#if entityBuilders??>		
 		<#list entityBuilders as builder>
-		world.setEntityBuilder(new ${builder.name});
+		world.setEntityBuilder(new ${builder}Builder());
 		</#list>
 		</#if>
 		
 		//managers
 		<#if managers??>
 		<#list managers as manager>
-		${manager.name?uncap_first} = new ${manager.name}();
+		${manager.varName} = new ${manager.name}();
 		<#if manager.entity>
-		world.setEntityManager(${manager.name?uncap_first});
+		world.setEntityManager(${manager.varNname});
 		<#elseif manager.render>
 		world.setCamera(camera);
-		world.setManager(${manager.name?uncap_first});
+		world.setManager(${manager.varNname});
 		<#else>
-		world.setManager(${manager.name?uncap_first});
+		world.setManager(${manager.varNname});
 		</#if>
 		</#list>
 		</#if>		
@@ -97,10 +97,10 @@ public final class ${class.name} extends GameState{
 		<#if entities??>		
 		<#list entities as entity>
 		<#if entity.varName??>
-		Entity ${entity.varName} = world.createEntity(${entity.name}); //TODO agregar parametros a esta wea...
-		world.addEntity(${entity.varName});//TODO acá le falta agregar algo extra...
+		Entity ${entity.varName} = world.createEntity("${entity.name}"); //TODO agregar parametros a esta wea...
+		world.addEntity(${entity.varName});
 		<#else>
-		world.addEntity((world.createEntity(${entity.name})); //TODO agregar parametros a esta wea...
+		world.addEntity(world.createEntity("${entity.name}")); //TODO agregar parametros a esta wea...
 		</#if>
 		</#list>
 		</#if>
