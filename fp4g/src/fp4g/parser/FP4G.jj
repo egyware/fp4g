@@ -1,308 +1,0 @@
-/**
- * JavaCC template file created by SF JavaCC plugin 1.5.17+ wizard for JavaCC 1.5.0+
- */options{  JDK_VERSION = "1.5";
-  IGNORE_CASE = true;    static = false;
- }PARSER_BEGIN(FastPrototyping4Game)package fp4g.parser;
-import java.util.LinkedList;
-import fp4g.data.*;
-import fp4g.data.define.*;
-import fp4g.data.expresion.*;import static fp4g.Log.ErrType;
-import static fp4g.Log.WarnType;
-import static fp4g.Log.InfoType;
-import static fp4g.Log.Show;
-
-public class FastPrototyping4Game{   
- 
-}PARSER_END(FastPrototyping4Game)SKIP :{  " "| "\r"| "\t"
-| "\n"
-}
-
-SPECIAL_TOKEN : /* comentarios */
-{
-	< SINGLE_LINE_COMMENT: "//" ( ~["\n","\r"] )* ("\n" | "\r" | "\r\n") >
-|	< MULTI_LINE_COMMENT: "/*" ( ~["*"] | ("*")+ ~["*","/"] )* ("*")+ "/" >
-}
-
-  
-
-TOKEN: /* keywords */
-{      
-    < DEFINE     : "DEFINE" >
-|	< ADD        : "ADD" >
-|   < ON         : "ON" >
-|   < SEND       : "SEND" >
-|   < GROUP      : "GROUP" >
-| 	< SUBSCRIBE  : "SUBSCRIBE" >
-|   < UNSUBSCRIBE: "UNSUBSCRIBE" >
-|	< START      : "START" >
-|   < RESUME     : "RESUME" >
-|   < PAUSE      : "PAUSE" >
-|   < USING      : "USING" > 
-|   < EXIT       : "EXIT" >
-
-}
-
-TOKEN: /* auxiliars keywords */
-{    < MANAGER  : "MANAGER" >
-|   < GAME    : "GAME" >  
-|   < STATE   : "STATE" >
-|   < BEHAVIOR: "BEHAVIOR" >
-|   < ENTITY  : "ENTITY" >
-|   < GOAL    : "GOAL" >
-|   < MESSAGE : "MESSAGE" >
-|   < BASE    : "BASE" >
-|   < TO      : "TO" >
-|   < SOURCE  : "SOURCE" >	
-}
-
-TOKEN: /* Separadores */
-{
-  < ABRE_COR  : "[" >
-| < ABRE_PAR  : "(" >
-| < CIERRA_COR: "]" >
-| < CIERRA_PAR: ")" >
-| < COMA      : "," >
-| < EQUAL     : "=" >
-| < DOT       : "." >
-| < DOTCOMA   : ";" >
-| < DOBLEDOT       : ":" >
-}TOKEN : /* Literales */{  < INT_LITERAL 	: (< DIGIT >)+ >
-| < DECIMAL_LITERAL : (< DIGIT >)*"."(< DIGIT >)+ >
-| < STRING_LITERAL  : "\""(~["\""])*"\""  > {  matchedToken.image = image.substring(1,lengthOfMatch-1);}
-| < BOOL_LITERAL 	: "true"|"false" > | < #DIGIT 			: [ "0"-"9" ] >}
-
-TOKEN : /* OPERATORS */
-{
-  < PLUS : "+" >
-| < MINUS : "-" >
-| < MULTIPLY : "*" >
-| < DIVIDE : "/" >
-| < AND : "AND" >
-| < OR : "OR" >
-| < XOR : "XOR" >
-| < NOT : "NOT" >
-}
-
-TOKEN: /* Identificador */
-{
-  	< IDENTIFIER : [ "a"-"z","A"-"Z","_" ]([ "a"-"b","A"-"Z","_","0"-"9" ])* >
-}
-
-
-void usings(Game game):
-{  
-}
-{	using(game) ( LOOKAHEAD(2) < DOTCOMA > using(game) )* [ < DOTCOMA > ]
-}
-
-void using(Game game):
-{
-   //TODO: Por hacer los usings...
-}
-{
-  	< USING > (<MANAGER >|< STATE >|< BEHAVIOR >|< ENTITY >| < GOAL >|< MESSAGE >) <  IDENTIFIER >
-}
-
-void game(Game game):
-{}
-{
-  [	usings(game) ]//using opcional  < DEFINE > <GAME > game.name = < IDENTIFIER >.image <ABRE_COR > [values(game)] <CIERRA_COR > <EOF >  
-}
-
-
-
-void values(Define define):
-{   }
-{
-   value(define) ( LOOKAHEAD(2) < COMA > value(define) )* [ < COMA > ]       
-}
-
-
-void value(Define define):
-{
-  String key;
-  Object value;
-}
-{
-  	add(define,null)
-  | define(define)
-  | on(define)
-  | key = < IDENTIFIER >.image < EQUAL > add(define,key)
-}
- /*	
-	| define(local)
-	| start(local)
-	| LOOKAHEAD(2) key = < IDENTIFIER >.image < EQUAL > value = expresion(local) { local.set(key,value); }
-	| LOOKAHEAD(2) inline_prototype_object(local) 	 
-	| value = function(local) { local.add(value);	}*/
-
-void add(Define define,String keyName):
-{
-  int line = 0;
-  ObjectType type = null;
-  String name;
-  Add add;
-  ExprList exprList;
-}
-{
-   line = < ADD >.beginLine 
-   (
-     < STATE  >   { type  =  ObjectType.STATE;  }  
-    |< MANAGER >  { type  =  ObjectType.MANAGER; }
-    |< BEHAVIOR > { type  =  ObjectType.BEHAVIOR; }
-    |< ENTITY >   { type  =  ObjectType.ENTITY; }
-    |< GOAL >     { type  =  ObjectType.GOAL;  }
-   )
-   name = < IDENTIFIER >.image
-   {
-     add = new Add(type,name,keyName);     
-     add.setLine(line);
-     define.addADD(add);     
-   }
-   [ < ABRE_PAR > exprList = exprlist() { add.addParams(exprList);} < CIERRA_PAR >]
-}
-void define(Define parent):
-{ 
-  String name;
-  String basedName = null;
-  ObjectType factoryType;
-  int line = 0;
-  Define define = null;
-  NameList list = null;
-}
-{
-  	line = < DEFINE >.beginLine
-  (
-     < STATE  >  { factoryType   =  ObjectType.STATE;  }  
-    |< MANAGER > { factoryType   =  ObjectType.MANAGER; }
-    |< BEHAVIOR >{ factoryType   =  ObjectType.BEHAVIOR; }
-    |< ENTITY >  { factoryType   =  ObjectType.ENTITY; }
-    |< GOAL >    { factoryType   =  ObjectType.GOAL;  }
-  )
-  [< BASE > basedName = < IDENTIFIER >.image ]
-  name = < IDENTIFIER >.image 
-  {
-    switch(factoryType)
-    {		case STATE:
-			define = new GameState(name,parent);
-		break;
-		case MANAGER:
-			///TODO: define = new Manager(name);
-		break;
-		case BEHAVIOR:
-			///TODO: define = new Behavior();
-			
-		break;
-		case ENTITY:
-			define = new Entity(name,parent);
-		break;
-		case GOAL:
-			define = new Goal(name);
-		break;
-    }
-    define.setLine(line);
-  }
-  [
-  	<ABRE_PAR > list = nameList() <CIERRA_PAR >
-  	{		define.setNameList(list);
-  	}
-  ]
-  <  ABRE_COR > values(define) < CIERRA_COR >
-  {
-    parent.addDefine(define);  }
-  
-}
-
-void on(Define define):
-{}
-{
-  	< ON > <IDENTIFIER > }
-
-NameList nameList():
-{
-  	NameList list = new NameList();  
-}
-{
-  declareVar(list) ( < COMA > declareVar(list) )*
-  {
-	return list;  }
-}
-
-void declareVar(NameList list):
-{
-  	String varName;
-  	String declType;
-}
-{
-  	varName = < IDENTIFIER >.image <DOBLEDOT > declType = < IDENTIFIER >.image
-  	{
-  	  	list.add(varName,declType);  	}}
-
-ExprList exprlist():
-{
-  ExprList exprList = new ExprList();
-  Expresion expr;}
-{	expr = expresion() { exprList.add(expr);} ( < COMA > expr = expresion() { exprList.add(expr);} )*
-	{
-	  	return exprList;	}
-}
-/* expresiones de lua
-exp ::= prefixexp
-exp ::= nil | false | true (Literales)
-exp ::= Number             (Numero)
-exp ::= String             (String)
-exp ::= functiondef        (funcion, nop, esto no lo tiene Fp4g)
-exp ::= tableconstructor   (constructor, nop, esto tampoco)
-exp ::= ‘...’              (...)
-exp ::= exp binop exp      (expresion operador binario, claro que si :C)
-exp ::= unop exp           (operador unario, expresion)
-prefixexp ::= var | functioncall | ‘(’ exp ‘)’ (variable o llamada a funcion, vaya que hay tipos de expresiones)
-*/
-Expresion expresion():
-{
-  	String image;
-  	//aux var
-  	FunctionCall call = null;
-  	ExprList exprList = null;
-  	Expresion expr = null;
-}
-{
-  	expr = unaryOp() { return expr; } |
-  	//expr = binaryOp() { return expr; } |	image = < INT_LITERAL >.image { return new Literal<Integer>(Integer.parseInt(image)); } |
-	image = < DECIMAL_LITERAL >.image { return new Literal<Float>(Float.parseFloat(image)); } |
-	image = < BOOL_LITERAL >.image	{ return new Literal<Boolean>(Boolean.parseBoolean(image)); } |	
-	image = < STRING_LITERAL >.image { return new Literal<String>(image); } |
-	LOOKAHEAD(2)
-	image = < IDENTIFIER >.image { call = new FunctionCall(image); } < ABRE_PAR >[ exprList = exprlist() { call.addParams(exprList); } ] < CIERRA_PAR > |
-	image = < IDENTIFIER >.image { return new VarExpr(image);} 
-}
-
-Expresion unaryOp():
-{
-  UnaryOp.Type type;
-   Expresion expr;}
-{
-  	(  	  
-	  	< NOT > { type = UnaryOp.Type.Not; } |
-	  	< MINUS > { type = UnaryOp.Type.Minus; }
- 	)
-  	expr = expresion()
-  	{
-  	  	 return new UnaryOp(type,expr);
-  	}  	  	}
-
-//TODO PROBLEMAS CON RECURSIVIDAD
-Expresion binaryOp():
-{
-  	BinaryOp.Type type;
-  	Expresion left;
-  	Expresion right;}
-{
-  	left = expresion()
-  	(
-	  	< PLUS > { type = BinaryOp.Type.Plus; } |
-	  	< MINUS > { type = BinaryOp.Type.Minus; }	)
-	right = expresion()
-	{
-		return new BinaryOp(type,left,right);
-	} 	}

@@ -1,19 +1,17 @@
 package fp4g;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import fp4g.data.define.Game;
-import fp4g.data.managers.EntityManager;
-import fp4g.data.managers.PhysicsManager;
-import fp4g.data.managers.RenderManager;
-import fp4g.data.managers.SoundManager;
-import fp4g.generator.Generator;
-import fp4g.parser.FastPrototyping4Game;
-import fp4g.parser.ParseException;
+import fp4g.parser.FP4GDataVisitor;
+import fp4g.parser.FP4GLexer;
+import fp4g.parser.FP4GParser;
 
 public class Main {
 	private static String outDirectory = ".";
@@ -23,7 +21,7 @@ public class Main {
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args)  throws ParseException {
+	public static void main(String[] args)  throws Exception {
 		options.put("package", "game"); //por defecto
 		options.put("debug", false); //por defecto
 		if(params(args))
@@ -40,74 +38,97 @@ public class Main {
 	}
 
 	private static void parseFile(String inputFile) {
-		try 
-		{			
-			  FileInputStream fis = new FileInputStream(inputFile);
-			  FastPrototyping4Game parser = new FastPrototyping4Game(fis);
-		      System.out.println(String.format("Reading from %s",inputFile));      
-		      try
-		      {
-		    	Game gameConf = new Game();
-		    	gameConf.name = "GameApp";
-		    	gameConf.width = 640;
-		    	gameConf.height = 480;
-		    	gameConf.debug = false;
-		    	
-//		    	gameConf.addDefine(new RenderManager());
-//		    	gameConf.addDefine(new EntityManager());
-//		    	gameConf.addDefine(new SoundManager());
-//		    	gameConf.addDefine(new PhysicsManager());
-		    	
-		        //agregar componentes		    	
-//		        String components[][] = 
-//		        	{
-//		        		{"BodyBehavior"},
-//		        		{"spatial.Spatial"},
-//		        		{"SpriteBehavior","spatial.Spatial"},		        			        		
-//		        	};	        
-//		        for(String c[]:components)
-//		        {
-//		        	if(c.length == 1)
-//		        	{
-//		        		gameConf.addBehavior(c[0]);
-//		        	}
-//		        	else
-//		        	{
-//		        		gameConf.addBehavior(c[0],c[1]);
-//		        	}
-//		        }
-
-		        System.out.println(String.format("Parsing: %s",inputFile));
-		        parser.game(gameConf);
-		        System.out.println(String.format("Parsing complete: %s",inputFile));
-		        
-		        System.out.println("Generating...");
-		        Generator.generate(options,gameConf, new File(outDirectory));
-		        System.out.println("...Ok!");		        
-	        
-		      }
-		      catch (Exception e)
-		      {
-		        System.out.println("NOK.");
-		        System.out.println(e.getMessage());
-		        e.printStackTrace();
-		      }
-		      catch (Error e)
-		      {
-		        System.out.println("Oops.");
-		        System.out.println(e.getMessage());
-		        e.printStackTrace();
-		      }
-		      fis.close();
+				
+		try {
+			FP4GLexer lexer = new FP4GLexer(new ANTLRFileStream(inputFile));	
+			CommonTokenStream tokens = new CommonTokenStream(lexer);		
+			FP4GParser p = new FP4GParser(tokens);		
+			p.setBuildParseTree(true);
+			
+			
+			Game gameConf = new Game();
+	    	gameConf.name = "GameApp";
+	    	gameConf.width = 640;
+	    	gameConf.height = 480;
+	    	gameConf.debug = false;
+			
+			
+			FP4GDataVisitor visitor = new FP4GDataVisitor(gameConf);
+			visitor.visit(p.program());
+			
+			
+		} catch (IOException e) {
+			//TODO personalizar error
+			e.printStackTrace();
 		}
-		catch (FileNotFoundException fileNotFound) 
-		{			
-			fileNotFound.printStackTrace();
-		}
-		catch (IOException io)
-		{			 
-			io.printStackTrace();
-		}
+		
+	
+//			  FileInputStream fis = new FileInputStream(inputFile);
+//			  FastPrototyping4Game parser = new FastPrototyping4Game(fis);
+//		      System.out.println(String.format("Reading from %s",inputFile));      
+//		      try
+//		      {
+//		    	Game gameConf = new Game();
+//		    	gameConf.name = "GameApp";
+//		    	gameConf.width = 640;
+//		    	gameConf.height = 480;
+//		    	gameConf.debug = false;
+//		    	
+////		    	gameConf.addDefine(new RenderManager());
+////		    	gameConf.addDefine(new EntityManager());
+////		    	gameConf.addDefine(new SoundManager());
+////		    	gameConf.addDefine(new PhysicsManager());
+//		    	
+//		        //agregar componentes		    	
+////		        String components[][] = 
+////		        	{
+////		        		{"BodyBehavior"},
+////		        		{"spatial.Spatial"},
+////		        		{"SpriteBehavior","spatial.Spatial"},		        			        		
+////		        	};	        
+////		        for(String c[]:components)
+////		        {
+////		        	if(c.length == 1)
+////		        	{
+////		        		gameConf.addBehavior(c[0]);
+////		        	}
+////		        	else
+////		        	{
+////		        		gameConf.addBehavior(c[0],c[1]);
+////		        	}
+////		        }
+//
+//		        System.out.println(String.format("Parsing: %s",inputFile));
+//		        parser.game(gameConf);
+//		        System.out.println(String.format("Parsing complete: %s",inputFile));
+//		        
+//		        System.out.println("Generating...");
+//		        Generator.generate(options,gameConf, new File(outDirectory));
+//		        System.out.println("...Ok!");		        
+//	        
+//		      }
+//		      catch (Exception e)
+//		      {
+//		        System.out.println("NOK.");
+//		        System.out.println(e.getMessage());
+//		        e.printStackTrace();
+//		      }
+//		      catch (Error e)
+//		      {
+//		        System.out.println("Oops.");
+//		        System.out.println(e.getMessage());
+//		        e.printStackTrace();
+//		      }
+//		      fis.close();
+//		}
+//		catch (FileNotFoundException fileNotFound) 
+//		{			
+//			fileNotFound.printStackTrace();
+//		}
+//		catch (IOException io)
+//		{			 
+//			io.printStackTrace();
+//		}
 	}
 
 	private static void ShowHelp() {

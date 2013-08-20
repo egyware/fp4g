@@ -10,10 +10,12 @@
     <target name="generate" depends="clean">
         <mkdir dir="${src}/${package}" />
         <java classname="org.antlr.v4.Tool" classpathref="classpath" fork="true">
-            <arg value="-o" />
+        	<arg value="-no-listener" />
+        	<arg value="-visitor" />
+            <arg value="-o" />        	
             <arg path="${src}/${package}" />
             <arg value="-lib" />
-            <arg path="${src}/${package}" />            
+            <arg path="${src}/fp4g" />            
  
             <arg value="${src}/${package}/FP4G.g" />
         </java>
