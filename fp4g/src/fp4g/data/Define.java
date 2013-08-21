@@ -21,16 +21,14 @@ public abstract class Define extends Code{
 	public ObjectType getType()
 	{
 		return type;
-	}
-	
+	}	
 	public String getName()
 	{
 		return name;
 	}
 	public void setNameList(NameList list) {
 		this.list = list;		
-	}
-	
+	}	
 	
 	/**
 	 * Agrega una adición de codigo

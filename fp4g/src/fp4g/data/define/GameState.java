@@ -37,7 +37,7 @@ public class GameState extends Define{
 			break;
 		case GOAL:
 			//TODO: No implementado aún
-				throw new RuntimeException("No implementado");
+			throw new RuntimeException("No implementado");
 			//break;
 		case MANAGER:
 			addManagers.add(code);

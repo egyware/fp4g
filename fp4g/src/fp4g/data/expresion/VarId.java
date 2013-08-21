@@ -5,9 +5,9 @@ import fp4g.data.Expresion;
 /*
  * Una expresión que indica que se ha usado una variable.
  */
-public class VarExpr extends Expresion{
+public class VarId extends Expresion{
 	public final String varName;
-	public VarExpr(String name)
+	public VarId(String name)
 	{
 		this.varName = name;
 	}

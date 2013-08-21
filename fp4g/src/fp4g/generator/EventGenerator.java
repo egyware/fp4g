@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import fp4g.data.Code;
-import fp4g.data.IGameData;
 import freemarker.template.Configuration;
 
 public class EventGenerator extends Generator {

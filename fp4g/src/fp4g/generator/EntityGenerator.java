@@ -18,10 +18,9 @@ import fp4g.data.Add;
 import fp4g.data.Behavior;
 import fp4g.data.Code;
 import fp4g.data.Expresion;
-import fp4g.data.IGameData;
 import fp4g.data.define.Entity;
 import fp4g.data.expresion.Literal;
-import fp4g.data.expresion.VarExpr;
+import fp4g.data.expresion.VarId;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -82,9 +81,9 @@ public class EntityGenerator extends Generator {
 				List<String> params = new LinkedList<>();
 				for(Expresion expr: addBhvr.params)
 				{					
-					if(expr instanceof VarExpr)
+					if(expr instanceof VarId)
 					{					
-						params.add(((VarExpr) expr).varName);
+						params.add(((VarId) expr).varName);
 					}
 					if(expr instanceof Literal)
 					{					

@@ -12,10 +12,12 @@ public class Log {
 	}
 	public static enum WarnType implements MessageType
 	{			
-		MissingDefineAdd("No se encontro un Define para el Add"),
-		NotFoundDefine("No se encontró una definición previa, se omitirá y se asumirá que existe"),
-		CustomAddState, 
-		NotExpectedThis, ParentBehaviorNull, NotImplement;
+		MissingDefineAdd("No se encontro un Define o Using para el Add"),
+//		NotFoundDefine("No se encontró una definición previa, se omitirá y se asumirá que existe"),
+//		CustomAddState, 
+//		NotExpectedThis,
+//		ParentBehaviorNull,
+		;
 		
 		private String message;
 		private WarnType()
@@ -34,17 +36,19 @@ public class Log {
 	}
 	public static enum ErrType implements MessageType
 	{	
-		DontMatchTypes("Los tipos no coinciden"),
-		NotFoundVar("La variable buscada no está definida"),
-		NotDefineFuction("La función especificada no está definida"),
-		NotFoundEntitySystem("No se ha definido un sistema de entidades para el estado actual"), 
+//		DontMatchTypes("Los tipos no coinciden"),
+//		NotFoundVar("La variable buscada no está definida"),
+//		NotDefineFuction("La función especificada no está definida"),
+//		NotFoundEntitySystem("No se ha definido un sistema de entidades para el estado actual"), 
 		NotExpectedType("No se esperaba ese tipo"),
-		ExpectedAddDefineStart("Se esperaba Define/ADD State en Start"),
-		CannotCastVar(""), 
-		ErrorCallFunction("Error al llamar la función"),
-		BehaviorNull,
-		BasedExcepted,
-		UnknowError;
+//		ExpectedAddDefineStart("Se esperaba Define/ADD State en Start"),
+//		CannotCastVar(""), 
+//		ErrorCallFunction("Error al llamar la función"),
+//		BehaviorNull,
+//		BasedExcepted,
+		NotImplement,
+		UnknowError,
+		;
 		
 		private String message;
 		private ErrType()
@@ -63,7 +67,8 @@ public class Log {
 	}
 	public static enum InfoType implements MessageType
 	{	
-		NoValidTestType("NO VALIDO!");
+		//NoValidTestType("NO VALIDO!")
+		;
 		
 		private String message;
 		private InfoType()

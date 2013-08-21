@@ -4,9 +4,12 @@ grammar FP4G;
 {
 package fp4g.parser;
 
+import static fp4g.Log.*;
+
 import fp4g.data.*;
 import fp4g.data.define.*;
 import fp4g.data.managers.*;
+
 }
 
 // **** PARSER ****
@@ -17,60 +20,95 @@ usings  : (using)*;
 using   : USING ( MANAGER | STATE | BEHAVIOR | ENTITY | GOAL | MESSAGE ) ID DOTCOMA;
 
 game 
-returns[String name]  
-		 :
+returns [String name]  
+		:
 		 DEFINE GAME ID { $name = $ID.text; } 
-		 ABRE_COR values CIERRA_COR		 
-		 ;
-
-values  : value ( value)*?;
-
-value   :  define
-		 | add DOTCOMA
+		 ABRE_COR gameValues CIERRA_COR		 
 		;
 
-add     : ADD ( MANAGER | STATE | BEHAVIOR | ENTITY | GOAL ) ID ( ABRE_PAR exprlist CIERRA_PAR )? 
+gameValues
+		:
+		 gameValue (gameValue)*
 		;
+
+gameValue  
+		: define
+		| add DOTCOMA
+		;
+
+add 
+returns
+[
+	ObjectType type = null,
+	String addName = null
+]
+	    :
+		  ADD 
+		  ( 
+			  	MANAGER  { $type = ObjectType.MANAGER;  }			  	
+			  | STATE    { $type = ObjectType.STATE;    }
+			  | BEHAVIOR { $type = ObjectType.BEHAVIOR; }
+			  | ENTITY   { $type = ObjectType.ENTITY;  }
+			  | GOAL     { $type = ObjectType.GOAL;  }
+		  )
+		  ID { $addName = $ID.text; }
+		  ( ABRE_PAR exprList CIERRA_PAR )? 
+		;	
+
+define  
+returns
+[
 	
-
-define  : DEFINE ( MANAGER | STATE | BEHAVIOR | ENTITY | GOAL | MESSAGE ) ID ( ABRE_PAR namelist CIERRA_PAR )?
-          ABRE_COR values CIERRA_COR
+	ObjectType type = null,
+	String defName = null
+]
+		: 
+		  DEFINE 
+		  	( 
+		  		 MANAGER    { $type = ObjectType.MANAGER; }
+		  		| STATE     { $type = ObjectType.STATE;   }
+		  		| BEHAVIOR  { $type = ObjectType.BEHAVIOR;}
+		  		| ENTITY    { $type = ObjectType.ENTITY;  }
+		  		| GOAL      { $type = ObjectType.GOAL;    }
+		  		| MESSAGE   { $type = ObjectType.MESSAGE; }
+		  	) 
+		  ID { $defName = $ID.text; } 
+		  ( ABRE_PAR namelist CIERRA_PAR )?		  
+          ABRE_COR defineValues CIERRA_COR         
         ; 
+ 
+defineValues
+	    :
+	    	defineValue (defineValue)* 
+	    ;
 
-exprlist: expr ( COMA expr)*;
+defineValue
+		:
+			add DOTCOMA
+		;
+
+exprList: expr ( COMA expr)*;
 
 namelist: declareVar ( COMA declareVar)*;
 
-expr    : expr binary expr 			# binaryExpr
-		 | unary expr  				# unaryExpr
-		 | ABRE_PAR expr CIERRA_PAR # parExpr
-		 | INT_LITERAL  			#intLiteral
-         | DECIMAL_LITERAL 			#decimalLiteral
-         | STRING_LITERAL 			#stringLiteral
-         | BOOL_LITERAL				#boolLiteral
-		 | ID						#id
+// sin operaciones booleanes por ahora
+expr    :  NOT   op=expr  				 #notExpr
+		 | MINUS op=expr 				 #minusExpr
+		 | left=expr MULTIPLY right=expr #multExpr
+		 | left=expr DIVIDE   right=expr #divExpr
+		 | left=expr PLUS     right=expr #addExpr
+		 | left=expr MINUS    right=expr #subExpr
+		 | ABRE_PAR op=expr CIERRA_PAR   #parExpr
+		 
+		 | INT_LITERAL     #intLiteral
+         | DECIMAL_LITERAL #decimalLiteral
+         | STRING_LITERAL  #stringLiteral         
+		 | ID			   #id
 		 ;
-
-binary  : MULTIPLY
-		 | DIVIDE
-		 | PLUS
-         | MINUS
-         | AND
-         | OR
-         | XOR
-        ;
-
-unary   : NOT
-        ;
-		 
-		 
 
 declareVar
 		: ID DOBLEDOT ID; 
 
- 
-/*assignment : ID '=' expression;
- 
 //***** LEXER *****
 
 /* comentarios */
@@ -128,7 +166,7 @@ NOT : 'NOT';
 /* Literales */
 INT_LITERAL 	: ( DIGIT)+;
 DECIMAL_LITERAL : ( DIGIT)*'.'(DIGIT)+;
-STRING_LITERAL  : '"'*?'"';
+STRING_LITERAL  : '"' .*? '"';
 BOOL_LITERAL 	: ('true'|'false'); 
 fragment DIGIT   : [0-9];
 

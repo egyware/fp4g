@@ -5,8 +5,10 @@ import fp4g.data.Expresion;
 public class BinaryOp extends Expresion{
 	public static enum Type
 	{
-		Plus,
-		Minus
+		Add,
+		Sub,
+		Div,
+		Mult
 	}
 	public final Type type;
 	public final Expresion left;

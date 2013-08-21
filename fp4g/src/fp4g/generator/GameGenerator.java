@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import fp4g.data.Code;
-import fp4g.data.IGameData;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
