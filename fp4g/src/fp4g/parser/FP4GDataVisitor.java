@@ -11,6 +11,7 @@ import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
+import fp4g.data.NameList;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
@@ -30,6 +31,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	private Stack<Define> current;
 	private Stack<Expresion> expr_stack;
 	private ExprList exprList;
+	private NameList nameList;
 	public FP4GDataVisitor(Game game)
 	{
 		this.game = game;
@@ -96,10 +98,16 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		 }
 		define.setLine(define_ctx.getStart().getLine());
 		parent.addDefine(define);
-		  
+				  
 		current.push(define);		
 		super.visitDefineValues(ctx);
-		current.pop();		
+		current.pop();
+		
+		if(nameList != null)
+		{
+			define.setNameList(nameList);
+			nameList = null;
+		}
 		
 		return null;		
 	}
@@ -109,14 +117,56 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	{
 		Define parent = current.peek();
 		
-		Add add = new Add(ctx.type,ctx.addName);
+		Add	add = new Add(ctx.type,ctx.addName,ctx.varName);
 		add.setLine(ctx.getStart().getLine());
+		super.visitAdd(ctx);
+		if(exprList != null)
+		{
+			add.addParams(exprList);
+			exprList = null;
+		}		
 		
-		parent.addADD(add);		
-		return super.visitAdd(ctx); 		
+		parent.addADD(add);
+		
+		
+		return null; 		
 	}
 	
-	 
+	
+	@Override
+	public Void visitNameList(FP4GParser.NameListContext ctx)
+	{
+		nameList = new NameList();
+		super.visitNameList(ctx);
+	
+		return null;		
+	}
+	
+	@Override 
+	public Void visitDeclareVar(FP4GParser.DeclareVarContext ctx)
+	{
+		String name = null;
+		switch(ctx.varType().type)
+		{
+		case Bool:
+			name = "Boolean";
+			break;		
+		case Decimal:
+			name = "Float";
+			break;
+		case Entity:
+			name = "Entity";
+			break;
+		case Integer:
+			name = "Integer";
+			break;					
+		default:
+			name = ctx.varType().getText();
+			break;
+		}
+		nameList.add(ctx.ID().getText(),name);
+		return null;		
+	}
 	
 	@Override
 	public Void visitExprList(FP4GParser.ExprListContext ctx)
@@ -126,14 +176,12 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		super.visitExprList(ctx);
 		//añadimos todas las expresiones
 		
-		if(!expr_stack.isEmpty())
+
+		while(!expr_stack.isEmpty())
 		{
-			for(Expresion expr = expr_stack.pop(); !expr_stack.isEmpty(); expr = expr_stack.pop())
-			{
-				exprList.add(expr);
-				System.err.println(expr.getClass().getSimpleName());
-			}
-		}
+			final Expresion expr = expr_stack.pop();
+			exprList.addFirst(expr);				
+		}		
 		
 		return null;
 	}
@@ -250,7 +298,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		String id = ctx.ID().getText();
 		VarId varId = new VarId(id);
 		expr_stack.push(varId);
-		
+				
 		return null;
 	}
 }

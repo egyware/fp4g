@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import fp4g.data.define.Game;
 import fp4g.generator.Generator;
@@ -78,10 +79,19 @@ public class Main {
 ////        	}
 ////        }
 			
-	    	System.out.println(String.format("Parsing: %s",inputFile));
-			FP4GDataVisitor visitor = new FP4GDataVisitor(gameConf);
-			visitor.visit(p.program());
-	        System.out.println(String.format("Parsing complete: %s",inputFile));
+	    	System.out.println(String.format("Parsing: %s",inputFile));			
+			ParseTree tree = p.program();
+			
+			if(tree != null)
+			{
+				FP4GDataVisitor visitor = new FP4GDataVisitor(gameConf);
+				visitor.visit(tree);
+				System.out.println(String.format("Parsing complete: %s",inputFile));
+			}
+			else
+			{
+				System.out.println(String.format("Parsing incomplete: %s",inputFile));
+			}
 			
 	        System.out.println("Generating...");
 	        Generator.generate(options,gameConf, new File(outDirectory));

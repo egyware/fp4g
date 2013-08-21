@@ -40,9 +40,11 @@ add
 returns
 [
 	ObjectType type = null,
-	String addName = null
+	String addName = null,
+	String varName = null,	
 ]
 	    :
+	      (ID EQUAL {$varName = $ID.text;})?	
 		  ADD 
 		  ( 
 			  	MANAGER  { $type = ObjectType.MANAGER;  }			  	
@@ -73,7 +75,7 @@ returns
 		  		| MESSAGE   { $type = ObjectType.MESSAGE; }
 		  	) 
 		  ID { $defName = $ID.text; } 
-		  ( ABRE_PAR namelist CIERRA_PAR )?		  
+		  ( ABRE_PAR nameList CIERRA_PAR )?		  
           ABRE_COR defineValues CIERRA_COR         
         ; 
  
@@ -89,7 +91,7 @@ defineValue
 
 exprList: expr ( COMA expr)*;
 
-namelist: declareVar ( COMA declareVar)*;
+nameList: declareVar ( COMA declareVar)*;
 
 // sin operaciones booleanes por ahora
 expr    :  NOT   op=expr  				 #notExpr
@@ -107,7 +109,22 @@ expr    :  NOT   op=expr  				 #notExpr
 		 ;
 
 declareVar
-		: ID DOBLEDOT ID; 
+		: varType ID;
+
+varType
+returns
+[
+	
+	VarType type = null
+]
+		:
+		   INT_TYPE    {$type = VarType.Integer;}
+		 | DEC_TYPE    {$type = VarType.Decimal;}
+		 | BOOL_TYPE   {$type = VarType.Bool;}
+		 | ENTITY_TYPE {$type = VarType.Entity;}
+		 //tipos temporales
+		 | 'KeyMap'    {$type = VarType.Custom;}
+        ;
 
 //***** LEXER *****
 
@@ -163,6 +180,12 @@ OR  : 'OR';
 XOR : 'XOR';
 NOT : 'NOT';
 
+/* Tipos */
+INT_TYPE    : 'Int';
+DEC_TYPE    : 'Dec';
+BOOL_TYPE   : 'Bool';
+ENTITY_TYPE : 'Entity';
+
 /* Literales */
 INT_LITERAL 	: ( DIGIT)+;
 DECIMAL_LITERAL : ( DIGIT)*'.'(DIGIT)+;
@@ -174,6 +197,6 @@ fragment DIGIT   : [0-9];
 ID : [a-zA-Z_][a-zA-Z_0-9]*;
 
 
-NL: [\r\n]+ -> skip;
 /* ignore */
+NL: [\r\n]+ -> skip;
 WS: [ \t]+ -> skip;
