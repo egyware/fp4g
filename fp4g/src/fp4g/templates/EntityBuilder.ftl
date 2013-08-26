@@ -26,7 +26,7 @@ public class ${class.name}Builder implements EntityBuilder
 		</#list>	
 		</#if>
 		
-		Entity entity = new Entity(world);
+		${class.name} entity = new ${class.name}(world);
 		
 		<#if behaviors??>
 		//crear los behaviors
@@ -40,7 +40,7 @@ public class ${class.name}Builder implements EntityBuilder
 		//añadir las instancias
 		<#if behaviors??>
 		<#list behaviors as behavior>
-		entity.setBehavior(${behavior.varName});				
+		entity.${behavior.varName} = ${behavior.varName};				
 		</#list>
 		</#if>
 		

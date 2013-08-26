@@ -34,6 +34,7 @@ gameValues
 gameValue  
 		: define
 		| add DOTCOMA
+		| on
 		;
 
 add 
@@ -77,7 +78,18 @@ returns
 		  ID { $defName = $ID.text; } 
 		  ( ABRE_PAR nameList CIERRA_PAR )?		  
           ABRE_COR defineValues CIERRA_COR         
-        ; 
+        ;
+
+on
+returns
+[
+	String messageName	
+]
+		:
+		ON 
+		ID {$messageName = $ID.text; }
+		ABRE_COR CIERRA_COR 
+		; 
  
 defineValues
 	    :
@@ -87,9 +99,10 @@ defineValues
 defineValue
 		:
 			add DOTCOMA
+			|on
 		;
 
-exprList: expr ( COMA expr)*;
+exprList: expr (COMA expr)*;
 
 nameList: declareVar ( COMA declareVar)*;
 

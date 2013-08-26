@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,7 +14,6 @@ import static fp4g.Log.Show;
 import fp4g.Log.ErrType;
 import fp4g.Pair;
 import fp4g.data.Add;
-import fp4g.data.Behavior;
 import fp4g.data.Code;
 import fp4g.data.Expresion;
 import fp4g.data.define.Entity;
@@ -34,15 +32,27 @@ public class EntityGenerator extends Generator {
 	throws IOException, TemplateException
 	{
 		Entity entity = (Entity)gameData;		
-		Template temp = cfg.getTemplate("EntityBuilder.ftl");	
+		Template entityBuilderTempl = cfg.getTemplate("EntityBuilder.ftl");
+		Template entityTempl        = cfg.getTemplate("Entity.ftl");
 		
-		HashMap<String,Object> root = new HashMap<>();
-		HashMap<String,Object> clazz = new HashMap<>();
-		clazz.put("package", String.format("%s.%s",packageName,"entity"));
-		clazz.put("name",entity.name);
-		root.put("class",clazz);
-		root.put("autodoc", autodoc);
+		HashMap<String,Object> buildRoot = new HashMap<>();	
+		HashMap<String,Object> entityRoot = new HashMap<>();
 		
+		HashMap<String,Object> buildClazz = new HashMap<>();
+		buildClazz.put("package", String.format("%s.%s",packageName,"entity"));
+		buildClazz.put("name",entity.name);
+		
+		HashMap<String,Object> entityClazz = new HashMap<>();
+		entityClazz.put("package", String.format("%s.%s",packageName,"entity"));
+		entityClazz.put("name",entity.name);
+				
+		
+		buildRoot.put("class",buildClazz);
+		buildRoot.put("autodoc", autodoc);
+		
+		entityRoot.put("class", entityClazz);				
+		entityRoot.put("autodoc", autodoc);
+				
 		//agregar parametros de entrada
 		if(entity.list != null)
 		{
@@ -55,7 +65,7 @@ public class EntityGenerator extends Generator {
 				el.put("type", par.b);
 				pair.add(el);
 			}
-			root.put("params",pair);
+			buildRoot.put("params",pair);
 		}
 		
 		//agregar behaviors
@@ -63,8 +73,9 @@ public class EntityGenerator extends Generator {
 		List<HashMap<String,Object>> behaviors = new LinkedList<>(); 
 		for(Add addBhvr:entity.addBehaviors)
 		{
-			HashMap<String,Object> bhvr = new HashMap<>();
+			HashMap<String,Object> bhvr = new HashMap<>();			
 			bhvr.put("name", addBhvr.name);
+			bhvr.put("hash", addBhvr.name.hashCode());
 			if(addBhvr.varName != null)
 			{
 				bhvr.put("varName", addBhvr.varName);
@@ -87,7 +98,7 @@ public class EntityGenerator extends Generator {
 					}
 					if(expr instanceof Literal)
 					{					
-						params.add(((Literal) expr).value.toString());
+						params.add(((Literal<?>) expr).value.toString());
 					}
 				}
 				bhvr.put("params",params);				
@@ -95,23 +106,47 @@ public class EntityGenerator extends Generator {
 			behaviors.add(bhvr);
 		}
 		
-		root.put("behaviors", behaviors);
-		//agregar imports!		
-		List<String> imports = new LinkedList<>();
-		String arrayImports[] = new String[]
-		{
-			"com.apollo.EntityBuilder",
-			"com.apollo.Entity",
-			"com.apollo.World"
-		};
-		Arrays.sort(arrayImports);
-		Collections.addAll(imports, arrayImports);
+		buildRoot.put("behaviors", behaviors);
+		entityRoot.put("behaviors", behaviors);
 		
-		for(Add addBhvr:entity.addBehaviors)
+		//agregar imports!
 		{
-			imports.add(String.format("com.apollo.components.%s",addBhvr.name));
+			String arrayImports[] = new String[]
+					{
+						"com.apollo.EntityBuilder",
+						"com.apollo.Entity",			
+						"com.apollo.World"
+					};
+			//imports para el builder
+			List<String> imports = new LinkedList<>();
+			Collections.addAll(imports, arrayImports);		
+			for(Add addBhvr:entity.addBehaviors)
+			{
+				imports.add(String.format("com.apollo.components.%s",addBhvr.name));
+			}
+			Collections.sort(imports);
+			buildClazz.put("imports", imports);
 		}
-		clazz.put("imports", imports);		
+		
+		{
+			String arrayImports[] = new String[]
+					{
+						"com.apollo.EntityBuilder",
+						"com.apollo.Entity",			
+						"com.apollo.World",
+						"com.apollo.Behavior",
+						"com.apollo.utils.Bag"
+					};
+			//imports para el builder
+			List<String> imports = new LinkedList<>();
+			Collections.addAll(imports, arrayImports);		
+			for(Add addBhvr:entity.addBehaviors)
+			{
+				imports.add(String.format("com.apollo.components.%s",addBhvr.name));
+			}
+			Collections.sort(imports);
+			entityClazz.put("imports", imports);
+		}
 		
 		if(entityPackageDir == null)
 		{
@@ -121,9 +156,16 @@ public class EntityGenerator extends Generator {
 				entityPackageDir.mkdir();
 			}
 		}
-		Writer out = new FileWriter(new File(entityPackageDir,String.format("%sBuilder.java",entity.name)));
-		temp.process(root, out);  
-		System.out.println(String.format("Generado: %s/entity/%sBuilder.java",packageNameDir, entity.name));
+		{
+			Writer out = new FileWriter(new File(entityPackageDir,String.format("%sBuilder.java",entity.name)));		
+			entityBuilderTempl.process(buildRoot, out);  
+			System.out.println(String.format("Generado: %s/entity/%sBuilder.java",packageNameDir, entity.name));
+		}
+		{
+			Writer out = new FileWriter(new File(entityPackageDir,String.format("%s.java",entity.name)));		
+			entityTempl.process(entityRoot, out);  
+			System.out.println(String.format("Generado: %s/entity/%s.java",packageNameDir, entity.name));
+		}
 		
 	}
 

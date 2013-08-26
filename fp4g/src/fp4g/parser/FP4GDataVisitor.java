@@ -12,6 +12,7 @@ import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.NameList;
+import fp4g.data.On;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
@@ -113,6 +114,19 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
+	public Void visitOn(FP4GParser.OnContext ctx)
+	{
+		Define parent = current.peek();
+		//en vez de usar el nombre, deberia buscar una clase del tipo Mensaje!!!
+		On on = new On(ctx.messageName);
+		
+		
+		parent.addOn(on);
+		
+		return super.visitOn(ctx);		
+	}
+	
+	@Override
 	public Void visitAdd(FP4GParser.AddContext ctx)
 	{
 		Define parent = current.peek();
@@ -126,8 +140,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 			exprList = null;
 		}		
 		
-		parent.addADD(add);
-		
+		parent.addADD(add);		
 		
 		return null; 		
 	}

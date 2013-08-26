@@ -22,7 +22,7 @@ public class RenderManager<T> extends Manager {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void addEntitySpatialsToBuckets(Entity entity) {
+	private void addBaseEntitySpatialsToBuckets(Entity entity) {
 		Spatial<T> spatial = entity.getBehavior(Spatial.class);
 		if (spatial != null) {
 			spatial.addToRenderBuckets(buckets);
@@ -43,7 +43,7 @@ public class RenderManager<T> extends Manager {
 
 	@Override
 	public void added(Entity e) {
-		addEntitySpatialsToBuckets(e);
+		addBaseEntitySpatialsToBuckets(e);
 	}
 
 	@Override

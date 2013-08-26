@@ -4,8 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import com.apollo.ApolloException;
-import com.apollo.Behavior;
 import com.apollo.Entity;
+import com.apollo.Behavior;
 import com.apollo.managers.Manager;
 import com.apollo.managers.TagManager;
 

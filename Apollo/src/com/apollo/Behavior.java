@@ -6,7 +6,7 @@ import com.apollo.annotate.ComponentInjector;
 import com.apollo.managers.EntityManager;
 
 public abstract class Behavior{
-	protected Entity owner;
+	protected DefaultEntity owner;
 
 	public World getWorld() {
 		return owner.getWorld();
@@ -16,7 +16,7 @@ public abstract class Behavior{
 		return owner.getWorld().getEntityManager();
 	}
 
-	public void setOwner(Entity owner) {
+	public void setOwner(DefaultEntity owner) {
 		this.owner = owner;
 	}
 

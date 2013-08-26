@@ -1,6 +1,6 @@
 package com.apollo.managers;
 
-import com.apollo.Entity;
+import com.apollo.DefaultEntity;
 import com.apollo.messages.ContactMessage;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -48,8 +48,8 @@ public class PhysicsManager extends Manager implements ContactListener{
 	public void beginContact(Contact contact) {
 		Fixture fixA = contact.getFixtureA();
 		Fixture fixB = contact.getFixtureB();
-		Entity a = (Entity)fixA.getBody().getUserData();
-		Entity b = (Entity)fixB.getBody().getUserData();
+		DefaultEntity a = (DefaultEntity)fixA.getBody().getUserData();
+		DefaultEntity b = (DefaultEntity)fixB.getBody().getUserData();
 		if(a != null)
 		{		
 			contactMessage.contact = contact;			
@@ -79,8 +79,8 @@ public class PhysicsManager extends Manager implements ContactListener{
 	public void endContact(Contact contact) {
 		Fixture fixA = contact.getFixtureA();
 		Fixture fixB = contact.getFixtureB();
-		Entity a = (Entity)fixA.getBody().getUserData();
-		Entity b = (Entity)fixB.getBody().getUserData();
+		DefaultEntity a = (DefaultEntity)fixA.getBody().getUserData();
+		DefaultEntity b = (DefaultEntity)fixB.getBody().getUserData();
 		if(a != null)
 		{
 			contactMessage.contact = contact;

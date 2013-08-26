@@ -29,8 +29,8 @@ public class World {
 		entityManager = new EntityManager();
 		gameManager = game;
 		
-		added = new Bag<Entity>();
 		addedManagers = new Bag<Manager>();
+		added   = new Bag<Entity>();		
 		deleted = new Bag<Entity>();
 		
 		managers = new LinkedHashMap<Class<? extends Manager>, Manager>();

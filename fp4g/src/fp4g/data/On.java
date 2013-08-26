@@ -8,7 +8,7 @@ package fp4g.data;
  *
  */
 public class On {
-	public String message;
+	public final String message;
 	//On Message  [...source...]
 	public On(String message) {
 		this.message = message;

@@ -1,7 +1,7 @@
 package com.apollo.managers;
 
-import com.apollo.Behavior;
 import com.apollo.Entity;
+import com.apollo.Behavior;
 import com.apollo.Message;
 import com.apollo.messages.CreateEntityMessage;
 import com.apollo.utils.Bag;
