@@ -5,6 +5,15 @@ import java.io.PrintStream;
 import fp4g.data.Code;
 
 public class Log {	
+	private final static String formatErrorSimple = "%d: error%03d %s";
+	private final static String formatWarnSimple  = "%d: warn%03d %s";
+	private final static String formatInfoSimple  = "%d: info%03d %s";
+	private final static String formatErrorMore   = "%d: error%03d %s (%s)";
+	private final static String formatWarnMore    = "%d: warn%03d %s (%s)";
+	private final static String formatInfoMore    = "%d: info%03d %s (%s)";
+	private final static PrintStream out = System.out;
+	private final static PrintStream err = System.err;
+	
 	protected static interface MessageType
 	{
 		public String getMessage();
@@ -46,6 +55,7 @@ public class Log {
 //		ErrorCallFunction("Error al llamar la función"),
 //		BehaviorNull,
 //		BasedExcepted,
+		FunctionNotFound,
 		NotImplement,
 		UnknowError,
 		;
@@ -87,64 +97,91 @@ public class Log {
 	}
 	public static <T extends MessageType> void Show(T type)
 	{
-		Show(type,0);
+		if(type instanceof WarnType)
+		{			
+			Warning((WarnType) type,0,null);				
+		}else
+		if(type instanceof InfoType)
+		{	
+			Info((InfoType) type,0,null);	
+		}else
+		if(type instanceof ErrType)
+		{	
+			Error((ErrType) type,0,null);				
+		}
 	}
-	public static <T extends MessageType> void Show(T type,Object v)
+	
+	public static <T extends MessageType> void Show(T type,Code c)
 	{
-		if(v instanceof Code)
+		if(type instanceof WarnType)
+		{			
+			Warning((WarnType) type,c.getLine(),null);				
+		}else
+		if(type instanceof InfoType)
+		{	
+			Info((InfoType) type,c.getLine(),null);	
+		}else
+		if(type instanceof ErrType)
+		{	
+			Error((ErrType) type,c.getLine(),null);				
+		}
+	}
+	
+	public static <T extends MessageType> void Show(T type,String more)
+	{
+		if(type instanceof WarnType)
+		{			
+			Warning((WarnType) type,0,more);				
+		}else
+		if(type instanceof InfoType)
+		{	
+			Info((InfoType) type,0,more);	
+		}else
+		if(type instanceof ErrType)
+		{	
+			Error((ErrType) type,0,more);				
+		}
+	}
+	
+	
+	
+	private static void Info(final InfoType type,final int line,final String more) {		
+		final int code = type.ordinal();		
+		final String message = type.getMessage();
+		if(more == null)
 		{
-			Show(type,v);
+			out.println(String.format(formatInfoSimple,line, code,message));
 		}
 		else
 		{
-			//TODO [egyware] No es un error que tiene asociado una linea
+			out.println(String.format(formatInfoMore,line, code,message,more));
 		}
 	}
-	public static void Show(ErrType type,Code line)
-	{
-		Error(type,line.getLine());
-	}
-	public static void Show(WarnType type,Code line)
-	{
-		Warning(type,line.getLine());		
-	}
-	public static void Show(InfoType type,Code line)
-	{
-		Info(type,line.getLine());		
-	}
-	public static void Show(ErrType type,int line)
-	{
-		Error(type,line);
-	}
-	public static void Show(WarnType type,int line)
-	{
-		Warning(type,line);		
-	}
-	public static void Show(InfoType type,int line)
-	{
-		Info(type,line);		
-	}	
-	private static void Info(final InfoType type,final int line) {
-		final String format = "%d: info%03d %s";
-		final PrintStream out = System.out;
+	private static void Warning(final WarnType type,final int line,final String more) {
 		final int code = type.ordinal();		
 		final String message = type.getMessage();				
-		out.println(String.format(format,line, code,message));		
+		if(more == null)
+		{
+			err.println(String.format(formatWarnSimple,line, code,message));
+		}
+		else
+		{
+			err.println(String.format(formatWarnMore,line, code,message,more));
+		}
 	}
-	private static void Warning(final WarnType type,final int line) {		
-		final String format = "%d: warn%03d %s";
-		final PrintStream err = System.err;
+	private static void Error(final ErrType type,final int line,final String more)
+	{	
 		final int code = type.ordinal();		
 		final String message = type.getMessage();				
-		err.println(String.format(format,line, code,message));
+		if(more == null)
+		{
+			err.println(String.format(formatErrorSimple,line, code,message));
+		}
+		else
+		{
+			err.println(String.format(formatErrorMore,line, code,message,more));
+		}
 	}
-	private static void Error(final ErrType type,final int line)
-	{
-		final String format = "%d: error%03d %s";
-		final PrintStream err = System.err;
-		final int code = type.ordinal();		
-		final String message = type.getMessage();				
-		err.println(String.format(format,line, code,message));
-	}
+	
 
 }

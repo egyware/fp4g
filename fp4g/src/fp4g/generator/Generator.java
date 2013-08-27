@@ -73,6 +73,7 @@ public abstract class Generator {
 		}
 		
 	}
+	
 	protected static String uncap_first(String string)
 	{
 		StringBuilder uncap_string = new StringBuilder();

@@ -18,6 +18,7 @@ public class Goal extends Define {
 	public String name;
 	public Event acomplish;
 	//TODO pendiente falta como se encapsulará la condición de activación
+	//TODO quedará definida con "On", pero como encapsularé los On?
 	@Override
 	public void addADD(Add code) {
 		// TODO Auto-generated method stub

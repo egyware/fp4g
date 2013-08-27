@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.apollo.managers.graphics;
 
 import com.badlogic.gdx.Gdx;

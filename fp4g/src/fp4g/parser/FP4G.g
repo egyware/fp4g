@@ -114,6 +114,8 @@ expr    :  NOT   op=expr  				 #notExpr
 		 | left=expr PLUS     right=expr #addExpr
 		 | left=expr MINUS    right=expr #subExpr
 		 | ABRE_PAR op=expr CIERRA_PAR   #parExpr
+		 | functionName=ID 
+		   ABRE_PAR exprList CIERRA_PAR  #functionCallExpr
 		 
 		 | INT_LITERAL     #intLiteral
          | DECIMAL_LITERAL #decimalLiteral

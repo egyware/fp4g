@@ -1,17 +1,16 @@
 package fp4g.data.expresion;
 
 import fp4g.data.ExprList;
+import fp4g.data.Expresion;
 
-public class FunctionCall {
-	public final String function;
-	public ExprList params;
-	public FunctionCall(String function)
+public class FunctionCall extends Expresion {
+	public final String functionName;
+	public final ExprList params;
+	public FunctionCall(String function,ExprList params)
 	{
-		this.function = function;
-	}
-	public void addParams(ExprList params)
-	{
+		this.functionName = function;
 		this.params = params;
 	}
+	
 
 }

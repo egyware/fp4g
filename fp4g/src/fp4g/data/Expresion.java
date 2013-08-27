@@ -6,4 +6,15 @@ package fp4g.data;
  *
  */
 public abstract class Expresion {	
+	private boolean hasPar;
+	
+	public boolean hasPar()
+	{
+		return hasPar;
+	}
+	
+	public void setPar(boolean p)
+	{
+		hasPar = p;
+	}
 }

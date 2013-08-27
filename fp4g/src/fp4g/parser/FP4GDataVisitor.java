@@ -17,6 +17,8 @@ import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.expresion.BinaryOp;
+import fp4g.data.expresion.FunctionCall;
+import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.VarId;
 import fp4g.data.expresion.Literal;
 
@@ -183,16 +185,16 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	
 	@Override
 	public Void visitExprList(FP4GParser.ExprListContext ctx)
-	{			
-		//se asume que no se visitará concurrentemente a ExprList
-		exprList = new ExprList();
+	{	
+		//ojo con el orden de estas funciones
 		super.visitExprList(ctx);
-		//añadimos todas las expresiones
-		
-
+		//se asume que no se visitará concurrentemente a ExprList
+		exprList = new ExprList(expr_stack.size());
+				
+		//añadimos todas las expresiones				
 		while(!expr_stack.isEmpty())
 		{
-			final Expresion expr = expr_stack.pop();
+			final Expresion expr = expr_stack.pop();		
 			exprList.addFirst(expr);				
 		}		
 		
@@ -206,8 +208,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		visit(ctx.left);
 		visit(ctx.right);
 		
-		right = expr_stack.pop();
 		left = expr_stack.pop();
+		right = expr_stack.pop();		
 		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Mult,right,left);
 		expr_stack.push(binaryExpr);		
 		
@@ -220,8 +222,9 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		visit(ctx.left);
 		visit(ctx.right);
 		
-		right = expr_stack.pop();
 		left = expr_stack.pop();
+		right = expr_stack.pop();
+		
 		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Sub,right,left);
 		expr_stack.push(binaryExpr);		
 		
@@ -229,13 +232,14 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	@Override
 	public Void visitAddExpr(FP4GParser.AddExprContext ctx)
-	{
+	{		
 		Expresion left,right;
 		visit(ctx.left);
 		visit(ctx.right);
 		
-		right = expr_stack.pop();
 		left = expr_stack.pop();
+		right = expr_stack.pop();
+		
 		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Add,right,left);
 		expr_stack.push(binaryExpr);		
 		
@@ -248,8 +252,9 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		visit(ctx.left);
 		visit(ctx.right);
 		
-		right = expr_stack.pop();
 		left = expr_stack.pop();
+		right = expr_stack.pop();
+		
 		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Div,right,left);
 		expr_stack.push(binaryExpr);		
 		
@@ -257,23 +262,31 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}	
 	@Override
 	public Void visitParExpr(FP4GParser.ParExprContext ctx)
-	{
-		//TODO será bueno añadir esta expresión a una clase parentesis?
+	{		
 		visit(ctx.op);
+		expr_stack.peek().setPar(true); //establecemos que esta expresión, lleva parentesis
 				
 		return null;
 	}	
 	@Override
 	public Void visitMinusExpr(FP4GParser.MinusExprContext ctx)
-	{
-		//TODO
+	{		
+		visit(ctx.op);
+		Expresion expr = expr_stack.pop();
+		UnaryOp unaryExpr = new UnaryOp(UnaryOp.Type.Minus,expr);
+		expr_stack.push(unaryExpr);
+		
 		return null;
 	}	
 	@Override
 	public Void visitNotExpr(FP4GParser.NotExprContext ctx)
 	{
-		//TODO 
-		return null;
+		visit(ctx.op);		
+		Expresion expr = expr_stack.pop();		
+		UnaryOp unaryExpr = new UnaryOp(UnaryOp.Type.Not,expr);
+		expr_stack.push(unaryExpr);
+ 
+		return super.visitNotExpr(ctx);
 	}
 	
 	//literal y id
@@ -312,6 +325,27 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		VarId varId = new VarId(id);
 		expr_stack.push(varId);
 				
+		return null;
+	}
+	
+	@Override
+	public Void visitFunctionCallExpr(FP4GParser.FunctionCallExprContext ctx)
+	{
+		//guardamos el actual stack!
+		Stack<Expresion> prev_stack  = expr_stack;
+		//nuevo stack!
+		expr_stack = new Stack<>();
+		String callName = ctx.functionName.getText();
+		
+		visit(ctx.exprList());
+				
+		FunctionCall functionCall = new FunctionCall(callName,exprList);
+		exprList = null;		
+		
+		//restablecemos el stack anterior
+		expr_stack = prev_stack;		
+		expr_stack.push(functionCall);
+		
 		return null;
 	}
 }

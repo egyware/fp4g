@@ -28,6 +28,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitMultExpr(@NotNull FP4GParser.MultExprContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#functionCallExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionCallExpr(@NotNull FP4GParser.FunctionCallExprContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#using}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

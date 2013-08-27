@@ -17,8 +17,6 @@ import fp4g.data.Add;
 import fp4g.data.Code;
 import fp4g.data.Expresion;
 import fp4g.data.define.Entity;
-import fp4g.data.expresion.Literal;
-import fp4g.data.expresion.VarId;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -82,24 +80,21 @@ public class EntityGenerator extends Generator {
 			}
 			else
 			{
-				StringBuilder varName = new StringBuilder();
-				varName.append(addBhvr.name.toLowerCase().charAt(0));
-				varName.append(addBhvr.name.substring(1));
+				StringBuilder varName = new StringBuilder();				
+				varName.append(uncap_first(addBhvr.name));				
 				bhvr.put("varName", varName.toString());
 			}			
 			if(addBhvr.params != null)
 			{	
 				List<String> params = new LinkedList<>();
 				for(Expresion expr: addBhvr.params)
-				{					
-					if(expr instanceof VarId)
-					{					
-						params.add(((VarId) expr).varName);
+				{
+					String result = ExpresionGenerator.generate(expr);
+					if(result != null)
+					{
+						params.add(result);
 					}
-					if(expr instanceof Literal)
-					{					
-						params.add(((Literal<?>) expr).value.toString());
-					}
+					//TODO: probablemente mostrar un error...
 				}
 				bhvr.put("params",params);				
 			}			
@@ -130,13 +125,13 @@ public class EntityGenerator extends Generator {
 		
 		{
 			String arrayImports[] = new String[]
-					{
-						"com.apollo.EntityBuilder",
-						"com.apollo.Entity",			
-						"com.apollo.World",
-						"com.apollo.Behavior",
-						"com.apollo.utils.Bag"
-					};
+			{
+					"com.apollo.EntityBuilder",
+					"com.apollo.Entity",			
+					"com.apollo.World",
+					"com.apollo.Behavior",
+					"com.apollo.utils.Bag"
+			};
 			//imports para el builder
 			List<String> imports = new LinkedList<>();
 			Collections.addAll(imports, arrayImports);		
@@ -156,6 +151,7 @@ public class EntityGenerator extends Generator {
 				entityPackageDir.mkdir();
 			}
 		}
+		//TODO podria enviarse a algún lugar y ahi guardar todos los archivos...
 		{
 			Writer out = new FileWriter(new File(entityPackageDir,String.format("%sBuilder.java",entity.name)));		
 			entityBuilderTempl.process(buildRoot, out);  

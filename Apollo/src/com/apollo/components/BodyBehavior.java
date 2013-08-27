@@ -1,6 +1,5 @@
 package com.apollo.components;
 
-import com.apollo.Behavior;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
@@ -11,10 +10,7 @@ import com.badlogic.gdx.physics.box2d.Body;
  */
 public abstract class BodyBehavior extends Transform {
 	private Vector2 position = new Vector2();
-	
-	
-	
-	
+
 	public abstract Body getBody();
 	public abstract void setPosition(float x,float y);
 	public abstract void setRotation(float angleRadians);

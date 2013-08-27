@@ -9,8 +9,8 @@ import ${import};
 ${autodoc}
 public class ${class.name} extends Entity
 {
-	private final Bag<Behavior> behaviors;
-	<#if behaviors??>		
+	<#if behaviors??>
+	private final Bag<Behavior> behaviors;			
 	<#list behaviors as behavior>
 	public ${behavior.name} ${behavior.varName};				 		
 	</#list>
@@ -22,7 +22,9 @@ public class ${class.name} extends Entity
 	public ${class.name}(World world)
 	{
 		super(world);
-		behaviors = new Bag<Behavior>();		
+		<#if behaviors??>
+		behaviors = new Bag<Behavior>(${behaviors?size});
+		</#if>		
 	}
 	
 	public Bag<Behavior> getBehaviors()
@@ -49,8 +51,8 @@ public class ${class.name} extends Entity
 
 	public void update(float delta)
 	{
-		for (int i = 0, s = components.size(); s > i; i++) {
-			components.get(i).update(delta);
+		for (int i = 0, s = behaviors.size(); s > i; i++) {
+			behaviors.get(i).update(delta);
 		}
 	}
 	

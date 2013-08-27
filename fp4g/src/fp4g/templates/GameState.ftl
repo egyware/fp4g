@@ -59,8 +59,8 @@ public final class ${class.name} extends GameState{
 	@Override
 	public boolean load()
 	{
-		int w = ${game.name}.Width;		 
-		int h = ${game.name}.Height;
+		final int w = ${game.name}.Width;		 
+		final int h = ${game.name}.Height;
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false,w,h);	
@@ -83,12 +83,12 @@ public final class ${class.name} extends GameState{
 		<#list managers as manager>
 		${manager.varName} = new ${manager.name}();
 		<#if manager.entity>
-		world.setEntityManager(${manager.varNname});
+		world.setEntityManager(${manager.varName});
 		<#elseif manager.render>
 		world.setCamera(camera);
-		world.setManager(${manager.varNname});
+		world.setManager(${manager.varName});
 		<#else>
-		world.setManager(${manager.varNname});
+		world.setManager(${manager.varName});
 		</#if>
 		</#list>
 		</#if>		
