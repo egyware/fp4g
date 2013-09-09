@@ -43,6 +43,7 @@ public class ${class.name}Builder implements EntityBuilder
 		entity.${behavior.varName} = ${behavior.varName};				
 		</#list>
 		</#if>
+		entity.pack();
 		
 		return entity;
 	}		

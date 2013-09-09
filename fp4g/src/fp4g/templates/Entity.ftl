@@ -41,7 +41,7 @@ public class ${class.name} extends Entity
 		<#if behaviors??>		
 		<#list behaviors as behavior>
 			case ${behavior.hash?string.computer}:
-				return ${behavior.varName};
+				return type.cast(${behavior.varName});
 		</#list>
 		</#if>
 			default:
@@ -57,17 +57,10 @@ public class ${class.name} extends Entity
 	}
 	
 	protected void initialize()
-	{
-		<#if behaviors??>		
-		<#list behaviors as behavior>
-		behaviors.add(${behavior.varName});						 		
-		</#list>		
-		</#if>
-		<#if behaviors??>		
-		<#list behaviors as behavior>
-		${behavior.varName}.initialize();
-		</#list>
-		</#if>		
+	{		
+		for (int i = 0, s = behaviors.size(); s > i; i++) {
+			behaviors.get(i).initialize();
+		}		
 	}
 	
 	protected void uninitialize()
@@ -75,6 +68,18 @@ public class ${class.name} extends Entity
 		for (int i = 0, s = behaviors.size(); s > i; i++) {
 			behaviors.get(i).uninitialize();
 		}		
+	}
+	
+	protected void pack()
+	{
+		<#if behaviors??>
+		<#list behaviors as behavior>
+		${behavior.varName}.setOwner(this);
+		</#list>				
+		<#list behaviors as behavior>
+		behaviors.add(${behavior.varName});						 		
+		</#list>		
+		</#if>
 	}
 	
 				

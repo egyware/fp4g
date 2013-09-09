@@ -1,13 +1,13 @@
 package com.apollo.components;
 
 import com.apollo.Layer;
-import com.apollo.World;
 import com.apollo.annotate.InjectComponent;
 import com.apollo.components.spatial.Spatial;
 import com.apollo.managers.graphics.Sprite;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class SpriteBehavior extends Spatial<SpriteBatch> 
@@ -22,26 +22,21 @@ public class SpriteBehavior extends Spatial<SpriteBatch>
 	private boolean flip_y;
 	private float origin_x;
 	private float origin_y;
-		
-	public static class Def
-	{		
-		public String animation;				
-		public Sprite sequence;
-	}	
-	public SpriteBehavior(World world)
-	{	
-		
+	
+	public SpriteBehavior(Sprite sequence)
+	{
+		this(sequence,null);
 	}
-	public SpriteBehavior(World world,Def def)
+	public SpriteBehavior(Sprite sequence, String animation)
 	{	
-		sequence = def.sequence;		
-		if(def.animation == null)
+		this.sequence = sequence;	
+		if(animation == null)
 		{
 			current_sequence = sequence.getFirstAnimation();
 		}	
 		else
 		{
-			current_sequence = sequence.getAnimation(def.animation);			
+			current_sequence = sequence.getAnimation(animation);			
 		}
 		Vector2 temp = sequence.origin();
 		origin_x = temp.x;
@@ -67,8 +62,9 @@ public class SpriteBehavior extends Spatial<SpriteBatch>
 	}
 
 	@Override
-	public void render(SpriteBatch graphicsContext) {
-		TextureRegion current_region = sequence.getKeyFrame(current_sequence,current_time,true);		
+	public void render(SpriteBatch graphicsContext) {		
+		TextureRegion current_region = sequence.getKeyFrame(current_sequence,current_time,true);
+		
 		if(flip_x && !current_region.isFlipX())
 		{
 			current_region.flip(true, false);			
@@ -84,9 +80,12 @@ public class SpriteBehavior extends Spatial<SpriteBatch>
 		else if(!flip_y && current_region.isFlipY())			
 		{
 			current_region.flip(false,true);
-		}
+		}		
 		
-		graphicsContext.draw(current_region, transform.x-origin_x, transform.y-origin_y);		
+		graphicsContext.draw(current_region, transform.x-origin_x, transform.y-origin_y, 
+							 origin_x,origin_y,
+							 current_region.getRegionWidth(),current_region.getRegionHeight(),
+							 1,1, MathUtils.radiansToDegrees*transform.rotation); 
 	}
 	public void setAnimation(String animation) {
 		if(current_id == null)

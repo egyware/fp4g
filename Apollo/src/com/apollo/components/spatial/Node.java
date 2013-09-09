@@ -1,6 +1,6 @@
 package com.apollo.components.spatial;
 
-import com.apollo.DefaultEntity;
+import com.apollo.Entity;
 import com.apollo.utils.Bag;
 
 public abstract class Node<T> extends Spatial<T> {
@@ -19,7 +19,7 @@ public abstract class Node<T> extends Spatial<T> {
 	}
 	
 	@Override
-	public void setOwner(DefaultEntity owner) {
+	public void setOwner(Entity owner) {
 		super.setOwner(owner);
 
 		for (int i = 0; children.size() > i; i++) {

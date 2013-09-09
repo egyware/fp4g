@@ -10,6 +10,8 @@ import fp4g.data.*;
 import fp4g.data.define.*;
 import fp4g.data.managers.*;
 
+import java.util.LinkedList;
+
 }
 
 // **** PARSER ****
@@ -34,7 +36,14 @@ gameValues
 gameValue  
 		: define
 		| add DOTCOMA
+		| set DOTCOMA
 		| on
+		;
+		
+set
+returns
+[ String key ]
+		: SET ID { $key = $ID.text; } EQUAL expr 
 		;
 
 add 
@@ -73,7 +82,7 @@ returns
 		  		| BEHAVIOR  { $type = ObjectType.BEHAVIOR;}
 		  		| ENTITY    { $type = ObjectType.ENTITY;  }
 		  		| GOAL      { $type = ObjectType.GOAL;    }
-		  		| MESSAGE   { $type = ObjectType.MESSAGE; }
+		  		| MESSAGE   { $type = ObjectType.MESSAGE; }		  		
 		  	) 
 		  ID { $defName = $ID.text; } 
 		  ( ABRE_PAR nameList CIERRA_PAR )?		  
@@ -88,18 +97,42 @@ returns
 		:
 		ON 
 		ID {$messageName = $ID.text; }
+		(DOUBLEDOT onFilters)?
 		ABRE_COR CIERRA_COR 
 		; 
+//filtros On:pressA pressB (parsea la disyuncion pressA or pressB)
+onFilters
+returns
+[
+	List<List<String>> or = new LinkedList<>();
+]
+		:
+		filter  {$or.add($filter.filters);} 
+		(filter {$or.add($filter.filters);})*		
+		;
+
+//filtros y On:pressA,pressB (parsea la conjunción pressA and pressB)
+filter
+returns
+[
+	List<String> filters = new LinkedList<>();
+]
+		:
+		ID       {$filters.add($ID.text);}
+		(COMA ID {$filters.add($ID.text);})*			
+		;
+
  
 defineValues
 	    :
-	    	defineValue (defineValue)* 
+	    defineValue (defineValue)* 
 	    ;
 
 defineValue
 		:
-			add DOTCOMA
-			|on
+		add DOTCOMA
+		| set DOTCOMA
+		| on		
 		;
 
 exprList: expr (COMA expr)*;
@@ -119,9 +152,17 @@ expr    :  NOT   op=expr  				 #notExpr
 		 
 		 | INT_LITERAL     #intLiteral
          | DECIMAL_LITERAL #decimalLiteral
-         | STRING_LITERAL  #stringLiteral         
+         | STRING_LITERAL  #stringLiteral
+         | DIRECTCODE      #directCode
 		 | ID			   #id
 		 ;
+		 
+array    :
+		 ABRE_LLAV
+		 ID equal expr
+		 (COMA ID equal expr)*
+		 CIERRA_LLAV 	
+   		 ;
 
 declareVar
 		: varType ID;
@@ -137,6 +178,7 @@ returns
 		 | DEC_TYPE    {$type = VarType.Decimal;}
 		 | BOOL_TYPE   {$type = VarType.Bool;}
 		 | ENTITY_TYPE {$type = VarType.Entity;}
+		 | STRING_TYPE {$type = VarType.String;}
 		 //tipos temporales
 		 | 'KeyMap'    {$type = VarType.Custom;}
         ;
@@ -145,7 +187,7 @@ returns
 
 /* comentarios */
 SINGLE_LINE_COMMENT: '//' ('\n' | '\r' | .*? ) '\r'? '\n' -> skip;
-MULTI_LINE_COMMENT: '/*' * .*? '*/' -> skip;
+MULTI_LINE_COMMENT: '/*' .*? '*/' -> skip;
 
 /* keywords */
 
@@ -156,11 +198,11 @@ SEND       : 'SEND';
 GROUP      : 'GROUP';
 SUBSCRIBE  : 'SUBSCRIBE';
 UNSUBSCRIBE: 'UNSUBSCRIBE';
-START      : 'START';
 RESUME     : 'RESUME';
 PAUSE      : 'PAUSE';
 USING      : 'USING'; 
 EXIT       : 'EXIT';
+SET        : 'SET';
 
 /* auxiliars keywords */
 MANAGER : 'MANAGER';
@@ -177,13 +219,17 @@ SOURCE  : 'SOURCE';
 /* separators */
 ABRE_COR  : '['; 
 ABRE_PAR  : '(';
+ABRE_LLAV : '{';
 CIERRA_COR: ']';
 CIERRA_PAR: ')';
+CIERRA_LLAV: '}';
+
+
 COMA      : ',';
 EQUAL     : '=';
 DOT       : '.';
 DOTCOMA   : ';';
-DOBLEDOT  : ':';
+DOUBLEDOT  : ':';
 
 /* OPERATORS */
 PLUS  : '+';
@@ -198,15 +244,17 @@ NOT : 'NOT';
 /* Tipos */
 INT_TYPE    : 'Int';
 DEC_TYPE    : 'Dec';
+STRING_TYPE : 'String';
 BOOL_TYPE   : 'Bool';
 ENTITY_TYPE : 'Entity';
 
 /* Literales */
+DIRECTCODE      : '@\'' .*? '\''; 
 INT_LITERAL 	: ( DIGIT)+;
 DECIMAL_LITERAL : ( DIGIT)*'.'(DIGIT)+;
 STRING_LITERAL  : '"' .*? '"';
 BOOL_LITERAL 	: ('true'|'false'); 
-fragment DIGIT   : [0-9];
+fragment DIGIT  : [0-9];
 
 /* Identificador */
 ID : [a-zA-Z_][a-zA-Z_0-9]*;

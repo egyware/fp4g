@@ -2,7 +2,6 @@ package fp4g.data.define;
 
 import fp4g.data.Add;
 import fp4g.data.Define;
-import fp4g.data.Event;
 import fp4g.data.ObjectType;
 import fp4g.data.On;
 
@@ -16,11 +15,11 @@ public class Goal extends Define {
 		super(ObjectType.GOAL, name);		 
 	}
 	public String name;
-	public Event acomplish;
+	public On acomplish;
 	//TODO pendiente falta como se encapsulará la condición de activación
 	//TODO quedará definida con "On", pero como encapsularé los On?
 	@Override
-	public void addADD(Add code) {
+	public void addAdd(Add code) {
 		// TODO Auto-generated method stub
 		
 	}

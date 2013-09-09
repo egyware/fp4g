@@ -36,8 +36,7 @@ public class SpriteLoader extends
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Array<AssetDescriptor> getDependencies(String fileName,
-			AnimationParameter parameter) {
+	public Array<AssetDescriptor> getDependencies(String fileName,	AnimationParameter parameter) {
 		Array<AssetDescriptor> deps = new Array<AssetDescriptor>();
 		if (parameter == null) {
 			deps.add(new AssetDescriptor(resolve(fileName)

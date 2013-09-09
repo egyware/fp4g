@@ -159,7 +159,7 @@ public class Game extends Define  {
 //	}
 
 	@Override
-	public void addADD(Add code) {
+	public void addAdd(Add code) {
 		switch(code.getType())
 		{	
 			case MANAGER:

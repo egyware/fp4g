@@ -1,6 +1,6 @@
 package fp4g.data;
 
 public enum VarType {
-	Integer, Decimal, Entity,Bool, Custom, 
+	Integer, Decimal, Entity,Bool, String, Custom
 
 }

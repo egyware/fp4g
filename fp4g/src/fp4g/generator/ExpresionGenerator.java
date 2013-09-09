@@ -66,8 +66,16 @@ public abstract class ExpresionGenerator {
 	{
 		@Override
 		protected String expr2string(Expresion expr) {
-			Literal<?> literal = (Literal<?>)expr;			
-			return literal.value.toString();
+			final Literal<?> literal = (Literal<?>)expr;
+			final Object value = literal.value;
+			if(value instanceof String)
+			{
+				return String.format("\"%s\"",value);
+			}
+			else
+			{
+				return literal.value.toString();
+			}
 		}		
 	}
 	

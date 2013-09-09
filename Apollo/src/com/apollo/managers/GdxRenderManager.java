@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GdxRenderManager extends RenderManager<SpriteBatch> {
-	private Camera camera; 
 
 	public GdxRenderManager(SpriteBatch batch)
 	{
@@ -15,15 +14,7 @@ public class GdxRenderManager extends RenderManager<SpriteBatch> {
 	public GdxRenderManager() {
 		super(new SpriteBatch());
 
-	}
-	public void setCamera(Camera cam)
-	{
-		camera = cam;
-	}
-	public Camera getCamera()
-	{
-		return camera;
-	}
+	}	
 	
 	@Override
 	public void update(float delta)

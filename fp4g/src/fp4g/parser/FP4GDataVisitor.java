@@ -16,7 +16,9 @@ import fp4g.data.On;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
+import fp4g.data.define.Message;
 import fp4g.data.expresion.BinaryOp;
+import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.VarId;
@@ -40,6 +42,19 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		this.game = game;
 		current = new Stack<>();
 		expr_stack = new Stack<>();
+	}
+	
+	@Override 
+	public Void visitSet(FP4GParser.SetContext ctx)
+	{
+		Define define = current.peek();
+		Stack<Expresion> expr_stack = this.expr_stack;		
+		this.expr_stack = new Stack<>();
+		super.visitSet(ctx);
+		Expresion expr = this.expr_stack.pop();
+		this.expr_stack = expr_stack;
+		define.set(ctx.key, expr);
+		return null;
 	}
 	
 	@Override
@@ -91,10 +106,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 				throw new RuntimeException("No implementado");
 		  		//break;
 		  	case MESSAGE:
-		  		//TODO: No implementado aún
-		  		Show(ErrType.NotImplement);
-				throw new RuntimeException("No implementado");
-		  		//break;		  		
+		  		define = new Message(defName,parent);		  		
+		  		break;		  		
 		  	default:
 		  		Show(ErrType.UnknowError);		  		
 		  	break;
@@ -142,7 +155,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 			exprList = null;
 		}		
 		
-		parent.addADD(add);		
+		parent.addAdd(add);		
 		
 		return null; 		
 	}
@@ -160,6 +173,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	@Override 
 	public Void visitDeclareVar(FP4GParser.DeclareVarContext ctx)
 	{
+		//TODO: esta conversación de variables no deberia estár puesta aqui
 		String name = null;
 		switch(ctx.varType().type)
 		{
@@ -175,6 +189,9 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		case Integer:
 			name = "Integer";
 			break;					
+		case String:
+			name = "String";
+			break;
 		default:
 			name = ctx.varType().getText();
 			break;
@@ -318,6 +335,19 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		
 		return null;
 	}
+	
+	@Override
+	public Void visitDirectCode(FP4GParser.DirectCodeContext ctx)
+	{
+		String code = ctx.DIRECTCODE().getText();
+		code = code.substring(2,code.length()-1);
+		DirectCode dc = new DirectCode(code);
+		expr_stack.push(dc);
+		
+		return null;
+	}
+	
+	
 	@Override
 	public Void visitId(FP4GParser.IdContext ctx)
 	{

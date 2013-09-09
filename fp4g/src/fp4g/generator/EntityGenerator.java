@@ -126,7 +126,6 @@ public class EntityGenerator extends Generator {
 		{
 			String arrayImports[] = new String[]
 			{
-					"com.apollo.EntityBuilder",
 					"com.apollo.Entity",			
 					"com.apollo.World",
 					"com.apollo.Behavior",

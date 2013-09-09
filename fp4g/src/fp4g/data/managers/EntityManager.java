@@ -13,7 +13,7 @@ public class EntityManager extends Manager {
 	}
 
 	@Override
-	public void addADD(Add code) {
+	public void addAdd(Add code) {
 		// TODO Auto-generated method stub
 		
 	}
