@@ -230,9 +230,13 @@ public class EntityGenerator extends Generator {
 			{
 				imports.add(String.format("com.apollo.components.%s",addBhvr.name));
 			}
-			for(On on:entity.onMessages)
+			if(entity.onMessages.size()>0)
 			{
-				imports.add(String.format("com.apollo.messages.%sMessage",on.name));
+				imports.add("com.apollo.messages.MessageReceiver");
+				for(On on:entity.onMessages)
+				{
+					imports.add(String.format("com.apollo.messages.%sMessage",on.name));
+				}
 			}
 			Collections.sort(imports);
 			entityClazz.put("imports", imports);

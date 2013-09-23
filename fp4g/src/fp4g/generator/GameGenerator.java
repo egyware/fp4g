@@ -61,6 +61,7 @@ public class GameGenerator extends Generator {
 				"com.apollo.managers.graphics.SpriteLoader",
 				"com.badlogic.gdx.assets.AssetManager",
 				"com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver",
+				"com.badlogic.gdx.graphics.g2d.TextureRegion"
 			};
 			Arrays.sort(arrayImports);
 			Collections.addAll(imports, arrayImports);

@@ -8,6 +8,9 @@ import ${import};
 
 ${autodoc}
 public class ${class.name} extends Entity
+<#if messages??>
+implements MessageReceiver
+</#if>
 {
 	<#if behaviors??>
 	private final Bag<Behavior> behaviors;
@@ -50,7 +53,12 @@ public class ${class.name} extends Entity
 	{		
 		for (int i = 0, s = behaviors.size(); s > i; i++) {
 			behaviors.get(i).initialize();
-		}		
+		}
+		<#if messages??>
+		<#list messages as message>
+		addEventHandler(${message.name}Message.class, this);
+		</#list>
+		</#if>			
 	}
 	
 	protected void uninitialize()
@@ -76,6 +84,7 @@ public class ${class.name} extends Entity
 	}
 	
 	<#if messages??>
+	@Override
 	public void onMessage(Message message)
 	{
 		<#list messages as message>

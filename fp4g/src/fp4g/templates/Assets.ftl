@@ -28,6 +28,10 @@ public class Assets {
 	{
 		return assetManager.get(asset);
 	}
+	public static TextureRegion getTexture(String asset)
+	{
+		return assetManager.get(asset);
+	}
 	public static <T> void loadAsset(String asset, Class<T> clazz){
 		assetManager.load(asset, clazz);
 	}
