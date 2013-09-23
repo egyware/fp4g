@@ -53,11 +53,26 @@ public abstract class Define extends Code{
 	public abstract void addOn(On on);
 	
 	/**
+	 * Busca un evento ya agregado y definido
+	 * @param message Nombre del mensaje
+	 * @return regresa una instancia definida de On si es que existe, si no devuelve null
+	 */
+	public abstract On getOn(String message);
+	
+	
+	/**
 	 * Pregunta si está la definicion
 	 * @param name
 	 * @return
 	 */
 	public abstract boolean isDefined(ObjectType type,String name);
+	
+	/**
+	 * Pregunta si está la definicion
+	 * @param name
+	 * @return
+	 */
+	public abstract Define getDefine(ObjectType type,String name);
 	
 	/**
 	 * Establece una variable  
@@ -66,7 +81,7 @@ public abstract class Define extends Code{
 	 */
 	public final void set(String key, Object value)
 	{
-		map.put(name, value);
+		map.put(key, value);
 	}
 	
 	/**

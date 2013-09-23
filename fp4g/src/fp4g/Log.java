@@ -57,7 +57,9 @@ public class Log {
 //		BasedExcepted,
 		FunctionNotFound,
 		NotImplement,
+		MessageExpected,
 		UnknowError,
+		FilterMissing,
 		;
 		
 		private String message;
@@ -124,6 +126,38 @@ public class Log {
 		if(type instanceof ErrType)
 		{	
 			Error((ErrType) type,c.getLine(),null);				
+		}
+	}
+	
+	public static <T extends MessageType> void Show(T type,int line)
+	{
+		if(type instanceof WarnType)
+		{			
+			Warning((WarnType) type,line,null);				
+		}else
+		if(type instanceof InfoType)
+		{	
+			Info((InfoType) type,line,null);	
+		}else
+		if(type instanceof ErrType)
+		{	
+			Error((ErrType) type,line,null);				
+		}
+	}
+	
+	public static <T extends MessageType> void Show(T type,int line,String more)
+	{
+		if(type instanceof WarnType)
+		{			
+			Warning((WarnType) type,line,more);				
+		}else
+		if(type instanceof InfoType)
+		{	
+			Info((InfoType) type,line,more);	
+		}else
+		if(type instanceof ErrType)
+		{	
+			Error((ErrType) type,line,more);				
 		}
 	}
 	

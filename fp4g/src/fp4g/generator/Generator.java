@@ -1,12 +1,16 @@
 package fp4g.generator;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
+import java.util.HashMap;
 import java.util.Map;
 
 import fp4g.data.Code;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.Version;
@@ -81,5 +85,16 @@ public abstract class Generator {
 		uncap_string.append(string.substring(1));
 		return uncap_string.toString();
 	}
-	protected abstract void generateData(Map<String, Object> options,Configuration cfg, Code gameData, File path) throws IOException, TemplateException ;	
+	protected abstract void generateData(Map<String, Object> options,Configuration cfg, Code gameData, File path) throws IOException, TemplateException ;
+
+	public static void createFile(
+			String name, 
+			Template template,
+			HashMap<String, Object> buildRoot) throws IOException, TemplateException
+	{		
+		File file = new File(packageDir,name);
+		Writer out = new FileWriter(file);		
+		template.process(buildRoot, out);  
+		System.out.println(String.format("Generado: %s/%s",packageNameDir,name));		
+	}	
 }

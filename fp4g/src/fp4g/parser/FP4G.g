@@ -97,7 +97,7 @@ returns
 		:
 		ON 
 		ID {$messageName = $ID.text; }
-		(DOUBLEDOT onFilters)?
+		(DOUBLEDOT filters = onFilters)?
 		ABRE_COR CIERRA_COR 
 		; 
 //filtros On:pressA pressB (parsea la disyuncion pressA or pressB)
@@ -140,7 +140,8 @@ exprList: expr (COMA expr)*;
 nameList: declareVar ( COMA declareVar)*;
 
 // sin operaciones booleanes por ahora
-expr    :  NOT   op=expr  				 #notExpr
+expr  
+		 :  NOT   op=expr  				 #notExpr
 		 | MINUS op=expr 				 #minusExpr
 		 | left=expr MULTIPLY right=expr #multExpr
 		 | left=expr DIVIDE   right=expr #divExpr
@@ -150,6 +151,7 @@ expr    :  NOT   op=expr  				 #notExpr
 		 | functionName=ID 
 		   ABRE_PAR exprList CIERRA_PAR  #functionCallExpr
 		 
+		 | array           #arrayExpr
 		 | INT_LITERAL     #intLiteral
          | DECIMAL_LITERAL #decimalLiteral
          | STRING_LITERAL  #stringLiteral
@@ -159,10 +161,19 @@ expr    :  NOT   op=expr  				 #notExpr
 		 
 array    :
 		 ABRE_LLAV
-		 ID equal expr
-		 (COMA ID equal expr)*
+		 parArray  
+		 (COMA parArray)*
 		 CIERRA_LLAV 	
    		 ;
+   		 
+parArray 
+returns
+[
+	String key	
+]
+		 :
+		 ID { $key = $ID.text; } EQUAL expr
+		 ;
 
 declareVar
 		: varType ID;

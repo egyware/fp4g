@@ -17,6 +17,22 @@ import fp4g.data.expresion.VarId;
  *
  */
 public abstract class ExpresionGenerator {
+	public static enum CompareExpresion
+	{
+		equals("=="),
+		lessThan("<"),
+		greaterThan(">"),
+		lessEqualsThan("<="),
+		greaterEqualsThan(">=")
+		;
+		
+		final String operator;
+		private CompareExpresion(String operator)
+		{
+			this.operator = operator;
+		}
+	}
+	
 	private static final  Map<Class<?>, ExpresionGenerator> generator = new HashMap<>(6);
 	static
 	{

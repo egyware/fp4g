@@ -10,5 +10,5 @@ public final class ContactMessage implements Message{
 	public Fixture otherFixture;
 	public Fixture ownFixture;
 	public Contact contact;
-	public boolean begin;	
+	public boolean begin;
 }

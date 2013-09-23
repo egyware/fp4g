@@ -33,10 +33,12 @@ public class Game extends Define  {
 	public List<Goal> goals;	
 	
 	//defines mapas
-	public Map<String,Manager> managersByName;
-	public Map<String,Entity> entitiesByName;
 	public Map<String,Behavior> behaviorsByName;
+	public Map<String,Manager> managersByName;	
+	public Map<String,Entity> entitiesByName;	
+	public Map<String,Message> messageByName;
 	public Map<String,Goal> goalsByName;
+	
 	//public Map<String,GameState> statesByName;
 	
 	//adds? como serán, aun no los he definido todavia
@@ -54,6 +56,7 @@ public class Game extends Define  {
 		entitiesByName = new HashMap<>();
 		behaviorsByName = new HashMap<>();
 		goalsByName     = new HashMap<>();
+		messageByName = new HashMap<>();
 		//statesByName = new HashMap<>();
 		
 		addStates = new LinkedList<>();
@@ -199,8 +202,11 @@ public class Game extends Define  {
 				goalsByName.put(define.getName(), (Goal) define);
 				break;
 			case STATE:
-				states.add((GameState) define);
+				states.add((GameState) define);			
 				//statesByName.put(define.getName(), (GameState) define);
+				break;
+			case MESSAGE:
+				messageByName.put(define.getName(),(Message)define);
 				break;
 			default:
 				break;		
@@ -225,11 +231,38 @@ public class Game extends Define  {
 			return goalsByName.containsValue(name);			
 		case MANAGER:
 			return managersByName.containsValue(name);
+		case MESSAGE:
+			return messageByName.containsValue(name);
 		//case STATE:
 			//return statesByName.containsValue(name);
 		default:			
 			return false;		
 		}		
+	}
+
+	@Override
+	public Define getDefine(ObjectType type, String name) {
+		switch(type)
+		{		
+		case ENTITY:
+			return entitiesByName.get(name);
+		case GOAL:
+			return goalsByName.get(name);			
+		case MANAGER:
+			return managersByName.get(name);
+		case MESSAGE:
+			return messageByName.get(name);
+		//case STATE:
+			//return statesByName.containsValue(name);
+		default:			
+			return null;
+		}		
+	}
+
+	@Override
+	public On getOn(String message) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

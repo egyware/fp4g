@@ -37,24 +37,43 @@ public class GameGenerator extends Generator {
 		root.put("height", game.height);
 		//agregar imports!
 		
-		List<String> imports = new LinkedList<>();
-		String arrayImports[] = new String[]
 		{
-				"com.apollo.managers.GameManager",
-				"com.apollo.managers.graphics.Sprite",
-				"com.apollo.managers.graphics.SpriteLoader",
-				"com.badlogic.gdx.assets.AssetManager",
-				"com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver",	
-		};
-		Arrays.sort(arrayImports);
-		Collections.addAll(imports, arrayImports);
-		clazz.put("imports", imports);
+			List<String> imports = new LinkedList<>();
+			String arrayImports[] = new String[]
+			{
+					"com.apollo.managers.GameManager",					
+			};
+			//Arrays.sort(arrayImports);
+			Collections.addAll(imports, arrayImports);
+			clazz.put("imports", imports);
+		}
 		
 		// TODO falta ${start_state}
 		
-		Writer out = new FileWriter(new File(packageDir,String.format("%s.java",game.name)));
-		temp.process(root, out);  
-		System.out.println(String.format("Generado: %s/%s.java",packageNameDir, game.name));
+		Generator.createFile(String.format("%s.java",game.name), temp,root);
+		
+		//generar Assets...
+		{
+			List<String> imports = new LinkedList<>();
+			String arrayImports[] = new String[]
+			{				
+				"com.apollo.managers.graphics.Sprite",
+				"com.apollo.managers.graphics.SpriteLoader",
+				"com.badlogic.gdx.assets.AssetManager",
+				"com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver",
+			};
+			Arrays.sort(arrayImports);
+			Collections.addAll(imports, arrayImports);
+			HashMap<String,Object> assetsRoot = new HashMap<>();
+			HashMap<String,Object> assetsClazz = new HashMap<>();
+			assetsClazz.put("package", packageName);
+			assetsClazz.put("imports", imports);
+			assetsRoot.put("class",assetsClazz);
+			assetsRoot.put("autodoc", autodoc);			
+			
+			Generator.createFile("Assets.java",cfg.getTemplate("Assets.ftl"), assetsRoot);
+		}
+		
 		
 		for(Entity entity: game.entities)
 		{

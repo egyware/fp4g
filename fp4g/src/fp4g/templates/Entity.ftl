@@ -10,7 +10,8 @@ ${autodoc}
 public class ${class.name} extends Entity
 {
 	<#if behaviors??>
-	private final Bag<Behavior> behaviors;			
+	private final Bag<Behavior> behaviors;
+	private final Map<Class<? extends Behavior>,Behavior> behaviorsByType;		
 	<#list behaviors as behavior>
 	public ${behavior.name} ${behavior.varName};				 		
 	</#list>
@@ -24,6 +25,7 @@ public class ${class.name} extends Entity
 		super(world);
 		<#if behaviors??>
 		behaviors = new Bag<Behavior>(${behaviors?size});
+		behaviorsByType = new HashMap<Class<? extends Behavior>,Behavior>(${behaviors?size},1);
 		</#if>		
 	}
 	
@@ -34,19 +36,7 @@ public class ${class.name} extends Entity
 
 	public <T extends Behavior> T getBehavior(Class<T> type)
 	{	
-		//WARNING: If you change something in this code, the results can be unexpected 
-		int hash = type.getSimpleName().hashCode();
-		switch(hash)
-		{
-		<#if behaviors??>		
-		<#list behaviors as behavior>
-			case ${behavior.hash?string.computer}:
-				return type.cast(${behavior.varName});
-		</#list>
-		</#if>
-			default:
-				return null;
-		}	
+		return type.cast(behaviorsByType.get(type));
 	}
 
 	public void update(float delta)
@@ -78,9 +68,42 @@ public class ${class.name} extends Entity
 		</#list>				
 		<#list behaviors as behavior>
 		behaviors.add(${behavior.varName});						 		
-		</#list>		
+		</#list>
+		<#list behaviors as behavior>		
+		behaviorsByType.put(${behavior.varName}.getType(),${behavior.varName});
+		</#list>
 		</#if>
 	}
+	
+	<#if messages??>
+	public void onMessage(Message message)
+	{
+		<#list messages as message>
+		if(message instanceof ${message.name})
+		{
+			onMessage((${message.name}Message)message);			
+		}
+		<#if message_has_next>
+		else
+		</#if>		
+		</#list>		
+	}
+	<#list messages as message>
+	public void onMessage(${message.name}Message message)
+	{		
+		<#list message.sources as source>
+		<#if source.filter??>
+		if(${source.filter})
+		{
+			${source.code}
+		}		
+		<#else>
+		${source.code}
+		</#if>
+		</#list>
+	}
+	</#list>
+	</#if>
 	
 				
 }

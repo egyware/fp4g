@@ -50,5 +50,17 @@ public class Message extends Define {
 	@Override
 	public boolean isDefined(ObjectType type, String name) {		
 		return type == ObjectType.VAR &&  isSet(name);
+	}
+
+	@Override
+	public Define getDefine(ObjectType type, String name) {
+		//no hay nada
+		return null;
+	}
+
+	@Override
+	public On getOn(String message) {
+		//no hay nada
+		return null;
 	}	
 }

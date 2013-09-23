@@ -36,4 +36,16 @@ public class PhysicsManager extends Manager {
 		return false;
 	}
 
+	@Override
+	public Define getDefine(ObjectType type, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public On getOn(String message) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

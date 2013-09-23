@@ -79,6 +79,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitDeclareVar(@NotNull FP4GParser.DeclareVarContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#arrayExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayExpr(@NotNull FP4GParser.ArrayExprContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#defineValues}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -177,18 +184,18 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitDefine(@NotNull FP4GParser.DefineContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#gameValues}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGameValues(@NotNull FP4GParser.GameValuesContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link FP4GParser#directCode}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitDirectCode(@NotNull FP4GParser.DirectCodeContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#gameValues}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGameValues(@NotNull FP4GParser.GameValuesContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#game}.
@@ -226,6 +233,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitProgram(@NotNull FP4GParser.ProgramContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#parArray}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParArray(@NotNull FP4GParser.ParArrayContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#nameList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -238,4 +252,11 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFilter(@NotNull FP4GParser.FilterContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#array}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArray(@NotNull FP4GParser.ArrayContext ctx);
 }

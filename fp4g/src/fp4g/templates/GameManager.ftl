@@ -11,16 +11,11 @@ public class ${class.name} extends GameManager {
 	public static final int Width  = ${width};
 	public static final int Height = ${height};
 
-	private static AssetManager assetManager;
-	private InternalFileHandleResolver fileResolver;
-
 	@Override
 	public void create()
 	{
 		super.create();
-		fileResolver = new InternalFileHandleResolver();
-		assetManager = new AssetManager();
-		assetManager.setLoader(Sprite.class,new SpriteLoader(fileResolver));		
+		Assets.initialize();	
 	}
 	
 	@Override 
@@ -39,19 +34,5 @@ public class ${class.name} extends GameManager {
 	public void dispose()
 	{
 		super.dispose();
-	}
-    
-	//funciones de utilidad  
-	public static <T> T getAsset(String asset) {
-		return assetManager.get(asset);
-	}
-	public static <T> void loadAsset(String asset, Class<T> clazz){
-		assetManager.load(asset, clazz);
-	}
-	public static void unloadAsset(String asset){
-		assetManager.unload(asset);
-	}
-	public static void loadAssets() { 
-		assetManager.finishLoading();
 	}
 }

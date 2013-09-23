@@ -3,20 +3,25 @@
  */
 package fp4g.parser;
 
+import java.util.List;
 import java.util.Stack;
 
 import static fp4g.Log.Show;
+import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.NameList;
+import fp4g.data.ObjectType;
 import fp4g.data.On;
+import fp4g.data.On.Source;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
+import fp4g.data.expresion.ArrayExpr;
 import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
@@ -34,6 +39,7 @@ import fp4g.data.expresion.Literal;
 public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	private Game game;
 	private Stack<Define> current;
+	private Stack<ArrayExpr> array_stack;
 	private Stack<Expresion> expr_stack;
 	private ExprList exprList;
 	private NameList nameList;
@@ -42,6 +48,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		this.game = game;
 		current = new Stack<>();
 		expr_stack = new Stack<>();
+		array_stack = new Stack<>();
 	}
 	
 	@Override 
@@ -132,13 +139,40 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	public Void visitOn(FP4GParser.OnContext ctx)
 	{
 		Define parent = current.peek();
-		//en vez de usar el nombre, deberia buscar una clase del tipo Mensaje!!!
-		On on = new On(ctx.messageName);
 		
+		//en vez de solo crearlo, tengo que buscarlo... y si no existe crearlo.
+		On on = parent.getOn(ctx.messageName);
+		if(on == null)
+		{		
+			//en vez de usar el nombre, deberia buscar una clase del tipo Mensaje!!!
+			Define message = parent.getDefine(ObjectType.MESSAGE,ctx.messageName);
+			if(message == null)
+			{
+				Log.Show(ErrType.MessageExpected,ctx.start.getLine(),ctx.messageName);
+				on = new On(ctx.messageName);
+			}
+			else
+			{
+				//ahora lo creo...
+				on = new On(message);
+			}
+			//solo si es nuevito, se agrega
+			parent.addOn(on);
+		}
 		
-		parent.addOn(on);
-		
-		return super.visitOn(ctx);		
+		super.visitOn(ctx);
+		//al evento on, se crea un nuevo codigo y se le añaden los filtros, si es que existen.
+		//falta solo agregarle el codigo :)
+		Source source = on.addSource();
+		if(ctx.filters != null)
+		{			
+			List<List<String>> filtros = ctx.filters.or;
+			for(List<String> filtro:filtros)
+			{
+				source.addFilter(filtro);
+			}
+		}
+		return null;		
 	}
 	
 	@Override
@@ -347,6 +381,32 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		return null;
 	}
 	
+	@Override
+	public Void visitArray(FP4GParser.ArrayContext ctx)
+	{
+		ArrayExpr array = new ArrayExpr();
+		array_stack.push(array);
+		super.visitArray(ctx);
+		array_stack.pop();
+		expr_stack.push(array);
+		return null;
+	}
+	
+	@Override
+	public Void visitParArray(FP4GParser.ParArrayContext ctx)
+	{
+		String key = ctx.key;
+		Stack<Expresion> expr_stack = this.expr_stack;		
+		this.expr_stack = new Stack<>();
+		super.visitParArray(ctx);
+		Expresion expr = this.expr_stack.pop();
+		this.expr_stack = expr_stack;
+		
+		ArrayExpr array = array_stack.peek();
+		array.set(key, expr);
+		
+		return null;		
+	}
 	
 	@Override
 	public Void visitId(FP4GParser.IdContext ctx)
