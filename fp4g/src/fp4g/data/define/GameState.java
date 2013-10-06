@@ -8,22 +8,17 @@ import java.util.List;
 import fp4g.Log.ErrType;
 import fp4g.data.Add;
 import fp4g.data.Define;
-import fp4g.data.ObjectType;
+import fp4g.data.DefineType;
 import fp4g.data.On;
 
 public class GameState extends Define{
-	public List<Add> addEntities;
-	public List<Add> addManagers;
-
+	
 	public GameState(String name,Define parent) {
-		super(ObjectType.STATE, name,parent);
-		
-		addEntities = new LinkedList<>();
-		addManagers = new LinkedList<>();
+		super(DefineType.STATE, name,parent);
 	}
 	
 	@Override
-	public void addAdd(Add code) {
+	public void setAdd(Add code) {
 		switch(code.getType())
 		{
 		case ASSET:		
@@ -33,14 +28,14 @@ public class GameState extends Define{
 			Show(ErrType.NotExpectedType,code);
 			break;
 		case ENTITY:
-			addEntities.add(code);
+			super.setAdd(code);
 			break;
 		case GOAL:
 			//TODO: No implementado aún
 			throw new RuntimeException("No implementado");
 			//break;
 		case MANAGER:
-			addManagers.add(code);
+			super.setAdd(code);
 			break;
 		default:
 			Show(ErrType.UnknowError,code);
@@ -49,68 +44,12 @@ public class GameState extends Define{
 	}
 
 	@Override
-	public void addDefine(Define define) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("No implementado");
+	public void setDefine(Define define) {
+		Show(ErrType.NotExpectedDefine,define);
 	}
 
 	@Override
-	public void addOn(On on) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("No implementado");
+	public void setOn(On on) {
+		Show(ErrType.NotExpectedOn,on);
 	}
-
-	@Override
-	public boolean isDefined(ObjectType type, String name) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Define getDefine(ObjectType type, String name) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("No implementado");		
-	}
-
-	@Override
-	public On getOn(String message) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-//	public static class Custom extends GameState
-//	{
-//
-//		public Custom(Game game, String name) {
-//			super(game, name);
-//		}
-//		
-//		
-//	}
-//	public static class Generated extends GameState
-//	{
-//		
-//		public Generated(Game game, String name) {
-//			super(game, name);
-//		}
-//
-//		public List<Entity> entities;
-//		public List<Behavior> behaviors;
-//		public List<Goal> goals;
-//		public List<Event> events;
-//		public List<Manager> systems;
-//		public List<Var<?>> variables;
-//		public List<Param> parameters;
-//		
-//		//aceso rapido a los datos
-//		public Map<String,Entity> entitiesByName;
-//		public Map<String,Behavior> behaviorsByName;
-//		public Map<String,Goal> goalsByName;
-//		public Map<String,Event> eventsByName;
-//		public Map<String,Manager> systemsByName;
-//		public Map<String,Var<?>> variablesByName;
-//		
-//		//acceso a todos los datos
-//		public IScope scope;
-//	}
 }

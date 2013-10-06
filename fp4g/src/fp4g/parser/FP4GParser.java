@@ -435,7 +435,7 @@ public class FP4GParser extends Parser {
 	}
 
 	public static class AddContext extends ParserRuleContext {
-		public ObjectType type = null;
+		public DefineType type = null;
 		public String addName = null;
 		public String varName = null;
 		public Token ID;
@@ -489,31 +489,31 @@ public class FP4GParser extends Parser {
 			case MANAGER:
 				{
 				setState(94); match(MANAGER);
-				 ((AddContext)_localctx).type =  ObjectType.MANAGER;  
+				 ((AddContext)_localctx).type =  DefineType.MANAGER;  
 				}
 				break;
 			case STATE:
 				{
 				setState(96); match(STATE);
-				 ((AddContext)_localctx).type =  ObjectType.STATE;    
+				 ((AddContext)_localctx).type =  DefineType.STATE;    
 				}
 				break;
 			case BEHAVIOR:
 				{
 				setState(98); match(BEHAVIOR);
-				 ((AddContext)_localctx).type =  ObjectType.BEHAVIOR; 
+				 ((AddContext)_localctx).type =  DefineType.BEHAVIOR; 
 				}
 				break;
 			case ENTITY:
 				{
 				setState(100); match(ENTITY);
-				 ((AddContext)_localctx).type =  ObjectType.ENTITY;  
+				 ((AddContext)_localctx).type =  DefineType.ENTITY;  
 				}
 				break;
 			case GOAL:
 				{
 				setState(102); match(GOAL);
-				 ((AddContext)_localctx).type =  ObjectType.GOAL;  
+				 ((AddContext)_localctx).type =  DefineType.GOAL;  
 				}
 				break;
 			default:
@@ -545,7 +545,7 @@ public class FP4GParser extends Parser {
 	}
 
 	public static class DefineContext extends ParserRuleContext {
-		public ObjectType type = null;
+		public DefineType type = null;
 		public String defName = null;
 		public Token ID;
 		public TerminalNode GOAL() { return getToken(FP4GParser.GOAL, 0); }
@@ -590,37 +590,37 @@ public class FP4GParser extends Parser {
 			case MANAGER:
 				{
 				setState(115); match(MANAGER);
-				 ((DefineContext)_localctx).type =  ObjectType.MANAGER; 
+				 ((DefineContext)_localctx).type =  DefineType.MANAGER; 
 				}
 				break;
 			case STATE:
 				{
 				setState(117); match(STATE);
-				 ((DefineContext)_localctx).type =  ObjectType.STATE;   
+				 ((DefineContext)_localctx).type =  DefineType.STATE;   
 				}
 				break;
 			case BEHAVIOR:
 				{
 				setState(119); match(BEHAVIOR);
-				 ((DefineContext)_localctx).type =  ObjectType.BEHAVIOR;
+				 ((DefineContext)_localctx).type =  DefineType.BEHAVIOR;
 				}
 				break;
 			case ENTITY:
 				{
 				setState(121); match(ENTITY);
-				 ((DefineContext)_localctx).type =  ObjectType.ENTITY;  
+				 ((DefineContext)_localctx).type =  DefineType.ENTITY;  
 				}
 				break;
 			case GOAL:
 				{
 				setState(123); match(GOAL);
-				 ((DefineContext)_localctx).type =  ObjectType.GOAL;    
+				 ((DefineContext)_localctx).type =  DefineType.GOAL;    
 				}
 				break;
 			case MESSAGE:
 				{
 				setState(125); match(MESSAGE);
-				 ((DefineContext)_localctx).type =  ObjectType.MESSAGE; 
+				 ((DefineContext)_localctx).type =  DefineType.MESSAGE; 
 				}
 				break;
 			default:

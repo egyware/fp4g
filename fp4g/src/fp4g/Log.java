@@ -59,7 +59,7 @@ public class Log {
 		NotImplement,
 		MessageExpected,
 		UnknowError,
-		FilterMissing,
+		FilterMissing, NotExpectedDefine, NotExpectedOn, NotExpectedAdd,
 		;
 		
 		private String message;

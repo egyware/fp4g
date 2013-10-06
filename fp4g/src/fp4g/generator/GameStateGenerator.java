@@ -1,10 +1,9 @@
 package fp4g.generator;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,6 +12,7 @@ import java.util.Map;
 
 import fp4g.data.Add;
 import fp4g.data.Code;
+import fp4g.data.DefineType;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
@@ -44,7 +44,7 @@ public class GameStateGenerator extends Generator {
 		root.put("debug", isDebug);
 		
 		List<Map<String, Object>> managers = new LinkedList<>();
-		for(Add manager:state.addManagers)
+		for(Add manager:state.getAdd(DefineType.MANAGER))
 		{
 			Map<String,Object> mngr = new HashMap<>(2);
 			mngr.put("name", manager.name);
@@ -66,7 +66,8 @@ public class GameStateGenerator extends Generator {
 		
 		//agregamos todos las entidades definidas en el game
 		List<String> entityBuilders = new LinkedList<>();
-		for(Entity entity:game.entities)
+		final Collection<Entity> state_entities = game.getDefines(DefineType.ENTITY);
+		for(Entity entity:state_entities)
 		{
 			entityBuilders.add(entity.name);
 			//agregar imports
@@ -76,7 +77,8 @@ public class GameStateGenerator extends Generator {
 		root.put("entityBuilders", entityBuilders);
 		
 		List<Map<String, Object>> entities = new LinkedList<>();
-		for(Add entity:state.addEntities)
+		final List<Add> state_addentities = state.getAdd(DefineType.ENTITY);
+		for(Add entity:state_addentities)
 		{
 			Map<String,Object> mngr = new HashMap<>(2);
 			mngr.put("name", entity.name);
@@ -103,17 +105,13 @@ public class GameStateGenerator extends Generator {
 		};
 		Arrays.sort(arrayImports);
 		Collections.addAll(imports, arrayImports);
-		if(state.addEntities.size() > 0)
+		if(state_addentities.size() > 0)
 		{
 			imports.add("com.apollo.Entity");
 		}
 		Collections.sort(imports);
 		clazz.put("imports", imports);		
 		
-		
-		Writer out = new FileWriter(new File(packageDir,String.format("%s.java",state.name)));
-		temp.process(root, out);  
-		System.out.println(String.format("Generado: %s/%s.java",packageNameDir, state.name));
-		
+		Generator.createFile(String.format("%s.java",state.name), temp, root);
 	}
 }

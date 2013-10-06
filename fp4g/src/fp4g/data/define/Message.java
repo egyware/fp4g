@@ -7,7 +7,7 @@ import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.data.Add;
 import fp4g.data.Define;
-import fp4g.data.ObjectType;
+import fp4g.data.DefineType;
 import fp4g.data.On;
 
 /**
@@ -17,14 +17,14 @@ import fp4g.data.On;
 public class Message extends Define {
 
 	public Message(String name,Define parent) {
-		super(ObjectType.MESSAGE, name,parent);		
+		super(DefineType.MESSAGE, name,parent);		
 	}
 
 	/* (non-Javadoc)
 	 * @see fp4g.data.Define#addADD(fp4g.data.Add)
 	 */
 	@Override
-	public void addAdd(Add add) {
+	public void setAdd(Add add) {
 		Log.Show(ErrType.NotExpectedType,add);
 	}
 
@@ -32,7 +32,7 @@ public class Message extends Define {
 	 * @see fp4g.data.Define#addDefine(fp4g.data.Define)
 	 */
 	@Override
-	public void addDefine(Define define) {
+	public void setDefine(Define define) {
 		Log.Show(ErrType.NotExpectedType,define);
 	}
 
@@ -40,27 +40,7 @@ public class Message extends Define {
 	 * @see fp4g.data.Define#addOn(fp4g.data.On)
 	 */
 	@Override
-	public void addOn(On on) {
+	public void setOn(On on) {
 		Log.Show(ErrType.NotExpectedType,on);
 	}
-
-	/* (non-Javadoc)
-	 * @see fp4g.data.Define#isDefined(fp4g.data.ObjectType, java.lang.String)
-	 */
-	@Override
-	public boolean isDefined(ObjectType type, String name) {		
-		return type == ObjectType.VAR &&  isSet(name);
-	}
-
-	@Override
-	public Define getDefine(ObjectType type, String name) {
-		//no hay nada
-		return null;
-	}
-
-	@Override
-	public On getOn(String message) {
-		//no hay nada
-		return null;
-	}	
 }

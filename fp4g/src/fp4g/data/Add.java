@@ -8,16 +8,16 @@ package fp4g.data;
  *
  */
 public class Add extends Code{		
-	private ObjectType type;
+	private DefineType type;
 	public String name;	
 	public String varName;
 	public ExprList params;
-	public Add(ObjectType type,String name)
+	public Add(DefineType type,String name)
 	{
 		this(type,name,null);		
 	}		
 		
-	public Add(ObjectType type, String name, String varName) {
+	public Add(DefineType type, String name, String varName) {
 		this.type = type;
 		this.name = name;
 		this.varName = varName;
@@ -28,7 +28,7 @@ public class Add extends Code{
 		this.params = params;
 	}
 
-	public ObjectType getType()
+	public DefineType getType()
 	{
 		return type;
 	}

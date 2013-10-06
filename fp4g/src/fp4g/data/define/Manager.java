@@ -1,4 +1,7 @@
-package fp4g.data;
+package fp4g.data.define;
+
+import fp4g.data.Define;
+import fp4g.data.DefineType;
 
 
 /**
@@ -10,7 +13,7 @@ package fp4g.data;
 public abstract class Manager extends Define {
 	
 	public Manager(String name) {
-		super(ObjectType.MANAGER, name);		 
+		super(DefineType.MANAGER, name);		 
 	}
 
 	public String name;	

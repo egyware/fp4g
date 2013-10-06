@@ -1,6 +1,5 @@
 package fp4g.data;
 
-import java.util.List;
 
 /**
  * Encapsula un comportamiento

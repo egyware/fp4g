@@ -11,25 +11,17 @@ import fp4g.Log.ErrType;
 import fp4g.Log.WarnType;
 import fp4g.data.Add;
 import fp4g.data.Define;
-import fp4g.data.ObjectType;
+import fp4g.data.DefineType;
 import fp4g.data.On;
 
 public class Entity extends Define{	
-	public final List<Add> addBehaviors;
-	public final List<On> onMessages;
-	public final Map<String,On> onMessagesByName;
-	
 	
 	public Entity(String name,Define parent) {
-		super(ObjectType.ENTITY, name,parent);
-		
-		addBehaviors = new LinkedList<>();
-		onMessages = new LinkedList<>();
-		onMessagesByName = new HashMap<>();
+		super(DefineType.ENTITY, name,parent);
 	}
 	
 	@Override
-	public void addAdd(Add code) {
+	public void setAdd(Add code) {
 		switch(code.getType())
 		{
 		case ASSET:			
@@ -41,62 +33,26 @@ public class Entity extends Define{
 			Show(ErrType.NotExpectedType,code);
 			break;
 		case BEHAVIOR:	
-			if(!isDefined(ObjectType.BEHAVIOR,code.name))
+			if(!isSetDefine(DefineType.BEHAVIOR,code.name))
 			{
 				Show(WarnType.MissingDefineAdd,code);
 			}
-			addBehaviors.add(code);
+			super.setAdd(code);
 			break;			
 		default:
+			Show(ErrType.UnknowError,code);
 			break;		 
 		}		
 	}
 
-
 	@Override
-	public void addDefine(Define define) {
-		// TODO Auto-generated method stub
-		
+	public void setDefine(Define define) {
+		Show(ErrType.NotExpectedDefine,define);		
 	}
 
 
 	@Override
-	public void addOn(On on) {
-		onMessages.add(on);
-		onMessagesByName.put(on.name,on);
-	}
-	
-	@Override
-	public On getOn(String name)
-	{		
-		return onMessagesByName.get(name);
-	}
-	
-
-	@Override
-	public boolean isDefined(ObjectType type,String name) {
-		if(parent != null)
-		{
-			//preguntamos más arriba, debido que Entity no acepta definiciones ;)
-			return parent.isDefined(type,name);
-		}
-		else
-		{
-			return false;
-		}				
-	}
-
-	@Override
-	public Define getDefine(ObjectType type, String name) {
-		if(parent != null)
-		{
-			//preguntamos más arriba, debido que Entity no acepta definiciones ;)
-			return parent.getDefine(type,name);
-		}
-		else
-		{
-			return null;
-		}			
-	}
-		
+	public void setOn(On on) {
+		super.setOn(on);
+	}		
 }

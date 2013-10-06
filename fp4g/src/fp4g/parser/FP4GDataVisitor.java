@@ -14,7 +14,7 @@ import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.NameList;
-import fp4g.data.ObjectType;
+import fp4g.data.DefineType;
 import fp4g.data.On;
 import fp4g.data.On.Source;
 import fp4g.data.define.Entity;
@@ -120,7 +120,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		  	break;
 		 }
 		define.setLine(define_ctx.getStart().getLine());
-		parent.addDefine(define);
+		parent.setDefine(define);
 				  
 		current.push(define);		
 		super.visitDefineValues(ctx);
@@ -145,7 +145,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		if(on == null)
 		{		
 			//en vez de usar el nombre, deberia buscar una clase del tipo Mensaje!!!
-			Define message = parent.getDefine(ObjectType.MESSAGE,ctx.messageName);
+			Define message = parent.getDefine(DefineType.MESSAGE,ctx.messageName);
 			if(message == null)
 			{
 				Log.Show(ErrType.MessageExpected,ctx.start.getLine(),ctx.messageName);
@@ -157,7 +157,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 				on = new On(message);
 			}
 			//solo si es nuevito, se agrega
-			parent.addOn(on);
+			parent.setOn(on);
 		}
 		
 		super.visitOn(ctx);
@@ -189,7 +189,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 			exprList = null;
 		}		
 		
-		parent.addAdd(add);		
+		parent.setAdd(add);		
 		
 		return null; 		
 	}

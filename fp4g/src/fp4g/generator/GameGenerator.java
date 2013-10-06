@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import fp4g.data.Code;
+import fp4g.data.DefineType;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
@@ -76,11 +78,13 @@ public class GameGenerator extends Generator {
 		}
 		
 		
-		for(Entity entity: game.entities)
+		final Collection<Entity> game_entities = game.getDefines(DefineType.ENTITY);
+		for(Entity entity: game_entities)
 		{
 			Generator.generate(options, entity, path);
 		}
-		for(GameState state: game.states)
+		final Collection<GameState> game_states = game.getDefines(DefineType.STATE);
+		for(GameState state: game_states)
 		{
 			Generator.generate(options, state, path);
 		}		

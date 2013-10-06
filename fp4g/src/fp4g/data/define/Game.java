@@ -1,20 +1,11 @@
 package fp4g.data.define;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import fp4g.data.Add;
-import fp4g.data.Behavior;
-import fp4g.data.Define;
-import fp4g.data.Manager;
-import fp4g.data.ObjectType;
-import fp4g.data.On;
 import static fp4g.Log.Show;
-import static fp4g.Log.ErrType;
-import static fp4g.Log.WarnType;
-import static fp4g.Log.InfoType;
+import fp4g.Log.ErrType;
+import fp4g.data.Add;
+import fp4g.data.Define;
+import fp4g.data.DefineType;
+import fp4g.data.On;
 /**
  * Esta clase contendrá todos los datos necesarios para construir un juego
  * @author Edgardo
@@ -25,42 +16,9 @@ public class Game extends Define  {
 	public int height = 480;
 	public boolean debug = false;
 	
-	//datos que contiene un juego, todo esto es visto de manera global
-
-	//defines listas
-	public List<GameState> states;
-	public List<Entity> entities;	
-	public List<Goal> goals;	
-	
-	//defines mapas
-	public Map<String,Behavior> behaviorsByName;
-	public Map<String,Manager> managersByName;	
-	public Map<String,Entity> entitiesByName;	
-	public Map<String,Message> messageByName;
-	public Map<String,Goal> goalsByName;
-	
-	//public Map<String,GameState> statesByName;
-	
-	//adds? como serán, aun no los he definido todavia
-	public List<Add> addStates; //solo se aceptan states y goals!
-	public List<Add> addGoals; 
-	
 	public Game()
 	{
-		super(ObjectType.GAME,"game");
-		states = new LinkedList<>();
-		entities = new LinkedList<>();		
-		goals = new LinkedList<>();	
-		
-		managersByName = new HashMap<>();		
-		entitiesByName = new HashMap<>();
-		behaviorsByName = new HashMap<>();
-		goalsByName     = new HashMap<>();
-		messageByName = new HashMap<>();
-		//statesByName = new HashMap<>();
-		
-		addStates = new LinkedList<>();
-		addGoals = new LinkedList<>();
+		super(DefineType.GAME,"game");	
 	}
 	
 //	/**
@@ -162,7 +120,7 @@ public class Game extends Define  {
 //	}
 
 	@Override
-	public void addAdd(Add code) {
+	public void setAdd(Add code) {
 		switch(code.getType())
 		{	
 			case MANAGER:
@@ -172,19 +130,19 @@ public class Game extends Define  {
 				Show(ErrType.NotExpectedType,code);
 				break;
 			case GOAL:
-				addGoals.add(code);
+				super.setAdd(code);
 				break;
 			case STATE:
-				addStates.add(code);
+				super.setAdd(code);
 				break;
 			default:
+				Show(ErrType.UnknowError,code);
 				break;		
-		}
-		//System.out.println(code.name);
+		}		
 	}
 
 	@Override
-	public void addDefine(Define define) {
+	public void setDefine(Define define) {
 		switch(define.getType())
 		{
 			case GAME:
@@ -194,77 +152,25 @@ public class Game extends Define  {
 				Show(ErrType.NotExpectedType,define);
 				break;			
 			case ENTITY:
-				entities.add((Entity) define);
-				entitiesByName.put(define.getName(), (Entity) define);
+				super.setDefine(define);				
 				break;			
 			case GOAL:
-				goals.add((Goal) define);
-				goalsByName.put(define.getName(), (Goal) define);
+				super.setDefine(define);
 				break;
 			case STATE:
-				states.add((GameState) define);			
-				//statesByName.put(define.getName(), (GameState) define);
+				super.setDefine(define);				
 				break;
 			case MESSAGE:
-				messageByName.put(define.getName(),(Message)define);
+				super.setDefine(define);
 				break;
 			default:
+				Show(ErrType.UnknowError,define);
 				break;		
 		}		
 	}
 
 	@Override
-	public void addOn(On on) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isDefined(ObjectType type,String name) {
-		switch(type)
-		{		
-		case BEHAVIOR:
-			return behaviorsByName.containsValue(name);			
-		case ENTITY:
-			return entitiesByName.containsValue(name);
-		case GOAL:
-			return goalsByName.containsValue(name);			
-		case MANAGER:
-			return managersByName.containsValue(name);
-		case MESSAGE:
-			return messageByName.containsValue(name);
-		//case STATE:
-			//return statesByName.containsValue(name);
-		default:			
-			return false;		
-		}		
-	}
-
-	@Override
-	public Define getDefine(ObjectType type, String name) {
-		switch(type)
-		{		
-		case ENTITY:
-			return entitiesByName.get(name);
-		case GOAL:
-			return goalsByName.get(name);			
-		case MANAGER:
-			return managersByName.get(name);
-		case MESSAGE:
-			return messageByName.get(name);
-		//case STATE:
-			//return statesByName.containsValue(name);
-		default:			
-			return null;
-		}		
-	}
-
-	@Override
-	public On getOn(String message) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
-	
+	public void setOn(On on) {
+		Show(ErrType.NotExpectedOn,on);		
+	}	
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,6 +18,7 @@ import fp4g.Log.ErrType;
 import fp4g.Pair;
 import fp4g.data.Add;
 import fp4g.data.Code;
+import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.On;
 import fp4g.data.On.Filter;
@@ -60,11 +62,11 @@ public class EntityGenerator extends Generator {
 		entityRoot.put("autodoc", autodoc);
 				
 		//agregar parametros de entrada
-		if(entity.list != null)
+		if(entity.paramNameList != null)
 		{
 			//lo veo un poco consumidor de recursos, pero bueno...
 			List<Map<String,Object>> pair = new LinkedList<>();
-			for(Pair<String,String> par: entity.list)
+			for(Pair<String,String> par: entity.paramNameList)
 			{
 				Map<String,Object> el = new HashMap<String,Object>(2);
 				el.put("name", par.a);
@@ -76,8 +78,9 @@ public class EntityGenerator extends Generator {
 		
 		//agregar behaviors
 				
-		List<HashMap<String,Object>> behaviors = new LinkedList<>(); 
-		for(Add addBhvr:entity.addBehaviors)
+		List<HashMap<String,Object>> behaviors = new LinkedList<>();
+		final Collection<Add> entity_addBehaviors = entity.getAdd(DefineType.BEHAVIOR);
+		for(Add addBhvr:entity_addBehaviors)
 		{
 			HashMap<String,Object> bhvr = new HashMap<>();			
 			bhvr.put("name", addBhvr.name);
@@ -113,10 +116,11 @@ public class EntityGenerator extends Generator {
 		entityRoot.put("behaviors", behaviors);
 		
 		//agregar eventos
-		if(entity.onMessages.size()>0)
+		final Collection<On> entity_onMessages = entity.getOnMessages();
+		if(entity_onMessages.size()>0)
 		{
 			List<HashMap<String,Object>> messages = new LinkedList<>();
-			for(On on:entity.onMessages)
+			for(On on:entity_onMessages)
 			{
 				HashMap<String,Object> message = new HashMap<>();
 				LinkedList<HashMap<String,Object>> sources = new LinkedList<>();				
@@ -205,7 +209,7 @@ public class EntityGenerator extends Generator {
 			//imports para el builder
 			List<String> imports = new LinkedList<>();
 			Collections.addAll(imports, arrayImports);		
-			for(Add addBhvr:entity.addBehaviors)
+			for(Add addBhvr:entity_addBehaviors)
 			{
 				imports.add(String.format("com.apollo.components.%s",addBhvr.name));
 			}
@@ -226,14 +230,14 @@ public class EntityGenerator extends Generator {
 			//imports para el builder
 			List<String> imports = new LinkedList<>();
 			Collections.addAll(imports, arrayImports);		
-			for(Add addBhvr:entity.addBehaviors)
+			for(Add addBhvr:entity_addBehaviors)
 			{
 				imports.add(String.format("com.apollo.components.%s",addBhvr.name));
 			}
-			if(entity.onMessages.size()>0)
+			if(entity_onMessages.size()>0)
 			{
 				imports.add("com.apollo.messages.MessageReceiver");
-				for(On on:entity.onMessages)
+				for(On on:entity_onMessages)
 				{
 					imports.add(String.format("com.apollo.messages.%sMessage",on.name));
 				}
