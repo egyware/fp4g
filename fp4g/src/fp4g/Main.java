@@ -94,6 +94,9 @@ public class Main {
 			
 	        System.out.println("Generating...");
 	        Generator.generate(options,gameConf, new File(outDirectory));
+	        System.out.println("Done!");
+	        System.out.println("Compilig...");
+	        Generator.compileFiles();
 	        System.out.println("Done!");	
 			
 		} catch (IOException e) {

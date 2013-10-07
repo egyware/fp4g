@@ -24,7 +24,8 @@ import freemarker.template.TemplateException;
 public class GameGenerator extends Generator {
 
 	@Override
-	protected void generateData(Map<String,Object> options,Configuration cfg,Code gameData, File path) throws IOException, TemplateException {
+	protected void generateData(Map<String,Object> options,Configuration cfg,Code gameData, File path)
+	throws IOException {
 		Game game = (Game)gameData;
 		
 		Template temp = cfg.getTemplate("GameManager.ftl"); 	
@@ -63,7 +64,10 @@ public class GameGenerator extends Generator {
 				"com.apollo.managers.graphics.SpriteLoader",
 				"com.badlogic.gdx.assets.AssetManager",
 				"com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver",
-				"com.badlogic.gdx.graphics.g2d.TextureRegion"
+				"com.badlogic.gdx.graphics.g2d.TextureRegion",
+				"com.badlogic.gdx.physics.box2d.CircleShape",
+				"com.badlogic.gdx.physics.box2d.PolygonShape",
+				"com.badlogic.gdx.physics.box2d.FixtureDef"
 			};
 			Arrays.sort(arrayImports);
 			Collections.addAll(imports, arrayImports);
@@ -74,7 +78,7 @@ public class GameGenerator extends Generator {
 			assetsRoot.put("class",assetsClazz);
 			assetsRoot.put("autodoc", autodoc);			
 			
-			Generator.createFile("Assets.java",cfg.getTemplate("Assets.ftl"), assetsRoot);
+			Generator.createFile("Utils.java",cfg.getTemplate("Utils.ftl"), assetsRoot);
 		}
 		
 		

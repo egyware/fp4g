@@ -1,3 +1,25 @@
+:::0.1.11 (prototipo)
++ SimpleBodyBehavior añadido más las funciones createCircle(radio), createBox(ancho,alto)
++ Muchos cambios no registrados entre la versión 10 y 11
++ Cambio de parser de JavaCC a ANTLR
++ Se agregaron tipos de variables como el codigo directo.
++ Se incluyeron operadores basicos como +-/* entre otros.
++ Se la palabra clave "On Message" que procesa los eventos de entrada a la entidad.
++ Se pueden invocar funciones preestablecidas.
++ Ya no se utiliza la entidad por defecto, si no una entidad autogenerada. Se sigue utilizando el EntityBuilder aún.
++ Se cambio la estructura de las clases que definen el juego.
+B se requieren todavía muchos cambios para que funcione el sistema.
+P agregar un objeto que represente el codigo antes de ser compilado. (lista con los imports, el nombre de la clase, la plantillad de freemarker, metodos, etc...)
+P Agregar los managers
+P imports más automaticos
+P Imports para funciones? es probable que se requiera una clase pre-recurso
+P Definir la verdadera utilidad de la clase Utils y no la parche de ahora.
+P Hacer que compile automaticamente y ejecute el codigo
+P Hacer más generales las opciones de compilación automatica.
+P Hacer que las clases compiladas queden en el otro lugar.
+P Hacer que los Managers envien mensaje
+P Falta agregarle los parametros a Gameloop
+P falta agregar el objeto start
 :::0.1.10 (prototipo)
 + Permite Estados personalizados (definidos fuera del generador) para usarlos debe usar Add State CustomNameState
 + Se agregaron más funciones getSound,getMusic,getTexture todas variantes de getSprite

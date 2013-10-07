@@ -15,7 +15,7 @@ public class ${class.name} extends GameManager {
 	public void create()
 	{
 		super.create();
-		Assets.initialize();	
+		Utils.initialize();	
 	}
 	
 	@Override 
@@ -33,6 +33,7 @@ public class ${class.name} extends GameManager {
 	@Override
 	public void dispose()
 	{
-		super.dispose();
+		Utils.dispose();
+		super.dispose();		
 	}
 }

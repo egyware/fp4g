@@ -49,7 +49,7 @@ returns
 add 
 returns
 [
-	ObjectType type = null,
+	DefineType type = null,
 	String addName = null,
 	String varName = null,	
 ]
@@ -57,11 +57,11 @@ returns
 	      (ID EQUAL {$varName = $ID.text;})?	
 		  ADD 
 		  ( 
-			  	MANAGER  { $type = ObjectType.MANAGER;  }			  	
-			  | STATE    { $type = ObjectType.STATE;    }
-			  | BEHAVIOR { $type = ObjectType.BEHAVIOR; }
-			  | ENTITY   { $type = ObjectType.ENTITY;  }
-			  | GOAL     { $type = ObjectType.GOAL;  }
+			  	MANAGER  { $type = DefineType.MANAGER;  }			  	
+			  | STATE    { $type = DefineType.STATE;    }
+			  | BEHAVIOR { $type = DefineType.BEHAVIOR; }
+			  | ENTITY   { $type = DefineType.ENTITY;  }
+			  | GOAL     { $type = DefineType.GOAL;  }
 		  )
 		  ID { $addName = $ID.text; }
 		  ( ABRE_PAR exprList CIERRA_PAR )? 
@@ -71,18 +71,18 @@ define
 returns
 [
 	
-	ObjectType type = null,
+	DefineType type = null,
 	String defName = null
 ]
 		: 
 		  DEFINE 
 		  	( 
-		  		 MANAGER    { $type = ObjectType.MANAGER; }
-		  		| STATE     { $type = ObjectType.STATE;   }
-		  		| BEHAVIOR  { $type = ObjectType.BEHAVIOR;}
-		  		| ENTITY    { $type = ObjectType.ENTITY;  }
-		  		| GOAL      { $type = ObjectType.GOAL;    }
-		  		| MESSAGE   { $type = ObjectType.MESSAGE; }		  		
+		  		 MANAGER    { $type = DefineType.MANAGER; }
+		  		| STATE     { $type = DefineType.STATE;   }
+		  		| BEHAVIOR  { $type = DefineType.BEHAVIOR;}
+		  		| ENTITY    { $type = DefineType.ENTITY;  }
+		  		| GOAL      { $type = DefineType.GOAL;    }
+		  		| MESSAGE   { $type = DefineType.MESSAGE; }		  		
 		  	) 
 		  ID { $defName = $ID.text; } 
 		  ( ABRE_PAR nameList CIERRA_PAR )?		  

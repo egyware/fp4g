@@ -24,7 +24,7 @@ public class GameStateGenerator extends Generator {
 
 	@Override
 	protected void generateData(Map<String,Object> options,Configuration cfg, Code gameData, File path)
-	throws IOException, TemplateException {
+	throws IOException {
 		GameState state = (GameState)gameData;
 		Game game = (Game)state.parent;
 		

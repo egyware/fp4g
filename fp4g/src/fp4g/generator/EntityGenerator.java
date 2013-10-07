@@ -37,7 +37,7 @@ public class EntityGenerator extends Generator {
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void generateData(Map<String,Object> options,Configuration cfg, Code gameData, File path) 
-	throws IOException, TemplateException
+	throws IOException
 	{
 		Entity entity = (Entity)gameData;		
 		Template entityBuilderTempl = cfg.getTemplate("EntityBuilder.ftl");
@@ -204,7 +204,7 @@ public class EntityGenerator extends Generator {
 						"com.apollo.EntityBuilder",
 						"com.apollo.Entity",			
 						"com.apollo.World",
-						String.format("%s.Assets", packageName)
+						String.format("%s.Utils", packageName)						
 					};
 			//imports para el builder
 			List<String> imports = new LinkedList<>();

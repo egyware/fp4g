@@ -26,6 +26,8 @@ public abstract class FunctionGenerator {
 		functions.put("getMusic"  , new GetMusic());
 		functions.put("getTexture", new GetTexture());
 		functions.put("loadAssets", new LoadAssets());
+		functions.put("createBox", new CreateBox());
+		functions.put("createCircle", new CreateCircle());
 	}
 	
 	
@@ -60,7 +62,7 @@ public abstract class FunctionGenerator {
 		@Override
 		protected Expresion generate(ExprList list) {
 			Expresion resourceName = list.get(0);			
-			DirectCode expr = new DirectCode(String.format("Assets.getSprite(%s)",ExpresionGenerator.generate(resourceName)));			
+			DirectCode expr = new DirectCode(String.format("Utils.getSprite(%s)",ExpresionGenerator.generate(resourceName)));			
 			return expr;
 		}		
 	}
@@ -70,7 +72,7 @@ public abstract class FunctionGenerator {
 		@Override
 		protected Expresion generate(ExprList list) {
 			Expresion resourceName = list.get(0);			
-			DirectCode expr = new DirectCode(String.format("Assets.getSound(%s)",ExpresionGenerator.generate(resourceName)));			
+			DirectCode expr = new DirectCode(String.format("Utils.getSound(%s)",ExpresionGenerator.generate(resourceName)));			
 			return expr;
 		}		
 	}
@@ -80,7 +82,7 @@ public abstract class FunctionGenerator {
 		@Override
 		protected Expresion generate(ExprList list) {
 			Expresion resourceName = list.get(0);			
-			DirectCode expr = new DirectCode(String.format("Assets.getTexture(%s)",ExpresionGenerator.generate(resourceName)));			
+			DirectCode expr = new DirectCode(String.format("Utils.getTexture(%s)",ExpresionGenerator.generate(resourceName)));			
 			return expr;
 		}		
 	}
@@ -90,10 +92,10 @@ public abstract class FunctionGenerator {
 		@Override
 		protected Expresion generate(ExprList list) {
 			Expresion resourceName = list.get(0);			
-			DirectCode expr = new DirectCode(String.format("Assets.getMusic(%s)",ExpresionGenerator.generate(resourceName)));			
+			DirectCode expr = new DirectCode(String.format("Utils.getMusic(%s)",ExpresionGenerator.generate(resourceName)));			
 			return expr;
 		}		
-	}
+	}	
 	private static class LoadAssets extends FunctionGenerator
 	{
 
@@ -103,5 +105,28 @@ public abstract class FunctionGenerator {
 			return null;
 		}		
 	}
+	
+	private static class CreateBox extends FunctionGenerator
+	{
+
+		@Override
+		protected Expresion generate(ExprList list) {
+			Expresion width  = list.get(0);			
+			Expresion height = list.get(1);
+			DirectCode expr = new DirectCode(String.format("Utils.createBox(%s)",ExpresionGenerator.generate(width),ExpresionGenerator.generate(height)));			
+			return expr;
+		}		
+	}
+	private static class CreateCircle extends FunctionGenerator
+	{
+
+		@Override
+		protected Expresion generate(ExprList list) {
+			Expresion ratio = list.get(0);			
+			DirectCode expr = new DirectCode(String.format("Utils.createCircle(%s)",ExpresionGenerator.generate(ratio)));			
+			return expr;
+		}		
+	}
+
 
 }
