@@ -160,6 +160,10 @@ public abstract class Define extends Code{
 		{
 			return map.containsKey(name);
 		}
+		if(parent != null)
+		{
+			return parent.isSetDefine(type, name);
+		}
 		return false;
 	}
 	

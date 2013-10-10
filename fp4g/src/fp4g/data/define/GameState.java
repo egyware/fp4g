@@ -1,11 +1,8 @@
 package fp4g.data.define;
 
 import static fp4g.Log.Show;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import fp4g.Log.ErrType;
+import fp4g.Log.WarnType;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
@@ -28,6 +25,10 @@ public class GameState extends Define{
 			Show(ErrType.NotExpectedType,code);
 			break;
 		case ENTITY:
+			if(!isSetDefine(DefineType.ENTITY,code.name))
+			{
+				Show(WarnType.MissingDefineAdd,code);
+			}
 			super.setAdd(code);
 			break;
 		case GOAL:
@@ -35,6 +36,10 @@ public class GameState extends Define{
 			throw new RuntimeException("No implementado");
 			//break;
 		case MANAGER:
+			if(!isSetDefine(DefineType.MANAGER,code.name))
+			{
+				Show(WarnType.MissingDefineAdd,code);
+			}
 			super.setAdd(code);
 			break;
 		default:

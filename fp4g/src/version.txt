@@ -1,3 +1,20 @@
+:::0.1.12 (prototipo)
++ Agregar los managers
++ Hay una clase que representa el codigo antes de ser compilado, por ahora es bastante simple y da mucha utildad a la hora de agregar imports
++ Se puede agregar imports en las funciones, para eso se tiene una nueva clase que encapsula el contenido a generar.
++ Gracias a la clase que modela el codigo modelo del codigo los imports son más automaticos.
++ Hacer que compile automaticamente.
+B se requieren todavía muchos cambios para que funcione el sistema.
+P Falta definir que codigo va ir en las sentencias.
+P Falta la capacidad de ordenar los managers según prioridad
+P Definir la verdadera utilidad de la clase Utils y no la parche de ahora.
+P Ejecute el codigo
+P Hacer más generales las opciones de compilación automatica.
+P Hacer que las clases compiladas queden en el otro lugar.
+P Hacer que los Managers envien mensaje
+P Falta agregarle los parametros a Gameloop
+P falta agregar el objeto start
+P falta agregar la instruccion Using
 :::0.1.11 (prototipo)
 + SimpleBodyBehavior añadido más las funciones createCircle(radio), createBox(ancho,alto)
 + Muchos cambios no registrados entre la versión 10 y 11

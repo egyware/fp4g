@@ -10,6 +10,7 @@ import fp4g.data.expresion.FunctionCall;
 import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.VarId;
+import fp4g.generator.models.JavaCodeModel;
 
 /**
  * @author Edgardo
@@ -44,9 +45,9 @@ public abstract class ExpresionGenerator {
 		generator.put(DirectCode.class, new DirectCodeExprGen());
 	}
 	
-	protected abstract String expr2string(Expresion expr);
+	protected abstract String expr2string(JavaCodeModel model,Expresion expr);
 		
-	public static String generate(Expresion expr)
+	public static String generate(JavaCodeModel model,Expresion expr)
 	{		
 		//System.err.println(expr.getClass().getSimpleName());
 		ExpresionGenerator eg = generator.get(expr.getClass());		
@@ -54,11 +55,11 @@ public abstract class ExpresionGenerator {
 		{
 			if(expr.hasPar())
 			{
-				return String.format("(%s)",eg.expr2string(expr));
+				return String.format("(%s)",eg.expr2string(model,expr));
 			}
 			else
 			{
-				return eg.expr2string(expr);
+				return eg.expr2string(model,expr);
 			}			
 			 
 		}
@@ -72,7 +73,7 @@ public abstract class ExpresionGenerator {
 	private static class VarExprGen extends ExpresionGenerator
 	{
 		@Override
-		protected String expr2string(Expresion expr) {
+		protected String expr2string(JavaCodeModel model,Expresion expr) {
 			VarId var = (VarId)expr;			
 			return var.varName;
 		}		
@@ -81,7 +82,7 @@ public abstract class ExpresionGenerator {
 	private static class LiteralExprGen extends ExpresionGenerator
 	{
 		@Override
-		protected String expr2string(Expresion expr) {
+		protected String expr2string(JavaCodeModel model,Expresion expr) {
 			final Literal<?> literal = (Literal<?>)expr;
 			final Object value = literal.value;
 			if(value instanceof String)
@@ -98,11 +99,11 @@ public abstract class ExpresionGenerator {
 	private static class FunctionCallExprGen extends ExpresionGenerator
 	{
 		@Override
-		protected String expr2string(Expresion expr) {			
-			Expresion resultExpr = FunctionGenerator.generate((FunctionCall)expr);
+		protected String expr2string(JavaCodeModel model,Expresion expr) {			
+			Expresion resultExpr = FunctionGenerator.generate(model,(FunctionCall)expr);
 			if(resultExpr != null)
 			{
-				return generate(resultExpr);
+				return generate(model,resultExpr);
 			}
 			else
 			{	
@@ -115,7 +116,7 @@ public abstract class ExpresionGenerator {
 	private static class DirectCodeExprGen extends ExpresionGenerator
 	{
 		@Override
-		protected String expr2string(Expresion expr) {
+		protected String expr2string(JavaCodeModel model,Expresion expr) {
 			DirectCode direct = (DirectCode)expr;			
 			return direct.code;
 		}		
@@ -124,7 +125,7 @@ public abstract class ExpresionGenerator {
 	private static class UnaryExprGen extends ExpresionGenerator
 	{
 		@Override
-		protected String expr2string(Expresion expr) {
+		protected String expr2string(JavaCodeModel model,Expresion expr) {
 			UnaryOp un = (UnaryOp)expr;
 			StringBuilder builder = new StringBuilder();
 			switch(un.type)
@@ -138,7 +139,7 @@ public abstract class ExpresionGenerator {
 			default:
 				break;				
 			}
-			builder.append(generate(un.expr));			
+			builder.append(generate(model,un.expr));			
 			return builder.toString();
 		}		
 	}
@@ -146,10 +147,10 @@ public abstract class ExpresionGenerator {
 	private static class BinaryExprGen extends ExpresionGenerator
 	{
 		@Override
-		protected String expr2string(Expresion expr) {
+		protected String expr2string(JavaCodeModel model,Expresion expr) {
 			BinaryOp bin = (BinaryOp)expr;
 			StringBuilder builder = new StringBuilder();
-			builder.append(generate(bin.left));
+			builder.append(generate(model,bin.left));
 			switch(bin.type)
 			{
 			case Add:
@@ -168,7 +169,7 @@ public abstract class ExpresionGenerator {
 				break;
 							
 			}
-			builder.append(generate(bin.right));						
+			builder.append(generate(model,bin.right));						
 			return builder.toString();
 		}		
 	}

@@ -10,6 +10,10 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import fp4g.data.define.Game;
+import fp4g.data.managers.EntityManager;
+import fp4g.data.managers.PhysicsManager;
+import fp4g.data.managers.RenderManager;
+import fp4g.data.managers.SoundManager;
 import fp4g.generator.Generator;
 import fp4g.parser.FP4GDataVisitor;
 import fp4g.parser.FP4GLexer;
@@ -54,10 +58,10 @@ public class Main {
 	    	gameConf.width = 640;
 	    	gameConf.height = 480;
 	    	gameConf.debug = false;
-////    	gameConf.addDefine(new RenderManager());
-////    	gameConf.addDefine(new EntityManager());
-////    	gameConf.addDefine(new SoundManager());
-////    	gameConf.addDefine(new PhysicsManager());
+	    	gameConf.setManager(new RenderManager());
+	    	gameConf.setManager(new EntityManager());
+	    	gameConf.setManager(new SoundManager());
+	    	gameConf.setManager(new PhysicsManager());
 	    	
 //	        //agregar componentes		    	
 ////        String components[][] = 

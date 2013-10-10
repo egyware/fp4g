@@ -5,6 +5,6 @@ import fp4g.data.define.Manager;
 public class SoundManager extends Manager {
 
 	public SoundManager() {
-		super("SoundManager");
+		super("SoundManager",4);
 	}
 }

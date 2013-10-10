@@ -10,13 +10,13 @@ import fp4g.data.DefineType;
  * @author Edgardo
  *
  */
-public abstract class Manager extends Define {
+public abstract class Manager extends Define implements Comparable<Manager>{
+	private final int priority;
 	
-	public Manager(String name) {
-		super(DefineType.MANAGER, name);		 
+	public Manager(String name,int p) {
+		super(DefineType.MANAGER, name);
+		priority = p;
 	}
-
-	public String name;	
 
 	//TODO Para que es esto?
 //	public Manager add() {
@@ -29,5 +29,10 @@ public abstract class Manager extends Define {
 //			e.printStackTrace();
 //		}
 //		return clone;
-//	}	
+//	}
+	
+	public int compareTo(Manager other)
+	{
+		return (priority - other.priority);
+	}
 }

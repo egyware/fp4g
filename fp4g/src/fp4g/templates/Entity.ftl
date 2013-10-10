@@ -1,4 +1,4 @@
-package ${class.package};
+package ${class.pckg};
 
 <#if class.imports??>
 <#list class.imports as import>
@@ -6,7 +6,7 @@ import ${import};
 </#list>
 </#if>
 
-${autodoc}
+${class.javadoc}
 public class ${class.name} extends Entity
 <#if messages??>
 implements MessageReceiver

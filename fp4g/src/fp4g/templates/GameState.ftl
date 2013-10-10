@@ -1,4 +1,4 @@
-package ${class.package};
+package ${class.pckg};
 
 <#if class.imports??>
 <#list class.imports as import>
@@ -6,7 +6,7 @@ import ${import};
 </#list>
 </#if>
 
-${autodoc}
+${class.javadoc}
 public final class ${class.name} extends GameState{
 	private World world;
 	public OrthographicCamera camera;
@@ -21,7 +21,7 @@ public final class ${class.name} extends GameState{
 	//sistemas o manejadores
 	<#if managers??>
 	<#list managers as manager>
-	private ${manager.name} ${manager.name?uncap_first};
+	private ${manager.name} ${manager.varName};
 	</#list>
 	</#if>
 	
@@ -36,24 +36,28 @@ public final class ${class.name} extends GameState{
 		Gdx.gl.glClearColor(1,1,1,1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		world.update(delta);
 		<#if managers??>
 		<#list managers as manager>
-			${manager.name?uncap_first}.update(delta);
+		<#if manager.preupdate?has_content>
+		${manager.preupdate}
+		</#if>
 		</#list>
 		</#if>
 		
-		
-		//your render here
-		<#if debug>
-		<#if physicsManager??>
-		cameraDebug.position.x = camera.position.x * SCALE;
-		cameraDebug.position.y = camera.position.y * SCALE;
-		cameraDebug.update();
-		debugRender.render(${physicsManager}.getb2World(),debugCamera.combined); 
-		</#if>	
-		fpsLogger.log();			
+		world.update(delta);
+		<#if managers??>
+		<#list managers as manager>
+		${manager.varName}.update(delta);
+		</#list>
 		</#if>
+		
+		<#if managers??>
+		<#list managers?reverse as manager>
+		<#if manager.postupdate?has_content>
+		${manager.postupdate}
+		</#if>
+		</#list>
+		</#if>		
 	}	
 	
 	@Override
@@ -82,17 +86,25 @@ public final class ${class.name} extends GameState{
 		<#if managers??>
 		<#list managers as manager>
 		${manager.varName} = new ${manager.name}();
-		<#if manager.entity>
-		world.setEntityManager(${manager.varName});
-		<#elseif manager.render>
-		world.setCamera(camera);
-		world.setManager(${manager.varName});
+		</#list>
+		</#if>
+		
+		<#if managers??>
+		<#list managers as manager>
+		<#if manager.setters??>
+		<#list manager.setters as set>
+		${manager.varName}.${set};
+		</#list>
+		</#if>
+		<#if manager.setMethod??>
+		world.set${manager.setMethod}(${manager.varName});
 		<#else>
-		world.setManager(${manager.varName});
+		world.setManager(${manager.varName});		
 		</#if>
 		</#list>
 		</#if>		
 		
+			
 		//entidades
 		<#if entities??>		
 		<#list entities as entity>
@@ -131,35 +143,4 @@ public final class ${class.name} extends GameState{
 	public void resume()
 	{
 	}
-		
-
-<#-- visitante
-		@Override
-		public void visitor(JExpression dataVar, JBlock block,IScope scope, String key, Object value) {
-			if(value instanceof IScope) //es otro scope
-			{	
-				JClass _familyClass    = jcm.ref(String.format("%s.%s",Utils.componentsPackageName,Utils.getFamilyByComponent(key)));
-				JClass _componentClass = jcm.ref(String.format("%s.%s",Utils.componentsPackageName,key));
-				JExpression inv = dataVar.invoke("getComponent").arg(_familyClass.staticRef("class"));
-				if(!_familyClass.equals(_componentClass))
-				{
-					inv = JExpr.cast(_componentClass, inv);
-				}	
-				IScope child = (IScope)value;
-				if(child.size() > 0)
-				{
-					JBlock subBlock = block.block();
-					inv = subBlock.decl(_componentClass, String.format("_%s_component",key), inv);
-					Utils.assingScope(inv,subBlock,(MapScope)value);
-				}
-				else
-				{
-					Utils.assingScope(inv,block,(MapScope)value);
-				}
-								
-			}			
-		}
-		
-	};
--->	
 }

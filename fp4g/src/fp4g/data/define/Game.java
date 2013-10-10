@@ -140,7 +140,15 @@ public class Game extends Define  {
 				break;		
 		}		
 	}
-
+	/**
+	 * Bypass para los managers
+	 * @param manager
+	 */
+	public void setManager(Manager manager)
+	{	
+		super.setDefine(manager);		
+	}
+	
 	@Override
 	public void setDefine(Define define) {
 		switch(define.getType())

@@ -5,7 +5,7 @@ import fp4g.data.define.Manager;
 public class PhysicsManager extends Manager {
 
 	public PhysicsManager() {
-		super("PhysicsManager");		
+		super("PhysicsManager",2);		
 	}
 	
 }

@@ -26,6 +26,7 @@ import fp4g.data.On.Source;
 import fp4g.data.define.Entity;
 import fp4g.data.expresion.ArrayExpr;
 import fp4g.data.expresion.Literal;
+import fp4g.generator.models.JavaCodeModel;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -46,20 +47,20 @@ public class EntityGenerator extends Generator {
 		HashMap<String,Object> buildRoot = new HashMap<>();	
 		HashMap<String,Object> entityRoot = new HashMap<>();
 		
-		HashMap<String,Object> buildClazz = new HashMap<>();
-		buildClazz.put("package", String.format("%s.%s",packageName,"entity"));
-		buildClazz.put("name",entity.name);
+		JavaCodeModel modelBuild = new JavaCodeModel();
+		modelBuild.pckg = String.format("%s.%s",packageName,"entity");
+		modelBuild.name = String.format("%sBuilder",entity.name);;
+		modelBuild.javadoc = autodoc;
 		
-		HashMap<String,Object> entityClazz = new HashMap<>();
-		entityClazz.put("package", String.format("%s.%s",packageName,"entity"));
-		entityClazz.put("name",entity.name);
-				
+		JavaCodeModel modelEntity = new JavaCodeModel();
+		modelEntity.pckg = String.format("%s.%s",packageName,"entity");
+		modelEntity.name = entity.name;
+		modelEntity.javadoc = autodoc;
 		
-		buildRoot.put("class",buildClazz);
-		buildRoot.put("autodoc", autodoc);
+		buildRoot.put("class",modelBuild);
+		buildRoot.put("entity", modelEntity);
+		entityRoot.put("class", modelEntity);				
 		
-		entityRoot.put("class", entityClazz);				
-		entityRoot.put("autodoc", autodoc);
 				
 		//agregar parametros de entrada
 		if(entity.paramNameList != null)
@@ -83,8 +84,7 @@ public class EntityGenerator extends Generator {
 		for(Add addBhvr:entity_addBehaviors)
 		{
 			HashMap<String,Object> bhvr = new HashMap<>();			
-			bhvr.put("name", addBhvr.name);
-			bhvr.put("hash", addBhvr.name.hashCode());
+			bhvr.put("name", addBhvr.name);			
 			if(addBhvr.varName != null)
 			{
 				bhvr.put("varName", addBhvr.varName);
@@ -100,7 +100,7 @@ public class EntityGenerator extends Generator {
 				List<String> params = new LinkedList<>();
 				for(Expresion expr: addBhvr.params)
 				{
-					String result = ExpresionGenerator.generate(expr);
+					String result = ExpresionGenerator.generate(modelBuild,expr);
 					if(result != null)
 					{
 						params.add(result);
@@ -214,7 +214,7 @@ public class EntityGenerator extends Generator {
 				imports.add(String.format("com.apollo.components.%s",addBhvr.name));
 			}
 			Collections.sort(imports);
-			buildClazz.put("imports", imports);
+			modelBuild.imports.addAll(imports);			
 		}
 		
 		{
@@ -243,7 +243,7 @@ public class EntityGenerator extends Generator {
 				}
 			}
 			Collections.sort(imports);
-			entityClazz.put("imports", imports);
+			modelEntity.imports.addAll(imports);
 		}
 		
 		if(entityPackageDir == null)

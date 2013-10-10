@@ -63,6 +63,7 @@ public abstract class Generator {
 		cfg.setDefaultEncoding("UTF-8");
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.DEBUG_HANDLER);
 		cfg.setIncompatibleImprovements(new Version(2, 3, 20));
+		//cfg.
 		
 		Class<?> clazz = gameData.getClass();		
 		Available available =  Available.valueOf(clazz.getSimpleName());

@@ -5,6 +5,6 @@ import fp4g.data.define.Manager;
 public class RenderManager extends Manager {
 
 	public RenderManager() {
-		super("RenderManager");		
+		super("GdxRenderManager",1);		
 	}
 }

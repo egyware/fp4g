@@ -16,6 +16,7 @@ import fp4g.data.DefineType;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
+import fp4g.generator.models.JavaCodeModel;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -29,18 +30,19 @@ public class GameStateGenerator extends Generator {
 		Game game = (Game)state.parent;
 		
 		Template temp = cfg.getTemplate("GameState.ftl"); 
-		List<String> imports = new LinkedList<>();
-		HashMap<String,Object> root = new HashMap<>();		
-		HashMap<String,Object> clazz = new HashMap<>();
+		HashMap<String,Object> root = new HashMap<>();	
+		
 		HashMap<String,Object> gamez = new HashMap<>();
-		clazz.put("package", packageName);
-		clazz.put("name",state.name);		
+		JavaCodeModel modelClass = new JavaCodeModel();
+		modelClass.pckg    = packageName;
+		modelClass.name    = state.name;
+		modelClass.javadoc = autodoc;		
+			
 		gamez.put("width", game.width);
 		gamez.put("height", game.height);
 		gamez.put("name", game.name);
-		root.put("class",clazz);
+		root.put("class",modelClass);
 		root.put("game", gamez);
-		root.put("autodoc", autodoc);
 		root.put("debug", isDebug);
 		
 		List<Map<String, Object>> managers = new LinkedList<>();
@@ -61,6 +63,8 @@ public class GameStateGenerator extends Generator {
 				throw new RuntimeException("No implementado");
 			}
 			managers.add(mngr);
+			//import
+			modelClass.imports.add(String.format("com.apollo.managers.%s", manager.name));
 		}
 		root.put("managers", managers);
 		
@@ -71,7 +75,7 @@ public class GameStateGenerator extends Generator {
 		{
 			entityBuilders.add(entity.name);
 			//agregar imports
-			imports.add(String.format("%s.entity.%sBuilder",packageName,entity.name));
+			modelClass.imports.add(String.format("%s.entity.%sBuilder",packageName,entity.name));
 			
 		}
 		root.put("entityBuilders", entityBuilders);
@@ -104,13 +108,12 @@ public class GameStateGenerator extends Generator {
 				"com.badlogic.gdx.graphics.OrthographicCamera"
 		};
 		Arrays.sort(arrayImports);
-		Collections.addAll(imports, arrayImports);
+		modelClass.imports.addAll(Arrays.asList(arrayImports));
 		if(state_addentities.size() > 0)
 		{
-			imports.add("com.apollo.Entity");
+			modelClass.imports.add("com.apollo.Entity");
 		}
-		Collections.sort(imports);
-		clazz.put("imports", imports);		
+						
 		
 		Generator.createFile(String.format("%s.java",state.name), temp, root);
 	}

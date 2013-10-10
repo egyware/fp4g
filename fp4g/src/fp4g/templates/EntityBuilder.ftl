@@ -1,4 +1,4 @@
-package ${class.package};
+package ${class.pckg};
 
 <#if class.imports??>
 <#list class.imports as import>
@@ -6,14 +6,14 @@ import ${import};
 </#list>
 </#if>
 
-${autodoc}
-public class ${class.name}Builder implements EntityBuilder
+${class.javadoc}
+public class ${class.name} implements EntityBuilder
 {
 
 	@Override
 	public String getEntityBuilderName()
 	{
-		return "${class.name}";
+		return "${entity.name}";
 	}
 	
 	@Override
@@ -26,7 +26,7 @@ public class ${class.name}Builder implements EntityBuilder
 		</#list>	
 		</#if>
 		
-		${class.name} entity = new ${class.name}(world);
+		${entity.name} entity = new ${entity.name}(world);
 		
 		<#if behaviors??>
 		//crear los behaviors
