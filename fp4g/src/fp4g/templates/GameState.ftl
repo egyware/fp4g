@@ -8,8 +8,7 @@ import ${import};
 
 ${class.javadoc}
 public final class ${class.name} extends GameState{
-	private World world;
-	public OrthographicCamera camera;
+	private World world;	
 	<#if debug>
 	<#if physicsManager??>
 	private OrthographicCamera debugCamera;
@@ -22,6 +21,16 @@ public final class ${class.name} extends GameState{
 	<#if managers??>
 	<#list managers as manager>
 	private ${manager.name} ${manager.varName};
+	</#list>
+	</#if>
+	
+	<#if managers??>
+	<#list managers as manager>
+	<#if manager.fields?has_content>
+	<#list manager.fields as field>
+	private ${field};
+	</#list>	
+	</#if>
 	</#list>
 	</#if>
 	
@@ -39,7 +48,9 @@ public final class ${class.name} extends GameState{
 		<#if managers??>
 		<#list managers as manager>
 		<#if manager.preupdate?has_content>
-		${manager.preupdate}
+		<#list manager.preupdate as preupdate>
+		${preupdate};		
+		</#list>
 		</#if>
 		</#list>
 		</#if>
@@ -54,7 +65,9 @@ public final class ${class.name} extends GameState{
 		<#if managers??>
 		<#list managers?reverse as manager>
 		<#if manager.postupdate?has_content>
-		${manager.postupdate}
+		<#list manager.postupdate as postupdate>
+		${postupdate};
+		</#list>
 		</#if>
 		</#list>
 		</#if>		
@@ -63,7 +76,7 @@ public final class ${class.name} extends GameState{
 	@Override
 	public boolean load()
 	{
-		final int w = ${game.name}.Width;		 
+		final int w = ${game.name}.Width;
 		final int h = ${game.name}.Height;
 		
 		camera = new OrthographicCamera();
@@ -85,7 +98,7 @@ public final class ${class.name} extends GameState{
 		//managers
 		<#if managers??>
 		<#list managers as manager>
-		${manager.varName} = new ${manager.name}();
+		${manager.varName} = new ${manager.name}(<#if manager.params??><#list manager.params as param>${param}<#if param_has_next>, </#if></#list></#if>);
 		</#list>
 		</#if>
 		
@@ -109,10 +122,10 @@ public final class ${class.name} extends GameState{
 		<#if entities??>		
 		<#list entities as entity>
 		<#if entity.varName??>
-		Entity ${entity.varName} = world.createEntity("${entity.name}"); //TODO agregar parametros a esta wea...
+		Entity ${entity.varName} = world.createEntity("${entity.name}"<#if entity.params??>,<#list entity.params as param>${param}<#if param_has_next>, </#if></#list></#if>));
 		world.addEntity(${entity.varName});
 		<#else>
-		world.addEntity(world.createEntity("${entity.name}")); //TODO agregar parametros a esta wea...
+		world.addEntity(world.createEntity("${entity.name}"<#if entity.params??>,<#list entity.params as param>${param}<#if param_has_next>, </#if></#list></#if>));
 		</#if>
 		</#list>
 		</#if>

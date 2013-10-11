@@ -2,9 +2,9 @@ package fp4g.generator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,16 +13,35 @@ import java.util.Map;
 import fp4g.data.Add;
 import fp4g.data.Code;
 import fp4g.data.DefineType;
+import fp4g.data.Expresion;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.generator.models.JavaCodeModel;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
-public class GameStateGenerator extends Generator {
-
+public class GameStateGenerator extends Generator {	
+	private static HashMap<String,Map<String,Object>> mngrData;
+	static
+	{
+		mngrData = new HashMap<>();
+		
+		HashMap<String,Object> entityMngrData = new HashMap<>();
+		entityMngrData.put("setMethod", "EntityManager");
+		
+		HashMap<String,Object> renderMngrData = new HashMap<>();		
+		
+		renderMngrData.put("preupdate",Arrays.asList("batch.setProjectionMatrix(camera.combined)","batch.begin()"));
+		renderMngrData.put("postupdate",Arrays.asList("batch.end()"));		
+		renderMngrData.put("fields", Arrays.asList("OrthographicCamera camera","SpriteBatch batch"));
+		renderMngrData.put("imports",Arrays.asList("com.badlogic.gdx.graphics.g2d.SpriteBatch"));
+				
+		mngrData.put("EntityManager", entityMngrData);
+		mngrData.put("GdxRenderManager", renderMngrData);
+	}
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void generateData(Map<String,Object> options,Configuration cfg, Code gameData, File path)
 	throws IOException {
@@ -50,6 +69,21 @@ public class GameStateGenerator extends Generator {
 		{
 			Map<String,Object> mngr = new HashMap<>(2);
 			mngr.put("name", manager.name);
+			//acá, buscar las cosas extras y añadirselas.
+			Map<String,Object> extras = mngrData.get(manager.name);
+			if(extras != null)
+			{
+				mngr.putAll(extras);
+				
+				//si existe algún dato adicional a importar,se lo añadimos a los imports
+				List<String> imports = (List<String>) extras.get("imports");
+				if(imports != null)
+				{
+					modelClass.imports.addAll(imports);
+				}
+				
+			}
+			
 			if(manager.varName != null)
 			{
 				mngr.put("varName", manager.varName);
@@ -60,7 +94,17 @@ public class GameStateGenerator extends Generator {
 			}
 			if(manager.params != null)
 			{
-				throw new RuntimeException("No implementado");
+				List<String> params = new LinkedList<>();
+				for(Expresion expr: manager.params)
+				{
+					String result = ExpresionGenerator.generate(modelClass,expr);
+					if(result != null)
+					{
+						params.add(result);
+					}
+					//TODO: probablemente mostrar un error...
+				}
+				mngr.put("params",params);
 			}
 			managers.add(mngr);
 			//import
@@ -84,17 +128,27 @@ public class GameStateGenerator extends Generator {
 		final List<Add> state_addentities = state.getAdd(DefineType.ENTITY);
 		for(Add entity:state_addentities)
 		{
-			Map<String,Object> mngr = new HashMap<>(2);
-			mngr.put("name", entity.name);
+			Map<String,Object> ent = new HashMap<>(2);
+			ent.put("name", entity.name);
 			if(entity.varName != null)
 			{
-				mngr.put("varName", entity.varName);
+				ent.put("varName", entity.varName);
 			}			
 			if(entity.params != null)
 			{
-				throw new RuntimeException("No implementado");
+				List<String> params = new LinkedList<>();
+				for(Expresion expr: entity.params)
+				{
+					String result = ExpresionGenerator.generate(modelClass,expr);
+					if(result != null)
+					{
+						params.add(result);
+					}
+					//TODO: probablemente mostrar un error...
+				}
+				ent.put("params",params);
 			}
-			entities.add(mngr);
+			entities.add(ent);
 		}
 		root.put("entities", entities);
 		
