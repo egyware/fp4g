@@ -10,6 +10,7 @@ import fp4g.data.expresion.FunctionCall;
 import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.VarId;
+import fp4g.generator.FunctionGenerator;
 import fp4g.generator.models.JavaCodeModel;
 
 /**
