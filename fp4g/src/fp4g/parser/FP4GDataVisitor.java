@@ -9,6 +9,7 @@ import java.util.Stack;
 import static fp4g.Log.Show;
 import fp4g.Log;
 import fp4g.Log.ErrType;
+import fp4g.Log.WarnType;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.ExprList;
@@ -49,6 +50,25 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		current = new Stack<>();
 		expr_stack = new Stack<>();
 		array_stack = new Stack<>();
+	}
+	
+	@Override
+	public Void visitStart(FP4GParser.StartContext ctx)
+	{
+		Define define = current.peek();
+		
+		if(define instanceof Game)
+		{
+			final String state = ctx.state;
+			if(!define.isSetDefine(DefineType.MANAGER, state))
+			{
+				//TODO warn!
+				Show(WarnType.MissingAdd,game);
+			}
+			//if(state )
+			((Game) define).setStart(ctx.state);
+		}
+		return null;		
 	}
 	
 	@Override 

@@ -1,8 +1,6 @@
-package fp4g.generator;
+package fp4g.generator.gdxgenerator;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,11 +15,13 @@ import fp4g.data.Expresion;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
+import fp4g.generator.CodeGenerator;
+import fp4g.generator.Generator;
 import fp4g.generator.models.JavaCodeModel;
-import freemarker.template.Configuration;
 import freemarker.template.Template;
 
-public class GameStateGenerator extends Generator {	
+public class GameStateGenerator extends CodeGenerator<JavaGenerator> {	
+	
 	private static HashMap<String,Map<String,Object>> mngrData;
 	static
 	{
@@ -41,28 +41,33 @@ public class GameStateGenerator extends Generator {
 		mngrData.put("GdxRenderManager", renderMngrData);
 	}
 	
+	public GameStateGenerator(JavaGenerator generator) 
+	{
+		super(generator);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void generateData(Map<String,Object> options,Configuration cfg, Code gameData, File path)
-	throws IOException {
+	public void generateCode(Code gameData, File path) 
+	throws Exception {	
 		GameState state = (GameState)gameData;
 		Game game = (Game)state.parent;
 		
-		Template temp = cfg.getTemplate("GameState.ftl"); 
+		Template temp = generator.getTemplate("GameState.ftl"); 
 		HashMap<String,Object> root = new HashMap<>();	
 		
 		HashMap<String,Object> gamez = new HashMap<>();
 		JavaCodeModel modelClass = new JavaCodeModel();
-		modelClass.pckg    = packageName;
+		modelClass.pckg    = generator.packageName;
 		modelClass.name    = state.name;
-		modelClass.javadoc = autodoc;		
+		modelClass.javadoc = JavaGenerator.autodoc;		
 			
-		gamez.put("width", game.width);
+		gamez.put("width",  game.width);
 		gamez.put("height", game.height);
 		gamez.put("name", game.name);
 		root.put("class",modelClass);
 		root.put("game", gamez);
-		root.put("debug", isDebug);
+		root.put("debug", generator.isDebug);
 		
 		List<Map<String, Object>> managers = new LinkedList<>();
 		for(Add manager:state.getAdd(DefineType.MANAGER))
@@ -90,7 +95,7 @@ public class GameStateGenerator extends Generator {
 			}
 			else
 			{								
-				mngr.put("varName", uncap_first(manager.name));
+				mngr.put("varName", Generator.uncap_first(manager.name));
 			}
 			if(manager.params != null)
 			{
@@ -119,7 +124,7 @@ public class GameStateGenerator extends Generator {
 		{
 			entityBuilders.add(entity.name);
 			//agregar imports
-			modelClass.imports.add(String.format("%s.entity.%sBuilder",packageName,entity.name));
+			modelClass.imports.add(String.format("%s.entity.%sBuilder",generator.packageName,entity.name));
 			
 		}
 		root.put("entityBuilders", entityBuilders);
@@ -169,6 +174,7 @@ public class GameStateGenerator extends Generator {
 		}
 						
 		
-		Generator.createFile(String.format("%s.java",state.name), temp, root);
+		Generator.createFile(path,String.format("%s.java",state.name), temp, root);
 	}
+	
 }

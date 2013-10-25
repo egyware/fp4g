@@ -226,6 +226,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitMinusExpr(@NotNull FP4GParser.MinusExprContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#start}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStart(@NotNull FP4GParser.StartContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#program}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

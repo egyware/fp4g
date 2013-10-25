@@ -21,8 +21,13 @@ public class ${class.name} implements EntityBuilder
 	{ 
 		<#if params??>
 		//parametros de entrada!
-		<#list params as param>
+		final int length = params.length;		
+		<#list params as param>		
+		<#if param.defaultValue?has_content>		
+		${param.type} ${param.name} = (${param_index}<length)?((${param.type})params[${param_index}]):${param.defaultValue};
+		<#else>
 		${param.type} ${param.name} = (${param.type})params[${param_index}];
+		</#if>
 		</#list>	
 		</#if>
 		

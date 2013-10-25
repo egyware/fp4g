@@ -15,6 +15,7 @@ public class Game extends Define  {
 	public int width = 640;
 	public int height = 480;
 	public boolean debug = false;
+	public String startState;
 	
 	public Game()
 	{
@@ -180,5 +181,9 @@ public class Game extends Define  {
 	@Override
 	public void setOn(On on) {
 		Show(ErrType.NotExpectedOn,on);		
+	}
+
+	public void setStart(String state) {
+		startState = state;		
 	}	
 }

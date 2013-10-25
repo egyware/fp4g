@@ -8,7 +8,7 @@ import ${import};
 
 ${class.javadoc}
 public final class ${class.name} extends GameState{
-	private World world;	
+	private World world;
 	<#if debug>
 	<#if physicsManager??>
 	private OrthographicCamera debugCamera;
@@ -24,6 +24,7 @@ public final class ${class.name} extends GameState{
 	</#list>
 	</#if>
 	
+	//variables adicionales, añadidas por los sistemas.
 	<#if managers??>
 	<#list managers as manager>
 	<#if manager.fields?has_content>

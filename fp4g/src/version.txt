@@ -1,6 +1,33 @@
+:::0.1.15 (prototipo)
++ Instrucción Start agregada.
++ Clase modelo del parametro agregada
+B Se requieren cambios minimos para hacer que funcione el sistema.
+B Funciones getAssets, no pueden cargar automaticamente los assets, no hay forma de agregarlos previamente.
+P Ordenar el codigo para recibir parametros y talvez más adelante definir parametros por defecto.
+P Ejecute el codigo
+P Falta definir que codigo va ir en las sentencias.
+P Falta la capacidad de ordenar los managers según prioridad
+P Definir la verdadera utilidad de la clase Utils y no la parche de ahora.
+P Hacer más generales las opciones de compilación automatica.
+P Hacer que las clases compiladas queden en el otro lugar.
+P Hacer que los Managers envien mensaje
+P falta agregar la instruccion Using
+:::0.1.14 (prototipo)
++ Instrucción Start agregada.
++ Clase modelo del parametro agregada
+B Se requieren cambios minimos para hacer que funcione el sistema.
+P Ordenar el codigo para recibir parametros y talvez más adelante definir parametros por defecto.
+P Ejecute el codigo
+P Falta definir que codigo va ir en las sentencias.
+P Falta la capacidad de ordenar los managers según prioridad
+P Definir la verdadera utilidad de la clase Utils y no la parche de ahora.
+P Hacer más generales las opciones de compilación automatica.
+P Hacer que las clases compiladas queden en el otro lugar.
+P Hacer que los Managers envien mensaje
+P falta agregar la instruccion Using
 :::0.1.13 (prototipo)
 + Parametros agregados a GameState
-F Se parcho gran parte del codigo necesario para que funcionen correctamente los managers, sin embargo aún queda harto camino por recorrer para la ejecución automatica.
+F Se parcho gran parte del codigo para poder agregar el necesario para que funcionen correctamente los managers, sin embargo aún queda harto camino por recorrer para la ejecución automatica.
 B Se requieren cambios minimos para hacer que funcione el sistema.
 P Falta definir que codigo va ir en las sentencias.
 P Falta la capacidad de ordenar los managers según prioridad

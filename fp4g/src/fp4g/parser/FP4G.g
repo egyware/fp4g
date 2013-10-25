@@ -37,6 +37,7 @@ gameValue
 		: define
 		| add DOTCOMA
 		| set DOTCOMA
+		| start DOTCOMA
 		| on
 		;
 		
@@ -45,6 +46,12 @@ returns
 [ String key ]
 		: SET ID { $key = $ID.text; } EQUAL expr 
 		;
+start
+returns
+[ String state ]
+	:
+	START ID { $state = $ID.text; }
+;
 
 add 
 returns
@@ -141,7 +148,7 @@ nameList: declareVar ( COMA declareVar)*;
 
 // sin operaciones booleanes por ahora
 expr  
-		 :  NOT   op=expr  				 #notExpr
+		 :  NOT  op=expr  				 #notExpr
 		 | MINUS op=expr 				 #minusExpr
 		 | left=expr MULTIPLY right=expr #multExpr
 		 | left=expr DIVIDE   right=expr #divExpr
@@ -189,9 +196,8 @@ returns
 		 | DEC_TYPE    {$type = VarType.Decimal;}
 		 | BOOL_TYPE   {$type = VarType.Bool;}
 		 | ENTITY_TYPE {$type = VarType.Entity;}
-		 | STRING_TYPE {$type = VarType.String;}
-		 //tipos temporales
-		 | 'KeyMap'    {$type = VarType.Custom;}
+		 | STRING_TYPE {$type = VarType.String;}		 
+		 | ID          {$type = VarType.Custom;}
         ;
 
 //***** LEXER *****
@@ -214,6 +220,7 @@ PAUSE      : 'PAUSE';
 USING      : 'USING'; 
 EXIT       : 'EXIT';
 SET        : 'SET';
+START      : 'START';
 
 /* auxiliars keywords */
 MANAGER : 'MANAGER';

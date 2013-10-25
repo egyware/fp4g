@@ -21,14 +21,13 @@ import fp4g.parser.FP4GParser;
 public class Main {
 	private static String outDirectory = ".";
 	private static String inputFile;
-	private static HashMap<String,Object> options = new HashMap<>();
+	private static Options options = new Options();
 	/**
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args)  throws Exception {
-		options.put("package", "game"); //por defecto
-		options.put("debug", false); //por defecto
+	public static void main(String[] args)  throws Exception 
+	{		
 		if(params(args))
 		{
 			if(inputFile == null)

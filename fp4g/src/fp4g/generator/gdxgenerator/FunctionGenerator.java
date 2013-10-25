@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fp4g.generator;
+package fp4g.generator.gdxgenerator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +12,7 @@ import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
+import fp4g.generator.Generator;
 import fp4g.generator.models.JavaCodeModel;
 
 /**

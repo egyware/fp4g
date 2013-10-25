@@ -1,18 +1,13 @@
-package fp4g.generator;
+package fp4g.generator.gdxgenerator;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import static fp4g.Log.Show;
 import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.Pair;
@@ -26,53 +21,56 @@ import fp4g.data.On.Source;
 import fp4g.data.define.Entity;
 import fp4g.data.expresion.ArrayExpr;
 import fp4g.data.expresion.Literal;
+import fp4g.generator.CodeGenerator;
+import fp4g.generator.Generator;
 import fp4g.generator.models.JavaCodeModel;
-import freemarker.template.Configuration;
+import fp4g.generator.models.ParamCodeModel;
 import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
-public class EntityGenerator extends Generator {
+public class EntityGenerator extends CodeGenerator<JavaGenerator> {
+
+	public EntityGenerator(JavaGenerator generator) {
+		super(generator);
+	}
 
 	private static File entityPackageDir;
 
 	@Override
-	@SuppressWarnings("unchecked")
-	protected void generateData(Map<String,Object> options,Configuration cfg, Code gameData, File path) 
-	throws IOException
+	@SuppressWarnings("unchecked")	
+	public void generateCode(Code gameData, File path) 	 
+	throws Exception
 	{
 		Entity entity = (Entity)gameData;		
-		Template entityBuilderTempl = cfg.getTemplate("EntityBuilder.ftl");
-		Template entityTempl        = cfg.getTemplate("Entity.ftl");
+		Template entityBuilderTempl = generator.getTemplate("EntityBuilder.ftl");
+		Template entityTempl        = generator.getTemplate("Entity.ftl");
 		
 		HashMap<String,Object> buildRoot = new HashMap<>();	
 		HashMap<String,Object> entityRoot = new HashMap<>();
 		
 		JavaCodeModel modelBuild = new JavaCodeModel();
-		modelBuild.pckg = String.format("%s.%s",packageName,"entity");
+		modelBuild.pckg = String.format("%s.%s",generator.packageName,"entity");
 		modelBuild.name = String.format("%sBuilder",entity.name);;
-		modelBuild.javadoc = autodoc;
+		modelBuild.javadoc = JavaGenerator.autodoc;
 		
 		JavaCodeModel modelEntity = new JavaCodeModel();
-		modelEntity.pckg = String.format("%s.%s",packageName,"entity");
+		modelEntity.pckg = String.format("%s.%s",generator.packageName,"entity");
 		modelEntity.name = entity.name;
-		modelEntity.javadoc = autodoc;
+		modelEntity.javadoc = JavaGenerator.autodoc;
 		
 		buildRoot.put("class",modelBuild);
 		buildRoot.put("entity", modelEntity);
 		entityRoot.put("class", modelEntity);				
-		
 				
 		//agregar parametros de entrada
 		if(entity.paramNameList != null)
 		{
 			//lo veo un poco consumidor de recursos, pero bueno...
-			List<Map<String,Object>> pair = new LinkedList<>();
+			List<ParamCodeModel> pair = new LinkedList<>();
 			for(Pair<String,String> par: entity.paramNameList)
 			{
-				Map<String,Object> el = new HashMap<String,Object>(2);
-				el.put("name", par.a);
-				el.put("type", par.b);
-				pair.add(el);
+				//TODO más adelante, talvez especificar el tipo por defecto.
+				ParamCodeModel param = new ParamCodeModel(par.a,par.b);				
+				pair.add(param);
 			}
 			buildRoot.put("params",pair);
 		}
@@ -92,7 +90,7 @@ public class EntityGenerator extends Generator {
 			else
 			{
 				StringBuilder varName = new StringBuilder();				
-				varName.append(uncap_first(addBhvr.name));				
+				varName.append(Generator.uncap_first(addBhvr.name));				
 				bhvr.put("varName", varName.toString());
 			}			
 			if(addBhvr.params != null)
@@ -204,7 +202,7 @@ public class EntityGenerator extends Generator {
 						"com.apollo.EntityBuilder",
 						"com.apollo.Entity",			
 						"com.apollo.World",
-						String.format("%s.Utils", packageName)						
+						String.format("%s.Utils", generator.packageName)						
 					};
 			//imports para el builder
 			List<String> imports = new LinkedList<>();
@@ -248,14 +246,14 @@ public class EntityGenerator extends Generator {
 		
 		if(entityPackageDir == null)
 		{
-			entityPackageDir = new File(packageDir, "entity");
+			entityPackageDir = new File(generator.packageDir, "entity");
 			if(!entityPackageDir.exists())
 			{
 				entityPackageDir.mkdir();
 			}
 		}
-		Generator.createFile(String.format("entity/%sBuilder.java",entity.name),entityBuilderTempl,buildRoot);
-		Generator.createFile(String.format("entity/%s.java",entity.name),entityTempl,entityRoot);		
+		Generator.createFile(entityPackageDir,String.format("entity/%sBuilder.java",entity.name),entityBuilderTempl,buildRoot);
+		Generator.createFile(entityPackageDir,String.format("entity/%s.java",entity.name),entityTempl,entityRoot);		
 	}
 
 }

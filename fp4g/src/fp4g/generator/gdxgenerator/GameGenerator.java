@@ -1,41 +1,41 @@
-package fp4g.generator;
+package fp4g.generator.gdxgenerator;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import fp4g.data.Code;
 import fp4g.data.DefineType;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
-import freemarker.template.Configuration;
+import fp4g.generator.CodeGenerator;
+import fp4g.generator.Generator;
 import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
-public class GameGenerator extends Generator {
+public class GameGenerator extends CodeGenerator<JavaGenerator> {
+
+	public GameGenerator(JavaGenerator generator) {
+		super(generator);		
+	}
 
 	@Override
-	protected void generateData(Map<String,Object> options,Configuration cfg,Code gameData, File path)
-	throws IOException {
+	public void generateCode(Code gameData, File path)
+	throws Exception {
 		Game game = (Game)gameData;
 		
-		Template temp = cfg.getTemplate("GameManager.ftl"); 	
+		Template temp = generator.getTemplate("GameManager.ftl"); 	
 		
 		HashMap<String,Object> root = new HashMap<>();
 		HashMap<String,Object> clazz = new HashMap<>();
-		clazz.put("package", packageName);
+		clazz.put("package", generator.packageName);
 		clazz.put("name",game.name);
 		root.put("class",clazz);
-		root.put("autodoc", autodoc);
+		root.put("autodoc", JavaGenerator.autodoc);
 		root.put("width", game.width);
 		root.put("height", game.height);
 		//agregar imports!
@@ -44,16 +44,20 @@ public class GameGenerator extends Generator {
 			List<String> imports = new LinkedList<>();
 			String arrayImports[] = new String[]
 			{
-					"com.apollo.managers.GameManager",					
+				"com.apollo.managers.GameManager",					
 			};
 			//Arrays.sort(arrayImports);
 			Collections.addAll(imports, arrayImports);
 			clazz.put("imports", imports);
 		}
 		
+		if(game.startState != null)
+		{			
+			root.put("start_state", game.startState);
+		}
 		// TODO falta ${start_state}
 		
-		Generator.createFile(String.format("%s.java",game.name), temp,root);
+		Generator.createFile(path,String.format("%s.java",game.name), temp,root);
 		
 		//generar Assets...
 		{
@@ -73,25 +77,25 @@ public class GameGenerator extends Generator {
 			Collections.addAll(imports, arrayImports);
 			HashMap<String,Object> assetsRoot = new HashMap<>();
 			HashMap<String,Object> assetsClazz = new HashMap<>();
-			assetsClazz.put("package", packageName);
+			assetsClazz.put("package", generator.packageName);
 			assetsClazz.put("imports", imports);
 			assetsRoot.put("class",assetsClazz);
-			assetsRoot.put("autodoc", autodoc);			
+			assetsRoot.put("autodoc", JavaGenerator.autodoc);			
 			
-			Generator.createFile("Utils.java",cfg.getTemplate("Utils.ftl"), assetsRoot);
+			Generator.createFile(path,"Utils.java",generator.getTemplate("Utils.ftl"), assetsRoot);
 		}
 		
 		
 		final Collection<Entity> game_entities = game.getDefines(DefineType.ENTITY);
 		for(Entity entity: game_entities)
 		{
-			Generator.generate(options, entity, path);
+			generator.generateCode(entity, path);
 		}
 		final Collection<GameState> game_states = game.getDefines(DefineType.STATE);
 		for(GameState state: game_states)
 		{
-			Generator.generate(options, state, path);
+			generator.generateCode(state, path);
 		}		
 	}
-
+	
 }

@@ -1,4 +1,4 @@
-package fp4g.generator;
+package fp4g.generator.gdxgenerator;
 
 import java.util.HashMap;
 import java.util.Map;
