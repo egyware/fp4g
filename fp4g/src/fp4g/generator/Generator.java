@@ -9,6 +9,8 @@ import java.util.List;
 
 import fp4g.Options;
 import fp4g.data.Code;
+import fp4g.data.Expresion;
+import fp4g.data.expresion.FunctionCall;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -23,6 +25,7 @@ public abstract class Generator {
 	
 	private List<File> filesToCompile = new LinkedList<>();
 	private Configuration cfg;
+	
 		
 	public final void generate(Options options,Code gameData, File path){
 		cfg = new Configuration();		
@@ -34,17 +37,27 @@ public abstract class Generator {
 		//inicializar el generador		
 		initialize(options,cfg);
 		
+		System.out.println("Generating...");        	
 		//generar el codigo
 		generateCode(gameData,path);
-		
+		System.out.println("Done!");
+        
+		System.out.println("Compilig...");
 		//compilar archivos...
 		compileFiles(filesToCompile);		
+		System.out.println("Done!");
 	}
-	
+	//functiones de utilidad proxies
 	public Template getTemplate(String name) throws IOException
 	{	
 		return cfg.getTemplate(name);
 	}
+	
+	
+	public abstract <CodeModel> Expresion function(Code parent, CodeModel model, FunctionCall fcall);
+	public abstract <CodeModel> String   expresion(Code parent, CodeModel model, Expresion expr);
+	
+	
 	
 	//Funciones de utilidad
 	public static String uncap_first(String string)
@@ -55,11 +68,13 @@ public abstract class Generator {
 		return uncap_string.toString();
 	}
 	
-	public static void createFile(File path,String name,Template template,Object buildRoot) throws Exception
+	public void createFile(File path,String name,Template template,Object buildRoot) throws Exception
 	{	
 		File file = new File(path,name);
 		Writer out = new FileWriter(file);
 		template.process(buildRoot, out);
-		System.out.println(String.format("Generado: %s",name));					
+		System.out.println(String.format("Generado: %s",name));
+		
+		filesToCompile.add(file);
 	}
 }

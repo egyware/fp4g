@@ -98,7 +98,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				List<String> params = new LinkedList<>();
 				for(Expresion expr: addBhvr.params)
 				{
-					String result = ExpresionGenerator.generate(modelBuild,expr);
+					String result = generator.expresion(addBhvr,modelBuild,expr);
 					if(result != null)
 					{
 						params.add(result);
@@ -147,7 +147,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 								filterString.append("message.");
 								filterString.append(fieldName.value);
 								
-								ExpresionGenerator.CompareExpresion compare = ExpresionGenerator.CompareExpresion.valueOf(compareName.value);
+								JavaExpresionGenerator.CompareExpresion compare = JavaExpresionGenerator.CompareExpresion.valueOf(compareName.value);
 								if(compare != null)									
 								{
 									filterString.append(' ');
@@ -252,8 +252,8 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				entityPackageDir.mkdir();
 			}
 		}
-		Generator.createFile(entityPackageDir,String.format("entity/%sBuilder.java",entity.name),entityBuilderTempl,buildRoot);
-		Generator.createFile(entityPackageDir,String.format("entity/%s.java",entity.name),entityTempl,entityRoot);		
+		generator.createFile(generator.packageDir,String.format("entity/%sBuilder.java",entity.name),entityBuilderTempl,buildRoot);
+		generator.createFile(generator.packageDir,String.format("entity/%s.java",entity.name),entityTempl,entityRoot);		
 	}
 
 }

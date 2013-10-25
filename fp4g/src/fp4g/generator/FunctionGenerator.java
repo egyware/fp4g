@@ -4,7 +4,6 @@
 package fp4g.generator;
 
 import fp4g.data.Code;
-import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.expresion.FunctionCall;
 
@@ -32,7 +31,7 @@ public abstract class FunctionGenerator <T extends Generator,Model>
 	 * @param list
 	 * @return una expresion, la cual puede ser codigo directo o algo...
 	 */
-	public abstract Expresion generate(FunctionCall function,Code parent,Model model);
+	public abstract Expresion generate(Code parent,Model model,FunctionCall function);
 	
 	
 }

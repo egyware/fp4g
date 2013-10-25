@@ -14,6 +14,7 @@ import fp4g.data.managers.PhysicsManager;
 import fp4g.data.managers.RenderManager;
 import fp4g.data.managers.SoundManager;
 import fp4g.generator.Generator;
+import fp4g.generator.gdxgenerator.JavaGenerator;
 import fp4g.parser.FP4GDataVisitor;
 import fp4g.parser.FP4GLexer;
 import fp4g.parser.FP4GParser;
@@ -94,12 +95,9 @@ public class Main {
 				System.out.println(String.format("Parsing incomplete: %s",inputFile));
 			}
 			
-	        System.out.println("Generating...");
-	        Generator.generate(options,gameConf, new File(outDirectory));
-	        System.out.println("Done!");
-	        System.out.println("Compilig...");
-	        Generator.compileFiles();
-	        System.out.println("Done!");	
+			Generator generator = new JavaGenerator();
+			generator.generate(options,gameConf, new File(outDirectory));
+	        
 			
 		} catch (IOException e) {
 			//TODO personalizar error

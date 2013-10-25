@@ -18,12 +18,15 @@ import javax.tools.ToolProvider;
 
 import fp4g.Options;
 import fp4g.data.Code;
+import fp4g.data.Expresion;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Goal;
+import fp4g.data.expresion.FunctionCall;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
+import fp4g.generator.models.JavaCodeModel;
 import freemarker.template.Configuration;
 
 public class JavaGenerator extends Generator {	
@@ -32,6 +35,8 @@ public class JavaGenerator extends Generator {
 	public String packageNameDir = "";
 	public File packageDir;
 	public boolean isDebug;
+	public final JavaExpresionGenerator exprGen;
+	public final JavaFunctionGenerator funcGen;
 	
 	public final Map<Class<? extends Code>,Class<? extends CodeGenerator<JavaGenerator>>> generators;
 	
@@ -44,6 +49,9 @@ public class JavaGenerator extends Generator {
 		//generators.put(Event.class,     EventGenerator.class);
 		generators.put(Game.class,      GameGenerator.class);
 		generators.put(Goal.class,      GoalGenerator.class);
+		
+		exprGen = new JavaExpresionGenerator(this);
+		funcGen = new JavaFunctionGenerator(this);
 	}
 	
 	@Override	
@@ -138,5 +146,15 @@ public class JavaGenerator extends Generator {
 			e.printStackTrace();
 		}
 		
+	}
+
+	@Override
+	public <CodeModel> Expresion function(Code parent, CodeModel model,	FunctionCall fcall) {		
+		return funcGen.generate(parent, (JavaCodeModel)model,fcall);
+	}
+
+	@Override
+	public <CodeModel> String expresion(Code parent, CodeModel model,Expresion expr) {
+		return exprGen.generate(parent, (JavaCodeModel) model,expr);
 	}
 }

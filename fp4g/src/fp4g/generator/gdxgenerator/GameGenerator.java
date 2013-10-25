@@ -57,7 +57,7 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 		}
 		// TODO falta ${start_state}
 		
-		Generator.createFile(path,String.format("%s.java",game.name), temp,root);
+		generator.createFile(path,String.format("%s.java",game.name), temp,root);
 		
 		//generar Assets...
 		{
@@ -82,7 +82,7 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 			assetsRoot.put("class",assetsClazz);
 			assetsRoot.put("autodoc", JavaGenerator.autodoc);			
 			
-			Generator.createFile(path,"Utils.java",generator.getTemplate("Utils.ftl"), assetsRoot);
+			generator.createFile(path,"Utils.java",generator.getTemplate("Utils.ftl"), assetsRoot);
 		}
 		
 		

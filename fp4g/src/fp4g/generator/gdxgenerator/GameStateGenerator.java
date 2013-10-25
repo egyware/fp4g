@@ -102,7 +102,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				List<String> params = new LinkedList<>();
 				for(Expresion expr: manager.params)
 				{
-					String result = ExpresionGenerator.generate(modelClass,expr);
+					String result = generator.expresion(manager,modelClass,expr);
 					if(result != null)
 					{
 						params.add(result);
@@ -144,7 +144,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				List<String> params = new LinkedList<>();
 				for(Expresion expr: entity.params)
 				{
-					String result = ExpresionGenerator.generate(modelClass,expr);
+					String result = generator.expresion(entity,modelClass,expr);
 					if(result != null)
 					{
 						params.add(result);
@@ -174,7 +174,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		}
 						
 		
-		Generator.createFile(path,String.format("%s.java",state.name), temp, root);
+		generator.createFile(path,String.format("%s.java",state.name), temp, root);
 	}
 	
 }
