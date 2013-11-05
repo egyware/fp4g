@@ -16,6 +16,7 @@ import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.generator.FunctionGenerator;
 import fp4g.generator.models.JavaCodeModel;
+import fp4g.generator.models.AssetModel;
 
 /**
  * @author Edgardo
@@ -23,7 +24,7 @@ import fp4g.generator.models.JavaCodeModel;
  */
 public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaCodeModel>
 {		
-	private final Map<String,Function> functions;
+	private final Map<String,Function> functions;	
 	public JavaFunctionGenerator(JavaGenerator jg)
 	{
 		super(jg);
@@ -33,9 +34,10 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 		functions.put("getSound"  , new GetSound());
 		functions.put("getMusic"  , new GetMusic());
 		functions.put("getTexture", new GetTexture());
-		functions.put("loadAssets", new LoadAssets());
+		//functions.put("loadAssets", new LoadAssets());
 		functions.put("createBox", new CreateBox());
 		functions.put("createCircle", new CreateCircle());
+
 	}	
 	
 	private abstract class Function
@@ -64,9 +66,10 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 		@Override
 		public Expresion generate(Code parent,JavaCodeModel model,ExprList list)
 		{
+			String resourceName = generator.expresion(parent,model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			Expresion resourceName = list.get(0);			
-			DirectCode expr = new DirectCode(String.format("Utils.getSprite(%s)",generator.expresion(parent,model,resourceName)));			
+			model.depends.addAsset(AssetModel.AssetType.Sprite,resourceName);
+			DirectCode expr = new DirectCode(String.format("Utils.getSprite(%s)",resourceName));						
 			return expr;
 		}		
 	}
@@ -75,9 +78,10 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 		@Override
 		public Expresion generate(Code parent,JavaCodeModel model,ExprList list)
 		{
+			String resourceName = generator.expresion(parent,model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			Expresion resourceName = list.get(0);			
-			DirectCode expr = new DirectCode(String.format("Utils.getSound(%s)",generator.expresion(parent,model,resourceName)));			
+			model.depends.addAsset(AssetModel.AssetType.Sound,resourceName);
+			DirectCode expr = new DirectCode(String.format("Utils.getSound(%s)",resourceName));			
 			return expr;
 		}		
 	}
@@ -87,9 +91,10 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 		@Override
 		public Expresion generate(Code parent,JavaCodeModel model,ExprList list) 
 		{
+			String resourceName = generator.expresion(parent,model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			Expresion resourceName = list.get(0);			
-			DirectCode expr = new DirectCode(String.format("Utils.getTexture(%s)",generator.expresion(parent,model,resourceName)));			
+			model.depends.addAsset(AssetModel.AssetType.Texture,resourceName);			
+			DirectCode expr = new DirectCode(String.format("Utils.getTexture(%s)",resourceName));					
 			return expr;
 		}		
 	}
@@ -97,23 +102,30 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	{
 		@Override
 		public Expresion generate(Code parent,JavaCodeModel model,ExprList list)
-		{
+		{			
+			String resourceName = generator.expresion(parent,model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			Expresion resourceName = list.get(0);			
-			DirectCode expr = new DirectCode(String.format("Utils.getMusic(%s)",generator.expresion(parent,model,resourceName)));			
+			model.depends.addAsset(AssetModel.AssetType.Music,resourceName);						
+			DirectCode expr = new DirectCode(String.format("Utils.getMusic(%s)",resourceName));					
 			return expr;
 		}		
 	}	
-	private class LoadAssets extends Function
-	{
-
-		@Override
-		public Expresion generate(Code parent,JavaCodeModel model,ExprList list)
-		{
-			// TODO Auto-generated method stub
-			return null;
-		}		
-	}
+//	private class LoadAssets extends Function
+//	{
+//
+//		@Override
+//		public Expresion generate(Code parent,JavaCodeModel model,ExprList list)
+//		{
+//			StringBuilder builder = new StringBuilder();
+//			for(Pair<String,String> pair:loadAssets)				
+//			{
+//				builder.append(String.format("Utils.loadAsset(%s,%s);\n",".class",pair.b));
+//			}
+//			
+//			loadAssets.clear();
+//			return new DirectCode(builder.toString());
+//		}		
+//	}
 	
 	private class CreateBox extends Function
 	{

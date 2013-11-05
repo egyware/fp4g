@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import fp4g.data.Add;
 import fp4g.data.Code;
@@ -17,6 +18,8 @@ import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
+import fp4g.generator.models.AssetModel;
+import fp4g.generator.models.Depend;
 import fp4g.generator.models.JavaCodeModel;
 import freemarker.template.Template;
 
@@ -49,7 +52,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void generateCode(Code gameData, File path) 
-	throws Exception {	
+	throws Exception {
 		GameState state = (GameState)gameData;
 		Game game = (Game)state.parent;
 		
@@ -57,10 +60,11 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		HashMap<String,Object> root = new HashMap<>();	
 		
 		HashMap<String,Object> gamez = new HashMap<>();
+		TreeSet<AssetModel>  assets = new TreeSet<>();
 		JavaCodeModel modelClass = new JavaCodeModel();
 		modelClass.pckg    = generator.packageName;
 		modelClass.name    = state.name;
-		modelClass.javadoc = JavaGenerator.autodoc;		
+		modelClass.javadoc = JavaGenerator.autodoc;
 			
 		gamez.put("width",  game.width);
 		gamez.put("height", game.height);
@@ -68,6 +72,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		root.put("class",modelClass);
 		root.put("game", gamez);
 		root.put("debug", generator.isDebug);
+		root.put("assets", assets);
 		
 		List<Map<String, Object>> managers = new LinkedList<>();
 		for(Add manager:state.getAdd(DefineType.MANAGER))
@@ -126,6 +131,12 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			//agregar imports
 			modelClass.imports.add(String.format("%s.entity.%sBuilder",generator.packageName,entity.name));
 			
+			Depend dependencias = generator.getDependences(entity);
+			for(AssetModel model:dependencias.assets)
+			{
+				modelClass.imports.add(model.type.importClass);
+			}
+			assets.addAll(dependencias.assets);		
 		}
 		root.put("entityBuilders", entityBuilders);
 		
@@ -173,7 +184,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			modelClass.imports.add("com.apollo.Entity");
 		}
 						
-		
+		generator.addJavaCode(state, modelClass);
 		generator.createFile(path,String.format("%s.java",state.name), temp, root);
 	}
 	

@@ -118,6 +118,13 @@ public final class ${class.name} extends GameState{
 		</#list>
 		</#if>		
 		
+		//cargar los assets aqui.
+		<#if assets??>
+		<#list assets as asset>
+		Utils.loadAsset(${asset.name}, ${asset.type}.class);
+		</#list>
+		Utils.loadAssets();
+		</#if>
 			
 		//entidades
 		<#if entities??>		

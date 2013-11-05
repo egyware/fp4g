@@ -197,8 +197,26 @@ returns
 		 | BOOL_TYPE   {$type = VarType.Bool;}
 		 | ENTITY_TYPE {$type = VarType.Entity;}
 		 | STRING_TYPE {$type = VarType.String;}		 
-		 | ID          {$type = VarType.Custom;}
+		 | ID          {$type = VarType.Custom;} // solo Define del tipo Type
         ;
+
+assetType:
+	TEXTURE_TYPE
+	;
+        
+assets:
+	ASSET ID? 
+	assetsValues
+;
+
+assetsValues:
+	ABRE_COR assetValue (COMA assetValue)* COMA? CIERRA_COR
+;
+
+assetValue:
+	assetType ID? DOUBLEDOT STRING_TYPE (assetsValues)?	
+;
+	
 
 //***** LEXER *****
 
@@ -221,6 +239,7 @@ USING      : 'USING';
 EXIT       : 'EXIT';
 SET        : 'SET';
 START      : 'START';
+ASSET      : 'ASSET';
 
 /* auxiliars keywords */
 MANAGER : 'MANAGER';
@@ -265,6 +284,9 @@ DEC_TYPE    : 'Dec';
 STRING_TYPE : 'String';
 BOOL_TYPE   : 'Bool';
 ENTITY_TYPE : 'Entity';
+
+/* Tipos de Assets */
+TEXTURE_TYPE: 'Texture';
 
 /* Literales */
 DIRECTCODE      : '@\'' .*? '\''; 

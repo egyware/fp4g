@@ -1,4 +1,4 @@
-// Generated from C:\Users\Edgardo\Git\fp4g-src\fp4g\src/fp4g/parser/FP4G.g by ANTLR 4.1
+// Generated from C:\Users\Edgardo\Git\fp4g-src\fp4g\src/fp4g/parser/FP4G.g4 by ANTLR 4.1
 
 package fp4g.parser;
 
@@ -114,6 +114,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitUsings(@NotNull FP4GParser.UsingsContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#assetType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssetType(@NotNull FP4GParser.AssetTypeContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#subExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -184,6 +191,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitDefine(@NotNull FP4GParser.DefineContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#assetsValues}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssetsValues(@NotNull FP4GParser.AssetsValuesContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#directCode}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -217,6 +231,20 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitGameValue(@NotNull FP4GParser.GameValueContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#assetValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssetValue(@NotNull FP4GParser.AssetValueContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#assets}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssets(@NotNull FP4GParser.AssetsContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#minusExpr}.

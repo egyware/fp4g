@@ -17,7 +17,7 @@
             <arg value="-lib" />
             <arg path="${src}/fp4g" />            
  
-            <arg value="${src}/${package}/FP4G.g" />
+            <arg value="${src}/${package}/FP4G.g4" />
         </java>
     </target> 
     

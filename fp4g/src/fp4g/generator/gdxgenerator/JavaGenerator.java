@@ -18,6 +18,7 @@ import javax.tools.ToolProvider;
 
 import fp4g.Options;
 import fp4g.data.Code;
+import fp4g.data.Define;
 import fp4g.data.Expresion;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
@@ -26,6 +27,7 @@ import fp4g.data.define.Goal;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
+import fp4g.generator.models.Depend;
 import fp4g.generator.models.JavaCodeModel;
 import freemarker.template.Configuration;
 
@@ -37,12 +39,14 @@ public class JavaGenerator extends Generator {
 	public boolean isDebug;
 	public final JavaExpresionGenerator exprGen;
 	public final JavaFunctionGenerator funcGen;
+	public final Map<Define,JavaCodeModel> parDefineJavaCode;
 	
 	public final Map<Class<? extends Code>,Class<? extends CodeGenerator<JavaGenerator>>> generators;
 	
 	public JavaGenerator()
 	{
 		generators = new HashMap<>(10,1);
+		parDefineJavaCode = new HashMap<>(10);
 		
 		generators.put(GameState.class, GameStateGenerator.class);
 		generators.put(Entity.class,    EntityGenerator.class);
@@ -69,10 +73,13 @@ public class JavaGenerator extends Generator {
 	protected void generateCode(Code gameData, File path) 
 	{
 		//creamos la carpeta
-		packageDir = new File(path,packageNameDir);	
-		if(!packageDir.exists())
+		if(packageDir == null)
 		{
-			packageDir.mkdirs();
+			packageDir = new File(path,packageNameDir);	
+			if(!packageDir.exists())
+			{
+				packageDir.mkdirs();
+			}
 		}
 		
 		//----
@@ -83,7 +90,7 @@ public class JavaGenerator extends Generator {
 			try{
 				Constructor<? extends CodeGenerator<JavaGenerator>> constructor = codegen.getConstructor(JavaGenerator.class);
 				CodeGenerator<? extends JavaGenerator> generator = constructor.newInstance(this);
-				generator.generateCode(gameData, path);
+				generator.generateCode(gameData, packageDir);
 			} catch (NoSuchMethodException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -156,5 +163,15 @@ public class JavaGenerator extends Generator {
 	@Override
 	public <CodeModel> String expresion(Code parent, CodeModel model,Expresion expr) {
 		return exprGen.generate(parent, (JavaCodeModel) model,expr);
+	}
+	
+	public void addJavaCode(Define define,JavaCodeModel value)	
+	{
+		parDefineJavaCode.put(define, value);
+	}
+	
+	public Depend getDependences(Define define)
+	{
+		return parDefineJavaCode.get(define).depends;
 	}
 }

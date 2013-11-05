@@ -3,10 +3,9 @@ package fp4g.generator.models;
 import java.util.Map;
 import java.util.TreeSet;
 
-import freemarker.template.TemplateModel;
-
 public class JavaCodeModel {
 	public final TreeSet<String> imports;
+	public final Depend depends;
 	public String pckg;//package
 	public String javadoc;
 	public String name;
@@ -20,6 +19,7 @@ public class JavaCodeModel {
 	public JavaCodeModel()
 	{
 		imports = new TreeSet<>();
+		depends = new Depend(imports, new TreeSet<AssetModel>());
 	}
 	
 	public void addImport(String _class)
