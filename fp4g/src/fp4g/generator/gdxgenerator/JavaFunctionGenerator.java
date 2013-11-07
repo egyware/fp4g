@@ -16,7 +16,6 @@ import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.generator.FunctionGenerator;
 import fp4g.generator.models.JavaCodeModel;
-import fp4g.generator.models.AssetModel;
 
 /**
  * @author Edgardo
@@ -68,7 +67,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 		{
 			String resourceName = generator.expresion(parent,model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			model.depends.addAsset(AssetModel.AssetType.Sprite,resourceName);
+			//model.depends.addAsset(AssetModel.AssetType.Sprite,resourceName);
 			DirectCode expr = new DirectCode(String.format("Utils.getSprite(%s)",resourceName));						
 			return expr;
 		}		
@@ -80,7 +79,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 		{
 			String resourceName = generator.expresion(parent,model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			model.depends.addAsset(AssetModel.AssetType.Sound,resourceName);
+			//model.depends.addAsset(AssetModel.AssetType.Sound,resourceName);
 			DirectCode expr = new DirectCode(String.format("Utils.getSound(%s)",resourceName));			
 			return expr;
 		}		
@@ -93,7 +92,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 		{
 			String resourceName = generator.expresion(parent,model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			model.depends.addAsset(AssetModel.AssetType.Texture,resourceName);			
+			//model.depends.addAsset(AssetModel.AssetType.Texture,resourceName);			
 			DirectCode expr = new DirectCode(String.format("Utils.getTexture(%s)",resourceName));					
 			return expr;
 		}		
@@ -105,7 +104,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 		{			
 			String resourceName = generator.expresion(parent,model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			model.depends.addAsset(AssetModel.AssetType.Music,resourceName);						
+			//model.depends.addAsset(AssetModel.AssetType.Music,resourceName);						
 			DirectCode expr = new DirectCode(String.format("Utils.getMusic(%s)",resourceName));					
 			return expr;
 		}		

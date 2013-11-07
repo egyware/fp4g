@@ -11,6 +11,8 @@ import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.Log.WarnType;
 import fp4g.data.Add;
+import fp4g.data.AssetType;
+import fp4g.data.Assets;
 import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
@@ -31,7 +33,6 @@ import fp4g.data.expresion.VarId;
 import fp4g.data.expresion.Literal;
 
 
-
 /**
  * Visita el arbol construido.
  * @author Edgardo
@@ -42,6 +43,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	private Stack<Define> current;
 	private Stack<ArrayExpr> array_stack;
 	private Stack<Expresion> expr_stack;
+	private Stack<Assets> assets_stack;	
 	private ExprList exprList;
 	private NameList nameList;
 	public FP4GDataVisitor(Game game)
@@ -50,6 +52,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		current = new Stack<>();
 		expr_stack = new Stack<>();
 		array_stack = new Stack<>();
+		assets_stack = new Stack<>();
 	}
 	
 	@Override
@@ -457,5 +460,54 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		expr_stack.push(functionCall);
 		
 		return null;
+	}
+	
+	@Override
+	public Void visitAssets(FP4GParser.AssetsContext ctx) 
+	{
+		Assets assets = new Assets();		
+		assets_stack.push(assets);
+		visitChildren(ctx);
+		assets_stack.pop();
+		
+		Define parent = current.peek();
+		parent.setAssets(assets);
+		return null;
+	}
+	
+	@Override
+	public Void visitAssetValueInner(FP4GParser.AssetValueInnerContext ctx)
+	{
+		Assets parent = assets_stack.peek();
+		AssetType type = ctx.assetType().type;		
+		String name = (ctx.assetName != null)? ctx.assetName.getText(): null;
+		String assetFile = ctx.asset.getText();
+		parent.add(type,name,assetFile);
+		return null;
+	}
+	
+	@Override
+	public Void visitAssetValue(FP4GParser.AssetValueContext ctx)
+	{
+		Assets parent = assets_stack.peek();
+		AssetType type = ctx.assetType().type;		
+		String name = (ctx.assetName != null)? ctx.assetName.getText(): null;
+		String assetFile = ctx.asset.getText();
+		if(ctx.getChildCount()>0)
+		{			
+			Assets assets = new Assets(type,name,assetFile);		
+			assets_stack.push(assets);
+			visitChildren(ctx);
+			assets_stack.pop();
+			
+			parent.add(assets);
+		}		
+		else
+		{
+			parent.add(type,name,assetFile);
+		}
+			
+		
+		return null;		
 	}
 }

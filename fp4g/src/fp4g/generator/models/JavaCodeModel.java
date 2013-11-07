@@ -5,7 +5,7 @@ import java.util.TreeSet;
 
 public class JavaCodeModel {
 	public final TreeSet<String> imports;
-	public final Depend depends;
+	//public final Depend depends;
 	public String pckg;//package
 	public String javadoc;
 	public String name;
@@ -19,7 +19,7 @@ public class JavaCodeModel {
 	public JavaCodeModel()
 	{
 		imports = new TreeSet<>();
-		depends = new Depend(imports, new TreeSet<AssetModel>());
+		//depends = new Depend(imports,new TreeSet<AssetModel>());
 	}
 	
 	public void addImport(String _class)

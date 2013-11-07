@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import fp4g.Log;
+import fp4g.Log.ErrType;
+
 @SuppressWarnings("unchecked")
 public abstract class Define extends Code{
 	public final static List<Add> emptyList = new ArrayList<>(0);
@@ -17,7 +20,9 @@ public abstract class Define extends Code{
 	public String name;
 	public NameList paramNameList;
 	
-	private Map<String,Object> variables;
+	public Assets assets;
+	
+	private final Map<String,Object> variables;
 	
 	private final Map<DefineType,List<Add>> adds;
 	private final Map<DefineType,Map<String,? extends Define>> defines;
@@ -197,4 +202,17 @@ public abstract class Define extends Code{
 	{
 		return variables.containsKey(key);
 	}
+	
+	public void setAssets(Assets assets)
+	{
+		if(this.assets != null)
+		{
+			Log.Show(ErrType.YouCanUseOnceTimeAssets,assets);
+		}
+		else
+		{
+			this.assets = assets;
+		}		
+	}
+	
 }

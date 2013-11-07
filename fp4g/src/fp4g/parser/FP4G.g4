@@ -131,15 +131,16 @@ returns
 
  
 defineValues
-	    :
+	    :	    
 	    defineValue (defineValue)* 
 	    ;
 
 defineValue
 		:
-		add DOTCOMA
+		  add DOTCOMA
 		| set DOTCOMA
-		| on		
+		| on
+		| assets
 		;
 
 exprList: expr (COMA expr)*;
@@ -200,21 +201,33 @@ returns
 		 | ID          {$type = VarType.Custom;} // solo Define del tipo Type
         ;
 
-assetType:
-	TEXTURE_TYPE
-	;
+assetType
+returns
+[
+	AssetType type = null
+]
+		:
+		   TEXTURE_TYPE {$type = AssetType.Texture;}
+		 |  SPRITE_TYPE {$type = AssetType.Sprite;}
+		 |   ATLAS_TYPE {$type = AssetType.Atlas;}		 
+		;
         
 assets:
-	ASSET ID? 
-	assetsValues
-;
-
-assetsValues:
+	ASSETS
 	ABRE_COR assetValue (COMA assetValue)* COMA? CIERRA_COR
 ;
 
 assetValue:
-	assetType ID? DOUBLEDOT STRING_TYPE (assetsValues)?	
+	assetType assetName=ID? DOUBLEDOT asset=STRING_LITERAL (assetValuesInner)?	
+;
+
+/** diseñadas para no permitir otro nivel adicional de profundidad en los assets */
+assetValuesInner:
+	ABRE_COR assetValueInner (COMA assetValueInner)* COMA? CIERRA_COR
+;
+
+assetValueInner:
+	assetType assetName=ID? DOUBLEDOT asset=STRING_LITERAL
 ;
 	
 
@@ -239,7 +252,7 @@ USING      : 'USING';
 EXIT       : 'EXIT';
 SET        : 'SET';
 START      : 'START';
-ASSET      : 'ASSET';
+ASSETS     : 'ASSETS';
 
 /* auxiliars keywords */
 MANAGER : 'MANAGER';
@@ -287,6 +300,8 @@ ENTITY_TYPE : 'Entity';
 
 /* Tipos de Assets */
 TEXTURE_TYPE: 'Texture';
+SPRITE_TYPE : 'Sprite';
+ATLAS_TYPE  : 'Atlas';
 
 /* Literales */
 DIRECTCODE      : '@\'' .*? '\''; 

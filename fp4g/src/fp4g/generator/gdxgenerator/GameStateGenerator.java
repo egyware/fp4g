@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import fp4g.data.Add;
+import fp4g.data.Asset;
 import fp4g.data.Code;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
@@ -19,7 +20,6 @@ import fp4g.data.define.GameState;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
 import fp4g.generator.models.AssetModel;
-import fp4g.generator.models.Depend;
 import fp4g.generator.models.JavaCodeModel;
 import freemarker.template.Template;
 
@@ -71,8 +71,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		gamez.put("name", game.name);
 		root.put("class",modelClass);
 		root.put("game", gamez);
-		root.put("debug", generator.isDebug);
-		root.put("assets", assets);
+		root.put("debug", generator.isDebug);		
 		
 		List<Map<String, Object>> managers = new LinkedList<>();
 		for(Add manager:state.getAdd(DefineType.MANAGER))
@@ -129,14 +128,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		{
 			entityBuilders.add(entity.name);
 			//agregar imports
-			modelClass.imports.add(String.format("%s.entity.%sBuilder",generator.packageName,entity.name));
-			
-			Depend dependencias = generator.getDependences(entity);
-			for(AssetModel model:dependencias.assets)
-			{
-				modelClass.imports.add(model.type.importClass);
-			}
-			assets.addAll(dependencias.assets);		
+			modelClass.imports.add(String.format("%s.entity.%sBuilder",generator.packageName,entity.name));						
 		}
 		root.put("entityBuilders", entityBuilders);
 		
@@ -167,6 +159,14 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			entities.add(ent);
 		}
 		root.put("entities", entities);
+		
+		//agregar assets
+		for(Asset asset:state.assets)
+		{
+			//agrega el import necesario usando solo una funcion.
+			AssetModel.newAsset(assets,modelClass.imports,asset);						
+		}
+		root.put("assets", assets);
 		
 		String arrayImports[] = new String[]
 		{

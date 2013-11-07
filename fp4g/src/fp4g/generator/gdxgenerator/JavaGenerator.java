@@ -27,7 +27,6 @@ import fp4g.data.define.Goal;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
-import fp4g.generator.models.Depend;
 import fp4g.generator.models.JavaCodeModel;
 import freemarker.template.Configuration;
 
@@ -168,10 +167,5 @@ public class JavaGenerator extends Generator {
 	public void addJavaCode(Define define,JavaCodeModel value)	
 	{
 		parDefineJavaCode.put(define, value);
-	}
-	
-	public Depend getDependences(Define define)
-	{
-		return parDefineJavaCode.get(define).depends;
-	}
+	}	
 }

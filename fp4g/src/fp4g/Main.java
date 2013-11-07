@@ -89,14 +89,15 @@ public class Main {
 				FP4GDataVisitor visitor = new FP4GDataVisitor(gameConf);
 				visitor.visit(tree);
 				System.out.println(String.format("Parsing complete: %s",inputFile));
+				
+				Generator generator = new JavaGenerator();
+				generator.generate(options,gameConf, new File(outDirectory));
 			}
 			else
 			{
 				System.out.println(String.format("Parsing incomplete: %s",inputFile));
-			}
+			}			
 			
-			Generator generator = new JavaGenerator();
-			generator.generate(options,gameConf, new File(outDirectory));
 	        
 			
 		} catch (IOException e) {

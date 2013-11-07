@@ -60,7 +60,7 @@ public class Log {
 		NotImplement,
 		MessageExpected,
 		UnknowError,
-		FilterMissing, NotExpectedDefine, NotExpectedOn, NotExpectedAdd,
+		FilterMissing, NotExpectedDefine, NotExpectedOn, NotExpectedAdd, YouCanUseOnceTimeAssets,
 		;
 		
 		private String message;

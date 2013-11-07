@@ -23,6 +23,13 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#assetValuesInner}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssetValuesInner(@NotNull FP4GParser.AssetValuesInnerContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#multExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -35,6 +42,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunctionCallExpr(@NotNull FP4GParser.FunctionCallExprContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#assetValueInner}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssetValueInner(@NotNull FP4GParser.AssetValueInnerContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#using}.
@@ -189,13 +203,6 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDefine(@NotNull FP4GParser.DefineContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#assetsValues}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAssetsValues(@NotNull FP4GParser.AssetsValuesContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#directCode}.
