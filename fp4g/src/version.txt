@@ -1,3 +1,17 @@
+:::0.1.17 (prototipo)
++ Se reemplateo el asunto de los assets, ahora se deberá especificar en que GameState cargarlos.
++ Se agregaron las clases Asset y Assets que modelan y almacenan los datos la instrucción Assets. Se actualizo AssetModel para el template.
+B Se requieren cambios minimos para hacer que funcione el sistema.
+B Funciones getAssets, no pueden cargar automaticamente los assets, no hay forma de agregarlos previamente.
+B Ejecute el codigo
+P Ordenar el codigo para recibir parametros y talvez más adelante definir parametros por defecto.
+P Falta definir que codigo va ir en las sentencias.
+P Falta la capacidad de ordenar los managers según prioridad
+P Definir la verdadera utilidad de la clase Utils y no la parche de ahora.
+P Hacer más generales las opciones de compilación automatica.
+P Hacer que las clases compiladas queden en el otro lugar.
+P Hacer que los Managers envien mensaje
+P falta agregar la instruccion Using
 :::0.1.16 (prototipo)
 + Ahora se agregan las dependencias de los assets(Prototipado)
 + Se quito loadAssets, ahora se implementará nativamente en el generador, con la ayuda de la clase AssetModel y Depend
@@ -5,79 +19,6 @@
 B Se requieren cambios minimos para hacer que funcione el sistema.
 B Funciones getAssets, no pueden cargar automaticamente los assets, no hay forma de agregarlos previamente.
 P Talvez replantear el tema de los assets, el problema es que no puede saber con exactitud donde y cuando se van a usar.
-
-*** forma A ***
-DEFINE Type Texture
-[
-	SET import = "gdx.Texture"
-	SET name  = "Texture" //por defecto el mismo nombre del Type
-]
-Define Asset AsteroidePequeño
-[
-	SET atlas = "asteroide.atlas" 
-	SET name  = "small.json";	
-	SET type  = Sprite
-]
-Define Asset AsteroideGrande
-[
-	SET atlas = "asteroide.atlas" 
-	SET name  = "big.json";	
-	SET type  = Sprite
-] 
-Define Asset Bala
-[	 
-	SET name  = "bala.png";	
-	SET type  = Texture
-]
-
-*** forma B ***
-Assets 
-[
-	Texture: "bala.png" //archivos independientes
-	Texture: "gui.png"
-	Texture: "gui","general.atlas" //con atlas.
-	Sprite: "perro.json" //archivo independiente
-	Sprite: "perro","general.atlas" //con atlas
-	Music: "musica.mp3"
-]
-*** forma C ***
-Assets
-[
-	Zip    zipped: "assets.zip" 
-	Atlas general: "general.atlas" from zipped //esto ultimo... podria ir codificado en en loader
-	Texture  bala: "bala.png" 
-	Texture   gui: "elementoA" from general 
-]
-*** forma D ***
-Assets from Zip "assets.zip"
-[	 
-	Atlas general: "general.atlas"
-	Texture  bala: "bala.png" 
-	Texture   gui: "elementoA" from general 
-]
-*** forma E ***
-Assets:"assets.zip" <--- detectar automaticamente el formato.
-[	
-	Atlas:"general.atlas"
-	[
-		Texture gui: "elementoA" //entonces tendrá que forzamente utilizar punto y coma?	 
-	]
-	Texture  bala: "bala.png"
-]
-
-* al utilizar esto, estoy sugiriendo que, debo referenciar los defines como variables?
-* Pero... es necesario que todos los define sean un tipo de variable? 
-* Si... porque la intencion al tratar de añadir eso es hacer algo por el estilo
-** ADD BEHAVIOR SpriteBehavior(getSprite("asteroids.atlas"),tipo);
-** ADD BEHAVIOR SpriteBehavior(Asteroide,tipo); //<
-** Usando defines se ve engorroso (forma A)
-** Si se usa la forma B se ve más ordenado, pero se pierde la conexión con las variables.
-** Con esto me refiero que no se puede saber a que dato referenciar.
-
-
-
-
-
 P Ordenar el codigo para recibir parametros y talvez más adelante definir parametros por defecto.
 P Ejecute el codigo
 P Falta definir que codigo va ir en las sentencias.

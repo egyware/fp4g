@@ -35,6 +35,8 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		
 		HashMap<String,Object> renderMngrData = new HashMap<>();		
 		
+		renderMngrData.put("preinit",Arrays.asList("batch = new SpriteBatch()"));
+		renderMngrData.put("dparams", Arrays.asList("batch"));
 		renderMngrData.put("preupdate",Arrays.asList("batch.setProjectionMatrix(camera.combined)","batch.begin()"));
 		renderMngrData.put("postupdate",Arrays.asList("batch.end()"));		
 		renderMngrData.put("fields", Arrays.asList("OrthographicCamera camera","SpriteBatch batch"));
@@ -89,8 +91,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				if(imports != null)
 				{
 					modelClass.imports.addAll(imports);
-				}
-				
+				}				
 			}
 			
 			if(manager.varName != null)
@@ -104,6 +105,14 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			if(manager.params != null)
 			{
 				List<String> params = new LinkedList<>();
+				if(extras != null)
+				{
+					List<String> dparams = (List<String>) extras.get("dparams");
+					if(dparams != null)
+					{
+						params.addAll(dparams);
+					}
+				}
 				for(Expresion expr: manager.params)
 				{
 					String result = generator.expresion(manager,modelClass,expr);
@@ -114,6 +123,17 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 					//TODO: probablemente mostrar un error...
 				}
 				mngr.put("params",params);
+			}
+			else
+			{  //si no hay, y existe parametros por defecto. Entonces usamos este				
+				if(extras != null)
+				{
+					List<String> dparams = (List<String>) extras.get("dparams");
+					if(dparams != null)
+					{
+						mngr.put("params", dparams);
+					}
+				}
 			}
 			managers.add(mngr);
 			//import

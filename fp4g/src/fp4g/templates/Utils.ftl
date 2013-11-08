@@ -47,6 +47,9 @@ public class Utils {
 	public static <T> void loadAsset(String asset, Class<T> clazz){
 		assetManager.load(asset, clazz);
 	}
+	public static <T> void loadAsset(String asset, Class<T> clazz, AssetLoaderParameters<T> params){
+		assetManager.load(asset, clazz,params);
+	}
 	public static void unloadAsset(String asset){
 		assetManager.unload(asset);
 	}

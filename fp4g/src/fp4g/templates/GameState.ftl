@@ -99,6 +99,11 @@ public final class ${class.name} extends GameState{
 		//managers
 		<#if managers??>
 		<#list managers as manager>
+		<#if manager.preinit??>
+		<#list manager.preinit as preinit>
+		${preinit};
+		</#list>
+		</#if>
 		${manager.varName} = new ${manager.name}(<#if manager.params??><#list manager.params as param>${param}<#if param_has_next>, </#if></#list></#if>);
 		</#list>
 		</#if>
@@ -121,7 +126,7 @@ public final class ${class.name} extends GameState{
 		//cargar los assets aqui.
 		<#if assets??>
 		<#list assets as asset>
-		Utils.loadAsset(${asset.resource}, ${asset.type}.class);
+		Utils.loadAsset(${asset.resource}, ${asset.type}.class<#if asset.parameterClass??>, new ${asset.parameterClass}(${asset.parameterClassOption})</#if>);
 		</#list>
 		Utils.loadAssets();
 		</#if>
