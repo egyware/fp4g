@@ -24,9 +24,14 @@ import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Goal;
+import fp4g.data.define.Manager;
+import fp4g.data.define.Message;
+import fp4g.data.expresion.ArrayExpr;
 import fp4g.data.expresion.FunctionCall;
+import fp4g.data.expresion.Literal;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
+import fp4g.generator.models.Depend;
 import fp4g.generator.models.JavaCodeModel;
 import freemarker.template.Configuration;
 
@@ -41,6 +46,8 @@ public class JavaGenerator extends Generator {
 	public final Map<Define,JavaCodeModel> parDefineJavaCode;
 	
 	public final Map<Class<? extends Code>,Class<? extends CodeGenerator<JavaGenerator>>> generators;
+	
+	public final HashMap<Define,Depend> dependencias = new HashMap<>();
 	
 	public JavaGenerator()
 	{
@@ -65,6 +72,7 @@ public class JavaGenerator extends Generator {
 		isDebug = (Boolean) options.get("debug");
 		
 		cfg.setClassForTemplateLoading(JavaGenerator.class, "/fp4g/templates");
+				
 	}
 
 	
@@ -167,5 +175,82 @@ public class JavaGenerator extends Generator {
 	public void addJavaCode(Define define,JavaCodeModel value)	
 	{
 		parDefineJavaCode.put(define, value);
-	}	
+	}
+
+	public static void fillWithUsefulData(Game gameConf) 
+	{
+		gameConf.name = "GameApp";
+    	gameConf.width = 640;
+    	gameConf.height = 480;
+    	gameConf.debug = false;
+    	gameConf.setManager(new JavaRenderManager());
+    	gameConf.setManager(new JavaEntityManager());
+    	gameConf.setManager(new JavaSoundManager());
+    	gameConf.setManager(new JavaPhysicsManager());
+    	
+    	Message keyMessage = new Message("Key",gameConf);
+    	String keys[] = {"key","value","compare"};
+    	Expresion value[] = {new Literal<String>("key"),new Literal<String>("Keyboard.A"), new Literal<String>("equals")};
+    	keyMessage.set("pressA", new ArrayExpr(keys,value));
+    	
+    	gameConf.setDefine(keyMessage);
+    	/*DEFINE MESSAGE Key
+    	[
+    		SET pressA     = {field= "key", value="Keyboard.A",     compare="equals"};
+    		SET pressA     = {field= "key", value="Keyboard.B",     compare="equals"};
+    		SET pressLeft  = {field= "key", value="Keyboard.Left",  compare="equals"};
+    		SET pressRight = {field= "key", value="Keyboard.Right", compare="equals"};
+    		SET pressUp    = {field= "key", value="Keyboard.Up",    compare="equals"};
+    		SET pressDown  = {field= "key", value="Keyboard.Down",  compare="equals"};
+    		SET pressSpace = {field= "key", value="Keyboard.Space", compare="equals"};
+    	]*/
+//        //agregar componentes		    	
+////    String components[][] = 
+////    	{
+////    		{"BodyBehavior"},
+////    		{"spatial.Spatial"},
+////    		{"SpriteBehavior","spatial.Spatial"},		        			        		
+////    	};	        
+////    for(String c[]:components)
+////    {
+////    	if(c.length == 1)
+////    	{
+////    		gameConf.addBehavior(c[0]);
+////    	}
+////    	else
+////    	{
+////    		gameConf.addBehavior(c[0],c[1]);
+////    	}
+////    }
+	}
+	
+	private static class JavaRenderManager extends Manager
+	{
+		public JavaRenderManager() {
+			super("GdxRenderManager",1);		
+		}
+	}
+	private static class JavaEntityManager extends Manager 
+	{
+		public JavaEntityManager() 
+		{
+			super("EntityManager",3);		
+		}		
+	}
+	private static class JavaPhysicsManager extends Manager 
+	{
+
+		public JavaPhysicsManager() {
+			super("PhysicsManager",2);		
+		}		
+	}
+	private static class JavaSoundManager extends Manager {
+
+		public JavaSoundManager() {
+			super("SoundManager",4);
+		}
+	}
+
+
+
 }

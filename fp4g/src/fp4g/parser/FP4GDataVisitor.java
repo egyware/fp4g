@@ -166,11 +166,11 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		//en vez de solo crearlo, tengo que buscarlo... y si no existe crearlo.
 		On on = parent.getOn(ctx.messageName);
 		if(on == null)
-		{		
-			//en vez de usar el nombre, deberia buscar una clase del tipo Mensaje!!!
+		{	
 			Define message = parent.getDefine(DefineType.MESSAGE,ctx.messageName);
 			if(message == null)
 			{
+				//Muestra un error, pero sigue funcionando...
 				Log.Show(ErrType.MessageExpected,ctx.start.getLine(),ctx.messageName);
 				on = new On(ctx.messageName);
 			}

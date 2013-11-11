@@ -19,6 +19,10 @@ public class Message extends Define {
 	public Message(String name,Define parent) {
 		super(DefineType.MESSAGE, name,parent);		
 	}
+	
+	public Message(String name) {
+		super(DefineType.MESSAGE, name);		
+	}
 
 	/* (non-Javadoc)
 	 * @see fp4g.data.Define#addADD(fp4g.data.Add)

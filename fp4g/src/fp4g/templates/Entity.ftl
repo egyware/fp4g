@@ -88,7 +88,7 @@ implements MessageReceiver
 	public void onMessage(Message message)
 	{
 		<#list messages as message>
-		if(message instanceof ${message.name})
+		if(message instanceof ${message.name}Message)
 		{
 			onMessage((${message.name}Message)message);			
 		}

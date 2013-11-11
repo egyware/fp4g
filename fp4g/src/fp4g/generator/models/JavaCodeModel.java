@@ -1,6 +1,5 @@
 package fp4g.generator.models;
 
-import java.util.Map;
 import java.util.TreeSet;
 
 public class JavaCodeModel {
@@ -8,12 +7,6 @@ public class JavaCodeModel {
 	public String pckg;//package
 	public String javadoc;
 	public String name;
-	
-	//parche...
-	//contiene las variables que seran pasadasa la plantilla
-	//Esta variable existe solo con la intención de ser un poco más flexible con las funciones.
-	public Map<String,Object> vars;
-	
 	
 	public JavaCodeModel()
 	{

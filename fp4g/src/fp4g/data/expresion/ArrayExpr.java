@@ -7,6 +7,16 @@ import fp4g.data.Expresion;
 
 public class ArrayExpr extends Expresion{
 	private Map<String,Expresion> map;
+	
+	public ArrayExpr(String keys[],Expresion exprs[])
+	{		
+		map = new HashMap<>();
+		for(int i=0;i<keys.length;i++)
+		{
+			map.put(keys[i], exprs[i]);
+		}
+	}
+	
 	public ArrayExpr()
 	{
 		map = new HashMap<>();

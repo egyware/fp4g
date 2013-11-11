@@ -6,7 +6,6 @@ import static fp4g.Log.*;
 
 import fp4g.data.*;
 import fp4g.data.define.*;
-import fp4g.data.managers.*;
 
 import java.util.LinkedList;
 

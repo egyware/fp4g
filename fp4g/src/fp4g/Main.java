@@ -9,10 +9,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import fp4g.data.define.Game;
-import fp4g.data.managers.EntityManager;
-import fp4g.data.managers.PhysicsManager;
-import fp4g.data.managers.RenderManager;
-import fp4g.data.managers.SoundManager;
 import fp4g.generator.Generator;
 import fp4g.generator.gdxgenerator.JavaGenerator;
 import fp4g.parser.FP4GDataVisitor;
@@ -53,33 +49,8 @@ public class Main {
 			
 			
 			Game gameConf = new Game();
-	    	gameConf.name = "GameApp";
-	    	gameConf.width = 640;
-	    	gameConf.height = 480;
-	    	gameConf.debug = false;
-	    	gameConf.setManager(new RenderManager());
-	    	gameConf.setManager(new EntityManager());
-	    	gameConf.setManager(new SoundManager());
-	    	gameConf.setManager(new PhysicsManager());
-	    	
-//	        //agregar componentes		    	
-////        String components[][] = 
-////        	{
-////        		{"BodyBehavior"},
-////        		{"spatial.Spatial"},
-////        		{"SpriteBehavior","spatial.Spatial"},		        			        		
-////        	};	        
-////        for(String c[]:components)
-////        {
-////        	if(c.length == 1)
-////        	{
-////        		gameConf.addBehavior(c[0]);
-////        	}
-////        	else
-////        	{
-////        		gameConf.addBehavior(c[0],c[1]);
-////        	}
-////        }
+			JavaGenerator.fillWithUsefulData(gameConf);
+						
 			
 	    	System.out.println(String.format("Parsing: %s",inputFile));			
 			ParseTree tree = p.program();
@@ -88,10 +59,10 @@ public class Main {
 			{
 				FP4GDataVisitor visitor = new FP4GDataVisitor(gameConf);
 				visitor.visit(tree);
-				System.out.println(String.format("Parsing complete: %s",inputFile));
 				
 				Generator generator = new JavaGenerator();
 				generator.generate(options,gameConf, new File(outDirectory));
+				System.out.println(String.format("Parsing complete: %s",inputFile));				
 			}
 			else
 			{

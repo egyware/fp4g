@@ -3,7 +3,7 @@ package fp4g.generator.models;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ParamCodeModel {
+public class ParamCodeModel implements Model {
 	private static final Map<String,String> defaultValues;
 	static
 	{

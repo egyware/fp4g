@@ -22,11 +22,12 @@ public abstract class Define extends Code{
 	
 	public Assets assets;
 	
-	private final Map<String,Object> variables;
+	private final Map<String,Object> variables;	
 	
 	private final Map<DefineType,List<Add>> adds;
 	private final Map<DefineType,Map<String,? extends Define>> defines;
 	private final Map<String,On> onMessages;
+	
 	
 	public Define(DefineType type,String name)
 	{
@@ -38,7 +39,7 @@ public abstract class Define extends Code{
 		this.type = type;
 		this.name = name;
 		this.parent = parent;
-		variables = new HashMap<String,Object>();
+		variables = new HashMap<String,Object>();		
 		adds    = new HashMap<>(DefineType.values().length,1);
 		defines = new HashMap<>(DefineType.values().length,1);
 		onMessages= new HashMap<>();
@@ -182,7 +183,7 @@ public abstract class Define extends Code{
 	{
 		variables.put(key, value);
 	}
-	
+		
 	/**
 	 * Devuelve el valor de una variable.
 	 * @param key
@@ -190,8 +191,9 @@ public abstract class Define extends Code{
 	 */
 	public final Object get(String key)
 	{
-		return variables.get(key);
-	}	
+		return variables.get(key);		 
+	}
+	
 	
 	/**
 	 * Verifica si la variable existe.
