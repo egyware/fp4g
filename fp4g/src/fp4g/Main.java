@@ -48,9 +48,9 @@ public class Main {
 			p.setBuildParseTree(true);
 			
 			
+			Generator generator = new JavaGenerator();
 			Game gameConf = new Game();
-			JavaGenerator.fillWithUsefulData(gameConf);
-						
+			generator.prepareGameData(gameConf);						
 			
 	    	System.out.println(String.format("Parsing: %s",inputFile));			
 			ParseTree tree = p.program();
@@ -58,9 +58,8 @@ public class Main {
 			if(tree != null)
 			{
 				FP4GDataVisitor visitor = new FP4GDataVisitor(gameConf);
-				visitor.visit(tree);
+				visitor.visit(tree);				
 				
-				Generator generator = new JavaGenerator();
 				generator.generate(options,gameConf, new File(outDirectory));
 				System.out.println(String.format("Parsing complete: %s",inputFile));				
 			}

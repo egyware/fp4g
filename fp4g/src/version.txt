@@ -3,9 +3,9 @@
 + Se agregaron las clases Asset y Assets que modelan y almacenan los datos la instrucción Assets. Se actualizo AssetModel para el template.
 + Se requieren minimos cambios para que funcione, de hecho sin usar los eventos funciona correctamente.
 + GetAssets Eliminado por la instrucción Assets.
-+ Se descarta la idea de usar templates durante runtime, se cambia a templates antes de parsear. Utilizando freemaker para ello.
 B No se pueden encontrar las dependendencias correctamente de los eventos.
 B Ejecute el codigo
+P Se descarta la idea de usar templates durante runtime, se cambia a templates antes de parsear. Utilizando freemaker para ello.
 P Los eventos no están funcionando correctamente. Aplicar patron de las otras implementacion par Clase Data/Model
 P Debe quedar prueba de tontos
 P Ordenar el codigo para recibir parametros y talvez más adelante definir parametros por defecto.

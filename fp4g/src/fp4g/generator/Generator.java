@@ -10,6 +10,7 @@ import java.util.List;
 import fp4g.Options;
 import fp4g.data.Code;
 import fp4g.data.Expresion;
+import fp4g.data.define.Game;
 import fp4g.data.expresion.FunctionCall;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -76,5 +77,10 @@ public abstract class Generator {
 		System.out.println(String.format("Generado: %s",name));
 		
 		filesToCompile.add(file);
+	}
+	
+	public void prepareGameData(Game gameConf) {
+		//nothing to do
+		
 	}
 }

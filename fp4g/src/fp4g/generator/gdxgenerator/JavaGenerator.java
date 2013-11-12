@@ -54,12 +54,6 @@ public class JavaGenerator extends Generator {
 		generators = new HashMap<>(10,1);
 		parDefineJavaCode = new HashMap<>(10);
 		
-		generators.put(GameState.class, GameStateGenerator.class);
-		generators.put(Entity.class,    EntityGenerator.class);
-		//generators.put(Event.class,     EventGenerator.class);
-		generators.put(Game.class,      GameGenerator.class);
-		generators.put(Goal.class,      GoalGenerator.class);
-		
 		exprGen = new JavaExpresionGenerator(this);
 		funcGen = new JavaFunctionGenerator(this);
 	}
@@ -72,6 +66,12 @@ public class JavaGenerator extends Generator {
 		isDebug = (Boolean) options.get("debug");
 		
 		cfg.setClassForTemplateLoading(JavaGenerator.class, "/fp4g/templates");
+		
+		generators.put(GameState.class, GameStateGenerator.class);
+		generators.put(Entity.class,    EntityGenerator.class);
+		//generators.put(Event.class,     EventGenerator.class);
+		generators.put(Game.class,      GameGenerator.class);
+		generators.put(Goal.class,      GoalGenerator.class);
 				
 	}
 
@@ -177,7 +177,8 @@ public class JavaGenerator extends Generator {
 		parDefineJavaCode.put(define, value);
 	}
 
-	public static void fillWithUsefulData(Game gameConf) 
+	
+	public void prepareGameData(Game gameConf) 
 	{
 		gameConf.name = "GameApp";
     	gameConf.width = 640;
@@ -189,21 +190,16 @@ public class JavaGenerator extends Generator {
     	gameConf.setManager(new JavaPhysicsManager());
     	
     	Message keyMessage = new Message("Key",gameConf);
-    	String keys[] = {"key","value","compare"};
-    	Expresion value[] = {new Literal<String>("key"),new Literal<String>("Keyboard.A"), new Literal<String>("equals")};
-    	keyMessage.set("pressA", new ArrayExpr(keys,value));
+    	String[] keys = {"A","B","Left","Right","Up","Down","Space"};
+    	for(int i=0;i<keys.length;i++)
+    	{
+    		String k[] = {"field","value","compare"};
+    		Expresion value[] = {new Literal<String>("key"),new Literal<String>(String.format("Keyboard.%s",keys[i])), new Literal<String>("equals")};
+    		keyMessage.set(String.format("press%s",keys[i]), new ArrayExpr(k,value));    		
+    	}
+    	gameConf.setDefine(keyMessage);  
     	
-    	gameConf.setDefine(keyMessage);
-    	/*DEFINE MESSAGE Key
-    	[
-    		SET pressA     = {field= "key", value="Keyboard.A",     compare="equals"};
-    		SET pressA     = {field= "key", value="Keyboard.B",     compare="equals"};
-    		SET pressLeft  = {field= "key", value="Keyboard.Left",  compare="equals"};
-    		SET pressRight = {field= "key", value="Keyboard.Right", compare="equals"};
-    		SET pressUp    = {field= "key", value="Keyboard.Up",    compare="equals"};
-    		SET pressDown  = {field= "key", value="Keyboard.Down",  compare="equals"};
-    		SET pressSpace = {field= "key", value="Keyboard.Space", compare="equals"};
-    	]*/
+    	//dependencias.put(keyMessage, new Depend());
 //        //agregar componentes		    	
 ////    String components[][] = 
 ////    	{
