@@ -5,12 +5,12 @@ import java.io.PrintStream;
 import fp4g.data.Code;
 
 public class Log {	
-	private final static String formatErrorSimple = "%d: error%03d %s";
-	private final static String formatWarnSimple  = "%d: warn%03d %s";
-	private final static String formatInfoSimple  = "%d: info%03d %s";
-	private final static String formatErrorMore   = "%d: error%03d %s (%s)";
-	private final static String formatWarnMore    = "%d: warn%03d %s (%s)";
-	private final static String formatInfoMore    = "%d: info%03d %s (%s)";
+	private final static String formatErrorSimple = "%3d: error%03d %s";
+	private final static String formatWarnSimple  = "%3d: warn%03d %s";
+	private final static String formatInfoSimple  = "%3d: info%03d %s";
+	private final static String formatErrorMore   = "%3d: error%03d %s (%s)";
+	private final static String formatWarnMore    = "%3d: warn%03d %s (%s)";
+	private final static String formatInfoMore    = "%3d: info%03d %s (%s)";
 	private final static PrintStream out = System.out;
 	private final static PrintStream err = System.err;
 	

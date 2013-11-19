@@ -13,6 +13,7 @@ import fp4g.Log.ErrType;
 import fp4g.Pair;
 import fp4g.data.Add;
 import fp4g.data.Code;
+import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.On;
@@ -23,6 +24,7 @@ import fp4g.data.expresion.ArrayExpr;
 import fp4g.data.expresion.Literal;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
+import fp4g.generator.models.Depend;
 import fp4g.generator.models.JavaCodeModel;
 import fp4g.generator.models.ParamCodeModel;
 import freemarker.template.Template;
@@ -119,7 +121,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		{
 			List<HashMap<String,Object>> messages = new LinkedList<>();
 			for(On on:entity_onMessages)
-			{
+			{				
 				HashMap<String,Object> message = new HashMap<>();
 				LinkedList<HashMap<String,Object>> sources = new LinkedList<>();				
 				message.put("name", on.name);
@@ -225,6 +227,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 					"java.util.HashMap",
 					"java.util.Map"
 			};
+			//TODO deberia haber una clase que haga todo esto junto. Y que la relación no sea a un objeto. Si no a la clase.
 			//imports para el builder
 			List<String> imports = new LinkedList<>();
 			Collections.addAll(imports, arrayImports);		
@@ -233,11 +236,15 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				imports.add(String.format("com.apollo.components.%s",addBhvr.name));
 			}
 			if(entity_onMessages.size()>0)
-			{
+			{				
 				imports.add("com.apollo.messages.MessageReceiver");
 				for(On on:entity_onMessages)
-				{
-					imports.add(String.format("com.apollo.messages.%sMessage",on.name));
+				{					
+					Depend<Define> depende = generator.resolveDependency(on.message);
+					if(depende != null)
+					{
+						depende.perform(on.message,entityRoot, modelEntity);
+					}
 				}
 			}
 			Collections.sort(imports);

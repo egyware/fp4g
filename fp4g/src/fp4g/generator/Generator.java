@@ -9,9 +9,11 @@ import java.util.List;
 
 import fp4g.Options;
 import fp4g.data.Code;
+import fp4g.data.Define;
 import fp4g.data.Expresion;
 import fp4g.data.define.Game;
 import fp4g.data.expresion.FunctionCall;
+import fp4g.generator.models.Depend;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -79,8 +81,6 @@ public abstract class Generator {
 		filesToCompile.add(file);
 	}
 	
-	public void prepareGameData(Game gameConf) {
-		//nothing to do
-		
-	}
+	public abstract void prepareGameData(Game gameConf);
+	protected abstract <T extends Define> Depend<T> resolveDependency(Define define);
 }

@@ -33,6 +33,7 @@ import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
 import fp4g.generator.models.Depend;
 import fp4g.generator.models.JavaCodeModel;
+import fp4g.generator.models.KeyMessageDepend;
 import freemarker.template.Configuration;
 
 public class JavaGenerator extends Generator {	
@@ -47,7 +48,7 @@ public class JavaGenerator extends Generator {
 	
 	public final Map<Class<? extends Code>,Class<? extends CodeGenerator<JavaGenerator>>> generators;
 	
-	public final HashMap<Define,Depend> dependencias = new HashMap<>();
+	public final HashMap<Define,Depend<? extends Define>> dependencias = new HashMap<>();
 	
 	public JavaGenerator()
 	{
@@ -199,7 +200,7 @@ public class JavaGenerator extends Generator {
     	}
     	gameConf.setDefine(keyMessage);  
     	
-    	//dependencias.put(keyMessage, new Depend());
+    	dependencias.put(keyMessage, new KeyMessageDepend());
 //        //agregar componentes		    	
 ////    String components[][] = 
 ////    	{
@@ -245,6 +246,24 @@ public class JavaGenerator extends Generator {
 		public JavaSoundManager() {
 			super("SoundManager",4);
 		}
+	}
+	@Override
+	@SuppressWarnings("unchecked")	
+	protected <T extends Define> Depend<T> resolveDependency(Define define) {
+		if(define == null)
+		{
+			return null;
+		}
+		else
+		if(define instanceof Entity)
+		{
+			//TODO por hacer
+			return null;
+		}
+		else
+		{
+			return (Depend<T>) dependencias.get(define);
+		}		
 	}
 
 
