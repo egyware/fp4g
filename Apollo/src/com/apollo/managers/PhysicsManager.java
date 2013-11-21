@@ -1,7 +1,7 @@
 package com.apollo.managers;
 
 import com.apollo.DefaultEntity;
-import com.apollo.messages.ContactMessage;
+import com.apollo.messages.ContactMessageHandler;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -22,8 +22,8 @@ public class PhysicsManager extends Manager implements ContactListener{
 	public static final float SCALE = 0.01f;
 	public static final float INV_SCALE = 100.0f;
 	private final World world;
-	private final ContactMessage contactMessage;
-	
+	//private final ContactMessageHandler contactMessage;
+	//TODO arreglar mensajeria
 	public PhysicsManager()
 	{
 		this(Vector2.Zero);
@@ -32,7 +32,7 @@ public class PhysicsManager extends Manager implements ContactListener{
 	{		
 		world = new World(gravity, true);
 		world.setContactListener(this);
-		contactMessage = new ContactMessage();
+//		contactMessage = new ContactMessageHandler();
 
 	}
 	
@@ -50,24 +50,24 @@ public class PhysicsManager extends Manager implements ContactListener{
 		Fixture fixB = contact.getFixtureB();
 		DefaultEntity a = (DefaultEntity)fixA.getBody().getUserData();
 		DefaultEntity b = (DefaultEntity)fixB.getBody().getUserData();
-		if(a != null)
-		{		
-			contactMessage.contact = contact;			
-			contactMessage.other = b;
-			contactMessage.ownFixture = fixA;
-			contactMessage.otherFixture = fixB;			
-			contactMessage.begin = true;
-			a.fireEvent(contactMessage);
-		}
-		if(b != null)
-		{			
-			contactMessage.contact = contact;
-			contactMessage.other = a;
-			contactMessage.ownFixture = fixB;
-			contactMessage.otherFixture = fixA;
-			contactMessage.begin = true;
-			b.fireEvent(contactMessage);
-		}
+//		if(a != null)
+//		{		
+//			contactMessage.contact = contact;			
+//			contactMessage.other = b;
+//			contactMessage.ownFixture = fixA;
+//			contactMessage.otherFixture = fixB;			
+//			contactMessage.begin = true;
+//			a.fireEvent(contactMessage);
+//		}
+//		if(b != null)
+//		{			
+//			contactMessage.contact = contact;
+//			contactMessage.other = a;
+//			contactMessage.ownFixture = fixB;
+//			contactMessage.otherFixture = fixA;
+//			contactMessage.begin = true;
+//			b.fireEvent(contactMessage);
+//		}
 	}
 
 	public World getb2World()
@@ -81,24 +81,24 @@ public class PhysicsManager extends Manager implements ContactListener{
 		Fixture fixB = contact.getFixtureB();
 		DefaultEntity a = (DefaultEntity)fixA.getBody().getUserData();
 		DefaultEntity b = (DefaultEntity)fixB.getBody().getUserData();
-		if(a != null)
-		{
-			contactMessage.contact = contact;
-			contactMessage.other = b;
-			contactMessage.ownFixture = fixA;
-			contactMessage.otherFixture = fixB;		
-			contactMessage.begin = false;
-			a.fireEvent(contactMessage);
-		}
-		if(b != null)
-		{
-			contactMessage.contact = contact;
-			contactMessage.other = a;
-			contactMessage.ownFixture = fixB;
-			contactMessage.otherFixture = fixA;
-			contactMessage.begin = false;
-			b.fireEvent(contactMessage);
-		}		
+//		if(a != null)
+//		{
+//			contactMessage.contact = contact;
+//			contactMessage.other = b;
+//			contactMessage.ownFixture = fixA;
+//			contactMessage.otherFixture = fixB;		
+//			contactMessage.begin = false;
+//			a.fireEvent(contactMessage);
+//		}
+//		if(b != null)
+//		{
+//			contactMessage.contact = contact;
+//			contactMessage.other = a;
+//			contactMessage.ownFixture = fixB;
+//			contactMessage.otherFixture = fixA;
+//			contactMessage.begin = false;
+//			b.fireEvent(contactMessage);
+//		}		
 	}
 
 	@Override

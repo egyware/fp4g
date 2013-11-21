@@ -1,12 +1,11 @@
 package com.apollo.managers;
 
-import com.apollo.Entity;
 import com.apollo.Behavior;
-import com.apollo.Message;
-import com.apollo.messages.CreateEntityMessage;
+import com.apollo.Entity;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
+//TODO arreglar mensajeria
 public class EntityManager extends Manager {
 	private Bag<Entity> entities;
 		
@@ -42,16 +41,16 @@ public class EntityManager extends Manager {
 		}
 	}
 	
-	public void onMessage(Message m)
-	{
-		if(m instanceof CreateEntityMessage)
-		{
-			CreateEntityMessage cem = (CreateEntityMessage)m;
-			Entity novo = world.createEntity(cem.name,cem.args);
-			world.addEntity(novo);
-			cem.entity = novo;
-		}
-		//TODO [egyware] ignorar los demás
-	}
+//	public void onMessage(Message m)
+//	{
+//		if(m instanceof CreateEntityMessageHandler)
+//		{
+//			CreateEntityMessageHandler cem = (CreateEntityMessageHandler)m;
+//			Entity novo = world.createEntity(cem.name,cem.args);
+//			world.addEntity(novo);
+//			cem.entity = novo;
+//		}
+//		//TODO [egyware] ignorar los demás
+//	}
 
 }
