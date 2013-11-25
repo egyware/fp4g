@@ -124,7 +124,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			{				
 				HashMap<String,Object> message = new HashMap<>();
 				LinkedList<HashMap<String,Object>> sources = new LinkedList<>();				
-				message.put("name", on.name);
+				message.put("name", on.name);				
 				message.put("sources", sources);				 
 				for(Source source:on.sources)
 				{
@@ -134,7 +134,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 						StringBuilder filterString = new StringBuilder();					
 						for(Iterator<Filter> iterator = source.filters.iterator();iterator.hasNext();)
 						{
-							Filter filter = iterator.next();
+							Filter filter = iterator.next();							
 							final int size = filter.data.length;
 							filterString.append("(");
 							for(int i=0;i<size;i++)
@@ -237,7 +237,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			}
 			if(entity_onMessages.size()>0)
 			{				
-				imports.add("com.apollo.messages.MessageReceiver");
+				imports.add("com.apollo.MessageReceiver");
 				for(On on:entity_onMessages)
 				{					
 					Depend<Define> depende = generator.resolveDependency(on.message);

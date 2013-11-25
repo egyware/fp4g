@@ -3,12 +3,12 @@ package com.apollo;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.apollo.messages.MessageReceiver;
 import com.apollo.utils.Bag;
+import com.apollo.utils.ImmutableBag;
 
-public abstract class Entity {
+public abstract class Entity implements MessageReceiver{
 	protected final World world;
-	private Map<Class<? extends Message>,Bag<MessageReceiver>> handlersByEventType;
+	private Map<Message,Bag<MessageHandler>> handlersByEventType;
 	private boolean deleted;
 
 	public Entity(World world) {
@@ -47,60 +47,49 @@ public abstract class Entity {
 	 * 
 	 * @return
 	 */
-	public Map<Class<? extends Message>, Bag<MessageReceiver>> getAllEventHandlers() {
+	public Map<Message, Bag<MessageHandler>> getAllEventHandlers() {
 		return handlersByEventType;
 	}
 	
 	/**
 	 * 
-	 * @param eventType Class of Message Type
+	 * @param messageType Class of Message Type
 	 * @param listener
 	 */	
-	public <T extends Message> void addEventHandler(Class<T> eventType, MessageReceiver listener) {
+	public <T extends Message> void addEventHandler(Message messageType, MessageHandler listener) {
 		if(handlersByEventType == null)
-			handlersByEventType = new HashMap<Class<? extends Message>,Bag<MessageReceiver>>();
+			handlersByEventType = new HashMap<Message,Bag<MessageHandler>>();
 		
-		Bag<MessageReceiver> listeners = handlersByEventType.get(eventType);
+		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
 		if(listeners == null) {
-			listeners = new Bag<MessageReceiver>();
-			handlersByEventType.put(eventType,listeners);
+			listeners = new Bag<MessageHandler>();
+			handlersByEventType.put(messageType,listeners);
 		}
 		listeners.add(listener);
 	}
 	
+	public ImmutableBag<MessageHandler> getMessageHandler(Message messageType)
+	{
+		if(handlersByEventType == null)
+			return null;		
+		return handlersByEventType.get(messageType);		 
+	}
+	
+	
 	/**
 	 * 
 	 */	
-	public <T extends Message> void removeEventHandler(Class<T> eventType, MessageReceiver listener) {
+	public <T extends Message> void removeEventHandler(Message messagetType, MessageHandler listener) {
 		if(handlersByEventType == null)
 		{
 			return;
 		}		
-		Bag<MessageReceiver> listeners = handlersByEventType.get(eventType);
+		Bag<MessageHandler> listeners = handlersByEventType.get(messagetType);
 		if(listeners == null) {
 			return;
 		}
 		listeners.remove(listener);
 	}
-
-	/**
-	 * Fire a some event...
-	 * 
-	 * @param eventType
-	 */
-	public <T extends Message> void fireEvent(T eventType) {
-		if(handlersByEventType != null) {
-			Bag<MessageReceiver> handlers = handlersByEventType.get(eventType.getClass());
-			if(handlers != null) {
-				for(int i = 0; handlers.size() > i; i++) {					
-					MessageReceiver handler = handlers.get(i);
-					handler.onMessage(eventType);										
-				}
-			}
-		}
-	}
-
-
 
 	public abstract 
 	Bag<Behavior> getBehaviors();

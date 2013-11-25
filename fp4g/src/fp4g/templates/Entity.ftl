@@ -8,8 +8,8 @@ import ${import};
 
 ${class.javadoc}
 public class ${class.name} extends Entity
-<#if messages??>
-implements MessageReceiver
+<#if class.interfaces??>
+implements <#list class.interfaces as interface>${interface}<#if interface_has_next>,</#if></#list>
 </#if>
 {
 	<#if behaviors??>
@@ -56,7 +56,7 @@ implements MessageReceiver
 		}
 		<#if messages??>
 		<#list messages as message>
-		addEventHandler(${message.name}Message.class, this);
+		addEventHandler(${message.name}.class, this);
 		</#list>
 		</#if>			
 	}

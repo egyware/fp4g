@@ -1,7 +1,6 @@
 package com.apollo.managers;
 
 import com.apollo.DefaultEntity;
-import com.apollo.messages.ContactMessageHandler;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;

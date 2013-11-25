@@ -1,14 +1,15 @@
 package com.apollo.managers;
 
 import com.apollo.Message;
-import com.apollo.messages.MessageSender;
-import com.apollo.messages.MessageReceiver;
+import com.apollo.MessageHandler;
+import com.apollo.MessageReceiver;
+import com.apollo.utils.ImmutableBag;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 
-// estas clases están temporalmente en este paquete hasta su reubicación
+//TODO estas clases están temporalmente en este paquete hasta su reubicación
 public class GameManager implements ApplicationListener,MessageReceiver {
 	private GameState next;
 	private GameState current;
@@ -155,14 +156,11 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 		}
 	}
 
-	@Override
-	public void onMessage(Message m) {		
-		
-	}
-
 	
-	public <T extends Message> MessageSender signal(Class<T> clazz) {
-		return MessageSender.nullSignal;
+	@Override
+	public ImmutableBag<MessageHandler> getMessageHandler(Message message) 
+	{		
+		return null;
 	}
 
 }

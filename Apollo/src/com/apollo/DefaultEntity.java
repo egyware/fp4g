@@ -3,8 +3,8 @@ package com.apollo;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.apollo.messages.MessageReceiver;
 import com.apollo.utils.Bag;
+import com.apollo.utils.ImmutableBag;
 
 /**
  * An Abstract Entity
@@ -86,5 +86,11 @@ public final class DefaultEntity extends Entity {
 	public void setVariable(String name,Var<?> var)
 	{
 		variables.put(name,var);		
+	}
+
+	@Override
+	public ImmutableBag<MessageHandler> getMessageHandler(Message message) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

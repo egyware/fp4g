@@ -3,13 +3,10 @@ package com.apollo.managers;
 import java.lang.reflect.Field;
 
 import com.apollo.Entity;
-import com.apollo.Message;
 import com.apollo.World;
 import com.apollo.annotate.ManagerInjector;
-import com.apollo.messages.MessageSender;
-import com.apollo.messages.MessageReceiver;
 
-public abstract class Manager implements MessageReceiver{
+public abstract class Manager{
 	protected World world;
 		
 	/**
@@ -41,13 +38,5 @@ public abstract class Manager implements MessageReceiver{
 		for (int i = 0; i < fields.length; i++) {
 			ManagerInjector.injectorManager.inject(this, fields[i]);
 		}
-	}
-	
-	@Override
-	public void onMessage(Message m) {
-	}
-	
-	public <T extends Message> MessageSender signal(Class<T> clazz) {
-		return MessageSender.nullSignal;
 	}
 }
