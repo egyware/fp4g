@@ -8,7 +8,7 @@ import ${import};
 
 ${class.javadoc}
 public class ${class.name} extends Entity
-<#if class.interfaces??>
+<#if class.interfaces?has_content>
 implements <#list class.interfaces as interface>${interface}<#if interface_has_next>,</#if></#list>
 </#if>
 {
