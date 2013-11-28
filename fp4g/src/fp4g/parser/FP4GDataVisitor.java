@@ -420,7 +420,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		{
 			ClassLoader cl = ClassLoader.getSystemClassLoader();
 			try {
-				Class<?> clazz = cl.loadClass(ctx.bean);
+				Class<?> clazz = cl.loadClass(String.format("fp4g.classes.",ctx.bean));
 				map = new ClassMap(clazz);
 			} catch (ClassNotFoundException e) {
 				Show(ErrType.ClassNotFound,ctx.ID.getLine());

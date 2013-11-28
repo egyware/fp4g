@@ -11,6 +11,11 @@ public final class ClassMap extends Literal<Map> implements Map{
 		bean = ConstructorAccess.get(type).newInstance();
 		method = MethodAccess.get(type);
 	}
+	public ClassMap(Object value)
+	{
+		bean = value;
+		method = MethodAccess.get(value.getClass());
+	}
 	@Override
 	public Literal<?> set(String key, Literal<?> literal) {
 		Literal<?> old = get(key);

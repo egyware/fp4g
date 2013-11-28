@@ -147,9 +147,9 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 								Literal<String> valueName  = (Literal<String>)array.get("value");
 																
 								filterString.append("message.");
-								filterString.append(fieldName.value);
+								filterString.append(fieldName.getValue());
 								
-								JavaExpresionGenerator.CompareExpresion compare = JavaExpresionGenerator.CompareExpresion.valueOf(compareName.value);
+								JavaExpresionGenerator.CompareExpresion compare = JavaExpresionGenerator.CompareExpresion.valueOf(compareName.getValue());
 								if(compare != null)									
 								{
 									filterString.append(' ');
@@ -167,7 +167,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 									filterString.append(" == ");								
 								}
 								
-								filterString.append(valueName.value);
+								filterString.append(valueName.getValue());
 								
 								if(i+1 < size)
 								{

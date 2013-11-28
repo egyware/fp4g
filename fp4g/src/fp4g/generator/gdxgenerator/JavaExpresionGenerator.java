@@ -12,7 +12,6 @@ import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.VarId;
 import fp4g.generator.ExpresionGenerator;
-import fp4g.generator.FunctionGenerator;
 import fp4g.generator.models.JavaCodeModel;
 
 /**
@@ -78,14 +77,14 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 		@Override
 		public String expr2string(Code parent, JavaCodeModel model,Expresion expr) {
 			final Literal<?> literal = (Literal<?>)expr;
-			final Object value = literal.value;
+			final Object value = literal.getValue();
 			if(value instanceof String)
 			{
 				return String.format("\"%s\"",value);
 			}
 			else
 			{
-				return literal.value.toString();
+				return literal.getValue().toString();
 			}
 		}		
 	}

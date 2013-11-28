@@ -17,6 +17,7 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 import fp4g.Options;
+import fp4g.classes.MessageMethod;
 import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.Expresion;
@@ -26,9 +27,8 @@ import fp4g.data.define.GameState;
 import fp4g.data.define.Goal;
 import fp4g.data.define.Manager;
 import fp4g.data.define.Message;
-import fp4g.data.expresion.ArrayMap;
+import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.FunctionCall;
-import fp4g.data.expresion.Literal;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
 import fp4g.generator.models.Depend;
@@ -195,16 +195,13 @@ public class JavaGenerator extends Generator {
     	gameConf.setManager(new JavaPhysicsManager());
     	
     	Message keyMessage = new Message("Key",gameConf);
-    	String[] keys = {"A","B","Left","Right","Up","Down","Space"};
-    	for(int i=0;i<keys.length;i++)
-    	{
-    		String k[] = {"field","value","compare"};
-    		Expresion value[] = {new Literal<String>("key"),new Literal<String>(String.format("Keyboard.%s",keys[i])), new Literal<String>("equals")};
-    		keyMessage.set(String.format("press%s",keys[i]), new ArrayMap(k,value));    		
-    	}
-    	gameConf.setDefine(keyMessage);  
-    	
+    	MessageMethod press = new MessageMethod();
+    	press.setMethodName("press");
+    	press.setValueRegex("Input.Keys.%s == key");
+    	keyMessage.set("press", new ClassMap(press)); //nombre del metodo    	
+    	gameConf.setDefine(keyMessage);     	
     	dependencias.put(keyMessage, new KeyMessageDepend());
+    	
 //        //agregar componentes		    	
 ////    String components[][] = 
 ////    	{
