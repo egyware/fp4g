@@ -20,7 +20,7 @@ import fp4g.data.On;
 import fp4g.data.On.Filter;
 import fp4g.data.On.Source;
 import fp4g.data.define.Entity;
-import fp4g.data.expresion.ArrayExpr;
+import fp4g.data.expresion.ArrayMap;
 import fp4g.data.expresion.Literal;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
@@ -140,7 +140,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 							for(int i=0;i<size;i++)
 							{
 								//talvez no sea la mejor manera de extraer los datos
-								ArrayExpr array = (ArrayExpr)filter.data[i];
+								ArrayMap array = (ArrayMap)filter.data[i];
 								//TODO asegurarse que sea unn string literal								
 								Literal<String> fieldName  = (Literal<String>)array.get("field");
 								Literal<String> compareName= (Literal<String>)array.get("compare");

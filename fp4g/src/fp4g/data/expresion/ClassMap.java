@@ -3,10 +3,10 @@ package fp4g.data.expresion;
 import com.esotericsoftware.reflectasm.ConstructorAccess;
 import com.esotericsoftware.reflectasm.MethodAccess;
 
-public final class BeanMap extends Literal<Map> implements Map{
+public final class ClassMap extends Literal<Map> implements Map{
 	private MethodAccess method;
 	private Object bean;	
-	public BeanMap(Class<?> type)
+	public ClassMap(Class<?> type)
 	{
 		bean = ConstructorAccess.get(type).newInstance();
 		method = MethodAccess.get(type);

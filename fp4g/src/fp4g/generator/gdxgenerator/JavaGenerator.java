@@ -26,7 +26,7 @@ import fp4g.data.define.GameState;
 import fp4g.data.define.Goal;
 import fp4g.data.define.Manager;
 import fp4g.data.define.Message;
-import fp4g.data.expresion.ArrayExpr;
+import fp4g.data.expresion.ArrayMap;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.data.expresion.Literal;
 import fp4g.generator.CodeGenerator;
@@ -80,6 +80,10 @@ public class JavaGenerator extends Generator {
 	@Override
 	protected void generateCode(Code gameData, File path) 
 	{
+		if(!gameData.canBuild())
+		{
+			return; //nope, no debo contruir este objeto
+		}
 		//creamos la carpeta
 		if(packageDir == null)
 		{
@@ -196,7 +200,7 @@ public class JavaGenerator extends Generator {
     	{
     		String k[] = {"field","value","compare"};
     		Expresion value[] = {new Literal<String>("key"),new Literal<String>(String.format("Keyboard.%s",keys[i])), new Literal<String>("equals")};
-    		keyMessage.set(String.format("press%s",keys[i]), new ArrayExpr(k,value));    		
+    		keyMessage.set(String.format("press%s",keys[i]), new ArrayMap(k,value));    		
     	}
     	gameConf.setDefine(keyMessage);  
     	

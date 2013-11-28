@@ -24,8 +24,9 @@ import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
-import fp4g.data.expresion.ArrayExpr;
+import fp4g.data.expresion.ArrayMap;
 import fp4g.data.expresion.BinaryOp;
+import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.data.expresion.Map;
@@ -414,11 +415,25 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	@Override
 	public Void visitArray(FP4GParser.ArrayContext ctx)
 	{		
-		ArrayExpr array = new ArrayExpr();
-		array_stack.push(array);
+		Map map = null;
+		if(ctx.bean != null)
+		{
+			ClassLoader cl = ClassLoader.getSystemClassLoader();
+			try {
+				Class<?> clazz = cl.loadClass(ctx.bean);
+				map = new ClassMap(clazz);
+			} catch (ClassNotFoundException e) {
+				Show(ErrType.ClassNotFound,ctx.ID.getLine());
+			}
+		}
+		if(map == null)
+		{
+			map = new ArrayMap();
+		}		
+		array_stack.push(map);
 		super.visitArray(ctx);
 		array_stack.pop();
-		expr_stack.push(array);
+		expr_stack.push((Expresion)map); //siempre son expresiones!
 		return null;
 	}
 	

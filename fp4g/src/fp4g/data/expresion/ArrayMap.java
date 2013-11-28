@@ -3,10 +3,10 @@ package fp4g.data.expresion;
 import java.util.HashMap;
 
 // también deberia ser literal
-public final class ArrayExpr extends Literal<Map> implements Map{
+public final class ArrayMap extends Literal<Map> implements Map{
 	private final java.util.Map<String,Literal<?>> map;
 	
-	public ArrayExpr(String keys[],Literal<?> exprs[])
+	public ArrayMap(String keys[],Literal<?> exprs[])
 	{		
 		map = new HashMap<>();		
 		for(int i=0;i<keys.length;i++)
@@ -15,7 +15,7 @@ public final class ArrayExpr extends Literal<Map> implements Map{
 		}
 	}
 	
-	public ArrayExpr()
+	public ArrayMap()
 	{
 		map = new HashMap<>();
 	}

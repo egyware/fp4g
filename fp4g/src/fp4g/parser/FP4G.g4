@@ -42,8 +42,8 @@ gameValue
 		
 set
 returns
-[ String key, String bean ]
-		: SET ID { $key = $ID.text; } (AS ID {$bean = $ID.text;})? EQUAL expr 
+[ String key ]
+		: SET ID { $key = $ID.text; } EQUAL expr 
 		;
 start
 returns
@@ -166,11 +166,14 @@ expr
 		 | ID			   #id
 		 ;
 		 
-array    :
+array   
+returns [ String bean ] 
+		:
 		 ABRE_LLAV
 		 parArray  
 		 (COMA parArray)*
-		 CIERRA_LLAV 	
+		 CIERRA_LLAV
+		 (AS ID {$bean = $ID.text;})?
    		 ;
    		 
 parArray 
