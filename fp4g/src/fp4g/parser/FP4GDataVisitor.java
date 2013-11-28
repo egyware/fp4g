@@ -28,7 +28,9 @@ import fp4g.data.expresion.ArrayExpr;
 import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
+import fp4g.data.expresion.Map;
 import fp4g.data.expresion.UnaryOp;
+import fp4g.data.expresion.ValueLiteral;
 import fp4g.data.expresion.VarId;
 import fp4g.data.expresion.Literal;
 
@@ -36,12 +38,12 @@ import fp4g.data.expresion.Literal;
 /**
  * Visita el arbol construido.
  * @author Edgardo
- *
+ * @TODO podria mejorarse utilizando generics
  */
 public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	private Game game;
 	private Stack<Define> current;
-	private Stack<ArrayExpr> array_stack;
+	private Stack<Map> array_stack;
 	private Stack<Expresion> expr_stack;
 	private Stack<Assets> assets_stack;	
 	private ExprList exprList;
@@ -62,14 +64,18 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		
 		if(define instanceof Game)
 		{
-			final String state = ctx.state;
-			if(!define.isSetDefine(DefineType.MANAGER, state))
+			final String stateName = ctx.state;
+			GameState state = define.getDefine(DefineType.STATE, stateName);
+			if(state != null)
 			{
 				//TODO warn!
 				Show(WarnType.MissingAdd,game);
+				//creo un elemento temporal para solucionar el state faltante, sin embargo no se generará
+				state = new GameState(ctx.state,define);
+				state.setBuild(false);
 			}
 			//if(state )
-			((Game) define).setStart(ctx.state);
+			((Game) define).setStart(state);
 		}
 		return null;		
 	}
@@ -78,6 +84,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	public Void visitSet(FP4GParser.SetContext ctx)
 	{
 		Define define = current.peek();
+		
 		Stack<Expresion> expr_stack = this.expr_stack;		
 		this.expr_stack = new Stack<>();
 		super.visitSet(ctx);
@@ -368,7 +375,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	public Void visitDecimalLiteral(FP4GParser.DecimalLiteralContext ctx)
 	{
 		Float integer = Float.valueOf(ctx.getText());
-		Literal<Float> literal = new Literal<Float>(integer);
+		Literal<Float> literal = new ValueLiteral<Float>(integer);
 		expr_stack.push(literal);
 		
 		return null;
@@ -377,7 +384,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	public Void visitIntLiteral(FP4GParser.IntLiteralContext ctx)
 	{
 		Integer integer = Integer.valueOf(ctx.getText());
-		Literal<Integer> literal = new Literal<Integer>(integer);
+		Literal<Integer> literal = new ValueLiteral<Integer>(integer);
 		expr_stack.push(literal);
 		
 		return null;
@@ -387,7 +394,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	{
 		String string = ctx.STRING_LITERAL().getText();
 		string = string.substring(1, string.length()-1);
-		Literal<String> literal = new Literal<String>(string);
+		Literal<String> literal = new ValueLiteral<String>(string);
 		expr_stack.push(literal);
 		
 		return null;
@@ -406,7 +413,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	
 	@Override
 	public Void visitArray(FP4GParser.ArrayContext ctx)
-	{
+	{		
 		ArrayExpr array = new ArrayExpr();
 		array_stack.push(array);
 		super.visitArray(ctx);
@@ -425,9 +432,15 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		Expresion expr = this.expr_stack.pop();
 		this.expr_stack = expr_stack;
 		
-		ArrayExpr array = array_stack.peek();
-		array.set(key, expr);
-		
+		Map array = array_stack.peek();
+		if(expr instanceof Literal)
+		{
+			array.set(key, (Literal<?>) expr);
+		}
+		else
+		{
+			Show(ErrType.MissingError);
+		}		
 		return null;		
 	}
 	

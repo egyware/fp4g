@@ -8,7 +8,6 @@ import static fp4g.Log.*;
 
 import fp4g.data.*;
 import fp4g.data.define.*;
-import fp4g.data.managers.*;
 
 import java.util.LinkedList;
 
@@ -43,8 +42,8 @@ gameValue
 		
 set
 returns
-[ String key ]
-		: SET ID { $key = $ID.text; } EQUAL expr 
+[ String key, String bean ]
+		: SET ID { $key = $ID.text; } (AS ID {$bean = $ID.text;})? EQUAL expr 
 		;
 start
 returns
@@ -265,6 +264,7 @@ MESSAGE : 'MESSAGE';
 BASE    : 'BASE';
 TO      : 'TO';
 SOURCE  : 'SOURCE';	
+AS		: 'AS';
 
 /* separators */
 ABRE_COR  : '['; 

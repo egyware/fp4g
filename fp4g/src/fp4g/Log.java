@@ -60,7 +60,7 @@ public class Log {
 		NotImplement,
 		MessageExpected,
 		UnknowError,
-		FilterMissing, NotExpectedDefine, NotExpectedOn, NotExpectedAdd, YouCanUseOnceTimeAssets,
+		FilterMissing, NotExpectedDefine, NotExpectedOn, NotExpectedAdd, YouCanUseOnceTimeAssets, MissingError("Falta un error descriptivo o no corresponde un error grave"), ClassNotFound,
 		;
 		
 		private String message;
