@@ -91,11 +91,16 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 	<#-- Hacer funciones por cada method Handler -->
 	public void on${method.name?cap_first}${message.name?cap_first}()
 	{
-		<#if method.filtersD?has_content>
-		if(<#list method.filtersD as filterD>(<#list filterD.filtersC as filterC>${filterC}<#if filterC_has_next> && </#if></#list>)<#if filterD_has_next>||</#if></#list>)
+		<#if method.sources?has_content>
+		<#list method.sources as source>
+		<#if source.filtersD?has_content>
+		if(<#list source.filtersD as filterD>(<#list filterD.filtersC as filterC>${filterC}<#if filterC_has_next> && </#if></#list>)<#if filterD_has_next>||</#if></#list>)
 		{
+			${source.code}
 		}
-		</#if>		
+		</#if>
+		</#list>
+		</#if>
 	}
 	</#list>
 	</#if>
