@@ -94,48 +94,21 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 		<#if method.sources?has_content>
 		<#list method.sources as source>
 		<#if source.filtersD?has_content>
+		<#if (source.filtersD?size == 1)>
+		if(<#list source.filtersD as filterD><#list filterD.filtersC as filterC>${filterC}<#if filterC_has_next> && </#if></#list></#list>)
+		<#else>
 		if(<#list source.filtersD as filterD>(<#list filterD.filtersC as filterC>${filterC}<#if filterC_has_next> && </#if></#list>)<#if filterD_has_next>||</#if></#list>)
-		{
-			${source.code}
-		}
 		</#if>
-		</#list>
-		</#if>
-	}
-	</#list>
-	</#if>
-	</#list>
-	</#if>
-	<#--#if messages??>
-	@Override
-	public void onMessage(Message message)
-	{
-		<#list messages as message>
-		if(message instanceof ${message.name}Message)
-		{
-			onMessage((${message.name}Message)message);			
-		}
-		<#if message_has_next>
-		else
-		</#if>		
-		</#list>		
-	}
-	<#list messages as message>
-	public void onMessage(${message.name}Message message)
-	{		
-		<#list message.sources as source>
-		<#if source.filter??>
-		if(${source.filter})
 		{
 			${source.code}
 		}		
-		<#else>
-		${source.code}
 		</#if>
 		</#list>
+		</#if>
 	}
 	</#list>
-	</#if-->
-	
+	</#if>
+	</#list>
+	</#if>
 				
 }
