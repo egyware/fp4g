@@ -47,7 +47,7 @@ public abstract class Generator {
         
 		System.out.println("Compilig...");
 		//compilar archivos...
-		compileFiles(filesToCompile);		
+		//compileFiles(filesToCompile);		
 		System.out.println("Done!");
 	}
 	//functiones de utilidad proxies

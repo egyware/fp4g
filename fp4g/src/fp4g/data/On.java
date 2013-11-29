@@ -11,13 +11,14 @@ import java.util.regex.Pattern;
 import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.classes.MessageMethod;
+import fp4g.data.expresion.ClassMap;
 
 /**
  * @author egyware
  *
  */
 public class On extends Code{
-	private static final Pattern methodValue = Pattern.compile("([a-z]+[A-Z]+)");
+	private static final Pattern methodValue = Pattern.compile("([a-z]+)([A-Z]+)");
 	public final String name;
 	public final Define message;
 	public final List<Source> sources;
@@ -58,24 +59,22 @@ public class On extends Code{
 		public void addFilter(List<String> listFilter)
 		{
 			//chequeamos que todos los filtros existan y que estén definidos
-			Filter filter = new Filter(listFilter.size());
-			int i = 0;
+			Filter filter = new Filter(listFilter.size());			
 			for(String elementFilter:listFilter)
 			{
 				//extraer el metodo
 				Matcher m = methodValue.matcher(elementFilter);
 				//siempre va hacer match
 				m.matches();
-				String methodName = m.group(0);
-				String value      = m.group(1);
+				String methodName = m.group(1);
+				String value      = m.group(2);
 				
-				MessageMethod method = (MessageMethod) message.get(methodName);
+				ClassMap cm = (ClassMap) message.get(methodName);
+				MessageMethod method = (MessageMethod) cm.getBean();
 				if(method != null)
 				{
 					//setiando, los datos para que no webee más tarde (este mensaje no tiene validez, cambie algunas cosas y ya ni recuerdo porque dije eso)
-					filter.methods[i] = method;
-					filter.value[i] = value;
-					i++;
+					filter.add(method, value);					
 				}
 				else
 				{
@@ -88,12 +87,22 @@ public class On extends Code{
 	public final static class Filter
 	{	
 		public final MessageMethod methods[]; //podria ser una lista de expresiones...
-		public final String value[];		
+		public final String values[];
+		private int lenght;
 		public Filter(final int size)
-		{		
-			
+		{					
 			methods = new MessageMethod[size];
-			value = new String[size];
+			values = new String[size];
 		}		
+		public void add(MessageMethod method, String value)
+		{
+			methods[lenght] = method;
+			values[lenght] = value;
+			lenght++;
+		}
+		public int lenght()
+		{
+			return lenght;
+		}
 	}
 }

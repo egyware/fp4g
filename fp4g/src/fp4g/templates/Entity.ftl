@@ -54,11 +54,11 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 		for (int i = 0, s = behaviors.size(); s > i; i++) {
 			behaviors.get(i).initialize();
 		}
-		<#if messages??>
+		<#--<#if messages??>
 		<#list messages as message>
 		addEventHandler(${message.name}.class, this);
 		</#list>
-		</#if>			
+		</#if>-->			
 	}
 	
 	protected void uninitialize()
@@ -84,6 +84,24 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 	}
 	
 	<#if messages??>
+	<#list messages as message>
+	//Categoria ${message.name}	
+	<#if message.methodHandlers?has_content>
+	<#list message.methodHandlers as method>
+	<#-- Hacer funciones por cada method Handler -->
+	public void on${method.name?cap_first}${message.name?cap_first}()
+	{
+		<#if method.filtersD?has_content>
+		if(<#list method.filtersD as filterD>(<#list filterD.filtersC as filterC>${filterC}<#if filterC_has_next> && </#if></#list>)<#if filterD_has_next>||</#if></#list>)
+		{
+		}
+		</#if>		
+	}
+	</#list>
+	</#if>
+	</#list>
+	</#if>
+	<#--#if messages??>
 	@Override
 	public void onMessage(Message message)
 	{
@@ -112,7 +130,7 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 		</#list>
 	}
 	</#list>
-	</#if>
+	</#if-->
 	
 				
 }

@@ -3,16 +3,16 @@ package fp4g.classes;
 public class MessageMethod 
 {
 	private String methodName;
-	private String valueRegex;	
+	private String valueReplace;	
 	private boolean multiple = false;
 	
 	public String getMethodName()
 	{
 		return methodName;
 	}
-	public String getValueRegex()
+	public String getValueReplace()
 	{
-		return valueRegex;
+		return valueReplace;
 	}
 	public boolean getMultiple() //deberia ser is, per no tengo tiempo para hacer comprobaciones extras.
 	{
@@ -22,9 +22,9 @@ public class MessageMethod
 	{
 		methodName = m;
 	}
-	public void setValueRegex(String s)
+	public void setValueReplace(String s)
 	{
-		valueRegex = s;
+		valueReplace = s;
 	}
 	public void setMultiple(boolean b) //deberia ser is, per no tengo tiempo para hacer comprobaciones extras.
 	{

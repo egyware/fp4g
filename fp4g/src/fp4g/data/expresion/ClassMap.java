@@ -34,6 +34,12 @@ public final class ClassMap extends Literal<Map> implements Map{
 		chars[0] = Character.toUpperCase(chars[0]);
 		return String.valueOf(chars);
 	}
+	
+	public Object getBean()
+	{
+		return bean;
+	}
+	
 	@Override
 	public Map getValue() {
 		return this;

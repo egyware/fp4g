@@ -11,6 +11,7 @@ import java.util.List;
 import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.Pair;
+import fp4g.classes.MessageMethod;
 import fp4g.data.Add;
 import fp4g.data.Code;
 import fp4g.data.Define;
@@ -26,6 +27,7 @@ import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
 import fp4g.generator.models.Depend;
 import fp4g.generator.models.JavaCodeModel;
+import fp4g.generator.models.OnModel;
 import fp4g.generator.models.ParamCodeModel;
 import freemarker.template.Template;
 
@@ -117,84 +119,17 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		
 		//agregar eventos
 		final Collection<On> entity_onMessages = entity.getOnMessages();
-		if(entity_onMessages.size()>0)
+		if(entity_onMessages.size() > 0)
 		{
-			List<HashMap<String,Object>> messages = new LinkedList<>();
-			for(On on:entity_onMessages)
-			{				
-				HashMap<String,Object> message = new HashMap<>();
-				LinkedList<HashMap<String,Object>> sources = new LinkedList<>();				
-				message.put("name", on.name);				
-				message.put("sources", sources);				 
-				for(Source source:on.sources)
-				{
-					HashMap<String,Object> map = new HashMap<>();
-					if(source.filters.size()> 0)
-					{
-						StringBuilder filterString = new StringBuilder();					
-						for(Iterator<Filter> iterator = source.filters.iterator();iterator.hasNext();)
-						{
-							Filter filter = iterator.next();							
-							final int size = filter.data.length;
-							filterString.append("(");
-							for(int i=0;i<size;i++)
-							{
-								//talvez no sea la mejor manera de extraer los datos
-								ArrayMap array = (ArrayMap)filter.data[i];
-								//TODO asegurarse que sea unn string literal								
-								Literal<String> fieldName  = (Literal<String>)array.get("field");
-								Literal<String> compareName= (Literal<String>)array.get("compare");
-								Literal<String> valueName  = (Literal<String>)array.get("value");
-																
-								filterString.append("message.");
-								filterString.append(fieldName.getValue());
-								
-								JavaExpresionGenerator.CompareExpresion compare = JavaExpresionGenerator.CompareExpresion.valueOf(compareName.getValue());
-								if(compare != null)									
-								{
-									filterString.append(' ');
-									filterString.append(compare.operator);
-									filterString.append(' ');
-								}
-								else
-								{	
-									//TODO mejorar el metodo para encontrar el operator
-									if(on.message != null)
-									{
-										Log.Show(ErrType.UnknowError,on.message);
-									}
-									Log.Show(ErrType.UnknowError,"Error, se debia encontrar un operator valido");
-									filterString.append(" == ");								
-								}
-								
-								filterString.append(valueName.getValue());
-								
-								if(i+1 < size)
-								{
-									filterString.append(" && ");
-								}
-								
-							}
-							if(iterator.hasNext())
-							{
-								filterString.append(") || ");
-							}
-							else
-							{
-								filterString.append(")");
-							}
-						}
-						//agregar filtros...
-						map.put("filter", filterString.toString());
-					}
-					//TODO agregar codigo
-					map.put("code","//TODO codigo...");					
-					
-					sources.add(map);					
-				}							
-				messages.add(message);
+			//por cada on! que es lo que necesitaré
+			//La categoria del mensaje Key,Contact,Life, etc..
+			//Obvio el code
+			List<OnModel> onList = new LinkedList<>();
+			for(On on: entity_onMessages)
+			{
+				onList.add(new OnModel(on));
 			}
-			entityRoot.put("messages",messages);
+			entityRoot.put("messages", onList);
 		}
 		
 		//agregar imports!
