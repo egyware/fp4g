@@ -5,15 +5,19 @@ package fp4g.data;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import fp4g.Log;
 import fp4g.Log.ErrType;
+import fp4g.classes.MessageMethod;
 
 /**
  * @author egyware
  *
  */
 public class On extends Code{
+	private static final Pattern methodValue = Pattern.compile("([a-z]+[A-Z]+)");
 	public final String name;
 	public final Define message;
 	public final List<Source> sources;
@@ -44,7 +48,7 @@ public class On extends Code{
 	}	
 	
 	public final class Source
-	{		
+	{	
 		public final List<Filter> filters;
 		public Source()
 		{
@@ -54,34 +58,42 @@ public class On extends Code{
 		public void addFilter(List<String> listFilter)
 		{
 			//chequeamos que todos los filtros existan y que estén definidos
-			Filter filter = new Filter(listFilter);
+			Filter filter = new Filter(listFilter.size());
 			int i = 0;
 			for(String elementFilter:listFilter)
 			{
-				if(message.isSet(elementFilter))
+				//extraer el metodo
+				Matcher m = methodValue.matcher(elementFilter);
+				//siempre va hacer match
+				m.matches();
+				String methodName = m.group(0);
+				String value      = m.group(1);
+				
+				MessageMethod method = (MessageMethod) message.get(methodName);
+				if(method != null)
 				{
-					//setiando, los datos para que no webee más tarde
-					filter.data[i++] = message.get(elementFilter);
+					//setiando, los datos para que no webee más tarde (este mensaje no tiene validez, cambie algunas cosas y ya ni recuerdo porque dije eso)
+					filter.methods[i] = method;
+					filter.value[i] = value;
+					i++;
 				}
 				else
 				{
-					Log.Show(ErrType.FilterMissing);
-					return;
+					Log.Show(ErrType.FilterMethodMissing);					
 				}
 			}
 			filters.add(filter);
 		}
 	}
 	public final static class Filter
-	{
-		public final String filters[];
-		public final Object data[]; //podria ser una lista de expresiones...
-		public Filter(List<String> filters)
-		{
-			final int size = filters.size();
-			this.filters = new String[size];
-			this.data = new Object[size];
-			filters.toArray(this.filters);
+	{	
+		public final MessageMethod methods[]; //podria ser una lista de expresiones...
+		public final String value[];		
+		public Filter(final int size)
+		{		
+			
+			methods = new MessageMethod[size];
+			value = new String[size];
 		}		
 	}
 }
