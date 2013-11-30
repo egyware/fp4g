@@ -57,42 +57,53 @@ public class OnModel implements Model
 		{			
 			final HashMap<MethodHandlerModel,SourceModel> sourcesMap = new HashMap<>();
 			
-			for(Filter f:source.filters)
+			if(source.filters.size() > 0)
 			{
-				final int l = f.lenght();				
-				for(int i=0;i<l;i++)
+				for(Filter f:source.filters)
 				{
-					final MessageMethod method = f.methods[i];
-					final String value = f.values[i];
-					//encontré un metodo, que hago con el
-					MethodHandlerModel m = methods.get(method.getMethodName());
-					
-					if(m == null)
+					final int l = f.lenght();				
+					for(int i=0;i<l;i++)
 					{
-						m = new MethodHandlerModel(method);
-						methods.put(method.getMethodName(), m);
-					}
-
-					//obtengo el source model correspondiente 
-					SourceModel sm = sourcesMap.get(m);
-					if(sm == null)
-					{
-						sm = new SourceModel(source);
-						sourcesMap.put(m, sm);						
-					}					
-					//ya tengo el metodo manejador, que hago con el?
-					//facil, ahora debes agregar este filtro
-					//pero como diferencio si es conjuncion o disyunción?
-					//todos los que están en este for, son una conjunción
-					if(value != null) //me aseguro que sea distinto de nulo, asi no agrega nada adicional
-					{
-						FilterD filterD = sm.getCurrentFilterD(f);
-						filterD.add(method,value); //agrego el filtro actual
-					}
-				}				
-				//ahora como agrego otra disyunción?
-				//lo haré en currentFilter, guardará la ultima iteración. Si esta cambia, entonces agregará otro filtro.
-			}			
+						final MessageMethod method = f.methods[i];
+						final String value = f.values[i];
+						//encontré un metodo, que hago con el
+						MethodHandlerModel m = methods.get(method.getMethodName());
+						
+//						if(m == null) //siempre son != null
+//						{
+//							m = new MethodHandlerModel(method);
+//							methods.put(method.getMethodName(), m);
+//						}
+	
+						//obtengo el source model correspondiente 
+						SourceModel sm = sourcesMap.get(m);
+						if(sm == null)
+						{
+							sm = new SourceModel(source);
+							sourcesMap.put(m, sm);						
+						}					
+						//ya tengo el metodo manejador, que hago con el?
+						//facil, ahora debes agregar este filtro
+						//pero como diferencio si es conjuncion o disyunción?
+						//todos los que están en este for, son una conjunción
+						if(value != null) //me aseguro que sea distinto de nulo, asi no agrega nada adicional
+						{
+							FilterD filterD = sm.getCurrentFilterD(f);
+							filterD.add(method,value); //agrego el filtro actual
+						}
+					}				
+					//ahora como agrego otra disyunción?
+					//lo haré en currentFilter, guardará la ultima iteración. Si esta cambia, entonces agregará otro filtro.
+				}
+			}
+			else //cuando hay 0 filtros
+			{
+				for(Entry<String,MethodHandlerModel> entry:methods.entrySet())
+				{
+					//cuando hay 0 filtros, el source se agrega a cada uno de los metodos
+					entry.getValue().addSource(new SourceModel(source));					
+				}
+			}
 			//al finalizar
 			for(Entry<MethodHandlerModel, SourceModel> entry:sourcesMap.entrySet())
 			{
