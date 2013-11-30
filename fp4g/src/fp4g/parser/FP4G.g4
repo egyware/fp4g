@@ -125,8 +125,8 @@ returns
 	List<String> filters = new LinkedList<>();
 ]
 		:
-		FILTRO      {$filters.add($FILTRO.text);}
-		(COMA FILTRO {$filters.add($FILTRO.text);})*			
+		ID      {$filters.add($ID.text);}
+		(COMA ID {$filters.add($ID.text);})*			
 		;
 
  
@@ -315,8 +315,6 @@ STRING_LITERAL  : '"' .*? '"';
 BOOL_LITERAL 	: ('true'|'false'); 
 fragment DIGIT  : [0-9];
 
-/* Filtro */
-FILTRO : [a-z]+[A-Z]+;
 /* Identificador */
 ID : [a-zA-Z_][a-zA-Z_0-9]*;
 

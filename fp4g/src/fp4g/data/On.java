@@ -2,7 +2,7 @@
  * 
  */
 package fp4g.data;
-
+import static fp4g.Log.Show;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import fp4g.Log;
 import fp4g.Log.ErrType;
+import fp4g.Log.WarnType;
 import fp4g.classes.MessageMethod;
 import fp4g.data.expresion.ClassMap;
 
@@ -18,7 +19,7 @@ import fp4g.data.expresion.ClassMap;
  *
  */
 public class On extends Code{
-	private static final Pattern methodValue = Pattern.compile("([a-z]+)([A-Z]+)");
+	private static final Pattern methodValue = Pattern.compile("([a-z]+)([A-Z]*)");
 	public final String name;
 	public final Define message;
 	public final List<Source> sources;
@@ -64,10 +65,23 @@ public class On extends Code{
 			{
 				//extraer el metodo
 				Matcher m = methodValue.matcher(elementFilter);
-				//siempre va hacer match
-				m.matches();
-				String methodName = m.group(1);
-				String value      = m.group(2);
+				String methodName = null,value = null;  
+				
+				if(m.matches())
+				{
+					methodName = m.group(1);
+					value      = m.group(2);
+					if(value.length() == 0)
+					{
+						value = null;
+					}
+				}				
+				else
+				{
+					Show(WarnType.UnformatedFilter,elementFilter);
+					methodName = elementFilter.toLowerCase();
+				}
+				
 				
 				ClassMap cm = (ClassMap) message.get(methodName);
 				MessageMethod method = (MessageMethod) cm.getBean();

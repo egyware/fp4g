@@ -105,7 +105,9 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 		</#if>
 		{
 			${source.code}
-		}		
+		}
+		<#else>
+		${source.code}		
 		</#if>
 		</#list>
 		</#if>

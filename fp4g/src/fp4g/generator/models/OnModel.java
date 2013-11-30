@@ -63,6 +63,7 @@ public class OnModel implements Model
 				for(int i=0;i<l;i++)
 				{
 					final MessageMethod method = f.methods[i];
+					final String value = f.values[i];
 					//encontré un metodo, que hago con el
 					MethodHandlerModel m = methods.get(method.getMethodName());
 					
@@ -83,8 +84,11 @@ public class OnModel implements Model
 					//facil, ahora debes agregar este filtro
 					//pero como diferencio si es conjuncion o disyunción?
 					//todos los que están en este for, son una conjunción
-					FilterD filterD = sm.getCurrentFilterD(f);
-					filterD.add(method,f.values[i]); //agrego el filtro actual
+					if(value != null) //me aseguro que sea distinto de nulo, asi no agrega nada adicional
+					{
+						FilterD filterD = sm.getCurrentFilterD(f);
+						filterD.add(method,value); //agrego el filtro actual
+					}
 				}				
 				//ahora como agrego otra disyunción?
 				//lo haré en currentFilter, guardará la ultima iteración. Si esta cambia, entonces agregará otro filtro.

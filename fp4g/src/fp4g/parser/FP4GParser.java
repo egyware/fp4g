@@ -34,7 +34,7 @@ public class FP4GParser extends Parser {
 		MULTIPLY=41, DIVIDE=42, AND=43, OR=44, XOR=45, NOT=46, INT_TYPE=47, DEC_TYPE=48, 
 		STRING_TYPE=49, BOOL_TYPE=50, ENTITY_TYPE=51, TEXTURE_TYPE=52, SPRITE_TYPE=53, 
 		ATLAS_TYPE=54, DIRECTCODE=55, INT_LITERAL=56, DECIMAL_LITERAL=57, STRING_LITERAL=58, 
-		BOOL_LITERAL=59, FILTRO=60, ID=61, NL=62, WS=63;
+		BOOL_LITERAL=59, ID=60, NL=61, WS=62;
 	public static final String[] tokenNames = {
 		"<INVALID>", "SINGLE_LINE_COMMENT", "MULTI_LINE_COMMENT", "'DEFINE'", 
 		"'ADD'", "'ON'", "'SEND'", "'GROUP'", "'SUBSCRIBE'", "'UNSUBSCRIBE'", 
@@ -44,8 +44,8 @@ public class FP4GParser extends Parser {
 		"']'", "')'", "'}'", "','", "'='", "'.'", "';'", "':'", "'+'", "'-'", 
 		"'*'", "'/'", "'AND'", "'OR'", "'XOR'", "'NOT'", "'Int'", "'Dec'", "'String'", 
 		"'Bool'", "'Entity'", "'Texture'", "'Sprite'", "'Atlas'", "DIRECTCODE", 
-		"INT_LITERAL", "DECIMAL_LITERAL", "STRING_LITERAL", "BOOL_LITERAL", "FILTRO", 
-		"ID", "NL", "WS"
+		"INT_LITERAL", "DECIMAL_LITERAL", "STRING_LITERAL", "BOOL_LITERAL", "ID", 
+		"NL", "WS"
 	};
 	public static final int
 		RULE_program = 0, RULE_usings = 1, RULE_using = 2, RULE_game = 3, RULE_gameValues = 4, 
@@ -794,7 +794,7 @@ public class FP4GParser extends Parser {
 			setState(177);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==FILTRO) {
+			while (_la==ID) {
 				{
 				{
 				setState(172); ((OnFiltersContext)_localctx).filter = filter();
@@ -820,14 +820,14 @@ public class FP4GParser extends Parser {
 
 	public static class FilterContext extends ParserRuleContext {
 		public List<String> filters = new LinkedList<>();;
-		public Token FILTRO;
-		public List<TerminalNode> FILTRO() { return getTokens(FP4GParser.FILTRO); }
+		public Token ID;
+		public List<TerminalNode> ID() { return getTokens(FP4GParser.ID); }
 		public List<TerminalNode> COMA() { return getTokens(FP4GParser.COMA); }
-		public TerminalNode FILTRO(int i) {
-			return getToken(FP4GParser.FILTRO, i);
-		}
 		public TerminalNode COMA(int i) {
 			return getToken(FP4GParser.COMA, i);
+		}
+		public TerminalNode ID(int i) {
+			return getToken(FP4GParser.ID, i);
 		}
 		public FilterContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -847,8 +847,8 @@ public class FP4GParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(180); ((FilterContext)_localctx).FILTRO = match(FILTRO);
-			_localctx.filters.add((((FilterContext)_localctx).FILTRO!=null?((FilterContext)_localctx).FILTRO.getText():null));
+			setState(180); ((FilterContext)_localctx).ID = match(ID);
+			_localctx.filters.add((((FilterContext)_localctx).ID!=null?((FilterContext)_localctx).ID.getText():null));
 			setState(187);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -856,8 +856,8 @@ public class FP4GParser extends Parser {
 				{
 				{
 				setState(182); match(COMA);
-				setState(183); ((FilterContext)_localctx).FILTRO = match(FILTRO);
-				_localctx.filters.add((((FilterContext)_localctx).FILTRO!=null?((FilterContext)_localctx).FILTRO.getText():null));
+				setState(183); ((FilterContext)_localctx).ID = match(ID);
+				_localctx.filters.add((((FilterContext)_localctx).ID!=null?((FilterContext)_localctx).ID.getText():null));
 				}
 				}
 				setState(189);
@@ -2073,7 +2073,7 @@ public class FP4GParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3A\u0163\4\2\t\2\4"+
+		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3@\u0163\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -2109,17 +2109,17 @@ public class FP4GParser extends Parser {
 		"\3\2\2\2,\u012b\3\2\2\2.\u0133\3\2\2\2\60\u0135\3\2\2\2\62\u0144\3\2\2"+
 		"\2\64\u014d\3\2\2\2\66\u015b\3\2\2\289\5\4\3\29:\5\b\5\2:;\7\2\2\3;\3"+
 		"\3\2\2\2<>\5\6\4\2=<\3\2\2\2>A\3\2\2\2?=\3\2\2\2?@\3\2\2\2@\5\3\2\2\2"+
-		"A?\3\2\2\2BC\7\16\2\2CD\t\2\2\2DE\7?\2\2EF\7\'\2\2F\7\3\2\2\2GH\7\5\2"+
-		"\2HI\7\24\2\2IJ\7?\2\2JK\b\5\1\2KL\7\36\2\2LM\5\n\6\2MN\7!\2\2N\t\3\2"+
+		"A?\3\2\2\2BC\7\16\2\2CD\t\2\2\2DE\7>\2\2EF\7\'\2\2F\7\3\2\2\2GH\7\5\2"+
+		"\2HI\7\24\2\2IJ\7>\2\2JK\b\5\1\2KL\7\36\2\2LM\5\n\6\2MN\7!\2\2N\t\3\2"+
 		"\2\2OS\5\f\7\2PR\5\f\7\2QP\3\2\2\2RU\3\2\2\2SQ\3\2\2\2ST\3\2\2\2T\13\3"+
 		"\2\2\2US\3\2\2\2Vb\5\24\13\2WX\5\22\n\2XY\7\'\2\2Yb\3\2\2\2Z[\5\16\b\2"+
 		"[\\\7\'\2\2\\b\3\2\2\2]^\5\20\t\2^_\7\'\2\2_b\3\2\2\2`b\5\26\f\2aV\3\2"+
 		"\2\2aW\3\2\2\2aZ\3\2\2\2a]\3\2\2\2a`\3\2\2\2b\r\3\2\2\2cd\7\20\2\2de\7"+
-		"?\2\2ef\b\b\1\2fg\7%\2\2gh\5$\23\2h\17\3\2\2\2ij\7\21\2\2jk\7?\2\2kl\b"+
-		"\t\1\2l\21\3\2\2\2mn\7?\2\2no\7%\2\2oq\b\n\1\2pm\3\2\2\2pq\3\2\2\2qr\3"+
+		">\2\2ef\b\b\1\2fg\7%\2\2gh\5$\23\2h\17\3\2\2\2ij\7\21\2\2jk\7>\2\2kl\b"+
+		"\t\1\2l\21\3\2\2\2mn\7>\2\2no\7%\2\2oq\b\n\1\2pm\3\2\2\2pq\3\2\2\2qr\3"+
 		"\2\2\2r}\7\6\2\2st\7\23\2\2t~\b\n\1\2uv\7\25\2\2v~\b\n\1\2wx\7\26\2\2"+
 		"x~\b\n\1\2yz\7\27\2\2z~\b\n\1\2{|\7\30\2\2|~\b\n\1\2}s\3\2\2\2}u\3\2\2"+
-		"\2}w\3\2\2\2}y\3\2\2\2}{\3\2\2\2~\177\3\2\2\2\177\u0080\7?\2\2\u0080\u0085"+
+		"\2}w\3\2\2\2}y\3\2\2\2}{\3\2\2\2~\177\3\2\2\2\177\u0080\7>\2\2\u0080\u0085"+
 		"\b\n\1\2\u0081\u0082\7\37\2\2\u0082\u0083\5 \21\2\u0083\u0084\7\"\2\2"+
 		"\u0084\u0086\3\2\2\2\u0085\u0081\3\2\2\2\u0085\u0086\3\2\2\2\u0086\23"+
 		"\3\2\2\2\u0087\u0094\7\5\2\2\u0088\u0089\7\23\2\2\u0089\u0095\b\13\1\2"+
@@ -2128,11 +2128,11 @@ public class FP4GParser extends Parser {
 		"\7\30\2\2\u0091\u0095\b\13\1\2\u0092\u0093\7\31\2\2\u0093\u0095\b\13\1"+
 		"\2\u0094\u0088\3\2\2\2\u0094\u008a\3\2\2\2\u0094\u008c\3\2\2\2\u0094\u008e"+
 		"\3\2\2\2\u0094\u0090\3\2\2\2\u0094\u0092\3\2\2\2\u0095\u0096\3\2\2\2\u0096"+
-		"\u0097\7?\2\2\u0097\u009c\b\13\1\2\u0098\u0099\7\37\2\2\u0099\u009a\5"+
+		"\u0097\7>\2\2\u0097\u009c\b\13\1\2\u0098\u0099\7\37\2\2\u0099\u009a\5"+
 		"\"\22\2\u009a\u009b\7\"\2\2\u009b\u009d\3\2\2\2\u009c\u0098\3\2\2\2\u009c"+
 		"\u009d\3\2\2\2\u009d\u009e\3\2\2\2\u009e\u009f\7\36\2\2\u009f\u00a0\5"+
 		"\34\17\2\u00a0\u00a1\7!\2\2\u00a1\25\3\2\2\2\u00a2\u00a3\7\7\2\2\u00a3"+
-		"\u00a4\7?\2\2\u00a4\u00a7\b\f\1\2\u00a5\u00a6\7(\2\2\u00a6\u00a8\5\30"+
+		"\u00a4\7>\2\2\u00a4\u00a7\b\f\1\2\u00a5\u00a6\7(\2\2\u00a6\u00a8\5\30"+
 		"\r\2\u00a7\u00a5\3\2\2\2\u00a7\u00a8\3\2\2\2\u00a8\u00a9\3\2\2\2\u00a9"+
 		"\u00aa\7\36\2\2\u00aa\u00ab\7!\2\2\u00ab\27\3\2\2\2\u00ac\u00ad\5\32\16"+
 		"\2\u00ad\u00b3\b\r\1\2\u00ae\u00af\5\32\16\2\u00af\u00b0\b\r\1\2\u00b0"+
@@ -2154,10 +2154,10 @@ public class FP4GParser extends Parser {
 		"\2\2\u00de\u00df\3\2\2\2\u00df#\3\2\2\2\u00e0\u00de\3\2\2\2\u00e1\u00e2"+
 		"\b\23\1\2\u00e2\u00e3\7\60\2\2\u00e3\u00f6\5$\23\2\u00e4\u00e5\7*\2\2"+
 		"\u00e5\u00f6\5$\23\2\u00e6\u00e7\7\37\2\2\u00e7\u00e8\5$\23\2\u00e8\u00e9"+
-		"\7\"\2\2\u00e9\u00f6\3\2\2\2\u00ea\u00eb\7?\2\2\u00eb\u00ec\7\37\2\2\u00ec"+
+		"\7\"\2\2\u00e9\u00f6\3\2\2\2\u00ea\u00eb\7>\2\2\u00eb\u00ec\7\37\2\2\u00ec"+
 		"\u00ed\5 \21\2\u00ed\u00ee\7\"\2\2\u00ee\u00f6\3\2\2\2\u00ef\u00f6\5&"+
 		"\24\2\u00f0\u00f6\7:\2\2\u00f1\u00f6\7;\2\2\u00f2\u00f6\7<\2\2\u00f3\u00f6"+
-		"\79\2\2\u00f4\u00f6\7?\2\2\u00f5\u00e1\3\2\2\2\u00f5\u00e4\3\2\2\2\u00f5"+
+		"\79\2\2\u00f4\u00f6\7>\2\2\u00f5\u00e1\3\2\2\2\u00f5\u00e4\3\2\2\2\u00f5"+
 		"\u00e6\3\2\2\2\u00f5\u00ea\3\2\2\2\u00f5\u00ef\3\2\2\2\u00f5\u00f0\3\2"+
 		"\2\2\u00f5\u00f1\3\2\2\2\u00f5\u00f2\3\2\2\2\u00f5\u00f3\3\2\2\2\u00f5"+
 		"\u00f4\3\2\2\2\u00f6\u0105\3\2\2\2\u00f7\u00f8\6\23\2\3\u00f8\u00f9\7"+
@@ -2169,14 +2169,14 @@ public class FP4GParser extends Parser {
 		"%\3\2\2\2\u0107\u0105\3\2\2\2\u0108\u0109\7 \2\2\u0109\u010e\5(\25\2\u010a"+
 		"\u010b\7$\2\2\u010b\u010d\5(\25\2\u010c\u010a\3\2\2\2\u010d\u0110\3\2"+
 		"\2\2\u010e\u010c\3\2\2\2\u010e\u010f\3\2\2\2\u010f\u0111\3\2\2\2\u0110"+
-		"\u010e\3\2\2\2\u0111\u0115\7#\2\2\u0112\u0113\7\35\2\2\u0113\u0114\7?"+
+		"\u010e\3\2\2\2\u0111\u0115\7#\2\2\u0112\u0113\7\35\2\2\u0113\u0114\7>"+
 		"\2\2\u0114\u0116\b\24\1\2\u0115\u0112\3\2\2\2\u0115\u0116\3\2\2\2\u0116"+
-		"\'\3\2\2\2\u0117\u0118\7?\2\2\u0118\u0119\b\25\1\2\u0119\u011a\7%\2\2"+
+		"\'\3\2\2\2\u0117\u0118\7>\2\2\u0118\u0119\b\25\1\2\u0119\u011a\7%\2\2"+
 		"\u011a\u011b\5$\23\2\u011b)\3\2\2\2\u011c\u011d\5,\27\2\u011d\u011e\7"+
-		"?\2\2\u011e+\3\2\2\2\u011f\u0120\7\61\2\2\u0120\u012c\b\27\1\2\u0121\u0122"+
+		">\2\2\u011e+\3\2\2\2\u011f\u0120\7\61\2\2\u0120\u012c\b\27\1\2\u0121\u0122"+
 		"\7\62\2\2\u0122\u012c\b\27\1\2\u0123\u0124\7\64\2\2\u0124\u012c\b\27\1"+
 		"\2\u0125\u0126\7\65\2\2\u0126\u012c\b\27\1\2\u0127\u0128\7\63\2\2\u0128"+
-		"\u012c\b\27\1\2\u0129\u012a\7?\2\2\u012a\u012c\b\27\1\2\u012b\u011f\3"+
+		"\u012c\b\27\1\2\u0129\u012a\7>\2\2\u012a\u012c\b\27\1\2\u012b\u011f\3"+
 		"\2\2\2\u012b\u0121\3\2\2\2\u012b\u0123\3\2\2\2\u012b\u0125\3\2\2\2\u012b"+
 		"\u0127\3\2\2\2\u012b\u0129\3\2\2\2\u012c-\3\2\2\2\u012d\u012e\7\66\2\2"+
 		"\u012e\u0134\b\30\1\2\u012f\u0130\7\67\2\2\u0130\u0134\b\30\1\2\u0131"+
@@ -2186,7 +2186,7 @@ public class FP4GParser extends Parser {
 		"\2\u013a\u0138\3\2\2\2\u013b\u013e\3\2\2\2\u013c\u013a\3\2\2\2\u013c\u013d"+
 		"\3\2\2\2\u013d\u0140\3\2\2\2\u013e\u013c\3\2\2\2\u013f\u0141\7$\2\2\u0140"+
 		"\u013f\3\2\2\2\u0140\u0141\3\2\2\2\u0141\u0142\3\2\2\2\u0142\u0143\7!"+
-		"\2\2\u0143\61\3\2\2\2\u0144\u0146\5.\30\2\u0145\u0147\7?\2\2\u0146\u0145"+
+		"\2\2\u0143\61\3\2\2\2\u0144\u0146\5.\30\2\u0145\u0147\7>\2\2\u0146\u0145"+
 		"\3\2\2\2\u0146\u0147\3\2\2\2\u0147\u0148\3\2\2\2\u0148\u0149\7(\2\2\u0149"+
 		"\u014b\7<\2\2\u014a\u014c\5\64\33\2\u014b\u014a\3\2\2\2\u014b\u014c\3"+
 		"\2\2\2\u014c\63\3\2\2\2\u014d\u014e\7\36\2\2\u014e\u0153\5\66\34\2\u014f"+
@@ -2194,7 +2194,7 @@ public class FP4GParser extends Parser {
 		"\2\2\2\u0153\u0151\3\2\2\2\u0153\u0154\3\2\2\2\u0154\u0157\3\2\2\2\u0155"+
 		"\u0153\3\2\2\2\u0156\u0158\7$\2\2\u0157\u0156\3\2\2\2\u0157\u0158\3\2"+
 		"\2\2\u0158\u0159\3\2\2\2\u0159\u015a\7!\2\2\u015a\65\3\2\2\2\u015b\u015d"+
-		"\5.\30\2\u015c\u015e\7?\2\2\u015d\u015c\3\2\2\2\u015d\u015e\3\2\2\2\u015e"+
+		"\5.\30\2\u015c\u015e\7>\2\2\u015d\u015c\3\2\2\2\u015d\u015e\3\2\2\2\u015e"+
 		"\u015f\3\2\2\2\u015f\u0160\7(\2\2\u0160\u0161\7<\2\2\u0161\67\3\2\2\2"+
 		"\37?Sap}\u0085\u0094\u009c\u00a7\u00b3\u00bd\u00c4\u00cf\u00d6\u00de\u00f5"+
 		"\u0103\u0105\u010e\u0115\u012b\u0133\u013c\u0140\u0146\u014b\u0153\u0157"+

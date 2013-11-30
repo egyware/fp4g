@@ -22,7 +22,7 @@ public class Log {
 	public static enum WarnType implements MessageType
 	{			
 		MissingDefineAdd("No se encontro un Define o Using para el Add"), 
-		MissingAdd("No se encontro un Add"),
+		MissingAdd("No se encontro un Add"), UnformatedFilter,
 //		NotFoundDefine("No se encontró una definición previa, se omitirá y se asumirá que existe"),
 //		CustomAddState, 
 //		NotExpectedThis,
