@@ -1,15 +1,18 @@
 package fp4g.generator.gdxgenerator;
 
+import static fp4g.Log.Show;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import fp4g.Log.ErrType;
 import fp4g.data.Code;
 import fp4g.data.Expresion;
 import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
-import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.UnaryOp;
+import fp4g.data.expresion.ValueLiteral;
 import fp4g.data.expresion.VarId;
 import fp4g.generator.ExpresionGenerator;
 import fp4g.generator.models.JavaCodeModel;
@@ -27,7 +30,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 		super(generator);
 		
 		expresions.put(VarId.class, new VarExprGen());
-		expresions.put(Literal.class, new LiteralExprGen());
+		expresions.put(ValueLiteral.class, new LiteralExprGen());
 		expresions.put(UnaryOp.class, new UnaryExprGen());
 		expresions.put(BinaryOp.class, new BinaryExprGen());
 		expresions.put(FunctionCall.class, new FunctionCallExprGen());
@@ -58,7 +61,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 		}
 		else
 		{	
-			//TODO: mostrar error
+			Show(ErrType.ExpresionGeneratorNotFound,expr.getClass().getSimpleName());
 			return null;
 		}
 	}
@@ -76,7 +79,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	{
 		@Override
 		public String expr2string(Code parent, JavaCodeModel model,Expresion expr) {
-			final Literal<?> literal = (Literal<?>)expr;
+			final ValueLiteral<?> literal = (ValueLiteral<?>)expr;
 			final Object value = literal.getValue();
 			if(value instanceof String)
 			{
@@ -84,7 +87,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 			}
 			else
 			{
-				return literal.getValue().toString();
+				return value.toString();
 			}
 		}		
 	}

@@ -5,25 +5,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import fp4g.Log;
-import fp4g.Log.ErrType;
 import fp4g.Pair;
-import fp4g.classes.MessageMethod;
 import fp4g.data.Add;
 import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.On;
-import fp4g.data.On.Filter;
-import fp4g.data.On.Source;
 import fp4g.data.define.Entity;
-import fp4g.data.expresion.ArrayMap;
-import fp4g.data.expresion.Literal;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
 import fp4g.generator.models.Depend;
@@ -131,15 +123,6 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			}
 			entityRoot.put("messages", onList);
 			
-			modelEntity.imports.addAll(
-					Arrays.asList(
-							"com.apollo.Message",
-							"com.apollo.utils.Bag",
-							"com.apollo.MessageHandler",
-							"com.apollo.utils.ImmutableBag",
-							"com.esotericsoftware.reflectasm.MethodAccess"
-					)
-				);
 		}
 		
 		//agregar imports!
@@ -181,8 +164,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				imports.add(String.format("com.apollo.components.%s",addBhvr.name));
 			}
 			if(entity_onMessages.size()>0)
-			{				
-				imports.add("com.apollo.MessageReceiver");
+			{	
 				for(On on:entity_onMessages)
 				{					
 					Depend<Define> depende = generator.resolveDependency(on.message);
@@ -191,6 +173,15 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 						depende.perform(on.message,entityRoot, modelEntity);
 					}
 				}
+				modelEntity.imports.addAll(
+						Arrays.asList(
+								"com.apollo.Message",
+								"com.apollo.utils.Bag",
+								"com.apollo.MessageHandler",
+								"com.apollo.utils.ImmutableBag",
+								"com.esotericsoftware.reflectasm.MethodAccess"
+						)
+					);
 			}
 			Collections.sort(imports);
 			modelEntity.imports.addAll(imports);

@@ -14,7 +14,6 @@ import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.generator.CodeGenerator;
-import fp4g.generator.Generator;
 import freemarker.template.Template;
 
 public class GameGenerator extends CodeGenerator<JavaGenerator> {
@@ -53,7 +52,7 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 		
 		if(game.startState != null)
 		{			
-			root.put("start_state", game.startState);
+			root.put("start_state", game.startState.getName());
 		}
 		// TODO falta ${start_state}
 		
