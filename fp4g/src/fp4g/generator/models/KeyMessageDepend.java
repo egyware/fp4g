@@ -16,7 +16,11 @@ public class KeyMessageDepend extends Depend<Message> {
 	
 	public KeyMessageDepend()
 	{
-		importsRequired = Arrays.asList("com.apollo.messages.KeyMessage","com.apollo.messages.KeyMessageHandler");
+		importsRequired = Arrays.asList(
+				"com.badlogic.gdx.Input",
+				"com.apollo.messages.KeyMessage",
+				"com.apollo.messages.KeyMessageHandler"				
+				);
 	}
 	
 	@Override

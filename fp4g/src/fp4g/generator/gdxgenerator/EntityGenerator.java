@@ -1,6 +1,7 @@
 package fp4g.generator.gdxgenerator;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,8 +40,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 
 	private static File entityPackageDir;
 
-	@Override
-	@SuppressWarnings("unchecked")	
+	@Override	
 	public void generateCode(Code gameData, File path) 	 
 	throws Exception
 	{
@@ -130,6 +130,16 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				onList.add(new OnModel(on));
 			}
 			entityRoot.put("messages", onList);
+			
+			modelEntity.imports.addAll(
+					Arrays.asList(
+							"com.apollo.Message",
+							"com.apollo.utils.Bag",
+							"com.apollo.MessageHandler",
+							"com.apollo.utils.ImmutableBag",
+							"com.esotericsoftware.reflectasm.MethodAccess"
+					)
+				);
 		}
 		
 		//agregar imports!

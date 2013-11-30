@@ -198,7 +198,15 @@ public class JavaGenerator extends Generator {
     	MessageMethod press = new MessageMethod();
     	press.setMethodName("press");
     	press.setValueReplace("Input.Keys.%s == key");
-    	keyMessage.set("press", new ClassMap(press)); //nombre del metodo    	
+    	press.setParams("int key");
+    	keyMessage.set("press", new ClassMap(press)); //nombre del metodo
+    	
+    	MessageMethod release = new MessageMethod();
+    	release.setMethodName("release");
+    	release.setValueReplace("Input.Keys.%s == key");
+    	release.setParams("int key");
+    	keyMessage.set("release", new ClassMap(release)); //nombre del metodo
+    	
     	gameConf.setDefine(keyMessage);     	
     	dependencias.put(keyMessage, new KeyMessageDepend());
     	

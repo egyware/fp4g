@@ -9,6 +9,7 @@ import fp4g.classes.MessageMethod;
 import fp4g.data.On;
 import fp4g.data.On.Filter;
 import fp4g.data.On.Source;
+import fp4g.data.expresion.ClassMap;
 
 public class OnModel implements Model
 {
@@ -21,15 +22,21 @@ public class OnModel implements Model
 	
 	public OnModel(On on)
 	{
-		name = on.name;
+		name = on.name;		
 		methodHandlers = new LinkedList<>();
 		HashMap<String,MethodHandlerModel> methods = new HashMap<>();
+		//agregar los metodos, aunque estén vacios y asumiento que todos son MessageMethod		
+		for(Entry<String,Object> entry:on.message.entrySet())
+		{
+			ClassMap map = (ClassMap)entry.getValue();
+			methods.put(entry.getKey(), new MethodHandlerModel((MessageMethod)map.getBean()));
+		}
 		//tengo que recorrer los sources en busca de los methodHandlers y subirlos acá
 		for(Source source:on.sources)
 		{			
 			SourceModel.findAndInsert(source,methods);
 		}
-		methodHandlers.addAll(methods.values());
+		methodHandlers.addAll(methods.values());		
 	}
 	
 	public static class SourceModel implements Model
@@ -129,23 +136,31 @@ public class OnModel implements Model
 		private final String name;		
 		//Una lista de Source Codes
 		private final List<SourceModel> sources;
+		//Parametros
+		private final String params;
 				
 		public MethodHandlerModel(MessageMethod method)
 		{
 			name = method.getMethodName();
-			sources = new LinkedList<>();		
+			params = method.getParams();
+			sources = new LinkedList<>();			
 		}
 					
 		public void addSource(SourceModel value) {
 			sources.add(value);			
 		}
 
-		public final String getName() {
+		public final String getName() 
+		{
 			return name;
 		}
 		public final List<SourceModel> getSources()
 		{
 			return sources;
+		}
+		public final String getParams()
+		{
+			return params;
 		}
 	}
 	public static class FilterD implements Model

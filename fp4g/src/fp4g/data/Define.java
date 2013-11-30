@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import fp4g.Log;
 import fp4g.Log.ErrType;
@@ -194,6 +196,15 @@ public abstract class Define extends Code{
 		return variables.get(key);		 
 	}
 	
+	/**
+	 * Devuelve todas las variables de tiene almacenado este define
+	 * @return
+	 */
+	public final Set<Entry<String,Object>> entrySet()
+	{
+		return variables.entrySet();
+	}
+	
 	
 	/**
 	 * Verifica si la variable existe.
@@ -205,6 +216,10 @@ public abstract class Define extends Code{
 		return variables.containsKey(key);
 	}
 	
+	/**
+	 * Establece por lo menos 1 vez los assets
+	 * @param assets
+	 */
 	public void setAssets(Assets assets)
 	{
 		if(this.assets != null)
