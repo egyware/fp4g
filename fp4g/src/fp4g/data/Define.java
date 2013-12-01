@@ -28,7 +28,7 @@ public abstract class Define extends Code{
 	
 	private final Map<DefineType,List<Add>> adds;
 	private final Map<DefineType,Map<String,? extends Define>> defines;
-	private final Map<String,On> onMessages;
+	private final Map<String,On> onMessages;	
 	
 	
 	public Define(DefineType type,String name)
@@ -44,7 +44,7 @@ public abstract class Define extends Code{
 		variables = new HashMap<String,Object>();		
 		adds    = new HashMap<>(DefineType.values().length,1);
 		defines = new HashMap<>(DefineType.values().length,1);
-		onMessages= new HashMap<>();
+		onMessages= new HashMap<>();		
 	}
 		
 	public DefineType getType()
@@ -86,7 +86,7 @@ public abstract class Define extends Code{
 			map = new HashMap<>();
 			defines.put(type, map);
 		}
-		map.put(define.name, define);
+		map.put(define.name, define);		
 	}
 	/**
 	 * Agrega un evento
@@ -230,6 +230,5 @@ public abstract class Define extends Code{
 		{
 			this.assets = assets;
 		}		
-	}
-	
+	}	
 }

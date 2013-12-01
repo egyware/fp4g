@@ -104,8 +104,23 @@ returns
 		ON 
 		ID {$messageName = $ID.text; }
 		(DOUBLEDOT filters = onFilters)?
-		ABRE_COR CIERRA_COR 
-		; 
+		ABRE_COR
+		on_statements 
+		CIERRA_COR 
+		;
+on_statements
+			:
+			(on_statement DOTCOMA) *
+			;
+on_statement:
+			send 
+			;
+send
+returns
+[String messageMethodName,String receiverName]
+	:
+		SEND method=ID {$messageMethodName = $method.text;} (ABRE_PAR exprList CIERRA_PAR)? (TO receiver=ID {$receiverName = $receiver.text;})?
+		;
 //filtros On:pressA pressB (parsea la disyuncion pressA or pressB)
 onFilters
 returns

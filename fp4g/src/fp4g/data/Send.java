@@ -1,17 +1,34 @@
 package fp4g.data;
 
+import fp4g.classes.MessageMethod;
 
-public class Send extends Code {
-//	private String messageType;
-//	private IScope local;
-//	private String to;
-//	private IScope contents;
-//
-//	public Send(String messageType, IScope local, String to, IScope contents) {
-//		//super(messageType);
-//		this.messageType = messageType;
-//		this.local = local;
-//		this.to = to;
-//		this.contents = contents;
-//	}
+public class Send extends Code 
+{
+	public static enum SendTo
+	{
+		Self,Other,System
+	}
+	//Send que se caracteriza por tener
+	//Mensaje a enviar (methodo de message y el mensaje)
+	public final MessageMethod method;
+	public final SendTo toReceiverType;
+	public String toReceiverName;
+	//A quien enviarle el mensaje		
+	public ExprList args;
+	
+	public Send(SendTo type,MessageMethod mm)
+	{
+		this.method = mm;
+		toReceiverType = type;
+	}
+	
+	public void setArguments(ExprList list)
+	{
+		args = list;
+	}
+	
+	public void setTo(String receiverName)
+	{
+		toReceiverName = receiverName;
+	}
 }

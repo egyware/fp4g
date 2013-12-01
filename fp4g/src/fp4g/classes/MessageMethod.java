@@ -1,11 +1,36 @@
 package fp4g.classes;
 
+import fp4g.data.define.Message;
+
+/**
+ * Esta clase sirve de apoyo para guardar los metodos de los mensajes.
+ * 
+ * @author Edgardo
+ *
+ */
 public class MessageMethod 
-{
+{	
+	private Message message;
 	private String methodName;
 	private String valueReplace;
 	private String params;
 	private boolean multiple = false;
+	
+	//mensaje por conveniencia dentro del sistema
+	public MessageMethod(Message m)
+	{
+		message = m; 
+	}
+	//para ser usado dentro del set
+	public MessageMethod()
+	{		
+	}
+	
+	
+	public final Message getMessage()
+	{
+		return message;
+	}	
 	
 	public final String getMethodName()
 	{
@@ -36,5 +61,10 @@ public class MessageMethod
 	}
 	public final void setParams(String params) {
 		this.params = params;
-	}	
+	}
+	public final void setMessage(Message m)
+	{
+		message = m;
+	}
+	
 }

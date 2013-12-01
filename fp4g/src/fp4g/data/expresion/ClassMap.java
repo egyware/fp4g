@@ -5,7 +5,7 @@ import com.esotericsoftware.reflectasm.MethodAccess;
 
 public final class ClassMap extends Literal<Map> implements Map{
 	private MethodAccess method;
-	private Object bean;	
+	private Object bean;
 	public ClassMap(Class<?> type)
 	{
 		bean = ConstructorAccess.get(type).newInstance();
@@ -17,13 +17,15 @@ public final class ClassMap extends Literal<Map> implements Map{
 		method = MethodAccess.get(value.getClass());
 	}
 	@Override
-	public Literal<?> set(String key, Literal<?> literal) {
+	public Literal<?> set(String key, Literal<?> literal) 
+	{
 		Literal<?> old = get(key);
 		method.invoke(bean, String.format("set%s",capitalize(key)),literal.getValue());
 		return old;
 	}
 	@Override
-	public Literal<?> get(String key) {
+	public Literal<?> get(String key) 
+	{
 		return new ValueLiteral<Object>(method.invoke(bean, String.format("get%s",capitalize(key))));		
 	}
 	

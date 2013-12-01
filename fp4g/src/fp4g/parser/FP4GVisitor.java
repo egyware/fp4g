@@ -57,6 +57,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitUsing(@NotNull FP4GParser.UsingContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#send}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSend(@NotNull FP4GParser.SendContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#set}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -148,11 +155,11 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitAddExpr(@NotNull FP4GParser.AddExprContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#onFilters}.
+	 * Visit a parse tree produced by {@link FP4GParser#intLiteral}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitOnFilters(@NotNull FP4GParser.OnFiltersContext ctx);
+	T visitIntLiteral(@NotNull FP4GParser.IntLiteralContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#on}.
@@ -162,11 +169,11 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitOn(@NotNull FP4GParser.OnContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#intLiteral}.
+	 * Visit a parse tree produced by {@link FP4GParser#onFilters}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIntLiteral(@NotNull FP4GParser.IntLiteralContext ctx);
+	T visitOnFilters(@NotNull FP4GParser.OnFiltersContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#divExpr}.
@@ -195,6 +202,20 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNotExpr(@NotNull FP4GParser.NotExprContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#on_statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOn_statement(@NotNull FP4GParser.On_statementContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#on_statements}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOn_statements(@NotNull FP4GParser.On_statementsContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#define}.

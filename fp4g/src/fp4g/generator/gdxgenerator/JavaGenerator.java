@@ -18,6 +18,7 @@ import javax.tools.ToolProvider;
 
 import fp4g.Options;
 import fp4g.classes.MessageMethod;
+import fp4g.classes.MessageMethods;
 import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.Expresion;
@@ -28,6 +29,7 @@ import fp4g.data.define.Goal;
 import fp4g.data.define.Manager;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.ClassMap;
+import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
@@ -195,17 +197,24 @@ public class JavaGenerator extends Generator {
     	gameConf.setManager(new JavaPhysicsManager());
     	
     	Message keyMessage = new Message("Key",gameConf);
-    	MessageMethod press = new MessageMethod();
+    	MessageMethod press = new MessageMethod(keyMessage);
     	press.setMethodName("press");
     	press.setValueReplace("Input.Keys.%s == key");
     	press.setParams("int key");
     	keyMessage.set("press", new ClassMap(press)); //nombre del metodo
     	
-    	MessageMethod release = new MessageMethod();
+    	MessageMethod release = new MessageMethod(keyMessage);
     	release.setMethodName("release");
     	release.setValueReplace("Input.Keys.%s == key");
     	release.setParams("int key");
     	keyMessage.set("release", new ClassMap(release)); //nombre del metodo
+    	
+    	//Agregar todos los metodos acá
+    	MessageMethods methods = new MessageMethods();
+    	methods.add(press);
+    	methods.add(release);
+    	
+    	gameConf.set("methods", new CustomClassMap(methods));
     	
     	gameConf.setDefine(keyMessage);     	
     	dependencias.put(keyMessage, new KeyMessageDepend());

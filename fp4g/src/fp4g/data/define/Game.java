@@ -170,7 +170,7 @@ public class Game extends Define  {
 				super.setDefine(define);				
 				break;
 			case MESSAGE:
-				super.setDefine(define);
+				super.setDefine(define);								
 				break;
 			default:
 				Show(ErrType.UnknowError,define);

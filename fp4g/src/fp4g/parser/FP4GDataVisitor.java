@@ -10,9 +10,12 @@ import static fp4g.Log.Show;
 import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.Log.WarnType;
+import fp4g.classes.MessageMethod;
+import fp4g.classes.MessageMethods;
 import fp4g.data.Add;
 import fp4g.data.AssetType;
 import fp4g.data.Assets;
+import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
@@ -20,6 +23,7 @@ import fp4g.data.NameList;
 import fp4g.data.DefineType;
 import fp4g.data.On;
 import fp4g.data.On.Source;
+import fp4g.data.Send;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
@@ -34,6 +38,7 @@ import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.ValueLiteral;
 import fp4g.data.expresion.VarId;
 import fp4g.data.expresion.Literal;
+import fp4g.data.expresion.CustomClassMap;
 
 
 /**
@@ -41,8 +46,9 @@ import fp4g.data.expresion.Literal;
  * @author Edgardo
  * @TODO podria mejorarse utilizando generics
  */
-public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
+public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	private Game game;
+	private MessageMethods methods;
 	private Stack<Define> current;
 	private Stack<Map> array_stack;
 	private Stack<Expresion> expr_stack;
@@ -51,15 +57,16 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	private NameList nameList;
 	public FP4GDataVisitor(Game game)
 	{
-		this.game = game;
+		this.game = game;		
 		current = new Stack<>();
 		expr_stack = new Stack<>();
 		array_stack = new Stack<>();
 		assets_stack = new Stack<>();
+		methods = (MessageMethods) ((CustomClassMap)game.get("methods")).getValue();
 	}
 	
 	@Override
-	public Void visitStart(FP4GParser.StartContext ctx)
+	public Code visitStart(FP4GParser.StartContext ctx)
 	{
 		Define define = current.peek();
 		
@@ -77,12 +84,64 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 			}
 			//if(state )
 			((Game) define).setStart(state);
+			return state;
 		}
+		else
+		{
+			return null;
+		}				
+	}
+	
+	@Override
+	public Code visitSend(FP4GParser.SendContext ctx)
+	{
+		
+		
+		MessageMethod method = methods.getMessageMethod(ctx.messageMethodName);
+		if(method == null)
+		{
+			Log.Show(ErrType.MessageMethodNotFound,ctx.start.getLine());
+			//TODO ?
+		}
+		Send.SendTo type = null;
+		String receiver = null;
+		if(ctx.receiverName != null) //TODO detectar para onde vá (falta System)
+		{
+			receiver = ctx.receiverName;
+			type = Send.SendTo.Other;
+		}
+		else
+		{
+			type = Send.SendTo.Self;
+		}
+		Send send = new Send(type,method);		
+		if(exprList != null)
+		{
+			//TODO checkar la exprList
+			send.setArguments(exprList);
+			exprList = null;
+		}
+		switch(type)
+		{		
+		case Other:
+			send.setTo(receiver);
+			break;		
+		case System:
+			//TODO falta que hago
+			break;
+		default:
+			break;		
+		}
+		
+		
+		//buscar el MethodName 
+		//ctx.messageMethodName
+		//Send
 		return null;		
 	}
 	
 	@Override 
-	public Void visitSet(FP4GParser.SetContext ctx)
+	public Code visitSet(FP4GParser.SetContext ctx)
 	{
 		Define define = current.peek();
 		
@@ -96,7 +155,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitGame(FP4GParser.GameContext ctx)
+	public Code visitGame(FP4GParser.GameContext ctx)
 	{
 		game.name = ctx.name;
 		game.setLine(ctx.getStart().getLine());
@@ -104,7 +163,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitGameValues(FP4GParser.GameValuesContext ctx)
+	public Code visitGameValues(FP4GParser.GameValuesContext ctx)
 	{
 		current.push(game);		
 		super.visitGameValues(ctx);		
@@ -113,7 +172,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}	
 	
 	@Override
-	public Void visitDefineValues(FP4GParser.DefineValuesContext ctx)
+	public Code visitDefineValues(FP4GParser.DefineValuesContext ctx)
 	{
 		FP4GParser.DefineContext define_ctx = (FP4GParser.DefineContext)ctx.parent;
 		Define parent = current.peek();
@@ -167,7 +226,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitOn(FP4GParser.OnContext ctx)
+	public Code visitOn(FP4GParser.OnContext ctx)
 	{
 		Define parent = current.peek();
 		
@@ -207,7 +266,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitAdd(FP4GParser.AddContext ctx)
+	public Code visitAdd(FP4GParser.AddContext ctx)
 	{
 		Define parent = current.peek();
 		
@@ -227,7 +286,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	
 	
 	@Override
-	public Void visitNameList(FP4GParser.NameListContext ctx)
+	public Code visitNameList(FP4GParser.NameListContext ctx)
 	{
 		nameList = new NameList();
 		super.visitNameList(ctx);
@@ -236,7 +295,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override 
-	public Void visitDeclareVar(FP4GParser.DeclareVarContext ctx)
+	public Code visitDeclareVar(FP4GParser.DeclareVarContext ctx)
 	{
 		//TODO: esta conversación de variables no deberia estár puesta aqui
 		String name = null;
@@ -266,7 +325,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitExprList(FP4GParser.ExprListContext ctx)
+	public Code visitExprList(FP4GParser.ExprListContext ctx)
 	{	
 		//ojo con el orden de estas funciones
 		super.visitExprList(ctx);
@@ -284,7 +343,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitMultExpr(FP4GParser.MultExprContext ctx)
+	public Code visitMultExpr(FP4GParser.MultExprContext ctx)
 	{	
 		Expresion left,right;
 		visit(ctx.left);
@@ -298,7 +357,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		return null;
 	}
 	@Override
-	public Void visitSubExpr(FP4GParser.SubExprContext ctx)
+	public Code visitSubExpr(FP4GParser.SubExprContext ctx)
 	{
 		Expresion left,right;
 		visit(ctx.left);
@@ -313,7 +372,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		return null;
 	}
 	@Override
-	public Void visitAddExpr(FP4GParser.AddExprContext ctx)
+	public Code visitAddExpr(FP4GParser.AddExprContext ctx)
 	{		
 		Expresion left,right;
 		visit(ctx.left);
@@ -328,7 +387,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		return null;
 	}
 	@Override
-	public Void visitDivExpr(FP4GParser.DivExprContext ctx)
+	public Code visitDivExpr(FP4GParser.DivExprContext ctx)
 	{
 		Expresion left,right;
 		visit(ctx.left);
@@ -343,7 +402,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		return null;
 	}	
 	@Override
-	public Void visitParExpr(FP4GParser.ParExprContext ctx)
+	public Code visitParExpr(FP4GParser.ParExprContext ctx)
 	{		
 		visit(ctx.op);
 		expr_stack.peek().setPar(true); //establecemos que esta expresión, lleva parentesis
@@ -351,7 +410,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		return null;
 	}	
 	@Override
-	public Void visitMinusExpr(FP4GParser.MinusExprContext ctx)
+	public Code visitMinusExpr(FP4GParser.MinusExprContext ctx)
 	{		
 		visit(ctx.op);
 		Expresion expr = expr_stack.pop();
@@ -361,7 +420,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		return null;
 	}	
 	@Override
-	public Void visitNotExpr(FP4GParser.NotExprContext ctx)
+	public Code visitNotExpr(FP4GParser.NotExprContext ctx)
 	{
 		visit(ctx.op);		
 		Expresion expr = expr_stack.pop();		
@@ -373,7 +432,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	
 	//literal y id
 	@Override
-	public Void visitDecimalLiteral(FP4GParser.DecimalLiteralContext ctx)
+	public Code visitDecimalLiteral(FP4GParser.DecimalLiteralContext ctx)
 	{
 		Float integer = Float.valueOf(ctx.getText());
 		Literal<Float> literal = new ValueLiteral<Float>(integer);
@@ -382,7 +441,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		return null;
 	}
 	@Override
-	public Void visitIntLiteral(FP4GParser.IntLiteralContext ctx)
+	public Code visitIntLiteral(FP4GParser.IntLiteralContext ctx)
 	{
 		Integer integer = Integer.valueOf(ctx.getText());
 		Literal<Integer> literal = new ValueLiteral<Integer>(integer);
@@ -391,7 +450,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 		return null;
 	}
 	@Override
-	public Void visitStringLiteral(FP4GParser.StringLiteralContext ctx)
+	public Code visitStringLiteral(FP4GParser.StringLiteralContext ctx)
 	{
 		String string = ctx.STRING_LITERAL().getText();
 		string = string.substring(1, string.length()-1);
@@ -402,7 +461,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitDirectCode(FP4GParser.DirectCodeContext ctx)
+	public Code visitDirectCode(FP4GParser.DirectCodeContext ctx)
 	{
 		String code = ctx.DIRECTCODE().getText();
 		code = code.substring(2,code.length()-1);
@@ -413,7 +472,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitArray(FP4GParser.ArrayContext ctx)
+	public Code visitArray(FP4GParser.ArrayContext ctx)
 	{		
 		Map map = null;
 		if(ctx.bean != null)
@@ -438,7 +497,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitParArray(FP4GParser.ParArrayContext ctx)
+	public Code visitParArray(FP4GParser.ParArrayContext ctx)
 	{
 		String key = ctx.key;
 		Stack<Expresion> expr_stack = this.expr_stack;		
@@ -460,7 +519,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitId(FP4GParser.IdContext ctx)
+	public Code visitId(FP4GParser.IdContext ctx)
 	{
 		String id = ctx.ID().getText();
 		VarId varId = new VarId(id);
@@ -470,7 +529,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitFunctionCallExpr(FP4GParser.FunctionCallExprContext ctx)
+	public Code visitFunctionCallExpr(FP4GParser.FunctionCallExprContext ctx)
 	{
 		//guardamos el actual stack!
 		Stack<Expresion> prev_stack  = expr_stack;
@@ -491,7 +550,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitAssets(FP4GParser.AssetsContext ctx) 
+	public Code visitAssets(FP4GParser.AssetsContext ctx) 
 	{
 		Assets assets = new Assets();		
 		assets_stack.push(assets);
@@ -504,7 +563,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitAssetValueInner(FP4GParser.AssetValueInnerContext ctx)
+	public Code visitAssetValueInner(FP4GParser.AssetValueInnerContext ctx)
 	{
 		Assets parent = assets_stack.peek();
 		AssetType type = ctx.assetType().type;		
@@ -515,7 +574,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Void> {
 	}
 	
 	@Override
-	public Void visitAssetValue(FP4GParser.AssetValueContext ctx)
+	public Code visitAssetValue(FP4GParser.AssetValueContext ctx)
 	{
 		Assets parent = assets_stack.peek();
 		AssetType type = ctx.assetType().type;		
