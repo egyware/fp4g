@@ -6,6 +6,8 @@ package fp4g.parser;
 import java.util.List;
 import java.util.Stack;
 
+import org.antlr.v4.runtime.tree.ParseTree;
+
 import static fp4g.Log.Show;
 import fp4g.Log;
 import fp4g.Log.ErrType;
@@ -22,6 +24,7 @@ import fp4g.data.Expresion;
 import fp4g.data.NameList;
 import fp4g.data.DefineType;
 import fp4g.data.On;
+import fp4g.data.Statements;
 import fp4g.data.On.Source;
 import fp4g.data.Send;
 import fp4g.data.define.Entity;
@@ -55,14 +58,15 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	private Stack<Assets> assets_stack;	
 	private ExprList exprList;
 	private NameList nameList;
+	private Statements statements;
 	public FP4GDataVisitor(Game game)
 	{
 		this.game = game;		
 		current = new Stack<>();
 		expr_stack = new Stack<>();
 		array_stack = new Stack<>();
-		assets_stack = new Stack<>();
-		methods = (MessageMethods) ((CustomClassMap)game.get("methods")).getValue();
+		assets_stack = new Stack<>();	
+		methods = (MessageMethods) ((CustomClassMap)game.get("methods")).getBean();
 	}
 	
 	@Override
@@ -93,10 +97,21 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	}
 	
 	@Override
+	public Code visitOnStatement(FP4GParser.OnStatementContext ctx)
+	{
+		statements = new Statements();
+		//TODO talvez deberia usar aggregateResult
+		for(ParseTree c:ctx.children)
+		{
+			statements.add(visit(c));
+		}		
+		return statements;		
+	}
+	
+	
+	@Override
 	public Code visitSend(FP4GParser.SendContext ctx)
 	{
-		
-		
 		MessageMethod method = methods.getMessageMethod(ctx.messageMethodName);
 		if(method == null)
 		{
@@ -133,11 +148,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 			break;		
 		}
 		
-		
-		//buscar el MethodName 
-		//ctx.messageMethodName
-		//Send
-		return null;		
+		return send;		
 	}
 	
 	@Override 
@@ -251,9 +262,11 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		}
 		
 		super.visitOn(ctx);
+		
 		//al evento on, se crea un nuevo codigo y se le añaden los filtros, si es que existen.
 		//falta solo agregarle el codigo :)
-		Source source = on.addSource();
+		Source source = on.addSource(statements);
+		statements = null;
 		if(ctx.filters != null)
 		{			
 			List<List<String>> filtros = ctx.filters.or;

@@ -42,9 +42,9 @@ public class On extends Code{
 	}
 	
 	//TODO falta el codigo del evento.
-	public Source addSource()
+	public Source addSource(Statements statements)
 	{
-		Source source = new Source();
+		Source source = new Source(statements);
 		sources.add(source);
 		return source;
 	}	
@@ -52,9 +52,11 @@ public class On extends Code{
 	public final class Source
 	{	
 		public final List<Filter> filters;
-		public Source()
+		public final Statements statements;
+		public Source(Statements statements)
 		{
 			this.filters = new LinkedList<>();
+			this.statements = statements;
 		}
 		
 		public void addFilter(List<String> listFilter)

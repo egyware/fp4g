@@ -105,14 +105,11 @@ returns
 		ID {$messageName = $ID.text; }
 		(DOUBLEDOT filters = onFilters)?
 		ABRE_COR
-		on_statements 
+		(onStatement DOTCOMA) * 
 		CIERRA_COR 
 		;
-on_statements
-			:
-			(on_statement DOTCOMA) *
-			;
-on_statement:
+
+onStatement :
 			send 
 			;
 send

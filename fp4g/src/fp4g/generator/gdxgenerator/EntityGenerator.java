@@ -119,9 +119,10 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			List<OnModel> onList = new LinkedList<>();
 			for(On on: entity_onMessages)
 			{
-				onList.add(new OnModel(on));
+				onList.add(new OnModel(on,generator));
 			}
 			entityRoot.put("messages", onList);
+			
 			
 		}
 		
@@ -179,7 +180,8 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 								"com.apollo.utils.Bag",
 								"com.apollo.MessageHandler",
 								"com.apollo.utils.ImmutableBag",
-								"com.esotericsoftware.reflectasm.MethodAccess"
+								"com.apollo.MessageSender",
+								"com.esotericsoftware.reflectasm.MethodAccess"								
 						)
 					);
 			}

@@ -5,11 +5,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.antlr.v4.misc.Utils;
+
 import fp4g.classes.MessageMethod;
+import fp4g.data.Code;
+import fp4g.data.Expresion;
 import fp4g.data.On;
 import fp4g.data.On.Filter;
 import fp4g.data.On.Source;
+import fp4g.data.Send;
 import fp4g.data.expresion.ClassMap;
+import fp4g.generator.gdxgenerator.JavaGenerator;
 
 public class OnModel implements Model
 {
@@ -19,8 +25,9 @@ public class OnModel implements Model
 	//Necesitaré una lista de los MethodHandlers!
 	private final List<MethodHandlerModel> methodHandlers;	
 	
-	
-	public OnModel(On on)
+	//TODO claramente acá el generator es una solución parche
+	//TODO Lo que paso acá. Que este modelo empezo a generar codigo. por eso este desasastre...
+	public OnModel(On on, JavaGenerator generator)
 	{
 		name = on.name;		
 		methodHandlers = new LinkedList<>();
@@ -34,7 +41,7 @@ public class OnModel implements Model
 		//tengo que recorrer los sources en busca de los methodHandlers y subirlos acá
 		for(Source source:on.sources)
 		{			
-			SourceModel.findAndInsert(source,methods);
+			SourceModel.findAndInsert(source,methods,generator);
 		}
 		methodHandlers.addAll(methods.values());		
 	}
@@ -46,14 +53,44 @@ public class OnModel implements Model
 		//Una lista de filtros (disyunción)
 		private final List<FilterD> filters;
 				
-		public SourceModel(Source source)
+		public SourceModel(Source source, JavaGenerator generator)
 		{
-			//code = on.getCode();
-			code = "//TODO falta el codigo.."; //TODO falta el codigo
+			//TODO por ahora traduciré el codigo así
+			if(source.statements != null && source.statements.size() > 0)
+			{
+				StringBuilder builder = new StringBuilder();
+				for(Code stmnt:source.statements)
+				{
+					//MessageSender.instance().send(receiver, message);
+					//TODO por ahora TODOS son Send
+					Send send = (Send)stmnt;
+					String message = String.format("%1$sMessage.on%2$s%1$s",send.method.getMessage().name,Utils.capitalize(send.method.getMethodName()));
+					builder.append("MessageSender.instance().send(");
+					builder.append(message);
+					if(send.args != null)
+					{
+						builder.append(", ");					
+						for(Expresion e:send.args)
+						{
+							builder.append(generator.exprGen.generate(null,null, e));
+							builder.append(", ");
+						}
+					}
+					builder.append(");\n");
+				}				
+				code = builder.toString();
+			}
+			else
+			{
+			
+				code = "//TODO falta el codigo...";
+			}			
+			
+			
 			filters = new LinkedList<>();
 		}
 		
-		public static void findAndInsert(final Source source,final HashMap<String,MethodHandlerModel> methods)
+		public static void findAndInsert(final Source source,final HashMap<String,MethodHandlerModel> methods, JavaGenerator generator)
 		{			
 			final HashMap<MethodHandlerModel,SourceModel> sourcesMap = new HashMap<>();
 			
@@ -79,7 +116,7 @@ public class OnModel implements Model
 						SourceModel sm = sourcesMap.get(m);
 						if(sm == null)
 						{
-							sm = new SourceModel(source);
+							sm = new SourceModel(source,generator);
 							sourcesMap.put(m, sm);						
 						}					
 						//ya tengo el metodo manejador, que hago con el?
@@ -101,7 +138,7 @@ public class OnModel implements Model
 				for(Entry<String,MethodHandlerModel> entry:methods.entrySet())
 				{
 					//cuando hay 0 filtros, el source se agrega a cada uno de los metodos
-					entry.getValue().addSource(new SourceModel(source));					
+					entry.getValue().addSource(new SourceModel(source,generator));					
 				}
 			}
 			//al finalizar
