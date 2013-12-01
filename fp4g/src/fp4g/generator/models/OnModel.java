@@ -74,7 +74,7 @@ public class OnModel implements Model
 						for(Iterator<Expresion> iterator = send.args.iterator();iterator.hasNext();)
 						{
 							Expresion e = iterator.next();
-							builder.append(generator.exprGen.generate(null,null, e));
+							builder.append(generator.exprGen.generate(null, e));
 							if(iterator.hasNext())
 							{
 								builder.append(", ");

@@ -170,13 +170,13 @@ public class JavaGenerator extends Generator {
 	}
 
 	@Override
-	public <CodeModel> Expresion function(Code parent, CodeModel model,	FunctionCall fcall) {		
-		return funcGen.generate(parent, (JavaCodeModel)model,fcall);
+	public <CodeModel> Expresion function(CodeModel model,	FunctionCall fcall) {		
+		return funcGen.generate((JavaCodeModel)model,fcall);
 	}
 
 	@Override
-	public <CodeModel> String expresion(Code parent, CodeModel model,Expresion expr) {
-		return exprGen.generate(parent, (JavaCodeModel) model,expr);
+	public <CodeModel> String expresion(CodeModel model,Expresion expr) {
+		return exprGen.generate((JavaCodeModel) model,expr);
 	}
 	
 	public void addJavaCode(Define define,JavaCodeModel value)	

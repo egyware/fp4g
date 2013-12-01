@@ -57,8 +57,8 @@ public abstract class Generator {
 	}
 	
 	
-	public abstract <CodeModel> Expresion function(Code parent, CodeModel model, FunctionCall fcall);
-	public abstract <CodeModel> String   expresion(Code parent, CodeModel model, Expresion expr);
+	public abstract <CodeModel> Expresion function(CodeModel model, FunctionCall fcall);
+	public abstract <CodeModel> String   expresion(CodeModel model, Expresion expr);
 	
 	
 	

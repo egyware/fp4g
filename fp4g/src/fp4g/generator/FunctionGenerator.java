@@ -31,7 +31,7 @@ public abstract class FunctionGenerator <T extends Generator,Model>
 	 * @param list
 	 * @return una expresion, la cual puede ser codigo directo o algo...
 	 */
-	public abstract Expresion generate(Code parent,Model model,FunctionCall function);
+	public abstract Expresion generate(Model model,FunctionCall function);
 	
 	
 }

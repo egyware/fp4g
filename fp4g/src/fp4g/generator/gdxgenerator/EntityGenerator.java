@@ -94,7 +94,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				List<String> params = new LinkedList<>();
 				for(Expresion expr: addBhvr.params)
 				{
-					String result = generator.expresion(addBhvr,modelBuild,expr);
+					String result = generator.expresion(modelBuild,expr);
 					if(result != null)
 					{
 						params.add(result);
