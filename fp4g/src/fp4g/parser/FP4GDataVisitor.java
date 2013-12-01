@@ -129,7 +129,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		{
 			type = Send.SendTo.Self;
 		}
-		Send send = new Send(type,method);		
+		Send send = new Send(type,method);	
+		super.visitSend(ctx);
 		if(exprList != null)
 		{
 			//TODO checkar la exprList

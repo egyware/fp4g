@@ -1,6 +1,7 @@
 package fp4g.generator.models;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -65,15 +66,19 @@ public class OnModel implements Model
 					//TODO por ahora TODOS son Send
 					Send send = (Send)stmnt;
 					String message = String.format("%1$sMessage.on%2$s%1$s",send.method.getMessage().name,Utils.capitalize(send.method.getMethodName()));
-					builder.append("MessageSender.instance().send(");
+					builder.append("MessageSender.instance().send(this,"); //TODO por ahora solo yo recibo mensajes
 					builder.append(message);
 					if(send.args != null)
 					{
 						builder.append(", ");					
-						for(Expresion e:send.args)
+						for(Iterator<Expresion> iterator = send.args.iterator();iterator.hasNext();)
 						{
+							Expresion e = iterator.next();
 							builder.append(generator.exprGen.generate(null,null, e));
-							builder.append(", ");
+							if(iterator.hasNext())
+							{
+								builder.append(", ");
+							}
 						}
 					}
 					builder.append(");\n");
