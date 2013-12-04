@@ -2,13 +2,6 @@
 
 package fp4g.parser;
 
-import static fp4g.Log.*;
-
-import fp4g.data.*;
-import fp4g.data.define.*;
-
-import java.util.LinkedList;
-
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;

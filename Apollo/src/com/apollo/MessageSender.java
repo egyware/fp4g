@@ -6,9 +6,7 @@ import com.esotericsoftware.reflectasm.MethodAccess;
 public class MessageSender 
 {
 	private static MessageSender messageSender = new MessageSender();
-	private MessageSender()
-	{	
-	}
+	private MessageSender()	{ }
 	private Object array1[] = new Object[1];
 	private Object array2[] = new Object[2];
 	private Object array3[] = new Object[3];

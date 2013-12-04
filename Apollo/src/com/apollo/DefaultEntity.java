@@ -76,10 +76,5 @@ public final class DefaultEntity extends Entity {
 	public Bag<Behavior> getBehaviors() {
 		return components;
 	}
-
-	@Override
-	public ImmutableBag<MessageHandler> getMessageHandler(Message message) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 }
