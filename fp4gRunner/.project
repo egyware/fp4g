@@ -18,7 +18,7 @@
 		<link>
 			<name>libs</name>
 			<type>2</type>
-			<location>C:/Users/Edgardo/Git/fp4g-src/libs</location>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/libs</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

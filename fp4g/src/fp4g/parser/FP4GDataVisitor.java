@@ -47,7 +47,6 @@ import fp4g.data.expresion.CustomClassMap;
 /**
  * Visita el arbol construido.
  * @author Edgardo
- * @TODO podria mejorarse utilizando generics
  */
 public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	private Game game;
@@ -81,7 +80,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 			if(state != null)
 			{
 				Show(WarnType.MissingAdd,game);
-				//creo un elemento temporal para solucionar el state faltante, sin embargo no se generará
+				//creo un elemento temporal para solucionar el state faltante, sin embargo no se generarï¿½
 				state = new GameState(ctx.state,define);
 				state.setBuild(false);
 			}
@@ -119,7 +118,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		}
 		Send.SendTo type = null;
 		String receiver = null;
-		if(ctx.receiverName != null) //TODO detectar para onde vá (falta sistemas)
+		if(ctx.receiverName != null) //TODO detectar para onde vï¿½ (falta sistemas)
 		{
 			receiver = ctx.receiverName;
 			type = Send.SendTo.Other;
@@ -199,17 +198,17 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 				define = new Entity(defName,parent);
 			break;
 			case MANAGER:
-				//TODO: No implementado aún
+				//TODO: No implementado aï¿½n
 				Show(ErrType.NotImplement);
 				throw new RuntimeException("No implementado");
 				//break;		  		
 		  	case BEHAVIOR:
-		  		//TODO: No implementado aún
+		  		//TODO: No implementado aï¿½n
 		  		Show(ErrType.NotImplement);
 				throw new RuntimeException("No implementado");
 		  		//break;		  		
 		  	case GOAL:
-		  		//TODO: No implementado aún
+		  		//TODO: No implementado aï¿½n
 		  		Show(ErrType.NotImplement);
 				throw new RuntimeException("No implementado");
 		  		//break;
@@ -263,7 +262,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		
 		super.visitOn(ctx);
 		
-		//al evento on, se crea un nuevo codigo y se le añaden los filtros, si es que existen.
+		//al evento on, se crea un nuevo codigo y se le aï¿½aden los filtros, si es que existen.
 		//falta solo agregarle el codigo :)
 		Source source = on.addSource(statements);
 		statements = null;
@@ -310,7 +309,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	@Override 
 	public Code visitDeclareVar(FP4GParser.DeclareVarContext ctx)
 	{
-		//TODO: esta conversación de variables no deberia estár puesta aqui
+		//TODO: esta conversaciï¿½n de variables no deberia estï¿½r puesta aqui
 		String name = null;
 		switch(ctx.varType().type)
 		{
@@ -342,10 +341,10 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	{	
 		//ojo con el orden de estas funciones
 		super.visitExprList(ctx);
-		//se asume que no se visitará concurrentemente a ExprList
+		//se asume que no se visitarï¿½ concurrentemente a ExprList
 		exprList = new ExprList(expr_stack.size());
 				
-		//añadimos todas las expresiones				
+		//aï¿½adimos todas las expresiones				
 		while(!expr_stack.isEmpty())
 		{
 			final Expresion expr = expr_stack.pop();		
@@ -418,7 +417,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	public Code visitParExpr(FP4GParser.ParExprContext ctx)
 	{		
 		visit(ctx.op);
-		expr_stack.peek().setPar(true); //establecemos que esta expresión, lleva parentesis
+		expr_stack.peek().setPar(true); //establecemos que esta expresiï¿½n, lleva parentesis
 				
 		return null;
 	}	

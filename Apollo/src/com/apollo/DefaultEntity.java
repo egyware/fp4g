@@ -14,13 +14,11 @@ import com.apollo.utils.ImmutableBag;
 public final class DefaultEntity extends Entity {
 	private Bag<Behavior> components;
 	private Map<Class<? extends Behavior>, Behavior> componentsByType;	
-	private Map<String,Var<?>> variables;
 	public DefaultEntity(World world) {
 		super(world);
 		
 		components = new Bag<Behavior>();
 		componentsByType = new LinkedHashMap<Class<? extends Behavior>, Behavior>();
-		variables = new LinkedHashMap<String,Var<?>>();
 	}
 
 	public void setBehavior(Behavior component) {		
@@ -77,15 +75,6 @@ public final class DefaultEntity extends Entity {
 	@Override
 	public Bag<Behavior> getBehaviors() {
 		return components;
-	}
-	
-	public Var<?> getVariable(String name)
-	{
-		return variables.get(name);
-	}
-	public void setVariable(String name,Var<?> var)
-	{
-		variables.put(name,var);		
 	}
 
 	@Override

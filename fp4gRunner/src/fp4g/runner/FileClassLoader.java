@@ -48,7 +48,8 @@ public class FileClassLoader extends ClassLoader
 		Class<?> clazz = findClass(name);		
 		if (clazz == null)
 		{
-			synchronized(getClassLoadingLock(name))
+			
+			//synchronized(getClassLoadingLock(name))
 			{
 				String fileName = String.format("%s.class",name.replace('.', File.separatorChar));
 				try {
@@ -63,16 +64,21 @@ public class FileClassLoader extends ClassLoader
 
    public Class<?> createClass(File file) throws IOException 
    {
-      
-      try 
-      (FileInputStream fis = new FileInputStream(file))
+	  FileInputStream fis = null; 
+      try
       {         
+    	 fis = new FileInputStream(file);
          byte[] bytes = new byte[fis.available()];
          int read = fis.read(bytes);
          if (read != bytes.length) {
+        	fis.close();
             return null;
          }
+         fis.close();
          return createClass(bytes);
+      }
+      finally
+      {    	  
       }
    }
 
