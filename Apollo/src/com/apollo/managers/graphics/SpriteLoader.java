@@ -88,7 +88,7 @@ public class SpriteLoader extends
 
 		}
 
-		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@SuppressWarnings({ "rawtypes"})
 		@Override		
 		public Sprite read(Json json, JsonValue jsonData, Class type) 
 		{			
@@ -101,24 +101,23 @@ public class SpriteLoader extends
 			json.readField(sprite, "first", jsonData);
 			JsonValue animations = jsonData.get("animations");
 
-			for (Object animation : animations) {
-				OrderedMap<String,Object> aniData = (OrderedMap<String,Object>)animation;					
-				OrderedMap<String,Object> sequence = (OrderedMap<String,Object>)aniData.get("sequence");
-				String name = (String)aniData.get("name");
-				String region = (aniData.containsKey("region"))?(String)aniData.get("region"):name;
+			for (JsonValue animation : animations) {									
+				JsonValue sequence = animation.get("sequence");
+				String name = animation.getString("name");
+				String region = (animation.hasChild("region"))?animation.getString("region"):name;
 				AtlasRegion array[] = null;					
 				int duration = DEFAULT_DURATION;
-				if(sequence.containsKey("delay"))
+				if(sequence.hasChild("delay"))
 				{
-					duration = ((Float)sequence.get("delay")).intValue();
+					duration = (int) sequence.getInt("delay");
 				}
 				Array<AtlasRegion> regions = atlas.findRegions(region);
-				if(sequence.containsKey("data"))
+				if(sequence.hasChild("data"))
 				{
-					Array<Float> framesArray = (Array<Float>)sequence.get("data");
+					JsonValue framesArray = sequence.get("data");
 					array = new AtlasRegion[framesArray.size];
 					for (int i = 0; i < framesArray.size; i++) {
-						array[i] = regions.get(framesArray.get(i).intValue()); 
+						array[i] = regions.get(framesArray.getInt(i)); 
 					}
 				}
 				if (array == null) {
