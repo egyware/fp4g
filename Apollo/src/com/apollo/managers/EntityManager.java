@@ -41,16 +41,4 @@ public class EntityManager extends Manager {
 		}
 	}
 	
-//	public void onMessage(Message m)
-//	{
-//		if(m instanceof CreateEntityMessageHandler)
-//		{
-//			CreateEntityMessageHandler cem = (CreateEntityMessageHandler)m;
-//			Entity novo = world.createEntity(cem.name,cem.args);
-//			world.addEntity(novo);
-//			cem.entity = novo;
-//		}
-//		//TODO [egyware] ignorar los demás
-//	}
-
 }

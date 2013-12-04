@@ -42,7 +42,7 @@ public class PlatformBodyBehavior extends BodyBehavior {
 	
 		{
 			BodyDef defA = new BodyDef();		
-			defA.position.set(def.position.cpy().mul(SCALE));
+			defA.position.set(def.position.cpy().scl(SCALE));
 			defA.type = BodyDef.BodyType.DynamicBody;
 			defA.fixedRotation = true;		
 			box = world.createBody(defA);
@@ -71,7 +71,7 @@ public class PlatformBodyBehavior extends BodyBehavior {
 			//crear el body B
 		    BodyDef defB = new BodyDef();
 		    defB.type = BodyDef.BodyType.DynamicBody;
-		    defB.position.set(def.position.cpy().add(0,-def.height).mul(SCALE));	    
+		    defB.position.set(def.position.cpy().add(0,-def.height).scl(SCALE));	    
 		    circle = world.createBody(defB);
 		    circle.setUserData(owner);
 
@@ -113,7 +113,7 @@ public class PlatformBodyBehavior extends BodyBehavior {
 		float velChange = desiredVel - vel.x;	
 		float impulse = (box.getMass() + circle.getMass()) * velChange;		
 		Vector2 worldCenter = circle.getWorldCenter();
-		circle.applyLinearImpulse(impulse, 0, worldCenter.x,worldCenter.y);		
+		circle.applyLinearImpulse(impulse, 0, worldCenter.x,worldCenter.y,true);		
 		if(desiredVel == 0){
 			circle.setAngularVelocity(0);
 		}

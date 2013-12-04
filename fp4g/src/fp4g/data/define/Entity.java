@@ -1,12 +1,6 @@
 package fp4g.data.define;
 
 import static fp4g.Log.Show;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import fp4g.Log.ErrType;
 import fp4g.Log.WarnType;
 import fp4g.data.Add;

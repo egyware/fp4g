@@ -16,6 +16,8 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import fp4g.Log;
+import fp4g.Log.ErrType;
 import fp4g.Options;
 import fp4g.classes.MessageMethod;
 import fp4g.classes.MessageMethods;
@@ -72,7 +74,6 @@ public class JavaGenerator extends Generator {
 		
 		generators.put(GameState.class, GameStateGenerator.class);
 		generators.put(Entity.class,    EntityGenerator.class);
-		//generators.put(Event.class,     EventGenerator.class);
 		generators.put(Game.class,      GameGenerator.class);
 		generators.put(Goal.class,      GoalGenerator.class);
 				
@@ -130,7 +131,7 @@ public class JavaGenerator extends Generator {
 		}
 		else
 		{
-			//TODO mostrar error
+			Log.Show(ErrType.CriticalErrorGeneratorNotFound,gameData);
 			throw new RuntimeException("Epa, generador incorrecto");
 		}		
 	}
@@ -140,9 +141,12 @@ public class JavaGenerator extends Generator {
 	{
 		final String path = packageDir.getAbsolutePath();
 		final int start = path.length()-packageNameDir.length();
+		final String cp = "C:\\Users\\Edgardo\\Git\\fp4g-src\\Apollo\\bin;C:\\Libraries\\libgdx\\gdx.jar;C:\\Users\\Edgardo\\Git\\reflectasm\\bin;"; 
 		final String options[] = {
 				"-classpath",
-				"C:\\Users\\Edgardo\\Git\\fp4g-src\\Apollo\\bin;C:\\Users\\Edgardo\\personal\\Asteroids\\libs\\gdx.jar;"				
+				cp,
+				"-d",
+				"C:\\Users\\Edgardo\\Desktop\\fp4g"
 		};
 		System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.7.0_25");
 						
@@ -151,6 +155,7 @@ public class JavaGenerator extends Generator {
 		StandardJavaFileManager fileManager = javaCompiler.getStandardFileManager(diagnostics,null,null);
 		Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(files);
 		javaCompiler.getTask(null, fileManager, diagnostics, Arrays.asList(options), null, compilationUnits).call();
+		
 		
 		for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
 			String fileName = diagnostic.getSource().getName();

@@ -3,7 +3,6 @@
  */
 package fp4g.generator;
 
-import fp4g.data.Code;
 import fp4g.data.Expresion;
 import fp4g.data.expresion.FunctionCall;
 

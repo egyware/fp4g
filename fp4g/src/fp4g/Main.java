@@ -2,7 +2,6 @@ package fp4g;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;

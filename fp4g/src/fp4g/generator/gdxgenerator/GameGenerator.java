@@ -54,7 +54,6 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 		{			
 			root.put("start_state", game.startState.getName());
 		}
-		// TODO falta ${start_state}
 		
 		generator.createFile(path,String.format("%s.java",game.name), temp,root);
 		

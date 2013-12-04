@@ -9,7 +9,7 @@ import fp4g.data.define.Message;
  *
  */
 public class MessageMethod 
-{	
+{
 	private Message message;
 	private String methodName;
 	private String valueReplace;

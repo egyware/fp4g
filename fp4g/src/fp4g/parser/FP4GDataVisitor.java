@@ -80,7 +80,6 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 			GameState state = define.getDefine(DefineType.STATE, stateName);
 			if(state != null)
 			{
-				//TODO warn!
 				Show(WarnType.MissingAdd,game);
 				//creo un elemento temporal para solucionar el state faltante, sin embargo no se generará
 				state = new GameState(ctx.state,define);
@@ -120,7 +119,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		}
 		Send.SendTo type = null;
 		String receiver = null;
-		if(ctx.receiverName != null) //TODO detectar para onde vá (falta System)
+		if(ctx.receiverName != null) //TODO detectar para onde vá (falta sistemas)
 		{
 			receiver = ctx.receiverName;
 			type = Send.SendTo.Other;

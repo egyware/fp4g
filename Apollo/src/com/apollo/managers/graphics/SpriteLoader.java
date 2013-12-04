@@ -9,12 +9,14 @@ import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializer;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.OrderedMap;
 
 /**
@@ -35,11 +37,11 @@ public class SpriteLoader extends
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public Array<AssetDescriptor> getDependencies(String fileName,	AnimationParameter parameter) {
+	@Override	
+	public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, AnimationParameter parameter) {
 		Array<AssetDescriptor> deps = new Array<AssetDescriptor>();
 		if (parameter == null) {
-			deps.add(new AssetDescriptor(resolve(fileName)
+			deps.add(new AssetDescriptor(file
 					.pathWithoutExtension() + ".atlas", TextureAtlas.class));
 		} else {
 			deps.add(new AssetDescriptor(parameter.textureAtlasPath,
@@ -48,12 +50,13 @@ public class SpriteLoader extends
 		return deps;
 	}
 
+	
 	@Override
-	public Sprite load(AssetManager assetManager, String fileName,
+	public Sprite load(AssetManager assetManager, String fileName, FileHandle file,	
 			AnimationParameter parameter) {
 		String textureAtlasPath;
 		if (parameter == null) {
-			textureAtlasPath = resolve(fileName).pathWithoutExtension()
+			textureAtlasPath = file.pathWithoutExtension()
 					+ ".atlas";
 		} else {
 			textureAtlasPath = parameter.textureAtlasPath;
@@ -65,7 +68,7 @@ public class SpriteLoader extends
 		Sprite sprite = json.fromJson(Sprite.class,
 				Gdx.files.internal(fileName));
 
-		return sprite;// Sprite.build(resolve(fileName),atlas);
+		return sprite;
 	}
 
 	private final class SpriteSerializer implements Serializer<Sprite> {
@@ -86,9 +89,9 @@ public class SpriteLoader extends
 		}
 
 		@SuppressWarnings({ "rawtypes", "unchecked" })
-		@Override
-		public Sprite read(Json json, Object jsonData, Class type) {
-			OrderedMap<String, Object> data = (OrderedMap<String, Object>) jsonData;
+		@Override		
+		public Sprite read(Json json, JsonValue jsonData, Class type) 
+		{			
 			Sprite sprite = new Sprite();
 			// talvez no sea la mejor manera de leer estos datos, pero por
 			// lo menos es simple
@@ -96,7 +99,7 @@ public class SpriteLoader extends
 			json.readField(sprite, "height", jsonData);
 			json.readField(sprite, "origin", jsonData);
 			json.readField(sprite, "first", jsonData);
-			Array<?> animations = (Array<?>) data.get("animations");
+			JsonValue animations = jsonData.get("animations");
 
 			for (Object animation : animations) {
 				OrderedMap<String,Object> aniData = (OrderedMap<String,Object>)animation;					
@@ -128,7 +131,7 @@ public class SpriteLoader extends
 				sprite.addAnimation(name, new Animation(duration * 0.001f, array));
 			}
 			return sprite;
-		}
+		}		
 	}
 
 	static public class AnimationParameter extends
@@ -140,5 +143,4 @@ public class SpriteLoader extends
 			textureAtlasPath = _textureAtlasPath;
 		}
 	}
-
 }
