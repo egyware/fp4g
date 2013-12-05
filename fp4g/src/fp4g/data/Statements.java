@@ -6,7 +6,7 @@ import java.util.LinkedList;
 public class Statements extends Code implements Iterable<Code>{
 
 	//TODO una lista de codes, (por ahora)
-	private final LinkedList<Code> codigo = new LinkedList<>();
+	private final LinkedList<Code> codigo = new LinkedList<Code>();
 	
 	public void add(Code code)
 	{

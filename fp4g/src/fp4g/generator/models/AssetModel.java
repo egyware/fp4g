@@ -23,7 +23,7 @@ public class AssetModel implements Comparable<AssetModel>
 			this.parameterClass = parameterClass;
 		}
 	}
-	private static final HashMap<AssetType,AssetModelExtra> assetModelExtra = new HashMap<>();	
+	private static final HashMap<AssetType,AssetModelExtra> assetModelExtra = new HashMap<AssetType, AssetModelExtra>();	
 	private static int nullName = 0;
 	static 
 	{

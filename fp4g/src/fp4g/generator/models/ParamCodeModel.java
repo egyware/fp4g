@@ -7,7 +7,7 @@ public class ParamCodeModel implements Model {
 	private static final Map<String,String> defaultValues;
 	static
 	{
-		defaultValues = new HashMap<>();
+		defaultValues = new HashMap<String, String>();
 		defaultValues.put("Boolean", "false");
 		defaultValues.put("Float",   "0.0f");		
 		defaultValues.put("Entity",  "null");		

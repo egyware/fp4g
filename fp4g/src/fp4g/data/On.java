@@ -30,7 +30,7 @@ public class On extends Code{
 	{
 		this.message = message;
 		this.name = message.name;
-		sources = new LinkedList<>();
+		sources = new LinkedList<Source>();
 	}
 	/**
 	 * En caso que no exista un mensaje predefinido
@@ -40,7 +40,7 @@ public class On extends Code{
 	{
 		this.message = null;
 		this.name = name;
-		sources = new LinkedList<>();
+		sources = new LinkedList<Source>();
 	}
 	
 	public Source addSource(Statements statements)
@@ -56,7 +56,7 @@ public class On extends Code{
 		public final Statements statements;
 		public Source(Statements statements)
 		{
-			this.filters = new LinkedList<>();
+			this.filters = new LinkedList<Filter>();
 			this.statements = statements;
 		}
 		

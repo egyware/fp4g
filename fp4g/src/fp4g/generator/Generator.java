@@ -26,7 +26,7 @@ public abstract class Generator {
 	protected abstract void compileFiles(List<File> files); //TODO: compile file add throw some exception
 	
 	
-	private List<File> filesToCompile = new LinkedList<>();
+	private List<File> filesToCompile = new LinkedList<File>();
 	private Configuration cfg;
 	
 		

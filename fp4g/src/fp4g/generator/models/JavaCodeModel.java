@@ -11,8 +11,8 @@ public class JavaCodeModel {
 	
 	public JavaCodeModel()
 	{
-		imports = new TreeSet<>();
-		interfaces = new TreeSet<>();
+		imports = new TreeSet<String>();
+		interfaces = new TreeSet<String>();
 	}
 	
 	public void addImport(String _class)

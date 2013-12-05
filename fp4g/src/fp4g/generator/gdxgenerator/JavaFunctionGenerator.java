@@ -26,7 +26,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	public JavaFunctionGenerator(JavaGenerator jg)
 	{
 		super(jg);
-		functions = new HashMap<>(10,1);
+		functions = new HashMap<String, Function>(10,1);
 		
 		functions.put("getSprite" , new GetSprite());
 		functions.put("getSound"  , new GetSound());

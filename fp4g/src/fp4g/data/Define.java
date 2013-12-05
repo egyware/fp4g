@@ -15,7 +15,7 @@ import fp4g.data.expresion.Literal;
 
 @SuppressWarnings("unchecked")
 public abstract class Define extends Code{
-	public final static List<Add> emptyList = new ArrayList<>(0);
+	public final static List<Add> emptyList = new ArrayList<Add>(0);
 	
 	public final DefineType type;
 	public final Define parent;
@@ -43,9 +43,9 @@ public abstract class Define extends Code{
 		this.name = name;
 		this.parent = parent;
 		variables = new HashMap<String,Literal<?>>();		
-		adds    = new HashMap<>(DefineType.values().length,1);
-		defines = new HashMap<>(DefineType.values().length,1);
-		onMessages= new HashMap<>();		
+		adds    = new HashMap<DefineType, List<Add>>(DefineType.values().length,1);
+		defines = new HashMap<DefineType, Map<String, ? extends Define>>(DefineType.values().length,1);
+		onMessages= new HashMap<String, On>();		
 	}
 		
 	public DefineType getType()
@@ -69,7 +69,7 @@ public abstract class Define extends Code{
 		List<Add> list = adds.get(add.getType());
 		if(list == null)
 		{
-			list = new LinkedList<>();
+			list = new LinkedList<Add>();
 			adds.put(add.getType(), list);
 		}
 		list.add(add);
@@ -84,7 +84,7 @@ public abstract class Define extends Code{
 		Map<String,T> map = (Map<String, T>) defines.get(type);
 		if(map == null)
 		{
-			map = new HashMap<>();
+			map = new HashMap<String, T>();
 			defines.put(type, map);
 		}
 		map.put(define.name, define);		

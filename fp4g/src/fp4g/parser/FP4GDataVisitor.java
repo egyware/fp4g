@@ -8,7 +8,6 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import static fp4g.Log.Show;
 import fp4g.Log;
 import fp4g.Log.ErrType;
@@ -62,10 +61,10 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	public FP4GDataVisitor(Game game)
 	{
 		this.game = game;		
-		current = new Stack<>();
-		expr_stack = new Stack<>();
-		array_stack = new Stack<>();
-		assets_stack = new Stack<>();	
+		current = new Stack<Define>();
+		expr_stack = new Stack<Expresion>();
+		array_stack = new Stack<Map>();
+		assets_stack = new Stack<Assets>();	
 		methods = (MessageMethods) ((CustomClassMap)game.get("methods")).getBean();
 	}
 	
@@ -157,7 +156,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		Define define = current.peek();
 		
 		Stack<Expresion> expr_stack = this.expr_stack;		
-		this.expr_stack = new Stack<>();
+		this.expr_stack = new Stack<Expresion>();
 		super.visitSet(ctx);
 		Expresion expr = this.expr_stack.pop();
 		this.expr_stack = expr_stack;
@@ -173,7 +172,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		else
 		{
 			//TODO evaluar el set
-			throw new NotImplementedException();
+			throw new RuntimeException("No Implementados");
 		}		
 	}
 
@@ -527,7 +526,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	{
 		String key = ctx.key;
 		Stack<Expresion> expr_stack = this.expr_stack;		
-		this.expr_stack = new Stack<>();
+		this.expr_stack = new Stack<Expresion>();
 		super.visitParArray(ctx);
 		Expresion expr = this.expr_stack.pop();
 		this.expr_stack = expr_stack;
@@ -560,7 +559,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		//guardamos el actual stack!
 		Stack<Expresion> prev_stack  = expr_stack;
 		//nuevo stack!
-		expr_stack = new Stack<>();
+		expr_stack = new Stack<Expresion>();
 		String callName = ctx.functionName.getText();
 		
 		visit(ctx.exprList());

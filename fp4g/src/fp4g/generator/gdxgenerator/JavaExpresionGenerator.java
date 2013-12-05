@@ -23,7 +23,7 @@ import fp4g.generator.models.JavaCodeModel;
  */
 public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,JavaCodeModel> 
 {
-	private final  Map<Class<?>, EG_Expresion> expresions = new HashMap<>(6,1);
+	private final  Map<Class<?>, EG_Expresion> expresions = new HashMap<Class<?>, EG_Expresion>(6,1);
 	
 	public JavaExpresionGenerator(JavaGenerator generator) {
 		super(generator);

@@ -893,7 +893,7 @@ public class FP4GParser extends Parser {
 	}
 
 	public static class OnFiltersContext extends ParserRuleContext {
-		public List<List<String>> or = new LinkedList<>();;
+		public List<List<String>> or = new LinkedList<List<String>>();;
 		public FilterContext filter;
 		public List<FilterContext> filter() {
 			return getRuleContexts(FilterContext.class);
@@ -949,7 +949,7 @@ public class FP4GParser extends Parser {
 	}
 
 	public static class FilterContext extends ParserRuleContext {
-		public List<String> filters = new LinkedList<>();;
+		public List<String> filters = new LinkedList<String>();;
 		public Token ID;
 		public List<TerminalNode> ID() { return getTokens(FP4GParser.ID); }
 		public List<TerminalNode> COMA() { return getTokens(FP4GParser.COMA); }

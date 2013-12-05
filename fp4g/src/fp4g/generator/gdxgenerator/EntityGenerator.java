@@ -40,8 +40,8 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		Template entityBuilderTempl = generator.getTemplate("EntityBuilder.ftl");
 		Template entityTempl        = generator.getTemplate("Entity.ftl");
 		
-		HashMap<String,Object> buildRoot = new HashMap<>();	
-		HashMap<String,Object> entityRoot = new HashMap<>();
+		HashMap<String,Object> buildRoot = new HashMap<String, Object>();	
+		HashMap<String,Object> entityRoot = new HashMap<String, Object>();
 		
 		JavaCodeModel modelBuild = new JavaCodeModel();
 		modelBuild.pckg = String.format("%s.%s",generator.packageName,"entity");
@@ -61,10 +61,10 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		if(entity.paramNameList != null)
 		{
 			//lo veo un poco consumidor de recursos, pero bueno...
-			List<ParamCodeModel> pair = new LinkedList<>();
+			List<ParamCodeModel> pair = new LinkedList<ParamCodeModel>();
 			for(Pair<String,String> par: entity.paramNameList)
 			{
-				//TODO más adelante, talvez especificar el tipo por defecto.
+				//TODO mï¿½s adelante, talvez especificar el tipo por defecto.
 				ParamCodeModel param = new ParamCodeModel(par.a,par.b);				
 				pair.add(param);
 			}
@@ -73,11 +73,11 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		
 		//agregar behaviors
 				
-		List<HashMap<String,Object>> behaviors = new LinkedList<>();
+		List<HashMap<String,Object>> behaviors = new LinkedList<HashMap<String, Object>>();
 		final Collection<Add> entity_addBehaviors = entity.getAdd(DefineType.BEHAVIOR);
 		for(Add addBhvr:entity_addBehaviors)
 		{
-			HashMap<String,Object> bhvr = new HashMap<>();			
+			HashMap<String,Object> bhvr = new HashMap<String, Object>();			
 			bhvr.put("name", addBhvr.name);			
 			if(addBhvr.varName != null)
 			{
@@ -91,7 +91,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			}			
 			if(addBhvr.params != null)
 			{	
-				List<String> params = new LinkedList<>();
+				List<String> params = new LinkedList<String>();
 				for(Expresion expr: addBhvr.params)
 				{
 					String result = generator.expresion(modelBuild,expr);
@@ -113,10 +113,10 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		final Collection<On> entity_onMessages = entity.getOnMessages();
 		if(entity_onMessages.size() > 0)
 		{
-			//por cada on! que es lo que necesitaré
+			//por cada on! que es lo que necesitarï¿½
 			//La categoria del mensaje Key,Contact,Life, etc..
 			//Obvio el code
-			List<OnModel> onList = new LinkedList<>();
+			List<OnModel> onList = new LinkedList<OnModel>();
 			for(On on: entity_onMessages)
 			{
 				onList.add(new OnModel(on,generator));
@@ -136,7 +136,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 						String.format("%s.Utils", generator.packageName)						
 					};
 			//imports para el builder
-			List<String> imports = new LinkedList<>();
+			List<String> imports = new LinkedList<String>();
 			Collections.addAll(imports, arrayImports);		
 			for(Add addBhvr:entity_addBehaviors)
 			{
@@ -156,9 +156,9 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 					"java.util.HashMap",
 					"java.util.Map"
 			};
-			//TODO deberia haber una clase que haga todo esto junto. Y que la relación no sea a un objeto. Si no a la clase.
+			//TODO deberia haber una clase que haga todo esto junto. Y que la relaciï¿½n no sea a un objeto. Si no a la clase.
 			//imports para el builder
-			List<String> imports = new LinkedList<>();
+			List<String> imports = new LinkedList<String>();
 			Collections.addAll(imports, arrayImports);		
 			for(Add addBhvr:entity_addBehaviors)
 			{

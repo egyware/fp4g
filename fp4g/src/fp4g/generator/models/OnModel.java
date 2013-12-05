@@ -32,8 +32,8 @@ public class OnModel implements Model
 	public OnModel(On on, JavaGenerator generator)
 	{
 		name = on.name;		
-		methodHandlers = new LinkedList<>();
-		HashMap<String,MethodHandlerModel> methods = new HashMap<>();
+		methodHandlers = new LinkedList<MethodHandlerModel>();
+		HashMap<String,MethodHandlerModel> methods = new HashMap<String, MethodHandlerModel>();
 		//agregar los metodos, aunque est�n vacios y asumiento que todos son MessageMethod		
 		for(Entry<String,Literal<?>> entry:on.message.entrySet())
 		{
@@ -93,12 +93,12 @@ public class OnModel implements Model
 			}			
 			
 			
-			filters = new LinkedList<>();
+			filters = new LinkedList<FilterD>();
 		}
 		
 		public static void findAndInsert(final Source source,final HashMap<String,MethodHandlerModel> methods, JavaGenerator generator)
 		{			
-			final HashMap<MethodHandlerModel,SourceModel> sourcesMap = new HashMap<>();
+			final HashMap<MethodHandlerModel,SourceModel> sourcesMap = new HashMap<MethodHandlerModel, SourceModel>();
 			
 			if(source.filters.size() > 0)
 			{
@@ -201,7 +201,7 @@ public class OnModel implements Model
 		{
 			name = method.getMethodName();
 			params = method.getParams();
-			sources = new LinkedList<>();			
+			sources = new LinkedList<SourceModel>();			
 		}
 					
 		public void addSource(SourceModel value) {
@@ -229,7 +229,7 @@ public class OnModel implements Model
 		
 		public FilterD()
 		{
-			conjunciones = new LinkedList<>();
+			conjunciones = new LinkedList<String>();
 		}
 		public void add(MessageMethod method, String value) {
 			conjunciones.add(String.format(method.getValueReplace(),value));			

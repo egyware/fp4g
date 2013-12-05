@@ -18,7 +18,7 @@ public class MessageMethods implements CustomMap
 	
 	public MessageMethods()
 	{
-		map = new HashMap<>();
+		map = new HashMap<String, MessageMethod>();
 	}
 	public void add(MessageMethod mm)
 	{

@@ -20,7 +20,7 @@ public class ApolloInputProcesor implements InputProcessor,MessageReceiver
 	private final ImmutableBag<MessageHandler> emptyBag;
 	public ApolloInputProcesor()
 	{
-		handlersByEventType = new HashMap<>();
+		handlersByEventType = new HashMap<Message, Bag<MessageHandler>>();
 		instance = MessageSender.instance();
 		emptyBag = new ImmutableBag<MessageHandler>()
 		{

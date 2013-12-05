@@ -14,7 +14,7 @@ public class Assets extends Asset implements Iterable<Asset>{
 	
 	public Assets(AssetType type, String name,String asset) {
 		super(type,name,asset);
-		assets = new LinkedList<>();		
+		assets = new LinkedList<Asset>();		
 	}
 
 	public void add(AssetType type, String name,String asset)

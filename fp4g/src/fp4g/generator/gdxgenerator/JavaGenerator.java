@@ -7,7 +7,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -46,19 +48,21 @@ public class JavaGenerator extends Generator {
 	public String packageNameDir = "";
 	public File packageDir;
 	public boolean isDebug;
-	public File outputDir;
+	public File binaryDir;
+	public File sourceDir;
 	public final JavaExpresionGenerator exprGen;
 	public final JavaFunctionGenerator funcGen;
 	public final Map<Define,JavaCodeModel> parDefineJavaCode;
 	
 	public final Map<Class<? extends Code>,Class<? extends CodeGenerator<JavaGenerator>>> generators;
 	
-	public final HashMap<Define,Depend<? extends Define>> dependencias = new HashMap<>();
+	public final HashMap<Define,Depend<? extends Define>> dependencias;
 	
 	public JavaGenerator()
 	{
-		generators = new HashMap<>(10,1);
-		parDefineJavaCode = new HashMap<>(10);
+		generators = new HashMap<Class<? extends Code>, Class<? extends CodeGenerator<JavaGenerator>>>(10,1);
+		parDefineJavaCode = new HashMap<Define, JavaCodeModel>(10);
+		dependencias = new HashMap<Define, Depend<? extends Define>>();
 		
 		exprGen = new JavaExpresionGenerator(this);
 		funcGen = new JavaFunctionGenerator(this);
@@ -71,20 +75,22 @@ public class JavaGenerator extends Generator {
 		packageNameDir = packageName.replace('.', '/');
 		isDebug = (Boolean) options.get("debug");
 		
+		sourceDir = new File(path,"src");
+		if(!sourceDir.exists())
+		{
+			sourceDir.mkdirs();
+		}
+		binaryDir = new File(path,"build");
+		if(!binaryDir.exists())
+		{
+			binaryDir.mkdirs();
+		}
 		//creamos la carpeta
-		if(packageDir == null)
+		packageDir = new File(sourceDir,packageNameDir);	
+		if(!packageDir.exists())
 		{
-			packageDir = new File(path,packageNameDir);	
-			if(!packageDir.exists())
-			{
-				packageDir.mkdirs();
-			}
-		}
-		outputDir = path;
-		if(!outputDir.exists())
-		{
-			outputDir.mkdirs();
-		}
+			packageDir.mkdirs();
+		}		
 		
 		cfg.setClassForTemplateLoading(JavaGenerator.class, "/fp4g/templates");
 		
@@ -148,19 +154,19 @@ public class JavaGenerator extends Generator {
 	{
 		final String path = packageDir.getAbsolutePath();
 		final int start = path.length()-packageNameDir.length();
-		final String cp = "C:\\Users\\Edgardo\\Git\\fp4g-src\\Apollo\\bin;C:\\Libraries\\libgdx\\gdx.jar;C:\\Users\\Edgardo\\Git\\reflectasm\\bin;";
-		final File buildDir = new File(outputDir,"build");
-		if(!buildDir.exists())
-		{
-			buildDir.mkdirs();
-		}
+		final String cp = "/home/edgardo/workspace/fp4g/Apollo/bin:/home/edgardo/workspace/fp4g/libs/gdx.jar:/home/edgardo/workspace/reflectasm/bin/:";		
+		
 		final String options[] = {
-				"-classpath",
+				"-cp",
 				cp,
 				"-d",
-				buildDir.getAbsolutePath()
-		};
-		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.7.0_25");
+				binaryDir.getAbsolutePath()				
+		};		
+		//System.setProperty("java.home", "/usr/lib/jvm/java-6-openjdk-i386");
+//		for(Entry<Object, Object> e:System.getProperties().entrySet())
+//		{
+//			System.out.println(e.getKey()+":"+e.getValue());
+//		}
 						
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
@@ -175,7 +181,7 @@ public class JavaGenerator extends Generator {
 			{
 				fileName = fileName.substring(start);
 			}
-			System.out.format("%3d: JavaError %s \"%s\"\n", diagnostic.getLineNumber(), fileName,diagnostic.getMessage(null));
+			System.out.format("%3d: JavaError %s \n%s\n", diagnostic.getLineNumber(), fileName,diagnostic.getMessage(null));
 		}        
 	 
 	    try {

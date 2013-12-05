@@ -29,8 +29,8 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 		
 		Template temp = generator.getTemplate("GameManager.ftl"); 	
 		
-		HashMap<String,Object> root = new HashMap<>();
-		HashMap<String,Object> clazz = new HashMap<>();
+		HashMap<String,Object> root = new HashMap<String, Object>();
+		HashMap<String,Object> clazz = new HashMap<String, Object>();
 		clazz.put("package", generator.packageName);
 		clazz.put("name",game.name);
 		root.put("class",clazz);
@@ -40,7 +40,7 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 		//agregar imports!
 		
 		{
-			List<String> imports = new LinkedList<>();
+			List<String> imports = new LinkedList<String>();
 			String arrayImports[] = new String[]
 			{
 				"com.apollo.managers.GameManager",					
@@ -59,7 +59,7 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 		
 		//generar Assets...
 		{
-			List<String> imports = new LinkedList<>();
+			List<String> imports = new LinkedList<String>();
 			String arrayImports[] = new String[]
 			{				
 				"com.apollo.managers.graphics.Sprite",
@@ -74,8 +74,8 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 			};
 			Arrays.sort(arrayImports);
 			Collections.addAll(imports, arrayImports);
-			HashMap<String,Object> assetsRoot = new HashMap<>();
-			HashMap<String,Object> assetsClazz = new HashMap<>();
+			HashMap<String,Object> assetsRoot = new HashMap<String, Object>();
+			HashMap<String,Object> assetsClazz = new HashMap<String, Object>();
 			assetsClazz.put("package", generator.packageName);
 			assetsClazz.put("imports", imports);
 			assetsRoot.put("class",assetsClazz);

@@ -39,12 +39,12 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 	private static HashMap<String,Map<String,Object>> mngrData;
 	static
 	{
-		mngrData = new HashMap<>();
+		mngrData = new HashMap<String, Map<String, Object>>();
 		
-		HashMap<String,Object> entityMngrData = new HashMap<>();
+		HashMap<String,Object> entityMngrData = new HashMap<String, Object>();
 		entityMngrData.put("setMethod", "EntityManager");
 		
-		HashMap<String,Object> renderMngrData = new HashMap<>();		
+		HashMap<String,Object> renderMngrData = new HashMap<String, Object>();		
 		
 		renderMngrData.put("preinit",Arrays.asList("batch = new SpriteBatch()"));
 		renderMngrData.put("dparams", Arrays.asList("batch"));
@@ -72,10 +72,10 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		Game game = (Game)state.parent;
 		
 		Template temp = generator.getTemplate("GameState.ftl"); 
-		HashMap<String,Object> root = new HashMap<>();	
+		HashMap<String,Object> root = new HashMap<String, Object>();	
 		
-		HashMap<String,Object> gamez = new HashMap<>();
-		TreeSet<AssetModel>  assets = new TreeSet<>();
+		HashMap<String,Object> gamez = new HashMap<String, Object>();
+		TreeSet<AssetModel>  assets = new TreeSet<AssetModel>();
 		JavaCodeModel modelClass = new JavaCodeModel();
 		modelClass.pckg    = generator.packageName;
 		modelClass.name    = state.name;
@@ -88,10 +88,10 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		root.put("game", gamez);
 		root.put("debug", generator.isDebug);		
 		
-		List<Map<String, Object>> managers = new LinkedList<>();
+		List<Map<String, Object>> managers = new LinkedList<Map<String, Object>>();
 		for(Add manager:state.getAdd(DefineType.MANAGER))
 		{
-			Map<String,Object> mngr = new HashMap<>(2);
+			Map<String,Object> mngr = new HashMap<String, Object>(2);
 			mngr.put("name", manager.name);
 			//acá, buscar las cosas extras y añadirselas.
 			Map<String,Object> extras = mngrData.get(manager.name);
@@ -117,7 +117,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			}
 			if(manager.params != null)
 			{
-				List<String> params = new LinkedList<>();
+				List<String> params = new LinkedList<String>();
 				if(extras != null)
 				{
 					List<String> dparams = (List<String>) extras.get("dparams");
@@ -155,7 +155,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		root.put("managers", managers);
 		
 		//agregamos todos las entidades definidas en el game
-		List<String> entityBuilders = new LinkedList<>();
+		List<String> entityBuilders = new LinkedList<String>();
 		final Collection<Entity> state_entities = game.getDefines(DefineType.ENTITY);
 		for(Entity entity:state_entities)
 		{
@@ -166,11 +166,11 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		root.put("entityBuilders", entityBuilders);
 		
 		//acá tengo que revisar quien tiene mensajes y cuales debo registrar al sistema.
-		List<Map<String, Object>> entities = new LinkedList<>();
+		List<Map<String, Object>> entities = new LinkedList<Map<String, Object>>();
 		final List<Add> state_addentities = state.getAdd(DefineType.ENTITY);
 		for(Add entity:state_addentities)
 		{			
-			Map<String,Object> ent = new HashMap<>(2);
+			Map<String,Object> ent = new HashMap<String, Object>(2);
 			ent.put("name", entity.name);
 			/* primero los mensajes a adjuntar a este objeto,
 			   el detalle que si existen mensajes y no hay un nombre definido. 
@@ -179,7 +179,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			Define define = game.getDefine(DefineType.ENTITY, entity.name);
 			if(define != null)
 			{
-				TreeSet<String> messageToAttach = new TreeSet<>();
+				TreeSet<String> messageToAttach = new TreeSet<String>();
 				//revisar los On
 				for(On on:define.getOnMessages())
 				{
@@ -224,7 +224,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			}			
 			if(entity.params != null)
 			{
-				List<String> params = new LinkedList<>();
+				List<String> params = new LinkedList<String>();
 				for(Expresion expr: entity.params)
 				{
 					String result = generator.expresion(modelClass,expr);
