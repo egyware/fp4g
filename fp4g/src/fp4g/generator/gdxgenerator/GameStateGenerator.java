@@ -182,7 +182,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				TreeSet<String> messageToAttach = new TreeSet<>();
 				//revisar los On
 				for(On on:define.getOnMessages())
-				{	
+				{
 					//solo si message está definido
 					if(on.message != null)
 					{
@@ -192,11 +192,11 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 							//no me gusta esa forma de extraer los datos, pero es buena para la refleción
 							ClassMap classMap = (ClassMap) methods.getValue();
 							MessageMethod mm = (MessageMethod)classMap.getBean();
-							if(mm.isAttachInputProcessor())
+							if(mm.isAttachInputProcessor()&&on.sources.size() > 0)
 							{
 								//TODO más adelante actualizar todo esto a que tenga un modelo
-								messageToAttach.add(String.format("%1sMessage.on$1%s$1%s",on.message.name,Utils.capitalize(mm.getMethodName())));
-							}							
+								messageToAttach.add(String.format("%1$sMessage.on%1$s%2$s",on.message.name,Utils.capitalize(mm.getMethodName())));
+							}
 						}
 					}						
 					else
@@ -241,12 +241,15 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		root.put("entities", entities);
 		
 		//agregar assets
-		for(Asset asset:state.assets)
+		if(state.assets != null)
 		{
-			//agrega el import necesario usando solo una funcion.
-			AssetModel.newAsset(assets,modelClass.imports,asset);						
+			for(Asset asset:state.assets)
+			{
+				//agrega el import necesario usando solo una funcion.
+				AssetModel.newAsset(assets,modelClass.imports,asset);						
+			}
+			root.put("assets", assets);
 		}
-		root.put("assets", assets);
 		
 		String arrayImports[] = new String[]
 		{

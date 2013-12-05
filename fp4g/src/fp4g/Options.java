@@ -12,7 +12,7 @@ public class Options extends HashMap<String,Object> {
 	public Options()
 	{
 		put("package", "game"); //por defecto
-		put("debug", false); //por defecto
+		put("debug", false); //por defecto		
 	}
 
 }

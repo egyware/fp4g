@@ -8,6 +8,7 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import static fp4g.Log.Show;
 import fp4g.Log;
 import fp4g.Log.ErrType;
@@ -160,10 +161,22 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		super.visitSet(ctx);
 		Expresion expr = this.expr_stack.pop();
 		this.expr_stack = expr_stack;
-		define.set(ctx.key, expr);
+		define.set(ctx.key, eval(define,expr));
 		return null;
 	}
 	
+	private Literal<?> eval(Define define, Expresion expr) {
+		if(expr instanceof Literal<?>)
+		{
+			return (Literal<?>)expr;
+		}
+		else
+		{
+			//TODO evaluar el set
+			throw new NotImplementedException();
+		}		
+	}
+
 	@Override
 	public Code visitGame(FP4GParser.GameContext ctx)
 	{

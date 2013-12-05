@@ -72,7 +72,7 @@ public class MessageMethod
 	{
 		message = m;
 	}
-	public final void setRequireAttachInputProcessor(boolean b)
+	public final void setAttachInputProcessor(boolean b)
 	{
 		attachInputProcesor = b;
 	}

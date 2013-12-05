@@ -21,7 +21,7 @@ import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.Version;
 
 public abstract class Generator {	
-	protected abstract void initialize(Options options,Configuration cfg);
+	protected abstract void initialize(File path,Options options,Configuration cfg);
 	protected abstract void generateCode(Code gameData,File path);
 	protected abstract void compileFiles(List<File> files); //TODO: compile file add throw some exception
 	
@@ -38,7 +38,7 @@ public abstract class Generator {
 		cfg.setIncompatibleImprovements(new Version(2, 3, 20));
 		
 		//inicializar el generador		
-		initialize(options,cfg);
+		initialize(path,options,cfg);
 		
 		System.out.println("Generating...");        	
 		//generar el codigo

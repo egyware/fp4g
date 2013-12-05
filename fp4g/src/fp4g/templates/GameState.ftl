@@ -137,7 +137,7 @@ public final class ${class.name} extends GameState{
 		<#if entities??>		
 		<#list entities as entity>
 		<#if entity.varName??>
-		Entity ${entity.varName} = world.createEntity("${entity.name}"<#if entity.params?has_content>,<#list entity.params as param>${param}<#if param_has_next>, </#if></#list></#if>));
+		Entity ${entity.varName} = world.createEntity("${entity.name}"<#if entity.params?has_content>,<#list entity.params as param>${param}<#if param_has_next>, </#if></#list></#if>);
 		world.addEntity(${entity.varName});
 		<#else>
 		world.addEntity(world.createEntity("${entity.name}"<#if entity.params?has_content>,<#list entity.params as param>${param}<#if param_has_next>, </#if></#list></#if>));

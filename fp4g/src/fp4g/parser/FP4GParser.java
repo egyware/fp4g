@@ -1,4 +1,4 @@
-// Generated from C:\Users\Edgardo\Git\fp4g-src\fp4g\src/fp4g/parser/FP4G.g4 by ANTLR 4.1
+// Generated from /home/edgardo/workspace/fp4g/fp4g/src/fp4g/parser/FP4G.g4 by ANTLR 4.1
 
 package fp4g.parser;
 
@@ -600,23 +600,23 @@ public class FP4GParser extends Parser {
 		public DefineType type = null;
 		public String defName = null;
 		public Token ID;
-		public TerminalNode GOAL() { return getToken(FP4GParser.GOAL, 0); }
-		public TerminalNode ABRE_COR() { return getToken(FP4GParser.ABRE_COR, 0); }
 		public TerminalNode DEFINE() { return getToken(FP4GParser.DEFINE, 0); }
+		public TerminalNode ABRE_COR() { return getToken(FP4GParser.ABRE_COR, 0); }
 		public NameListContext nameList() {
 			return getRuleContext(NameListContext.class,0);
 		}
-		public TerminalNode STATE() { return getToken(FP4GParser.STATE, 0); }
-		public TerminalNode CIERRA_COR() { return getToken(FP4GParser.CIERRA_COR, 0); }
 		public TerminalNode ID() { return getToken(FP4GParser.ID, 0); }
 		public TerminalNode CIERRA_PAR() { return getToken(FP4GParser.CIERRA_PAR, 0); }
-		public TerminalNode BEHAVIOR() { return getToken(FP4GParser.BEHAVIOR, 0); }
 		public TerminalNode MANAGER() { return getToken(FP4GParser.MANAGER, 0); }
+		public TerminalNode BEHAVIOR() { return getToken(FP4GParser.BEHAVIOR, 0); }
+		public TerminalNode ABRE_PAR() { return getToken(FP4GParser.ABRE_PAR, 0); }
+		public TerminalNode GOAL() { return getToken(FP4GParser.GOAL, 0); }
+		public TerminalNode CIERRA_COR() { return getToken(FP4GParser.CIERRA_COR, 0); }
+		public TerminalNode STATE() { return getToken(FP4GParser.STATE, 0); }
 		public TerminalNode ENTITY() { return getToken(FP4GParser.ENTITY, 0); }
 		public DefineValuesContext defineValues() {
 			return getRuleContext(DefineValuesContext.class,0);
 		}
-		public TerminalNode ABRE_PAR() { return getToken(FP4GParser.ABRE_PAR, 0); }
 		public TerminalNode MESSAGE() { return getToken(FP4GParser.MESSAGE, 0); }
 		public DefineContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1331,15 +1331,6 @@ public class FP4GParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class IdContext extends ExprContext {
-		public TerminalNode ID() { return getToken(FP4GParser.ID, 0); }
-		public IdContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitId(this);
-			else return visitor.visitChildren(this);
-		}
-	}
 	public static class ParExprContext extends ExprContext {
 		public ExprContext op;
 		public ExprContext expr() {
@@ -1351,6 +1342,15 @@ public class FP4GParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitParExpr(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class IdContext extends ExprContext {
+		public TerminalNode ID() { return getToken(FP4GParser.ID, 0); }
+		public IdContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitId(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1410,19 +1410,6 @@ public class FP4GParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class NotExprContext extends ExprContext {
-		public ExprContext op;
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public TerminalNode NOT() { return getToken(FP4GParser.NOT, 0); }
-		public NotExprContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitNotExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
 	public static class DivExprContext extends ExprContext {
 		public ExprContext left;
 		public ExprContext right;
@@ -1437,6 +1424,19 @@ public class FP4GParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitDivExpr(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class NotExprContext extends ExprContext {
+		public ExprContext op;
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public TerminalNode NOT() { return getToken(FP4GParser.NOT, 0); }
+		public NotExprContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitNotExpr(this);
 			else return visitor.visitChildren(this);
 		}
 	}

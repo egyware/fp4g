@@ -129,7 +129,7 @@ returns
 		(filter {$or.add($filter.filters);})*		
 		;
 
-//filtros y On:pressA,pressB (parsea la conjunción pressA and pressB)
+//filtros y On:pressA,pressB (parsea la conjunciÃ³n pressA and pressB)
 //filtro methodValue
 filter
 returns
@@ -236,7 +236,7 @@ assetValue:
 	assetType assetName=ID? DOUBLEDOT asset=STRING_LITERAL (assetValuesInner)?	
 ;
 
-/** diseñadas para no permitir otro nivel adicional de profundidad en los assets */
+/** diseï¿½adas para no permitir otro nivel adicional de profundidad en los assets */
 assetValuesInner:
 	ABRE_COR assetValueInner (COMA assetValueInner)* COMA? CIERRA_COR
 ;

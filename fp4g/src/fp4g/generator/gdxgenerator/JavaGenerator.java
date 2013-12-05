@@ -46,6 +46,7 @@ public class JavaGenerator extends Generator {
 	public String packageNameDir = "";
 	public File packageDir;
 	public boolean isDebug;
+	public File outputDir;
 	public final JavaExpresionGenerator exprGen;
 	public final JavaFunctionGenerator funcGen;
 	public final Map<Define,JavaCodeModel> parDefineJavaCode;
@@ -64,11 +65,26 @@ public class JavaGenerator extends Generator {
 	}
 	
 	@Override	
-	protected void initialize(Options options,Configuration cfg)
+	protected void initialize(File path,Options options,Configuration cfg)
 	{
 		packageName = (String) options.get("package");
 		packageNameDir = packageName.replace('.', '/');
 		isDebug = (Boolean) options.get("debug");
+		
+		//creamos la carpeta
+		if(packageDir == null)
+		{
+			packageDir = new File(path,packageNameDir);	
+			if(!packageDir.exists())
+			{
+				packageDir.mkdirs();
+			}
+		}
+		outputDir = path;
+		if(!outputDir.exists())
+		{
+			outputDir.mkdirs();
+		}
 		
 		cfg.setClassForTemplateLoading(JavaGenerator.class, "/fp4g/templates");
 		
@@ -86,16 +102,7 @@ public class JavaGenerator extends Generator {
 		if(!gameData.canBuild())
 		{
 			return; //nope, no debo contruir este objeto
-		}
-		//creamos la carpeta
-		if(packageDir == null)
-		{
-			packageDir = new File(path,packageNameDir);	
-			if(!packageDir.exists())
-			{
-				packageDir.mkdirs();
-			}
-		}
+		}	
 		
 		//----
 		Class<? extends CodeGenerator<JavaGenerator>> codegen = generators.get(gameData.getClass());
@@ -141,14 +148,19 @@ public class JavaGenerator extends Generator {
 	{
 		final String path = packageDir.getAbsolutePath();
 		final int start = path.length()-packageNameDir.length();
-		final String cp = "C:\\Users\\Edgardo\\Git\\fp4g-src\\Apollo\\bin;C:\\Libraries\\libgdx\\gdx.jar;C:\\Users\\Edgardo\\Git\\reflectasm\\bin;"; 
+		final String cp = "C:\\Users\\Edgardo\\Git\\fp4g-src\\Apollo\\bin;C:\\Libraries\\libgdx\\gdx.jar;C:\\Users\\Edgardo\\Git\\reflectasm\\bin;";
+		final File buildDir = new File(outputDir,"build");
+		if(!buildDir.exists())
+		{
+			buildDir.mkdirs();
+		}
 		final String options[] = {
 				"-classpath",
 				cp,
 				"-d",
-				"C:\\Users\\Edgardo\\Desktop\\fp4g"
+				buildDir.getAbsolutePath()
 		};
-		System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.7.0_25");
+		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.7.0_25");
 						
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
@@ -206,15 +218,17 @@ public class JavaGenerator extends Generator {
     	press.setMethodName("press");
     	press.setValueReplace("Input.Keys.%s == key");
     	press.setParams("int key");
+    	press.setAttachInputProcessor(true);
     	keyMessage.set("press", new ClassMap(press)); //nombre del metodo
     	
     	MessageMethod release = new MessageMethod(keyMessage);
     	release.setMethodName("release");
     	release.setValueReplace("Input.Keys.%s == key");
     	release.setParams("int key");
+    	press.setAttachInputProcessor(true);
     	keyMessage.set("release", new ClassMap(release)); //nombre del metodo
     	
-    	//Agregar todos los metodos acá
+    	//Agregar todos los metodos acï¿½
     	MessageMethods methods = new MessageMethods();
     	methods.add(press);
     	methods.add(release);
