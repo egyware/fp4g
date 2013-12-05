@@ -16,30 +16,31 @@ import fp4g.data.On.Filter;
 import fp4g.data.On.Source;
 import fp4g.data.Send;
 import fp4g.data.expresion.ClassMap;
+import fp4g.data.expresion.Literal;
 import fp4g.generator.gdxgenerator.JavaGenerator;
 
 public class OnModel implements Model
 {
-	//Que necesito acá:
+	//Que necesito acï¿½:
 	//Nombre categoria mensaje	
 	private final String name;
-	//Necesitaré una lista de los MethodHandlers!
+	//Necesitarï¿½ una lista de los MethodHandlers!
 	private final List<MethodHandlerModel> methodHandlers;	
 	
-	//TODO claramente acá el generator es una solución parche
-	//TODO Lo que paso acá. Que este modelo empezo a generar codigo. por eso este desasastre...
+	//TODO claramente acï¿½ el generator es una soluciï¿½n parche
+	//TODO Lo que paso acï¿½. Que este modelo empezo a generar codigo. por eso este desasastre...
 	public OnModel(On on, JavaGenerator generator)
 	{
 		name = on.name;		
 		methodHandlers = new LinkedList<>();
 		HashMap<String,MethodHandlerModel> methods = new HashMap<>();
-		//agregar los metodos, aunque estén vacios y asumiento que todos son MessageMethod		
-		for(Entry<String,Object> entry:on.message.entrySet())
+		//agregar los metodos, aunque estï¿½n vacios y asumiento que todos son MessageMethod		
+		for(Entry<String,Literal<?>> entry:on.message.entrySet())
 		{
 			ClassMap map = (ClassMap)entry.getValue();
 			methods.put(entry.getKey(), new MethodHandlerModel((MessageMethod)map.getBean()));
 		}
-		//tengo que recorrer los sources en busca de los methodHandlers y subirlos acá
+		//tengo que recorrer los sources en busca de los methodHandlers y subirlos acï¿½
 		for(Source source:on.sources)
 		{			
 			SourceModel.findAndInsert(source,methods,generator);
@@ -51,12 +52,12 @@ public class OnModel implements Model
 	{
 		//El codigo
 		private final String code;
-		//Una lista de filtros (disyunción)
+		//Una lista de filtros (disyunciï¿½n)
 		private final List<FilterD> filters;
 				
 		public SourceModel(Source source, JavaGenerator generator)
 		{
-			//TODO por ahora traduciré el codigo así
+			//TODO por ahora traducirï¿½ el codigo asï¿½
 			if(source.statements != null && source.statements.size() > 0)
 			{
 				StringBuilder builder = new StringBuilder();
@@ -108,7 +109,7 @@ public class OnModel implements Model
 					{
 						final MessageMethod method = f.methods[i];
 						final String value = f.values[i];
-						//encontré un metodo, que hago con el
+						//encontrï¿½ un metodo, que hago con el
 						MethodHandlerModel m = methods.get(method.getMethodName());
 						
 //						if(m == null) //siempre son != null
@@ -126,16 +127,16 @@ public class OnModel implements Model
 						}					
 						//ya tengo el metodo manejador, que hago con el?
 						//facil, ahora debes agregar este filtro
-						//pero como diferencio si es conjuncion o disyunción?
-						//todos los que están en este for, son una conjunción
+						//pero como diferencio si es conjuncion o disyunciï¿½n?
+						//todos los que estï¿½n en este for, son una conjunciï¿½n
 						if(value != null) //me aseguro que sea distinto de nulo, asi no agrega nada adicional
 						{
 							FilterD filterD = sm.getCurrentFilterD(f);
 							filterD.add(method,value); //agrego el filtro actual
 						}
 					}				
-					//ahora como agrego otra disyunción?
-					//lo haré en currentFilter, guardará la ultima iteración. Si esta cambia, entonces agregará otro filtro.
+					//ahora como agrego otra disyunciï¿½n?
+					//lo harï¿½ en currentFilter, guardarï¿½ la ultima iteraciï¿½n. Si esta cambia, entonces agregarï¿½ otro filtro.
 				}
 			}
 			else //cuando hay 0 filtros
@@ -188,7 +189,7 @@ public class OnModel implements Model
 		
 	public static class MethodHandlerModel implements Model
 	{
-		//que necesito acá, por cada MethodHander necesito:
+		//que necesito acï¿½, por cada MethodHander necesito:
 		//Nombre del metodo
 		private final String name;		
 		//Una lista de Source Codes
@@ -222,7 +223,7 @@ public class OnModel implements Model
 	}
 	public static class FilterD implements Model
 	{
-		//que necesito acá. Por cada FilterS necesito:
+		//que necesito acï¿½. Por cada FilterS necesito:
 		//Una lista de conjunciones
 		private final List<String> conjunciones;
 		

@@ -244,7 +244,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		On on = parent.getOn(ctx.messageName);
 		if(on == null)
 		{	
-			Define message = parent.getDefine(DefineType.MESSAGE,ctx.messageName);
+			//es message, cast seguro
+			Message message = parent.getDefine(DefineType.MESSAGE,ctx.messageName);
 			if(message == null)
 			{
 				//Muestra un error, pero sigue funcionando...

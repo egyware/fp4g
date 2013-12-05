@@ -7,7 +7,8 @@ package fp4g.data;
  * @author egyware
  *
  */
-public class Add extends Code{		
+public class Add extends Code
+{		
 	private DefineType type;
 	public String name;	
 	public String varName;

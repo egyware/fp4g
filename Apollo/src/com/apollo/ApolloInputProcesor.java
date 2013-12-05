@@ -9,6 +9,10 @@ import com.apollo.utils.ImmutableBag;
 import com.badlogic.gdx.InputProcessor;
 
 // TODO Aún faltan mensajes por hacer...
+/* TODO 
+ * acá hay un problema, actuamente solo es un MessageReceiver común (como si fuese una entidad).
+ * Y no un multiplexer de MessageReceiver.
+ */
 public class ApolloInputProcesor implements InputProcessor,MessageReceiver
 {
 	private final MessageSender instance;

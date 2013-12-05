@@ -8,7 +8,8 @@ import ${import};
 
 ${class.javadoc}
 public final class ${class.name} extends GameState{
-	private World world;
+	private final World world;
+	private final ApolloInputProcesor inputProcesor;
 	<#if debug>
 	<#if physicsManager??>
 	private OrthographicCamera debugCamera;
@@ -24,7 +25,7 @@ public final class ${class.name} extends GameState{
 	</#list>
 	</#if>
 	
-	//variables adicionales, añadidas por los sistemas.
+	//variables adicionales, aï¿½adidas por los sistemas.
 	<#if managers??>
 	<#list managers as manager>
 	<#if manager.fields?has_content>
@@ -37,7 +38,8 @@ public final class ${class.name} extends GameState{
 	
 	public ${class.name}(GameManager manager)
 	{
-		world = new World(manager);		
+		world = new World(manager);
+		inputProcesor = new ApolloInputProcesor();
 	}
 	
 	@Override	
@@ -139,6 +141,11 @@ public final class ${class.name} extends GameState{
 		world.addEntity(${entity.varName});
 		<#else>
 		world.addEntity(world.createEntity("${entity.name}"<#if entity.params?has_content>,<#list entity.params as param>${param}<#if param_has_next>, </#if></#list></#if>));
+		</#if>
+		<#if entity.attachMessages?has_content>
+		<#list entity.attachMessages as attach>
+		inputProcesor.addEventHandler(${attach},${entity.varName});
+		</#list>
 		</#if>
 		</#list>
 		</#if>

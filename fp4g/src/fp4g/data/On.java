@@ -3,6 +3,7 @@
  */
 package fp4g.data;
 import static fp4g.Log.Show;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -12,6 +13,7 @@ import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.Log.WarnType;
 import fp4g.classes.MessageMethod;
+import fp4g.data.define.Message;
 import fp4g.data.expresion.ClassMap;
 
 /**
@@ -21,10 +23,10 @@ import fp4g.data.expresion.ClassMap;
 public class On extends Code{
 	private static final Pattern methodValue = Pattern.compile("([a-z]+)([A-Z]*)");
 	public final String name;
-	public final Define message;
+	public final Message message;
 	public final List<Source> sources;
 	//On Message[:filter]  [...source...]
-	public On(Define message) 
+	public On(Message message) 
 	{
 		this.message = message;
 		this.name = message.name;
@@ -60,7 +62,7 @@ public class On extends Code{
 		
 		public void addFilter(List<String> listFilter)
 		{
-			//chequeamos que todos los filtros existan y que estén definidos
+			//chequeamos que todos los filtros existan y que estï¿½n definidos
 			Filter filter = new Filter(listFilter.size());			
 			for(String elementFilter:listFilter)
 			{
@@ -88,7 +90,7 @@ public class On extends Code{
 				MessageMethod method = (MessageMethod) cm.getBean();
 				if(method != null)
 				{
-					//setiando, los datos para que no webee más tarde (este mensaje no tiene validez, cambie algunas cosas y ya ni recuerdo porque dije eso)
+					//setiando, los datos para que no webee mï¿½s tarde (este mensaje no tiene validez, cambie algunas cosas y ya ni recuerdo porque dije eso)
 					filter.add(method, value);					
 				}
 				else

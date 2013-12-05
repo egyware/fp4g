@@ -11,6 +11,7 @@ import java.util.Set;
 
 import fp4g.Log;
 import fp4g.Log.ErrType;
+import fp4g.data.expresion.Literal;
 
 @SuppressWarnings("unchecked")
 public abstract class Define extends Code{
@@ -24,7 +25,7 @@ public abstract class Define extends Code{
 	
 	public Assets assets;
 	
-	private final Map<String,Object> variables;	
+	private final Map<String,Literal<?>> variables;	
 	
 	private final Map<DefineType,List<Add>> adds;
 	private final Map<DefineType,Map<String,? extends Define>> defines;
@@ -41,7 +42,7 @@ public abstract class Define extends Code{
 		this.type = type;
 		this.name = name;
 		this.parent = parent;
-		variables = new HashMap<String,Object>();		
+		variables = new HashMap<String,Literal<?>>();		
 		adds    = new HashMap<>(DefineType.values().length,1);
 		defines = new HashMap<>(DefineType.values().length,1);
 		onMessages= new HashMap<>();		
@@ -60,7 +61,7 @@ public abstract class Define extends Code{
 	}	
 	
 	/**
-	 * Agrega una adición de codigo
+	 * Agrega una adiciï¿½n de codigo
 	 * @param code
 	 */
 	public void setAdd(Add add)
@@ -74,7 +75,7 @@ public abstract class Define extends Code{
 		list.add(add);
 	}
 	/**
-	 * Agrega una definición de codigo
+	 * Agrega una definiciï¿½n de codigo
 	 * @param define
 	 */	
 	public <T extends Define> void setDefine(T define)
@@ -98,7 +99,7 @@ public abstract class Define extends Code{
 	}
 	
 	/**
-	 * Devuelve una lista de adiciones según el tipo
+	 * Devuelve una lista de adiciones segï¿½n el tipo
 	 * @param type
 	 * @return
 	 */
@@ -122,7 +123,7 @@ public abstract class Define extends Code{
 	}
 	
 	/**
-	 * Obtiene una definición
+	 * Obtiene una definiciï¿½n
 	 * @param name
 	 * @return
 	 */	
@@ -157,7 +158,7 @@ public abstract class Define extends Code{
 	}
 	
 	/**
-	 * Pregunta si está la definicion
+	 * Pregunta si estï¿½ la definicion
 	 * @param name
 	 * @return
 	 */
@@ -181,7 +182,7 @@ public abstract class Define extends Code{
 	 * @param key nombre de la variable
 	 * @param value valor de la variable
 	 */
-	public final void set(String key, Object value)
+	public final void set(String key, Literal<?> value)
 	{
 		variables.put(key, value);
 	}
@@ -191,7 +192,7 @@ public abstract class Define extends Code{
 	 * @param key
 	 * @return
 	 */
-	public final Object get(String key)
+	public final Literal<?> get(String key)
 	{
 		return variables.get(key);		 
 	}
@@ -200,7 +201,7 @@ public abstract class Define extends Code{
 	 * Devuelve todas las variables de tiene almacenado este define
 	 * @return
 	 */
-	public final Set<Entry<String,Object>> entrySet()
+	public final Set<Entry<String,Literal<?>>> entrySet()
 	{
 		return variables.entrySet();
 	}
@@ -209,7 +210,7 @@ public abstract class Define extends Code{
 	/**
 	 * Verifica si la variable existe.
 	 * @param key
-	 * @return true, si encontró la variable. False si no existe.
+	 * @return true, si encontrï¿½ la variable. False si no existe.
 	 */
 	public final boolean isSet(String key)
 	{

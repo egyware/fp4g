@@ -14,6 +14,7 @@ public class MessageMethod
 	private String methodName;
 	private String valueReplace;
 	private String params;
+	private boolean attachInputProcesor;
 	private boolean multiple = false;
 	
 	//mensaje por conveniencia dentro del sistema
@@ -44,6 +45,11 @@ public class MessageMethod
 	{
 		return multiple;
 	}
+	//TODO corregir, para poder usar is en vez de get en caso de ser boolean
+	public final boolean isAttachInputProcessor()
+	{
+		return attachInputProcesor;
+	}
 	public final void setMethodName(String m)
 	{
 		methodName = m;
@@ -66,5 +72,8 @@ public class MessageMethod
 	{
 		message = m;
 	}
-	
+	public final void setRequireAttachInputProcessor(boolean b)
+	{
+		attachInputProcesor = b;
+	}
 }

@@ -7,16 +7,27 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeSet;
 
+import org.antlr.v4.misc.Utils;
+
+import fp4g.Log;
+import fp4g.Log.ErrType;
+import fp4g.Log.WarnType;
+import fp4g.classes.MessageMethod;
 import fp4g.data.Add;
 import fp4g.data.Asset;
 import fp4g.data.Code;
+import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
+import fp4g.data.On;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
+import fp4g.data.expresion.ClassMap;
+import fp4g.data.expresion.Literal;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
 import fp4g.generator.models.AssetModel;
@@ -45,6 +56,8 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		mngrData.put("EntityManager", entityMngrData);
 		mngrData.put("GdxRenderManager", renderMngrData);
 	}
+
+	private int auxIndex;
 	
 	public GameStateGenerator(JavaGenerator generator) 
 	{
@@ -80,13 +93,13 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		{
 			Map<String,Object> mngr = new HashMap<>(2);
 			mngr.put("name", manager.name);
-			//ac�, buscar las cosas extras y a�adirselas.
+			//acá, buscar las cosas extras y añadirselas.
 			Map<String,Object> extras = mngrData.get(manager.name);
 			if(extras != null)
 			{
 				mngr.putAll(extras);
 				
-				//si existe alg�n dato adicional a importar,se lo a�adimos a los imports
+				//si existe algún dato adicional a importar,se lo añadimos a los imports
 				List<String> imports = (List<String>) extras.get("imports");
 				if(imports != null)
 				{
@@ -152,12 +165,59 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		}
 		root.put("entityBuilders", entityBuilders);
 		
+		//acá tengo que revisar quien tiene mensajes y cuales debo registrar al sistema.
 		List<Map<String, Object>> entities = new LinkedList<>();
 		final List<Add> state_addentities = state.getAdd(DefineType.ENTITY);
 		for(Add entity:state_addentities)
-		{
+		{			
 			Map<String,Object> ent = new HashMap<>(2);
 			ent.put("name", entity.name);
+			/* primero los mensajes a adjuntar a este objeto,
+			   el detalle que si existen mensajes y no hay un nombre definido. 
+			   Hay que inventarle uno. 
+			*/
+			Define define = game.getDefine(DefineType.ENTITY, entity.name);
+			if(define != null)
+			{
+				TreeSet<String> messageToAttach = new TreeSet<>();
+				//revisar los On
+				for(On on:define.getOnMessages())
+				{	
+					//solo si message está definido
+					if(on.message != null)
+					{
+						//TODO asumiento que todos son MethodMessage
+						for(Entry<String, Literal<?>> methods:on.message.entrySet())
+						{
+							//no me gusta esa forma de extraer los datos, pero es buena para la refleción
+							ClassMap classMap = (ClassMap) methods.getValue();
+							MessageMethod mm = (MessageMethod)classMap.getBean();
+							if(mm.isAttachInputProcessor())
+							{
+								//TODO más adelante actualizar todo esto a que tenga un modelo
+								messageToAttach.add(String.format("%1sMessage.on$1%s$1%s",on.message.name,Utils.capitalize(mm.getMethodName())));
+							}							
+						}
+					}						
+					else
+					{
+						Log.Show(ErrType.MessageNotFound,entity);
+					}
+				}
+				if(messageToAttach.size()> 0)
+				{
+					ent.put("attachMessages", messageToAttach);
+					//fuuu inventar nombre >:c
+					if(entity.varName == null)
+					{
+						entity.varName = String.format("%s%d", Utils.decapitalize(entity.name),auxIndex++);
+					}
+				}
+			}
+			else
+			{
+				Log.Show(WarnType.MissingDefineAdd,entity);
+			}
 			if(entity.varName != null)
 			{
 				ent.put("varName", entity.varName);
@@ -191,11 +251,13 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		String arrayImports[] = new String[]
 		{
 				"com.apollo.World",
+				"com.apollo.ApolloInputProcesor",
 				"com.apollo.managers.GameManager",
 				"com.apollo.managers.GameState",
 				"com.badlogic.gdx.Gdx",
 				"com.badlogic.gdx.graphics.GL10",
 				"com.badlogic.gdx.graphics.OrthographicCamera"
+				
 		};
 		Arrays.sort(arrayImports);
 		modelClass.imports.addAll(Arrays.asList(arrayImports));
