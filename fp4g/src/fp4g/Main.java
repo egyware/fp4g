@@ -15,7 +15,7 @@ import fp4g.parser.FP4GLexer;
 import fp4g.parser.FP4GParser;
 
 public class Main {
-	private static String outDirectory = ".";
+	private static String outDirectory;
 	private static String inputFile;
 	private static Options options = new Options();
 	/**
@@ -102,11 +102,7 @@ public class Main {
 			if(cmd.startsWith("-out"))
 			{
 				outDirectory = args[++i];
-			}else
-			if(cmd.startsWith("-out"))
-			{
-				outDirectory = args[++i];
-			}else
+			}else			
 			if(cmd.startsWith("-h"))
 			{
 				ShowHelp();
@@ -115,6 +111,10 @@ public class Main {
 			{
 				inputFile = args[i];
 			}
+		}
+		if(inputFile != null && outDirectory == null)
+		{
+			outDirectory = new File(inputFile).getParent();
 		}
 		return inputFile != null;		
 	}

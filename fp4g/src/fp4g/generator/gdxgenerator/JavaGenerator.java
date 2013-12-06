@@ -7,9 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -162,12 +160,7 @@ public class JavaGenerator extends Generator {
 				"-d",
 				binaryDir.getAbsolutePath()				
 		};		
-		//System.setProperty("java.home", "/usr/lib/jvm/java-6-openjdk-i386");
-//		for(Entry<Object, Object> e:System.getProperties().entrySet())
-//		{
-//			System.out.println(e.getKey()+":"+e.getValue());
-//		}
-						
+							
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 		StandardJavaFileManager fileManager = javaCompiler.getStandardFileManager(diagnostics,null,null);
