@@ -82,8 +82,6 @@ public final class ${class.name} extends GameState{
 		final int w = ${game.name}.Width;
 		final int h = ${game.name}.Height;
 		
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false,w,h);	
 		<#if debug>
 		<#if physicsManager??>
 		debugCamera = new OrthographicCamera();

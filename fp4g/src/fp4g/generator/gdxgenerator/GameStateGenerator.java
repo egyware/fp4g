@@ -46,7 +46,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		
 		HashMap<String,Object> renderMngrData = new HashMap<String, Object>();		
 		
-		renderMngrData.put("preinit",Arrays.asList("batch = new SpriteBatch()"));
+		renderMngrData.put("preinit",Arrays.asList("batch = new SpriteBatch()","camera = new OrthographicCamera()","camera.setToOrtho(false,w,h)"));
 		renderMngrData.put("dparams", Arrays.asList("batch"));
 		renderMngrData.put("preupdate",Arrays.asList("batch.setProjectionMatrix(camera.combined)","batch.begin()"));
 		renderMngrData.put("postupdate",Arrays.asList("batch.end()"));		
@@ -195,7 +195,8 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 							if(mm.isAttachInputProcessor()&&on.sources.size() > 0)
 							{
 								//TODO más adelante actualizar todo esto a que tenga un modelo
-								messageToAttach.add(String.format("%1$sMessage.on%1$s%2$s",on.message.name,Utils.capitalize(mm.getMethodName())));
+								messageToAttach.add(String.format("%1$sMessage.on%2$s%1$s",on.name,Utils.capitalize(mm.getMethodName())));
+								modelClass.addImport(String.format("com.apollo.messages.%sMessage", on.name));
 							}
 						}
 					}						

@@ -40,6 +40,44 @@ public class ApolloInputProcesor implements InputProcessor,MessageReceiver
 		listeners.add(listener);
 	}
 	
+	public <T extends Message> void addEventHandler(Message messageType, MessageReceiver receiver) 
+	{		
+		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
+		if(listeners == null) {
+			listeners = new Bag<MessageHandler>();
+			handlersByEventType.put(messageType,listeners);
+		}		
+		ImmutableBag<MessageHandler> handlers = receiver.getMessageHandler(messageType);
+		if(handlers != null)
+		{
+			listeners.addAll(handlers);
+		}				
+	}
+	
+	public <T extends Message> void removeEventHandler(Message messageType, MessageHandler listener) 
+	{		
+		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
+		if(listeners == null) {
+			listeners = new Bag<MessageHandler>();
+			handlersByEventType.put(messageType,listeners);
+		}
+		listeners.remove(listener);
+	}
+	
+	public <T extends Message> void removeEventHandler(Message messageType, MessageReceiver receiver) 
+	{		
+		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
+		if(listeners == null) {
+			listeners = new Bag<MessageHandler>();
+			handlersByEventType.put(messageType,listeners);
+		}		
+		ImmutableBag<MessageHandler> handlers = receiver.getMessageHandler(messageType);
+		if(handlers != null)
+		{
+			listeners.removeAll(handlers);
+		}				
+	}
+	
 	@Override
 	public ImmutableBag<MessageHandler> getMessageHandler(Message message) 
 	{		

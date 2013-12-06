@@ -109,7 +109,7 @@ public class Bag<E> implements ImmutableBag<E>,Iterable<E> {
 	 *            Bag containing elements to be removed from this Bag
 	 * @return {@code true} if this Bag changed as a result of the call
 	 */
-	public boolean removeAll(Bag<E> bag) {
+	public boolean removeAll(ImmutableBag<E> bag) {
 		boolean modified = false;
 
 		for (int i = 0; i < bag.size(); i++) {
