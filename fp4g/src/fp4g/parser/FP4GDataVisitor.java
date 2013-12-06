@@ -95,6 +95,49 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	}
 	
 	@Override
+	public Code visitOn(FP4GParser.OnContext ctx)
+	{
+		Define parent = current.peek();
+		
+		//en vez de solo crearlo, tengo que buscarlo... y si no existe crearlo.
+		On on = parent.getOn(ctx.messageName);
+		if(on == null)
+		{	
+			//es message, cast seguro
+			Message message = parent.getDefine(DefineType.MESSAGE,ctx.messageName);
+			if(message == null)
+			{
+				//Muestra un error, pero sigue funcionando...
+				Log.Show(ErrType.MessageExpected,ctx.start.getLine(),ctx.messageName);
+				on = new On(ctx.messageName);
+			}
+			else
+			{
+				//ahora lo creo...
+				on = new On(message);
+			}
+			//solo si es nuevito, se agrega
+			parent.setOn(on);
+		}
+		
+		super.visitOn(ctx);
+		
+		//al evento on, se crea un nuevo codigo y se le a�aden los filtros, si es que existen.
+		//falta solo agregarle el codigo :)
+		Source source = on.addSource(statements);
+		statements = null;
+		if(ctx.filters != null)
+		{			
+			List<List<String>> filtros = ctx.filters.or;
+			for(List<String> filtro:filtros)
+			{
+				source.addFilter(filtro);
+			}
+		}
+		return null;		
+	}
+	
+	@Override
 	public Code visitOnStatement(FP4GParser.OnStatementContext ctx)
 	{
 		statements = new Statements();
@@ -118,7 +161,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		}
 		Send.SendTo type = null;
 		String receiver = null;
-		if(ctx.receiverName != null) //TODO detectar para onde v� (falta sistemas)
+		if(ctx.receiverName != null) //TODO detectar para onde vá (falta sistemas)
 		{
 			receiver = ctx.receiverName;
 			type = Send.SendTo.Other;
@@ -245,50 +288,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		}
 		
 		return null;		
-	}
-	
-	@Override
-	public Code visitOn(FP4GParser.OnContext ctx)
-	{
-		Define parent = current.peek();
-		
-		//en vez de solo crearlo, tengo que buscarlo... y si no existe crearlo.
-		On on = parent.getOn(ctx.messageName);
-		if(on == null)
-		{	
-			//es message, cast seguro
-			Message message = parent.getDefine(DefineType.MESSAGE,ctx.messageName);
-			if(message == null)
-			{
-				//Muestra un error, pero sigue funcionando...
-				Log.Show(ErrType.MessageExpected,ctx.start.getLine(),ctx.messageName);
-				on = new On(ctx.messageName);
-			}
-			else
-			{
-				//ahora lo creo...
-				on = new On(message);
-			}
-			//solo si es nuevito, se agrega
-			parent.setOn(on);
-		}
-		
-		super.visitOn(ctx);
-		
-		//al evento on, se crea un nuevo codigo y se le a�aden los filtros, si es que existen.
-		//falta solo agregarle el codigo :)
-		Source source = on.addSource(statements);
-		statements = null;
-		if(ctx.filters != null)
-		{			
-			List<List<String>> filtros = ctx.filters.or;
-			for(List<String> filtro:filtros)
-			{
-				source.addFilter(filtro);
-			}
-		}
-		return null;		
-	}
+	}	
 	
 	@Override
 	public Code visitAdd(FP4GParser.AddContext ctx)

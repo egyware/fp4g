@@ -22,11 +22,13 @@ public class MessageMethods implements CustomMap
 	}
 	public void add(MessageMethod mm)
 	{
-		map.put(mm.getMethodName(), mm);
+		//me aseguro que esté en minusculas para usarlo de la manera que se me de la gana
+		map.put(mm.getMethodName().toLowerCase(), mm); 
 	}
 	public MessageMethod getMessageMethod(String k)
 	{
-		return map.get(k);
+		//me aseguro que esté en minusculas para usarlo de la manera que se me de la gana
+		return map.get(k.toLowerCase());
 	}
 
 	

@@ -18,7 +18,7 @@ public class Runner
 		FileClassLoader fileClassLoader = new FileClassLoader(ClassLoader.getSystemClassLoader(),new File(args[0]));
 		Class<?> appClass = fileClassLoader.loadClass(args[1]);
 		
-		//TODO Más adelante leer alguna especie de archivo de arranque y wea
+		//TODO Mï¿½s adelante leer alguna especie de archivo de arranque y wea
 	
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "FP4G - GameApp";
@@ -28,6 +28,5 @@ public class Runner
 		
 		new LwjglApplication((ApplicationListener) appClass.newInstance(),cfg);
 		
-	}	
-		
+	}		
 }
