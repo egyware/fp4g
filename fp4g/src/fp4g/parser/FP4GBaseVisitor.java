@@ -1,4 +1,4 @@
-// Generated from /home/edgardo/workspace/fp4g/fp4g/src/fp4g/parser/FP4G.g4 by ANTLR 4.1
+// Generated from C:\Users\Edgardo\Git\fp4g-src\fp4g\src/fp4g/parser/FP4G.g4 by ANTLR 4.1
 
 package fp4g.parser;
 
@@ -180,6 +180,14 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitIntLiteral(@NotNull FP4GParser.IntLiteralContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitOn(@NotNull FP4GParser.OnContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -189,14 +197,6 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitOnFilters(@NotNull FP4GParser.OnFiltersContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitIntLiteral(@NotNull FP4GParser.IntLiteralContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

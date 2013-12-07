@@ -29,7 +29,7 @@ returns [String name]
 
 gameValues
 		:
-		 gameValue (gameValue)*
+		  (gameValue)* 
 		;
 
 gameValue  
@@ -122,7 +122,7 @@ returns
 onFilters
 returns
 [
-	List<List<String>> or = new LinkedList<>();
+	List<List<String>> or = new LinkedList<List<String>>();
 ]
 		:
 		filter  {$or.add($filter.filters);} 
@@ -134,7 +134,7 @@ returns
 filter
 returns
 [
-	List<String> filters = new LinkedList<>();
+	List<String> filters = new LinkedList<String>();
 ]
 		:
 		ID      {$filters.add($ID.text);}
@@ -143,8 +143,8 @@ returns
 
  
 defineValues
-	    :	    
-	    defineValue (defineValue)* 
+	    :
+	      (defineValue)* 
 	    ;
 
 defineValue

@@ -1,4 +1,4 @@
-// Generated from /home/edgardo/workspace/fp4g/fp4g/src/fp4g/parser/FP4G.g4 by ANTLR 4.1
+// Generated from C:\Users\Edgardo\Git\fp4g-src\fp4g\src/fp4g/parser/FP4G.g4 by ANTLR 4.1
 
 package fp4g.parser;
 
@@ -155,6 +155,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitAddExpr(@NotNull FP4GParser.AddExprContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#intLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIntLiteral(@NotNull FP4GParser.IntLiteralContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#on}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -167,13 +174,6 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitOnFilters(@NotNull FP4GParser.OnFiltersContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#intLiteral}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIntLiteral(@NotNull FP4GParser.IntLiteralContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#divExpr}.

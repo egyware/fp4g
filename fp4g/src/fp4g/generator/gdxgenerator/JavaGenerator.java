@@ -152,7 +152,7 @@ public class JavaGenerator extends Generator {
 	{
 		final String path = packageDir.getAbsolutePath();
 		final int start = path.length()-packageNameDir.length();
-		final String cp = "/home/edgardo/workspace/fp4g/Apollo/bin:/home/edgardo/workspace/fp4g/libs/gdx.jar:/home/edgardo/workspace/reflectasm/bin/:";		
+		final String cp = "c:\\users\\edgardo\\git\\fp4g-src\\Apollo\\bin:c:\\users\\edgardo\\git\\fp4g-libs\\gdx.jar:c:\\users\\edgardo\\git\\fp4g-src\\reflectasm\\bin:";		
 		
 		final String options[] = {
 				"-cp",
@@ -160,7 +160,8 @@ public class JavaGenerator extends Generator {
 				"-d",
 				binaryDir.getAbsolutePath()				
 		};		
-							
+		System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.7.0_45");
+		
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 		StandardJavaFileManager fileManager = javaCompiler.getStandardFileManager(diagnostics,null,null);

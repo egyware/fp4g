@@ -1,4 +1,4 @@
-// Generated from /home/edgardo/workspace/fp4g/fp4g/src/fp4g/parser/FP4G.g4 by ANTLR 4.1
+// Generated from C:\Users\Edgardo\Git\fp4g-src\fp4g\src/fp4g/parser/FP4G.g4 by ANTLR 4.1
 
 package fp4g.parser;
 
