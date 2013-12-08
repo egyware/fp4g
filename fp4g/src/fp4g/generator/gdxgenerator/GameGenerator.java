@@ -86,15 +86,21 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 		
 		
 		final Collection<Entity> game_entities = game.getDefines(DefineType.ENTITY);
-		for(Entity entity: game_entities)
+		if(game_entities != null)
 		{
-			generator.generateCode(entity, path);
+			for(Entity entity: game_entities)
+			{
+				generator.generateCode(entity, path);
+			}
 		}
 		final Collection<GameState> game_states = game.getDefines(DefineType.STATE);
-		for(GameState state: game_states)
+		if(game_states != null)
 		{
-			generator.generateCode(state, path);
-		}		
+			for(GameState state: game_states)
+			{
+				generator.generateCode(state, path);
+			}
+		}
 	}
 	
 }

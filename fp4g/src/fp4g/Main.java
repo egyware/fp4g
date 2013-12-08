@@ -58,7 +58,7 @@ public class Main {
 			{
 				FP4GDataVisitor visitor = new FP4GDataVisitor(gameConf);
 				visitor.visit(tree);				
-				
+								
 				generator.generate(options,gameConf, new File(outDirectory));
 				System.out.println(String.format("Parsing complete: %s",inputFile));				
 			}
@@ -115,8 +115,14 @@ public class Main {
 		if(inputFile != null && outDirectory == null)
 		{
 			outDirectory = new File(inputFile).getParent();
+			if(outDirectory == null)
+			{
+				outDirectory = ".";
+			}			
 		}
-		return inputFile != null;		
+		System.out.println(inputFile);
+		System.out.println(outDirectory);
+		return inputFile != null;
 	}
 
 }

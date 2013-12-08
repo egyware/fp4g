@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -152,16 +153,15 @@ public class JavaGenerator extends Generator {
 	{
 		final String path = packageDir.getAbsolutePath();
 		final int start = path.length()-packageNameDir.length();
-		final String cp = "c:\\users\\edgardo\\git\\fp4g-src\\Apollo\\bin:c:\\users\\edgardo\\git\\fp4g-libs\\gdx.jar:c:\\users\\edgardo\\git\\fp4g-src\\reflectasm\\bin:";		
+		final String cp = "c:\\users\\edgardo\\git\\fp4g-src\\Apollo\\bin;c:\\users\\edgardo\\git\\fp4g-src\\libs\\gdx.jar;c:\\users\\edgardo\\git\\reflectasm\\bin;";		
 		
 		final String options[] = {
 				"-cp",
 				cp,
-				"-d",
-				binaryDir.getAbsolutePath()				
-		};		
-		System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.7.0_45");
-		
+				"-d",				
+				binaryDir.getAbsolutePath()								
+		};
+				
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 		StandardJavaFileManager fileManager = javaCompiler.getStandardFileManager(diagnostics,null,null);
