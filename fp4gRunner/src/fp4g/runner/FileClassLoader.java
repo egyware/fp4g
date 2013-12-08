@@ -1,28 +1,23 @@
-/**
- * @(#)FileClassLoader.java	1.0 12/09/2008
- */
-
 package fp4g.runner;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
- * FileClassLoader extends URLClassLoader to provide functionality for
- * loading a class from a file or byte array.
  * 
- * @author Darryl
- * @see URLClassLoader
  */
 public class FileClassLoader extends ClassLoader 
 {
 	private File path;
-   public FileClassLoader(ClassLoader cl,File path) 
-   {	   
+	public FileClassLoader(ClassLoader cl,File path) 
+	{	   
 	   super(cl);
-	   this.path = path;
-   }
+	   this.path = path;	   
+	}
 
    public FileClassLoader(ClassLoader parent) 
    {
@@ -43,6 +38,21 @@ public class FileClassLoader extends ClassLoader
 	   }
 	   return clazz;	   
    }
+   
+   public InputStream getResourceAsStream(String name)
+   {	   
+	   File file = new File(name.replace('.', File.separatorChar));
+	   try {
+           return new FileInputStream(file);
+	   } catch (Exception ex) 
+	   {
+		   //TODO talvez cambiar estas excepciones
+           if (file.isDirectory())
+                   throw new GdxRuntimeException(String.format("Cannot open a stream to a directory: %s ",file), ex);
+           throw new GdxRuntimeException(String.format("Error reading file: %s",file), ex);
+	   }	   
+   }
+   
 	public Class<?> loadClass(String name) throws ClassNotFoundException 
 	{		
 		Class<?> clazz = findClass(name);		

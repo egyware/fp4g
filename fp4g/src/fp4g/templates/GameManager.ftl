@@ -10,10 +10,10 @@ ${autodoc}
 public class ${class.name} extends GameManager {
 	public static final int Width  = ${width};
 	public static final int Height = ${height};
-
+	
 	@Override
 	public void create()
-	{
+	{		
 		super.create();
 		Utils.initialize();	
 	}
@@ -26,7 +26,7 @@ public class ${class.name} extends GameManager {
 		${start_state} _start = new ${start_state}(this);     	
 		start(_start);
 		<#else>
-		throw new RuntimeException("¿Se te olvido usar start?");
+		throw new RuntimeException("ï¿½Se te olvido usar start?");
     	</#if>
 	}
     
@@ -35,5 +35,5 @@ public class ${class.name} extends GameManager {
 	{
 		Utils.dispose();
 		super.dispose();		
-	}
+	}	
 }

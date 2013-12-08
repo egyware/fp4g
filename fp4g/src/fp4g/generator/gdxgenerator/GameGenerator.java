@@ -43,7 +43,7 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 			List<String> imports = new LinkedList<String>();
 			String arrayImports[] = new String[]
 			{
-				"com.apollo.managers.GameManager",					
+				"com.apollo.managers.GameManager"				
 			};
 			//Arrays.sort(arrayImports);
 			Collections.addAll(imports, arrayImports);
@@ -61,16 +61,17 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 		{
 			List<String> imports = new LinkedList<String>();
 			String arrayImports[] = new String[]
-			{				
+			{					
 				"com.apollo.managers.graphics.Sprite",
 				"com.apollo.managers.graphics.SpriteLoader",
 				"com.badlogic.gdx.assets.AssetLoaderParameters",
 				"com.badlogic.gdx.assets.AssetManager",
-				"com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver",
+				"com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver",				
 				"com.badlogic.gdx.graphics.g2d.TextureRegion",
 				"com.badlogic.gdx.physics.box2d.CircleShape",
 				"com.badlogic.gdx.physics.box2d.PolygonShape",
-				"com.badlogic.gdx.physics.box2d.FixtureDef"
+				"com.badlogic.gdx.physics.box2d.FixtureDef",
+				
 			};
 			Arrays.sort(arrayImports);
 			Collections.addAll(imports, arrayImports);

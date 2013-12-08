@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -153,8 +152,8 @@ public class JavaGenerator extends Generator {
 	{
 		final String path = packageDir.getAbsolutePath();
 		final int start = path.length()-packageNameDir.length();
-		final String cp = "c:\\users\\edgardo\\git\\fp4g-src\\Apollo\\bin;c:\\users\\edgardo\\git\\fp4g-src\\libs\\gdx.jar;c:\\users\\edgardo\\git\\reflectasm\\bin;";		
-		
+		final String cp = "libs/apollo-fp4g.jar:libs/reflectasm-fp4g.jar:libs/gdx.jar";		
+			  
 		final String options[] = {
 				"-cp",
 				cp,
