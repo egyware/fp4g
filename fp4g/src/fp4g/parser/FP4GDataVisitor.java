@@ -64,8 +64,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		current = new Stack<Define>();
 		expr_stack = new Stack<Expresion>();
 		array_stack = new Stack<Map>();
-		assets_stack = new Stack<Assets>();	
-		methods = (MessageMethods) ((CustomClassMap)game.get("methods")).getBean();
+		assets_stack = new Stack<Assets>();
+		methods = (MessageMethods) ((CustomClassMap)game.get("methods")).getBean(); //TODO problema, porque en la biblioteca no está cargado todavia esta biblioteca
 	}
 	
 	@Override
@@ -500,6 +500,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	public Code visitArray(FP4GParser.ArrayContext ctx)
 	{		
 		Map map = null;
+		System.out.println(ctx.bean);
 		if(ctx.bean != null)
 		{
 			ClassLoader cl = ClassLoader.getSystemClassLoader();

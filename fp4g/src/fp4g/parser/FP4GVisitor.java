@@ -78,6 +78,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitStringLiteral(@NotNull FP4GParser.StringLiteralContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#boolExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolExpr(@NotNull FP4GParser.BoolExprContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#add}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -202,6 +209,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNotExpr(@NotNull FP4GParser.NotExprContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#gameLib}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGameLib(@NotNull FP4GParser.GameLibContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#define}.

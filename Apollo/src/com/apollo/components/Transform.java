@@ -5,13 +5,14 @@ import com.apollo.utils.TrigLUT;
 import com.apollo.utils.Utils;
 
 public abstract class Transform extends Behavior {
-	//estos campos deben ser actualizados
+	//estos campos deben ser actualizados por los hijos para asegurar maxima compatibilidad
 	protected float x;
 	protected float y;
 	protected float rotation;
 	
 	//interfaz publica util para la herencia de las transformaciones como box2d
 	public abstract void setPosition(float x, float y);
+	
 	public void addX(float dx){
 		x += dx;
 		setPosition(x,y);
@@ -54,6 +55,7 @@ public abstract class Transform extends Behavior {
 	}
 
 	public abstract void setRotation(float rotation);
+	
 	public float getRotation()
 	{
 		return rotation;

@@ -7,6 +7,10 @@ import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+
 import fp4g.Options;
 import fp4g.data.Code;
 import fp4g.data.Define;
@@ -14,6 +18,9 @@ import fp4g.data.Expresion;
 import fp4g.data.define.Game;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.generator.models.Depend;
+import fp4g.parser.FP4GDataVisitor;
+import fp4g.parser.FP4GLexer;
+import fp4g.parser.FP4GParser;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -79,6 +86,32 @@ public abstract class Generator {
 		System.out.println(String.format("Generado: %s",name));
 		
 		filesToCompile.add(file);
+	}
+	
+	public void loadLib(String libFileName,Game data)
+	{
+		try
+		{
+			FP4GLexer lexer = new FP4GLexer(new ANTLRFileStream(libFileName));	
+			CommonTokenStream tokens = new CommonTokenStream(lexer);		
+			FP4GParser p = new FP4GParser(tokens);		
+			p.setBuildParseTree(true);
+			
+			ParseTree tree = p.gameLib();		
+			if(tree != null)
+			{
+				FP4GDataVisitor visitor = new FP4GDataVisitor(data);
+				visitor.visit(tree);
+			}
+			else
+			{
+				System.err.println("Biblioteca no cargada");
+			}
+		}
+		catch(IOException io)
+		{
+			io.printStackTrace();
+		}
 	}
 	
 	public abstract void prepareGameData(Game gameConf);

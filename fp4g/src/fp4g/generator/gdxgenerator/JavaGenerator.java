@@ -212,6 +212,8 @@ public class JavaGenerator extends Generator {
     	gameConf.setManager(new JavaSoundManager());
     	gameConf.setManager(new JavaPhysicsManager());
     	
+    	loadLib("libs/fp4g.lib", gameConf);
+    	
     	Message keyMessage = new Message("Key",gameConf);
     	MessageMethod press = new MessageMethod(keyMessage);
     	press.setMethodName("press");

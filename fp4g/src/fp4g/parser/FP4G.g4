@@ -27,6 +27,13 @@ returns [String name]
 		 ABRE_COR gameValues CIERRA_COR		 
 		;
 
+//Util para las futuras bibliotecas de FP4G		
+gameLib
+		:
+		 DEFINE GAME
+		 ABRE_COR gameValues CIERRA_COR		 
+		;
+
 gameValues
 		:
 		  (gameValue)* 
@@ -172,10 +179,11 @@ expr
 		   ABRE_PAR exprList CIERRA_PAR  #functionCallExpr
 		 
 		 | array           #arrayExpr
+		 | BOOL_LITERAL    #boolExpr
 		 | INT_LITERAL     #intLiteral
          | DECIMAL_LITERAL #decimalLiteral
-         | STRING_LITERAL  #stringLiteral
-         | DIRECTCODE      #directCode
+         | STRING_LITERAL  #stringLiteral         
+         | DIRECTCODE      #directCode         
 		 | ID			   #id
 		 ;
 		 
