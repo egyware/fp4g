@@ -66,7 +66,7 @@ public class OnModel implements Model
 					//MessageSender.instance().send(receiver, message);
 					//TODO por ahora TODOS son Send
 					Send send = (Send)stmnt;
-					String message = String.format("%1$sMessage.on%2$s%1$s",send.method.getMessage().name,Utils.capitalize(send.method.getMethodName()));
+					String message = String.format("%1$sMessage.on%2$s%1$s",send.method.getMessage().name,Utils.capitalize(send.method.getName()));
 					builder.append("MessageSender.instance().send(this,"); //TODO por ahora solo yo recibo mensajes
 					builder.append(message);
 					if(send.args != null)
@@ -110,7 +110,7 @@ public class OnModel implements Model
 						final MessageMethod method = f.methods[i];
 						final String value = f.values[i];
 						//encontr� un metodo, que hago con el
-						MethodHandlerModel m = methods.get(method.getMethodName());
+						MethodHandlerModel m = methods.get(method.getName());
 						
 //						if(m == null) //siempre son != null
 //						{
@@ -199,7 +199,7 @@ public class OnModel implements Model
 				
 		public MethodHandlerModel(MessageMethod method)
 		{
-			name = method.getMethodName();
+			name = method.getName();
 			params = method.getParams();
 			sources = new LinkedList<SourceModel>();			
 		}

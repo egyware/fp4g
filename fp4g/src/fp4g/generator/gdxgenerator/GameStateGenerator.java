@@ -195,7 +195,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 							if(mm.isAttachInputProcessor()&&on.sources.size() > 0)
 							{
 								//TODO más adelante actualizar todo esto a que tenga un modelo
-								messageToAttach.add(String.format("%1$sMessage.on%2$s%1$s",on.name,Utils.capitalize(mm.getMethodName())));
+								messageToAttach.add(String.format("%1$sMessage.on%2$s%1$s",on.name,Utils.capitalize(mm.getName())));
 								modelClass.addImport(String.format("com.apollo.messages.%sMessage", on.name));
 							}
 						}

@@ -34,6 +34,7 @@ import fp4g.data.define.Message;
 import fp4g.data.expresion.ArrayMap;
 import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.ClassMap;
+import fp4g.data.expresion.CustomMap;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.data.expresion.Map;
@@ -49,23 +50,25 @@ import fp4g.data.expresion.CustomClassMap;
  * @author Edgardo
  */
 public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
-	private Game game;
+	private final Game game;
 	private MessageMethods methods;
-	private Stack<Define> current;
-	private Stack<Map> array_stack;
-	private Stack<Expresion> expr_stack;
+	private Stack<Define> current;	
 	private Stack<Assets> assets_stack;	
 	private ExprList exprList;
 	private NameList nameList;
 	private Statements statements;
+	private final FP4GExpresionVisitor exprVisitor;
 	public FP4GDataVisitor(Game game)
 	{
 		this.game = game;		
 		current = new Stack<Define>();
-		expr_stack = new Stack<Expresion>();
-		array_stack = new Stack<Map>();
 		assets_stack = new Stack<Assets>();
-		methods = (MessageMethods) ((CustomClassMap)game.get("methods")).getBean(); //TODO problema, porque en la biblioteca no está cargado todavia esta biblioteca
+		exprVisitor = new FP4GExpresionVisitor();
+		CustomClassMap map = ((CustomClassMap)game.get("methods"));
+		if(map != null)
+		{
+			methods = (MessageMethods)map.getBean();
+		}
 	}
 	
 	@Override
@@ -198,11 +201,12 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	{
 		Define define = current.peek();
 		
-		Stack<Expresion> expr_stack = this.expr_stack;		
-		this.expr_stack = new Stack<Expresion>();
-		super.visitSet(ctx);
-		Expresion expr = this.expr_stack.pop();
-		this.expr_stack = expr_stack;
+		
+		exprVisitor.pushStack();
+		exprVisitor.visitChildren(ctx);
+		Stack<Expresion> expr_stack = exprVisitor.pop();
+		
+		Expresion expr = expr_stack.pop();		
 		define.set(ctx.key, eval(define,expr));
 		return null;
 	}
@@ -348,232 +352,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		nameList.add(ctx.ID().getText(),name);
 		return null;		
 	}
+		
 	
-	@Override
-	public Code visitExprList(FP4GParser.ExprListContext ctx)
-	{	
-		//ojo con el orden de estas funciones
-		super.visitExprList(ctx);
-		//se asume que no se visitarï¿½ concurrentemente a ExprList
-		exprList = new ExprList(expr_stack.size());
-				
-		//aï¿½adimos todas las expresiones				
-		while(!expr_stack.isEmpty())
-		{
-			final Expresion expr = expr_stack.pop();		
-			exprList.addFirst(expr);				
-		}		
-		
-		return null;
-	}
-	
-	@Override
-	public Code visitMultExpr(FP4GParser.MultExprContext ctx)
-	{	
-		Expresion left,right;
-		visit(ctx.left);
-		visit(ctx.right);
-		
-		left = expr_stack.pop();
-		right = expr_stack.pop();		
-		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Mult,right,left);
-		expr_stack.push(binaryExpr);		
-		
-		return null;
-	}
-	@Override
-	public Code visitSubExpr(FP4GParser.SubExprContext ctx)
-	{
-		Expresion left,right;
-		visit(ctx.left);
-		visit(ctx.right);
-		
-		left = expr_stack.pop();
-		right = expr_stack.pop();
-		
-		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Sub,right,left);
-		expr_stack.push(binaryExpr);		
-		
-		return null;
-	}
-	@Override
-	public Code visitAddExpr(FP4GParser.AddExprContext ctx)
-	{		
-		Expresion left,right;
-		visit(ctx.left);
-		visit(ctx.right);
-		
-		left = expr_stack.pop();
-		right = expr_stack.pop();
-		
-		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Add,right,left);
-		expr_stack.push(binaryExpr);		
-		
-		return null;
-	}
-	@Override
-	public Code visitDivExpr(FP4GParser.DivExprContext ctx)
-	{
-		Expresion left,right;
-		visit(ctx.left);
-		visit(ctx.right);
-		
-		left = expr_stack.pop();
-		right = expr_stack.pop();
-		
-		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Div,right,left);
-		expr_stack.push(binaryExpr);		
-		
-		return null;
-	}	
-	@Override
-	public Code visitParExpr(FP4GParser.ParExprContext ctx)
-	{		
-		visit(ctx.op);
-		expr_stack.peek().setPar(true); //establecemos que esta expresiï¿½n, lleva parentesis
-				
-		return null;
-	}	
-	@Override
-	public Code visitMinusExpr(FP4GParser.MinusExprContext ctx)
-	{		
-		visit(ctx.op);
-		Expresion expr = expr_stack.pop();
-		UnaryOp unaryExpr = new UnaryOp(UnaryOp.Type.Minus,expr);
-		expr_stack.push(unaryExpr);
-		
-		return null;
-	}	
-	@Override
-	public Code visitNotExpr(FP4GParser.NotExprContext ctx)
-	{
-		visit(ctx.op);		
-		Expresion expr = expr_stack.pop();		
-		UnaryOp unaryExpr = new UnaryOp(UnaryOp.Type.Not,expr);
-		expr_stack.push(unaryExpr);
- 
-		return super.visitNotExpr(ctx);
-	}
-	
-	//literal y id
-	@Override
-	public Code visitDecimalLiteral(FP4GParser.DecimalLiteralContext ctx)
-	{
-		Float integer = Float.valueOf(ctx.getText());
-		Literal<Float> literal = new ValueLiteral<Float>(integer);
-		expr_stack.push(literal);
-		
-		return null;
-	}
-	@Override
-	public Code visitIntLiteral(FP4GParser.IntLiteralContext ctx)
-	{
-		Integer integer = Integer.valueOf(ctx.getText());
-		Literal<Integer> literal = new ValueLiteral<Integer>(integer);
-		expr_stack.push(literal);
-		
-		return null;
-	}
-	@Override
-	public Code visitStringLiteral(FP4GParser.StringLiteralContext ctx)
-	{
-		String string = ctx.STRING_LITERAL().getText();
-		string = string.substring(1, string.length()-1);
-		Literal<String> literal = new ValueLiteral<String>(string);
-		expr_stack.push(literal);
-		
-		return null;
-	}
-	
-	@Override
-	public Code visitDirectCode(FP4GParser.DirectCodeContext ctx)
-	{
-		String code = ctx.DIRECTCODE().getText();
-		code = code.substring(2,code.length()-1);
-		DirectCode dc = new DirectCode(code);
-		expr_stack.push(dc);
-		
-		return null;
-	}
-	
-	@Override
-	public Code visitArray(FP4GParser.ArrayContext ctx)
-	{		
-		Map map = null;
-		System.out.println(ctx.bean);
-		if(ctx.bean != null)
-		{
-			ClassLoader cl = ClassLoader.getSystemClassLoader();
-			try {
-				Class<?> clazz = cl.loadClass(String.format("fp4g.classes.",ctx.bean));
-				map = new ClassMap(clazz);
-			} catch (ClassNotFoundException e) {
-				Show(ErrType.ClassNotFound,ctx.ID.getLine());
-			}
-		}
-		if(map == null)
-		{
-			map = new ArrayMap();
-		}		
-		array_stack.push(map);
-		super.visitArray(ctx);
-		array_stack.pop();
-		expr_stack.push((Expresion)map); //siempre son expresiones!
-		return null;
-	}
-	
-	@Override
-	public Code visitParArray(FP4GParser.ParArrayContext ctx)
-	{
-		String key = ctx.key;
-		Stack<Expresion> expr_stack = this.expr_stack;		
-		this.expr_stack = new Stack<Expresion>();
-		super.visitParArray(ctx);
-		Expresion expr = this.expr_stack.pop();
-		this.expr_stack = expr_stack;
-		
-		Map array = array_stack.peek();
-		if(expr instanceof Literal)
-		{
-			array.set(key, (Literal<?>) expr);
-		}
-		else
-		{
-			Show(ErrType.MissingError);
-		}		
-		return null;		
-	}
-	
-	@Override
-	public Code visitId(FP4GParser.IdContext ctx)
-	{
-		String id = ctx.ID().getText();
-		VarId varId = new VarId(id);
-		expr_stack.push(varId);
-				
-		return null;
-	}
-	
-	@Override
-	public Code visitFunctionCallExpr(FP4GParser.FunctionCallExprContext ctx)
-	{
-		//guardamos el actual stack!
-		Stack<Expresion> prev_stack  = expr_stack;
-		//nuevo stack!
-		expr_stack = new Stack<Expresion>();
-		String callName = ctx.functionName.getText();
-		
-		visit(ctx.exprList());
-				
-		FunctionCall functionCall = new FunctionCall(callName,exprList);
-		exprList = null;		
-		
-		//restablecemos el stack anterior
-		expr_stack = prev_stack;		
-		expr_stack.push(functionCall);
-		
-		return null;
-	}
 	
 	@Override
 	public Code visitAssets(FP4GParser.AssetsContext ctx) 

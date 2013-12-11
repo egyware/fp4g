@@ -48,8 +48,8 @@ public class CustomLwjglApplication implements Application {
 	protected final ApplicationListener listener;
 	protected Thread mainLoopThread;
 	protected boolean running = true;
-	protected final Array<Runnable> runnables = new Array();
-	protected final Array<Runnable> executedRunnables = new Array();
+	protected final Array<Runnable> runnables = new Array<Runnable>();
+	protected final Array<Runnable> executedRunnables = new Array<Runnable>();
 	protected final Array<LifecycleListener> lifecycleListeners = new Array<LifecycleListener>();
 	protected int logLevel = LOG_INFO;
 

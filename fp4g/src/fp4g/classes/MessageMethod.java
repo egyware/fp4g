@@ -33,7 +33,7 @@ public class MessageMethod
 		return message;
 	}	
 	
-	public final String getMethodName()
+	public final String getName()
 	{
 		return methodName;
 	}
@@ -50,7 +50,7 @@ public class MessageMethod
 	{
 		return attachInputProcesor;
 	}
-	public final void setMethodName(String m)
+	public final void setName(String m)
 	{
 		methodName = m;
 	}

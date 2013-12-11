@@ -23,7 +23,7 @@ public class MessageMethods implements CustomMap
 	public void add(MessageMethod mm)
 	{
 		//me aseguro que esté en minusculas para usarlo de la manera que se me de la gana
-		map.put(mm.getMethodName().toLowerCase(), mm); 
+		map.put(mm.getName().toLowerCase(), mm); 
 	}
 	public MessageMethod getMessageMethod(String k)
 	{
