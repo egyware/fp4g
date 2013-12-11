@@ -1,7 +1,7 @@
 grammar FP4G;
 import Lexer,Expr; 
  
-@header
+@parser::header
 {
 package fp4g.parser;
 
@@ -12,6 +12,11 @@ import fp4g.data.define.*;
 
 import java.util.LinkedList;
 
+}
+
+@lexer::header
+{
+package fp4g.parser;
 }
 
 // **** PARSER ****

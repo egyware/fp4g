@@ -37,12 +37,8 @@ nExpr
 
 accessVarOp
 		:
-		  accessVarOp DOT variable      #accessVarOperator
-		| variable                      #accessVar
-		;
-variable
-		:	
-		var=ID
+		  accessVarOp DOT var=ID      #accessVarOperator
+		| var=ID                      #accessVar
 		;
 		 
 array   

@@ -377,11 +377,4 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParArray(@NotNull FP4GParser.ParArrayContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#variable}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVariable(@NotNull FP4GParser.VariableContext ctx);
 }

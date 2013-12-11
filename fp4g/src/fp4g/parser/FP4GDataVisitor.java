@@ -3,12 +3,13 @@
  */
 package fp4g.parser;
 
+import static fp4g.Log.Show;
+
 import java.util.List;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import static fp4g.Log.Show;
 import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.Log.WarnType;
@@ -19,30 +20,20 @@ import fp4g.data.AssetType;
 import fp4g.data.Assets;
 import fp4g.data.Code;
 import fp4g.data.Define;
+import fp4g.data.DefineType;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.NameList;
-import fp4g.data.DefineType;
 import fp4g.data.On;
-import fp4g.data.Statements;
 import fp4g.data.On.Source;
 import fp4g.data.Send;
+import fp4g.data.Statements;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
-import fp4g.data.expresion.ArrayMap;
-import fp4g.data.expresion.BinaryOp;
-import fp4g.data.expresion.ClassMap;
-import fp4g.data.expresion.CustomMap;
-import fp4g.data.expresion.DirectCode;
-import fp4g.data.expresion.FunctionCall;
-import fp4g.data.expresion.Map;
-import fp4g.data.expresion.UnaryOp;
-import fp4g.data.expresion.ValueLiteral;
-import fp4g.data.expresion.VarId;
-import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.CustomClassMap;
+import fp4g.data.expresion.Literal;
 
 
 /**

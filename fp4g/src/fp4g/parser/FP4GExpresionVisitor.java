@@ -24,6 +24,8 @@ import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.Map;
 import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.ValueLiteral;
+import fp4g.data.expresion.VarDot;
+import fp4g.data.expresion.VarId;
 
 /**
  * @author Edgardo
@@ -190,7 +192,12 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		return literal;
 	}
 
-	//TODO accessVarOp                    #varNExpr
+	@Override
+	public Expresion visitVarNExpr(FP4GParser.VarNExprContext ctx)
+	{		
+		super.visitVarNExpr(ctx);
+		return null;
+	}
 	
 	//logical expresion
 	@Override
@@ -221,7 +228,14 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		return literal;
 	}
 	
-//	TODO accessVarOp    #varLExpr
+
+	@Override
+	public Expresion visitVarLExpr(FP4GParser.VarLExprContext ctx)
+	{		
+		super.visitVarLExpr(ctx);
+		return null;
+	}
+	
 	
 	
 	//otros visitors
@@ -320,5 +334,20 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 			
 		return dc;
 	}
-//TODO	    accessVarOp                   #varExpr 
+	
+	@Override
+	public Expresion visitAccessVarOperator(FP4GParser.AccessVarOperatorContext ctx)
+	{
+		super.visitAccessVarOperator(ctx);
+		VarId property = (VarId)stack.pop();
+		VarDot dot = new VarDot(ctx.var.getText(), property);
+		return dot;
+	}
+	
+	@Override
+	public Expresion visitAccessVar(FP4GParser.AccessVarContext ctx)
+	{
+		VarId varId = new VarId(ctx.var.getText());
+		return varId;
+	}	
 }

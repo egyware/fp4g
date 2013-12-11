@@ -20,4 +20,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>sf.eclipse.javacc.javaccnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>libs</name>
+			<type>2</type>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/libs</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
