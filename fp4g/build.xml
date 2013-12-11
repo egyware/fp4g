@@ -3,7 +3,7 @@
 	<property name="package" value="fp4g/parser" />
  
     <path id="classpath">
-        <pathelement location="libs/antlr4.jar" />
+        <pathelement location="../libs/antlr4.jar" />
         <pathelement location="bin" />
     </path>
  

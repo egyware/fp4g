@@ -142,6 +142,24 @@ public abstract class Define extends Code{
 		return value;
 	}
 	
+	/**
+	 * Busca un define de tipo desconocido
+	 * @param name Nombre de la definición
+	 * @return Define La definición buscada, si no devuelve null
+	 */
+	public Define getDefine(String name) 
+	{
+		for(DefineType type :DefineType.values())
+		{
+			Define define = getDefine(type,name);
+			if(define != null)
+			{
+				return define;
+			}
+		}		
+		return null;
+	}	
+	
 	public final <T extends Define> Collection<T> getDefines(DefineType type)
 	{
 		Map<String,T> map = (Map<String, T>) defines.get(type);
@@ -231,5 +249,7 @@ public abstract class Define extends Code{
 		{
 			this.assets = assets;
 		}		
-	}	
+	}
+
+	
 }

@@ -33,7 +33,10 @@ import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.CustomClassMap;
+import fp4g.data.expresion.FunctionCall;
 import fp4g.data.expresion.Literal;
+import fp4g.data.expresion.VarDot;
+import fp4g.data.expresion.VarId;
 
 
 /**
@@ -43,18 +46,18 @@ import fp4g.data.expresion.Literal;
 public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	private final Game game;
 	private MessageMethods methods;
-	private Stack<Define> current;	
+	private final Stack<Define> current;	
 	private Stack<Assets> assets_stack;	
 	private ExprList exprList;
 	private NameList nameList;
 	private Statements statements;
 	private final FP4GExpresionVisitor exprVisitor;
-	public FP4GDataVisitor(Game game)
+	public FP4GDataVisitor(final Game game)
 	{
 		this.game = game;		
 		current = new Stack<Define>();
 		assets_stack = new Stack<Assets>();
-		exprVisitor = new FP4GExpresionVisitor();
+		exprVisitor = new FP4GExpresionVisitor(current);
 		CustomClassMap map = ((CustomClassMap)game.get("methods"));
 		if(map != null)
 		{
@@ -202,15 +205,42 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		return null;
 	}
 	
-	private Literal<?> eval(Define define, Expresion expr) {
+	//TODO talvez moverlo a otra clase
+	public static Literal<?> eval(Define define, Expresion expr) {
 		if(expr instanceof Literal<?>)
 		{
 			return (Literal<?>)expr;
 		}
 		else
 		{
-			//TODO evaluar el set
-			throw new RuntimeException("No Implementados");
+			if(expr instanceof VarDot)
+			{				
+				VarDot varDot = (VarDot)expr;
+				System.out.println(varDot.property.varName);
+				//a que define accedo si no me sé el tipo?
+				Define sub = define.getDefine(varDot.varName);
+				if(sub == null)
+				{
+					Show(ErrType.VarNameNotFound,define,varDot.varName);
+				}
+				return eval(sub,varDot.property);
+			}
+			else
+			if(expr instanceof VarId)
+			{				
+				VarId varId = (VarId)expr;
+				Literal<?> value = define.get(varId.varName);
+				System.out.println(value.getClass().getSimpleName());
+				if(value == null)
+				{
+					Show(ErrType.VarNameNotFound,define,varId.varName);
+				}
+				return value;
+			}			
+			else
+			{	
+				throw new RuntimeException("No Implementados");
+			}
 		}		
 	}
 

@@ -11,6 +11,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 
 import fp4g.Log.ErrType;
+import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.expresion.ArrayMap;
@@ -37,6 +38,13 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	private final Stack<Map> array_stack = new Stack<Map>();
 	private Stack<Expresion> stack;		
 	private ExprList exprList;
+	private final Stack<Define> current;
+	
+	public FP4GExpresionVisitor(Stack<Define> d)
+	{
+		current = d;
+	}
+	
 	
 	public void pushStack()
 	{
@@ -310,11 +318,12 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		}
 		else
 		{
-			Show(ErrType.MissingError);
+			array.set(key,FP4GDataVisitor.eval(current.peek(),expr));
 		}		
 		return null;		
 	}
 	
+
 	@Override
 	public Expresion visitStringLiteral(FP4GParser.StringLiteralContext ctx)
 	{
@@ -340,14 +349,14 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	{
 		super.visitAccessVarOperator(ctx);
 		VarId property = (VarId)stack.pop();
-		VarDot dot = new VarDot(ctx.var.getText(), property);
+		VarDot dot = new VarDot(ctx.varName.getText(), property);		
 		return dot;
 	}
 	
 	@Override
 	public Expresion visitAccessVar(FP4GParser.AccessVarContext ctx)
 	{
-		VarId varId = new VarId(ctx.var.getText());
+		VarId varId = new VarId(ctx.varName.getText());		
 		return varId;
 	}	
 }

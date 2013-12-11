@@ -37,9 +37,11 @@ nExpr
 
 accessVarOp
 		:
-		  accessVarOp DOT var=ID      #accessVarOperator
-		| var=ID                      #accessVar
+		  varName=ID					 #accessVar
+		 |varName=ID (DOT accessVarOp)?  #accessVarOperator		                        
 		;
+		
+		
 		 
 array   
 returns [ String bean ] 

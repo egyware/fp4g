@@ -60,7 +60,7 @@ public class Log {
 		NotImplement,
 		MessageExpected,
 		UnknowError,
-		FilterMethodMissing, NotExpectedDefine, NotExpectedOn, NotExpectedAdd, YouCanUseOnceTimeAssets, MissingError("Falta un error descriptivo o no corresponde un error grave"), ClassNotFound, ExpresionGeneratorNotFound, MessageNotFound, MessageMethodNotFound, CriticalErrorGeneratorNotFound,
+		FilterMethodMissing, NotExpectedDefine, NotExpectedOn, NotExpectedAdd, YouCanUseOnceTimeAssets, MissingError("Falta un error descriptivo o no corresponde un error grave"), ClassNotFound, ExpresionGeneratorNotFound, MessageNotFound, MessageMethodNotFound, CriticalErrorGeneratorNotFound, VarNameNotFound,
 		;
 		
 		private String message;
@@ -111,6 +111,22 @@ public class Log {
 		if(type instanceof ErrType)
 		{	
 			Error((ErrType) type,0,null);				
+		}
+	}
+	
+	public static <T extends MessageType> void Show(T type,Code c,String more)
+	{
+		if(type instanceof WarnType)
+		{			
+			Warning((WarnType) type,c.getLine(),more);				
+		}else
+		if(type instanceof InfoType)
+		{	
+			Info((InfoType) type,c.getLine(),more);	
+		}else
+		if(type instanceof ErrType)
+		{	
+			Error((ErrType) type,c.getLine(),more);				
 		}
 	}
 	
@@ -216,6 +232,7 @@ public class Log {
 		{
 			err.println(String.format(formatErrorMore,line, code,message,more));
 		}
+		throw new RuntimeException("Error!");
 	}
 	
 
