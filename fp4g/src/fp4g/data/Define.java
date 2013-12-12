@@ -11,6 +11,9 @@ import java.util.Set;
 
 import fp4g.Log;
 import fp4g.Log.ErrType;
+import fp4g.data.expresion.ClassMap;
+import fp4g.data.expresion.CustomClassMap;
+import fp4g.data.expresion.CustomMap;
 import fp4g.data.expresion.Literal;
 
 @SuppressWarnings("unchecked")
@@ -203,6 +206,22 @@ public abstract class Define extends Code{
 	public final void set(String key, Literal<?> value)
 	{
 		variables.put(key, value);
+	}
+	/**
+	 * Establece una variable  
+	 * @param key nombre de la variable
+	 * @param value valor de la variable
+	 */
+	public final void set(String key, Object  value)
+	{
+		if(value instanceof CustomMap)
+		{
+			variables.put(key,new CustomClassMap((CustomMap)value));
+		}
+		else
+		{
+			variables.put(key, new ClassMap(value));
+		}		
 	}
 		
 	/**

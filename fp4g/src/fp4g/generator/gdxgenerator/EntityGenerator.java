@@ -113,13 +113,15 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		final Collection<On> entity_onMessages = entity.getOnMessages();
 		if(entity_onMessages.size() > 0)
 		{
+			//TODO esta clase tiene demasiada responsabilidad con respecto a lo que debe hacer.
+			//TODO Se está volviendo un caos agregar o quitar codigo de esta misma.
 			//por cada on! que es lo que necesitarï¿½
 			//La categoria del mensaje Key,Contact,Life, etc..
 			//Obvio el code
 			List<OnModel> onList = new LinkedList<OnModel>();
 			for(On on: entity_onMessages)
 			{
-				onList.add(new OnModel(on,generator));
+				onList.add(new OnModel(on,generator,modelEntity));				
 			}
 			entityRoot.put("messages", onList);
 			
@@ -171,7 +173,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 					Depend<Define> depende = generator.resolveDependency(on.message);
 					if(depende != null)
 					{
-						depende.perform(on.message,entityRoot, modelEntity);
+						depende.perform(on.message, modelEntity);
 					}
 				}
 				modelEntity.imports.addAll(

@@ -2,6 +2,7 @@ package fp4g;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.Thread.UncaughtExceptionHandler;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -24,6 +25,18 @@ public class Main {
 	 */
 	public static void main(String[] args)  throws Exception 
 	{		
+		Thread.currentThread().setUncaughtExceptionHandler(new UncaughtExceptionHandler()
+		{
+			@Override
+			public void uncaughtException(Thread t, Throwable e) 
+			{
+				System.err.println(String.format("%s %s",e.getClass().getSimpleName(),e.getMessage()));
+				System.err.println(e.getStackTrace()[0]);
+				System.err.println(e.getStackTrace()[1]);
+				System.err.println(e.getStackTrace()[2]);
+			}
+		});
+		
 		if(params(args))
 		{
 			if(inputFile == null)

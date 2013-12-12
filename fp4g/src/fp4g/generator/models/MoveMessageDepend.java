@@ -10,22 +10,21 @@ import fp4g.data.define.Message;
  * @author Edgardo
  *
  */
-public class KeyMessageDepend extends Depend<Message> {
+public class MoveMessageDepend extends Depend<Message> {
 	private final List<String> importsRequired;	
 	
-	public KeyMessageDepend()
+	public MoveMessageDepend()
 	{
-		importsRequired = Arrays.asList(
-				"com.badlogic.gdx.Input",
-				"com.apollo.messages.KeyMessage",
-				"com.apollo.messages.KeyMessageHandler"				
+		importsRequired = Arrays.asList(				
+				"com.apollo.messages.MoveMessage",
+				"com.apollo.messages.MoveMessageHandler"				
 				);
 	}
 	
 	@Override
 	public void perform(Message data, JavaCodeModel model) {
 		model.imports.addAll(importsRequired);
-		model.addInterface("KeyMessageHandler");
+		model.addInterface("MoveMessageHandler");
 	}
 
 }

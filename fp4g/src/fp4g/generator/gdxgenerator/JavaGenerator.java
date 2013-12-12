@@ -35,9 +35,11 @@ import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
+import fp4g.generator.models.ContactMessageDepend;
 import fp4g.generator.models.Depend;
 import fp4g.generator.models.JavaCodeModel;
 import fp4g.generator.models.KeyMessageDepend;
+import fp4g.generator.models.MoveMessageDepend;
 import freemarker.template.Configuration;
 
 public class JavaGenerator extends Generator {	
@@ -212,7 +214,7 @@ public class JavaGenerator extends Generator {
     	gameConf.setManager(new JavaSoundManager());
     	gameConf.setManager(new JavaPhysicsManager());
     	
-    	loadLib("libs/fp4g.lib", gameConf);
+    	//loadLib("libs/fp4g.lib", gameConf);
     	
     	Message keyMessage = new Message("Key",gameConf);
     	MessageMethod press = new MessageMethod(keyMessage);
@@ -229,15 +231,52 @@ public class JavaGenerator extends Generator {
     	press.setAttachInputProcessor(true);
     	keyMessage.set("release", new ClassMap(release)); //nombre del metodo
     	
+    	Message contactMessage = new Message("Contact",gameConf);
+    	MessageMethod begin = new MessageMethod(contactMessage);
+    	begin.setName("begin");
+    	begin.setValueReplace("other instanceof %s");
+    	begin.setParams("Entity other, Contact c");    	
+    	contactMessage.set("begin", new ClassMap(begin)); //nombre del metodo
+    	
+    	MessageMethod end = new MessageMethod(contactMessage);
+    	end.setName("end");
+    	end.setValueReplace("other instanceof %s");
+    	end.setParams("Entity other, Contact c");    	
+    	contactMessage.set("end", end); //nombre del metodo
+    	
+    	Message moveMessage = new Message("Move",gameConf);
+    	
+    	MessageMethod translate = new MessageMethod(moveMessage);
+    	translate.setName("translate");
+    	translate.setParams("float x, float y");
+    	moveMessage.set("translate",end);
+    	
+    	MessageMethod speed = new MessageMethod(moveMessage);
+    	speed.setName("speed");
+    	speed.setParams("float x, float y");
+    	moveMessage.set("speed",speed);
+    	
     	//Agregar todos los metodos 
     	MessageMethods methods = new MessageMethods();
     	methods.add(press);
     	methods.add(release);
-    	
+    	methods.add(begin);
+    	methods.add(end);
+    	methods.add(translate);
+    	methods.add(speed);
+   	
     	gameConf.set("methods", new CustomClassMap(methods));
     	
-    	gameConf.setDefine(keyMessage);     	
-    	dependencias.put(keyMessage, new KeyMessageDepend());
+    	gameConf.setDefine(keyMessage);
+    	gameConf.setDefine(contactMessage);
+    	gameConf.setDefine(moveMessage);
+    	dependencias.put(keyMessage,     new KeyMessageDepend());
+    	dependencias.put(contactMessage, new ContactMessageDepend());
+    	dependencias.put(moveMessage, new MoveMessageDepend());
+    	
+    	
+    	
+    	
     	
 //        //agregar componentes		    	
 ////    String components[][] = 
@@ -286,8 +325,8 @@ public class JavaGenerator extends Generator {
 		}
 	}
 	@Override
-	@SuppressWarnings("unchecked")	
-	protected <T extends Define> Depend<T> resolveDependency(Define define) {
+	@SuppressWarnings("unchecked")
+	public <T extends Define> Depend<T> resolveDependency(Define define) {
 		if(define == null)
 		{
 			return null;
