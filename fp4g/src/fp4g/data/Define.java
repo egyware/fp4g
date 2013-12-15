@@ -126,7 +126,7 @@ public abstract class Define extends Code{
 	}
 	
 	/**
-	 * Obtiene una definiciï¿½n
+	 * Obtiene una definición
 	 * @param name
 	 * @return
 	 */	

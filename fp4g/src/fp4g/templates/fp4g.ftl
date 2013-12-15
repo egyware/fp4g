@@ -7,6 +7,4 @@
 		//TODO No se reconoce la instrucción: "${statement.class.simpleName}"
 </#switch>
 </#macro>
-<#macro params p>
-<#list p as param>${param}<#if param_has_next>,</#if></#list>
-</#macro>
+<#macro params p><#list p as param>${param}<#if param_has_next>,</#if></#list></#macro>

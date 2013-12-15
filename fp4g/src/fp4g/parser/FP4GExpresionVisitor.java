@@ -8,7 +8,6 @@ import static fp4g.Log.Show;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.RuleNode;
 
 import fp4g.Log.ErrType;
 import fp4g.data.Define;
@@ -36,17 +35,15 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 {
 	private final Stack<Stack<Expresion>> stacks = new Stack<Stack<Expresion>>();
 	private final Stack<Map> array_stack = new Stack<Map>();
-	private Stack<Expresion> stack;		
-	private ExprList exprList;
+	private Stack<Expresion> stack;
 	private final Stack<Define> current;
 	
 	public FP4GExpresionVisitor(Stack<Define> d)
 	{
 		current = d;
 	}
-	
-	
-	public void pushStack()
+		
+	private void pushStack()
 	{
 		if(stack == null)
 		{
@@ -58,7 +55,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 			stack = new Stack<Expresion>();
 		}
 	}
-	public Stack<Expresion> pop()
+	private Stack<Expresion> pop()
 	{
 		Stack<Expresion> old = stack;
 		stack = null;
@@ -69,12 +66,24 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		return old;
 	}
 	
-	@Override
-	public Expresion visitExprList(FP4GParser.ExprListContext ctx)
+	public ExprList getExprList(FP4GParser.ExprListContext ctx)
 	{
-		pushStack();
-		visitChildren(ctx);
-		exprList = new ExprList(stack.size());
+		if(ctx == null) return null; //En cierto codigo aveces ExprList puede ser null porque no se escribio, asi que solo se regresa null. La comprobación se hace desde afuera si este es null o no.
+		pushStack();		
+		
+		//visitamos los hijos personalmente, evitamos usar cada vez menos la pila. (realmente me confunde, le pierdo el paso)
+		int n = ctx.getChildCount();
+        for (int i=0; i<n; i++) 
+        {
+            ParseTree c = ctx.getChild(i);
+            Expresion childResult = c.accept(this);
+            if(childResult != null)
+            {
+           	 	stack.push(childResult);
+            }                     
+        }
+		
+        ExprList exprList = new ExprList(stack.size());
 		
 		//añadimos todas las expresiones				
 		while(!stack.isEmpty())
@@ -83,32 +92,21 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 			exprList.addFirst(expr);				
 		}	
 		pop();
-		return null;		
+		return exprList;		
 	}
 	
 	@Override
-    public Expresion visitChildren(RuleNode node)
+	public Expresion visitExprList(FP4GParser.ExprListContext ctx)
 	{
-         Expresion result = defaultResult();
-         int n = node.getChildCount();
-         for (int i=0; i<n; i++) 
-         {
-                 ParseTree c = node.getChild(i);
-                 Expresion childResult = c.accept(this);
-                 if(childResult != null)
-                 {
-                	 stack.push(childResult);
-                 }                     
-         }
-         return result;
-    }
-
+		throw new IllegalStateException("Jamás debe ser invocada esta función");		
+	}
+	
+	
 	//numeric expresion!
 	@Override
 	public Expresion visitMinusNExpr(FP4GParser.MinusNExprContext ctx)
-	{
-		visitChildren(ctx.op);
-		Expresion expr = stack.pop();
+	{		
+		Expresion expr = visit(ctx.op);;
 		UnaryOp unaryExpr = new UnaryOp(UnaryOp.Type.Minus,expr);
 		
 		return unaryExpr;		
@@ -117,21 +115,18 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	@Override
 	public Expresion visitParNExpr(FP4GParser.ParNExprContext ctx)
 	{		
-		visit(ctx.op);
-		stack.peek().setPar(true); //establecemos que esta expresiï¿½n, lleva parentesis
+		Expresion expr = visit(ctx.op);
+		expr.setPar(true); //establecemos que esta expresión, lleva parentesis
 				
-		return null;
+		return expr;
 	}	
 	
 	@Override
 	public Expresion visitMultNExpr(FP4GParser.MultNExprContext ctx)
 	{	
-		Expresion left,right;
-		visit(ctx.left);
-		visit(ctx.right);
-		
-		left = stack.pop();
-		right = stack.pop();		
+		Expresion left = visit(ctx.left);
+		Expresion right = visit(ctx.right);
+				
 		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Mult,right,left);
 			
 		return binaryExpr;
@@ -140,12 +135,8 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	@Override
 	public Expresion visitDivNExpr(FP4GParser.DivNExprContext ctx)
 	{
-		Expresion left,right;
-		visit(ctx.left);
-		visit(ctx.right);
-		
-		left = stack.pop();
-		right = stack.pop();
+		Expresion left = visit(ctx.left);
+		Expresion right = visit(ctx.right);
 		
 		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Div,right,left);
 		
@@ -155,12 +146,8 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	@Override
 	public Expresion visitAddNExpr(FP4GParser.AddNExprContext ctx)
 	{		
-		Expresion left,right;
-		visit(ctx.left);
-		visit(ctx.right);
-		
-		left = stack.pop();
-		right = stack.pop();
+		Expresion left = visit(ctx.left);
+		Expresion right = visit(ctx.right);
 		
 		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Add,right,left);
 		
@@ -170,12 +157,8 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	@Override
 	public Expresion visitSubNExpr(FP4GParser.SubNExprContext ctx)
 	{
-		Expresion left,right;
-		visit(ctx.left);
-		visit(ctx.right);
-		
-		left = stack.pop();
-		right = stack.pop();
+		Expresion left = visit(ctx.left);
+		Expresion right = visit(ctx.right);		
 		
 		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Sub,right,left);
 		
@@ -210,9 +193,8 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	//logical expresion
 	@Override
 	public Expresion visitNotLExpr(FP4GParser.NotLExprContext ctx)
-	{
-		visit(ctx.op);		
-		Expresion expr = stack.pop();		
+	{			
+		Expresion expr = visit(ctx.op);;		
 		UnaryOp unaryExpr = new UnaryOp(UnaryOp.Type.Not,expr);
  
 		return unaryExpr;
@@ -221,10 +203,10 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	@Override
 	public Expresion visitParLExpr(FP4GParser.ParLExprContext ctx)
 	{		
-		visit(ctx.op);
-		stack.peek().setPar(true); //establecemos que esta expresiï¿½n, lleva parentesis
+		Expresion expr = visit(ctx.op);
+		expr.setPar(true); //establecemos que esta expresiï¿½n, lleva parentesis
 				
-		return null;
+		return expr;
 	}	
 	
 	@Override 
@@ -240,6 +222,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	@Override
 	public Expresion visitVarLExpr(FP4GParser.VarLExprContext ctx)
 	{		
+		//¿Para que era esto?
 		super.visitVarLExpr(ctx);
 		return null;
 	}
@@ -256,7 +239,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		
 		String callName = ctx.functionName.getText();
 		
-		visit(ctx.exprList()); //acá se crea un nuevo stack!
+		ExprList exprList = getExprList(ctx.exprList()); //acá se crea un nuevo stack!
 				
 		FunctionCall functionCall = new FunctionCall(callName,exprList);
 		exprList = null;		

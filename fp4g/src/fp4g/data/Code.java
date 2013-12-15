@@ -1,7 +1,7 @@
 package fp4g.data;
 
 public class Code {
-	private int line;
+	private int line = -1; //cuando es menos 1 no se ha especificado la linea
 	private boolean build = true;
 	
 	public void setLine(int line)

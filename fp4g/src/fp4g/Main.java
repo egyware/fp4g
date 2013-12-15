@@ -30,10 +30,11 @@ public class Main {
 			@Override
 			public void uncaughtException(Thread t, Throwable e) 
 			{
-				System.err.println(String.format("%s %s",e.getClass().getSimpleName(),e.getMessage()));
-				System.err.println(e.getStackTrace()[0]);
-				System.err.println(e.getStackTrace()[1]);
-				System.err.println(e.getStackTrace()[2]);
+				e.printStackTrace(System.err);
+//				System.err.println(String.format("%s %s",e.getClass().getSimpleName(),e.getMessage()));
+//				System.err.println(e.getStackTrace()[0]);
+//				System.err.println(e.getStackTrace()[1]);
+//				System.err.println(e.getStackTrace()[2]);
 			}
 		});
 		

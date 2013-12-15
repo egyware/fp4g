@@ -33,7 +33,6 @@ import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.CustomClassMap;
-import fp4g.data.expresion.FunctionCall;
 import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.VarDot;
 import fp4g.data.expresion.VarId;
@@ -47,8 +46,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	private final Game game;
 	private MessageMethods methods;
 	private final Stack<Define> current;	
-	private Stack<Assets> assets_stack;	
-	private ExprList exprList;
+	private Stack<Assets> assets_stack;
 	private NameList nameList;
 	private Statements statements;
 	private final FP4GExpresionVisitor exprVisitor;
@@ -74,14 +72,13 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		{
 			final String stateName = ctx.state;
 			GameState state = define.getDefine(DefineType.STATE, stateName);
-			if(state != null)
+			if(state == null)
 			{
-				Show(WarnType.MissingAdd,game);
+				Show(WarnType.MissingAdd,ctx.start.getLine());
 				//creo un elemento temporal para solucionar el state faltante, sin embargo no se generar�
 				state = new GameState(ctx.state,define);
 				state.setBuild(false);
 			}
-			//if(state )
 			((Game) define).setStart(state);
 			return state;
 		}
@@ -168,12 +165,12 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 			type = Send.SendTo.Self;
 		}
 		Send send = new Send(type,method);	
-		super.visitSend(ctx);
-		if(exprList != null)
-		{
-			//TODO checkar la exprList
-			send.setArguments(exprList);
-			exprList = null;
+		
+		ExprList list = exprVisitor.getExprList(ctx.exprList());
+		if(list != null)
+		{		
+			//TODO checkar la exprList, checkar que?, que debe tner? =S
+			send.setArguments(list);		
 		}
 		switch(type)
 		{		
@@ -195,12 +192,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	{
 		Define define = current.peek();
 		
-		
-		exprVisitor.pushStack();
-		exprVisitor.visitChildren(ctx);
-		Stack<Expresion> expr_stack = exprVisitor.pop();
-		
-		Expresion expr = expr_stack.pop();		
+		Expresion expr = exprVisitor.visit(ctx.expr());		
 		define.set(ctx.key, eval(define,expr));
 		return null;
 	}
@@ -229,12 +221,11 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 			if(expr instanceof VarId)
 			{				
 				VarId varId = (VarId)expr;
-				Literal<?> value = define.get(varId.varName);
-				System.out.println(value.getClass().getSimpleName());
+				Literal<?> value = define.get(varId.varName);				
 				if(value == null)
 				{
 					Show(ErrType.VarNameNotFound,define,varId.varName);
-				}
+				}				
 				return value;
 			}			
 			else
@@ -322,12 +313,12 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		
 		Add	add = new Add(ctx.type,ctx.addName,ctx.varName);
 		add.setLine(ctx.getStart().getLine());
-		super.visitAdd(ctx);
-		if(exprList != null)
-		{
-			add.addParams(exprList);
-			exprList = null;
-		}		
+		
+		ExprList list = exprVisitor.getExprList(ctx.exprList());
+		if(list != null)
+		{		
+			add.addParams(list);					
+		}				
 		
 		parent.setAdd(add);		
 		
