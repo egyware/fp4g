@@ -255,7 +255,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		String arrayImports[] = new String[]
 		{
 				"com.apollo.World",
-				"com.apollo.ApolloInputProcesor",
+				"com.apollo.ApolloInputProcessor",
 				"com.apollo.managers.GameManager",
 				"com.apollo.managers.GameState",
 				"com.badlogic.gdx.Gdx",

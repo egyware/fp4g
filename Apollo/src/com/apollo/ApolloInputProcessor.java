@@ -8,17 +8,17 @@ import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 import com.badlogic.gdx.InputProcessor;
 
-// TODO AÃºn faltan mensajes por hacer...
+// TODO Aún faltan mensajes por hacer...
 /* TODO 
- * acÃ¡ hay un problema, actuamente solo es un MessageReceiver comÃºn (como si fuese una entidad).
+ * acá hay un problema, actuamente solo es un MessageReceiver común (como si fuese una entidad).
  * Y no un multiplexer de MessageReceiver.
  */
-public class ApolloInputProcesor implements InputProcessor,MessageReceiver
+public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 {
 	private final MessageSender instance;
 	private final Map<Message,Bag<MessageHandler>> handlersByEventType;
 	private final ImmutableBag<MessageHandler> emptyBag;
-	public ApolloInputProcesor()
+	public ApolloInputProcessor()
 	{
 		handlersByEventType = new HashMap<Message, Bag<MessageHandler>>();
 		instance = MessageSender.instance();
@@ -101,7 +101,7 @@ public class ApolloInputProcesor implements InputProcessor,MessageReceiver
 
 	@Override
 	public boolean keyUp(int key) 
-	{
+	{		
 		instance.send(this, KeyMessage.onReleaseKey,key);
 		return false;
 	}

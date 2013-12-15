@@ -46,6 +46,7 @@ public class Transform extends ITransform {
 	public void onTranslateMove(float x, float y) {
 		this.x += x;
 		this.y += y;
+		System.out.println(this);
 	}
 
 	@Override

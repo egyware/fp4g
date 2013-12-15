@@ -9,7 +9,7 @@ import ${import};
 ${class.javadoc}
 public final class ${class.name} extends GameState{
 	private final World world;
-	private final ApolloInputProcesor inputProcesor;
+	private final ApolloInputProcessor inputProcessor;
 	<#if debug>
 	<#if physicsManager??>
 	private OrthographicCamera debugCamera;
@@ -39,7 +39,7 @@ public final class ${class.name} extends GameState{
 	public ${class.name}(GameManager manager)
 	{
 		world = new World(manager);
-		inputProcesor = new ApolloInputProcesor();
+		inputProcessor = new ApolloInputProcessor();
 	}
 	
 	@Override	
@@ -81,6 +81,8 @@ public final class ${class.name} extends GameState{
 	{
 		final int w = ${game.name}.Width;
 		final int h = ${game.name}.Height;
+		
+		Gdx.input.setInputProcessor(inputProcessor);
 		
 		<#if debug>
 		<#if physicsManager??>
@@ -142,7 +144,7 @@ public final class ${class.name} extends GameState{
 		</#if>
 		<#if entity.attachMessages?has_content>
 		<#list entity.attachMessages as attach>
-		inputProcesor.addEventHandler(${attach},${entity.varName});
+		inputProcessor.addEventHandler(${attach},${entity.varName});
 		</#list>
 		</#if>
 		</#list>
