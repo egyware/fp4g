@@ -41,6 +41,12 @@ public class Transform extends ITransform {
 		this.y = y;
 		
 	}
+	
+	@Override
+	public void initialize()
+	{
+		owner.addEventHandler(MoveMessage.onTranslateMove, this);
+	}
 
 	@Override
 	public void onTranslateMove(float x, float y) {

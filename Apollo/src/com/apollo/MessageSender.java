@@ -16,6 +16,7 @@ public class MessageSender
 	public void send(MessageReceiver receiver,Message message)
 	{	
 		ImmutableBag<MessageHandler> listeners = receiver.getMessageHandler(message);
+		if(listeners == null) return;
 		final int size = listeners.size();
 		for(int i=0;i<size;i++)
 		{
@@ -28,6 +29,7 @@ public class MessageSender
 	{		
 		array1[0] = arg1;
 		ImmutableBag<MessageHandler> listeners = receiver.getMessageHandler(message);
+		if(listeners == null) return;
 		final int size = listeners.size();
 		for(int i=0;i<size;i++)
 		{
@@ -41,6 +43,7 @@ public class MessageSender
 		array2[0] = arg1;
 		array2[1] = arg2;
 		ImmutableBag<MessageHandler> listeners = receiver.getMessageHandler(message);
+		if(listeners == null) return;
 		final int size = listeners.size();
 		for(int i=0;i<size;i++)
 		{
@@ -55,6 +58,7 @@ public class MessageSender
 		array3[1] = arg2;
 		array3[2] = arg3;
 		ImmutableBag<MessageHandler> listeners = receiver.getMessageHandler(message);
+		if(listeners == null) return;
 		final int size = listeners.size();
 		for(int i=0;i<size;i++)
 		{
@@ -70,6 +74,7 @@ public class MessageSender
 		array4[2] = arg3;
 		array4[3] = arg4;		
 		ImmutableBag<MessageHandler> listeners = receiver.getMessageHandler(message);
+		if(listeners == null) return;
 		final int size = listeners.size();
 		for(int i=0;i<size;i++)
 		{
@@ -86,6 +91,7 @@ public class MessageSender
 		array5[3] = arg4;
 		array5[4] = arg5;
 		ImmutableBag<MessageHandler> listeners = receiver.getMessageHandler(message);
+		if(listeners == null) return;
 		final int size = listeners.size();
 		for(int i=0;i<size;i++)
 		{

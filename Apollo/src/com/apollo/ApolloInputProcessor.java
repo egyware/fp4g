@@ -16,18 +16,11 @@ import com.badlogic.gdx.InputProcessor;
 public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 {
 	private final MessageSender instance;
-	private final Map<Message,Bag<MessageHandler>> handlersByEventType;
-	private final ImmutableBag<MessageHandler> emptyBag;
+	private final Map<Message,Bag<MessageHandler>> handlersByEventType;	
 	public ApolloInputProcessor()
 	{
 		handlersByEventType = new HashMap<Message, Bag<MessageHandler>>();
-		instance = MessageSender.instance();
-		emptyBag = new ImmutableBag<MessageHandler>()
-		{
-			@Override public MessageHandler get(int index){return null;}
-			@Override public int size() {return 0;}
-			@Override public boolean isEmpty() {return true;}
-		};
+		instance = MessageSender.instance();		
 	}
 	
 	public <T extends Message> void addEventHandler(Message messageType, MessageHandler listener) 
@@ -82,14 +75,7 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 	public ImmutableBag<MessageHandler> getMessageHandler(Message message) 
 	{		
 		ImmutableBag<MessageHandler> bag = handlersByEventType.get(message);
-		if(bag == null)
-		{
-			return emptyBag;
-		}
-		else
-		{
-			return bag;
-		}
+		return bag;
 	}
 	
 	@Override
