@@ -24,6 +24,8 @@ public class World {
 	private Bag<Manager> managersBag;
 	
 	private Map<String,EntityBuilder> entityBuildersByType;
+	
+	private final ApolloInputProcessor inputProcessor;
 
 	public World(GameManager game) {
 		entityManager = new EntityManager();
@@ -38,6 +40,8 @@ public class World {
 		setManager(entityManager);
 		
 		entityBuildersByType = new HashMap<String, EntityBuilder>();
+		
+		inputProcessor = new ApolloInputProcessor();
 	}
 
 	public EntityManager getEntityManager() {
@@ -157,5 +161,11 @@ public class World {
 			addEntities();
 		}
 	}
+	
+	public ApolloInputProcessor getInputProcessor()
+	{
+		return inputProcessor;
+	}
+	
 	
 }

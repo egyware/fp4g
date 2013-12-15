@@ -21,6 +21,7 @@ import fp4g.generator.Generator;
 import fp4g.generator.models.Depend;
 import fp4g.generator.models.JavaCodeModel;
 import fp4g.generator.models.OnModel;
+import fp4g.generator.models.OnModel.MethodHandlerModel;
 import fp4g.generator.models.ParamCodeModel;
 import freemarker.template.Template;
 
@@ -121,11 +122,32 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			List<OnModel> onList = new LinkedList<OnModel>();
 			for(On on: entity_onMessages)
 			{
-				onList.add(new OnModel(on,generator,modelEntity));				
+				onList.add(new OnModel(on,generator,modelEntity));
 			}
 			entityRoot.put("messages", onList);
 			
-			
+			//revisar si tiene attachments, basta con uno..
+			boolean hasAttachments = false;
+			for(OnModel onModel:onList)
+			{
+				for(MethodHandlerModel m:onModel.getMethodHandlers())
+				{
+					if(m.isAttach())
+					{
+						hasAttachments = true;
+						break;
+					}					
+				}
+				if(hasAttachments)
+				{					
+					break;
+				}
+			}	
+			if(hasAttachments)
+			{	
+				modelEntity.addImport("com.apollo.ApolloInputProcessor");
+				entityRoot.put("hasAttachments", true);
+			}
 		}
 		
 		//agregar imports!
@@ -153,7 +175,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			{
 					"com.apollo.Entity",			
 					"com.apollo.World",
-					"com.apollo.Behavior",
+					"com.apollo.Behavior",					
 					"com.apollo.utils.Bag",
 					"java.util.HashMap",
 					"java.util.Map"

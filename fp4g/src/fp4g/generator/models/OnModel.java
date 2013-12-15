@@ -19,21 +19,20 @@ import fp4g.generator.gdxgenerator.JavaGenerator;
 
 public class OnModel implements Model
 {
-	//Que necesito acï¿½:
 	//Nombre categoria mensaje	
 	private final String name;
-	//Necesitarï¿½ una lista de los MethodHandlers!
+	//Necesitaré una lista de los MethodHandlers!
 	private final List<MethodHandlerModel> methodHandlers;	
 	
-	//TODO claramente acï¿½ el generator es una soluciï¿½n parche
-	//TODO Lo que paso acï¿½. Que este modelo empezo a generar codigo. por eso este desasastre...
+	//TODO claramente acá el generator es una solución parche
+	//TODO Lo que paso acá. Que este modelo empezo a generar codigo. por eso este desasastre...
 	public OnModel(On on, JavaGenerator generator,JavaCodeModel model)
 	{
 		name = on.name;
 		model.addInterface(String.format("%sMessageHandler",name));
 		methodHandlers = new LinkedList<MethodHandlerModel>();
 		HashMap<String,MethodHandlerModel> methods = new HashMap<String, MethodHandlerModel>();
-		//agregar los metodos, aunque estï¿½n vacios y asumiento que todos son MessageMethod		
+		//agregar los metodos, aunque están vacios y asumiento que todos son MessageMethod		
 		for(Entry<String,Literal<?>> entry:on.message.entrySet())
 		{
 			ClassMap map = (ClassMap)entry.getValue();
@@ -182,7 +181,7 @@ public class OnModel implements Model
 		}
 	}
 		
-	public static class MethodHandlerModel implements Model
+	public static final class MethodHandlerModel implements Model
 	{
 		//que necesito acï¿½, por cada MethodHander necesito:
 		//Nombre del metodo
@@ -191,29 +190,36 @@ public class OnModel implements Model
 		private final List<SourceModel> sources;
 		//Parametros
 		private final String params;
+		//Se requiere attach?
+		private final boolean attachMethod;
 				
 		public MethodHandlerModel(MessageMethod method)
 		{
 			name = method.getName();
 			params = method.getParams();
-			sources = new LinkedList<SourceModel>();			
+			sources = new LinkedList<SourceModel>();
+			attachMethod = method.isAttachInputProcessor();
 		}
 					
 		public void addSource(SourceModel value) {
 			sources.add(value);			
 		}
 
-		public final String getName() 
+		public String getName() 
 		{
 			return name;
 		}
-		public final List<SourceModel> getSources()
+		public List<SourceModel> getSources()
 		{
 			return sources;
 		}
-		public final String getParams()
+		public String getParams()
 		{
 			return params;
+		}
+		public boolean isAttach()
+		{
+			return attachMethod;
 		}
 	}
 	public static class FilterD implements Model

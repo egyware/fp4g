@@ -32,7 +32,7 @@ public class MessageSender
 		for(int i=0;i<size;i++)
 		{
 			MessageHandler handler = listeners.get(i);
-			MethodAccess methods = MethodAccess.get(message.getClassHandler());
+			MethodAccess methods = MethodAccess.get(handler.getClass());
 			methods.invoke(handler, message.name(),array1);			
 		}
 	}
@@ -45,7 +45,7 @@ public class MessageSender
 		for(int i=0;i<size;i++)
 		{
 			MessageHandler handler = listeners.get(i);
-			MethodAccess methods = MethodAccess.get(message.getClassHandler());
+			MethodAccess methods = MethodAccess.get(handler.getClass());
 			methods.invoke(handler, message.name(),array2);			
 		}
 	}
@@ -59,7 +59,7 @@ public class MessageSender
 		for(int i=0;i<size;i++)
 		{
 			MessageHandler handler = listeners.get(i);
-			MethodAccess methods = MethodAccess.get(message.getClassHandler());
+			MethodAccess methods = MethodAccess.get(handler.getClass());
 			methods.invoke(handler, message.name(),array3);			
 		}
 	}
@@ -74,7 +74,7 @@ public class MessageSender
 		for(int i=0;i<size;i++)
 		{
 			MessageHandler handler = listeners.get(i);
-			MethodAccess methods = MethodAccess.get(message.getClassHandler());
+			MethodAccess methods = MethodAccess.get(handler.getClass());
 			methods.invoke(handler, message.name(),array4);			
 		}
 	}
@@ -90,7 +90,7 @@ public class MessageSender
 		for(int i=0;i<size;i++)
 		{
 			MessageHandler handler = listeners.get(i);
-			MethodAccess methods = MethodAccess.get(message.getClassHandler());
+			MethodAccess methods = MethodAccess.get(handler.getClass());
 			methods.invoke(handler, message.name(),array5);			
 		}
 	}

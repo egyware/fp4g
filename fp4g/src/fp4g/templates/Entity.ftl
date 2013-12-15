@@ -59,14 +59,23 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 		}
 		<#if messages??>
 		<#list messages as message>
-		<#assign messageName = message.name?cap_first />
-		<#list message.methodHandlers as method>
+		<#assign messageName = message.name?cap_first />		
+		<#list message.methodHandlers as method>		
 		<#if method.sources?has_content>		
 		addEventHandler(${messageName}Message.on${method.name?cap_first}${messageName}, this);
 		</#if>
 		</#list>
+		
+		<#if hasAttachments>
+		ApolloInputProcessor inputProcessor = world.getInputProcessor();
+		<#list message.methodHandlers as method>
+		<#if method.attach>
+		inputProcessor.addEventHandler(${messageName}Message.on${method.name?cap_first}${messageName}, (MessageHandler)this);
+		</#if>
 		</#list>
-		</#if>			
+		</#if>
+		</#list>
+		</#if>		
 	}
 	
 	protected void uninitialize()
