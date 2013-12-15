@@ -32,6 +32,10 @@ public class ExprList implements Iterable<Expresion> {
 	{
 		return list[index];
 	}
+	public int size()
+	{
+		return list.length;
+	}
 
 	@Override
 	public Iterator<Expresion> iterator() {		

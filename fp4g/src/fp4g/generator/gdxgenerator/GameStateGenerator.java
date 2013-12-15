@@ -93,13 +93,13 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		{
 			Map<String,Object> mngr = new HashMap<String, Object>(2);
 			mngr.put("name", manager.name);
-			//acá, buscar las cosas extras y añadirselas.
+			//acá, buscar las cosas extras y a�adirselas.
 			Map<String,Object> extras = mngrData.get(manager.name);
 			if(extras != null)
 			{
 				mngr.putAll(extras);
 				
-				//si existe algún dato adicional a importar,se lo añadimos a los imports
+				//si existe algún dato adicional a importar,se lo a�adimos a los imports
 				List<String> imports = (List<String>) extras.get("imports");
 				if(imports != null)
 				{

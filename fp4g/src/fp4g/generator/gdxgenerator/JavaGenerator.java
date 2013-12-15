@@ -19,8 +19,6 @@ import javax.tools.ToolProvider;
 import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.Options;
-import fp4g.classes.MessageMethod;
-import fp4g.classes.MessageMethods;
 import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.Expresion;
@@ -29,17 +27,12 @@ import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Goal;
 import fp4g.data.define.Manager;
-import fp4g.data.define.Message;
-import fp4g.data.expresion.ClassMap;
-import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
-import fp4g.generator.models.ContactMessageDepend;
 import fp4g.generator.models.Depend;
 import fp4g.generator.models.JavaCodeModel;
-import fp4g.generator.models.KeyMessageDepend;
-import fp4g.generator.models.MoveMessageDepend;
+import fp4g.generator.models.MessageDepend;
 import freemarker.template.Configuration;
 
 public class JavaGenerator extends Generator {	
@@ -56,13 +49,13 @@ public class JavaGenerator extends Generator {
 	
 	public final Map<Class<? extends Code>,Class<? extends CodeGenerator<JavaGenerator>>> generators;
 	
-	public final HashMap<Define,Depend<? extends Define>> dependencias;
+	public final HashMap<Class<? extends Define>,Depend<? extends Define>> dependencias;
 	
 	public JavaGenerator()
 	{
 		generators = new HashMap<Class<? extends Code>, Class<? extends CodeGenerator<JavaGenerator>>>(10,1);
 		parDefineJavaCode = new HashMap<Define, JavaCodeModel>(10);
-		dependencias = new HashMap<Define, Depend<? extends Define>>();
+		dependencias = new HashMap<Class<? extends Define>, Depend<? extends Define>>();
 		
 		exprGen = new JavaExpresionGenerator(this);
 		funcGen = new JavaFunctionGenerator(this);
@@ -216,67 +209,10 @@ public class JavaGenerator extends Generator {
     	
     	//loadLib("libs/fp4g.lib", gameConf);
     	
-    	Message keyMessage = new Message("Key",gameConf);
-    	MessageMethod press = new MessageMethod(keyMessage);
-    	press.setName("press");
-    	press.setValueReplace("Input.Keys.%s == key");
-    	press.setParams("int key");
-    	press.setAttachInputProcessor(true);
-    	keyMessage.set("press", new ClassMap(press)); //nombre del metodo
-    	
-    	MessageMethod release = new MessageMethod(keyMessage);
-    	release.setName("release");
-    	release.setValueReplace("Input.Keys.%s == key");
-    	release.setParams("int key");
-    	press.setAttachInputProcessor(true);
-    	keyMessage.set("release", new ClassMap(release)); //nombre del metodo
-    	
-    	Message contactMessage = new Message("Contact",gameConf);
-    	MessageMethod begin = new MessageMethod(contactMessage);
-    	begin.setName("begin");
-    	begin.setValueReplace("other instanceof %s");
-    	begin.setParams("Entity other, Contact c");    	
-    	contactMessage.set("begin", new ClassMap(begin)); //nombre del metodo
-    	
-    	MessageMethod end = new MessageMethod(contactMessage);
-    	end.setName("end");
-    	end.setValueReplace("other instanceof %s");
-    	end.setParams("Entity other, Contact c");    	
-    	contactMessage.set("end", end); //nombre del metodo
-    	
-    	Message moveMessage = new Message("Move",gameConf);
-    	
-    	MessageMethod translate = new MessageMethod(moveMessage);
-    	translate.setName("translate");
-    	translate.setParams("float x, float y");
-    	moveMessage.set("translate",end);
-    	
-    	MessageMethod speed = new MessageMethod(moveMessage);
-    	speed.setName("speed");
-    	speed.setParams("float x, float y");
-    	moveMessage.set("speed",speed);
-    	
-    	//Agregar todos los metodos 
-    	MessageMethods methods = new MessageMethods();
-    	methods.add(press);
-    	methods.add(release);
-    	methods.add(begin);
-    	methods.add(end);
-    	methods.add(translate);
-    	methods.add(speed);
-   	
-    	gameConf.set("methods", new CustomClassMap(methods));
-    	
-    	gameConf.setDefine(keyMessage);
-    	gameConf.setDefine(contactMessage);
-    	gameConf.setDefine(moveMessage);
-    	dependencias.put(keyMessage,     new KeyMessageDepend());
-    	dependencias.put(contactMessage, new ContactMessageDepend());
-    	dependencias.put(moveMessage, new MoveMessageDepend());
-    	
-    	
-    	
-    	
+    	MessageDepend md = new MessageDepend();
+    	md.install(gameConf);
+    	dependencias.put(md.getForClass(),md);
+    	    	
     	
 //        //agregar componentes		    	
 ////    String components[][] = 
@@ -331,15 +267,9 @@ public class JavaGenerator extends Generator {
 		{
 			return null;
 		}
-		else
-		if(define instanceof Entity)
+		else		
 		{
-			//TODO por hacer
-			return null;
-		}
-		else
-		{
-			return (Depend<T>) dependencias.get(define);
+			return (Depend<T>) dependencias.get(define.getClass());
 		}		
 	}
 

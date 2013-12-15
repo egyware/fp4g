@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 public class TextureBehavior extends Spatial<SpriteBatch> 
 {
 	@InjectComponent
-	private Transform transform;
+	private ITransform transform;
 	private TextureRegion texture;
 	private final int w;
 	private final int h;

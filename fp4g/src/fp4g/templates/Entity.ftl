@@ -1,5 +1,8 @@
+<#import "fp4g.ftl" as fp4g />
 package ${class.pckg};
-
+<#macro printParams params>
+<#if params?has_content><#list params as param>${param}<#if param_has_next>, </#if></#list></#if>
+</#macro>
 <#if class.imports??>
 <#list class.imports as import>
 import ${import};
@@ -106,10 +109,22 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 		if(<#list source.filtersD as filterD>(<#list filterD.filtersC as filterC>${filterC}<#if filterC_has_next> && </#if></#list>)<#if filterD_has_next>||</#if></#list>)
 		</#if>
 		{
-			${source.code}
+		<#if source.statements?has_content>
+		<#list source.statements as stmnt>
+			<@fp4g.translate statement=stmnt />
+		</#list>
+		<#else>
+			//TODO Recuerde añadir su codigo aqui...
+		</#if>
 		}
 		<#else>
-		${source.code}		
+		<#if source.code?has_content>
+		<#list source.statements as stmnt>
+			<@fp4g.translate statement=stmnt />
+		</#list>
+		<#else>
+			//TODO Recuerde añadir su codigo aqui...
+		</#if>		
 		</#if>
 		</#list>
 		</#if>

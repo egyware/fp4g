@@ -1,3 +1,16 @@
+:::0.1.20 (prerelease-prototipo)
+P Falta que se consideren bibliotecas
+P Falta que se agregen los parametros al envio de parametros
+P Falta separar el generador de instrucciones del generador de entidad.
+P Falta especificar cuando el mensaje va para otra entidad.
+P Ordenar el codigo OnModel tiene demasiadas responsabilidades
+P Falta definir que codigo va ir en las sentencias.
+P Debe quedar prueba de tontos
+P Ordenar el codigo para recibir parametros y talvez más adelante definir parametros por defecto.
+P Falta la capacidad de ordenar los managers según prioridad
+P Definir la utilidad de la clase Utils: Talvez cambiarle el nombre a Assets y mantener los punteros de los assets.
+P Hacer que los Managers envien mensaje
+P falta agregar la instruccion Using
 :::0.1.19 (prerelease-prototipo)
 + Ejecuta el codigo! Gracias al proyecto Runner
 + Se distribuyó la responsabilidad del FP4GDataVisitor, ahora existe un FP4GExpresionVisitor que se encarga de extraer solo las expresiones.

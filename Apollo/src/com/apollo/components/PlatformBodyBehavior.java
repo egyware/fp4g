@@ -5,7 +5,10 @@ package com.apollo.components;
 
 import static com.apollo.managers.PhysicsManager.SCALE;
 import static com.apollo.managers.PhysicsManager.INV_SCALE;
+
+import com.apollo.Message;
 import com.apollo.managers.PhysicsManager;
+import com.apollo.messages.MoveMessage;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -20,7 +23,7 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
  * @author egyware
  *
  */
-public class PlatformBodyBehavior extends BodyBehavior {
+public class PlatformBodyBehavior extends IBodyBehavior {
 	private Body circle;
 	private Body box;
 	private RevoluteJoint motor;
@@ -138,5 +141,30 @@ public class PlatformBodyBehavior extends BodyBehavior {
 	@Override
 	public Vector2 getRawPosition() {		
 		return circle.getPosition();
+	}
+	@Override
+	public void onTranslateMove(float x, float y) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onSpeedMove(float x, float y) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onMessage(Message message, Object... args) {
+		if(message instanceof MoveMessage)
+		{
+			switch((MoveMessage)message)
+			{
+			case onSpeedMove:
+				onSpeedMove((Float)args[0],(Float)args[1]);
+				break;
+			case onTranslateMove:
+				onTranslateMove((Float)args[0],(Float)args[1]);
+				break;			
+			}
+		}		
 	}
 }

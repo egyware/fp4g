@@ -1,12 +1,9 @@
 package fp4g.generator.models;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-
-import org.antlr.v4.misc.Utils;
 
 import fp4g.classes.MessageMethod;
 import fp4g.data.Code;
@@ -32,7 +29,8 @@ public class OnModel implements Model
 	//TODO Lo que paso acï¿½. Que este modelo empezo a generar codigo. por eso este desasastre...
 	public OnModel(On on, JavaGenerator generator,JavaCodeModel model)
 	{
-		name = on.name;		
+		name = on.name;
+		model.addInterface(String.format("%sMessageHandler",name));
 		methodHandlers = new LinkedList<MethodHandlerModel>();
 		HashMap<String,MethodHandlerModel> methods = new HashMap<String, MethodHandlerModel>();
 		//agregar los metodos, aunque estï¿½n vacios y asumiento que todos son MessageMethod		
@@ -52,56 +50,45 @@ public class OnModel implements Model
 	public static class SourceModel implements Model
 	{
 		//El codigo
-		private final String code;
-		//Una lista de filtros (disyunciï¿½n)
+		private final List<StatementModel> statements;
+		//Una lista de filtros (disyunción)
 		private final List<FilterD> filters;
 				
 		public SourceModel(Source source, JavaGenerator generator,JavaCodeModel model)
-		{
-			//TODO por ahora traducirï¿½ el codigo asï¿½
+		{			
+			filters = new LinkedList<FilterD>();
 			if(source.statements != null && source.statements.size() > 0)
 			{
-				StringBuilder builder = new StringBuilder();
+				statements = new LinkedList<StatementModel>();
 				for(Code stmnt:source.statements)
 				{	
 					//MessageSender.instance().send(receiver, message);
 					//TODO por ahora TODOS son Send					
 					Send send = (Send)stmnt;
-					Message msg = send.method.getMessage();
-					String message = String.format("%1$sMessage.on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
-					builder.append("MessageSender.instance().send(this,"); //TODO por ahora solo yo recibo mensajes
-					builder.append(message);
-					if(send.args != null)
-					{
-						builder.append(", ");					
-						for(Iterator<Expresion> iterator = send.args.iterator();iterator.hasNext();)
-						{
-							Expresion e = iterator.next();
-							builder.append(generator.exprGen.generate(null, e));
-							if(iterator.hasNext())
-							{
-								builder.append(", ");
-							}
-						}
-					}
-					builder.append(");\n");
 					
+					SendStatementModel sendModel = new SendStatementModel(send);
+					if(send.args != null && send.args.size() > 0)
+					{
+						List<String> params = sendModel.getParams();
+						for(Expresion expr:send.args)
+						{
+							params.add(generator.expresion(model, expr));
+						}						
+					}
+					statements.add(sendModel);
+									
+					Message msg = send.method.getMessage();
 					Depend<Message> depend = generator.resolveDependency(msg);
 					if(depend != null)
 					{
 						depend.perform(msg, model);
 					}					
-				}				
-				code = builder.toString();
+				}
 			}
 			else
 			{
-			
-				code = "//TODO falta el codigo...";
-			}			
-			
-			
-			filters = new LinkedList<FilterD>();
+				statements = null;
+			}
 		}
 		
 		public static void findAndInsert(final Source source,final HashMap<String,MethodHandlerModel> methods, JavaGenerator generator,JavaCodeModel model)
@@ -187,8 +174,8 @@ public class OnModel implements Model
 			filters.add(current);
 		}
 	
-		public final String getCode() {
-			return code;
+		public final List<StatementModel> getStatements() {
+			return statements;
 		}
 		public final List<FilterD> getFiltersD() {
 			return filters;
