@@ -156,6 +156,12 @@ public class PlatformBodyBehavior extends IBodyBehavior {
 		// TODO Auto-generated method stub		
 	}
 	@Override
+	public void onForwardMove(float units)
+	{
+		// TODO AUTO
+	}	
+	
+	@Override
 	public void onMessage(Message<?> message, Object... args) {
 		if(message instanceof MoveMessage)
 		{
@@ -169,7 +175,10 @@ public class PlatformBodyBehavior extends IBodyBehavior {
 				break;
 			case onRotateMove:
 				onRotateMove(((Number)args[0]).floatValue());
-				break;				
+				break;
+			case onForwardMove:
+				onForwardMove(((Number)args[0]).floatValue());
+				break;			
 			}
 		}
 	}

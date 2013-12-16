@@ -40,7 +40,7 @@ public class Utils {
 	{
 		return assetManager.get(asset);
 	}
-	public static TextureRegion getTexture(String asset)
+	public static Texture getTexture(String asset)
 	{
 		return assetManager.get(asset);
 	}

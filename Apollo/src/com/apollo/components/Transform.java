@@ -49,6 +49,7 @@ public class Transform extends ITransform {
 	{
 		owner.addEventHandler(MoveMessage.onTranslateMove, this);
 		owner.addEventHandler(MoveMessage.onRotateMove, this);
+		owner.addEventHandler(MoveMessage.onForwardMove, this);		
 	}
 
 	@Override
@@ -69,6 +70,12 @@ public class Transform extends ITransform {
 	{
 		this.rotation += MathUtils.degreesToRadians * grad;
 	}
+	
+	@Override
+	public void onForwardMove(float units)
+	{
+		move(units,rotation + MathUtils.PI * 0.5f);
+	}		
 
 	@Override
 	public void onMessage(Message<?> message, Object... args)
@@ -85,7 +92,10 @@ public class Transform extends ITransform {
 				break;
 			case onRotateMove:
 				onRotateMove(((Number)args[0]).floatValue());
-				break;				
+				break;
+			case onForwardMove:
+				onForwardMove(((Number)args[0]).floatValue());
+				break;			
 			}
 		}
 	}

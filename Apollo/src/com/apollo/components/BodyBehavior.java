@@ -107,6 +107,11 @@ public class BodyBehavior extends IBodyBehavior {
 		addRotation(grad*MathUtils.degreesToRadians);
 	}
 	@Override
+	public void onForwardMove(float units)
+	{
+		move(units);
+	}		
+	@Override
 	public void onMessage(Message<?> message, Object... args) {
 		if(message instanceof MoveMessage)
 		{
@@ -120,7 +125,10 @@ public class BodyBehavior extends IBodyBehavior {
 				break;
 			case onRotateMove:
 				onRotateMove(((Number)args[0]).floatValue());
-				break;				
+				break;	
+			case onForwardMove:
+				onForwardMove(((Number)args[0]).floatValue());
+				break;		
 			}
 		}
 	}

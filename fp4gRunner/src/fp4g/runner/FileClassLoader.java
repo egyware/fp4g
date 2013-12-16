@@ -41,6 +41,7 @@ public class FileClassLoader extends ClassLoader
    
    public InputStream getResourceAsStream(String name)
    {	   
+	   System.out.println(name);
 	   File file = new File(name.replace('.', File.separatorChar));
 	   try {
            return new FileInputStream(file);

@@ -5,7 +5,7 @@ import com.apollo.MessageHandler;
 
 public enum MoveMessage implements Message<MoveMessageHandler>
 {
-	onTranslateMove, onSpeedMove,onRotateMove;
+	onTranslateMove, onSpeedMove,onRotateMove,onForwardMove;
 
 	@Override
 	public Class<MoveMessageHandler> getClassHandler() 
@@ -17,7 +17,10 @@ public enum MoveMessage implements Message<MoveMessageHandler>
 	public void dispatch(MessageHandler h, Object... args) {
 		final MoveMessageHandler handler = (MoveMessageHandler)h;
 		switch(this)
-		{		
+		{
+		case onForwardMove:
+			handler.onForwardMove(((Number)args[0]).floatValue());
+			break;		
 		case onRotateMove:
 			handler.onRotateMove(((Number)args[0]).floatValue());
 			break;

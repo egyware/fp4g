@@ -99,7 +99,7 @@ public class MessageDepend extends Depend<Message> {
     	MessageMethod translate = new MessageMethod(moveMessage);
     	translate.setName("translate");
     	translate.setParams("float x, float y");
-    	moveMessage.set("translate",end);
+    	moveMessage.set("translate",translate);
     	
     	MessageMethod speed = new MessageMethod(moveMessage);
     	speed.setName("speed");
@@ -109,7 +109,18 @@ public class MessageDepend extends Depend<Message> {
     	MessageMethod rotate = new MessageMethod(moveMessage);
     	rotate.setName("rotate");
     	rotate.setParams("float grad");
-    	moveMessage.set("rotate",end);
+    	moveMessage.set("rotate",rotate);
+    	
+    	MessageMethod forward = new MessageMethod(moveMessage);
+    	forward.setName("forward");
+    	forward.setParams("float units");
+    	moveMessage.set("forward",forward);
+    	
+    	MessageMethod backward = new MessageMethod(moveMessage);
+    	backward.setName("backward");
+    	backward.setParams("float units");
+    	moveMessage.set("backward",backward);		
+    	
     	
     	//Agregar todos los metodos 
     	MessageMethods methods = new MessageMethods();
@@ -120,6 +131,8 @@ public class MessageDepend extends Depend<Message> {
     	methods.add(translate);
     	methods.add(speed);
     	methods.add(rotate);
+    	methods.add(forward);
+    	methods.add(backward);
    	
     	gameConf.set("methods", new CustomClassMap(methods));
     	
