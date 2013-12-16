@@ -9,6 +9,7 @@ import static com.apollo.managers.PhysicsManager.SCALE;
 import com.apollo.Message;
 import com.apollo.managers.PhysicsManager;
 import com.apollo.messages.MoveMessage;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -98,21 +99,28 @@ public class BodyBehavior extends IBodyBehavior {
 	@Override
 	public void onSpeedMove(float vX, float vY) 
 	{
-		simpleBody.setLinearVelocity(vX*SCALE, vY*SCALE);
-		
+		simpleBody.setLinearVelocity(vX*SCALE, vY*SCALE);		
 	}
 	@Override
-	public void onMessage(Message message, Object... args) {
+	public void onRotateMove(float grad) 
+	{
+		addRotation(grad*MathUtils.degreesToRadians);
+	}
+	@Override
+	public void onMessage(Message<?> message, Object... args) {
 		if(message instanceof MoveMessage)
 		{
 			switch((MoveMessage)message)
 			{
 			case onSpeedMove:
-				onSpeedMove((Float)args[0],(Float)args[1]);
+				onSpeedMove(((Number)args[0]).floatValue(),((Number)args[1]).floatValue());
 				break;
 			case onTranslateMove:
-				onTranslateMove((Float)args[0],(Float)args[1]);
-				break;			
+				onTranslateMove(((Number)args[0]).floatValue(),((Number)args[1]).floatValue());
+				break;
+			case onRotateMove:
+				onRotateMove(((Number)args[0]).floatValue());
+				break;				
 			}
 		}
 	}

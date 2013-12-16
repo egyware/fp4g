@@ -3,8 +3,8 @@
  */
 package com.apollo.components;
 
-import static com.apollo.managers.PhysicsManager.SCALE;
 import static com.apollo.managers.PhysicsManager.INV_SCALE;
+import static com.apollo.managers.PhysicsManager.SCALE;
 
 import com.apollo.Message;
 import com.apollo.managers.PhysicsManager;
@@ -149,22 +149,28 @@ public class PlatformBodyBehavior extends IBodyBehavior {
 	}
 	@Override
 	public void onSpeedMove(float x, float y) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
 	@Override
-	public void onMessage(Message message, Object... args) {
+	public void onRotateMove(float grad) {
+		// TODO Auto-generated method stub		
+	}
+	@Override
+	public void onMessage(Message<?> message, Object... args) {
 		if(message instanceof MoveMessage)
 		{
 			switch((MoveMessage)message)
 			{
 			case onSpeedMove:
-				onSpeedMove((Float)args[0],(Float)args[1]);
+				onSpeedMove(((Number)args[0]).floatValue(),((Number)args[1]).floatValue());
 				break;
 			case onTranslateMove:
-				onTranslateMove((Float)args[0],(Float)args[1]);
-				break;			
+				onTranslateMove(((Number)args[0]).floatValue(),((Number)args[1]).floatValue());
+				break;
+			case onRotateMove:
+				onRotateMove(((Number)args[0]).floatValue());
+				break;				
 			}
-		}		
+		}
 	}
 }

@@ -2,6 +2,7 @@ package com.apollo.components;
 
 import com.apollo.Message;
 import com.apollo.messages.MoveMessage;
+import com.badlogic.gdx.math.MathUtils;
 
 public class Transform extends ITransform {	
 	public Transform() {
@@ -30,7 +31,8 @@ public class Transform extends ITransform {
 	}
 	
 	
-	public void setRotation(float rotation) {
+	public void setRotation(float rotation)
+	{
 		this.rotation = rotation;
 	}
 
@@ -46,19 +48,26 @@ public class Transform extends ITransform {
 	public void initialize()
 	{
 		owner.addEventHandler(MoveMessage.onTranslateMove, this);
+		owner.addEventHandler(MoveMessage.onRotateMove, this);
 	}
 
 	@Override
-	public void onTranslateMove(float x, float y) {
+	public void onTranslateMove(float x, float y) 
+	{
 		this.x += x;
-		this.y += y;
-		System.out.println(this);
+		this.y += y;	
 	}
 
 	@Override
 	public void onSpeedMove(float x, float y) 
 	{			
 		//TODO I dont understand
+	}
+	
+	@Override
+	public void onRotateMove(float grad) 
+	{
+		this.rotation += MathUtils.degreesToRadians * grad;
 	}
 
 	@Override
@@ -69,11 +78,14 @@ public class Transform extends ITransform {
 			switch((MoveMessage)message)
 			{
 			case onSpeedMove:
-				onSpeedMove((Float)args[0],(Float)args[1]);
+				onSpeedMove(((Number)args[0]).floatValue(),((Number)args[1]).floatValue());
 				break;
 			case onTranslateMove:
-				onTranslateMove((Float)args[0],(Float)args[1]);
-				break;			
+				onTranslateMove(((Number)args[0]).floatValue(),((Number)args[1]).floatValue());
+				break;
+			case onRotateMove:
+				onRotateMove(((Number)args[0]).floatValue());
+				break;				
 			}
 		}
 	}

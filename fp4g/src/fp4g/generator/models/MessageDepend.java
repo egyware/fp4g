@@ -106,6 +106,11 @@ public class MessageDepend extends Depend<Message> {
     	speed.setParams("float x, float y");
     	moveMessage.set("speed",speed);
     	
+    	MessageMethod rotate = new MessageMethod(moveMessage);
+    	rotate.setName("rotate");
+    	rotate.setParams("float grad");
+    	moveMessage.set("rotate",end);
+    	
     	//Agregar todos los metodos 
     	MessageMethods methods = new MessageMethods();
     	methods.add(press);
@@ -114,6 +119,7 @@ public class MessageDepend extends Depend<Message> {
     	methods.add(end);
     	methods.add(translate);
     	methods.add(speed);
+    	methods.add(rotate);
    	
     	gameConf.set("methods", new CustomClassMap(methods));
     	
