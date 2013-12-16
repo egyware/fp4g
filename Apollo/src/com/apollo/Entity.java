@@ -85,6 +85,7 @@ public abstract class Entity implements MessageReceiver
 	public void onMessage(Message<?> message, Object... args) 
 	{		
 		ImmutableBag<MessageHandler> listeners = getMessageHandler(message);
+		if(listeners == null) return;
 		final int size = listeners.size();
 		for(int i=0; i<size; i++)
 		{

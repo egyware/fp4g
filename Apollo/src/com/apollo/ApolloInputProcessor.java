@@ -14,13 +14,11 @@ import com.badlogic.gdx.InputProcessor;
  * Y no un multiplexer de MessageReceiver.
  */
 public class ApolloInputProcessor implements InputProcessor,MessageReceiver
-{
-	private final MessageSender instance;
+{	
 	private final Map<Message<?>,Bag<MessageHandler>> handlersByEventType;	
 	public ApolloInputProcessor()
 	{
-		handlersByEventType = new HashMap<Message<?>, Bag<MessageHandler>>();
-		instance = MessageSender.instance();		
+		handlersByEventType = new HashMap<Message<?>, Bag<MessageHandler>>();		
 	}
 	
 	public <T extends Message<?>> void addEventHandler(Message<?> messageType, MessageHandler listener) 
@@ -81,14 +79,14 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 	@Override
 	public boolean keyDown(int key) 
 	{		
-		instance.send(this, KeyMessage.onPressKey,key);		
+		this.onMessage(KeyMessage.onPressKey,key);		
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int key) 
 	{		
-		instance.send(this, KeyMessage.onReleaseKey,key);
+		this.onMessage(KeyMessage.onReleaseKey,key);
 		return false;
 	}
 	
@@ -134,12 +132,13 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 		return false;
 	}
 
-	//TODO esta cosa puede/debe recibir mensajes? O.o?
-	//claro, para scripting n.n (supongo...)
+	//Esta cosa puede/debe recibir mensajes? O.o?
+	//claro que si, o sino como enruto los mensajes?
 	@Override
 	public void onMessage(Message<? extends MessageHandler> message, Object... args) 
 	{
 		ImmutableBag<MessageHandler> listeners = getMessageHandler(message);
+		if(listeners == null) return;
 		final int size = listeners.size();
 		for(int i=0; i<size; i++)
 		{

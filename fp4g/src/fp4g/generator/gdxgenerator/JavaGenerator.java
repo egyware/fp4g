@@ -147,7 +147,7 @@ public class JavaGenerator extends Generator {
 	{
 		final String path = packageDir.getAbsolutePath();
 		final int start = path.length()-packageNameDir.length();
-		final String cp = "libs/apollo-fp4g.jar;libs/reflectasm-fp4g.jar;libs/gdx.jar";		
+		final String cp = "libs/apollo-fp4g.jar;libs/gdx.jar";		
 			  
 		final String options[] = {
 				"-cp",

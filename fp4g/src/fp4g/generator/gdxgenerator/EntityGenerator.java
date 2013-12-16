@@ -203,9 +203,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 								"com.apollo.Message",
 								"com.apollo.utils.Bag",
 								"com.apollo.MessageHandler",
-								"com.apollo.utils.ImmutableBag",
-								"com.apollo.MessageSender",
-								"com.esotericsoftware.reflectasm.MethodAccess"								
+								"com.apollo.utils.ImmutableBag"																								
 						)
 					);
 			}
