@@ -158,9 +158,16 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 
 	
 	@Override
-	public ImmutableBag<MessageHandler> getMessageHandler(Message message) 
+	public ImmutableBag<MessageHandler> getMessageHandler(Message<?> message) 
 	{		
 		return null;
+	}
+
+	@Override
+	public void onMessage(Message<? extends MessageHandler> message,
+			Object... args) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

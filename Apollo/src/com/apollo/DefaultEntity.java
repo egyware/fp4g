@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.apollo.utils.Bag;
+import com.apollo.utils.ImmutableBag;
 /**
  * An Abstract Entity
  * 

@@ -10,7 +10,8 @@ import com.apollo.managers.Manager;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
-public class World {
+public class World 
+{
 	public static boolean DEBUG;
 	
 	private EntityManager entityManager;

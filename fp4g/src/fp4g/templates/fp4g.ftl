@@ -1,7 +1,7 @@
 <#macro translate statement>
 <#switch statement.type>
-<#case 0><#-- Send MessageSender.instance().send(receiver, message); -->
-		MessageSender.instance().send(${statement.to},${statement.message}<#if statement.params?has_content>,<@params p=statement.params /></#if>);
+<#case 0><#-- Send MessageSender.instance().send(receiver, message); -->	
+		${statement.to}.onMessage(${statement.message}<#if statement.params?has_content>,<@params p=statement.params /></#if>);
 <#break>
 <#default>
 		//TODO No se reconoce la instrucción: "${statement.class.simpleName}"

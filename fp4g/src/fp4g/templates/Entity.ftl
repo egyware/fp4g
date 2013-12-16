@@ -154,8 +154,7 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 		for(int i=0; i<size; i++)
 		{
 			MessageHandler handler = listeners.get(i);
-			MethodAccess methods = MethodAccess.get(handler.getClass());
-			methods.invoke(handler, message.name());
+			message.dispatch(handler,args);			
 		}		
 	}
 	</#if>

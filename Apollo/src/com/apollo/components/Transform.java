@@ -62,7 +62,7 @@ public class Transform extends ITransform {
 	}
 
 	@Override
-	public void onMessage(Message message, Object... args)
+	public void onMessage(Message<?> message, Object... args)
 	{
 		if(message instanceof MoveMessage)
 		{

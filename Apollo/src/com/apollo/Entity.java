@@ -6,9 +6,10 @@ import java.util.Map;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
-public abstract class Entity implements MessageReceiver{
+public abstract class Entity implements MessageReceiver
+{
 	protected final World world;
-	private Map<Message,Bag<MessageHandler>> handlersByEventType;
+	private Map<Message<?>,Bag<MessageHandler>> handlersByEventType;
 	private boolean deleted;
 
 	public Entity(World world) {
@@ -47,7 +48,7 @@ public abstract class Entity implements MessageReceiver{
 	 * 
 	 * @return
 	 */
-	public Map<Message, Bag<MessageHandler>> getAllEventHandlers() {
+	public Map<Message<?>, Bag<MessageHandler>> getAllEventHandlers() {
 		return handlersByEventType;
 	}
 	
@@ -56,9 +57,9 @@ public abstract class Entity implements MessageReceiver{
 	 * @param messageType Class of Message Type
 	 * @param listener
 	 */	
-	public <T extends Message> void addEventHandler(Message messageType, MessageHandler listener) {
+	public <T extends Message<?>> void addEventHandler(Message<?> messageType, MessageHandler listener) {
 		if(handlersByEventType == null)
-			handlersByEventType = new HashMap<Message,Bag<MessageHandler>>();
+			handlersByEventType = new HashMap<Message<?>,Bag<MessageHandler>>();
 		
 		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
 		if(listeners == null) {
@@ -68,18 +69,34 @@ public abstract class Entity implements MessageReceiver{
 		listeners.add(listener);
 	}
 	
-	public ImmutableBag<MessageHandler> getMessageHandler(Message messageType)
+	public ImmutableBag<MessageHandler> getMessageHandler(Message<?> messageType)
 	{
 		if(handlersByEventType == null)
 			return null;		
 		return handlersByEventType.get(messageType);		 
 	}
 	
+	/**
+	  * Caso general de envio de mensajes.
+	  * @param message Mensaje a enviar.
+	  * @param args Argumentos del mensaje.
+	  */
+	@Override
+	public void onMessage(Message<?> message, Object... args) 
+	{		
+		ImmutableBag<MessageHandler> listeners = getMessageHandler(message);
+		final int size = listeners.size();
+		for(int i=0; i<size; i++)
+		{
+			MessageHandler handler = listeners.get(i);
+			message.dispatch(handler,args);			
+		}		
+	}
 	
 	/**
 	 * 
 	 */	
-	public <T extends Message> void removeEventHandler(Message messagetType, MessageHandler listener) {
+	public <T extends Message<?>> void removeEventHandler(Message<?> messagetType, MessageHandler listener) {
 		if(handlersByEventType == null)
 		{
 			return;

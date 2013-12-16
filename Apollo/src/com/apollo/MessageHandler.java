@@ -1,6 +1,6 @@
 package com.apollo;
 
-public interface MessageHandler 
+public interface MessageHandler
 {
-	public void onMessage(Message message,Object ...args);
+	public void onMessage(Message<? extends MessageHandler> message,Object ...args);
 }

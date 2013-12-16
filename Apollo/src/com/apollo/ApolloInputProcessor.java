@@ -16,14 +16,14 @@ import com.badlogic.gdx.InputProcessor;
 public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 {
 	private final MessageSender instance;
-	private final Map<Message,Bag<MessageHandler>> handlersByEventType;	
+	private final Map<Message<?>,Bag<MessageHandler>> handlersByEventType;	
 	public ApolloInputProcessor()
 	{
-		handlersByEventType = new HashMap<Message, Bag<MessageHandler>>();
+		handlersByEventType = new HashMap<Message<?>, Bag<MessageHandler>>();
 		instance = MessageSender.instance();		
 	}
 	
-	public <T extends Message> void addEventHandler(Message messageType, MessageHandler listener) 
+	public <T extends Message<?>> void addEventHandler(Message<?> messageType, MessageHandler listener) 
 	{		
 		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
 		if(listeners == null) {
@@ -33,7 +33,7 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 		listeners.add(listener);
 	}
 	
-	public <T extends Message> void addEventHandler(Message messageType, MessageReceiver receiver) 
+	public <T extends Message<?>> void addEventHandler(Message<?> messageType, MessageReceiver receiver) 
 	{		
 		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
 		if(listeners == null) {
@@ -47,7 +47,7 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 		}				
 	}
 	
-	public <T extends Message> void removeEventHandler(Message messageType, MessageHandler listener) 
+	public <T extends Message<?>> void removeEventHandler(Message<?> messageType, MessageHandler listener) 
 	{		
 		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
 		if(listeners == null) {
@@ -57,7 +57,7 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 		listeners.remove(listener);
 	}
 	
-	public <T extends Message> void removeEventHandler(Message messageType, MessageReceiver receiver) 
+	public <T extends Message<?>> void removeEventHandler(Message<?> messageType, MessageReceiver receiver) 
 	{		
 		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
 		if(listeners == null) {
@@ -72,7 +72,7 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 	}
 	
 	@Override
-	public ImmutableBag<MessageHandler> getMessageHandler(Message message) 
+	public ImmutableBag<MessageHandler> getMessageHandler(Message<?> message) 
 	{		
 		ImmutableBag<MessageHandler> bag = handlersByEventType.get(message);
 		return bag;
@@ -132,5 +132,19 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 	{
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	//TODO esta cosa puede/debe recibir mensajes? O.o?
+	//claro, para scripting n.n (supongo...)
+	@Override
+	public void onMessage(Message<? extends MessageHandler> message, Object... args) 
+	{
+		ImmutableBag<MessageHandler> listeners = getMessageHandler(message);
+		final int size = listeners.size();
+		for(int i=0; i<size; i++)
+		{
+			MessageHandler handler = listeners.get(i);
+			message.dispatch(handler,args);			
+		}				
 	}	
 }
