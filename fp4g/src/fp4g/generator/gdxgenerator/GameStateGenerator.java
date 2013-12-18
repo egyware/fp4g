@@ -141,14 +141,17 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		}
 		root.put("managers", managers);
 		
-		//agregamos todos las entidades definidas en el game
+		//agregamos todos las entidades definidas ens el game
 		List<String> entityBuilders = new LinkedList<String>();
 		final Collection<Entity> state_entities = game.getDefines(DefineType.ENTITY);
-		for(Entity entity:state_entities)
+		if(state_entities != null && state_entities.size()>0)
 		{
-			entityBuilders.add(entity.name);
-			//agregar imports
-			modelClass.imports.add(String.format("%s.entity.%sBuilder",generator.packageName,entity.name));						
+			for(Entity entity:state_entities)
+			{
+				entityBuilders.add(entity.name);
+				//agregar imports
+				modelClass.imports.add(String.format("%s.entity.%sBuilder",generator.packageName,entity.name));						
+			}
 		}
 		root.put("entityBuilders", entityBuilders);
 		

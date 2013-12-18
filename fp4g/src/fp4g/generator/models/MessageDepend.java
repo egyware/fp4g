@@ -78,7 +78,7 @@ public class MessageDepend extends Depend<Message> {
     	release.setName("release");
     	release.setValueReplace("Input.Keys.%s == key");
     	release.setParams("int key");
-    	press.setAttachInputProcessor(true);
+    	release.setAttachInputProcessor(true);
     	keyMessage.set("release", new ClassMap(release)); //nombre del metodo
     	
     	contactMessage = new Message("Contact",gameConf);
@@ -116,10 +116,10 @@ public class MessageDepend extends Depend<Message> {
     	forward.setParams("float units");
     	moveMessage.set("forward",forward);
     	
-    	MessageMethod backward = new MessageMethod(moveMessage);
-    	backward.setName("backward");
-    	backward.setParams("float units");
-    	moveMessage.set("backward",backward);		
+    	MessageMethod angular = new MessageMethod(moveMessage);
+    	angular.setName("angularSpeed");
+    	angular.setParams("float w");
+    	moveMessage.set("backward",angular);		
     	
     	
     	//Agregar todos los metodos 
@@ -132,7 +132,7 @@ public class MessageDepend extends Depend<Message> {
     	methods.add(speed);
     	methods.add(rotate);
     	methods.add(forward);
-    	methods.add(backward);
+    	methods.add(angular);
    	
     	gameConf.set("methods", new CustomClassMap(methods));
     	

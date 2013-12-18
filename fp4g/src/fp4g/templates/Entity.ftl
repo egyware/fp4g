@@ -140,23 +140,7 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 	}
 	</#list>
 	</#if>
-	</#list>
-	/**
-	  * Caso general de envio de mensajes.
-	  * @param message Mensaje a enviar.
-	  * @param args Argumentos del mensaje.
-	  */
-	@Override
-	public void onMessage(Message message, Object... args) 
-	{		
-		ImmutableBag<MessageHandler> listeners = getMessageHandler(message);
-		final int size = listeners.size();
-		for(int i=0; i<size; i++)
-		{
-			MessageHandler handler = listeners.get(i);
-			message.dispatch(handler,args);			
-		}		
-	}
+	</#list>	
 	</#if>
 				
 }

@@ -1,10 +1,14 @@
 package com.apollo.components;
 
-import com.apollo.Message;
 import com.apollo.messages.MoveMessage;
+import com.apollo.utils.TrigLUT;
 import com.badlogic.gdx.math.MathUtils;
 
-public class Transform extends ITransform {	
+public class Transform extends ITransform 
+{	
+	private float vx;
+	private float vy;
+	private float w;
 	public Transform() {
 	}
 
@@ -27,13 +31,20 @@ public class Transform extends ITransform {
 
 	@Override
 	public String toString() {
-		return "x="+x+" y="+y+" rotation"+rotation;
+		return String.format("Transform: x=%f y=%f rotation=%f", x,y,rotation);
 	}
 	
 	
 	public void setRotation(float rotation)
 	{
 		this.rotation = rotation;
+	}
+	
+	public void update(float t)
+	{
+		x += (vx*t);
+		y += (vy*t);
+		rotation +=(w*t);		
 	}
 
 
@@ -48,8 +59,10 @@ public class Transform extends ITransform {
 	public void initialize()
 	{
 		owner.addEventHandler(MoveMessage.onTranslateMove, this);
+		owner.addEventHandler(MoveMessage.onSpeedMove, this);
 		owner.addEventHandler(MoveMessage.onRotateMove, this);
-		owner.addEventHandler(MoveMessage.onForwardMove, this);		
+		owner.addEventHandler(MoveMessage.onForwardMove, this);
+		owner.addEventHandler(MoveMessage.onAngularSpeedMove, this);
 	}
 
 	@Override
@@ -62,7 +75,8 @@ public class Transform extends ITransform {
 	@Override
 	public void onSpeedMove(float x, float y) 
 	{			
-		//TODO I dont understand
+		this.vx = x;
+		this.vy = y;
 	}
 	
 	@Override
@@ -74,30 +88,13 @@ public class Transform extends ITransform {
 	@Override
 	public void onForwardMove(float units)
 	{
-		move(units,rotation + MathUtils.PI * 0.5f);
-	}		
-
-	@Override
-	public void onMessage(Message<?> message, Object... args)
-	{
-		if(message instanceof MoveMessage)
-		{
-			switch((MoveMessage)message)
-			{
-			case onSpeedMove:
-				onSpeedMove(((Number)args[0]).floatValue(),((Number)args[1]).floatValue());
-				break;
-			case onTranslateMove:
-				onTranslateMove(((Number)args[0]).floatValue(),((Number)args[1]).floatValue());
-				break;
-			case onRotateMove:
-				onRotateMove(((Number)args[0]).floatValue());
-				break;
-			case onForwardMove:
-				onForwardMove(((Number)args[0]).floatValue());
-				break;			
-			}
-		}
+		vx = (float) (TrigLUT.cos(rotation+MathUtils.PI * 0.5f) * units);
+		vy = (float) (TrigLUT.sin(rotation+MathUtils.PI * 0.5f) * units);		
 	}
 
+	@Override
+	public void onAngularSpeedMove(float w) {
+		this.w = MathUtils.degreesToRadians * w;
+		
+	}	
 }

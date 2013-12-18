@@ -1,12 +1,12 @@
 :::0.1.20 (prerelease-prototipo)
++ Se consideran los parametros en los mensajes que se envian.
++ Separado, ahora se generan en la biblioteca común de funciones.
++ Semi definido, por lo menos va send.
+P Ordenar el codigo para recibir parametros y talvez más adelante definir parametros por defecto.
 P Falta que se consideren bibliotecas
-P Falta que se agregen los parametros al envio de parametros
-P Falta separar el generador de instrucciones del generador de entidad.
 P Falta especificar cuando el mensaje va para otra entidad.
 P Ordenar el codigo OnModel tiene demasiadas responsabilidades
-P Falta definir que codigo va ir en las sentencias.
 P Debe quedar prueba de tontos
-P Ordenar el codigo para recibir parametros y talvez más adelante definir parametros por defecto.
 P Falta la capacidad de ordenar los managers según prioridad
 P Definir la utilidad de la clase Utils: Talvez cambiarle el nombre a Assets y mantener los punteros de los assets.
 P Hacer que los Managers envien mensaje

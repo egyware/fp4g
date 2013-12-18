@@ -6,9 +6,7 @@ package com.apollo.components;
 import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
-import com.apollo.Message;
 import com.apollo.managers.PhysicsManager;
-import com.apollo.messages.MoveMessage;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -20,7 +18,8 @@ import com.badlogic.gdx.physics.box2d.World;
  * @author Edgardo
  *
  */
-public class BodyBehavior extends IBodyBehavior {
+public class BodyBehavior extends IBodyBehavior 
+{
 	private Body simpleBody;
 	
 	public BodyBehavior(com.apollo.World managers,int x, int y,FixtureDef fixDef)
@@ -110,27 +109,10 @@ public class BodyBehavior extends IBodyBehavior {
 	public void onForwardMove(float units)
 	{
 		move(units);
-	}		
-	@Override
-	public void onMessage(Message<?> message, Object... args) {
-		if(message instanceof MoveMessage)
-		{
-			switch((MoveMessage)message)
-			{
-			case onSpeedMove:
-				onSpeedMove(((Number)args[0]).floatValue(),((Number)args[1]).floatValue());
-				break;
-			case onTranslateMove:
-				onTranslateMove(((Number)args[0]).floatValue(),((Number)args[1]).floatValue());
-				break;
-			case onRotateMove:
-				onRotateMove(((Number)args[0]).floatValue());
-				break;	
-			case onForwardMove:
-				onForwardMove(((Number)args[0]).floatValue());
-				break;		
-			}
-		}
 	}
-
+	@Override
+	public void onAngularSpeedMove(float w)
+	{
+		// TODO Auto-generated method stub		
+	}
 }

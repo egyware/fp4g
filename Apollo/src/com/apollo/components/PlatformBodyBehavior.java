@@ -159,27 +159,11 @@ public class PlatformBodyBehavior extends IBodyBehavior {
 	public void onForwardMove(float units)
 	{
 		// TODO AUTO
-	}	
-	
-	@Override
-	public void onMessage(Message<?> message, Object... args) {
-		if(message instanceof MoveMessage)
-		{
-			switch((MoveMessage)message)
-			{
-			case onSpeedMove:
-				onSpeedMove(((Number)args[0]).floatValue(),((Number)args[1]).floatValue());
-				break;
-			case onTranslateMove:
-				onTranslateMove(((Number)args[0]).floatValue(),((Number)args[1]).floatValue());
-				break;
-			case onRotateMove:
-				onRotateMove(((Number)args[0]).floatValue());
-				break;
-			case onForwardMove:
-				onForwardMove(((Number)args[0]).floatValue());
-				break;			
-			}
-		}
 	}
+	@Override
+	public void onAngularSpeedMove(float w) {
+		// TODO Auto-generated method stub
+		
+	}
+		
 }

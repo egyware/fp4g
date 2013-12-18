@@ -82,10 +82,9 @@ public abstract class Entity implements MessageReceiver
 	  * @param args Argumentos del mensaje.
 	  */
 	@Override
-	public void onMessage(Message<?> message, Object... args) 
+	public void onMessage(Message<? extends MessageHandler> message, Object... args) 
 	{		
 		ImmutableBag<MessageHandler> listeners = getMessageHandler(message);
-		if(listeners == null) return;
 		final int size = listeners.size();
 		for(int i=0; i<size; i++)
 		{
