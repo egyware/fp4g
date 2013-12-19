@@ -2410,7 +2410,7 @@ public class FP4GParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(396); match(ABRE_LLAV);
-			setState(397); arrayBody();
+			setState(397); arrayBody((((ArrayContext)_localctx).ID!=null?((ArrayContext)_localctx).ID.getText():null));
 			setState(398); match(CIERRA_LLAV);
 			setState(402);
 			switch ( getInterpreter().adaptivePredict(_input,34,_ctx) ) {
@@ -2436,14 +2436,18 @@ public class FP4GParser extends Parser {
 	}
 
 	public static class ArrayBodyContext extends ParserRuleContext {
-		public ArrayBodyContext(ParserRuleContext parent, int invokingState) {
+		public String bean;
+		public ArrayBodyContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public ArrayBodyContext(ParserRuleContext parent, int invokingState, String bean) {
 			super(parent, invokingState);
+			this.bean = bean;
 		}
 		@Override public int getRuleIndex() { return RULE_arrayBody; }
 	 
 		public ArrayBodyContext() { }
 		public void copyFrom(ArrayBodyContext ctx) {
 			super.copyFrom(ctx);
+			this.bean = ctx.bean;
 		}
 	}
 	public static class ListArrayContext extends ArrayBodyContext {
@@ -2483,8 +2487,8 @@ public class FP4GParser extends Parser {
 		}
 	}
 
-	public final ArrayBodyContext arrayBody() throws RecognitionException {
-		ArrayBodyContext _localctx = new ArrayBodyContext(_ctx, getState());
+	public final ArrayBodyContext arrayBody(String bean) throws RecognitionException {
+		ArrayBodyContext _localctx = new ArrayBodyContext(_ctx, getState(), bean);
 		enterRule(_localctx, 64, RULE_arrayBody);
 		int _la;
 		try {

@@ -8,24 +8,27 @@ import static fp4g.Log.Show;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.RuleNode;
 
 import fp4g.Log.ErrType;
 import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
+import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.ArrayMap;
 import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.ClassMap;
+import fp4g.data.expresion.CustomClassList;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
+import fp4g.data.expresion.List;
 import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.Map;
 import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.ValueLiteral;
 import fp4g.data.expresion.VarDot;
 import fp4g.data.expresion.VarId;
+import fp4g.parser.FP4GParser.ArrayBodyContext;
 
 /**
  * @author Edgardo
@@ -33,10 +36,11 @@ import fp4g.data.expresion.VarId;
  */
 public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion> 
 {
-	private final Stack<Stack<Expresion>> stacks = new Stack<Stack<Expresion>>();
-	private final Stack<Map> array_stack = new Stack<Map>();
+	private final Stack<Stack<Expresion>> stacks = new Stack<Stack<Expresion>>();	
 	private Stack<Expresion> stack;
 	private final Stack<Define> current;
+	private final Stack<Map> map_stack = new Stack<Map>();
+	private final Stack<List> list_stack = new Stack<List>();
 	
 	public FP4GExpresionVisitor(Stack<Define> d)
 	{
@@ -232,17 +236,27 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 				
 		return functionCall;
 	}	
-	
-	@SuppressWarnings("unchecked")
+		
 	@Override
 	public Expresion visitArray(FP4GParser.ArrayContext ctx)
 	{		
+		//pequeño parche y entendible para pasarle los datos hacia abajo.
+		//Abajo hacia los nodos hojas, entiendase que estoy recorriendo un arbol.
+		ArrayBodyContext arrayBodyContext = ctx.arrayBody();
+		arrayBodyContext.bean = ctx.bean;
+		return visit(arrayBodyContext);		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Expresion visitAssocArray(FP4GParser.AssocArrayContext ctx)
+	{
 		Map map = null;		
 		if(ctx.bean != null)
 		{			
 			ClassLoader cl = getClass().getClassLoader();
 			try {
-				Class<?> clazz = cl.loadClass(String.format("fp4g.classes.%s",ctx.bean));
+				Class<?> clazz = cl.loadClass(String.format("fp4g.classes.%s",ctx.bean));								
 				if(Map.class.isAssignableFrom(clazz))
 				{
 					map = new CustomClassMap((Class<? extends Map>) clazz);
@@ -252,40 +266,71 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 					map = new ClassMap<Object>(clazz);
 				}
 			} catch (ClassNotFoundException e) {				
-				Show(ErrType.ClassNotFound,ctx.ID.getLine());
+				Show(ErrType.ClassNotFound,ctx.bean);
 			}
 		}
+		//ctx.arrayBody()
 		if(map == null)
 		{
 			map = new ArrayMap();
 		}		
-		array_stack.push(map);
-		super.visitArray(ctx);
-		array_stack.pop();
+		map_stack.push(map);
+		super.visitAssocArray(ctx);
+		map_stack.pop();
 		
-		return (Expresion)map;
+		return (Expresion)map;		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Expresion visitListArray(FP4GParser.ListArrayContext ctx)
+	{
+		List list = null;
+		if(ctx.bean != null)
+		{			
+			ClassLoader cl = getClass().getClassLoader();
+			try {
+				Class<?> clazz = cl.loadClass(String.format("fp4g.classes.%s",ctx.bean));
+				if(List.class.isAssignableFrom(clazz))
+				{
+					list = new CustomClassList((Class<? extends List>) clazz);
+				}
+				else
+				{
+					throw new IllegalStateException("No se puede crear una lista de esto!");
+				}
+			} catch (ClassNotFoundException e) {				
+				Show(ErrType.ClassNotFound,ctx.bean);
+			}
+		}
+		//ctx.arrayBody()
+		if(list == null)
+		{
+			list = new ArrayList();
+		}		
+		list_stack.push(list);
+		super.visitListArray(ctx);
+		list_stack.pop();
+		
+		return (Expresion)list;		
 	}
 	
 	@Override
-    public Expresion visitChildren(RuleNode node) {
-            Expresion result = defaultResult();
-            int n = node.getChildCount();
-            for (int i=0; i<n; i++) {
-                    if (!shouldVisitNextChild(node, result)) {
-                            break;
-                    }
-
-                    ParseTree c = node.getChild(i);
-                    Expresion childResult = c.accept(this);
-                    result = aggregateResult(result, childResult);
-            }
-
-            return result;
-    }
-	@Override
-    public Expresion visit(ParseTree tree) {
-            return tree.accept(this);
-    }
+	public Expresion visitItemArray(FP4GParser.ItemArrayContext ctx)
+	{
+		Expresion expr = visit(ctx.expr());
+		List list = list_stack.peek();
+		if(expr instanceof Literal)
+		{
+			list.add((Literal<?>) expr);
+		}
+		else
+		{
+			list.add(FP4GDataVisitor.eval(current.peek(),expr));
+		}		
+		return null;
+	}
+	
 	@Override
 	public Expresion visitParArray(FP4GParser.ParArrayContext ctx)
 	{
@@ -293,7 +338,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 				
 		Expresion expr = visit(ctx.expr());		
 		
-		Map array = array_stack.peek();
+		Map array = map_stack.peek();
 		if(expr instanceof Literal)
 		{
 			array.set(key, (Literal<?>) expr);
