@@ -18,7 +18,6 @@ public final class SendStatementModel extends StatementModel
 		
 		Message msg = send.method.getMessage();
 		
-		
 		message = String.format("%1$sMessage.on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
 		switch(send.toReceiverType)
 		{

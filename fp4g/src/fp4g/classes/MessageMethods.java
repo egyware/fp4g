@@ -23,12 +23,12 @@ public final class MessageMethods implements CustomMap
 	public void add(MessageMethod mm)
 	{
 		//me aseguro que est√© en minusculas para usarlo de la manera que se me de la gana
-		map.put(mm.getName().toLowerCase(), new ClassMap<MessageMethod>(mm)); 
+		map.put(mm.getName().toLowerCase(), new ClassMap<MessageMethod>(mm));		
 	}
 	public MessageMethod getMessageMethod(String k)
 	{
 		//me aseguro que est· en minusculas para usarlo de la manera que se me de la gana
-		ClassMap<MessageMethod> cm = map.get(k.toLowerCase());
+		ClassMap<MessageMethod> cm = map.get(k.toLowerCase());		
 		return cm.getValue();
 	}
 
@@ -41,8 +41,8 @@ public final class MessageMethods implements CustomMap
 		{
 			//TODO LANZAR UN ERROR
 			return;
-		}		
-		map.put(k, new ClassMap<MessageMethod>((MessageMethod)v.getValue()));		
+		}
+		map.put(k.toLowerCase(), new ClassMap<MessageMethod>((MessageMethod)v.getValue()));		
 	}
 	@Override
 	public Literal<?> get(String k) {

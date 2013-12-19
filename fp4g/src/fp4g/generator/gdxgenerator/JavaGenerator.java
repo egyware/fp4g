@@ -209,8 +209,7 @@ public class JavaGenerator extends Generator {
     	
     	loadLib("libs/fp4g.lib", gameConf);
     	
-    	MessageDepend md = new MessageDepend();
-    	md.install(gameConf);
+    	MessageDepend md = new MessageDepend();    	
     	dependencias.put(md.getForClass(),md);
     	    	
     	
