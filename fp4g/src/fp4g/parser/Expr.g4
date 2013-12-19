@@ -23,7 +23,7 @@ expr
 	
 accessVarOp
 		:
-		     var = varOp                                        #accessVarName 
+		    var = varOp                                         #accessVarName 
 		|  pVar = parentVarOp (DOT propertyAccess=accessVarOp)? #accessVarOperator				
 		;
 		
@@ -46,11 +46,20 @@ array
 returns [ String bean ] 
 		:
 		 ABRE_LLAV
-		 parArray  
-		 (COMA parArray)* COMA?
+		 arrayBody
 		 CIERRA_LLAV
 		 (AS ID {$bean = $ID.text;})?
    		 ;
+arrayBody
+		:
+		   (parArray (COMA parArray)* COMA?)   #assocArray
+		 | (itemArray (COMA itemArray)* COMA?) #listArray
+		;
+itemArray
+		:
+		expr
+		;
+		   		
    		 
 parArray 
 returns

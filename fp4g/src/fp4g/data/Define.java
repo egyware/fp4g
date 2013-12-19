@@ -13,11 +13,11 @@ import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassMap;
-import fp4g.data.expresion.CustomMap;
 import fp4g.data.expresion.Literal;
 
 @SuppressWarnings("unchecked")
-public abstract class Define extends Code implements CustomMap{
+public abstract class Define extends Code implements fp4g.data.expresion.Map
+{
 	public final static List<Add> emptyList = new ArrayList<Add>(0);
 	
 	public final DefineType type;
@@ -214,9 +214,9 @@ public abstract class Define extends Code implements CustomMap{
 	 */
 	public final void set(String key, Object  value)
 	{
-		if(value instanceof CustomMap)
+		if(value instanceof fp4g.data.expresion.Map)
 		{
-			variables.put(key,new CustomClassMap((CustomMap)value));
+			variables.put(key,new CustomClassMap((fp4g.data.expresion.Map)value));
 		}
 		else
 		{

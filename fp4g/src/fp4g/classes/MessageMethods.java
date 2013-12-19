@@ -3,8 +3,8 @@ package fp4g.classes;
 import java.util.HashMap;
 
 import fp4g.data.expresion.ClassMap;
-import fp4g.data.expresion.CustomMap;
 import fp4g.data.expresion.Literal;
+import fp4g.data.expresion.Map;
 
 /**
  * Esta clase auxiliar sirve para almacenar todos los methodos mensajes por nombre
@@ -12,7 +12,7 @@ import fp4g.data.expresion.Literal;
  * @author Edgardo
  *
  */
-public final class MessageMethods implements CustomMap
+public final class MessageMethods implements Map
 {
 	private final HashMap<String, ClassMap<MessageMethod>> map;
 	

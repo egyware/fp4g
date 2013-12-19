@@ -18,7 +18,6 @@ import fp4g.data.expresion.ArrayMap;
 import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassMap;
-import fp4g.data.expresion.CustomMap;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.data.expresion.Literal;
@@ -244,9 +243,9 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 			ClassLoader cl = getClass().getClassLoader();
 			try {
 				Class<?> clazz = cl.loadClass(String.format("fp4g.classes.%s",ctx.bean));
-				if(CustomMap.class.isAssignableFrom(clazz))
+				if(Map.class.isAssignableFrom(clazz))
 				{
-					map = new CustomClassMap((Class<? extends CustomMap>) clazz);
+					map = new CustomClassMap((Class<? extends Map>) clazz);
 				}
 				else
 				{
