@@ -22,6 +22,13 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#multExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultExpr(@NotNull FP4GParser.MultExprContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#functionCallExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -50,6 +57,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitAccessVarOperator(@NotNull FP4GParser.AccessVarOperatorContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#currentOperator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCurrentOperator(@NotNull FP4GParser.CurrentOperatorContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#stringLiteral}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -71,18 +85,11 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitDefineValues(@NotNull FP4GParser.DefineValuesContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#subNExpr}.
+	 * Visit a parse tree produced by {@link FP4GParser#parExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSubNExpr(@NotNull FP4GParser.SubNExprContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#divNExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDivNExpr(@NotNull FP4GParser.DivNExprContext ctx);
+	T visitParExpr(@NotNull FP4GParser.ParExprContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#assetType}.
@@ -90,6 +97,20 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAssetType(@NotNull FP4GParser.AssetTypeContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#subExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSubExpr(@NotNull FP4GParser.SubExprContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#varParent}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarParent(@NotNull FP4GParser.VarParentContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#onFilters}.
@@ -113,6 +134,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitIntLiteral(@NotNull FP4GParser.IntLiteralContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#accessVarName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAccessVarName(@NotNull FP4GParser.AccessVarNameContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#gameLib}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -120,32 +148,11 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitGameLib(@NotNull FP4GParser.GameLibContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#minusNExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMinusNExpr(@NotNull FP4GParser.MinusNExprContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#logicalExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLogicalExpr(@NotNull FP4GParser.LogicalExprContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link FP4GParser#gameValues}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitGameValues(@NotNull FP4GParser.GameValuesContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#multNExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMultNExpr(@NotNull FP4GParser.MultNExprContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#decimalLiteral}.
@@ -176,6 +183,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitAssets(@NotNull FP4GParser.AssetsContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#varNameOperator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarNameOperator(@NotNull FP4GParser.VarNameOperatorContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#boolLiteral}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -204,18 +218,18 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitNameList(@NotNull FP4GParser.NameListContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#parentOperator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParentOperator(@NotNull FP4GParser.ParentOperatorContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#onStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitOnStatement(@NotNull FP4GParser.OnStatementContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#accessVar}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAccessVar(@NotNull FP4GParser.AccessVarContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#filter}.
@@ -239,25 +253,11 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitAssetValuesInner(@NotNull FP4GParser.AssetValuesInnerContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#varLExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarLExpr(@NotNull FP4GParser.VarLExprContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link FP4GParser#assetValueInner}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAssetValueInner(@NotNull FP4GParser.AssetValueInnerContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#numericExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNumericExpr(@NotNull FP4GParser.NumericExprContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#set}.
@@ -274,20 +274,6 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitVarExpr(@NotNull FP4GParser.VarExprContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#notLExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNotLExpr(@NotNull FP4GParser.NotLExprContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#parLExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParLExpr(@NotNull FP4GParser.ParLExprContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link FP4GParser#add}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -300,13 +286,6 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitVarType(@NotNull FP4GParser.VarTypeContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#addNExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAddNExpr(@NotNull FP4GParser.AddNExprContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#declareVar}.
@@ -323,11 +302,18 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitUsings(@NotNull FP4GParser.UsingsContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#varNExpr}.
+	 * Visit a parse tree produced by {@link FP4GParser#varName}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitVarNExpr(@NotNull FP4GParser.VarNExprContext ctx);
+	T visitVarName(@NotNull FP4GParser.VarNameContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#addExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAddExpr(@NotNull FP4GParser.AddExprContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#exprList}.
@@ -344,6 +330,20 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitDefineValue(@NotNull FP4GParser.DefineValueContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#notExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNotExpr(@NotNull FP4GParser.NotExprContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#divExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDivExpr(@NotNull FP4GParser.DivExprContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#define}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -358,6 +358,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitDirectCode(@NotNull FP4GParser.DirectCodeContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#varCurrent}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarCurrent(@NotNull FP4GParser.VarCurrentContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#game}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -365,11 +372,11 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitGame(@NotNull FP4GParser.GameContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#parNExpr}.
+	 * Visit a parse tree produced by {@link FP4GParser#minusExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParNExpr(@NotNull FP4GParser.ParNExprContext ctx);
+	T visitMinusExpr(@NotNull FP4GParser.MinusExprContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#parArray}.

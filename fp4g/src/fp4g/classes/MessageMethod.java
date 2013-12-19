@@ -8,7 +8,7 @@ import fp4g.data.define.Message;
  * @author Edgardo
  *
  */
-public class MessageMethod 
+public final class MessageMethod 
 {
 	private Message message;
 	private String methodName;

@@ -66,79 +66,80 @@ public class MessageDepend extends Depend<Message> {
 
 	@Override
 	public void install(Game gameConf) {
-		keyMessage = new Message("Key",gameConf);
-    	MessageMethod press = new MessageMethod(keyMessage);
-    	press.setName("press");
-    	press.setValueReplace("Input.Keys.%s == key");
-    	press.setParams("int key");
-    	press.setAttachInputProcessor(true);
-    	keyMessage.set("press", new ClassMap(press)); //nombre del metodo
-    	
-    	MessageMethod release = new MessageMethod(keyMessage);
-    	release.setName("release");
-    	release.setValueReplace("Input.Keys.%s == key");
-    	release.setParams("int key");
-    	release.setAttachInputProcessor(true);
-    	keyMessage.set("release", new ClassMap(release)); //nombre del metodo
-    	
-    	contactMessage = new Message("Contact",gameConf);
-    	MessageMethod begin = new MessageMethod(contactMessage);
-    	begin.setName("begin");
-    	begin.setValueReplace("other instanceof %s");
-    	begin.setParams("Entity other, Contact c");    	
-    	contactMessage.set("begin", new ClassMap(begin)); //nombre del metodo
-    	
-    	MessageMethod end = new MessageMethod(contactMessage);
-    	end.setName("end");
-    	end.setValueReplace("other instanceof %s");
-    	end.setParams("Entity other, Contact c");    	
-    	contactMessage.set("end", end); //nombre del metodo
-    	
-    	moveMessage = new Message("Move",gameConf);
-    	
-    	MessageMethod translate = new MessageMethod(moveMessage);
-    	translate.setName("translate");
-    	translate.setParams("float x, float y");
-    	moveMessage.set("translate",translate);
-    	
-    	MessageMethod speed = new MessageMethod(moveMessage);
-    	speed.setName("speed");
-    	speed.setParams("float x, float y");
-    	moveMessage.set("speed",speed);
-    	
-    	MessageMethod rotate = new MessageMethod(moveMessage);
-    	rotate.setName("rotate");
-    	rotate.setParams("float grad");
-    	moveMessage.set("rotate",rotate);
-    	
-    	MessageMethod forward = new MessageMethod(moveMessage);
-    	forward.setName("forward");
-    	forward.setParams("float units");
-    	moveMessage.set("forward",forward);
-    	
-    	MessageMethod angular = new MessageMethod(moveMessage);
-    	angular.setName("angularSpeed");
-    	angular.setParams("float w");
-    	moveMessage.set("backward",angular);		
-    	
-    	
-    	//Agregar todos los metodos 
-    	MessageMethods methods = new MessageMethods();
-    	methods.add(press);
-    	methods.add(release);
-    	methods.add(begin);
-    	methods.add(end);
-    	methods.add(translate);
-    	methods.add(speed);
-    	methods.add(rotate);
-    	methods.add(forward);
-    	methods.add(angular);
-   	
-    	gameConf.set("methods", new CustomClassMap(methods));
-    	
-    	gameConf.setDefine(keyMessage);
-    	gameConf.setDefine(contactMessage);
-    	gameConf.setDefine(moveMessage);
+		//TODO pendiente
+//		keyMessage = new Message("Key",gameConf);
+//    	MessageMethod press = new MessageMethod(keyMessage);
+//    	press.setName("press");
+//    	press.setValueReplace("Input.Keys.%s == key");
+//    	press.setParams("int key");
+//    	press.setAttachInputProcessor(true);
+//    	keyMessage.set("press", new ClassMap(press)); //nombre del metodo
+//    	
+//    	MessageMethod release = new MessageMethod(keyMessage);
+//    	release.setName("release");
+//    	release.setValueReplace("Input.Keys.%s == key");
+//    	release.setParams("int key");
+//    	release.setAttachInputProcessor(true);
+//    	keyMessage.set("release", new ClassMap(release)); //nombre del metodo
+//    	
+//    	contactMessage = new Message("Contact",gameConf);
+//    	MessageMethod begin = new MessageMethod(contactMessage);
+//    	begin.setName("begin");
+//    	begin.setValueReplace("other instanceof %s");
+//    	begin.setParams("Entity other, Contact c");    	
+//    	contactMessage.set("begin", new ClassMap(begin)); //nombre del metodo
+//    	
+//    	MessageMethod end = new MessageMethod(contactMessage);
+//    	end.setName("end");
+//    	end.setValueReplace("other instanceof %s");
+//    	end.setParams("Entity other, Contact c");    	
+//    	contactMessage.set("end", end); //nombre del metodo
+//    	
+//    	moveMessage = new Message("Move",gameConf);
+//    	
+//    	MessageMethod translate = new MessageMethod(moveMessage);
+//    	translate.setName("translate");
+//    	translate.setParams("float x, float y");
+//    	moveMessage.set("translate",translate);
+//    	
+//    	MessageMethod speed = new MessageMethod(moveMessage);
+//    	speed.setName("speed");
+//    	speed.setParams("float x, float y");
+//    	moveMessage.set("speed",speed);
+//    	
+//    	MessageMethod rotate = new MessageMethod(moveMessage);
+//    	rotate.setName("rotate");
+//    	rotate.setParams("float grad");
+//    	moveMessage.set("rotate",rotate);
+//    	
+//    	MessageMethod forward = new MessageMethod(moveMessage);
+//    	forward.setName("forward");
+//    	forward.setParams("float units");
+//    	moveMessage.set("forward",forward);
+//    	
+//    	MessageMethod angular = new MessageMethod(moveMessage);
+//    	angular.setName("angularSpeed");
+//    	angular.setParams("float w");
+//    	moveMessage.set("backward",angular);		
+//    	
+//    	
+//    	//Agregar todos los metodos 
+//    	MessageMethods methods = new MessageMethods();
+//    	methods.add(press);
+//    	methods.add(release);
+//    	methods.add(begin);
+//    	methods.add(end);
+//    	methods.add(translate);
+//    	methods.add(speed);
+//    	methods.add(rotate);
+//    	methods.add(forward);
+//    	methods.add(angular);
+//   	
+//    	gameConf.set("methods", new CustomClassMap(methods));
+//    	
+//    	gameConf.setDefine(keyMessage);
+//    	gameConf.setDefine(contactMessage);
+//    	gameConf.setDefine(moveMessage);
 		
 	}
 

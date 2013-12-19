@@ -1,54 +1,53 @@
 parser grammar Expr;
 
 expr  
-		 :  
-		   lExpr                   #logicalExpr
-		 | nExpr                   #numericExpr
-		 
-		 | functionName=ID 
-		   ABRE_PAR exprList CIERRA_PAR  #functionCallExpr		 
-		 | array                         #arrayExpr	 		 
+		 :
+		   array                         #arrayExpr
+		 | ABRE_PAR op=expr CIERRA_PAR   #parExpr
+		 | NOT op=expr	                 #notExpr		 
+		 | MINUS op=expr                 #minusExpr		 
+		 | left=expr MULTIPLY right=expr #multExpr
+		 | left=expr DIVIDE   right=expr #divExpr
+		 | left=expr PLUS     right=expr #addExpr
+		 | left=expr MINUS    right=expr #subExpr
+			 
+		 | INT_LITERAL                   #intLiteral
+         | DECIMAL_LITERAL               #decimalLiteral         
+		 | BOOL_LITERAL			         #boolLiteral	 		 
          | STRING_LITERAL                #stringLiteral         
          | DIRECTCODE                    #directCode
-         | accessVarOp                   #varExpr          
+         | functionName=ID 
+		    ABRE_PAR exprList CIERRA_PAR #functionCallExpr         
+         | accessVarOp                   #varExpr         		          
 		 ;		
-
-lExpr
-		:
-		  NOT op=lExpr	               #notLExpr
-		| ABRE_PAR op=lExpr CIERRA_PAR #parLExpr
-		| BOOL_LITERAL                 #boolLiteral
-		| accessVarOp                  #varLExpr
-		;
-		
-nExpr
-		:
-		  MINUS op=nExpr   				   #minusNExpr
-		| ABRE_PAR op=nExpr CIERRA_PAR     #parNExpr
-		| left=nExpr MULTIPLY right=nExpr  #multNExpr
-		| left=nExpr DIVIDE   right=nExpr  #divNExpr
-		| left=nExpr PLUS     right=nExpr  #addNExpr
-		| left=nExpr MINUS    right=nExpr  #subNExpr
-			 
-		| INT_LITERAL                    #intLiteral
-        | DECIMAL_LITERAL                #decimalLiteral
-        | accessVarOp                    #varNExpr
-		;
-
+	
 accessVarOp
 		:
-		  varName=ID					 #accessVar
-		 |varName=ID (DOT accessVarOp)?  #accessVarOperator		                        
+		     var = varOp                                        #accessVarName 
+		|  pVar = parentVarOp (DOT propertyAccess=accessVarOp)? #accessVarOperator				
 		;
 		
-		
-		 
+parentVarOp
+returns
+[String name]
+		:
+		   CURRENT_LITERAL                    #currentOperator                  
+		 | PARENT_LITERAL                     #parentOperator 
+		 | varName=ID {$name=$varName.text;}  #varNameOperator
+		;
+varOp
+		:
+		   CURRENT_LITERAL  #varCurrent                  
+		 | PARENT_LITERAL	#varParent 
+		 | varName=ID		#varName
+		;
+	 
 array   
 returns [ String bean ] 
 		:
 		 ABRE_LLAV
 		 parArray  
-		 (COMA parArray)*
+		 (COMA parArray)* COMA?
 		 CIERRA_LLAV
 		 (AS ID {$bean = $ID.text;})?
    		 ;

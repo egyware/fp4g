@@ -8,6 +8,7 @@ import static fp4g.Log.Show;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.RuleNode;
 
 import fp4g.Log.ErrType;
 import fp4g.data.Define;
@@ -104,7 +105,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	
 	//numeric expresion!
 	@Override
-	public Expresion visitMinusNExpr(FP4GParser.MinusNExprContext ctx)
+	public Expresion visitMinusExpr(FP4GParser.MinusExprContext ctx)
 	{		
 		Expresion expr = visit(ctx.op);;
 		UnaryOp unaryExpr = new UnaryOp(UnaryOp.Type.Minus,expr);
@@ -113,16 +114,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	}
 	
 	@Override
-	public Expresion visitParNExpr(FP4GParser.ParNExprContext ctx)
-	{		
-		Expresion expr = visit(ctx.op);
-		expr.setPar(true); //establecemos que esta expresión, lleva parentesis
-				
-		return expr;
-	}	
-	
-	@Override
-	public Expresion visitMultNExpr(FP4GParser.MultNExprContext ctx)
+	public Expresion visitMultExpr(FP4GParser.MultExprContext ctx)
 	{	
 		Expresion left = visit(ctx.left);
 		Expresion right = visit(ctx.right);
@@ -133,7 +125,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	}
 	
 	@Override
-	public Expresion visitDivNExpr(FP4GParser.DivNExprContext ctx)
+	public Expresion visitDivExpr(FP4GParser.DivExprContext ctx)
 	{
 		Expresion left = visit(ctx.left);
 		Expresion right = visit(ctx.right);
@@ -144,7 +136,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	}
 	
 	@Override
-	public Expresion visitAddNExpr(FP4GParser.AddNExprContext ctx)
+	public Expresion visitAddExpr(FP4GParser.AddExprContext ctx)
 	{		
 		Expresion left = visit(ctx.left);
 		Expresion right = visit(ctx.right);
@@ -155,7 +147,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	}
 	
 	@Override
-	public Expresion visitSubNExpr(FP4GParser.SubNExprContext ctx)
+	public Expresion visitSubExpr(FP4GParser.SubExprContext ctx)
 	{
 		Expresion left = visit(ctx.left);
 		Expresion right = visit(ctx.right);		
@@ -182,17 +174,10 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 				
 		return literal;
 	}
-
-	@Override
-	public Expresion visitVarNExpr(FP4GParser.VarNExprContext ctx)
-	{		
-		super.visitVarNExpr(ctx);
-		return null;
-	}
 	
 	//logical expresion
 	@Override
-	public Expresion visitNotLExpr(FP4GParser.NotLExprContext ctx)
+	public Expresion visitNotExpr(FP4GParser.NotExprContext ctx)
 	{			
 		Expresion expr = visit(ctx.op);;		
 		UnaryOp unaryExpr = new UnaryOp(UnaryOp.Type.Not,expr);
@@ -201,7 +186,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	}
 	
 	@Override
-	public Expresion visitParLExpr(FP4GParser.ParLExprContext ctx)
+	public Expresion visitParExpr(FP4GParser.ParExprContext ctx)
 	{		
 		Expresion expr = visit(ctx.op);
 		expr.setPar(true); //establecemos que esta expresiï¿½n, lleva parentesis
@@ -220,11 +205,10 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	
 
 	@Override
-	public Expresion visitVarLExpr(FP4GParser.VarLExprContext ctx)
+	public Expresion visitVarExpr(FP4GParser.VarExprContext ctx)
 	{		
 		//¿Para que era esto?
-		super.visitVarLExpr(ctx);
-		return null;
+		return super.visitVarExpr(ctx);		
 	}
 	
 	
@@ -266,7 +250,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 				}
 				else
 				{
-					map = new ClassMap(clazz);
+					map = new ClassMap<Object>(clazz);
 				}
 			} catch (ClassNotFoundException e) {				
 				Show(ErrType.ClassNotFound,ctx.ID.getLine());
@@ -284,15 +268,31 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	}
 	
 	@Override
+    public Expresion visitChildren(RuleNode node) {
+            Expresion result = defaultResult();
+            int n = node.getChildCount();
+            for (int i=0; i<n; i++) {
+                    if (!shouldVisitNextChild(node, result)) {
+                            break;
+                    }
+
+                    ParseTree c = node.getChild(i);
+                    Expresion childResult = c.accept(this);
+                    result = aggregateResult(result, childResult);
+            }
+
+            return result;
+    }
+	@Override
+    public Expresion visit(ParseTree tree) {
+            return tree.accept(this);
+    }
+	@Override
 	public Expresion visitParArray(FP4GParser.ParArrayContext ctx)
 	{
 		String key = ctx.key;
-		
-		pushStack();
-		super.visitParArray(ctx);
-
-		Expresion expr = stack.pop();
-		pop();
+				
+		Expresion expr = visit(ctx.expr());		
 		
 		Map array = array_stack.peek();
 		if(expr instanceof Literal)
@@ -328,18 +328,68 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	}
 	
 	@Override
-	public Expresion visitAccessVarOperator(FP4GParser.AccessVarOperatorContext ctx)
+	public Expresion visitAccessVarName(FP4GParser.AccessVarNameContext ctx)
 	{
-		super.visitAccessVarOperator(ctx);
-		VarId property = (VarId)stack.pop();
-		VarDot dot = new VarDot(ctx.varName.getText(), property);		
-		return dot;
+		//devuelve el regreso de los nodos hijos. (las 3 siguientes funciones...)
+		return visit(ctx.var);
+	}
+	
+	@Override 
+	public Expresion visitVarCurrent(FP4GParser.VarCurrentContext ctx)
+	{
+		return VarId.current;
 	}
 	
 	@Override
-	public Expresion visitAccessVar(FP4GParser.AccessVarContext ctx)
+	public Expresion visitVarParent(FP4GParser.VarParentContext ctx)
 	{
-		VarId varId = new VarId(ctx.varName.getText());		
-		return varId;
-	}	
+		return VarId.parent;
+	}
+	
+	@Override 
+	public Expresion visitVarName(FP4GParser.VarNameContext ctx)
+	{
+		return new VarId(ctx.varName.getText());
+	}
+	
+	
+	@Override 
+	public Expresion visitCurrentOperator(FP4GParser.CurrentOperatorContext ctx)
+	{
+		return VarId.current;
+	}
+	
+	@Override
+	public Expresion visitParentOperator(FP4GParser.ParentOperatorContext ctx)
+	{
+		return VarId.parent;
+	}
+	
+	@Override 
+	public Expresion visitVarNameOperator(FP4GParser.VarNameOperatorContext ctx)
+	{
+		return null;
+	}
+	
+	@Override
+	public Expresion visitAccessVarOperator(FP4GParser.AccessVarOperatorContext ctx)
+	{
+		VarId varId    = (VarId)visit(ctx.pVar);
+		VarId property = (VarId)visit(ctx.propertyAccess);
+		if(varId == VarId.current)
+		{
+			VarDot var = new VarDot(VarDot.current, property);
+			return var;
+		}else
+		if(varId == VarId.parent)
+		{
+			VarDot var = new VarDot(VarDot.parent, property);
+			return var;
+		}
+		else
+		{
+			VarDot var = new VarDot(ctx.pVar.name,property);
+			return var;
+		}	
+	}
 }

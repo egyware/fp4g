@@ -34,15 +34,14 @@ import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.Literal;
-import fp4g.data.expresion.VarDot;
-import fp4g.data.expresion.VarId;
 
 
 /**
  * Visita el arbol construido.
  * @author Edgardo
  */
-public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
+public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
+{
 	private final Game game;
 	private MessageMethods methods;
 	private final Stack<Define> current;	
@@ -59,7 +58,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 		CustomClassMap map = ((CustomClassMap)game.get("methods"));
 		if(map != null)
 		{
-			methods = (MessageMethods)map.getBean();
+			methods = (MessageMethods)map.getValue();
 		}
 	}
 	
@@ -199,40 +198,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code> {
 	
 	//TODO talvez moverlo a otra clase
 	public static Literal<?> eval(Define define, Expresion expr) {
-		if(expr instanceof Literal<?>)
-		{
-			return (Literal<?>)expr;
-		}
-		else
-		{
-			if(expr instanceof VarDot)
-			{				
-				VarDot varDot = (VarDot)expr;
-				System.out.println(varDot.property.varName);
-				//a que define accedo si no me sé el tipo?
-				Define sub = define.getDefine(varDot.varName);
-				if(sub == null)
-				{
-					Show(ErrType.VarNameNotFound,define,varDot.varName);
-				}
-				return eval(sub,varDot.property);
-			}
-			else
-			if(expr instanceof VarId)
-			{				
-				VarId varId = (VarId)expr;
-				Literal<?> value = define.get(varId.varName);				
-				if(value == null)
-				{
-					Show(ErrType.VarNameNotFound,define,varId.varName);
-				}				
-				return value;
-			}			
-			else
-			{	
-				throw new RuntimeException("No Implementados");
-			}
-		}		
+		return expr.eval(define);
 	}
 
 	@Override

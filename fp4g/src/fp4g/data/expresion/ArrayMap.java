@@ -2,7 +2,7 @@ package fp4g.data.expresion;
 
 import java.util.HashMap;
 
-// tambiï¿½n deberia ser literal
+// también deberia ser literal
 public final class ArrayMap extends Literal<Map> implements Map{
 	private final java.util.Map<String,Literal<?>> map;
 	
@@ -26,8 +26,8 @@ public final class ArrayMap extends Literal<Map> implements Map{
 	}
 
 		@Override
-	public Literal<?> set(String key, Literal<?> value) {
-		return map.put(key, value);
+	public void set(String key, Literal<?> value) {
+		map.put(key, value);
 	}
 
 	@Override

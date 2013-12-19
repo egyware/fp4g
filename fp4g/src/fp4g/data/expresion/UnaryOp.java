@@ -1,5 +1,6 @@
 package fp4g.data.expresion;
 
+import fp4g.data.Define;
 import fp4g.data.Expresion;
 
 public class UnaryOp extends Expresion{	
@@ -14,5 +15,11 @@ public class UnaryOp extends Expresion{
 	{
 		this.type = type;
 		this.expr = expr;
+	}
+	
+	@Override
+	public Literal<?> eval(Define define) 
+	{
+		throw new RuntimeException("No Implementado");
 	}
 }

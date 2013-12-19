@@ -77,6 +77,8 @@ INT_LITERAL 	: ( DIGIT)+;
 DECIMAL_LITERAL : ( DIGIT)*'.'(DIGIT)+;
 STRING_LITERAL  : '"' .*? '"';
 BOOL_LITERAL 	: ('true'|'false'); 
+PARENT_LITERAL  : 'parent';
+CURRENT_LITERAL  : 'current';
 fragment DIGIT  : [0-9];
 
 /* Identificador */

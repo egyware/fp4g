@@ -1,5 +1,6 @@
 package fp4g.data.expresion;
 
+import fp4g.data.Define;
 import fp4g.data.Expresion;
 
 public class BinaryOp extends Expresion{
@@ -18,5 +19,11 @@ public class BinaryOp extends Expresion{
 		this.type = type;
 		this.left = left;
 		this.right = right;
+	}
+	
+	@Override
+	public Literal<?> eval(Define define) 
+	{
+		throw new RuntimeException("No Implementado");
 	}
 }

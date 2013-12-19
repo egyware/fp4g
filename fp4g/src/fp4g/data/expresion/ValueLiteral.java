@@ -1,5 +1,6 @@
 package fp4g.data.expresion;
 
+
 public class ValueLiteral<Type> extends Literal<Type>{
 	public final Type value;
 	public ValueLiteral(Type value)
@@ -9,5 +10,5 @@ public class ValueLiteral<Type> extends Literal<Type>{
 	@Override
 	public Type getValue() {
 		return value;
-	}	
+	}		
 }

@@ -8,6 +8,6 @@ package fp4g.data.expresion;
  */
 public interface CustomMap 
 {
-	public Literal<?> set(String k,Literal<?> v);
+	public void set(String k,Literal<?> v);
 	public Literal<?> get(String k);
 }

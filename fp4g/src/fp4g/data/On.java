@@ -60,6 +60,7 @@ public class On extends Code{
 			this.statements = statements;
 		}
 		
+		@SuppressWarnings("unchecked")
 		public void addFilter(List<String> listFilter)
 		{
 			//chequeamos que todos los filtros existan y que est�n definidos
@@ -85,9 +86,8 @@ public class On extends Code{
 					methodName = elementFilter.toLowerCase();
 				}
 				
-				
-				ClassMap cm = (ClassMap) message.get(methodName);
-				MessageMethod method = (MessageMethod) cm.getBean();
+				ClassMap<MessageMethod> cm = (ClassMap<MessageMethod>) message.get(methodName);
+				MessageMethod method = cm.getValue();
 				if(method != null)
 				{
 					//setiando, los datos para que no webee m�s tarde (este mensaje no tiene validez, cambie algunas cosas y ya ni recuerdo porque dije eso)

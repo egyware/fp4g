@@ -5,26 +5,30 @@ import org.antlr.v4.misc.Utils;
 import com.esotericsoftware.reflectasm.ConstructorAccess;
 import com.esotericsoftware.reflectasm.MethodAccess;
 
-public final class ClassMap extends Literal<Map> implements Map
+public final class ClassMap<T> extends Literal<T> implements Map
 {	
 	private MethodAccess method;
-	private Object bean;	
+	private T bean;	
+	
+	/**
+	 * Cuando se desconoce el tipo
+	 * @param type
+	 */
+	@SuppressWarnings("unchecked")
 	public ClassMap(Class<?> type)
-	{
-		bean = ConstructorAccess.get(type).newInstance();
-		method = MethodAccess.get(type);
+	{	
+		bean = (T)ConstructorAccess.get(type).newInstance();
+		method = MethodAccess.get(type);		
 	}
-	public ClassMap(Object value)
+	public ClassMap(T value)
 	{
 		bean = value;
-		method = MethodAccess.get(value.getClass());
+		method = MethodAccess.get(value.getClass());	
 	}
 	@Override
-	public Literal<?> set(String key, Literal<?> literal) 
-	{		
-		Literal<?> old = get(key);		
-		method.invoke(bean, String.format("set%s",Utils.capitalize(key)),literal.getValue());
-		return old;
+	public void set(String key, Literal<?> literal) 
+	{			
+		method.invoke(bean, String.format("set%s",Utils.capitalize(key)),literal.getValue());		
 	}
 	@Override
 	public Literal<?> get(String key) 
@@ -39,19 +43,12 @@ public final class ClassMap extends Literal<Map> implements Map
 				return new ValueLiteral<Object>(method.invoke(bean,indexMethod));
 			}
 		}
-		throw new IllegalArgumentException(String.format("Unable to find public method: set/is%s", key));
-				
+		throw new IllegalArgumentException(String.format("Unable to find public method: set/is%s", key));				
 	}	
 	
-	
-	public Object getBean()
-	{
-		return bean;
-	}
-	
 	@Override
-	public Map getValue() {
-		return this;
+	public T getValue() {
+		return bean;
 	}
 	
 

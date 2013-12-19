@@ -207,7 +207,7 @@ public class JavaGenerator extends Generator {
     	gameConf.setManager(new JavaSoundManager());
     	gameConf.setManager(new JavaPhysicsManager());
     	
-    	//loadLib("libs/fp4g.lib", gameConf);
+    	loadLib("libs/fp4g.lib", gameConf);
     	
     	MessageDepend md = new MessageDepend();
     	md.install(gameConf);

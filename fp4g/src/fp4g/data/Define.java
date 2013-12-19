@@ -17,7 +17,7 @@ import fp4g.data.expresion.CustomMap;
 import fp4g.data.expresion.Literal;
 
 @SuppressWarnings("unchecked")
-public abstract class Define extends Code{
+public abstract class Define extends Code implements CustomMap{
 	public final static List<Add> emptyList = new ArrayList<Add>(0);
 	
 	public final DefineType type;
@@ -220,7 +220,7 @@ public abstract class Define extends Code{
 		}
 		else
 		{
-			variables.put(key, new ClassMap(value));
+			variables.put(key, new ClassMap<Object>(value));
 		}		
 	}
 		

@@ -13,7 +13,6 @@ import fp4g.data.On.Filter;
 import fp4g.data.On.Source;
 import fp4g.data.Send;
 import fp4g.data.define.Message;
-import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.Literal;
 import fp4g.generator.gdxgenerator.JavaGenerator;
 
@@ -26,6 +25,7 @@ public class OnModel implements Model
 	
 	//TODO claramente acá el generator es una solución parche
 	//TODO Lo que paso acá. Que este modelo empezo a generar codigo. por eso este desasastre...
+	@SuppressWarnings("unchecked")
 	public OnModel(On on, JavaGenerator generator,JavaCodeModel model)
 	{
 		name = on.name;
@@ -35,8 +35,8 @@ public class OnModel implements Model
 		//agregar los metodos, aunque están vacios y asumiento que todos son MessageMethod		
 		for(Entry<String,Literal<?>> entry:on.message.entrySet())
 		{
-			ClassMap map = (ClassMap)entry.getValue();
-			methods.put(entry.getKey(), new MethodHandlerModel((MessageMethod)map.getBean()));
+			Literal<MessageMethod> literal = (Literal<MessageMethod>)entry.getValue();
+			methods.put(entry.getKey(), new MethodHandlerModel(literal.getValue()));
 		}
 		//tengo que recorrer los sources en busca de los methodHandlers y subirlos acï¿½
 		for(Source source:on.sources)

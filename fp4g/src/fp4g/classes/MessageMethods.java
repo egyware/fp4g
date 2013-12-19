@@ -12,46 +12,41 @@ import fp4g.data.expresion.Literal;
  * @author Edgardo
  *
  */
-public class MessageMethods implements CustomMap
+public final class MessageMethods implements CustomMap
 {
-	private final HashMap<String, MessageMethod> map;
+	private final HashMap<String, ClassMap<MessageMethod>> map;
 	
 	public MessageMethods()
 	{
-		map = new HashMap<String, MessageMethod>();
+		map = new HashMap<String, ClassMap<MessageMethod>>();
 	}
 	public void add(MessageMethod mm)
 	{
 		//me aseguro que esté en minusculas para usarlo de la manera que se me de la gana
-		map.put(mm.getName().toLowerCase(), mm); 
+		map.put(mm.getName().toLowerCase(), new ClassMap<MessageMethod>(mm)); 
 	}
 	public MessageMethod getMessageMethod(String k)
 	{
-		//me aseguro que esté en minusculas para usarlo de la manera que se me de la gana
-		return map.get(k.toLowerCase());
+		//me aseguro que est� en minusculas para usarlo de la manera que se me de la gana
+		ClassMap<MessageMethod> cm = map.get(k.toLowerCase());
+		return cm.getValue();
 	}
 
 	
 	//--- complaciendo el publico
 	@Override
-	public Literal<?> set(String k, Literal<?> v) {
+	public void set(String k, Literal<?> v) {
 		//rechazar si
 		if(!(v.getValue() instanceof MessageMethod))
 		{
-			return null;
-		}
-		Literal<?> old = get(k);
-		map.put(k, (MessageMethod)v.getValue());
-		return old;
+			//TODO LANZAR UN ERROR
+			return;
+		}		
+		map.put(k, new ClassMap<MessageMethod>((MessageMethod)v.getValue()));		
 	}
 	@Override
 	public Literal<?> get(String k) {
-		MessageMethod method = map.get(k);
-		if(method != null)
-		{
-			return new ClassMap(method);
-		}
-		return null;		
+		return map.get(k);				
 	}
 	
 	

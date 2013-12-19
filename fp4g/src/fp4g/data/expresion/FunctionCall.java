@@ -1,5 +1,6 @@
 package fp4g.data.expresion;
 
+import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 
@@ -12,5 +13,11 @@ public class FunctionCall extends Expresion {
 		this.params = params;
 	}
 	
+	
+	@Override
+	public Literal<?> eval(Define define) 
+	{
+		throw new RuntimeException("No Implementado");
+	}
 
 }
