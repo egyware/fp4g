@@ -19,6 +19,7 @@ import javax.tools.ToolProvider;
 import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.Options;
+import fp4g.classes.DependResolvers;
 import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.Expresion;
@@ -27,12 +28,12 @@ import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Goal;
 import fp4g.data.define.Manager;
+import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
-import fp4g.generator.models.Depend;
+import fp4g.generator.Depend;
 import fp4g.generator.models.JavaCodeModel;
-import fp4g.generator.models.MessageDepend;
 import freemarker.template.Configuration;
 
 public class JavaGenerator extends Generator {	
@@ -49,13 +50,12 @@ public class JavaGenerator extends Generator {
 	
 	public final Map<Class<? extends Code>,Class<? extends CodeGenerator<JavaGenerator>>> generators;
 	
-	public final HashMap<Class<? extends Define>,Depend<? extends Define>> dependencias;
+	public DependResolvers resolvers;
 	
 	public JavaGenerator()
 	{
 		generators = new HashMap<Class<? extends Code>, Class<? extends CodeGenerator<JavaGenerator>>>(10,1);
-		parDefineJavaCode = new HashMap<Define, JavaCodeModel>(10);
-		dependencias = new HashMap<Class<? extends Define>, Depend<? extends Define>>();
+		parDefineJavaCode = new HashMap<Define, JavaCodeModel>(10);		
 		
 		exprGen = new JavaExpresionGenerator(this);
 		funcGen = new JavaFunctionGenerator(this);
@@ -209,9 +209,9 @@ public class JavaGenerator extends Generator {
     	
     	loadLib("libs/fp4g.lib", gameConf);
     	
-    	MessageDepend md = new MessageDepend();    	
-    	dependencias.put(md.getForClass(),md);
-    	    	
+    	//TODO Posible error.
+    	CustomClassMap map = (CustomClassMap)gameConf.get("resolvers");
+    	resolvers = (DependResolvers)map.getValue();
     	
 //        //agregar componentes		    	
 ////    String components[][] = 
@@ -259,16 +259,15 @@ public class JavaGenerator extends Generator {
 			super("SoundManager",4);
 		}
 	}
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T extends Define> Depend<T> resolveDependency(Define define) {
+	@Override	
+	public Depend resolveDependency(Define define) {
 		if(define == null)
 		{
 			return null;
 		}
 		else		
 		{
-			return (Depend<T>) dependencias.get(define.getClass());
+			return resolvers.getResolver(define);
 		}		
 	}
 

@@ -11,14 +11,13 @@ import java.util.List;
 import fp4g.Pair;
 import fp4g.data.Add;
 import fp4g.data.Code;
-import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.On;
 import fp4g.data.define.Entity;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
-import fp4g.generator.models.Depend;
+import fp4g.generator.Depend;
 import fp4g.generator.models.JavaCodeModel;
 import fp4g.generator.models.OnModel;
 import fp4g.generator.models.OnModel.MethodHandlerModel;
@@ -192,7 +191,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			{	
 				for(On on:entity_onMessages)
 				{					
-					Depend<Define> depende = generator.resolveDependency(on.message);
+					Depend depende = generator.resolveDependency(on.message);
 					if(depende != null)
 					{
 						depende.perform(on.message, modelEntity);

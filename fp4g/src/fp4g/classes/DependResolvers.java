@@ -6,6 +6,7 @@ import fp4g.data.Define;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.Map;
+import fp4g.generator.Depend;
 
 public class DependResolvers implements Map
 {		
@@ -19,7 +20,7 @@ public class DependResolvers implements Map
 	@Override
 	public void set(String key, Literal<?> value)
 	{
-		resolvers.put(key, (CustomClassMap)value);		
+		resolvers.put(key.toLowerCase(), (CustomClassMap)value);		
 	}
 
 	@Override
@@ -28,10 +29,10 @@ public class DependResolvers implements Map
 		return resolvers.get(key);
 	}
 	
-	public DependResolver getResolver(Define define)
+	public Depend getResolver(Define define)
 	{
-		//TODO posible error con null
-		return (DependResolver)resolvers.get(define.name).getValue();
+		//TODO posible error con null		
+		return (Depend)resolvers.get(define.type.name().toLowerCase()).getValue();
 	}
 
 }

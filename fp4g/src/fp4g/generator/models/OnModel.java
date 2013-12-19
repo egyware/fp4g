@@ -14,6 +14,7 @@ import fp4g.data.On.Source;
 import fp4g.data.Send;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.Literal;
+import fp4g.generator.Depend;
 import fp4g.generator.gdxgenerator.JavaGenerator;
 
 public class OnModel implements Model
@@ -77,7 +78,7 @@ public class OnModel implements Model
 					statements.add(sendModel);
 									
 					Message msg = send.method.getMessage();
-					Depend<Message> depend = generator.resolveDependency(msg);
+					Depend depend = generator.resolveDependency(msg);
 					if(depend != null)
 					{
 						depend.perform(msg, model);

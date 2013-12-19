@@ -7,6 +7,7 @@ import fp4g.data.Define;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.List;
 import fp4g.data.expresion.Literal;
+import fp4g.generator.Depend;
 import fp4g.generator.models.JavaCodeModel;
 
 /**
@@ -14,7 +15,7 @@ import fp4g.generator.models.JavaCodeModel;
  * @author Edgardo
  *
  */
-public class DependResolver implements fp4g.data.expresion.Map
+public class DependResolver implements fp4g.data.expresion.Map, Depend
 {
 	private final Map<String,ArrayList> importsRequired;
 	
@@ -23,6 +24,10 @@ public class DependResolver implements fp4g.data.expresion.Map
 		importsRequired = new HashMap<String,ArrayList>();
 	}
 	
+	/* (non-Javadoc)
+	 * @see fp4g.classes.IDependResolver#perform(fp4g.data.Define, fp4g.generator.models.JavaCodeModel)
+	 */
+	@Override
 	public void perform(Define data, JavaCodeModel model)
 	{
 		List imports = importsRequired.get(data.name);
