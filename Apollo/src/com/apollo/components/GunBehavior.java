@@ -28,6 +28,10 @@ public final class GunBehavior extends Behavior implements GunMessageHandler
 	{	
 		this("Gun");		
 	}
+	public GunBehavior(int ammo)
+	{
+		this("Gun",ammo);
+	}
 	public GunBehavior(String entity)
 	{
 		this(entity,100);
@@ -60,11 +64,12 @@ public final class GunBehavior extends Behavior implements GunMessageHandler
 		if(ammo > 0)
 		{
 			float r = transform.rotation + rot*MathUtils.degreesToRadians;			
-			Entity gunEnt = world.createEntity(entity);
+			final float sin = MathUtils.sin(r);
+			final float cos = MathUtils.cos(r);
+			Entity gunEnt = world.createEntity(entity,transform.x + dist*cos,transform.y +dist*sin, vel*cos, vel*sin);
 			world.addEntity(gunEnt);
 			
 			//como no ha sido inicializado, no puedo fucking mover las balas.
-//			gunEnt.onMessage(MoveMessage.onTranslateMove, transform.x + dist*MathUtils.cos(r),transform.y +dist*MathUtils.sin(r));
 //			gunEnt.onMessage(MoveMessage.onForwardMove, vel);
 			ammo -=1;
 		}

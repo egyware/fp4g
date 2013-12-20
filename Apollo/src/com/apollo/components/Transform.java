@@ -16,6 +16,12 @@ public class Transform extends ITransform
 		this.x = x;
 		this.y = y;
 	}
+	public Transform(float x, float y,float vx, float vy) {
+		this.x = x;
+		this.y = y;
+		this.vx = vx;
+		this.vy = vy;
+	}
 	
 	public Transform(Transform t) {
 		this.x = t.x;
