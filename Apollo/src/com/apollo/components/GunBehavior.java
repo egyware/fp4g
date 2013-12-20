@@ -1,0 +1,80 @@
+/**
+ * 
+ */
+package com.apollo.components;
+
+import com.apollo.Behavior;
+import com.apollo.Entity;
+import com.apollo.World;
+import com.apollo.annotate.InjectComponent;
+import com.apollo.messages.GunMessage;
+import com.apollo.messages.GunMessageHandler;
+import com.apollo.messages.MoveMessage;
+import com.badlogic.gdx.math.MathUtils;
+
+/**
+ * @author Edgardo
+ *
+ */
+public final class GunBehavior extends Behavior implements GunMessageHandler
+{
+	private World world;
+	@InjectComponent
+	private ITransform transform;
+	private int ammo;
+	private String entity;
+	
+	public GunBehavior()
+	{	
+		this("Gun");		
+	}
+	public GunBehavior(String entity)
+	{
+		this(entity,100);
+	}
+	public GunBehavior(String entity,int ammo)
+	{
+		this.entity = entity;
+		this.ammo   = ammo;		
+	}
+		
+	@Override
+	public void initialize()
+	{
+		owner.addEventHandler(GunMessage.onChangeBulletGun, this);
+		owner.addEventHandler(GunMessage.onReloadGun, this);
+		owner.addEventHandler(GunMessage.onShotGun, this);		
+		
+		world = owner.getWorld();		
+	}
+	
+	@Override
+	public void onReloadGun(int ammo) 
+	{
+		this.ammo = ammo;
+	}
+
+	@Override
+	public void onShotGun(float rot, float dist, float vel) 
+	{
+		if(ammo > 0)
+		{
+			float r = transform.rotation + rot*MathUtils.degreesToRadians;			
+			Entity gunEnt = world.createEntity(entity);
+			world.addEntity(gunEnt);
+			
+			//como no ha sido inicializado, no puedo fucking mover las balas.
+//			gunEnt.onMessage(MoveMessage.onTranslateMove, transform.x + dist*MathUtils.cos(r),transform.y +dist*MathUtils.sin(r));
+//			gunEnt.onMessage(MoveMessage.onForwardMove, vel);
+			ammo -=1;
+		}
+	}
+
+	@Override
+	public void onChangeBulletGun(String entityName)
+	{
+		this.entity = entityName;
+		
+	}
+
+}

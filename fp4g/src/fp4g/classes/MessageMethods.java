@@ -28,7 +28,11 @@ public final class MessageMethods implements Map
 	public MessageMethod getMessageMethod(String k)
 	{
 		//me aseguro que está en minusculas para usarlo de la manera que se me de la gana
-		ClassMap<MessageMethod> cm = map.get(k.toLowerCase());		
+		ClassMap<MessageMethod> cm = map.get(k.toLowerCase());
+		if(cm == null)
+		{
+			System.out.println("*"+k);
+		}
 		return cm.getValue();
 	}
 
@@ -42,6 +46,7 @@ public final class MessageMethods implements Map
 			//TODO LANZAR UN ERROR
 			return;
 		}
+		System.out.println(k);
 		map.put(k.toLowerCase(), new ClassMap<MessageMethod>((MessageMethod)v.getValue()));		
 	}
 	@Override

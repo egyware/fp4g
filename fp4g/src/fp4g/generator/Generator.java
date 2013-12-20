@@ -94,9 +94,9 @@ public abstract class Generator {
 			FP4GLexer lexer = new FP4GLexer(new ANTLRFileStream(libFileName));	
 			CommonTokenStream tokens = new CommonTokenStream(lexer);		
 			FP4GParser p = new FP4GParser(tokens);		
-			p.setBuildParseTree(true);
+			p.setBuildParseTree(true);			
 			
-			ParseTree tree = p.gameLib();		
+			ParseTree tree = p.gameLib();			
 			if(tree != null)
 			{
 				FP4GDataVisitor visitor = new FP4GDataVisitor(data);

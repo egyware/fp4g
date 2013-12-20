@@ -51,6 +51,7 @@ returns [ String bean ]
 		 (AS ID {$bean = $ID.text;})?
    		 ;
 arrayBody
+locals [String bean]
 		:
 		   (parArray (COMA parArray)* COMA?)   #assocArray
 		 | (itemArray (COMA itemArray)* COMA?) #listArray
