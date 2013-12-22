@@ -14,6 +14,7 @@ import fp4g.Log.ErrType;
 import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.Literal;
+import fp4g.exceptions.DefineNotFoundException;
 
 @SuppressWarnings("unchecked")
 public abstract class Define extends Code implements fp4g.data.expresion.Map
@@ -129,8 +130,9 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 	 * Obtiene una definición
 	 * @param name
 	 * @return
+	 * @throws DefineNotFoundException 
 	 */	
-	public final <T extends Define> T getDefine(DefineType type,String name)
+	public final <T extends Define> T getDefine(DefineType type,String name) throws DefineNotFoundException
 	{	
 		final Map<String,T> map = (Map<String, T>) defines.get(type);
 		T value = null;		
@@ -142,6 +144,7 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 		{
 			value = parent.getDefine(type, name);
 		}
+		if(value == null) throw new DefineNotFoundException(type,name);		
 		return value;
 	}
 	
@@ -149,8 +152,9 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 	 * Busca un define de tipo desconocido
 	 * @param name Nombre de la definición
 	 * @return Define La definición buscada, si no devuelve null
+	 * @throws DefineNotFoundException 
 	 */
-	public Define getDefine(String name) 
+	public Define getDefine(String name) throws DefineNotFoundException 
 	{
 		for(DefineType type :DefineType.values())
 		{
@@ -159,8 +163,8 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 			{
 				return define;
 			}
-		}		
-		return null;
+		}
+		throw new DefineNotFoundException(name);		
 	}	
 	
 	public final <T extends Define> Collection<T> getDefines(DefineType type)

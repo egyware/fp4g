@@ -7,8 +7,9 @@ import fp4g.Pair;
 
 
 //TODO agregar más adelante parametros por defecto
-public class NameList implements Iterable<Pair<VarType,String>>{
-	public final List<Pair<VarType,String>> nameVars;
+public class NameList implements Iterable<Pair<VarType,String>>
+{
+	private final List<Pair<VarType,String>> nameVars;
 	public NameList()
 	{
 		nameVars = new LinkedList<Pair<VarType, String>>();

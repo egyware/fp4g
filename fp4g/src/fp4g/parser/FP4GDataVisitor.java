@@ -35,6 +35,7 @@ import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.Literal;
+import fp4g.exceptions.DefineNotFoundException;
 
 
 /**
@@ -70,15 +71,19 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		
 		if(define instanceof Game)
 		{
-			final String stateName = ctx.state;
-			GameState state = define.getDefine(DefineType.STATE, stateName);
-			if(state == null)
+			final String stateName = ctx.state;			
+			GameState state;
+			try 
 			{
+				state = define.getDefine(DefineType.STATE, stateName);
+			} 
+			catch (DefineNotFoundException e) 
+			{				
 				Show(WarnType.MissingAdd,ctx.start.getLine());
-				//creo un elemento temporal para solucionar el state faltante, sin embargo no se generarï¿½
+				//creo un elemento temporal para solucionar el state faltante, sin embargo no se generará
 				state = new GameState(ctx.state,define);
 				state.setBuild(false);
-			}
+			}			
 			((Game) define).setStart(state);
 			return state;
 		}
@@ -98,18 +103,20 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		if(on == null)
 		{	
 			//es message, cast seguro
-			Message message = parent.getDefine(DefineType.MESSAGE,ctx.messageName);
-			if(message == null)
+
+			Message message = null;
+			try
+			{
+				message = parent.getDefine(DefineType.MESSAGE,ctx.messageName);
+				on = new On(message);
+			}
+			catch (DefineNotFoundException e) 
 			{
 				//Muestra un error, pero sigue funcionando...
 				Log.Show(ErrType.MessageExpected,ctx.start.getLine(),ctx.messageName);
 				on = new On(ctx.messageName);
 			}
-			else
-			{
-				//ahora lo creo...
-				on = new On(message);
-			}
+			
 			//solo si es nuevito, se agrega
 			parent.setOn(on);
 		}

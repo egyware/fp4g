@@ -10,11 +10,16 @@ import java.util.List;
 
 import fp4g.Pair;
 import fp4g.data.Add;
+import fp4g.data.BasicType;
 import fp4g.data.Code;
+import fp4g.data.CustomType;
+import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.On;
+import fp4g.data.VarType;
 import fp4g.data.define.Entity;
+import fp4g.exceptions.UnknowException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
 import fp4g.generator.Depend;
@@ -62,10 +67,38 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		{
 			//lo veo un poco consumidor de recursos, pero bueno...
 			List<ParamCodeModel> pair = new LinkedList<ParamCodeModel>();
-			for(Pair<String,String> par: entity.paramNameList)
+			for(Pair<VarType,String> par: entity.paramNameList)
 			{
-				//TODO m�s adelante, talvez especificar el tipo por defecto.
-				ParamCodeModel param = new ParamCodeModel(par.a,par.b);				
+				//TODO esto debe ir en otro lugar.
+				String name;
+				if(par.a instanceof BasicType)
+				{
+					switch((BasicType)par.a)
+					{
+					case Bool:
+						name = "Boolean";
+						break;
+					case Entity:
+						name = "Entity";
+						break;
+					case Number:
+						name = "Number";
+						break;
+					case String:
+						name = "Name";
+						break;
+					default:
+						throw new UnknowException("Estado no valido del generador");
+					}
+				}
+				else
+				{
+					CustomType custom = (CustomType)par.a;
+					Define define = entity.getDefine(custom.name);
+					generator.resolveDependency(define).perform(define, modelEntity);
+					name = custom.name;
+				}
+				ParamCodeModel param = new ParamCodeModel(name,par.b);				
 				pair.add(param);
 			}
 			buildRoot.put("params",pair);

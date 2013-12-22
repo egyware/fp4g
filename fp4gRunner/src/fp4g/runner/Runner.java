@@ -1,7 +1,5 @@
 package fp4g.runner;
 
-import java.io.File;
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl.CustomLwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
