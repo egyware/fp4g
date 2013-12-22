@@ -6,9 +6,7 @@ package com.apollo.components;
 import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
-import com.apollo.Message;
 import com.apollo.managers.PhysicsManager;
-import com.apollo.messages.MoveMessage;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;

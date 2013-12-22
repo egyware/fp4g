@@ -9,7 +9,6 @@ import com.apollo.World;
 import com.apollo.annotate.InjectComponent;
 import com.apollo.messages.GunMessage;
 import com.apollo.messages.GunMessageHandler;
-import com.apollo.messages.MoveMessage;
 import com.badlogic.gdx.math.MathUtils;
 
 /**
@@ -68,9 +67,7 @@ public final class GunBehavior extends Behavior implements GunMessageHandler
 			final float cos = MathUtils.cos(r);
 			Entity gunEnt = world.createEntity(entity,transform.x + dist*cos,transform.y +dist*sin, vel*cos, vel*sin);
 			world.addEntity(gunEnt);
-			
-			//como no ha sido inicializado, no puedo fucking mover las balas.
-//			gunEnt.onMessage(MoveMessage.onForwardMove, vel);
+
 			ammo -=1;
 		}
 	}

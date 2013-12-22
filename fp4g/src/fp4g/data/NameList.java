@@ -6,19 +6,19 @@ import java.util.List;
 import fp4g.Pair;
 
 
-//TODO mï¿½s adelante utilizar una enumeraciï¿½n para detectar los tipos, y asi mejorar la importaciï¿½n de clases
-public class NameList implements Iterable<Pair<String,String>>{
-	public final List<Pair<String,String>> nameVars;
+//TODO agregar más adelante parametros por defecto
+public class NameList implements Iterable<Pair<VarType,String>>{
+	public final List<Pair<VarType,String>> nameVars;
 	public NameList()
 	{
-		nameVars = new LinkedList<Pair<String, String>>();
+		nameVars = new LinkedList<Pair<VarType, String>>();
 	}
-	public void add(String name, String type)
+	public void add(VarType type, String name)
 	{
-		nameVars.add(new Pair<String, String>(name,type));
+		nameVars.add(new Pair<VarType, String>(type,name));
 	}
 	@Override
-	public Iterator<Pair<String, String>> iterator() {
+	public Iterator<Pair<VarType, String>> iterator() {
 		return nameVars.iterator();
 	}
 }

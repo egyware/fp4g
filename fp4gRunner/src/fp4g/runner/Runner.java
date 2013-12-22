@@ -10,16 +10,14 @@ public class Runner
 {
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException 
 	{
-		if(args.length < 2)
+		if(args.length < 1)
 		{
-			System.out.println("Modo de uso: Runner path class");
+			System.out.println("Modo de uso: Runner class");
 			return;
-		}
-		FileClassLoader fileClassLoader = new FileClassLoader(ClassLoader.getSystemClassLoader(),new File(args[0]));
-		Class<?> appClass = fileClassLoader.loadClass(args[1]);
+		}		
 		
-		//TODO M�s adelante leer alguna especie de archivo de arranque y wea
-	
+		Class<?> appClass = Class.forName(args[0]);
+			
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		
 		cfg.title = String.format("FP4G - %s",appClass.getSimpleName());

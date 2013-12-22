@@ -60,8 +60,7 @@ XOR : 'XOR';
 NOT : 'NOT';
 
 /* Tipos */
-INT_TYPE    : 'Int';
-DEC_TYPE    : 'Dec';
+NUMBER_TYPE : 'Number';
 STRING_TYPE : 'String';
 BOOL_TYPE   : 'Bool';
 ENTITY_TYPE : 'Entity';

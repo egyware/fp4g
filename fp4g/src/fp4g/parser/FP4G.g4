@@ -182,12 +182,11 @@ returns
 	VarType type = null
 ]
 		:
-		   INT_TYPE    {$type = VarType.Integer;}
-		 | DEC_TYPE    {$type = VarType.Decimal;}
-		 | BOOL_TYPE   {$type = VarType.Bool;}
-		 | ENTITY_TYPE {$type = VarType.Entity;}
-		 | STRING_TYPE {$type = VarType.String;}		 
-		 | ID          {$type = VarType.Custom;} // solo Define del tipo Type
+		   NUMBER_TYPE  {$type = BasicType.Number;}
+		 | BOOL_TYPE    {$type = BasicType.Bool;}
+		 | ENTITY_TYPE  {$type = BasicType.Entity;}
+		 | STRING_TYPE  {$type = BasicType.String;}		 
+		 | ID           {$type = new CustomType($ID.text);} // solo Define del tipo Type
         ;
 
 assetType

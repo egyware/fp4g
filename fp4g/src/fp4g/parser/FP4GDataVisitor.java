@@ -28,6 +28,7 @@ import fp4g.data.On;
 import fp4g.data.On.Source;
 import fp4g.data.Send;
 import fp4g.data.Statements;
+import fp4g.data.VarType;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
@@ -304,30 +305,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	@Override 
 	public Code visitDeclareVar(FP4GParser.DeclareVarContext ctx)
 	{
-		//TODO: esta conversaci�n de variables no deberia est�r puesta aqui
-		String name = null;
-		switch(ctx.varType().type)
-		{
-		case Bool:
-			name = "Boolean";
-			break;		
-		case Decimal:
-			name = "Float";
-			break;
-		case Entity:
-			name = "Entity";
-			break;
-		case Integer:
-			name = "Integer";
-			break;					
-		case String:
-			name = "String";
-			break;
-		default:
-			name = ctx.varType().getText();
-			break;
-		}
-		nameList.add(ctx.ID().getText(),name);
+		final VarType type = ctx.varType().type;		
+		nameList.add(type,ctx.ID().getText());
 		return null;		
 	}
 		

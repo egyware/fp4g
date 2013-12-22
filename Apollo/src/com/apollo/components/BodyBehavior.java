@@ -22,7 +22,19 @@ public class BodyBehavior extends IBodyBehavior
 {
 	private Body simpleBody;
 	
-	public BodyBehavior(com.apollo.World managers,int x, int y,FixtureDef fixDef)
+	public BodyBehavior(com.apollo.World managers,FixtureDef fixDef)
+	{
+		World world = managers.getManager(PhysicsManager.class).getb2World();
+		
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyDef.BodyType.DynamicBody;		
+		
+		simpleBody = world.createBody(bodyDef);
+		
+		simpleBody.createFixture(fixDef);
+	}
+	
+	public BodyBehavior(com.apollo.World managers,FixtureDef fixDef, int x, int y)
 	{
 		World world = managers.getManager(PhysicsManager.class).getb2World();
 		
@@ -38,8 +50,9 @@ public class BodyBehavior extends IBodyBehavior
 		this.x = x;
 		this.y = y;
 	}
-	public BodyBehavior(com.apollo.World world, Integer x, Integer y,	FixtureDef fixDef, int dx,int dy) {
-		this(world,x,y,fixDef);
+	
+	public BodyBehavior(com.apollo.World world, FixtureDef fixDef, int x, int y, int dx,int dy) {
+		this(world,fixDef,x,y);
 		simpleBody.setBullet(true);
 		simpleBody.setLinearVelocity(dx, dy);
 	}
