@@ -19,6 +19,7 @@ USING      : 'USING';
 EXIT       : 'EXIT';
 SET        : 'SET';
 START      : 'START';
+ASSET      : 'ASSET';
 ASSETS     : 'ASSETS';
 
 /* auxiliars keywords */
@@ -64,11 +65,6 @@ NUMBER_TYPE : 'Number';
 STRING_TYPE : 'String';
 BOOL_TYPE   : 'Bool';
 ENTITY_TYPE : 'Entity';
-
-/* Tipos de Assets */
-TEXTURE_TYPE: 'Texture';
-SPRITE_TYPE : 'Sprite';
-ATLAS_TYPE  : 'Atlas';
 
 /* Literales */
 DIRECTCODE      : '@\'' .*? '\''; 

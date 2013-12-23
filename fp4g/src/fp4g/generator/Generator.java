@@ -17,6 +17,7 @@ import fp4g.data.Define;
 import fp4g.data.Expresion;
 import fp4g.data.define.Game;
 import fp4g.data.expresion.FunctionCall;
+import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.parser.FP4GDataVisitor;
 import fp4g.parser.FP4GLexer;
 import fp4g.parser.FP4GParser;
@@ -114,5 +115,5 @@ public abstract class Generator {
 	}
 	
 	public abstract void prepareGameData(Game gameConf);
-	protected abstract Depend resolveDependency(Define define);
+	protected abstract Depend resolveDependency(Define define) throws DependResolverNotFoundException;
 }

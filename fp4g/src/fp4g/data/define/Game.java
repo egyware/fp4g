@@ -154,12 +154,14 @@ public class Game extends Define  {
 	public void setDefine(Define define) {
 		switch(define.getType())
 		{
-			case GAME:
-			case ASSET:
+			case GAME:			
 			case MANAGER:
 			case BEHAVIOR:			
 				Show(ErrType.NotExpectedType,define);
-				break;			
+				break;
+			case ASSET:
+				super.setDefine(define);
+				break;
 			case ENTITY:
 				super.setDefine(define);				
 				break;			

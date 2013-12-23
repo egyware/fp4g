@@ -30,6 +30,7 @@ import fp4g.data.define.Goal;
 import fp4g.data.define.Manager;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.FunctionCall;
+import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
 import fp4g.generator.Depend;
@@ -260,7 +261,8 @@ public class JavaGenerator extends Generator {
 		}
 	}
 	@Override	
-	public Depend resolveDependency(Define define) {
+	public Depend resolveDependency(Define define) throws DependResolverNotFoundException 
+	{
 		if(define == null)
 		{
 			return null;

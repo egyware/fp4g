@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import fp4g.Log;
+import fp4g.Log.WarnType;
 import fp4g.classes.MessageMethod;
 import fp4g.data.Code;
 import fp4g.data.Expresion;
@@ -14,6 +16,7 @@ import fp4g.data.On.Source;
 import fp4g.data.Send;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.Literal;
+import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.generator.Depend;
 import fp4g.generator.gdxgenerator.JavaGenerator;
 
@@ -77,12 +80,14 @@ public class OnModel implements Model
 					}
 					statements.add(sendModel);
 									
-					Message msg = send.method.getMessage();
-					Depend depend = generator.resolveDependency(msg);
-					if(depend != null)
-					{
+					Message msg = send.method.getMessage();					
+					try {
+						Depend depend = generator.resolveDependency(msg);
 						depend.perform(msg, model);
-					}					
+					} catch (DependResolverNotFoundException e) {
+						Log.Show(WarnType.DependResolverNotFound,msg);
+						e.printStackTrace();
+					}										
 				}
 			}
 			else

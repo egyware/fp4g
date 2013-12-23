@@ -1,4 +1,6 @@
-package fp4g.data;
+package fp4g.data.vartypes;
+
+import fp4g.data.VarType;
 
 public class CustomType implements VarType
 {

@@ -3,6 +3,8 @@ package fp4g.data.expresion;
 import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.data.Define;
+import fp4g.exceptions.CannotEvalException;
+import fp4g.exceptions.DefineNotFoundException;
 
 /**
  * Esta clase corresponde a la operación Variable.propiedad.
@@ -26,7 +28,7 @@ public class VarDot extends VarId
 	}	
 	
 	@Override
-	public Literal<?> eval(Define define) 
+	public Literal<?> eval(Define define) throws CannotEvalException 
 	{		
 		//a que define accedo si no me sé el tipo?
 		Define sub;
@@ -39,11 +41,17 @@ public class VarDot extends VarId
 			sub = define;
 		}else
 		{
-			sub = define.getDefine(varName);
+			try {
+				sub = define.getDefine(varName);
+			} catch (DefineNotFoundException e) {
+				Log.Show(ErrType.VarNameNotFound, define, varName);
+				throw new CannotEvalException(e,this);
+			}
 		}
 		if(sub == null)
-		{
+		{			
 			Log.Show(ErrType.VarNameNotFound, define, varName);
+			throw new CannotEvalException(this);
 		}
 		return property.eval(sub);
 	}

@@ -9,6 +9,7 @@ import static fp4g.Log.*;
 
 import fp4g.data.*;
 import fp4g.data.define.*;
+import fp4g.data.vartypes.*;
 
 import java.util.LinkedList;
 
@@ -102,6 +103,7 @@ returns
 		  		| ENTITY    { $type = DefineType.ENTITY;  }
 		  		| GOAL      { $type = DefineType.GOAL;    }
 		  		| MESSAGE   { $type = DefineType.MESSAGE; }		  		
+		  		| ASSET     { $type = DefineType.ASSET;   }
 		  	) 
 		  ID { $defName = $ID.text; } 
 		  ( ABRE_PAR nameList CIERRA_PAR )?		  
@@ -188,17 +190,6 @@ returns
 		 | STRING_TYPE  {$type = BasicType.String;}		 
 		 | ID           {$type = new CustomType($ID.text);} // solo Define del tipo Type
         ;
-
-assetType
-returns
-[
-	AssetType type = null
-]
-		:
-		   TEXTURE_TYPE {$type = AssetType.Texture;}
-		 |  SPRITE_TYPE {$type = AssetType.Sprite;}
-		 |   ATLAS_TYPE {$type = AssetType.Atlas;}		 
-		;
         
 assets:
 	ASSETS
@@ -206,14 +197,14 @@ assets:
 ;
 
 assetValue:
-	assetType assetName=ID? DOUBLEDOT asset=STRING_LITERAL (assetValuesInner)?	
+	assetType=ID assetName=ID? DOUBLEDOT asset=STRING_LITERAL (innerAssetValues = assetValuesInner)?	
 ;
 
-/** diseï¿½adas para no permitir otro nivel adicional de profundidad en los assets */
+/** diseñadas para no permitir otro nivel adicional de profundidad en los assets */
 assetValuesInner:
 	ABRE_COR assetValueInner (COMA assetValueInner)* COMA? CIERRA_COR
 ;
 
 assetValueInner:
-	assetType assetName=ID? DOUBLEDOT asset=STRING_LITERAL
+	assetType=ID assetName=ID? DOUBLEDOT asset=STRING_LITERAL
 ;

@@ -10,15 +10,15 @@ import java.util.List;
 
 import fp4g.Pair;
 import fp4g.data.Add;
-import fp4g.data.BasicType;
 import fp4g.data.Code;
-import fp4g.data.CustomType;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.On;
 import fp4g.data.VarType;
 import fp4g.data.define.Entity;
+import fp4g.data.vartypes.BasicType;
+import fp4g.data.vartypes.CustomType;
 import fp4g.exceptions.UnknowException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;

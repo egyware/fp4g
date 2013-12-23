@@ -9,15 +9,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import fp4g.Log;
+import fp4g.Log.WarnType;
 import fp4g.data.Add;
-import fp4g.data.Asset;
 import fp4g.data.Code;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
+import fp4g.data.define.Asset;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
+import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.generator.CodeGenerator;
+import fp4g.generator.Depend;
 import fp4g.generator.Generator;
 import fp4g.generator.models.AssetModel;
 import fp4g.generator.models.JavaCodeModel;
@@ -62,7 +66,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		HashMap<String,Object> root = new HashMap<String, Object>();	
 		
 		HashMap<String,Object> gamez = new HashMap<String, Object>();
-		TreeSet<AssetModel>  assets = new TreeSet<AssetModel>();
+		List<AssetModel>  assets = new LinkedList<AssetModel>();
 		JavaCodeModel modelClass = new JavaCodeModel();
 		modelClass.pckg    = generator.packageName;
 		modelClass.name    = state.name;
@@ -184,16 +188,46 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		}
 		root.put("entities", entities);
 		
-		//agregar assets
-		if(state.assets != null)
-		{
-			for(Asset asset:state.assets)
+		//agregar assets 
+		int asset_number = 0;
+		final List<Add> assetsList = state.getAdd(DefineType.ASSET);			
+		for(Add asset:assetsList)
+		{			
+			//Buscamos el dtefine para poder definir lo siguiente.
+			Asset define = state.getDefine(DefineType.ASSET,asset.name);
+			
+			if(asset.varName == null)
 			{
-				//agrega el import necesario usando solo una funcion.
-				AssetModel.newAsset(assets,modelClass.imports,asset);						
+				asset.varName = String.format("asset_%d", asset_number++);
 			}
-			root.put("assets", assets);
+			//ahora assetModel deberia tener: el tipo de textura, nombre recurso y parametros adicionales.
+			List<String> params = new LinkedList<String>();
+			for(Expresion expr: asset.params)
+			{
+				String result = generator.expresion(modelClass,expr);
+				if(result != null)
+				{
+					params.add(result);
+				}
+				//TODO: probablemente mostrar un error...
+			}
+			
+			AssetModel assetModel = new AssetModel(define, asset.varName, params);
+			
+			assets.add(assetModel);
+			
+			try{
+				Depend depend = generator.resolveDependency(define);
+				depend.perform(define, modelClass);
+			}
+			catch(DependResolverNotFoundException ex)
+			{
+				Log.Show(WarnType.DependResolverNotFound,define.name);				
+			}
+									
 		}
+		root.put("assets", assets);
+		
 		
 		String arrayImports[] = new String[]
 		{

@@ -6,6 +6,7 @@ import static fp4g.Log.*;
 
 import fp4g.data.*;
 import fp4g.data.define.*;
+import fp4g.data.vartypes.*;
 
 import java.util.LinkedList;
 
@@ -97,13 +98,6 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParExpr(@NotNull FP4GParser.ParExprContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#assetType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAssetType(@NotNull FP4GParser.AssetTypeContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#subExpr}.

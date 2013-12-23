@@ -9,7 +9,9 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import fp4g.Log;
 import fp4g.Log.ErrType;
+import fp4g.Log.WarnType;
 import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
@@ -28,6 +30,7 @@ import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.ValueLiteral;
 import fp4g.data.expresion.VarDot;
 import fp4g.data.expresion.VarId;
+import fp4g.exceptions.CannotEvalException;
 import fp4g.parser.FP4GParser.ArrayBodyContext;
 
 /**
@@ -316,7 +319,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	}
 	
 	@Override
-	public Expresion visitItemArray(FP4GParser.ItemArrayContext ctx)
+	public Expresion visitItemArray(FP4GParser.ItemArrayContext ctx) 
 	{
 		Expresion expr = visit(ctx.expr());
 		List list = list_stack.peek();
@@ -326,7 +329,14 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		}
 		else
 		{
-			list.add(FP4GDataVisitor.eval(current.peek(),expr));
+			try 
+			{
+				list.add(FP4GDataVisitor.eval(current.peek(),expr));
+			}
+			catch (CannotEvalException e) 
+			{
+				Log.Show(WarnType.CannotEvalExpr,ctx.expr().start.getLine());
+			}
 		}		
 		return null;
 	}
@@ -345,7 +355,14 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		}
 		else
 		{
-			array.set(key,FP4GDataVisitor.eval(current.peek(),expr));
+			try
+			{
+				array.set(key,FP4GDataVisitor.eval(current.peek(),expr));
+			}
+			catch(CannotEvalException cee)
+			{
+				Log.Show(WarnType.CannotEvalExpr,ctx.start.getLine());
+			}
 		}		
 		return null;		
 	}

@@ -9,9 +9,8 @@ public class ParamCodeModel implements Model {
 	{
 		defaultValues = new HashMap<String, String>();
 		defaultValues.put("Boolean", "false");
-		defaultValues.put("Float",   "0.0f");		
-		defaultValues.put("Entity",  "null");		
-		defaultValues.put("Integer", "0");
+		defaultValues.put("Number",   "0");		
+		defaultValues.put("Entity",  "null");
 		defaultValues.put("String",  "null");
 	}
 	
@@ -19,7 +18,7 @@ public class ParamCodeModel implements Model {
 	private final String type;
 	private final String defaultValue;
 	
-	public ParamCodeModel(String name, String type)
+	public ParamCodeModel(String type,String name)
 	{
 		this.name = name;
 		this.type = type;

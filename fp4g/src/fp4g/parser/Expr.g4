@@ -56,6 +56,7 @@ locals [String bean]
 		   (parArray (COMA parArray)* COMA?)   #assocArray
 		 | (itemArray (COMA itemArray)* COMA?) #listArray
 		;
+		
 itemArray
 		:
 		expr

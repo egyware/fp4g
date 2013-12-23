@@ -16,8 +16,6 @@ import fp4g.Log.WarnType;
 import fp4g.classes.MessageMethod;
 import fp4g.classes.MessageMethods;
 import fp4g.data.Add;
-import fp4g.data.AssetType;
-import fp4g.data.Assets;
 import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
@@ -29,12 +27,15 @@ import fp4g.data.On.Source;
 import fp4g.data.Send;
 import fp4g.data.Statements;
 import fp4g.data.VarType;
+import fp4g.data.define.Asset;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.Literal;
+import fp4g.data.expresion.ValueLiteral;
+import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
 
 
@@ -46,16 +47,14 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 {
 	private final Game game;
 	private MessageMethods methods;
-	private final Stack<Define> current;	
-	private Stack<Assets> assets_stack;
+	private final Stack<Define> current;
 	private NameList nameList;
 	private Statements statements;
 	private final FP4GExpresionVisitor exprVisitor;
 	public FP4GDataVisitor(final Game game)
 	{
 		this.game = game;		
-		current = new Stack<Define>();
-		assets_stack = new Stack<Assets>();
+		current = new Stack<Define>();		
 		exprVisitor = new FP4GExpresionVisitor(current);
 		CustomClassMap map = ((CustomClassMap)game.get("methods"));
 		if(map != null)
@@ -200,12 +199,16 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		Define define = current.peek();
 		
 		Expresion expr = exprVisitor.visit(ctx.expr());		
-		define.set(ctx.key, eval(define,expr));
+		try {
+			define.set(ctx.key, eval(define,expr));
+		} catch (CannotEvalException e) {			
+			Log.Show(WarnType.CannotEvalExpr,ctx.getStart().getLine(),expr.toString());
+		}
 		return null;
 	}
 	
-	//TODO talvez moverlo a otra clase
-	public static Literal<?> eval(Define define, Expresion expr) {
+	public static Literal<?> eval(Define define, Expresion expr) throws CannotEvalException 
+	{
 		return expr.eval(define);
 	}
 
@@ -253,13 +256,17 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 				throw new RuntimeException("No implementado");
 		  		//break;		  		
 		  	case GOAL:
-		  		//TODO: No implementado aï¿½n
+		  		//TODO: No implementado aún
 		  		Show(ErrType.NotImplement);
 				throw new RuntimeException("No implementado");
 		  		//break;
 		  	case MESSAGE:
 		  		define = new Message(defName,parent);		  		
-		  		break;		  		
+		  		break;
+		  	case ASSET:
+		  		Asset.Type type = Asset.Type.valueOf(defName);
+		  		define = new Asset(type,parent);
+		  		break;
 		  	default:
 		  		Show(ErrType.UnknowError);		  		
 		  	break;
@@ -322,48 +329,58 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	@Override
 	public Code visitAssets(FP4GParser.AssetsContext ctx) 
 	{
-		Assets assets = new Assets();		
-		assets_stack.push(assets);
+//		Assets assets = new Assets();		
+//		assets_stack.push(assets);
 		visitChildren(ctx);
-		assets_stack.pop();
-		
-		Define parent = current.peek();
-		parent.setAssets(assets);
+//		assets_stack.pop();
+//		
+//		Define parent = current.peek();
+//		parent.setAssets(assets);
 		return null;
 	}
 	
 	@Override
 	public Code visitAssetValueInner(FP4GParser.AssetValueInnerContext ctx)
 	{
-		Assets parent = assets_stack.peek();
-		AssetType type = ctx.assetType().type;		
-		String name = (ctx.assetName != null)? ctx.assetName.getText(): null;
-		String assetFile = ctx.asset.getText();
-		parent.add(type,name,assetFile);
+//TODO por hacer		
+//		Assets parent = assets_stack.peek();
+//		AssetType type = ctx.assetType().type;		
+//		String name = (ctx.assetName != null)? ctx.assetName.getText(): null;
+//		String assetFile = ctx.asset.getText();
+//		parent.add(type,name,assetFile);
 		return null;
 	}
 	
 	@Override
 	public Code visitAssetValue(FP4GParser.AssetValueContext ctx)
 	{
-		Assets parent = assets_stack.peek();
-		AssetType type = ctx.assetType().type;		
-		String name = (ctx.assetName != null)? ctx.assetName.getText(): null;
-		String assetFile = ctx.asset.getText();
-		if(ctx.getChildCount()>0)
-		{			
-			Assets assets = new Assets(type,name,assetFile);		
-			assets_stack.push(assets);
-			visitChildren(ctx);
-			assets_stack.pop();
-			
-			parent.add(assets);
-		}		
+		Define parent = current.peek();	
+
+		//spaceship = ADD ASSET Texture({name="spacheship",atlas = assets_group_1})
+		String varName  = (ctx.assetName != null)?ctx.assetName.getText():null;
+		String assetFile = ctx.asset.getText(); //TODO hay que evualuar esto más adelante
+		Asset.Type assetType = Asset.Type.valueOf(ctx.assetType.getText());
+		
+		Add assetAdd;		
+		if(varName == null)
+		{
+			assetAdd = new Add(DefineType.ASSET,assetType.name());
+		}
 		else
 		{
-			parent.add(type,name,assetFile);
+			assetAdd = new Add(DefineType.ASSET,assetType.name(),varName);
 		}
-			
+		ExprList paramsList = new ExprList(1);
+		//TODO soportar muchas opciones
+		paramsList.add(new ValueLiteral<String>(assetFile));
+		
+		assetAdd.addParams(paramsList);		
+		parent.setAdd(assetAdd);
+		
+		if(ctx.innerAssetValues != null)
+		{	
+			//TODO más opciones...
+		}
 		
 		return null;		
 	}

@@ -1,6 +1,7 @@
 package fp4g.data;
 
 import fp4g.data.expresion.Literal;
+import fp4g.exceptions.CannotEvalException;
 
 /**
  * Clase base para las expresiones!
@@ -20,5 +21,5 @@ public abstract class Expresion {
 		hasPar = p;
 	}
 	
-	public abstract Literal<?> eval(Define define);
+	public abstract Literal<?> eval(Define define) throws CannotEvalException;
 }

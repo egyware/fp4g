@@ -124,9 +124,21 @@ public final class ${class.name} extends GameState{
 		</#if>		
 		
 		//cargar los assets aqui.
-		<#if assets??>
-		<#list assets as asset>
-		Utils.loadAsset(${asset.resource}, ${asset.type}.class<#if asset.parameterClass??>, new ${asset.parameterClass}(${asset.parameterClassOption})</#if>);
+		<#if assets?has_content>
+		<#assign counter = 0 />
+		<#list assets as asset>		
+		<#if asset.parameterName??>
+		//TODO quedo pendiente esto...
+		<#assign paramName = "${asset.parameterName?uncap_first}_${counter}" />
+		${asset.parameterName} ${paramName} = new ${asset.parameterName}();				
+		<#list asset.params as param>
+		//${paramName}.;
+		<#assign counter = counter + 1 />
+		</#list>
+		Utils.loadAsset(${asset.resource}, ${asset.type}.class, ${paramName});
+		<#else>
+		Utils.loadAsset(${asset.resource}, ${asset.type}.class);
+		</#if>		
 		</#list>
 		Utils.loadAssets();
 		</#if>

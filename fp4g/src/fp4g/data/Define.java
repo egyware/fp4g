@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import fp4g.Log;
-import fp4g.Log.ErrType;
 import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.Literal;
@@ -26,9 +24,7 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 	
 	public String name;
 	public NameList paramNameList;
-	
-	public Assets assets;
-	
+		
 	private final Map<String,Literal<?>> variables;	
 	
 	private final Map<DefineType,List<Add>> adds;
@@ -65,7 +61,7 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 	}	
 	
 	/**
-	 * Agrega una adiciï¿½n de codigo
+	 * Agrega una adición de codigo
 	 * @param code
 	 */
 	public void setAdd(Add add)
@@ -132,8 +128,15 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 	 * @return
 	 * @throws DefineNotFoundException 
 	 */	
-	public final <T extends Define> T getDefine(DefineType type,String name) throws DefineNotFoundException
+	public final <T extends Define> T getDefine(DefineType type,String name) throws DefineNotFoundException 
 	{	
+		T value = getDefinePriv(type,name);
+		if(value == null)throw new DefineNotFoundException(name);
+		return value;
+	}
+	
+	private final <T extends Define> T getDefinePriv(DefineType type,String name)
+	{
 		final Map<String,T> map = (Map<String, T>) defines.get(type);
 		T value = null;		
 		if(map != null)
@@ -142,9 +145,8 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 		}
 		if(value == null && parent != null)
 		{
-			value = parent.getDefine(type, name);
+			value = parent.getDefinePriv(type, name);
 		}
-		if(value == null) throw new DefineNotFoundException(type,name);		
 		return value;
 	}
 	
@@ -158,11 +160,9 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 	{
 		for(DefineType type :DefineType.values())
 		{
-			Define define = getDefine(type,name);
-			if(define != null)
-			{
-				return define;
-			}
+			Define define = getDefinePriv(type,name);
+			if(define != null) return define;
+								
 		}
 		throw new DefineNotFoundException(name);		
 	}	
@@ -257,22 +257,5 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 	{
 		return variables.containsKey(key);
 	}
-	
-	/**
-	 * Establece por lo menos 1 vez los assets
-	 * @param assets
-	 */
-	public void setAssets(Assets assets)
-	{
-		if(this.assets != null)
-		{
-			Log.Show(ErrType.YouCanUseOnceTimeAssets,assets);
-		}
-		else
-		{
-			this.assets = assets;
-		}		
-	}
-
 	
 }

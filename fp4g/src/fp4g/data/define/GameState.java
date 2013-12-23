@@ -17,8 +17,7 @@ public class GameState extends Define{
 	@Override
 	public void setAdd(Add code) {
 		switch(code.getType())
-		{
-		case ASSET:		
+		{				
 		case BEHAVIOR:
 		case GAME:
 		case STATE:
@@ -37,6 +36,13 @@ public class GameState extends Define{
 			//break;
 		case MANAGER:
 			if(!isSetDefine(DefineType.MANAGER,code.name))
+			{
+				Show(WarnType.MissingDefineAdd,code);
+			}
+			super.setAdd(code);
+			break;
+		case ASSET:
+			if(!isSetDefine(DefineType.ASSET,code.name))
 			{
 				Show(WarnType.MissingDefineAdd,code);
 			}
