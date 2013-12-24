@@ -26,7 +26,7 @@ public final class SceneManager
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT); // This cryptic line clears the screen.		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		Object array[] = nodes.begin(); ///\TODO hay un error conocido...
+		Object array[] = nodes.begin(); ///\TODO hay un error conocido..., que error conocido?
 		
 		for(int i = 0; i < array.length; i ++)
 		{

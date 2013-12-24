@@ -93,7 +93,7 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 	@Override
 	public boolean keyTyped(char key) 
 	{
-		// TODO No hay mensaje aÃºn para este tipo
+		// TODO No hay mensaje aún para este tipo
 		return false;
 	}
 

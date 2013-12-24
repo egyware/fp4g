@@ -5,6 +5,7 @@ package fp4g.generator;
 
 import fp4g.data.Expresion;
 import fp4g.data.expresion.FunctionCall;
+import fp4g.exceptions.GeneratorException;
 
 /**
  * @author Edgardo
@@ -29,8 +30,9 @@ public abstract class FunctionGenerator <T extends Generator,M extends Model>
 	 * @param model modelo del codigo fuente que se genera
 	 * @param list
 	 * @return una expresion, la cual puede ser codigo directo o algo...
+	 * @throws GeneratorException 
 	 */
-	public abstract Expresion generate(M model,FunctionCall function);
+	public abstract Expresion generate(M model,FunctionCall function) throws GeneratorException;
 	
 	
 }

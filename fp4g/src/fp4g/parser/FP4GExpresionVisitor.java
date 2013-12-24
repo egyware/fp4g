@@ -219,8 +219,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	
 	
 	
-	//otros visitors
-	//TODO más adelante seguir reorganizando según lado.
+	//otros visitors	
 	@Override
 	public Expresion visitFunctionCallExpr(FP4GParser.FunctionCallExprContext ctx)
 	{

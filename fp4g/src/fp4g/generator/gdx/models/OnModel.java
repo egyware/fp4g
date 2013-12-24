@@ -17,6 +17,7 @@ import fp4g.data.Send;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.Literal;
 import fp4g.exceptions.DependResolverNotFoundException;
+import fp4g.exceptions.GeneratorException;
 import fp4g.generator.Depend;
 import fp4g.generator.Model;
 import fp4g.generator.gdx.JavaGenerator;
@@ -71,15 +72,24 @@ public class OnModel implements Model
 					Send send = (Send)stmnt;
 					
 					SendStatementModel sendModel = new SendStatementModel(send);
-					if(send.args != null && send.args.size() > 0)
+					try
 					{
-						List<String> params = sendModel.getParams();
-						for(Expresion expr:send.args)
+						if(send.args != null && send.args.size() > 0)
 						{
-							params.add(generator.expresion(model, expr));
-						}						
+							List<String> params = sendModel.getParams();
+							for(Expresion expr:send.args)
+							{
+								params.add(generator.expresion(model, expr));
+							}						
+						}
+					}
+					catch(GeneratorException gex)
+					{
+						//TODO error mal escrito, deberia haber cada uno de sus hijos de la excepcion y por cada uno un mensaje personalizado 
+						Log.Show(WarnType.CannotEvalExpr,gex.getMessage());
 					}
 					statements.add(sendModel);
+					
 									
 					Message msg = send.method.getMessage();					
 					try {

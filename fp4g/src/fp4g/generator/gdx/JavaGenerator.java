@@ -31,6 +31,7 @@ import fp4g.data.define.Manager;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.exceptions.DependResolverNotFoundException;
+import fp4g.exceptions.GeneratorException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
 import fp4g.generator.Depend;
@@ -182,12 +183,14 @@ public class JavaGenerator extends Generator {
 	}
 
 	@Override
-	public <CodeModel> Expresion function(CodeModel model,	FunctionCall fcall) {		
+	public <CodeModel> Expresion function(CodeModel model,	FunctionCall fcall) throws GeneratorException
+	{		
 		return funcGen.generate((JavaCodeModel)model,fcall);
 	}
 
 	@Override
-	public <CodeModel> String expresion(CodeModel model,Expresion expr) {
+	public <CodeModel> String expresion(CodeModel model,Expresion expr) throws GeneratorException
+	{
 		return exprGen.generate((JavaCodeModel) model,expr);
 	}
 	

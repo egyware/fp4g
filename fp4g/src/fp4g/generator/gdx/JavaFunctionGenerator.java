@@ -3,16 +3,15 @@
  */
 package fp4g.generator.gdx;
 
-import static fp4g.Log.Show;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import fp4g.Log.ErrType;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
+import fp4g.exceptions.FunctionGeneratorException;
+import fp4g.exceptions.GeneratorException;
 import fp4g.generator.FunctionGenerator;
 import fp4g.generator.gdx.models.JavaCodeModel;
 
@@ -39,33 +38,28 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	
 	private abstract class Function
 	{
-		public abstract Expresion generate(JavaCodeModel model,ExprList list);
+		public abstract Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException;
 	}
 		
 	@Override
-	public Expresion generate(JavaCodeModel model,FunctionCall fc)
+	public Expresion generate(JavaCodeModel model,FunctionCall fc) throws GeneratorException
 	{
 		Function fg = functions.get(fc.functionName);
 		if(fg != null)
 		{
 			return fg.generate(model,fc.params);
 		}
-		else
-		{
-			Show(ErrType.FunctionNotFound,fc.functionName);
-		}
-		return null;
+		throw new FunctionGeneratorException(fc.functionName);
 	}
 	
 	
 	private class GetSprite extends Function
 	{
 		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list)
+		public Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException
 		{
 			String resourceName = generator.expresion(model,list.get(0));
-			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			//model.depends.addAsset(AssetModel.AssetType.Sprite,resourceName);
+			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));			
 			DirectCode expr = new DirectCode(String.format("Utils.getSprite(%s)",resourceName));						
 			return expr;
 		}		
@@ -73,11 +67,10 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	private class GetSound extends Function
 	{
 		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list)
+		public Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException
 		{
 			String resourceName = generator.expresion(model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			//model.depends.addAsset(AssetModel.AssetType.Sound,resourceName);
 			DirectCode expr = new DirectCode(String.format("Utils.getSound(%s)",resourceName));			
 			return expr;
 		}		
@@ -86,11 +79,10 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	{
 
 		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list) 
+		public Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException
 		{
 			String resourceName = generator.expresion(model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			//model.depends.addAsset(AssetModel.AssetType.Texture,resourceName);			
 			DirectCode expr = new DirectCode(String.format("Utils.getTexture(%s)",resourceName));					
 			return expr;
 		}		
@@ -98,7 +90,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	private class GetMusic extends Function
 	{
 		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list)
+		public Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException
 		{			
 			String resourceName = generator.expresion(model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));			
@@ -111,12 +103,12 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	{
 
 		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list)
+		public Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException
 		{
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
 			Expresion width  = list.get(0);			
 			Expresion height = list.get(1);
-			DirectCode expr = new DirectCode(String.format("Utils.createBox(%s)",generator.expresion(model,width),generator.expresion(model,height)));			
+			DirectCode expr = new DirectCode(String.format("Utils.createBox(%s,%s)",generator.expresion(model,width),generator.expresion(model,height)));			
 			return expr;
 		}		
 	}
@@ -124,7 +116,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	{
 
 		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list)
+		public Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException
 		{
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
 			Expresion ratio = list.get(0);			

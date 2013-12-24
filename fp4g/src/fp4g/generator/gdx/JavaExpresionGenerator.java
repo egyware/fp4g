@@ -1,11 +1,8 @@
 package fp4g.generator.gdx;
 
-import static fp4g.Log.Show;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import fp4g.Log.ErrType;
 import fp4g.data.Expresion;
 import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.DirectCode;
@@ -13,6 +10,8 @@ import fp4g.data.expresion.FunctionCall;
 import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.ValueLiteral;
 import fp4g.data.expresion.VarId;
+import fp4g.exceptions.ExpresionGeneratorException;
+import fp4g.exceptions.GeneratorException;
 import fp4g.generator.ExpresionGenerator;
 import fp4g.generator.gdx.models.JavaCodeModel;
 
@@ -37,12 +36,12 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	}
 	
 	private abstract class EG_Expresion
-	{
-		public abstract String expr2string(JavaCodeModel model,Expresion expr);
+	{		
+		public abstract String expr2string(JavaCodeModel model,Expresion expr) throws GeneratorException;
 	}
 	
 	@Override
-	public String generate(JavaCodeModel model, Expresion expr) 
+	public String generate(JavaCodeModel model, Expresion expr) throws GeneratorException 
 	{		
 		
 		EG_Expresion eg = expresions.get(expr.getClass());		
@@ -58,11 +57,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 			}			
 			 
 		}
-		else
-		{	
-			Show(ErrType.ExpresionGeneratorNotFound,expr.getClass().getSimpleName());
-			return null;
-		}
+		throw new ExpresionGeneratorException(expr.getClass().getSimpleName());		
 	}
 	
 	private class VarExprGen extends EG_Expresion
@@ -94,17 +89,10 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	private class FunctionCallExprGen extends EG_Expresion
 	{
 		@Override
-		public String expr2string(JavaCodeModel model, Expresion expr) {			
+		public String expr2string(JavaCodeModel model, Expresion expr) throws GeneratorException 
+		{			
 			Expresion resultExpr = generator.function(model,(FunctionCall)expr);
-			if(resultExpr != null)
-			{
-				return generate(model,resultExpr);
-			}
-			else
-			{	
-				//TODO: mostrar error
-				return null;
-			}
+			return generate(model,resultExpr);			
 		}		
 	}
 	
@@ -120,7 +108,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	private class UnaryExprGen extends EG_Expresion
 	{
 		@Override
-		public String expr2string(JavaCodeModel model,Expresion expr) {
+		public String expr2string(JavaCodeModel model,Expresion expr) throws GeneratorException {
 			UnaryOp un = (UnaryOp)expr;
 			StringBuilder builder = new StringBuilder();
 			switch(un.type)
@@ -142,7 +130,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	private class BinaryExprGen extends EG_Expresion
 	{
 		@Override
-		public String expr2string(JavaCodeModel model,Expresion expr) {
+		public String expr2string(JavaCodeModel model,Expresion expr) throws GeneratorException {
 			BinaryOp bin = (BinaryOp)expr;
 			StringBuilder builder = new StringBuilder();
 			builder.append(generate(model, bin.left));

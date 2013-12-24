@@ -51,6 +51,12 @@ public class BodyBehavior extends IBodyBehavior
 		this.y = y;
 	}
 	
+	public BodyBehavior(com.apollo.World world, FixtureDef fixDef, int x, int y, int dx,int dy) {
+		this(world,fixDef,x,y);
+		simpleBody.setBullet(true);
+		simpleBody.setLinearVelocity(dx*SCALE, dy*SCALE);
+	}
+	
 	public static BodyBehavior build(com.apollo.World world, FixtureDef fixDef, Number x, Number y, Number dx,Number dy) {
 		return new BodyBehavior(world,fixDef,x.intValue(),y.intValue(),dx.intValue(),dy.intValue());
 	}
@@ -65,11 +71,6 @@ public class BodyBehavior extends IBodyBehavior
 		return new BodyBehavior(managers,fixDef,x.intValue(),y.intValue());
 	}
 	
-	public BodyBehavior(com.apollo.World world, FixtureDef fixDef, int x, int y, int dx,int dy) {
-		this(world,fixDef,x,y);
-		simpleBody.setBullet(true);
-		simpleBody.setLinearVelocity(dx, dy);
-	}
 	/* (non-Javadoc)
 	 * @see com.apollo.components.BodyBehavior#getBody()
 	 */

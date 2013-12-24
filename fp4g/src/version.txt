@@ -1,8 +1,9 @@
 :::0.1.21 (prerelease-prototipo)
++ Mini manual de uso (-h)
 + Mejorando los assets, ahora es sintax sugar de DEFINE/ADD ASSETS
+F En el generador ya no se hace diferencia entre Entero y Decimal simplemente es Numero (Number)
 F Se han mejorados las dependencias, para ello se utiliza los datos especificados en la biblioteca.
 * Prototipando bibliotecas.
-B No se puede hacer unboxing de la clase Number
 P Ordenar el codigo para recibir parametros y talvez más adelante definir parametros por defecto.
 P Falta especificar cuando el mensaje va para otra entidad.
 P Ordenar el codigo OnModel tiene demasiadas responsabilidades

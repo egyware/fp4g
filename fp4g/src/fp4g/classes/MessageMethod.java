@@ -44,8 +44,7 @@ public final class MessageMethod
 	public final boolean getMultiple() //deberia ser is, per no tengo tiempo para hacer comprobaciones extras.
 	{
 		return multiple;
-	}
-	//TODO corregir, para poder usar is en vez de get en caso de ser boolean
+	}	
 	public final boolean isAttachInputProcessor()
 	{
 		return attachInputProcesor;

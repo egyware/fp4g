@@ -18,6 +18,7 @@ import fp4g.data.Expresion;
 import fp4g.data.define.Game;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.exceptions.DependResolverNotFoundException;
+import fp4g.exceptions.GeneratorException;
 import fp4g.parser.FP4GDataVisitor;
 import fp4g.parser.FP4GLexer;
 import fp4g.parser.FP4GParser;
@@ -64,8 +65,8 @@ public abstract class Generator {
 	}
 	
 	
-	public abstract <CodeModel> Expresion function(CodeModel model, FunctionCall fcall);
-	public abstract <CodeModel> String   expresion(CodeModel model, Expresion expr);
+	public abstract <CodeModel> Expresion function(CodeModel model, FunctionCall fcall) throws  GeneratorException;
+	public abstract <CodeModel> String   expresion(CodeModel model, Expresion expr) throws GeneratorException;
 	
 	
 	

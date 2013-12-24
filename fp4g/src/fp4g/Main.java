@@ -90,10 +90,23 @@ public class Main {
 		    	
 
 	}
-
-	private static void ShowHelp() {
-		//TODO [egyware] por hacer...
-		System.out.println("Por hacer....");		
+	private static String help[] = {
+		"*** Modo de uso ***",
+		"",
+		"FP4G [parametros] archivo.fp4g",
+		"FP4G -h",
+		"",
+		"parametros:",
+		"  -out directorio : Indica la salida del generador.",
+		"  -p packageName  : Especifica el nombre del paquete (solo Java).",
+		"  -h              : Muestra este menú.",
+	};
+	private static void ShowHelp() 
+	{
+		for(String line:help)
+		{		
+			System.out.println(line);
+		}
 	}
 
 	/**
