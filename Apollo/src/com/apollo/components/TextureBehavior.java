@@ -24,6 +24,11 @@ public class TextureBehavior extends Spatial<SpriteBatch>
 		h = texture.getHeight();
 	}
 	
+	public static TextureBehavior build(Texture texture)
+	{
+		return new TextureBehavior(texture);
+	}
+	
 	@Override
 	public Layer getLayer() {
 		return Layers.ActorLayer;

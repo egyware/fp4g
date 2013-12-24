@@ -34,6 +34,32 @@ public class Transform extends ITransform
 		this.y = y;
 		this.rotation = rotation;
 	}
+	
+	public static Transform build()
+	{
+		return new Transform();
+	}
+
+	public static Transform build(Number x, Number y) 
+	{
+		return new Transform(x.floatValue(),y.floatValue());		
+	}
+	
+	public static Transform build(Number x, Number y, Number vx, Number vy) 
+	{
+		return new Transform(x.floatValue(),y.floatValue(),vx.floatValue(),vy.floatValue());
+	}
+		
+	public static Transform build(Number x, Number y, Number rot) 
+	{
+		return new Transform(x.floatValue(), y.floatValue(), rot.floatValue());
+	}
+	
+	public static Transform build(Transform t)
+	{
+		return new Transform(t);
+	}
+	
 
 	@Override
 	public String toString() {

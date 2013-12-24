@@ -40,6 +40,23 @@ public final class GunBehavior extends Behavior implements GunMessageHandler
 		this.entity = entity;
 		this.ammo   = ammo;		
 	}
+	
+	public static GunBehavior build()
+	{	
+		return new GunBehavior();		
+	}
+	public static GunBehavior build(int ammo)
+	{
+		return new GunBehavior(ammo);
+	}
+	public static GunBehavior build(String entity)
+	{
+		return new GunBehavior(entity);
+	}
+	public static GunBehavior build(String entity,int ammo)
+	{
+		return new GunBehavior(entity,ammo);		
+	}
 		
 	@Override
 	public void initialize()
