@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
 
 import fp4g.Log;
 import fp4g.Log.WarnType;
@@ -202,8 +202,13 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			}
 			//ahora assetModel deberia tener: el tipo de textura, nombre recurso y parametros adicionales.
 			List<String> params = new LinkedList<String>();
-			for(Expresion expr: asset.params)
+			Iterator<Expresion> it = asset.params.iterator();
+			//sacamos el primer valor (siempre va tener uno, esto porque la gramatica de lo obliga.
+			Expresion first = it.next();			
+			String assetPath = generator.expresion(modelClass,first);			
+			for(;it.hasNext();)
 			{
+				Expresion expr = it.next();
 				String result = generator.expresion(modelClass,expr);
 				if(result != null)
 				{
@@ -211,8 +216,8 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				}
 				//TODO: probablemente mostrar un error...
 			}
-			
-			AssetModel assetModel = new AssetModel(define, asset.varName, params);
+			//TODO, no sé en que momento deberia usar la varName de add...
+			AssetModel assetModel = new AssetModel(define, assetPath, params);
 			
 			assets.add(assetModel);
 			

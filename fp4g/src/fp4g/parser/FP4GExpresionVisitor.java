@@ -372,7 +372,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	public Expresion visitStringLiteral(FP4GParser.StringLiteralContext ctx)
 	{
 		String string = ctx.STRING_LITERAL().getText();
-		string = string.substring(1, string.length()-1);
+		string = string.substring(1, string.length()-1);		
 		Literal<String> literal = new ValueLiteral<String>(string);
 				
 		return literal;

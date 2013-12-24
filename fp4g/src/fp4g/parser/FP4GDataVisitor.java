@@ -359,6 +359,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		//spaceship = ADD ASSET Texture({name="spacheship",atlas = assets_group_1})
 		String varName  = (ctx.assetName != null)?ctx.assetName.getText():null;
 		String assetFile = ctx.asset.getText(); //TODO hay que evualuar esto más adelante
+		assetFile = assetFile.substring(1, assetFile.length()-1);
 		Asset.Type assetType = Asset.Type.valueOf(ctx.assetType.getText());
 		
 		Add assetAdd;		
