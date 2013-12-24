@@ -1,7 +1,7 @@
 package fp4g.generator;
 
 import fp4g.data.Define;
-import fp4g.generator.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaCodeModel;
 
 public interface Depend {
 

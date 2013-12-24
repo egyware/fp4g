@@ -8,7 +8,7 @@ import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.List;
 import fp4g.data.expresion.Literal;
 import fp4g.generator.Depend;
-import fp4g.generator.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaCodeModel;
 
 /**
  * Clase que resuelve las dependencias de el KeyMessage

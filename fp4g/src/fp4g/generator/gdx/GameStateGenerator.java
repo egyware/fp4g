@@ -1,4 +1,4 @@
-package fp4g.generator.gdxgenerator;
+package fp4g.generator.gdx;
 
 import java.io.File;
 import java.util.Arrays;
@@ -23,8 +23,8 @@ import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
-import fp4g.generator.models.AssetModel;
-import fp4g.generator.models.JavaCodeModel;
+import fp4g.generator.gdx.models.AssetModel;
+import fp4g.generator.gdx.models.JavaCodeModel;
 import freemarker.template.Template;
 
 public class GameStateGenerator extends CodeGenerator<JavaGenerator> {	

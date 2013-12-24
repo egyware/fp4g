@@ -1,4 +1,4 @@
-package fp4g.generator.models;
+package fp4g.generator.gdx.models;
 
 import java.util.List;
 

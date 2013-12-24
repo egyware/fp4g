@@ -7,7 +7,7 @@ import fp4g.data.Expresion;
  * @param <T>
  *
  */
-public abstract class ExpresionGenerator <T extends Generator,Model> {
+public abstract class ExpresionGenerator <T extends Generator,M extends Model> {
 	protected final T generator;
 	
 	public static enum CompareExpresion
@@ -31,6 +31,6 @@ public abstract class ExpresionGenerator <T extends Generator,Model> {
 		this.generator = generator;
 	}
 	
-	public abstract String generate(Model model,Expresion expr);
+	public abstract String generate(M model,Expresion expr);
 
 }

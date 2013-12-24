@@ -1,4 +1,4 @@
-package fp4g.generator.gdxgenerator;
+package fp4g.generator.gdx;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +34,7 @@ import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
 import fp4g.generator.Depend;
-import fp4g.generator.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaCodeModel;
 import freemarker.template.Configuration;
 
 public class JavaGenerator extends Generator {	
@@ -86,7 +86,7 @@ public class JavaGenerator extends Generator {
 			packageDir.mkdirs();
 		}		
 		
-		cfg.setClassForTemplateLoading(JavaGenerator.class, "/fp4g/templates");
+		cfg.setClassForTemplateLoading(JavaGenerator.class, "templates");
 		
 		generators.put(GameState.class, GameStateGenerator.class);
 		generators.put(Entity.class,    EntityGenerator.class);

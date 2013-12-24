@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fp4g.generator.gdxgenerator;
+package fp4g.generator.gdx;
 
 import static fp4g.Log.Show;
 
@@ -14,7 +14,7 @@ import fp4g.data.Expresion;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.generator.FunctionGenerator;
-import fp4g.generator.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaCodeModel;
 
 /**
  * @author Edgardo

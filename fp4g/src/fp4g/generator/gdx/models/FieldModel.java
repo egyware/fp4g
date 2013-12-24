@@ -1,4 +1,6 @@
-package fp4g.generator.models;
+package fp4g.generator.gdx.models;
+
+import fp4g.generator.Model;
 
 public class FieldModel implements Model {
 	public String type;

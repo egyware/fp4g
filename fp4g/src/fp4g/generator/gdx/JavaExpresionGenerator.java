@@ -1,4 +1,4 @@
-package fp4g.generator.gdxgenerator;
+package fp4g.generator.gdx;
 
 import static fp4g.Log.Show;
 
@@ -14,7 +14,7 @@ import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.ValueLiteral;
 import fp4g.data.expresion.VarId;
 import fp4g.generator.ExpresionGenerator;
-import fp4g.generator.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaCodeModel;
 
 /**
  * @author Edgardo

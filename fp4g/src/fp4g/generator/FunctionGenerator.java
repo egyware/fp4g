@@ -10,7 +10,7 @@ import fp4g.data.expresion.FunctionCall;
  * @author Edgardo
  *
  */
-public abstract class FunctionGenerator <T extends Generator,Model>
+public abstract class FunctionGenerator <T extends Generator,M extends Model>
 {
 	//el generador para que esté disponible para las demás instancias...
 	protected final T generator;
@@ -30,7 +30,7 @@ public abstract class FunctionGenerator <T extends Generator,Model>
 	 * @param list
 	 * @return una expresion, la cual puede ser codigo directo o algo...
 	 */
-	public abstract Expresion generate(Model model,FunctionCall function);
+	public abstract Expresion generate(M model,FunctionCall function);
 	
 	
 }

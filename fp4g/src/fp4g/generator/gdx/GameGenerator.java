@@ -1,4 +1,4 @@
-package fp4g.generator.gdxgenerator;
+package fp4g.generator.gdx;
 
 import java.io.File;
 import java.util.Arrays;

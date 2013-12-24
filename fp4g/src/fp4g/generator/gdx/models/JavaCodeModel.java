@@ -1,8 +1,10 @@
-package fp4g.generator.models;
+package fp4g.generator.gdx.models;
 
 import java.util.TreeSet;
 
-public class JavaCodeModel {
+import fp4g.generator.Model;
+
+public class JavaCodeModel implements Model{
 	public final TreeSet<String> imports;
 	public final TreeSet<String> interfaces;
 	public String pckg;//package

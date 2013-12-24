@@ -1,4 +1,4 @@
-package fp4g.generator.models;
+package fp4g.generator.gdx.models;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -18,7 +18,8 @@ import fp4g.data.define.Message;
 import fp4g.data.expresion.Literal;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.generator.Depend;
-import fp4g.generator.gdxgenerator.JavaGenerator;
+import fp4g.generator.Model;
+import fp4g.generator.gdx.JavaGenerator;
 
 public class OnModel implements Model
 {

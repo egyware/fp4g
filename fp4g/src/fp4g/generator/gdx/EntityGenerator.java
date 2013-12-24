@@ -1,4 +1,4 @@
-package fp4g.generator.gdxgenerator;
+package fp4g.generator.gdx;
 
 import java.io.File;
 import java.util.Arrays;
@@ -23,10 +23,10 @@ import fp4g.exceptions.UnknowException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Generator;
 import fp4g.generator.Depend;
-import fp4g.generator.models.JavaCodeModel;
-import fp4g.generator.models.OnModel;
-import fp4g.generator.models.OnModel.MethodHandlerModel;
-import fp4g.generator.models.ParamCodeModel;
+import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.generator.gdx.models.OnModel;
+import fp4g.generator.gdx.models.ParamCodeModel;
+import fp4g.generator.gdx.models.OnModel.MethodHandlerModel;
 import freemarker.template.Template;
 
 public class EntityGenerator extends CodeGenerator<JavaGenerator> {

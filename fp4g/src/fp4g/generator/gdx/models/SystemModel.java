@@ -1,6 +1,8 @@
-package fp4g.generator.models;
+package fp4g.generator.gdx.models;
 
 import java.util.List;
+
+import fp4g.generator.Model;
 
 public class SystemModel  implements Model{	
 	public String preinit;
