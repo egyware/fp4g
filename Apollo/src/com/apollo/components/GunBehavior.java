@@ -25,11 +25,11 @@ public final class GunBehavior extends Behavior implements GunMessageHandler
 	
 	public GunBehavior()
 	{	
-		this("Gun");		
+		this("Bullet");		
 	}
 	public GunBehavior(int ammo)
 	{
-		this("Gun",ammo);
+		this("Bullet",ammo);
 	}
 	public GunBehavior(String entity)
 	{

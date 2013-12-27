@@ -175,7 +175,7 @@ exprList: expr (COMA expr)*;
 nameList: declareVar ( COMA declareVar)*;
 
 declareVar
-		: varType ID;
+		: varType varName=ID (EQUAL initValue = expr)?;
 
 varType
 returns

@@ -21,7 +21,7 @@ import fp4g.data.expresion.ClassMap;
  *
  */
 public class On extends Code{
-	private static final Pattern methodValue = Pattern.compile("([a-z]+)([A-Z]*)");
+	private static final Pattern methodValue = Pattern.compile("([a-z]+)([A-Z][a-zA-Z]*)?");
 	public final String name;
 	public final Message message;
 	public final List<Source> sources;

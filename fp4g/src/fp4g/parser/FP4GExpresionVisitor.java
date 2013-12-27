@@ -27,9 +27,12 @@ import fp4g.data.expresion.List;
 import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.Map;
 import fp4g.data.expresion.UnaryOp;
-import fp4g.data.expresion.ValueLiteral;
 import fp4g.data.expresion.VarDot;
 import fp4g.data.expresion.VarId;
+import fp4g.data.expresion.literals.BoolLiteral;
+import fp4g.data.expresion.literals.FloatLiteral;
+import fp4g.data.expresion.literals.IntegerLiteral;
+import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.parser.FP4GParser.ArrayBodyContext;
 
@@ -125,7 +128,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		Expresion left = visit(ctx.left);
 		Expresion right = visit(ctx.right);
 				
-		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Mult,right,left);
+		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Mult,left,right);
 			
 		return binaryExpr;
 	}
@@ -136,7 +139,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		Expresion left = visit(ctx.left);
 		Expresion right = visit(ctx.right);
 		
-		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Div,right,left);
+		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Div,left,right);
 		
 		return binaryExpr;
 	}
@@ -147,7 +150,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		Expresion left = visit(ctx.left);
 		Expresion right = visit(ctx.right);
 		
-		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Add,right,left);
+		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Add,left,right);
 		
 		return binaryExpr;
 	}
@@ -158,7 +161,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		Expresion left = visit(ctx.left);
 		Expresion right = visit(ctx.right);		
 		
-		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Sub,right,left);
+		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Sub,left,right);
 		
 		return binaryExpr;
 	}
@@ -167,7 +170,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	public Expresion visitIntLiteral(FP4GParser.IntLiteralContext ctx)
 	{
 		Integer integer = Integer.valueOf(ctx.getText());
-		Literal<Integer> literal = new ValueLiteral<Integer>(integer);
+		Literal<Integer> literal = new IntegerLiteral(integer);
 		
 		return literal;
 	}
@@ -176,7 +179,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	public Expresion visitDecimalLiteral(FP4GParser.DecimalLiteralContext ctx)
 	{
 		Float integer = Float.valueOf(ctx.getText());
-		Literal<Float> literal = new ValueLiteral<Float>(integer);
+		Literal<Float> literal = new FloatLiteral(integer);
 				
 		return literal;
 	}
@@ -195,7 +198,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	public Expresion visitParExpr(FP4GParser.ParExprContext ctx)
 	{		
 		Expresion expr = visit(ctx.op);
-		expr.setPar(true); //establecemos que esta expresiï¿½n, lleva parentesis
+		expr.setPar(true); //establecemos que esta expresión, lleva parentesis
 				
 		return expr;
 	}	
@@ -204,7 +207,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	public Expresion visitBoolLiteral(FP4GParser.BoolLiteralContext ctx)
 	{
 		boolean bool = Boolean.parseBoolean(ctx.BOOL_LITERAL().getText());
-		Literal<Boolean> literal = new ValueLiteral<Boolean>(bool);
+		Literal<Boolean> literal = new BoolLiteral(bool);
 				
 		return literal;
 	}
@@ -372,7 +375,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	{
 		String string = ctx.STRING_LITERAL().getText();
 		string = string.substring(1, string.length()-1);		
-		Literal<String> literal = new ValueLiteral<String>(string);
+		Literal<String> literal = new StringLiteral(string);
 				
 		return literal;
 	}

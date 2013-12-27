@@ -34,7 +34,7 @@ import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.Literal;
-import fp4g.data.expresion.ValueLiteral;
+import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
 
@@ -319,8 +319,24 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	@Override 
 	public Code visitDeclareVar(FP4GParser.DeclareVarContext ctx)
 	{
-		final VarType type = ctx.varType().type;		
-		nameList.add(type,ctx.ID().getText());
+		final VarType type = ctx.varType().type;
+		if(ctx.initValue != null)
+		{			
+			try
+			{
+				Expresion initValue = exprVisitor.visit(ctx.initValue);
+				nameList.add(type, ctx.varName.getText(),eval(current.peek(),initValue));
+			}
+			catch (CannotEvalException e) 
+			{
+				Show(WarnType.CannotEvalExpr,ctx.initValue.start.getLine());				
+			}
+		}
+		else
+		{
+			nameList.add(type, ctx.varName.getText());
+		}
+		//nameList.add(type,ctx.ID().getText());
 		return null;		
 	}
 		
@@ -373,7 +389,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		}
 		ExprList paramsList = new ExprList(1);
 		//TODO soportar muchas opciones
-		paramsList.add(new ValueLiteral<String>(assetFile));
+		paramsList.add(new StringLiteral(assetFile));
 		
 		assetAdd.addParams(paramsList);		
 		parent.setAdd(assetAdd);

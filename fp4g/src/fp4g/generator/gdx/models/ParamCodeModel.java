@@ -20,6 +20,12 @@ public class ParamCodeModel implements Model {
 	private final String type;
 	private final String defaultValue;
 	
+	public ParamCodeModel(String type,String name, String value)
+	{
+		this.name = name;
+		this.type = type;
+		defaultValue = value;
+	}
 	public ParamCodeModel(String type,String name)
 	{
 		this.name = name;

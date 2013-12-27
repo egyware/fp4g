@@ -1,53 +1,23 @@
-package fp4g.data.expresion;
+package fp4g.data.expresion.literals;
 
-import java.util.Iterator;
-
-import com.esotericsoftware.reflectasm.ConstructorAccess;
-
+import fp4g.data.expresion.BinaryOp;
+import fp4g.data.expresion.Literal;
 import fp4g.exceptions.NotAllowedOperatorException;
 
-public class CustomClassList extends Literal<List> implements List 
+public class BoolLiteral extends Literal<Boolean> 
 {
-	private List bean;
-	public CustomClassList(Class<? extends List> type)
-	{
-		bean = ConstructorAccess.get(type).newInstance();		
-	}
-	public CustomClassList(List value)
-	{
-		bean = value;		
-	}
-
-	@Override
-	public Iterator<Literal<?>> iterator() 
-	{
-		return bean.iterator();
-	}
-
-	@Override
-	public void add(Literal<?> item) 
-	{
-		bean.add(item);
-	}
-
-	@Override
-	public Literal<?> get(int index)
-	{
-		return bean.get(index);
-	}
-
-	@Override
-	public int size() 
-	{
-		return bean.size();
-	}
-
-	@Override
-	public List getValue() 
-	{	
-		return bean;
-	}
+	private final Boolean bool;
 	
+	public BoolLiteral(Boolean bool)
+	{
+		this.bool = bool;
+	}
+	@Override
+	public Boolean getValue() 
+	{		
+		return bool;
+	}
+
 	@Override
 	public Literal<?> sum(Literal<?> right) throws NotAllowedOperatorException 
 	{
@@ -71,6 +41,5 @@ public class CustomClassList extends Literal<List> implements List
 	{
 		throw new NotAllowedOperatorException(this,BinaryOp.Type.Sub);
 	}
-
 
 }

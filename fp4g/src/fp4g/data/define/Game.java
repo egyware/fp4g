@@ -6,12 +6,16 @@ import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.On;
+import fp4g.data.expresion.Literal;
+import fp4g.data.expresion.literals.BoolLiteral;
+import fp4g.data.expresion.literals.IntegerLiteral;
 /**
  * Esta clase contendrá todos los datos necesarios para construir un juego
  * @author Edgardo
  *
  */
-public class Game extends Define  {	
+public class Game extends Define  
+{	
 	public int width = 640;
 	public int height = 480;
 	public boolean debug = false;
@@ -20,6 +24,50 @@ public class Game extends Define  {
 	public Game()
 	{
 		super(DefineType.GAME,"game");	
+	}
+	
+	public void set(String key, Literal<?> value)
+	{
+		if(key.equalsIgnoreCase("width"))
+		{
+			width = ((Integer)value.getValue()).intValue();
+		}
+		else
+		if(key.equalsIgnoreCase("height"))
+		{
+			width = ((Integer)value.getValue()).intValue();
+		}
+		else
+		if(key.equalsIgnoreCase("debug"))
+		{
+			debug = ((Boolean)value.getValue()).booleanValue();
+		}
+		else
+		{
+			super.set(key, value);
+		}
+	}
+	
+	public Literal<?> get(String key)
+	{
+		if(key.equalsIgnoreCase("width"))
+		{
+			return new IntegerLiteral(width);
+		}
+		else
+		if(key.equalsIgnoreCase("height"))
+		{
+			return new IntegerLiteral(height);
+		}
+		else
+		if(key.equalsIgnoreCase("debug"))
+		{
+			return new BoolLiteral(debug);
+		}
+		else
+		{
+			return super.get(key);
+		}
 	}
 	
 //	/**

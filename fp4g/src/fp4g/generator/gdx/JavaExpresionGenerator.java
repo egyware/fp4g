@@ -7,9 +7,14 @@ import fp4g.data.Expresion;
 import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
+import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.UnaryOp;
-import fp4g.data.expresion.ValueLiteral;
 import fp4g.data.expresion.VarId;
+import fp4g.data.expresion.literals.BoolLiteral;
+import fp4g.data.expresion.literals.FloatLiteral;
+import fp4g.data.expresion.literals.IntegerLiteral;
+import fp4g.data.expresion.literals.ObjectLiteral;
+import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.ExpresionGeneratorException;
 import fp4g.exceptions.GeneratorException;
 import fp4g.generator.ExpresionGenerator;
@@ -27,8 +32,13 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	public JavaExpresionGenerator(JavaGenerator generator) {
 		super(generator);
 		
+		final LiteralExprGen litgen = new LiteralExprGen();
 		expresions.put(VarId.class, new VarExprGen());
-		expresions.put(ValueLiteral.class, new LiteralExprGen());
+		expresions.put(BoolLiteral.class, litgen);
+		expresions.put(FloatLiteral.class, litgen);
+		expresions.put(IntegerLiteral.class, litgen);
+		expresions.put(ObjectLiteral.class, litgen);
+		expresions.put(StringLiteral.class, litgen);
 		expresions.put(UnaryOp.class, new UnaryExprGen());
 		expresions.put(BinaryOp.class, new BinaryExprGen());
 		expresions.put(FunctionCall.class, new FunctionCallExprGen());
@@ -73,7 +83,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	{
 		@Override
 		public String expr2string(JavaCodeModel model,Expresion expr) {
-			final ValueLiteral<?> literal = (ValueLiteral<?>)expr;
+			final Literal<?> literal = (Literal<?>)expr;
 			final Object value = literal.getValue();
 			if(value instanceof String)
 			{

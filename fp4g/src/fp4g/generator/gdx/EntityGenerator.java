@@ -8,25 +8,24 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import fp4g.Pair;
 import fp4g.data.Add;
 import fp4g.data.Code;
+import fp4g.data.DeclVar;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.On;
-import fp4g.data.VarType;
 import fp4g.data.define.Entity;
 import fp4g.data.vartypes.BasicType;
 import fp4g.data.vartypes.CustomType;
 import fp4g.exceptions.UnknowException;
 import fp4g.generator.CodeGenerator;
-import fp4g.generator.Generator;
 import fp4g.generator.Depend;
+import fp4g.generator.Generator;
 import fp4g.generator.gdx.models.JavaCodeModel;
 import fp4g.generator.gdx.models.OnModel;
-import fp4g.generator.gdx.models.ParamCodeModel;
 import fp4g.generator.gdx.models.OnModel.MethodHandlerModel;
+import fp4g.generator.gdx.models.ParamCodeModel;
 import freemarker.template.Template;
 
 public class EntityGenerator extends CodeGenerator<JavaGenerator> {
@@ -67,13 +66,13 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		{
 			//lo veo un poco consumidor de recursos, pero bueno...
 			List<ParamCodeModel> pair = new LinkedList<ParamCodeModel>();
-			for(Pair<VarType,String> par: entity.paramNameList)
+			for(DeclVar par: entity.paramNameList)
 			{
 				//TODO esto debe ir en otro lugar.
 				String name;
-				if(par.a instanceof BasicType)
+				if(par.type instanceof BasicType)
 				{
-					switch((BasicType)par.a)
+					switch((BasicType)par.type)
 					{
 					case Bool:
 						name = "Boolean";
@@ -93,12 +92,20 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				}
 				else
 				{
-					CustomType custom = (CustomType)par.a;
+					CustomType custom = (CustomType)par.type;
 					Define define = entity.getDefine(custom.name);
 					generator.resolveDependency(define).perform(define, modelEntity);
 					name = custom.name;
 				}
-				ParamCodeModel param = new ParamCodeModel(name,par.b);				
+				ParamCodeModel param;
+				if(par.initValue != null)
+				{
+					param = new ParamCodeModel(name, par.name,generator.expresion(modelBuild, par.initValue));
+				}
+				else
+				{
+					param = new ParamCodeModel(name,par.name);
+				}								
 				pair.add(param);
 			}
 			buildRoot.put("params",pair);
@@ -148,7 +155,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		{
 			//TODO esta clase tiene demasiada responsabilidad con respecto a lo que debe hacer.
 			//TODO Se está volviendo un caos agregar o quitar codigo de esta misma.
-			//por cada on! que es lo que necesitarï¿½
+			//por cada on! que es lo que necesitaré
 			//La categoria del mensaje Key,Contact,Life, etc..
 			//Obvio el code
 			List<OnModel> onList = new LinkedList<OnModel>();
@@ -180,6 +187,10 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				modelEntity.addImport("com.apollo.ApolloInputProcessor");
 				entityRoot.put("hasAttachments", true);
 			}
+			else
+			{
+				entityRoot.put("hasAttachments", false);
+			}			
 		}
 		
 		//agregar imports!

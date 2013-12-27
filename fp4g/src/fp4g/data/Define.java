@@ -207,7 +207,7 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 	 * @param key nombre de la variable
 	 * @param value valor de la variable
 	 */
-	public final void set(String key, Literal<?> value)
+	public void set(String key, Literal<?> value)
 	{
 		variables.put(key, value);
 	}
@@ -217,7 +217,7 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 	 * @param value valor de la variable
 	 */
 	public final void set(String key, Object  value)
-	{
+	{		
 		if(value instanceof fp4g.data.expresion.Map)
 		{
 			variables.put(key,new CustomClassMap((fp4g.data.expresion.Map)value));
@@ -233,7 +233,7 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 	 * @param key
 	 * @return
 	 */
-	public final Literal<?> get(String key)
+	public Literal<?> get(String key)
 	{
 		return variables.get(key);		 
 	}

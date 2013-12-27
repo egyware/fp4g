@@ -4,7 +4,7 @@ import fp4g.data.Expresion;
 
 public class CannotEvalException extends Exception 
 {
-	public CannotEvalException(DefineNotFoundException e, Expresion expr) 
+	public CannotEvalException(Throwable e, Expresion expr) 
 	{
 		super(String.format("No se pudo evaluar la expresion %s", expr.toString()),e);
 	}
