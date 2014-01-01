@@ -8,13 +8,13 @@ package fp4g.parser;
 import static fp4g.Log.*;
 
 import fp4g.data.*;
+import fp4g.data.statements.*;
 import fp4g.data.define.*;
 import fp4g.data.vartypes.*;
 
 import java.util.LinkedList;
 
 }
-
 @lexer::header
 {
 package fp4g.parser;
@@ -125,14 +125,29 @@ returns
 		;
 
 onStatement :
-			send 
+			  send
+			| destroy
 			;
+			
+destroy		:
+			DESTROY
+			;
+
 send
 returns
-[String messageMethodName,String receiverName]
+[String messageMethodName,String receiverName, Send.SendTo receiverType]
 	:
-		SEND method=ID {$messageMethodName = $method.text;} (ABRE_PAR exprList CIERRA_PAR)? (TO receiver=ID {$receiverName = $receiver.text;})?
-		;
+	{$receiverType = Send.SendTo.Self;}
+	SEND method=ID {$messageMethodName = $method.text;}
+	(ABRE_PAR exprList CIERRA_PAR)?
+	(
+	 TO (
+	       receiver=OTHER {$receiverType = Send.SendTo.Other;}
+	     | receiver=ID    {$receiverType = null;} //sin especificar todavía
+	 	)
+	 {$receiverName = $receiver.text;}
+	)?
+	;
 //filtros On:pressA pressB (parsea la disyuncion pressA or pressB)
 onFilters
 returns

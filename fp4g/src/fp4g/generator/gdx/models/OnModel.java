@@ -13,9 +13,10 @@ import fp4g.data.Expresion;
 import fp4g.data.On;
 import fp4g.data.On.Filter;
 import fp4g.data.On.Source;
-import fp4g.data.Send;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.Literal;
+import fp4g.data.statements.Destroy;
+import fp4g.data.statements.Send;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.exceptions.GeneratorException;
 import fp4g.generator.Depend;
@@ -67,38 +68,49 @@ public class OnModel implements Model
 				statements = new LinkedList<StatementModel>();
 				for(Code stmnt:source.statements)
 				{	
-					//MessageSender.instance().send(receiver, message);
-					//TODO por ahora TODOS son Send					
-					Send send = (Send)stmnt;
 					
-					SendStatementModel sendModel = new SendStatementModel(send);
-					try
+					if(stmnt instanceof Destroy)
 					{
-						if(send.args != null && send.args.size() > 0)
+						Destroy destroy = (Destroy)stmnt;
+						DestroyStatementModel  destroyModel = new DestroyStatementModel(destroy);
+						statements.add(destroyModel);
+						
+					}else
+					if(stmnt instanceof Send)
+					{
+						//MessageSender.instance().send(receiver, message);
+						Send send = (Send)stmnt;
+						
+						SendStatementModel sendModel = new SendStatementModel(send);
+						try
 						{
-							List<String> params = sendModel.getParams();
-							for(Expresion expr:send.args)
+							if(send.args != null && send.args.size() > 0)
 							{
-								params.add(generator.expresion(model, expr));
-							}						
+								List<String> params = sendModel.getParams();
+								for(Expresion expr:send.args)
+								{
+									params.add(generator.expresion(model, expr));
+								}						
+							}
 						}
+						catch(GeneratorException gex)
+						{
+							//TODO error mal escrito, deberia haber cada uno de sus hijos de la excepcion y por cada uno un mensaje personalizado 
+							Log.Show(WarnType.CannotEvalExpr,gex.getMessage());
+						}
+						statements.add(sendModel);
+						Message msg = send.method.getMessage();					
+						try {
+							Depend depend = generator.resolveDependency(msg);
+							depend.perform(msg, model);
+						} catch (DependResolverNotFoundException e) {
+							Log.Show(WarnType.DependResolverNotFound,msg);
+							e.printStackTrace();
+						}				
 					}
-					catch(GeneratorException gex)
-					{
-						//TODO error mal escrito, deberia haber cada uno de sus hijos de la excepcion y por cada uno un mensaje personalizado 
-						Log.Show(WarnType.CannotEvalExpr,gex.getMessage());
-					}
-					statements.add(sendModel);
 					
 									
-					Message msg = send.method.getMessage();					
-					try {
-						Depend depend = generator.resolveDependency(msg);
-						depend.perform(msg, model);
-					} catch (DependResolverNotFoundException e) {
-						Log.Show(WarnType.DependResolverNotFound,msg);
-						e.printStackTrace();
-					}										
+											
 				}
 			}
 			else

@@ -21,10 +21,10 @@ import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
+import fp4g.data.Instance;
 import fp4g.data.NameList;
 import fp4g.data.On;
 import fp4g.data.On.Source;
-import fp4g.data.Send;
 import fp4g.data.Statements;
 import fp4g.data.VarType;
 import fp4g.data.define.Asset;
@@ -35,6 +35,8 @@ import fp4g.data.define.Message;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.literals.StringLiteral;
+import fp4g.data.statements.Destroy;
+import fp4g.data.statements.Send;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
 
@@ -151,6 +153,13 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	
 	
 	@Override
+	public Code visitDestroy(FP4GParser.DestroyContext ctx)
+	{
+		Destroy destroy = new Destroy(Instance.Self);
+		return destroy;
+	}
+	
+	@Override
 	public Code visitSend(FP4GParser.SendContext ctx)
 	{
 		MessageMethod method = methods.getMessageMethod(ctx.messageMethodName);
@@ -161,33 +170,35 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		}
 		Send.SendTo type = null;
 		String receiver = null;
-		if(ctx.receiverName != null) //TODO detectar para onde vÃ¡ (falta sistemas)
-		{
-			receiver = ctx.receiverName;
-			type = Send.SendTo.Other;
-		}
-		else
-		{
-			type = Send.SendTo.Self;
-		}
-		Send send = new Send(type,method);	
+		//Busqueda de quien envia mensaje.
+		//1.- Self
+		//2.- Other
+		//3.- Componente
+		//4.- Tag
+		//5.- Sistema
+		type = ctx.receiverType;
+		switch(ctx.receiverType)
+		{		
+		case Other:
+			//nada que hacer ;)
+			break;
+		case Self:
+			//nada que hacer ;)
+			break;					
+		default:
+		//Behavior,System, no se puede determinar desde el lexer
+			receiver = ctx.receiverName;			
+			type = Send.SendTo.System; //asumiré que es un sistema pero no será de mucha ayuda.			
+			//type = Send.SendTo.Behavior;
+			break;		
+		}		
+		Send send = new Send(type,method,receiver);	
 		
 		ExprList list = exprVisitor.getExprList(ctx.exprList());
 		if(list != null)
 		{		
-			//TODO checkar la exprList, checkar que?, que debe tner? =S
+			//TODO checkar la exprList, checkar que?, Compararla contra MessageMethod.Params se requiere conocimiento adicional.
 			send.setArguments(list);		
-		}
-		switch(type)
-		{		
-		case Other:
-			send.setTo(receiver);
-			break;		
-		case System:
-			//TODO falta que hago
-			break;
-		default:
-			break;		
 		}
 		
 		return send;		

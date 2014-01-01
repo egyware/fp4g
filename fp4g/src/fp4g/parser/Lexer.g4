@@ -10,6 +10,7 @@ DEFINE     : 'DEFINE';
 ADD        : 'ADD';
 ON         : 'ON';
 SEND       : 'SEND';
+DESTROY    : 'DESTROY';
 GROUP      : 'GROUP';
 SUBSCRIBE  : 'SUBSCRIBE';
 UNSUBSCRIBE: 'UNSUBSCRIBE';
@@ -19,13 +20,13 @@ USING      : 'USING';
 EXIT       : 'EXIT';
 SET        : 'SET';
 START      : 'START';
-ASSET      : 'ASSET';
 ASSETS     : 'ASSETS';
 
 /* auxiliars keywords */
 MANAGER : 'MANAGER';
 GAME    : 'GAME';
 STATE   : 'STATE';
+ASSET   : 'ASSET';
 BEHAVIOR: 'BEHAVIOR';
 ENTITY  : 'ENTITY';
 GOAL    : 'GOAL';
@@ -34,6 +35,7 @@ BASE    : 'BASE';
 TO      : 'TO';
 SOURCE  : 'SOURCE';	
 AS		: 'AS';
+OTHER   : 'OTHER'; 
 
 /* separators */
 ABRE_COR  : '['; 
@@ -71,9 +73,9 @@ DIRECTCODE      : '@\'' .*? '\'';
 INT_LITERAL 	: ( DIGIT)+;
 DECIMAL_LITERAL : ( DIGIT)*'.'(DIGIT)+;
 STRING_LITERAL  : '"' .*? '"';
-BOOL_LITERAL 	: ('true'|'false'); 
+BOOL_LITERAL 	: ('true'|'false');
 PARENT_LITERAL  : 'parent';
-CURRENT_LITERAL  : 'current';
+CURRENT_LITERAL : 'current';
 fragment DIGIT  : [0-9];
 
 /* Identificador */

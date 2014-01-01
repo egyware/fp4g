@@ -6,7 +6,8 @@ public abstract class StatementModel implements Model
 {
 	public static enum Type
 	{
-		SendStatement
+		SendStatement,
+		DestroyStatement
 	}
 	private final Type type;
 	public StatementModel(Type type)

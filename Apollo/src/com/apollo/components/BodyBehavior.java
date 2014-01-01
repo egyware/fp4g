@@ -51,6 +51,16 @@ public class BodyBehavior extends IBodyBehavior
 		this.y = y;
 	}
 	
+	public void initialize()
+	{
+		simpleBody.setUserData(owner);
+	}
+	
+	public void uninitialize()
+	{
+		simpleBody.getWorld().destroyBody(simpleBody);
+	}
+	
 	public BodyBehavior(com.apollo.World world, FixtureDef fixDef, int x, int y, int dx,int dy) {
 		this(world,fixDef,x,y);
 		simpleBody.setBullet(true);

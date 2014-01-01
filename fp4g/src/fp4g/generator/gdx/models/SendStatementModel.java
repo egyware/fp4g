@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.antlr.v4.misc.Utils;
 
-import fp4g.data.Send;
 import fp4g.data.define.Message;
+import fp4g.data.statements.Send;
 
 public final class SendStatementModel extends StatementModel 
 {	

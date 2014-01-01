@@ -5,6 +5,7 @@ package fp4g.parser;
 import static fp4g.Log.*;
 
 import fp4g.data.*;
+import fp4g.data.statements.*;
 import fp4g.data.define.*;
 import fp4g.data.vartypes.*;
 
@@ -308,6 +309,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDeclareVar(@NotNull FP4GParser.DeclareVarContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#destroy}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDestroy(@NotNull FP4GParser.DestroyContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#usings}.

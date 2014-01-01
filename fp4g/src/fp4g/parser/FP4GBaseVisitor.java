@@ -5,6 +5,7 @@ package fp4g.parser;
 import static fp4g.Log.*;
 
 import fp4g.data.*;
+import fp4g.data.statements.*;
 import fp4g.data.define.*;
 import fp4g.data.vartypes.*;
 
@@ -350,6 +351,14 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitDeclareVar(@NotNull FP4GParser.DeclareVarContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitDestroy(@NotNull FP4GParser.DestroyContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
