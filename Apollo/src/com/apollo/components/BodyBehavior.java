@@ -51,13 +51,16 @@ public class BodyBehavior extends IBodyBehavior
 		this.y = y;
 	}
 	
+	@Override
 	public void initialize()
 	{
 		simpleBody.setUserData(owner);
 	}
 	
+	@Override
 	public void uninitialize()
 	{
+		simpleBody.setUserData(null);
 		simpleBody.getWorld().destroyBody(simpleBody);
 	}
 	

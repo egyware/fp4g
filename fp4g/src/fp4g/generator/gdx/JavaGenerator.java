@@ -99,13 +99,7 @@ public class JavaGenerator extends Generator {
 	
 	@Override
 	protected void generateCode(Code gameData, File path) 
-	{
-		if(!gameData.canBuild())
-		{
-			return; //nope, no debo contruir este objeto
-		}	
-		
-		//----
+	{		
 		Class<? extends CodeGenerator<JavaGenerator>> codegen = generators.get(gameData.getClass());
 		
 		if(codegen != null)
@@ -113,7 +107,14 @@ public class JavaGenerator extends Generator {
 			try{
 				Constructor<? extends CodeGenerator<JavaGenerator>> constructor = codegen.getConstructor(JavaGenerator.class);
 				CodeGenerator<? extends JavaGenerator> generator = constructor.newInstance(this);
-				generator.generateCode(gameData, packageDir);
+				if(gameData.canBuild()) //se puede contruir?
+				{
+					generator.generateCode(gameData, packageDir);
+				}
+				else //si no, utilizamos su codigo :B
+				{
+					generator.usingCode(gameData, packageDir);
+				}
 			} catch (NoSuchMethodException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

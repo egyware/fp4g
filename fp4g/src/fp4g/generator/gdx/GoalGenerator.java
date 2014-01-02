@@ -17,6 +17,13 @@ public class GoalGenerator extends CodeGenerator<JavaGenerator> {
 		
 	}
 
+	@Override
+	public void usingCode(Code gameData, File path) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 
 }

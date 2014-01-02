@@ -12,6 +12,20 @@ public abstract class CodeGenerator <T extends Generator>
 	{
 		this.generator = generator;
 	}
-	
+
+	/**
+	 * Genera codigo dado ciertos datos
+	 * 
+	 * @param gameData
+	 * @param path
+	 * @throws Exception
+	 */
 	public abstract void generateCode(Code gameData, File path) throws Exception;
+	/**
+	 * Usa codigo prehecho dato ciertos datos.
+	 * 
+	 * @param gameData
+	 * @param path
+	 */
+	public abstract void usingCode(Code gameData, File path);
 }

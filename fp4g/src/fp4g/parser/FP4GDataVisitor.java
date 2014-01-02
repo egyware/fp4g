@@ -28,6 +28,7 @@ import fp4g.data.On.Source;
 import fp4g.data.Statements;
 import fp4g.data.VarType;
 import fp4g.data.define.Asset;
+import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
@@ -63,6 +64,47 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		{
 			methods = (MessageMethods)map.getValue();
 		}
+	}
+	
+	
+	
+	@Override
+	public Code visitUsing(FP4GParser.UsingContext ctx)
+	{	
+		switch(ctx.type)
+		{		
+		case BEHAVIOR:
+			Behavior behavior = new Behavior(ctx.name.getText());
+			behavior.setBuild(false);
+			game.setDefine(behavior);
+			break;
+		case ENTITY:
+			Entity entity = new Entity(ctx.name.getText(),game);
+			entity.setBuild(false);
+			game.setDefine(entity);
+			break;
+		case GOAL:
+			//TODO por hacer...
+//			Behavior behavior = new Behavior(ctx.name.getText());
+//			behavior.setBuild(false);
+//			game.setDefine(behavior);
+			break;
+		case MANAGER:
+			//TODO por hacer...
+			break;
+		case MESSAGE:
+			//TODO por hacer..
+			break;
+		case STATE:
+			GameState state = new GameState(ctx.name.getText(),game);
+			state.setBuild(false);
+			game.setDefine(state);			
+			break;
+		case GAME:			
+		default:			
+			//TODO error :/ estado ilegal					
+		}
+		return null;		
 	}
 	
 	@Override
@@ -304,7 +346,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		Define parent = current.peek();
 		
 		Add	add = new Add(ctx.type,ctx.addName,ctx.varName);
-		add.setLine(ctx.getStart().getLine());
+		add.setLine(ctx.start.getLine());
 		
 		ExprList list = exprVisitor.getExprList(ctx.exprList());
 		if(list != null)
@@ -314,7 +356,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		
 		parent.setAdd(add);		
 		
-		return null; 		
+		return add; 		
 	}
 	
 	

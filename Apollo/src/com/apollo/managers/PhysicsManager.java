@@ -67,9 +67,9 @@ public class PhysicsManager extends Manager implements ContactListener{
 	public void endContact(Contact contact) {
 		//onEndContact(Entity other,Fixture otherFixture, Fixture ownFixture,Contact contact);
 		Fixture fixA = contact.getFixtureA();
-		Fixture fixB = contact.getFixtureB();
-		Entity a = (Entity)fixA.getBody().getUserData();
-		Entity b = (Entity)fixB.getBody().getUserData();
+		Fixture fixB = contact.getFixtureB();		
+		Entity a = (fixA == null)?null:(Entity)fixA.getBody().getUserData();				
+		Entity b = (fixB == null)?null:(Entity)fixB.getBody().getUserData();
 		if(a != null)
 		{
 			a.onMessage(ContactMessage.onEndContact, b, fixB, fixA, contact);

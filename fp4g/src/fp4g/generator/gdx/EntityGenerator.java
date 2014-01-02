@@ -267,4 +267,15 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		generator.createFile(generator.packageDir,String.format("entity/%s.java",entity.name),entityTempl,entityRoot);		
 	}
 
+	@Override
+	public void usingCode(Code gameData, File path) 
+	{
+		Entity entity = (Entity)gameData;
+		
+		generator.usingFile(generator.packageDir,String.format("entity/%sBuilder.java",entity.name));
+		generator.usingFile(generator.packageDir,String.format("entity/%s.java",entity.name));	
+		
+		
+	}
+
 }

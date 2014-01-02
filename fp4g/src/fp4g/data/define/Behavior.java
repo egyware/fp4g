@@ -1,5 +1,7 @@
 package fp4g.data.define;
 
+import fp4g.data.Define;
+import fp4g.data.DefineType;
 import fp4g.data.ExprList;
 
 
@@ -9,9 +11,15 @@ import fp4g.data.ExprList;
  * @author Edgardo
  *
  */
-public class Behavior {
-	public Behavior parent;
-	public String name;
-	public ExprList parameters;
+public class Behavior extends Define
+{
+
+	public Behavior(String name) 
+	{
+		super(DefineType.BEHAVIOR, name);		
+	}
+	//public Behavior parent;
+	//public String name;
+	//public ExprList parameters;
 	
 }

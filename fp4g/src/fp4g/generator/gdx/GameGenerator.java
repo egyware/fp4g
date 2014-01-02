@@ -23,8 +23,8 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 	}
 
 	@Override
-	public void generateCode(Code gameData, File path)
-	throws Exception {
+	public void generateCode(Code gameData, File path) throws Exception 
+	{
 		Game game = (Game)gameData;
 		
 		Template temp = generator.getTemplate("GameManager.ftl"); 	
@@ -103,6 +103,14 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 				generator.generateCode(state, path);
 			}
 		}
+	}
+
+	@Override
+	public void usingCode(Code gameData, File path)
+	{
+		Game game = (Game)gameData;
+		generator.usingFile(path,String.format("%s.java",game.name));
+		generator.usingFile(path,"Utils.java");
 	}
 	
 }

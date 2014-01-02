@@ -254,5 +254,12 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		generator.addJavaCode(state, modelClass);
 		generator.createFile(path,String.format("%s.java",state.name), temp, root);
 	}
+
+	@Override
+	public void usingCode(Code gameData, File path) 
+	{
+		GameState state = (GameState)gameData;
+		generator.usingFile(path,String.format("%s.java",state.name));
+	}
 	
 }

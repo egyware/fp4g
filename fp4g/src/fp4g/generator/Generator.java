@@ -79,6 +79,13 @@ public abstract class Generator {
 		return uncap_string.toString();
 	}
 	
+	public void usingFile(File path,String name)
+	{
+		File file = new File(path,name);
+		System.out.println(String.format("Agregando: %s",name));
+		filesToCompile.add(file);
+	}
+	
 	public void createFile(File path,String name,Template template,Object buildRoot) throws Exception
 	{	
 		File file = new File(path,name);

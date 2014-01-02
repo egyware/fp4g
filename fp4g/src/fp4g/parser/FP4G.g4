@@ -25,7 +25,22 @@ program : usings game EOF;
 
 usings  : (using)*;
 
-using   : USING ( MANAGER | STATE | BEHAVIOR | ENTITY | GOAL | MESSAGE ) ID DOTCOMA;
+using
+returns
+[
+	DefineType type = null,
+]   
+		: USING 
+			(
+			   MANAGER  { $type = DefineType.MANAGER; }
+			 | STATE    { $type = DefineType.STATE;   }
+			 | BEHAVIOR { $type = DefineType.BEHAVIOR;}
+			 | ENTITY   { $type = DefineType.ENTITY;  }
+			 | GOAL     { $type = DefineType.GOAL;    }
+			 | MESSAGE  { $type = DefineType.MESSAGE; }
+			) 
+		  name = ID DOTCOMA
+		;
 
 game 
 returns [String name]  
