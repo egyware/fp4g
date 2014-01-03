@@ -203,11 +203,13 @@ public class Game extends Define
 		switch(define.getType())
 		{
 			case GAME:			
-			case MANAGER:
-			case BEHAVIOR:			
+			case MANAGER:			
 				Show(ErrType.NotExpectedType,define);
 				break;
 			case ASSET:
+				super.setDefine(define);
+				break;
+			case BEHAVIOR:
 				super.setDefine(define);
 				break;
 			case ENTITY:

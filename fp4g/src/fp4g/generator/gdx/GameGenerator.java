@@ -10,6 +10,7 @@ import java.util.List;
 
 import fp4g.data.Code;
 import fp4g.data.DefineType;
+import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
@@ -101,6 +102,14 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 			for(GameState state: game_states)
 			{
 				generator.generateCode(state, path);
+			}
+		}
+		final Collection<Behavior> behaviors = game.getDefines(DefineType.BEHAVIOR);
+		if(behaviors != null)
+		{
+			for(Behavior behavior: behaviors)
+			{
+				generator.generateCode(behavior, path);
 			}
 		}
 	}

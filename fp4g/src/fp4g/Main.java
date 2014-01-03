@@ -146,9 +146,7 @@ public class Main {
 			{
 				outDirectory = ".";
 			}			
-		}
-		System.out.println(inputFile);
-		System.out.println(outDirectory);
+		}		
 		return inputFile != null;
 	}
 

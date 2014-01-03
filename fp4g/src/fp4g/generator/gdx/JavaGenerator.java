@@ -1,13 +1,18 @@
 package fp4g.generator.gdx;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -23,6 +28,7 @@ import fp4g.classes.DependResolvers;
 import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.Expresion;
+import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
@@ -33,12 +39,13 @@ import fp4g.data.expresion.FunctionCall;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.exceptions.GeneratorException;
 import fp4g.generator.CodeGenerator;
-import fp4g.generator.Generator;
 import fp4g.generator.Depend;
+import fp4g.generator.Generator;
 import fp4g.generator.gdx.models.JavaCodeModel;
 import freemarker.template.Configuration;
 
-public class JavaGenerator extends Generator {	
+public class JavaGenerator extends Generator 
+{	
 	public static final String autodoc = "/**\n  * Autogenerado por FP4G\n  * [NO MODIFICAR]\n  */";
 	public String packageName = "";
 	public String packageNameDir = "";
@@ -61,6 +68,37 @@ public class JavaGenerator extends Generator {
 		
 		exprGen = new JavaExpresionGenerator(this);
 		funcGen = new JavaFunctionGenerator(this);
+	}
+	
+	
+	private Pattern pattern = Pattern.compile("import\\s+(static\\s+)?([a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*)(\\.\\*)?",	Pattern.CASE_INSENSITIVE);
+	protected List<File> getRequiredFiles(File path, File filename)
+	{
+		try
+		{
+			List<File> list = new LinkedList<File>();
+			FileInputStream fis = new FileInputStream(filename);
+			byte data[] = new byte[fis.available()];
+			fis.read(data);
+			fis.close();
+			String string = new String(data);
+			Matcher results = pattern.matcher(string);
+			while(results.find())
+			{
+				String clazz = results.group(2);
+				if(clazz.startsWith("com.apollo.components")||clazz.startsWith(packageName))
+				{
+					File file = new File(path,clazz.replace('.', File.separatorChar).concat(".java"));
+					list.add(file);
+				}
+			}
+			return list;			
+		}
+		catch(Exception e)
+		{
+			//TODO: ehhh que hacer con esto?
+		}
+		return Collections.emptyList();
 	}
 	
 	@Override	
@@ -93,6 +131,7 @@ public class JavaGenerator extends Generator {
 		generators.put(Entity.class,    EntityGenerator.class);
 		generators.put(Game.class,      GameGenerator.class);
 		generators.put(Goal.class,      GoalGenerator.class);
+		generators.put(Behavior.class,  BehaviorGenerator.class);
 				
 	}
 
@@ -156,7 +195,8 @@ public class JavaGenerator extends Generator {
 				"-cp",
 				cp,
 				"-d",				
-				binaryDir.getAbsolutePath()								
+				binaryDir.getAbsolutePath(),
+				"-Xlint:deprecation"
 		};
 				
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
@@ -167,12 +207,20 @@ public class JavaGenerator extends Generator {
 		
 		
 		for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
-			String fileName = diagnostic.getSource().getName();
-			if(fileName.length() > path.length() )
+			JavaFileObject source = diagnostic.getSource();
+			if(source != null)
 			{
-				fileName = fileName.substring(start);
+				String fileName = source.getName();
+				if(fileName.length() > path.length() )
+				{
+					fileName = fileName.substring(start);
+				}
+				System.out.format("%3d: JavaError %s \n%s\n", diagnostic.getLineNumber(), fileName,diagnostic.getMessage(null));
 			}
-			System.out.format("%3d: JavaError %s \n%s\n", diagnostic.getLineNumber(), fileName,diagnostic.getMessage(null));
+			else
+			{
+				System.out.format("%3d: JavaError %s\n", diagnostic.getLineNumber(), diagnostic.getMessage(null));
+			}
 		}        
 	 
 	    try {

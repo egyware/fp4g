@@ -32,6 +32,7 @@ public abstract class Generator {
 	protected abstract void initialize(File path,Options options,Configuration cfg);
 	protected abstract void generateCode(Code gameData,File path);
 	protected abstract void compileFiles(List<File> files); //TODO: compile file add throw some exception
+	protected abstract List<File> getRequiredFiles(File path,File file);
 	
 	
 	private List<File> filesToCompile = new LinkedList<File>();
@@ -84,6 +85,7 @@ public abstract class Generator {
 		File file = new File(path,name);
 		System.out.println(String.format("Agregando: %s",name));
 		filesToCompile.add(file);
+		filesToCompile.addAll(getRequiredFiles(path,file));
 	}
 	
 	public void createFile(File path,String name,Template template,Object buildRoot) throws Exception
