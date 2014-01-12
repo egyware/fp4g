@@ -1,9 +1,7 @@
 package fp4g.generator.gdx;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -194,65 +192,25 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		}
 		
 		//agregar imports!
-		{
-			String arrayImports[] = new String[]
-					{
-						"com.apollo.EntityBuilder",
-						"com.apollo.Entity",			
-						"com.apollo.World",
-						String.format("%s.Utils", generator.packageName)						
-					};
-			//imports para el builder
-			List<String> imports = new LinkedList<String>();
-			Collections.addAll(imports, arrayImports);		
-			for(Add addBhvr:entity_addBehaviors)
-			{
-				imports.add(String.format("com.apollo.components.%s",addBhvr.name));
-			}
-			Collections.sort(imports);
-			modelBuild.imports.addAll(imports);			
-		}
+		Depend dr = generator.resolveDependency(entity);
+		dr.perform(entity, modelBuild);
+		dr.perform(entity, modelEntity);
 		
-		{
-			String arrayImports[] = new String[]
-			{
-					"com.apollo.Entity",			
-					"com.apollo.World",
-					"com.apollo.Behavior",					
-					"com.apollo.utils.Bag",
-					"java.util.HashMap",
-					"java.util.Map"
-			};
-			//TODO deberia haber una clase que haga todo esto junto. Y que la relaci�n no sea a un objeto. Si no a la clase.
-			//imports para el builder
-			List<String> imports = new LinkedList<String>();
-			Collections.addAll(imports, arrayImports);		
-			for(Add addBhvr:entity_addBehaviors)
-			{
-				imports.add(String.format("com.apollo.components.%s",addBhvr.name));
-			}
-			if(entity_onMessages.size()>0)
-			{	
-				for(On on:entity_onMessages)
-				{					
-					Depend depende = generator.resolveDependency(on.message);
-					if(depende != null)
-					{
-						depende.perform(on.message, modelEntity);
-					}
+		//TODO no todo es perfecto en la vida, no todo sale como lo planeo. Espero que esto no se aplique al generador.
+		modelBuild.addImport(String.format("%s.Utils",generator.packageName));
+		
+		if(entity_onMessages.size()>0)
+		{	
+			for(On on:entity_onMessages)
+			{					
+				Depend depende = generator.resolveDependency(on.message);
+				if(depende != null)
+				{
+					depende.perform(on.message, modelEntity);
 				}
-				modelEntity.imports.addAll(
-						Arrays.asList(
-								"com.apollo.Message",
-								"com.apollo.utils.Bag",
-								"com.apollo.MessageHandler",
-								"com.apollo.utils.ImmutableBag"																								
-						)
-					);
-			}
-			Collections.sort(imports);
-			modelEntity.imports.addAll(imports);
-		}
+			}				
+		}			
+		
 		
 		if(entityPackageDir == null)
 		{

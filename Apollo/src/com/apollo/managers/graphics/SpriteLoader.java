@@ -55,8 +55,7 @@ public class SpriteLoader extends
 			AnimationParameter parameter) {
 		String textureAtlasPath;
 		if (parameter == null) {
-			textureAtlasPath = file.pathWithoutExtension()
-					+ ".atlas";
+			textureAtlasPath = file.pathWithoutExtension().concat(".atlas");					
 		} else {
 			textureAtlasPath = parameter.textureAtlasPath;
 		}
@@ -64,8 +63,7 @@ public class SpriteLoader extends
 		serializer.setAtlas(assetManager.get(textureAtlasPath,
 				TextureAtlas.class));			
 		
-		Sprite sprite = json.fromJson(Sprite.class,
-				Gdx.files.internal(fileName));
+		Sprite sprite = json.fromJson(Sprite.class,	Gdx.files.internal(fileName));
 
 		return sprite;
 	}
@@ -89,27 +87,33 @@ public class SpriteLoader extends
 
 		@SuppressWarnings({ "rawtypes"})
 		@Override		
-		public Sprite read(Json json, JsonValue jsonData, Class type) 
+		public Sprite read(Json json, JsonValue jsonData, Class AssetType) 
 		{			
-			Sprite sprite = new Sprite();
-			// talvez no sea la mejor manera de leer estos datos, pero por
-			// lo menos es simple
-			json.readField(sprite, "width", jsonData);
-			json.readField(sprite, "height", jsonData);
+			Sprite sprite = new Sprite();			
 			json.readField(sprite, "origin", jsonData);
 			json.readField(sprite, "first", jsonData);
 			JsonValue animations = jsonData.get("animations");
 
-			for (JsonValue animation : animations) {									
+			for (JsonValue animation : animations)
+			{									
 				JsonValue sequence = animation.get("sequence");
+				AtlasRegion array[] = null;
 				String name = animation.getString("name");
-				String region = (animation.hasChild("region"))?animation.getString("region"):name;
-				AtlasRegion array[] = null;					
-				int duration = DEFAULT_DURATION;
-				if(sequence.hasChild("delay"))
+				//esto sirve para utilizar una región personalizada, si no existe se utilizará name como nombre de región				
+				final String region = animation.getString("region", name);				
+				final int duration = sequence.getInt("delay", DEFAULT_DURATION);
+				final String type = animation.getString("type","normal").toLowerCase();
+				final int loopType;
+				if(type.equals("loop"))
 				{
-					duration = (int) sequence.getInt("delay");
+					loopType = Animation.LOOP;
 				}
+				//caso normal
+				else
+				{
+					loopType = Animation.NORMAL;
+				}				
+				
 				Array<AtlasRegion> regions = atlas.findRegions(region);
 				if(sequence.hasChild("data"))
 				{
@@ -126,18 +130,17 @@ public class SpriteLoader extends
 					}
 				}				
 				// ya ahora están listos los datos :D
-				sprite.addAnimation(name, new Animation(duration * 0.001f, array));
+				sprite.addAnimation(name, new Animation(duration * 0.001f, array), loopType);
 			}
 			return sprite;
 		}		
 	}
 
-	static public class AnimationParameter extends
-			AssetLoaderParameters<Sprite> {
-
-		public String textureAtlasPath;
-
-		public AnimationParameter(String _textureAtlasPath) {
+	public static class AnimationParameter extends AssetLoaderParameters<Sprite> 
+	{
+		public final String textureAtlasPath;
+		public AnimationParameter(String _textureAtlasPath)
+		{
 			textureAtlasPath = _textureAtlasPath;
 		}
 	}

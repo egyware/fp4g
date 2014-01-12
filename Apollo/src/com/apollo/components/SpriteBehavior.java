@@ -63,7 +63,7 @@ public class SpriteBehavior extends Spatial<SpriteBatch>
 
 	@Override
 	public void render(SpriteBatch graphicsContext) {		
-		TextureRegion current_region = sequence.getKeyFrame(current_sequence,current_time,true);
+		TextureRegion current_region = sequence.getKeyFrame(current_sequence,current_time);
 		
 		if(flip_x && !current_region.isFlipX())
 		{

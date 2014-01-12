@@ -17,7 +17,7 @@ public class ${class.name} implements EntityBuilder
 	}
 	
 	@Override
-	public Entity buildEntity(World world, Object... params)
+	public Entity buildEntity(WorldContainer container, Object... params)
 	{ 
 		<#if params??>
 		//parametros de entrada!
@@ -31,7 +31,7 @@ public class ${class.name} implements EntityBuilder
 		</#list>	
 		</#if>
 		
-		${entity.name} entity = new ${entity.name}(world);
+		${entity.name} entity = new ${entity.name}(container);
 		
 		<#if behaviors??>
 		//crear los behaviors

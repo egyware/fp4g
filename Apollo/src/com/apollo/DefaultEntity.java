@@ -9,24 +9,28 @@ import com.apollo.utils.Bag;
  * 
  *
  */
-public final class DefaultEntity extends Entity {
+public final class DefaultEntity extends Entity 
+{
 	private Bag<Behavior> components;
-	private Map<Class<? extends Behavior>, Behavior> componentsByType;	
-	public DefaultEntity(World world) {
+	private Map<Class<? extends BaseBehavior>, BaseBehavior> componentsByType;	
+	public DefaultEntity(WorldContainer world)
+	{
 		super(world);
 		
 		components = new Bag<Behavior>();
-		componentsByType = new LinkedHashMap<Class<? extends Behavior>, Behavior>();
+		componentsByType = new LinkedHashMap<Class<? extends BaseBehavior>, BaseBehavior>();
 	}
 
-	public void setBehavior(Behavior component) {		
+	public void setBehavior(BaseBehavior component)
+	{		
 		component.setOwner(this);
 		components.add(component);
 		componentsByType.put(component.getType(), component);		
 	}
 	
-	public void removeBehavior(Class<? extends Behavior> clazz) {
-		Behavior component = getBehavior(clazz);
+	public void removeBehavior(Class<? extends BaseBehavior> clazz)
+	{
+		BaseBehavior component = getBehavior(clazz);
 		if(component!=null) {
 			removeBehavior(component);
 		}
@@ -36,7 +40,8 @@ public final class DefaultEntity extends Entity {
 	 * Remove a Component
 	 * @param component to remove
 	 */
-	public void removeBehavior(Behavior component) {
+	public void removeBehavior(BaseBehavior component)
+	{
 		components.remove(component);
 		componentsByType.remove(component);	
 	}
@@ -45,7 +50,8 @@ public final class DefaultEntity extends Entity {
 	 * Initialize all the component
 	 */
 	@Override
-	protected void initialize() {
+	protected void initialize()
+	{
 		for (int i = 0, s = components.size(); s > i; i++) {
 			components.get(i).initialize();
 		}
@@ -71,7 +77,8 @@ public final class DefaultEntity extends Entity {
 	}
 	
 	@Override
-	public Bag<Behavior> getBehaviors() {
+	public Bag<Behavior> getBehaviors() 
+	{
 		return components;
 	}
 	

@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collection;
+import java.util.TreeSet;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -31,11 +31,11 @@ import freemarker.template.Version;
 public abstract class Generator {	
 	protected abstract void initialize(File path,Options options,Configuration cfg);
 	protected abstract void generateCode(Code gameData,File path);
-	protected abstract void compileFiles(List<File> files); //TODO: compile file add throw some exception
-	protected abstract List<File> getRequiredFiles(File path,File file);
+	protected abstract void compileFiles(Collection<File> files); //TODO: compile file add throw some exception
+	protected abstract Collection<File> getRequiredFiles(File path,File file);
 	
 	
-	private List<File> filesToCompile = new LinkedList<File>();
+	private TreeSet<File> filesToCompile = new TreeSet<File>();
 	private Configuration cfg;
 	
 		

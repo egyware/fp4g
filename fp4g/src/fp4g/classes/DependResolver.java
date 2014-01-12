@@ -17,6 +17,7 @@ import fp4g.generator.gdx.models.JavaCodeModel;
  */
 public class DependResolver implements fp4g.data.expresion.Map, Depend
 {
+	private final static String GENERAL   = "General";	
 	private final Map<String,ArrayList> importsRequired;
 	
 	public DependResolver()
@@ -24,18 +25,27 @@ public class DependResolver implements fp4g.data.expresion.Map, Depend
 		importsRequired = new HashMap<String,ArrayList>();
 	}
 	
+	public void addImports(final String s,JavaCodeModel model)
+	{
+		List imports = importsRequired.get(s);		
+		if(imports != null)
+		{
+			for(Literal<?> i:imports)
+			{
+				model.imports.add((String) i.getValue());
+			}
+		}
+	}
+	
 	/* (non-Javadoc)
 	 * @see fp4g.classes.IDependResolver#perform(fp4g.data.Define, fp4g.generator.models.JavaCodeModel)
 	 */
 	@Override
 	public void perform(Define data, JavaCodeModel model)
-	{
-		List imports = importsRequired.get(data.name);
-		
-		for(Literal<?> i:imports)
-		{
-			model.imports.add((String) i.getValue());
-		}			
+	{		
+		addImports(data.name,model);		
+		//imports generales, si existen...
+		addImports(GENERAL,model);
 	}
 	
 	@Override

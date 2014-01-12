@@ -5,11 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.apollo.Behavior;
+import com.apollo.BaseBehavior;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface InjectComponent {
-	Class<? extends Behavior> value() default Behavior.class;
+	Class<? extends BaseBehavior> value() default BaseBehavior.class;
 
 }

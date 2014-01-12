@@ -12,7 +12,7 @@ public abstract class ManagerInjector<T> {
 	public static ManagerInjector<Manager> injectorManager = new ManagerInjector<Manager>(InjectManager.class) {
 		@Override
 		Manager getInjectionObject(Manager manager, Class<Manager> type) {
-			return manager.getWorld().getManager(type);
+			return manager.getWorldContainer().getManager(type);
 		}
 	};
 

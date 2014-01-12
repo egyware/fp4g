@@ -8,7 +8,7 @@ import ${import};
 
 ${class.javadoc}
 public final class ${class.name} extends GameState{
-	private final World world;	
+	private final WorldContainer container;	
 	<#if debug>
 	<#if physicsManager??>
 	private OrthographicCamera debugCamera;
@@ -24,7 +24,7 @@ public final class ${class.name} extends GameState{
 	</#list>
 	</#if>
 	
-	//variables adicionales, aï¿½adidas por los sistemas.
+	//variables adicionales, añadidas por los sistemas.
 	<#if managers??>
 	<#list managers as manager>
 	<#if manager.fields?has_content>
@@ -37,7 +37,7 @@ public final class ${class.name} extends GameState{
 	
 	public ${class.name}(GameManager manager)
 	{
-		world = new World(manager);		
+		container = new WorldContainer(manager);		
 	}
 	
 	@Override	
@@ -56,7 +56,7 @@ public final class ${class.name} extends GameState{
 		</#list>
 		</#if>
 		
-		world.update(delta);
+		container.update(delta);
 		<#if managers??>
 		<#list managers as manager>
 		${manager.varName}.update(delta);
@@ -80,7 +80,7 @@ public final class ${class.name} extends GameState{
 		final int w = ${game.name}.Width;
 		final int h = ${game.name}.Height;
 		
-		Gdx.input.setInputProcessor(world.getInputProcessor());
+		Gdx.input.setInputProcessor(container.getInputProcessor());
 		
 		<#if debug>
 		<#if physicsManager??>
@@ -92,7 +92,7 @@ public final class ${class.name} extends GameState{
 		//entityBuilders
 		<#if entityBuilders??>		
 		<#list entityBuilders as builder>
-		world.setEntityBuilder(new ${builder}Builder());
+		container.setEntityBuilder(new ${builder}Builder());
 		</#list>
 		</#if>
 		
@@ -116,9 +116,9 @@ public final class ${class.name} extends GameState{
 		</#list>
 		</#if>
 		<#if manager.setMethod??>
-		world.set${manager.setMethod}(${manager.varName});
+		container.set${manager.setMethod}(${manager.varName});
 		<#else>
-		world.setManager(${manager.varName});		
+		container.setManager(${manager.varName});		
 		</#if>
 		</#list>
 		</#if>		
@@ -147,10 +147,10 @@ public final class ${class.name} extends GameState{
 		<#if entities??>		
 		<#list entities as entity>
 		<#if entity.varName??>
-		Entity ${entity.varName} = world.createEntity("${entity.name}"<#if entity.params?has_content>,<#list entity.params as param>${param}<#if param_has_next>, </#if></#list></#if>);
-		world.addEntity(${entity.varName});
+		Entity ${entity.varName} = container.createEntity("${entity.name}"<#if entity.params?has_content>,<#list entity.params as param>${param}<#if param_has_next>, </#if></#list></#if>);
+		container.addEntity(${entity.varName});
 		<#else>
-		world.addEntity(world.createEntity("${entity.name}"<#if entity.params?has_content>,<#list entity.params as param>${param}<#if param_has_next>, </#if></#list></#if>));
+		container.addEntity(container.createEntity("${entity.name}"<#if entity.params?has_content>,<#list entity.params as param>${param}<#if param_has_next>, </#if></#list></#if>));
 		</#if>		
 		</#list>
 		</#if>

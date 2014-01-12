@@ -2,8 +2,6 @@ package fp4g.data.define;
 
 import fp4g.data.Define;
 import fp4g.data.DefineType;
-import fp4g.data.ExprList;
-
 
 /**
  * TODO definir si va hacer algo esta clase...

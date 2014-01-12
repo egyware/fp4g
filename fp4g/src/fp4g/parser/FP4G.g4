@@ -215,8 +215,7 @@ returns
 ]
 		:
 		   NUMBER_TYPE  {$type = BasicType.Number;}
-		 | BOOL_TYPE    {$type = BasicType.Bool;}
-		 | ENTITY_TYPE  {$type = BasicType.Entity;}
+		 | BOOL_TYPE    {$type = BasicType.Bool;}		 
 		 | STRING_TYPE  {$type = BasicType.String;}		 
 		 | ID           {$type = new CustomType($ID.text);} // solo Define del tipo Type
         ;

@@ -3,11 +3,12 @@ package com.apollo.managers;
 import java.lang.reflect.Field;
 
 import com.apollo.Entity;
-import com.apollo.World;
+import com.apollo.WorldContainer;
 import com.apollo.annotate.ManagerInjector;
 
-public abstract class Manager{
-	protected World world;
+public abstract class Manager
+{
+	protected WorldContainer world;
 		
 	/**
 	 * Inicializa el Manager
@@ -24,11 +25,11 @@ public abstract class Manager{
 	public void update(float delta) {		
 	}
 
-	public void setWorld(World world) {
+	public void setWorldContainer(WorldContainer world) {
 		this.world = world;
 	}
 
-	public World getWorld() {
+	public WorldContainer getWorldContainer() {
 		return world;
 	}
 

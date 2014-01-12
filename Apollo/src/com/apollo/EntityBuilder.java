@@ -2,7 +2,7 @@ package com.apollo;
 
 public interface EntityBuilder {
 
-	Entity buildEntity(final World world,Object ...args);
+	Entity buildEntity(final WorldContainer world,Object ...args);
 	
 	public String getEntityBuilderName();
 

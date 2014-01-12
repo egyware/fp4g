@@ -33,11 +33,11 @@ public class PlatformBodyBehavior extends IBodyBehavior {
 		public Vector2 position = new Vector2();
 	}
 	
-	public PlatformBodyBehavior(com.apollo.World world)
+	public PlatformBodyBehavior(com.apollo.WorldContainer world)
 	{		
 		this(world,new Def());
 	}
-	public PlatformBodyBehavior(com.apollo.World managers,Def def)
+	public PlatformBodyBehavior(com.apollo.WorldContainer managers,Def def)
 	{	
 		World world = managers.getManager(PhysicsManager.class).getb2World();
 	

@@ -2,6 +2,7 @@ package com.apollo.managers;
 
 import com.apollo.Behavior;
 import com.apollo.Entity;
+import com.apollo.annotate.ComponentInjector;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
@@ -9,11 +10,13 @@ import com.apollo.utils.ImmutableBag;
 public class EntityManager extends Manager {
 	private Bag<Entity> entities;
 		
-	public EntityManager() {
+	public EntityManager()
+	{
 		entities = new Bag<Entity>();
 	}
 
-	public ImmutableBag<Entity> getEntities() {
+	public ImmutableBag<Entity> getEntities() 
+	{
 		return entities;
 	}
 
@@ -23,8 +26,9 @@ public class EntityManager extends Manager {
 	}
 
 	public void applyComponentAnnotations(Entity entity) {
-		for (Behavior component : entity.getBehaviors()) {
-			component.applyAnnotations();
+		for (Behavior component : entity.getBehaviors()) 
+		{
+			ComponentInjector.applyAnnotations(component);
 		}
 	}
 

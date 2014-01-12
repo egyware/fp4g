@@ -3,9 +3,9 @@
  */
 package com.apollo.components;
 
-import com.apollo.Behavior;
+import com.apollo.BaseBehavior;
 import com.apollo.Entity;
-import com.apollo.World;
+import com.apollo.WorldContainer;
 import com.apollo.annotate.InjectComponent;
 import com.apollo.messages.GunMessage;
 import com.apollo.messages.GunMessageHandler;
@@ -15,9 +15,9 @@ import com.badlogic.gdx.math.MathUtils;
  * @author Edgardo
  *
  */
-public final class GunBehavior extends Behavior implements GunMessageHandler
+public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 {
-	private World world;
+	private WorldContainer world;
 	@InjectComponent
 	private ITransform transform;
 	private int ammo;

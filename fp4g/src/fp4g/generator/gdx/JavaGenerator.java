@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,12 +71,12 @@ public class JavaGenerator extends Generator
 	}
 	
 	
-	private Pattern pattern = Pattern.compile("import\\s+(static\\s+)?([a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*)(\\.\\*)?",	Pattern.CASE_INSENSITIVE);
-	protected List<File> getRequiredFiles(File path, File filename)
-	{
+	private Pattern pattern = Pattern.compile("(import\\s+(static\\s+)?([a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*)(\\.\\*)?)|(([A-Z][a-zA-Z0-9]*)(\\s[^\n\r])+[a-zA-Z0-9]+)");
+	protected Collection<File> getRequiredFiles(File path, File filename)
+	{		
 		try
 		{
-			List<File> list = new LinkedList<File>();
+			TreeSet<File> list = new TreeSet<File>();			
 			FileInputStream fis = new FileInputStream(filename);
 			byte data[] = new byte[fis.available()];
 			fis.read(data);
@@ -85,11 +85,24 @@ public class JavaGenerator extends Generator
 			Matcher results = pattern.matcher(string);
 			while(results.find())
 			{
-				String clazz = results.group(2);
-				if(clazz.startsWith("com.apollo.components")||clazz.startsWith(packageName))
+				String clazz = results.group(3);				
+				if(clazz != null)
 				{
-					File file = new File(path,clazz.replace('.', File.separatorChar).concat(".java"));
-					list.add(file);
+					if(clazz.startsWith("com.apollo.components")||clazz.startsWith(packageName))
+					{
+						File file = new File(path,clazz.replace('.', File.separatorChar).concat(".java"));
+						list.add(file);
+					}
+				}
+				else
+				{
+					//TODO optimizar: Hace muchas consultas repetitivas...
+					clazz = results.group(7);
+					File file = new File(packageDir, clazz.concat(".java"));					
+					if(file.exists())
+					{
+						list.add(file);
+					}
 				}
 			}
 			return list;			
@@ -185,7 +198,7 @@ public class JavaGenerator extends Generator
 	}
 	
 	@Override
-	protected void compileFiles(List<File> files)
+	protected void compileFiles(Collection<File> files)
 	{
 		final String path = packageDir.getAbsolutePath();
 		final int start = path.length()-packageNameDir.length();
@@ -286,6 +299,7 @@ public class JavaGenerator extends Generator
 ////    }
 	}
 	
+	//TODO esto deberia cambiar... para bien claro :)
 	private static class JavaRenderManager extends Manager
 	{
 		public JavaRenderManager() {
@@ -317,6 +331,7 @@ public class JavaGenerator extends Generator
 	{
 		if(define == null)
 		{
+			//TODO lanzar una excepción
 			return null;
 		}
 		else		

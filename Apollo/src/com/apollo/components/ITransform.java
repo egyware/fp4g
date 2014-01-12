@@ -1,11 +1,11 @@
 package com.apollo.components;
 
-import com.apollo.Behavior;
+import com.apollo.BaseBehavior;
 import com.apollo.messages.MoveMessageHandler;
 import com.apollo.utils.TrigLUT;
 import com.apollo.utils.Utils;
 
-public abstract class ITransform extends Behavior
+public abstract class ITransform extends BaseBehavior
 implements MoveMessageHandler
 {
 	//estos campos deben ser actualizados por los hijos para asegurar maxima compatibilidad

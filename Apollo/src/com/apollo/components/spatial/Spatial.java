@@ -1,10 +1,10 @@
 package com.apollo.components.spatial;
 
-import com.apollo.Behavior;
+import com.apollo.BaseBehavior;
 import com.apollo.Layer;
 import com.apollo.utils.Bag;
 
-public abstract class Spatial<T> extends Behavior {
+public abstract class Spatial<T> extends BaseBehavior {
 	
 	public abstract Layer getLayer();
 	
@@ -36,7 +36,7 @@ public abstract class Spatial<T> extends Behavior {
 	public abstract void render(T graphicsContext);
 
 	@Override
-	public Class<? extends Behavior> getType() {
+	public Class<? extends BaseBehavior> getType() {
 		return Spatial.class;
 	}
 

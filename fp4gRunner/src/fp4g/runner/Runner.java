@@ -15,13 +15,17 @@ public class Runner
 		}		
 		
 		Class<?> appClass = Class.forName(args[0]);
+		
+
 			
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		
 		cfg.title = String.format("FP4G - %s",appClass.getSimpleName());
-		cfg.useGL20 = false;
-		cfg.width = 640;
-		cfg.height = 480;		
+		
+		cfg.useGL20 = true;
+		cfg.width   = 640;
+		cfg.height  = 480;
+		cfg.resizable = false;		
 				
 		
 		new CustomLwjglApplication((ApplicationListener) appClass.newInstance(),cfg);

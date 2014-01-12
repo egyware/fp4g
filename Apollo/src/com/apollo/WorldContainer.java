@@ -10,7 +10,7 @@ import com.apollo.managers.Manager;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
-public class World 
+public class WorldContainer 
 {
 	public static boolean DEBUG;
 	
@@ -28,7 +28,7 @@ public class World
 	
 	private final ApolloInputProcessor inputProcessor;
 
-	public World(GameManager game) {
+	public WorldContainer(GameManager game) {
 		entityManager = new EntityManager();
 		gameManager = game;
 		
@@ -77,7 +77,7 @@ public class World
 		managers.put(manager.getClass(), manager);
 		managersBag.add(manager);
 		addedManagers.add(manager);
-		manager.setWorld(this);
+		manager.setWorldContainer(this);
 	}
 	
 	public <T extends Manager> T getManager(Class<T> managerType) {

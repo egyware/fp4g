@@ -1,3 +1,13 @@
+:::0.1.22 (prerelease-prototipo)
++ La instrucción using fue agregada (en la versión anterior, pero se me olvido anotarla)
+* Prototipando bibliotecas. Se sigue prototipando las bibliotecas, se ha mejorado un poco el manejo de dependencias en EntityGenerator.
+P Falta especificar cuando el mensaje va para otra entidad.
+P Ordenar el codigo de OnModel tiene demasiadas responsabilidades
+P Debe quedar prueba de tontos
+P Falta la capacidad de ordenar los managers según prioridad
+P Definir la utilidad de la clase Utils: Talvez cambiarle el nombre a Assets y mantener los punteros de los assets.
+P Hacer que los Managers envien mensaje
+
 :::0.1.21 (prerelease-prototipo)
 + Mini manual de uso (-h)
 + Mejorando los assets, ahora es sintax sugar de DEFINE/ADD ASSETS

@@ -26,9 +26,9 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 	</#if>
 	
 	
-	public ${class.name}(World world)
+	public ${class.name}(WorldContainer container)
 	{
-		super(world);
+		super(container);
 		<#if behaviors??>
 		behaviors = new Bag<Behavior>(${behaviors?size});
 		behaviorsByType = new HashMap<Class<? extends Behavior>,Behavior>(${behaviors?size},1);

@@ -66,7 +66,6 @@ NOT : 'NOT';
 NUMBER_TYPE : 'Number';
 STRING_TYPE : 'String';
 BOOL_TYPE   : 'Bool';
-ENTITY_TYPE : 'Entity';
 
 /* Literales */
 DIRECTCODE      : '@\'' .*? '\''; 

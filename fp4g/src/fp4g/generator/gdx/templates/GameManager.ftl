@@ -15,19 +15,21 @@ public class ${class.name} extends GameManager {
 	public void create()
 	{		
 		super.create();
-		Utils.initialize();	
+		Utils.initialize();
+		
+		<#if start_state??>
+		//iniciando el juego 
+		${start_state} _start = new ${start_state}(this);     	
+		nextState(_start);
+		<#else>
+		throw new RuntimeException("¿Se te olvido usar start?");
+    	</#if>	
 	}
 	
 	@Override 
 	public void resize(int w,int h)
 	{
-		<#if start_state??>
-		//iniciando el juego 
-		${start_state} _start = new ${start_state}(this);     	
-		start(_start);
-		<#else>
-		throw new RuntimeException("ï¿½Se te olvido usar start?");
-    	</#if>
+		
 	}
     
 	@Override

@@ -5,48 +5,45 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.OrderedMap;
 
-public class Sprite{
-	private int width;
-	private int height;
-	private Vector2 origin;
+public class Sprite
+{	
+	private final Vector2 origin;	
+	private final OrderedMap<String,Animation> animations;
 	private String first;
-	private OrderedMap<String,Animation> animations;
 	
 	public Sprite()
 	{
 		animations = new OrderedMap<String,Animation>();
+		origin = new Vector2();
 	}
 	
-	public int getWidth()
-	{
-		return width;
-	}
-	public int geHeight()
-	{
-		return height;
-	}
 	public Vector2 origin()
 	{
 		return origin;
 	}	
 	
-	public Animation getFirstAnimation() {
+	public Animation getFirstAnimation()
+	{
 		return animations.get(first);		
 	}
-	public void addAnimation(String id, Animation s) {
+	public void addAnimation(String id, Animation s, int playMode ) 
+	{
 		animations.put(id, s);
-		s.setPlayMode(Animation.LOOP);
+		s.setPlayMode(playMode);
 	}
 
-	public Animation getAnimation(String id) {
+	public Animation getAnimation(String id) 
+	{
 		return animations.get(id);		
 	}
 
-	public TextureRegion getKeyFrame(Animation current_sequence,float current_time,boolean loop) {		
-		return current_sequence.getKeyFrame(current_time,loop);
+	public TextureRegion getKeyFrame(Animation current_sequence,float current_time)	
+	{		
+		return current_sequence.getKeyFrame(current_time);
 	}
 
-	public boolean isAnimationFinished(Animation current_sequence, float current_time) {
+	public boolean isAnimationFinished(Animation current_sequence, float current_time) 
+	{
 		return current_sequence.isAnimationFinished(current_time);		
 	}
 

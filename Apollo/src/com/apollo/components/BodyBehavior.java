@@ -22,7 +22,7 @@ public class BodyBehavior extends IBodyBehavior
 {
 	private Body simpleBody;
 	
-	public BodyBehavior(com.apollo.World managers,FixtureDef fixDef)
+	public BodyBehavior(com.apollo.WorldContainer managers,FixtureDef fixDef)
 	{
 		World world = managers.getManager(PhysicsManager.class).getb2World();
 		
@@ -34,7 +34,7 @@ public class BodyBehavior extends IBodyBehavior
 		simpleBody.createFixture(fixDef);
 	}
 	
-	public BodyBehavior(com.apollo.World managers,FixtureDef fixDef, int x, int y)
+	public BodyBehavior(com.apollo.WorldContainer managers,FixtureDef fixDef, int x, int y)
 	{
 		World world = managers.getManager(PhysicsManager.class).getb2World();
 		
@@ -64,22 +64,22 @@ public class BodyBehavior extends IBodyBehavior
 		simpleBody.getWorld().destroyBody(simpleBody);
 	}
 	
-	public BodyBehavior(com.apollo.World world, FixtureDef fixDef, int x, int y, int dx,int dy) {
+	public BodyBehavior(com.apollo.WorldContainer world, FixtureDef fixDef, int x, int y, int dx,int dy) {
 		this(world,fixDef,x,y);
 		simpleBody.setBullet(true);
 		simpleBody.setLinearVelocity(dx*SCALE, dy*SCALE);
 	}
 	
-	public static BodyBehavior build(com.apollo.World world, FixtureDef fixDef, Number x, Number y, Number dx,Number dy) {
+	public static BodyBehavior build(com.apollo.WorldContainer world, FixtureDef fixDef, Number x, Number y, Number dx,Number dy) {
 		return new BodyBehavior(world,fixDef,x.intValue(),y.intValue(),dx.intValue(),dy.intValue());
 	}
 	
-	public static BodyBehavior build(com.apollo.World world, FixtureDef fixDef)
+	public static BodyBehavior build(com.apollo.WorldContainer world, FixtureDef fixDef)
 	{
 		return new BodyBehavior(world,fixDef);		
 	}
 	
-	public static BodyBehavior build(com.apollo.World managers,FixtureDef fixDef, Number x, Number y)
+	public static BodyBehavior build(com.apollo.WorldContainer managers,FixtureDef fixDef, Number x, Number y)
 	{
 		return new BodyBehavior(managers,fixDef,x.intValue(),y.intValue());
 	}
