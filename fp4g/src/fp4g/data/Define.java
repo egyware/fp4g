@@ -12,23 +12,21 @@ import java.util.Set;
 import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.Literal;
+import fp4g.data.libs.Lib;
 import fp4g.exceptions.DefineNotFoundException;
 
-@SuppressWarnings("unchecked")
-public abstract class Define extends Code implements fp4g.data.expresion.Map
+public abstract class Define extends Lib implements fp4g.data.expresion.Map,IDefine
 {
 	public final static List<Add> emptyList = new ArrayList<Add>(0);
 	
-	public final DefineType type;
-	public final Define parent;
+	public final DefineType type;	
 	
 	public String name;
 	public NameList paramNameList;
 		
 	private final Map<String,Literal<?>> variables;	
 	
-	private final Map<DefineType,List<Add>> adds;
-	private final Map<DefineType,Map<String,? extends Define>> defines;
+	private final Map<DefineType,List<Add>> adds;	
 	private final Map<String,On> onMessages;	
 	
 	
@@ -37,14 +35,13 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 		this(type,name,null);		
 	}
 	
-	public Define(DefineType type,String name, Define parent)
+	public Define(DefineType type,String name, IDefine parent)
 	{
+		super(parent);
 		this.type = type;
-		this.name = name;
-		this.parent = parent;
+		this.name = name;		
 		variables = new HashMap<String,Literal<?>>();		
-		adds    = new HashMap<DefineType, List<Add>>(DefineType.values().length,1);
-		defines = new HashMap<DefineType, Map<String, ? extends Define>>(DefineType.values().length,1);
+		adds    = new HashMap<DefineType, List<Add>>(DefineType.values().length,1);		
 		onMessages= new HashMap<String, On>();		
 	}
 		
@@ -60,10 +57,6 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 		this.paramNameList = list;		
 	}	
 	
-	/**
-	 * Agrega una adición de codigo
-	 * @param code
-	 */
 	public void setAdd(Add add)
 	{
 		List<Add> list = adds.get(add.getType());
@@ -74,25 +67,7 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 		}
 		list.add(add);
 	}
-	/**
-	 * Agrega una definiciï¿½n de codigo
-	 * @param define
-	 */	
-	public <T extends Define> void setDefine(T define)
-	{
-		final DefineType type = define.getType();
-		Map<String,T> map = (Map<String, T>) defines.get(type);
-		if(map == null)
-		{
-			map = new HashMap<String, T>();
-			defines.put(type, map);
-		}
-		map.put(define.name, define);		
-	}
-	/**
-	 * Agrega un evento
-	 * @param on
-	 */
+	
 	public void setOn(On on)
 	{
 		onMessages.put(on.name, on);
@@ -122,83 +97,16 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 		return onMessages.get(messageName);
 	}
 	
-	/**
-	 * Obtiene una definición
-	 * @param name
-	 * @return
-	 * @throws DefineNotFoundException 
-	 */	
 	public final <T extends Define> T getDefine(DefineType type,String name) throws DefineNotFoundException 
 	{	
-		T value = getDefinePriv(type,name);
+		T value = findDefine(type,name);
 		if(value == null)throw new DefineNotFoundException(name);
 		return value;
 	}
-	
-	private final <T extends Define> T getDefinePriv(DefineType type,String name)
-	{
-		final Map<String,T> map = (Map<String, T>) defines.get(type);
-		T value = null;		
-		if(map != null)
-		{
-			value = map.get(name);
-		}
-		if(value == null && parent != null)
-		{
-			value = parent.getDefinePriv(type, name);
-		}
-		return value;
-	}
-	
-	/**
-	 * Busca un define de tipo desconocido
-	 * @param name Nombre de la definición
-	 * @return Define La definición buscada, si no devuelve null
-	 * @throws DefineNotFoundException 
-	 */
-	public Define getDefine(String name) throws DefineNotFoundException 
-	{
-		for(DefineType type :DefineType.values())
-		{
-			Define define = getDefinePriv(type,name);
-			if(define != null) return define;
-								
-		}
-		throw new DefineNotFoundException(name);		
-	}	
-	
-	public final <T extends Define> Collection<T> getDefines(DefineType type)
-	{
-		Map<String,T> map = (Map<String, T>) defines.get(type);
-		if(map != null)
-		{
-			return map.values();
-		}
-		return null;
-	}
-	
+		
 	public final Collection<On> getOnMessages()
 	{
 		return onMessages.values();
-	}
-	
-	/**
-	 * Pregunta si estï¿½ la definicion
-	 * @param name
-	 * @return
-	 */
-	public final <T extends Define> boolean isSetDefine(DefineType type,String name)
-	{
-		Map<String,T> map = (Map<String, T>) defines.get(type);
-		if(map != null)
-		{
-			return map.containsKey(name);
-		}
-		if(parent != null)
-		{
-			return parent.isSetDefine(type, name);
-		}
-		return false;
 	}
 	
 	
@@ -238,10 +146,7 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map
 		return variables.get(key);		 
 	}
 	
-	/**
-	 * Devuelve todas las variables de tiene almacenado este define
-	 * @return
-	 */
+	
 	public final Set<Entry<String,Literal<?>>> entrySet()
 	{
 		return variables.entrySet();

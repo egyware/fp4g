@@ -12,9 +12,9 @@ import java.util.Map;
 import fp4g.Log;
 import fp4g.Log.WarnType;
 import fp4g.data.Add;
-import fp4g.data.Code;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
+import fp4g.data.ICode;
 import fp4g.data.define.Asset;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
@@ -57,7 +57,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void generateCode(Code gameData, File path) 
+	public void generateCode(ICode gameData, File path) 
 	throws Exception {
 		GameState state = (GameState)gameData;
 		Game game = (Game)state.parent;
@@ -256,7 +256,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 	}
 
 	@Override
-	public void usingCode(Code gameData, File path) 
+	public void usingCode(ICode gameData, File path) 
 	{
 		GameState state = (GameState)gameData;
 		generator.usingFile(path,String.format("%s.java",state.name));

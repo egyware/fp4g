@@ -1,8 +1,8 @@
 package fp4g.data.expresion;
 
-import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
+import fp4g.data.IDefine;
 
 public class FunctionCall extends Expresion {
 	public final String functionName;
@@ -15,7 +15,7 @@ public class FunctionCall extends Expresion {
 	
 	
 	@Override
-	public Literal<?> eval(Define define) 
+	public Literal<?> eval(IDefine define) 
 	{
 		throw new RuntimeException("No Implementado");
 	}

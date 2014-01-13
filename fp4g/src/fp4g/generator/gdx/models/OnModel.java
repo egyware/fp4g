@@ -8,8 +8,8 @@ import java.util.Map.Entry;
 import fp4g.Log;
 import fp4g.Log.WarnType;
 import fp4g.classes.MessageMethod;
-import fp4g.data.Code;
 import fp4g.data.Expresion;
+import fp4g.data.ICode;
 import fp4g.data.On;
 import fp4g.data.On.Filter;
 import fp4g.data.On.Source;
@@ -66,7 +66,7 @@ public class OnModel implements Model
 			if(source.statements != null && source.statements.size() > 0)
 			{
 				statements = new LinkedList<StatementModel>();
-				for(Code stmnt:source.statements)
+				for(ICode stmnt:source.statements)
 				{	
 					
 					if(stmnt instanceof Destroy)

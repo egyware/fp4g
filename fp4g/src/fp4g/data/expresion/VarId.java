@@ -2,8 +2,8 @@ package fp4g.data.expresion;
 
 import fp4g.Log;
 import fp4g.Log.ErrType;
-import fp4g.data.Define;
 import fp4g.data.Expresion;
+import fp4g.data.IDefine;
 import fp4g.exceptions.CannotEvalException;
 
 /*
@@ -19,15 +19,15 @@ public class VarId extends Expresion{
 	}
 	
 	@Override
-	public Literal<?> eval(Define define) throws CannotEvalException 
+	public Literal<?> eval(IDefine define) throws CannotEvalException 
 	{
 		if(parent == this)
 		{
-			if(define.parent == null)
+			if(define.getParent() == null)
 			{
 				Log.Show(ErrType.VarNameNotFound,define,varName);
 			}
-			return new CustomClassMap(define.parent);	
+			return new CustomClassMap(define.getParent());	
 		}else
 		if(current == this)
 		{

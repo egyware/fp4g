@@ -6,11 +6,12 @@ import fp4g.Log.WarnType;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
+import fp4g.data.IDefine;
 import fp4g.data.On;
 
 public class GameState extends Define{
 	
-	public GameState(String name,Define parent) {
+	public GameState(String name,IDefine parent) {
 		super(DefineType.STATE, name,parent);
 	}
 	
@@ -55,7 +56,7 @@ public class GameState extends Define{
 	}
 
 	@Override
-	public void setDefine(Define define) {
+	public void setDefine(IDefine define) {
 		Show(ErrType.NotExpectedDefine,define);
 	}
 

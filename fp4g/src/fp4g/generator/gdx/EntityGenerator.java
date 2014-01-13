@@ -7,11 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import fp4g.data.Add;
-import fp4g.data.Code;
 import fp4g.data.DeclVar;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
+import fp4g.data.ICode;
 import fp4g.data.On;
 import fp4g.data.define.Entity;
 import fp4g.data.vartypes.BasicType;
@@ -35,7 +35,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 	private static File entityPackageDir;
 
 	@Override	
-	public void generateCode(Code gameData, File path) 	 
+	public void generateCode(ICode gameData, File path) 	 
 	throws Exception
 	{
 		Entity entity = (Entity)gameData;		
@@ -226,7 +226,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 	}
 
 	@Override
-	public void usingCode(Code gameData, File path) 
+	public void usingCode(ICode gameData, File path) 
 	{
 		Entity entity = (Entity)gameData;
 		

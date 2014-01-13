@@ -1,7 +1,7 @@
 package fp4g.data.expresion;
 
-import fp4g.data.Define;
 import fp4g.data.Expresion;
+import fp4g.data.IDefine;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.IncompatibleTypesException;
 
@@ -24,7 +24,7 @@ public class BinaryOp extends Expresion{
 	}
 	
 	@Override
-	public Literal<?> eval(Define define) throws CannotEvalException 
+	public Literal<?> eval(IDefine define) throws CannotEvalException 
 	{
 		Literal<?>  leftR  = left.eval(define);
 		Literal<?>  rightR = right.eval(define);		

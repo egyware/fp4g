@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import fp4g.data.Code;
 import fp4g.data.DefineType;
+import fp4g.data.ICode;
 import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
@@ -24,7 +24,7 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 	}
 
 	@Override
-	public void generateCode(Code gameData, File path) throws Exception 
+	public void generateCode(ICode gameData, File path) throws Exception 
 	{
 		Game game = (Game)gameData;
 		
@@ -115,7 +115,7 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 	}
 
 	@Override
-	public void usingCode(Code gameData, File path)
+	public void usingCode(ICode gameData, File path)
 	{
 		Game game = (Game)gameData;
 		generator.usingFile(path,String.format("%s.java",game.name));

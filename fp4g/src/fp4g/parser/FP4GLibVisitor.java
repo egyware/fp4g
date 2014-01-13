@@ -13,8 +13,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.Log.WarnType;
-import fp4g.classes.MessageMethod;
-import fp4g.classes.MessageMethods;
 import fp4g.data.Add;
 import fp4g.data.Code;
 import fp4g.data.Define;
@@ -31,14 +29,12 @@ import fp4g.data.VarType;
 import fp4g.data.define.Asset;
 import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
-import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
-import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.literals.StringLiteral;
+import fp4g.data.libs.Lib;
 import fp4g.data.statements.Destroy;
-import fp4g.data.statements.Send;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
 
@@ -47,21 +43,18 @@ import fp4g.exceptions.DefineNotFoundException;
  * Visita el arbol construido.
  * @author Edgardo
  */
-public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
+public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 {
-	private final Game game;
-	private MessageMethods methods;
+	private final Lib lib;	
 	private final Stack<IDefine> current;
 	private NameList nameList;
 	private Statements statements;
 	private final FP4GExpresionVisitor exprVisitor;
-	public FP4GDataVisitor(final Game game)
+	public FP4GLibVisitor(final Lib lib)
 	{
-		this.game = game;		
+		this.lib = lib;		
 		current = new Stack<IDefine>();		
 		exprVisitor = new FP4GExpresionVisitor(current);
-		CustomClassMap map = ((CustomClassMap)game.get("methods"));
-		methods = (MessageMethods)map.getValue();
 	}
 	
 	
@@ -74,12 +67,12 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		case BEHAVIOR:
 			Behavior behavior = new Behavior(ctx.name.getText());
 			behavior.setBuild(false);
-			game.setDefine(behavior);
+			lib.setDefine(behavior);
 			break;
 		case ENTITY:
-			Entity entity = new Entity(ctx.name.getText(),game);
+			Entity entity = new Entity(ctx.name.getText(),lib);
 			entity.setBuild(false);
-			game.setDefine(entity);
+			lib.setDefine(entity);
 			break;
 		case GOAL:
 			//TODO por hacer...
@@ -94,9 +87,9 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			//TODO por hacer..
 			break;
 		case STATE:
-			GameState state = new GameState(ctx.name.getText(),game);
+			GameState state = new GameState(ctx.name.getText(),lib);
 			state.setBuild(false);
-			game.setDefine(state);			
+			lib.setDefine(state);			
 			break;
 		case GAME:			
 		default:			
@@ -108,30 +101,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	@Override
 	public Code visitStart(FP4GParser.StartContext ctx)
 	{
-		IDefine define = current.peek();
-		
-		if(define instanceof Game)
-		{
-			final String stateName = ctx.state;			
-			GameState state;
-			try 
-			{
-				state = define.getDefine(DefineType.STATE, stateName);
-			} 
-			catch (DefineNotFoundException e) 
-			{				
-				Show(WarnType.MissingAdd,ctx.start.getLine());
-				//creo un elemento temporal para solucionar el state faltante, sin embargo no se generará
-				state = new GameState(ctx.state,define);
-				state.setBuild(false);
-			}			
-			((Game) define).setStart(state);
-			return state;
-		}
-		else
-		{
-			return null;
-		}				
+		//TODO cambiar a otro error
+		throw new RuntimeException("No se esperaba start");
 	}
 	
 	@Override
@@ -202,46 +173,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	@Override
 	public Code visitSend(FP4GParser.SendContext ctx)
 	{
-		MessageMethod method = methods.getMessageMethod(ctx.messageMethodName);
-		if(method == null)
-		{
-			Log.Show(ErrType.MessageMethodNotFound,ctx.start.getLine());
-			//TODO ?
-		}
-		Send.SendTo type = null;
-		String receiver = null;
-		//Busqueda de quien envia mensaje.
-		//1.- Self
-		//2.- Other
-		//3.- Componente
-		//4.- Tag
-		//5.- Sistema
-		type = ctx.receiverType;
-		switch(ctx.receiverType)
-		{		
-		case Other:
-			//nada que hacer ;)
-			break;
-		case Self:
-			//nada que hacer ;)
-			break;					
-		default:
-		//Behavior,System, no se puede determinar desde el lexer
-			receiver = ctx.receiverName;			
-			type = Send.SendTo.System; //asumiré que es un sistema pero no será de mucha ayuda.			
-			//type = Send.SendTo.Behavior;
-			break;		
-		}		
-		Send send = new Send(type,method,receiver);	
-		
-		ExprList list = exprVisitor.getExprList(ctx.exprList());
-		if(list != null)
-		{		
-			//TODO checkar la exprList, checkar que?, Compararla contra MessageMethod.Params se requiere conocimiento adicional.
-			send.setArguments(list);		
-		}
-		
-		return send;		
+		throw new RuntimeException("No se permite Send =P");
 	}
 	
 	@Override 
@@ -262,19 +194,11 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	{
 		return expr.eval(define);
 	}
-
-	@Override
-	public Code visitGame(FP4GParser.GameContext ctx)
-	{
-		game.name = ctx.name;
-		game.setLine(ctx.getStart().getLine());
-		return super.visitGame(ctx);		
-	}
 	
 	@Override
 	public Code visitGameValues(FP4GParser.GameValuesContext ctx)
 	{
-		current.push(game);		
+		current.push(lib);		
 		super.visitGameValues(ctx);		
 		current.pop();
 		return null;

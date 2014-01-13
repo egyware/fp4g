@@ -2,7 +2,7 @@ package fp4g;
 
 import java.io.PrintStream;
 
-import fp4g.data.Code;
+import fp4g.data.ICode;
 
 public class Log {	
 	private final static String formatErrorSimple = "%3d: error%03d %s";
@@ -114,7 +114,7 @@ public class Log {
 		}
 	}
 	
-	public static <T extends MessageType> void Show(T type,Code c,String more)
+	public static <T extends MessageType> void Show(T type,ICode c,String more)
 	{
 		if(type instanceof WarnType)
 		{			
@@ -130,7 +130,7 @@ public class Log {
 		}
 	}
 	
-	public static <T extends MessageType> void Show(T type,Code c)
+	public static <T extends MessageType> void Show(T type,ICode c)
 	{
 		if(type instanceof WarnType)
 		{			

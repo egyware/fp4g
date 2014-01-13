@@ -21,5 +21,5 @@ public abstract class Expresion {
 		hasPar = p;
 	}
 	
-	public abstract Literal<?> eval(Define define) throws CannotEvalException;
+	public abstract Literal<?> eval(IDefine define) throws CannotEvalException;
 }

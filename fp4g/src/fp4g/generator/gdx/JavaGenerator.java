@@ -28,6 +28,7 @@ import fp4g.classes.DependResolvers;
 import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.Expresion;
+import fp4g.data.ICode;
 import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
@@ -36,6 +37,7 @@ import fp4g.data.define.Goal;
 import fp4g.data.define.Manager;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.FunctionCall;
+import fp4g.data.libs.LibContainer;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.exceptions.GeneratorException;
 import fp4g.generator.CodeGenerator;
@@ -150,7 +152,7 @@ public class JavaGenerator extends Generator
 
 	
 	@Override
-	protected void generateCode(Code gameData, File path) 
+	protected void generateCode(ICode gameData, File path) 
 	{		
 		Class<? extends CodeGenerator<JavaGenerator>> codegen = generators.get(gameData.getClass());
 		
@@ -262,22 +264,27 @@ public class JavaGenerator extends Generator
 	}
 
 	
-	public void prepareGameData(Game gameConf) 
+	public void setDefaults(Game gameConf)
 	{
 		gameConf.name = "GameApp";
     	gameConf.width = 640;
     	gameConf.height = 480;
     	gameConf.debug = false;
-    	gameConf.setManager(new JavaRenderManager());
-    	gameConf.setManager(new JavaEntityManager());
-    	gameConf.setManager(new JavaSoundManager());
-    	gameConf.setManager(new JavaPhysicsManager());
-    	
-    	loadLib("libs/fp4g.lib", gameConf);
+
+	}
+	
+	public LibContainer loadLibs() 
+	{
+		loadLib("libs/fp4g.lib");
     	
     	//TODO Posible error.
-    	CustomClassMap map = (CustomClassMap)gameConf.get("resolvers");
+    	CustomClassMap map = (CustomClassMap)libContainer.get("resolvers");
     	resolvers = (DependResolvers)map.getValue();
+    	
+    	libContainer.setManager(new JavaRenderManager());
+    	libContainer.setManager(new JavaEntityManager());
+    	libContainer.setManager(new JavaSoundManager());
+    	libContainer.setManager(new JavaPhysicsManager());
     	
 //        //agregar componentes		    	
 ////    String components[][] = 
@@ -297,6 +304,7 @@ public class JavaGenerator extends Generator
 ////    		gameConf.addBehavior(c[0],c[1]);
 ////    	}
 ////    }
+    	return libContainer;
 	}
 	
 	//TODO esto deberia cambiar... para bien claro :)
@@ -339,7 +347,5 @@ public class JavaGenerator extends Generator
 			return resolvers.getResolver(define);
 		}		
 	}
-
-
 
 }

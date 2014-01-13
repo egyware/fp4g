@@ -2,7 +2,7 @@ package fp4g.data.expresion;
 
 import fp4g.Log;
 import fp4g.Log.ErrType;
-import fp4g.data.Define;
+import fp4g.data.IDefine;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
 
@@ -28,13 +28,13 @@ public class VarDot extends VarId
 	}	
 	
 	@Override
-	public Literal<?> eval(Define define) throws CannotEvalException 
+	public Literal<?> eval(IDefine define) throws CannotEvalException 
 	{		
 		//a que define accedo si no me sé el tipo?
-		Define sub;
+		IDefine sub;
 		if(VarDot.parent == varName)
 		{
-			sub = define.parent;
+			sub = define.getParent();
 		}else
 		if(VarDot.current == varName)
 		{

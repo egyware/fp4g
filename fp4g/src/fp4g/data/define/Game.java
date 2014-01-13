@@ -5,25 +5,27 @@ import fp4g.Log.ErrType;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
+import fp4g.data.IDefine;
 import fp4g.data.On;
 import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.literals.BoolLiteral;
 import fp4g.data.expresion.literals.IntegerLiteral;
+import fp4g.data.libs.LibContainer;
 /**
  * Esta clase contendrá todos los datos necesarios para construir un juego
  * @author Edgardo
  *
  */
-public class Game extends Define  
+public class Game extends Define
 {	
 	public int width = 640;
 	public int height = 480;
 	public boolean debug = false;
 	public GameState startState;
 	
-	public Game()
+	public Game(LibContainer lc)
 	{
-		super(DefineType.GAME,"game");	
+		super(DefineType.GAME,"game",lc);	
 	}
 	
 	public void set(String key, Literal<?> value)
@@ -199,7 +201,7 @@ public class Game extends Define
 	}
 	
 	@Override
-	public void setDefine(Define define) {
+	public void setDefine(IDefine define) {
 		switch(define.getType())
 		{
 			case GAME:			

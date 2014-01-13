@@ -12,9 +12,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.Log.WarnType;
-import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
+import fp4g.data.IDefine;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.ArrayMap;
 import fp4g.data.expresion.BinaryOp;
@@ -44,11 +44,11 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 {
 	private final Stack<Stack<Expresion>> stacks = new Stack<Stack<Expresion>>();	
 	private Stack<Expresion> stack;
-	private final Stack<Define> current;
+	private final Stack<IDefine> current;
 	private final Stack<Map> map_stack = new Stack<Map>();
 	private final Stack<List> list_stack = new Stack<List>();
 	
-	public FP4GExpresionVisitor(Stack<Define> d)
+	public FP4GExpresionVisitor(Stack<IDefine> d)
 	{
 		current = d;
 	}

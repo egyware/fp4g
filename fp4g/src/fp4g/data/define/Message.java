@@ -8,15 +8,17 @@ import fp4g.Log.ErrType;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
+import fp4g.data.IDefine;
 import fp4g.data.On;
 
 /**
  * @author Edgardo
  *
  */
-public class Message extends Define {
+public class Message extends Define
+{
 
-	public Message(String name,Define parent) {
+	public Message(String name,IDefine parent) {
 		super(DefineType.MESSAGE, name,parent);		
 	}
 	
@@ -36,7 +38,7 @@ public class Message extends Define {
 	 * @see fp4g.data.Define#addDefine(fp4g.data.Define)
 	 */
 	@Override
-	public void setDefine(Define define) {
+	public void setDefine(IDefine define) {
 		Log.Show(ErrType.NotExpectedType,define);
 	}
 

@@ -2,7 +2,7 @@ package fp4g.generator.gdx;
 
 import java.io.File;
 
-import fp4g.data.Code;
+import fp4g.data.ICode;
 import fp4g.generator.CodeGenerator;
 
 public class GoalGenerator extends CodeGenerator<JavaGenerator> {
@@ -12,13 +12,13 @@ public class GoalGenerator extends CodeGenerator<JavaGenerator> {
 	}
 
 	@Override
-	public void generateCode(Code gameData, File path) throws Exception {
+	public void generateCode(ICode gameData, File path) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void usingCode(Code gameData, File path) 
+	public void usingCode(ICode gameData, File path) 
 	{
 		// TODO Auto-generated method stub
 		

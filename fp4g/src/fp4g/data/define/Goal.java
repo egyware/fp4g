@@ -5,6 +5,7 @@ import fp4g.Log.ErrType;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
+import fp4g.data.IDefine;
 import fp4g.data.On;
 
 /**
@@ -23,7 +24,7 @@ public class Goal extends Define {
 		
 	}
 	@Override
-	public void setDefine(Define define) {
+	public void setDefine(IDefine define) {
 		Show(ErrType.NotExpectedDefine,define);
 		
 	}

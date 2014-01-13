@@ -12,15 +12,17 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import fp4g.Options;
-import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.Expresion;
+import fp4g.data.ICode;
 import fp4g.data.define.Game;
 import fp4g.data.expresion.FunctionCall;
+import fp4g.data.libs.Lib;
+import fp4g.data.libs.LibContainer;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.exceptions.GeneratorException;
-import fp4g.parser.FP4GDataVisitor;
 import fp4g.parser.FP4GLexer;
+import fp4g.parser.FP4GLibVisitor;
 import fp4g.parser.FP4GParser;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -30,16 +32,16 @@ import freemarker.template.Version;
 
 public abstract class Generator {	
 	protected abstract void initialize(File path,Options options,Configuration cfg);
-	protected abstract void generateCode(Code gameData,File path);
+	protected abstract void generateCode(ICode gameData,File path);
 	protected abstract void compileFiles(Collection<File> files); //TODO: compile file add throw some exception
 	protected abstract Collection<File> getRequiredFiles(File path,File file);
 	
-	
+	protected final LibContainer libContainer = new LibContainer();
 	private TreeSet<File> filesToCompile = new TreeSet<File>();
 	private Configuration cfg;
 	
 		
-	public final void generate(Options options,Code gameData, File path){
+	public final void generate(Options options,ICode gameData, File path){
 		cfg = new Configuration();		
 		cfg.setObjectWrapper(new DefaultObjectWrapper());		
 		cfg.setDefaultEncoding("UTF-8");
@@ -98,10 +100,11 @@ public abstract class Generator {
 		filesToCompile.add(file);
 	}
 	
-	public void loadLib(String libFileName,Game data)
+	public void loadLib(String libFileName)
 	{
 		try
 		{
+			Lib lib = Lib.createLib();
 			FP4GLexer lexer = new FP4GLexer(new ANTLRFileStream(libFileName));	
 			CommonTokenStream tokens = new CommonTokenStream(lexer);		
 			FP4GParser p = new FP4GParser(tokens);		
@@ -110,13 +113,14 @@ public abstract class Generator {
 			ParseTree tree = p.gameLib();			
 			if(tree != null)
 			{
-				FP4GDataVisitor visitor = new FP4GDataVisitor(data);
+				FP4GLibVisitor visitor = new FP4GLibVisitor(lib);
 				visitor.visit(tree);
 			}
 			else
 			{
 				System.err.println("Biblioteca no cargada");
 			}
+			libContainer.addLib(lib);
 		}
 		catch(IOException io)
 		{
@@ -124,6 +128,8 @@ public abstract class Generator {
 		}
 	}
 	
-	public abstract void prepareGameData(Game gameConf);
+	public abstract LibContainer loadLibs();
+	public abstract void setDefaults(Game gameConf);
 	protected abstract Depend resolveDependency(Define define) throws DependResolverNotFoundException;
+	
 }

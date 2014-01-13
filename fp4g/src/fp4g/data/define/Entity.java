@@ -6,11 +6,14 @@ import fp4g.Log.WarnType;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
+import fp4g.data.IDefine;
 import fp4g.data.On;
 
-public class Entity extends Define{	
+public class Entity extends Define
+{	
 	
-	public Entity(String name,Define parent) {
+	public Entity(String name, IDefine parent) 
+	{
 		super(DefineType.ENTITY, name,parent);
 	}
 	
@@ -40,7 +43,7 @@ public class Entity extends Define{
 	}
 
 	@Override
-	public void setDefine(Define define) {
+	public void setDefine(IDefine define) {
 		Show(ErrType.NotExpectedDefine,define);		
 	}
 

@@ -2,6 +2,7 @@ package fp4g.data.define;
 
 import fp4g.data.Define;
 import fp4g.data.DefineType;
+import fp4g.data.IDefine;
 
 public class Asset extends Define
 {
@@ -19,7 +20,7 @@ public class Asset extends Define
 	{
 		this(assetType,null);		
 	}
-	public Asset(Type assetType, Define parent) 
+	public Asset(Type assetType, IDefine parent) 
 	{
 		super(DefineType.ASSET, assetType.name(), parent);
 		this.assetType = assetType;

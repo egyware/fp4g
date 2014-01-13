@@ -2,7 +2,7 @@ package fp4g.generator;
 
 import java.io.File;
 
-import fp4g.data.Code;
+import fp4g.data.ICode;
 
 public abstract class CodeGenerator <T extends Generator>
 {
@@ -20,12 +20,12 @@ public abstract class CodeGenerator <T extends Generator>
 	 * @param path
 	 * @throws Exception
 	 */
-	public abstract void generateCode(Code gameData, File path) throws Exception;
+	public abstract void generateCode(ICode gameData, File path) throws Exception;
 	/**
 	 * Usa codigo prehecho dato ciertos datos.
 	 * 
 	 * @param gameData
 	 * @param path
 	 */
-	public abstract void usingCode(Code gameData, File path);
+	public abstract void usingCode(ICode gameData, File path);
 }

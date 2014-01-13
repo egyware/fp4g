@@ -55,6 +55,5 @@ public final class CustomClassMap extends Literal<Map> implements Map
 	{
 		throw new NotAllowedOperatorException(this,BinaryOp.Type.Sub);
 	}
-
-
+	
 }

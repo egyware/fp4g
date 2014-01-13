@@ -1,7 +1,7 @@
 package fp4g.data.expresion;
 
-import fp4g.data.Define;
 import fp4g.data.Expresion;
+import fp4g.data.IDefine;
 
 public class UnaryOp extends Expresion{	
 	public static enum Type
@@ -18,7 +18,7 @@ public class UnaryOp extends Expresion{
 	}
 	
 	@Override
-	public Literal<?> eval(Define define) 
+	public Literal<?> eval(IDefine define) 
 	{
 		throw new RuntimeException("No Implementado");
 	}

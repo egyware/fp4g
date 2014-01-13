@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import fp4g.data.define.Game;
+import fp4g.data.libs.LibContainer;
 import fp4g.generator.Generator;
 import fp4g.generator.gdx.JavaGenerator;
 import fp4g.parser.FP4GDataVisitor;
@@ -62,8 +63,9 @@ public class Main {
 			
 			
 			Generator generator = new JavaGenerator();
-			Game gameConf = new Game();
-			generator.prepareGameData(gameConf);						
+			LibContainer libs = generator.loadLibs();
+			Game gameConf = new Game(libs);
+			generator.setDefaults(gameConf);						
 			
 	    	System.out.println(String.format("Parsing: %s",inputFile));			
 			ParseTree tree = p.program();

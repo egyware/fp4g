@@ -1,7 +1,7 @@
 package fp4g.data.expresion;
 
-import fp4g.data.Define;
 import fp4g.data.Expresion;
+import fp4g.data.IDefine;
 import fp4g.exceptions.NotAllowedOperatorException;
 
 public abstract class Literal<T> extends Expresion{
@@ -9,7 +9,7 @@ public abstract class Literal<T> extends Expresion{
 	
 	
 	@Override
-	public Literal<?> eval(Define define) 
+	public Literal<?> eval(IDefine define) 
 	{
 		return this;
 	}
