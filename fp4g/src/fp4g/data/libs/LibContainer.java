@@ -8,7 +8,6 @@ import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
-import fp4g.data.ILib;
 import fp4g.data.On;
 import fp4g.data.define.Manager;
 import fp4g.data.expresion.Literal;
@@ -17,19 +16,20 @@ import fp4g.exceptions.DefineNotFoundException;
 
 public class LibContainer implements IDefine
 {
-	public final List<Lib> libs;
+	public final List<LibDefine> libs;
 	
 	public LibContainer()
 	{	
-		libs = new LinkedList<Lib>();
+		libs = new LinkedList<LibDefine>();		
 	}
 	
-	public void addLib(Lib lib) {
+	public void addLib(LibDefine lib) {
 		libs.add(lib);		
 	}
 
 	@Override
-	public <T extends IDefine> T findDefine(String defineName) {
+	public <T extends IDefine> T findDefine(String defineName) 
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -44,7 +44,7 @@ public class LibContainer implements IDefine
 	@Override
 	public <T extends IDefine> Collection<T> getDefines(DefineType defineType) {
 		List<T> list = new LinkedList<T>();
-		for(Lib lib:libs)
+		for(LibDefine lib:libs)
 		{
 			Collection<T> collection = lib.getDefines(defineType);
 			if(collection != null)
@@ -74,27 +74,29 @@ public class LibContainer implements IDefine
 	}
 
 	@Override
-	public void setBuild(boolean b) {
-		// TODO Auto-generated method stub
-		
+	public void setBuild(boolean b) 
+	{
+		//nunca se compilará
 	}
 
 	@Override
-	public boolean canBuild() {
-		// TODO Auto-generated method stub
+	public boolean canBuild() 
+	{	
+		//nunca se compilará
 		return false;
 	}
 
 	@Override
-	public DefineType getType() {
-		// TODO Auto-generated method stub
+	public DefineType getType() 
+	{
+		//TODO tipo nulo?
 		return null;
 	}
 
 	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getName() 
+	{
+		return LibContainer.class.getSimpleName();
 	}
 
 	@Override
@@ -116,8 +118,8 @@ public class LibContainer implements IDefine
 	}
 
 	@Override
-	public <T extends IDefine> T getDefine(String defineName)
-			throws DefineNotFoundException {
+	public <T extends IDefine> T getDefine(String defineName) throws DefineNotFoundException 
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -137,15 +139,19 @@ public class LibContainer implements IDefine
 	}
 
 	@Override
-	public void set(String key, Literal<?> eval) 
+	public void set(String key, Literal<?> value) 
 	{
-		// TODO Auto-generated method stub
+		//TODO nada? error!!
 	}
 
 	@Override
 	public Literal<?> get(String key)
 	{
-		// TODO Auto-generated method stub
+		for(LibDefine lib:libs)
+		{
+			Literal<?> value = lib.get(key);
+			if(value != null) return value;
+		}
 		return null;
 	}
 

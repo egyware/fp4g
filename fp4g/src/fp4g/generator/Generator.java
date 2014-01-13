@@ -104,7 +104,7 @@ public abstract class Generator {
 	{
 		try
 		{
-			Lib lib = Lib.createLib();
+			Lib lib = new Lib();
 			FP4GLexer lexer = new FP4GLexer(new ANTLRFileStream(libFileName));	
 			CommonTokenStream tokens = new CommonTokenStream(lexer);		
 			FP4GParser p = new FP4GParser(tokens);		

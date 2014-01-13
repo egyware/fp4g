@@ -12,10 +12,10 @@ import java.util.Set;
 import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.Literal;
-import fp4g.data.libs.Lib;
+import fp4g.data.libs.LibDefine;
 import fp4g.exceptions.DefineNotFoundException;
 
-public abstract class Define extends Lib implements fp4g.data.expresion.Map,IDefine
+public abstract class Define extends LibDefine implements fp4g.data.expresion.Map,IDefine
 {
 	public final static List<Add> emptyList = new ArrayList<Add>(0);
 	
@@ -24,7 +24,7 @@ public abstract class Define extends Lib implements fp4g.data.expresion.Map,IDef
 	public String name;
 	public NameList paramNameList;
 		
-	private final Map<String,Literal<?>> variables;	
+	private final Map<String,Literal<?>> variables;
 	
 	private final Map<DefineType,List<Add>> adds;	
 	private final Map<String,On> onMessages;	
@@ -143,7 +143,12 @@ public abstract class Define extends Lib implements fp4g.data.expresion.Map,IDef
 	 */
 	public Literal<?> get(String key)
 	{
-		return variables.get(key);		 
+		Literal<?> ret = variables.get(key);
+		if(ret == null && parent != null)			
+		{
+			ret = parent.get(key);
+		}
+		return ret;		 
 	}
 	
 	

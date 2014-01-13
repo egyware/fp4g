@@ -33,7 +33,7 @@ import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.literals.StringLiteral;
-import fp4g.data.libs.Lib;
+import fp4g.data.libs.LibDefine;
 import fp4g.data.statements.Destroy;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
@@ -45,12 +45,12 @@ import fp4g.exceptions.DefineNotFoundException;
  */
 public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 {
-	private final Lib lib;	
+	private final LibDefine lib;	
 	private final Stack<IDefine> current;
 	private NameList nameList;
 	private Statements statements;
 	private final FP4GExpresionVisitor exprVisitor;
-	public FP4GLibVisitor(final Lib lib)
+	public FP4GLibVisitor(final LibDefine lib)
 	{
 		this.lib = lib;		
 		current = new Stack<IDefine>();		
