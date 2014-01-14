@@ -1,7 +1,6 @@
 package fp4g.runner;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -19,19 +18,27 @@ public class Main
 			return;
 		}		
 		
-		RunnerClassLoader loader = null;
+		
+	    RunnerClassLoader loader = null;
 		try 
 		{
 			URL urls[] = new URL[]
 			{
-				new File(args[0]).toURI().toURL()	
+				new File(args[0]).toURI().toURL(),				
+				new URL("file:libs/gdx.jar"),
+				new URL("file:libs/gdx-natives.jar"),
+				new URL("file:libs/gdx-backend-lwjgl.jar"),				
+				new URL("file:libs/gdx-backend-lwjgl-natives.jar"),
+				new URL("file:libs/apollo-fp4g.jar")
 			};
 					
-			loader = new RunnerClassLoader(urls, ClassLoader.getSystemClassLoader());
-			Class<?> appClass  = loader.loadClass(args[1]);
-			Class<?> confClass = loader.loadClass("com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration");
-			Class<?> bindClass = loader.loadClass("com.badlogic.gdx.backends.lwjgl.LwjglApplication");
-
+			loader = new RunnerClassLoader(urls);
+			
+			Class<?> appClass     = loader.loadClass(args[1]);
+			Class<?> confClass    = loader.loadClass("com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration");
+			Class<?> bindClass    = loader.loadClass("com.badlogic.gdx.backends.lwjgl.LwjglApplication");
+			Class<?> appInterface = loader.loadClass("com.badlogic.gdx.ApplicationListener"); 
+			
 			Object instanceConf = confClass.newInstance();
 			FieldAccess confField = FieldAccess.get(confClass);
 			
@@ -42,9 +49,17 @@ public class Main
 			confField.set(instanceConf, "height", 480);
 			confField.set(instanceConf, "resizable", false);
 			
-			Constructor<?> constructor = bindClass.getConstructor(appClass,confClass);
+			Constructor<?> constructor = bindClass.getConstructor(appInterface, confClass);
 			
-			constructor.newInstance(appClass.newInstance(), instanceConf);
+			Object o = appClass.newInstance();
+//			for(Class<?> i :appClass.getSuperclass().getInterfaces())
+//			{
+//				System.out.println(i.getSimpleName());
+//				System.out.println(appInterface.isInstance(o));
+//			}			
+//			System.out.println(appInterface.getSimpleName());
+			
+			constructor.newInstance(o, instanceConf);
 			
 		}
 		catch (MalformedURLException e) 
@@ -86,18 +101,6 @@ public class Main
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
-		finally
-		{
-			try 
-			{
-				if(loader != null)	loader.close();
-			}
-			catch (IOException e)
-			{				
-				e.printStackTrace();
-			}
-		}
-				
 	}		
 	
 }

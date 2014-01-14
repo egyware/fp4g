@@ -5,15 +5,13 @@ import java.net.URLClassLoader;
 
 public class RunnerClassLoader extends URLClassLoader
 {
-
-	public RunnerClassLoader(URL[] urls,ClassLoader parent)
+	public RunnerClassLoader(URL[] urls)
 	{
-		super(urls,parent);
+		super(urls);		
 	}
 	
 	public void addURL(URL url)
 	{
 		super.addURL(url);
 	}
-
 }
