@@ -22,7 +22,7 @@ public class Log {
 	public static enum WarnType implements MessageType
 	{			
 		MissingDefineAdd("No se encontro un Define o Using para el Add"), 
-		MissingAdd("No se encontro un Add"), UnformatedFilter, CannotEvalExpr, DependResolverNotFound,
+		MissingAdd("No se encontro un Add"), UnformatedFilter, CannotEvalExpr, DependResolverNotFound, PropertiesCantSave,
 //		NotFoundDefine("No se encontró una definición previa, se omitirá y se asumirá que existe"),
 //		CustomAddState, 
 //		NotExpectedThis,
@@ -60,7 +60,7 @@ public class Log {
 		NotImplement,
 		MessageExpected,
 		UnknowError,
-		FilterMethodMissing, NotExpectedDefine, NotExpectedOn, NotExpectedAdd, YouCanUseOnceTimeAssets, MissingError("Falta un error descriptivo o no corresponde un error grave"), ClassNotFound, ExpresionGeneratorNotFound, MessageNotFound, MessageMethodNotFound, CriticalErrorGeneratorNotFound, VarNameNotFound, UnExpectedParams,
+		FilterMethodMissing, NotExpectedDefine, NotExpectedOn, NotExpectedAdd, YouCanUseOnceTimeAssets, MissingError("Falta un error descriptivo o no corresponde un error grave"), ClassNotFound, ExpresionGeneratorNotFound, MessageNotFound, MessageMethodNotFound, CriticalErrorGeneratorNotFound, VarNameNotFound, UnExpectedParams, PropertiesCantLoad, UncaughtException,
 		;
 		
 		private String message;
@@ -231,8 +231,7 @@ public class Log {
 		else
 		{
 			err.println(String.format(formatErrorMore,line, code,message,more));
-		}
-		throw new RuntimeException("Error!");
+		}		
 	}
 	
 
