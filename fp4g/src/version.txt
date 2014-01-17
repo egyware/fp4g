@@ -1,8 +1,17 @@
+:::0.1.23 (prerelease-prototipo)
++ Compilación casi mejorada, ahora no se cae al no encontrar un JDK, sin embargo no busca si existen JDK instaladas en el sistema.
+P Mejorar las bibliotecas, se me ocurrio una forma muy util para evitar que las bibliotecas se comporten como defines, solo para dar una distinción clara.
+P Falta especificar cuando el mensaje va para otra entidad.
+P Ordenar el codigo de OnModel tiene demasiadas responsabilidades
+P Debe quedar prueba de tontos
+P Falta la capacidad de ordenar los managers según prioridad
+P Definir la utilidad de la clase Utils: Talvez cambiarle el nombre a Assets y mantener los punteros de los assets.
+P Hacer que los Managers envien mensaje
+
 :::0.1.22 (prerelease-prototipo)
 + Se mejoró el Runner, ahora se ejecuta usando "java -jar Runner path class"
 + Bibliotecas agregadas, solo hay que aprovecharlas.
 P Mejorar la compilación, hasta ahora se cae si no encuentra un JDK valido.
-P Mejorar el FP4GRunner para la ejecución de codigo.
 P Falta especificar cuando el mensaje va para otra entidad.
 P Ordenar el codigo de OnModel tiene demasiadas responsabilidades
 P Debe quedar prueba de tontos

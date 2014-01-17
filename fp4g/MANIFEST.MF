@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: . libs/freemarker.jar libs/antlr4.jar libs/asm-4.0.jar libs/reflectasm-fp4g.jar
+Main-Class: fp4g.Main
+

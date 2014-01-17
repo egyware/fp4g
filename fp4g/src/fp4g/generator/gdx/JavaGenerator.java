@@ -202,6 +202,12 @@ public class JavaGenerator extends Generator
 	@Override
 	protected void compileFiles(Collection<File> files)
 	{
+		if(System.getProperty("java.home") == null)
+		{
+			Log.Show(ErrType.CompilerNotFound);
+			return;
+		}
+		
 		final String path = packageDir.getAbsolutePath();
 		final int start = path.length()-packageNameDir.length();
 		final String cp = "libs/apollo-fp4g.jar;libs/gdx.jar";		

@@ -35,9 +35,16 @@ public class LibContainer implements IDefine
 	}
 
 	@Override
-	public <T extends IDefine> T findDefine(DefineType defineType,
-			String defineName) {
-		// TODO Auto-generated method stub
+	public <T extends IDefine> T findDefine(DefineType defineType,String defineName) 
+	{		
+		for(LibDefine lib:libs)
+		{
+			T define = lib.findDefine(defineType,defineName);
+			if(define != null)
+			{
+				return define;
+			}			
+		}
 		return null;
 	}
 
