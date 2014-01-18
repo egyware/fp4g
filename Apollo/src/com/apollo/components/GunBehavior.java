@@ -19,7 +19,7 @@ public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 {
 	private WorldContainer world;
 	@InjectComponent
-	private ITransform transform;
+	private TransformFamily transform;
 	private int ammo;
 	private String entity;
 	

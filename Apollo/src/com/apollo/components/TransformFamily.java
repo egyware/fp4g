@@ -5,7 +5,7 @@ import com.apollo.messages.MoveMessageHandler;
 import com.apollo.utils.TrigLUT;
 import com.apollo.utils.Utils;
 
-public abstract class ITransform extends BaseBehavior
+public abstract class TransformFamily extends BaseBehavior
 implements MoveMessageHandler
 {
 	//estos campos deben ser actualizados por los hijos para asegurar maxima compatibilidad
@@ -63,7 +63,7 @@ implements MoveMessageHandler
 		return rotation;
 	}
 
-	public void set(ITransform t) {
+	public void set(TransformFamily t) {
 		setPosition(t.x,t.y);
 		setRotation(t.rotation);
 	}
@@ -80,7 +80,7 @@ implements MoveMessageHandler
 		return Utils.distance(x, y, this.x, this.y);
 	}
 
-	public float angleInRadians(ITransform t) {
+	public float angleInRadians(TransformFamily t) {
 		return Utils.angleInRadians(x, y, t.x, t.y);
 	}
 
@@ -88,8 +88,8 @@ implements MoveMessageHandler
 		return Utils.angleInRadians(this.x, this.y, x, y);
 	}
 	
-	public Class<ITransform> getType(){
-		return ITransform.class;
+	public Class<TransformFamily> getType(){
+		return TransformFamily.class;
 	}
 
 }

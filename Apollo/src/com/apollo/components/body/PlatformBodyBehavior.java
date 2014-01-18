@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.apollo.components;
+package com.apollo.components.body;
 
 import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
@@ -21,7 +21,8 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
  * @author egyware
  *
  */
-public class PlatformBodyBehavior extends IBodyBehavior {
+public class PlatformBodyBehavior extends PhysicsFamily 
+{
 	private Body circle;
 	private Body box;
 	private RevoluteJoint motor;
@@ -108,7 +109,8 @@ public class PlatformBodyBehavior extends IBodyBehavior {
 	}
 	
 	
-	public void move(float desiredVel){
+	public void move(float desiredVel)
+	{
 		//mantener velocidad
 		Vector2 vel = circle.getLinearVelocity();				
 		float velChange = desiredVel - vel.x;	

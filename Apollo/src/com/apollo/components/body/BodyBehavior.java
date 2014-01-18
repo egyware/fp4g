@@ -1,55 +1,22 @@
 /**
  * 
  */
-package com.apollo.components;
+package com.apollo.components.body;
 
 import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
-import com.apollo.managers.PhysicsManager;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * @author Edgardo
  *
  */
-public class BodyBehavior extends IBodyBehavior 
+public abstract class BodyBehavior extends PhysicsFamily 
 {
 	private Body simpleBody;
-	
-	public BodyBehavior(com.apollo.WorldContainer managers,FixtureDef fixDef)
-	{
-		World world = managers.getManager(PhysicsManager.class).getb2World();
-		
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyDef.BodyType.DynamicBody;		
-		
-		simpleBody = world.createBody(bodyDef);
-		
-		simpleBody.createFixture(fixDef);
-	}
-	
-	public BodyBehavior(com.apollo.WorldContainer managers,FixtureDef fixDef, int x, int y)
-	{
-		World world = managers.getManager(PhysicsManager.class).getb2World();
-		
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		bodyDef.position.set(x,y).scl(SCALE);
-		
-		simpleBody = world.createBody(bodyDef);
-		
-		simpleBody.createFixture(fixDef);
-			
-		//transformacionv
-		this.x = x;
-		this.y = y;
-	}
 	
 	@Override
 	public void initialize()
@@ -64,25 +31,21 @@ public class BodyBehavior extends IBodyBehavior
 		simpleBody.getWorld().destroyBody(simpleBody);
 	}
 	
-	public BodyBehavior(com.apollo.WorldContainer world, FixtureDef fixDef, int x, int y, int dx,int dy) {
-		this(world,fixDef,x,y);
-		simpleBody.setBullet(true);
-		simpleBody.setLinearVelocity(dx*SCALE, dy*SCALE);
-	}
+
 	
-	public static BodyBehavior build(com.apollo.WorldContainer world, FixtureDef fixDef, Number x, Number y, Number dx,Number dy) {
-		return new BodyBehavior(world,fixDef,x.intValue(),y.intValue(),dx.intValue(),dy.intValue());
-	}
-	
-	public static BodyBehavior build(com.apollo.WorldContainer world, FixtureDef fixDef)
-	{
-		return new BodyBehavior(world,fixDef);		
-	}
-	
-	public static BodyBehavior build(com.apollo.WorldContainer managers,FixtureDef fixDef, Number x, Number y)
-	{
-		return new BodyBehavior(managers,fixDef,x.intValue(),y.intValue());
-	}
+//	public static BodyBehavior build(com.apollo.WorldContainer world, FixtureDef fixDef, Number x, Number y, Number dx,Number dy) {
+//		return new BodyBehavior(world,fixDef,x.intValue(),y.intValue(),dx.intValue(),dy.intValue());
+//	}
+//	
+//	public static BodyBehavior build(com.apollo.WorldContainer world, FixtureDef fixDef)
+//	{
+//		return new BodyBehavior(world,fixDef);		
+//	}
+//	
+//	public static BodyBehavior build(com.apollo.WorldContainer managers,FixtureDef fixDef, Number x, Number y)
+//	{
+//		return new BodyBehavior(managers,fixDef,x.intValue(),y.intValue());
+//	}
 	
 	/* (non-Javadoc)
 	 * @see com.apollo.components.BodyBehavior#getBody()

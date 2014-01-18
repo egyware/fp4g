@@ -7,14 +7,31 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class StageRenderManager extends Manager 
 {
-	private Stage stage;
+	private final Stage stage;
+	private final com.badlogic.gdx.scenes.scene2d.Group backgroundLayer;
+	private final com.badlogic.gdx.scenes.scene2d.Group actorLayer;
+	private final com.badlogic.gdx.scenes.scene2d.Group frontLayer;
+	
 	public StageRenderManager()
 	{
 		stage = new Stage();
+		backgroundLayer = new com.badlogic.gdx.scenes.scene2d.Group();
+		actorLayer  = new com.badlogic.gdx.scenes.scene2d.Group();
+		frontLayer  = new com.badlogic.gdx.scenes.scene2d.Group();
+		stage.addActor(backgroundLayer);
+		stage.addActor(actorLayer);
+		stage.addActor(frontLayer);
 	}
 	public StageRenderManager(int w,int h)
 	{
 		stage = new Stage(w,h);
+		backgroundLayer = new com.badlogic.gdx.scenes.scene2d.Group();
+		actorLayer  = new com.badlogic.gdx.scenes.scene2d.Group();
+		frontLayer  = new com.badlogic.gdx.scenes.scene2d.Group();
+		
+		stage.addActor(backgroundLayer);
+		stage.addActor(actorLayer);
+		stage.addActor(frontLayer);
 	}
 	
 	public void added(Entity e) 
@@ -22,7 +39,7 @@ public class StageRenderManager extends Manager
 		ActorBehavior ab = e.getBehavior(ActorBehavior.class);
 		if(ab != null)
 		{
-			stage.addActor(ab);
+			actorLayer.addActor(ab);
 		}
 	}
 	

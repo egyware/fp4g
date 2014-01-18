@@ -4,7 +4,7 @@ import com.apollo.messages.MoveMessage;
 import com.apollo.utils.TrigLUT;
 import com.badlogic.gdx.math.MathUtils;
 
-public class Transform extends ITransform 
+public class Transform extends TransformFamily 
 {	
 	private float vx;
 	private float vy;

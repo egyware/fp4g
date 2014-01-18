@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 public class SpriteBehavior extends Spatial<SpriteBatch> 
 {	
 	@InjectComponent
-	private ITransform transform;
+	private TransformFamily transform;
 	private Sprite sequence;	
 	private Animation current_sequence;
 	private float current_time;	
