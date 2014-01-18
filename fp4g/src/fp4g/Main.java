@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import fp4g.Log.ErrType;
 import fp4g.data.define.Game;
 import fp4g.data.libs.LibContainer;
 import fp4g.generator.Generator;
@@ -32,6 +33,8 @@ public class Main {
 			public void uncaughtException(Thread t, Throwable e) 
 			{
 				e.printStackTrace(System.err);
+				Log.Show(ErrType.UncaughtException);
+				System.exit(1);
 //				System.err.println(String.format("%s %s",e.getClass().getSimpleName(),e.getMessage()));
 //				System.err.println(e.getStackTrace()[0]);
 //				System.err.println(e.getStackTrace()[1]);
@@ -52,9 +55,10 @@ public class Main {
 		}
 	}
 
-	private static void parseFile(String inputFile) {
-		
-		try {
+	private static void parseFile(String inputFile) 
+	{
+		try 
+		{
 			System.out.println(String.format("Reading from %s",inputFile));
 			FP4GLexer lexer = new FP4GLexer(new ANTLRFileStream(inputFile));	
 			CommonTokenStream tokens = new CommonTokenStream(lexer);		

@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -202,12 +203,6 @@ public class JavaGenerator extends Generator
 	@Override
 	protected void compileFiles(Collection<File> files)
 	{
-		if(System.getProperty("java.home") == null)
-		{
-			Log.Show(ErrType.CompilerNotFound);
-			return;
-		}
-		
 		final String path = packageDir.getAbsolutePath();
 		final int start = path.length()-packageNameDir.length();
 		final String cp = "libs/apollo-fp4g.jar;libs/gdx.jar";		
@@ -219,8 +214,19 @@ public class JavaGenerator extends Generator
 				binaryDir.getAbsolutePath(),
 				"-Xlint:deprecation"
 		};
-				
+			
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
+		if(javaCompiler == null)
+		{
+			javaCompiler = findJDK();
+			if(javaCompiler == null)
+			{
+				Log.Show(ErrType.CompilerNotFound);
+				return;
+			}
+
+		}
+		
 		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 		StandardJavaFileManager fileManager = javaCompiler.getStandardFileManager(diagnostics,null,null);
 		Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(files);
@@ -250,6 +256,77 @@ public class JavaGenerator extends Generator
 			e.printStackTrace();
 		}
 		
+	}
+
+	private JavaCompiler findJDK() 
+	{
+		JavaCompiler javaCompiler = null;
+		
+		String java_home = fp4g.Configuration.getProperty(fp4g.Configuration.JDK_HOME);
+		if(java_home != null)
+		{
+			System.setProperty(fp4g.Configuration.JDK_HOME, java_home);
+			//intentamos de nuevo :)
+			javaCompiler = ToolProvider.getSystemJavaCompiler();
+		}
+		
+		//aún no hemos encontrado el JDK,sigamos buscando
+		if(javaCompiler == null)
+		{
+			//asumiendo que estamos en windows
+			Scanner scan = null;
+			try 
+			{
+				ProcessBuilder ps = new ProcessBuilder("java.exe","-version");
+				ps.redirectErrorStream(true);
+				
+				Process java_version = ps.start();
+				
+				java_version.waitFor();
+				
+				String text = "";
+				scan = new Scanner(java_version.getInputStream());
+				while(scan.hasNextLine())
+				{
+					text += scan.nextLine();
+				}								
+				//TODO expresión regular plz
+				final String verToken = "version";
+				final int offset = text.indexOf(verToken)+verToken.length()+2;
+				final String version = text.substring(offset,text.indexOf('"',offset));
+				
+				//buscar en windows
+				File jdkDir;
+				jdkDir = new File(String.format("C:/Program Files/Java/JDK%s",version));
+				if(!jdkDir.exists())
+				{
+					jdkDir = new File(String.format("C:/Program Files (x86)/Java/JDK%s",version));
+				}
+				
+				if(jdkDir.exists())
+				{
+					System.setProperty("java.home", jdkDir.getAbsolutePath());
+					fp4g.Configuration.setProperty("java.home",jdkDir.getAbsolutePath());
+				}
+				
+				//try again...
+				javaCompiler = ToolProvider.getSystemJavaCompiler();
+				
+			}
+			catch (IOException e) 
+			{				
+				e.printStackTrace();
+			}
+			catch (InterruptedException e) 
+			{			
+				e.printStackTrace();
+			}
+			finally
+			{
+				if(scan != null) scan.close();
+			}
+		}
+		return javaCompiler;
 	}
 
 	@Override

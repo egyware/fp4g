@@ -11,8 +11,8 @@ public class Options extends HashMap<String,Object> {
 	
 	public Options()
 	{
-		put("package", "game"); //por defecto
-		put("debug", false); //por defecto		
+		put("package", Configuration.getProperty(Configuration.DEFAULT_PACKAGE)); //por defecto
+		put("debug", Boolean.parseBoolean(Configuration.getProperty(Configuration.DEFAULT_DEBUG))); //por defecto		
 	}
 
 }
