@@ -36,7 +36,7 @@ public class ${class.name} implements EntityBuilder
 		<#if behaviors??>
 		//crear los behaviors
 		<#list behaviors as behavior>
-		${behavior.name} ${behavior.varName} = ${behavior.name}.build(<#if behavior.params??><#list behavior.params as param>${param}<#if param_has_next>, </#if></#list></#if>);		 		
+		${behavior.name}Behavior ${behavior.varName} = ${behavior.name}Behavior.build(<#if behavior.params??><#list behavior.params as param>${param}<#if param_has_next>, </#if></#list></#if>);		 		
 		</#list>
 		<#else>
 		//TODO: Se te olvido agregar los Behaviors?

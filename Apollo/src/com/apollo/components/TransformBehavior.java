@@ -4,60 +4,60 @@ import com.apollo.messages.MoveMessage;
 import com.apollo.utils.TrigLUT;
 import com.badlogic.gdx.math.MathUtils;
 
-public class Transform extends TransformFamily 
+public class TransformBehavior extends TransformFamily 
 {	
 	private float vx;
 	private float vy;
 	private float w;
-	public Transform() {
+	public TransformBehavior() {
 	}
 
-	public Transform(float x, float y) {
+	public TransformBehavior(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
-	public Transform(float x, float y,float vx, float vy) {
+	public TransformBehavior(float x, float y,float vx, float vy) {
 		this.x = x;
 		this.y = y;
 		this.vx = vx;
 		this.vy = vy;
 	}
 	
-	public Transform(Transform t) {
+	public TransformBehavior(TransformBehavior t) {
 		this.x = t.x;
 		this.y = t.y;
 		this.rotation = t.rotation;
 	}
 	
-	public Transform(float x, float y, float rotation) {
+	public TransformBehavior(float x, float y, float rotation) {
 		this.x = x;
 		this.y = y;
 		this.rotation = rotation;
 	}
 	
-	public static Transform build()
+	public static TransformBehavior build()
 	{
-		return new Transform();
+		return new TransformBehavior();
 	}
 
-	public static Transform build(Number x, Number y) 
+	public static TransformBehavior build(Number x, Number y) 
 	{
-		return new Transform(x.floatValue(),y.floatValue());		
+		return new TransformBehavior(x.floatValue(),y.floatValue());		
 	}
 	
-	public static Transform build(Number x, Number y, Number vx, Number vy) 
+	public static TransformBehavior build(Number x, Number y, Number vx, Number vy) 
 	{
-		return new Transform(x.floatValue(),y.floatValue(),vx.floatValue(),vy.floatValue());
+		return new TransformBehavior(x.floatValue(),y.floatValue(),vx.floatValue(),vy.floatValue());
 	}
 		
-	public static Transform build(Number x, Number y, Number rot) 
+	public static TransformBehavior build(Number x, Number y, Number rot) 
 	{
-		return new Transform(x.floatValue(), y.floatValue(), rot.floatValue());
+		return new TransformBehavior(x.floatValue(), y.floatValue(), rot.floatValue());
 	}
 	
-	public static Transform build(Transform t)
+	public static TransformBehavior build(TransformBehavior t)
 	{
-		return new Transform(t);
+		return new TransformBehavior(t);
 	}
 	
 

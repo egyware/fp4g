@@ -16,24 +16,23 @@ import com.badlogic.gdx.physics.box2d.World;
  * @author Edgardo
  *
  */
-public class BoxBehavior extends BodyBehavior
+public class BoxBodyBehavior extends BodyBehavior
 {
-	private Body simpleBody;
 	private int width;
 	private int height;
 	
 	
-	public BoxBehavior()
+	public BoxBodyBehavior()
 	{
 		this(0,0);		
 	}
 	
-	public BoxBehavior(int x, int y)
+	public BoxBodyBehavior(int x, int y)
 	{
 		this(x, y, 10, 10);		
 	}
 	
-	public BoxBehavior(int x, int y, int w, int h)
+	public BoxBodyBehavior(int x, int y, int w, int h)
 	{		
 		this.width = w;
 		this.width = h;
@@ -59,18 +58,18 @@ public class BoxBehavior extends BodyBehavior
 		super.initialize();
 	}
 	
-	public static BoxBehavior build()
+	public static BoxBodyBehavior build()
 	{
-		return new BoxBehavior();
+		return new BoxBodyBehavior();
 	}
 	
-	public static BoxBehavior build(int x, int y)
+	public static BoxBodyBehavior build(int x, int y)
 	{
-		return new BoxBehavior(x, y);
+		return new BoxBodyBehavior(x, y);
 	}
 	
-	public static BoxBehavior build(int x, int y, int w, int h)
+	public static BoxBodyBehavior build(int x, int y, int w, int h)
 	{
-		return new BoxBehavior(x,y,w,h);
+		return new BoxBodyBehavior(x,y,w,h);
 	}		
 }

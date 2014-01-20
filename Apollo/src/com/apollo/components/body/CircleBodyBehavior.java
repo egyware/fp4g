@@ -17,23 +17,27 @@ import com.badlogic.gdx.physics.box2d.World;
  * @author Edgardo
  *
  */
-public class CircleBehavior extends BodyBehavior
+public class CircleBodyBehavior extends BodyBehavior
 {
-	private Body simpleBody;
 	private int radius;	
 	
 	
-	public CircleBehavior()
+	public CircleBodyBehavior()
 	{
 		this(0,0);		
 	}
 	
-	public CircleBehavior(int x, int y)
+	public CircleBodyBehavior(int r)
+	{
+		this(0,0, r);		
+	}
+	
+	public CircleBodyBehavior(int x, int y)
 	{
 		this(x, y, 10);		
 	}
 	
-	public CircleBehavior(int x, int y, int r)
+	public CircleBodyBehavior(int x, int y, int r)
 	{		
 		this.radius = r;		
 		this.x = x;
@@ -58,18 +62,24 @@ public class CircleBehavior extends BodyBehavior
 		super.initialize();
 	}
 	
-	public static CircleBehavior build()
+	public static CircleBodyBehavior build()
 	{
-		return new CircleBehavior();
+		return new CircleBodyBehavior();
 	}
 	
-	public static CircleBehavior build(int x, int y)
+	public static CircleBodyBehavior build(Number r)
 	{
-		return new CircleBehavior(x, y);
+		return new CircleBodyBehavior(r.intValue());
 	}
 	
-	public static CircleBehavior build(int x, int y, int r)
+	public static CircleBodyBehavior build(Number x, Number y)
 	{
-		return new CircleBehavior(x, y, r);
-	}		
+		return new CircleBodyBehavior(x.intValue(), y.intValue());
+	}
+	
+	public static CircleBodyBehavior build(Number x, Number y, Number r)
+	{
+		return new CircleBodyBehavior(x.intValue(), y.intValue(), r.intValue());
+	}
+
 }

@@ -16,7 +16,7 @@ public class SpriteActorBehavior extends ActorBehavior
 	private float time;
 	
 	@InjectComponent
-	private Transform transform;
+	private TransformBehavior transform;
 	
 	public SpriteActorBehavior(Sprite sprite)
 	{
@@ -43,5 +43,10 @@ public class SpriteActorBehavior extends ActorBehavior
 	{	
 		TextureRegion frame = sprite.getKeyFrame(current,time);
 		batch.draw(frame, getX() - frame.getRegionWidth()/2 - o.x, getY() - o.y);		
+	}
+	
+	public static SpriteActorBehavior build(Sprite sprite)
+	{
+		return new SpriteActorBehavior(sprite);
 	}
 }

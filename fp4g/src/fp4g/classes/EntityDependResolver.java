@@ -6,6 +6,7 @@ import java.util.Map;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
+import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.List;
@@ -39,7 +40,18 @@ public class EntityDependResolver implements fp4g.data.expresion.Map, Depend
 		{
 			for(Add bhvr: entity.getAdd(DefineType.BEHAVIOR))
 			{
-				model.imports.add(String.format((String) i.getValue(), bhvr.name));
+				String packageName;
+				Behavior behavior = (Behavior)bhvr.define;
+				if(behavior != null)
+				{					
+					packageName = behavior.group.concat(".").concat(bhvr.name);
+				}
+				else
+				{
+					packageName = bhvr.name;
+				}
+				
+				model.imports.add(String.format((String) i.getValue(), packageName));
 			}
 		}
 		

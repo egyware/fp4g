@@ -72,7 +72,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		switch(ctx.type)
 		{		
 		case BEHAVIOR:
-			Behavior behavior = new Behavior(ctx.name.getText());
+			Behavior behavior = new Behavior(ctx.name.getText(),game);
 			behavior.setBuild(false);
 			game.setDefine(behavior);
 			break;
@@ -180,13 +180,17 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	}
 	
 	@Override
-	public Code visitOnStatement(FP4GParser.OnStatementContext ctx)
+	public Code visitOnStatements(FP4GParser.OnStatementsContext ctx)
 	{
 		statements = new Statements();
 		//TODO talvez deberia usar aggregateResult
 		for(ParseTree c:ctx.children)
 		{
-			statements.add(visit(c));
+			Code code = visit(c);
+			if(code != null)
+			{
+				statements.add(code);
+			}
 		}		
 		return statements;		
 	}
@@ -343,8 +347,21 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	{
 		IDefine parent = current.peek();
 		
-		Add	add = new Add(ctx.type,ctx.addName,ctx.varName);
-		add.setLine(ctx.start.getLine());
+		Add add;
+		//buscar el define que estoy agregando
+		try 
+		{
+			IDefine  define = parent.getDefine(ctx.type,ctx.addName);
+			add = new Add((Define)define, ctx.varName);
+			add.setLine(ctx.start.getLine());
+		}
+		catch (DefineNotFoundException e) 
+		{			
+			add = new Add(ctx.type,ctx.addName,ctx.varName);
+			add.setLine(ctx.start.getLine());
+			//TODO no se encontró un Define lanzar warning
+			Show(WarnType.MissingDefineAdd,add);			
+		}
 		
 		ExprList list = exprVisitor.getExprList(ctx.exprList());
 		if(list != null)
