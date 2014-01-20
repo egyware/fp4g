@@ -168,4 +168,17 @@ public abstract class Define extends LibDefine implements fp4g.data.expresion.Ma
 		return variables.containsKey(key);
 	}
 	
+	
+	public String toString()
+	{
+		//TODO mostrar los add y On
+		StringBuilder builder = new StringBuilder();
+		builder.append("DEFINE ");
+		builder.append(type.name());
+		builder.append(' ');
+		builder.append(name);
+		//builder.append('\n');
+					
+		return builder.toString();
+	}
 }

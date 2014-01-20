@@ -39,7 +39,8 @@ public class OnModel implements Model
 		model.addInterface(String.format("%sMessageHandler",name));
 		methodHandlers = new LinkedList<MethodHandlerModel>();
 		HashMap<String,MethodHandlerModel> methods = new HashMap<String, MethodHandlerModel>();
-		//agregar los metodos, aunque están vacios y asumiento que todos son MessageMethod		
+		//agregar los metodos, aunque están vacios y asumiento que todos son MessageMethod
+		//TODO da un error cuando el mensaje está sin definir
 		for(Entry<String,Literal<?>> entry:on.message.entrySet())
 		{
 			Literal<MessageMethod> literal = (Literal<MessageMethod>)entry.getValue();

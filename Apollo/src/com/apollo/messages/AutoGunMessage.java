@@ -3,7 +3,7 @@ package com.apollo.messages;
 import com.apollo.Message;
 import com.apollo.MessageHandler;
 
-public enum AutoGunMessage implements Message<GunMessageHandler> 
+public enum AutoGunMessage implements Message<AutoGunMessageHandler> 
 {
 	onSetDelayShotAutoGun,
 	onSetShotAutoGun	
@@ -26,9 +26,9 @@ public enum AutoGunMessage implements Message<GunMessageHandler>
 	}
 
 	@Override
-	public Class<GunMessageHandler> getClassHandler() 
+	public Class<AutoGunMessageHandler> getClassHandler() 
 	{
-		return GunMessageHandler.class;		
+		return AutoGunMessageHandler.class;		
 	}
 
 }

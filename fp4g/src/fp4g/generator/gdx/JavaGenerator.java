@@ -325,6 +325,10 @@ public class JavaGenerator extends Generator
 			{
 				if(scan != null) scan.close();
 			}
+			if(javaCompiler != null)
+			{
+				
+			}
 		}
 		return javaCompiler;
 	}

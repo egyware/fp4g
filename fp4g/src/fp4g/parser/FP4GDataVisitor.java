@@ -184,14 +184,17 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	{
 		statements = new Statements();
 		//TODO talvez deberia usar aggregateResult
-		for(ParseTree c:ctx.children)
+		if(ctx.children != null)
 		{
-			Code code = visit(c);
-			if(code != null)
+			for(ParseTree c:ctx.children)
 			{
-				statements.add(code);
-			}
-		}		
+				Code code = visit(c);
+				if(code != null)
+				{
+					statements.add(code);
+				}
+			}		
+		}
 		return statements;		
 	}
 	
