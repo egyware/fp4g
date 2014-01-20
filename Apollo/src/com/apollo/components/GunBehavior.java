@@ -70,7 +70,7 @@ public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 	public void update(float delta)
 	{
 		if(enableAutoGun)
-		{			
+		{
 			currentTime += delta;
 			if(currentTime >= delayTime)
 			{

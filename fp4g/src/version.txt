@@ -1,7 +1,12 @@
 :::0.1.24 (prototipo)
++ Se añadio SetShot y SetDelayShot
++ Se añadio los behaviors BoxBodyBehavior y CircleBodyBehavior
++ Se actualizo el ejemplo, ahora se pueden destruir asteroides
++ Ya no es necesario al agregar behaviors agregarle el sufijo Behavior, el generador los agrega automaticamente y ahora en adelante es obligatorio que los behaviors tengan el sufijo "Behaviors"
 + Ahora busca el JDK y guarda en un archivo de propiedades donde se encuentra la carpeta del JDK para no volverlo a buscar
 + Prototipado: Ahora los componentes se pueden agrupar en Apollo lo cual también implica que FP4G sabe donde buscarlos.
 F Arreglando algunos bugs cuando se especifica el metodo del filtro solamente
+B Los CircleBody no se están moviendo
 B Cuando no encuentra un mensaje deberia abortar y no caerse.
 P Falta especificar cuando el mensaje va para otra entidad.
 P Ordenar el codigo de OnModel tiene demasiadas responsabilidades
