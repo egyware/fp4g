@@ -65,7 +65,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		switch(ctx.type)
 		{		
 		case BEHAVIOR:
-			Behavior behavior = new Behavior(ctx.name.getText());
+			Behavior behavior = new Behavior(ctx.name.getText(),lib);
 			behavior.setBuild(false);
 			lib.setDefine(behavior);
 			break;
@@ -225,11 +225,9 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 				Show(ErrType.NotImplement);
 				throw new RuntimeException("No implementado");
 				//break;		  		
-		  	case BEHAVIOR:
-		  		//TODO: No implementado aï¿½n
-		  		Show(ErrType.NotImplement);
-				throw new RuntimeException("No implementado");
-		  		//break;		  		
+		  	case BEHAVIOR:		  		
+		  		define = new Behavior(defName,parent);
+		  		break;		  		
 		  	case GOAL:
 		  		//TODO: No implementado aún
 		  		Show(ErrType.NotImplement);
@@ -267,8 +265,21 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 	{
 		IDefine parent = current.peek();
 		
-		Add	add = new Add(ctx.type,ctx.addName,ctx.varName);
-		add.setLine(ctx.start.getLine());
+		Add add;
+		//buscar el define que estoy agregando
+		try 
+		{
+			IDefine  define = parent.getDefine(ctx.type,ctx.addName);
+			add = new Add((Define)define, ctx.varName);
+			add.setLine(ctx.start.getLine());
+		}
+		catch (DefineNotFoundException e) 
+		{			
+			add = new Add(ctx.type,ctx.addName,ctx.varName);
+			add.setLine(ctx.start.getLine());
+			//TODO no se encontró un Define lanzar warning
+			Show(WarnType.MissingDefineAdd,add);			
+		}
 		
 		ExprList list = exprVisitor.getExprList(ctx.exprList());
 		if(list != null)

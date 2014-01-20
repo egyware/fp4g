@@ -3,7 +3,8 @@ package com.apollo.messages;
 import com.apollo.Message;
 import com.apollo.MessageHandler;
 
-public enum GunMessage implements Message<GunMessageHandler> {
+public enum GunMessage implements Message<GunMessageHandler> 
+{
 	onShotGun,
 	onReloadGun,
 	onChangeBulletGun,
@@ -14,7 +15,7 @@ public enum GunMessage implements Message<GunMessageHandler> {
 	{
 		final GunMessageHandler handler = (GunMessageHandler)h;
 		switch(this)
-		{
+		{		
 		case onReloadGun:
 			handler.onReloadGun(((Number)args[0]).intValue());
 			break;

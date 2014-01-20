@@ -72,7 +72,7 @@ implements MoveMessageHandler
 		return (float)Math.toRadians(rotation);
 	}
 
-	public float getDistanceTo(Transform t) {
+	public float getDistanceTo(TransformBehavior t) {
 		return Utils.distance(t.getX(), t.getY(), x, y);
 	}
 

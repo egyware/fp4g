@@ -19,7 +19,7 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 	private final Bag<Behavior> behaviors;
 	private final Map<Class<? extends Behavior>,Behavior> behaviorsByType;		
 	<#list behaviors as behavior>
-	public ${behavior.name} ${behavior.varName};				 		
+	public ${behavior.name}Behavior ${behavior.varName};				 		
 	</#list>
 	<#else>
 	//TODO: Se te olvido agregar los Behaviors?
@@ -118,8 +118,8 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 		if(<#list source.filtersD as filterD>(<#list filterD.filtersC as filterC>${filterC}<#if filterC_has_next> && </#if></#list>)<#if filterD_has_next>||</#if></#list>)
 		</#if>
 		{
-		<#if source.statements?has_content>
-		<#list source.statements as stmnt>
+		<#if source.statements?has_content>		
+		<#list source.statements as stmnt>						
 			<@fp4g.translate statement=stmnt />
 		</#list>
 		<#else>

@@ -101,6 +101,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitParExpr(@NotNull FP4GParser.ParExprContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#onStatements}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOnStatements(@NotNull FP4GParser.OnStatementsContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#subExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

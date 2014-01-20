@@ -2,7 +2,6 @@ package fp4g.data.define;
 
 import static fp4g.Log.Show;
 import fp4g.Log.ErrType;
-import fp4g.Log.WarnType;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
@@ -29,11 +28,7 @@ public class Entity extends Define
 		case STATE:
 			Show(ErrType.NotExpectedType,code);
 			break;
-		case BEHAVIOR:	
-			if(!isSetDefine(DefineType.BEHAVIOR,code.name))
-			{
-				Show(WarnType.MissingDefineAdd,code);
-			}
+		case BEHAVIOR:
 			super.setAdd(code);
 			break;			
 		default:

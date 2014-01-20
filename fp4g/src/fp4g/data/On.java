@@ -75,7 +75,7 @@ public class On extends Code{
 				{
 					methodName = m.group(1);
 					value      = m.group(2);
-					if(value.length() == 0)
+					if(value != null && value.length() == 0)
 					{
 						value = null;
 					}

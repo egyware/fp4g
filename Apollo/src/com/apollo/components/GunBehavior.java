@@ -7,6 +7,8 @@ import com.apollo.BaseBehavior;
 import com.apollo.Entity;
 import com.apollo.WorldContainer;
 import com.apollo.annotate.InjectComponent;
+import com.apollo.messages.AutoGunMessage;
+import com.apollo.messages.AutoGunMessageHandler;
 import com.apollo.messages.GunMessage;
 import com.apollo.messages.GunMessageHandler;
 import com.badlogic.gdx.math.MathUtils;
@@ -15,13 +17,19 @@ import com.badlogic.gdx.math.MathUtils;
  * @author Edgardo
  *
  */
-public final class GunBehavior extends BaseBehavior implements GunMessageHandler
+public final class GunBehavior extends BaseBehavior implements GunMessageHandler, AutoGunMessageHandler
 {
-	private WorldContainer world;
 	@InjectComponent
 	private TransformFamily transform;
+	private WorldContainer world;	
 	private int ammo;
 	private String entity;
+	private boolean enableAutoGun;
+	private float currentTime;
+	private float delayTime;
+	private float rot;
+	private float dist;
+	private float vel;
 	
 	public GunBehavior()
 	{	
@@ -59,11 +67,27 @@ public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 	}
 		
 	@Override
+	public void update(float delta)
+	{
+		if(enableAutoGun)
+		{			
+			currentTime += delta;
+			if(currentTime >= delayTime)
+			{
+				currentTime -= delayTime;
+				onShotGun(rot, dist, vel);
+			}
+		}
+	}
+	
+	@Override
 	public void initialize()
 	{
 		owner.addEventHandler(GunMessage.onChangeBulletGun, this);
 		owner.addEventHandler(GunMessage.onReloadGun, this);
-		owner.addEventHandler(GunMessage.onShotGun, this);		
+		owner.addEventHandler(GunMessage.onShotGun, this);	
+		owner.addEventHandler(AutoGunMessage.onSetDelayShotAutoGun,this);
+		owner.addEventHandler(AutoGunMessage.onSetShotAutoGun,this);	
 		
 		world = owner.getWorld();		
 	}
@@ -88,12 +112,29 @@ public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 			ammo -=1;
 		}
 	}
+	
 
 	@Override
 	public void onChangeBulletGun(String entityName)
 	{
 		this.entity = entityName;
 		
+	}
+	
+	@Override
+	public void onSetDelayShotAutoGun(int delayTime) 
+	{
+		this.enableAutoGun = (delayTime != 0);
+		this.delayTime = delayTime*0.001f;
+		currentTime = 0;		
+	}
+	
+	@Override
+	public void onSetShotAutoGun(float rot, float dist, float vel)
+	{
+		this.rot = rot;
+		this.dist = dist;
+		this.vel = vel;		
 	}
 
 }

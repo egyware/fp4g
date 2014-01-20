@@ -2,6 +2,9 @@ package fp4g.data.define;
 
 import fp4g.data.Define;
 import fp4g.data.DefineType;
+import fp4g.data.IDefine;
+import fp4g.data.expresion.Literal;
+import fp4g.data.expresion.literals.StringLiteral;
 
 /**
  * TODO definir si va hacer algo esta clase...
@@ -11,11 +14,36 @@ import fp4g.data.DefineType;
  */
 public class Behavior extends Define
 {
-
-	public Behavior(String name) 
+	public String group;
+	public Behavior(String name,IDefine parent) 
 	{
-		super(DefineType.BEHAVIOR, name);		
+		super(DefineType.BEHAVIOR, name,parent);		
 	}
+	
+	public void set(String key, Literal<?> value)
+	{
+		if(key.equalsIgnoreCase("group"))
+		{
+			group = value.getValue().toString();
+		}
+		else
+		{
+			super.set(key, value);
+		}
+	}
+	
+	public Literal<?> get(String key)
+	{
+		if(key.equalsIgnoreCase("group"))
+		{
+			return new StringLiteral(group);
+		}	
+		else
+		{
+			return super.get(key);
+		}
+	}
+	
 	//public Behavior parent;
 	//public String name;
 	//public ExprList parameters;
