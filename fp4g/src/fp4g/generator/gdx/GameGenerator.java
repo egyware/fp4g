@@ -15,6 +15,7 @@ import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.generator.CodeGenerator;
+import fp4g.generator.gdx.models.PropertiesModel;
 import freemarker.template.Template;
 
 public class GameGenerator extends CodeGenerator<JavaGenerator> {
@@ -28,7 +29,29 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 	{
 		Game game = (Game)gameData;
 		
-		Template temp = generator.getTemplate("GameManager.ftl"); 	
+		Template temp               = generator.getTemplate("GameManager.ftl"); 	
+		
+		
+		//aqui probaré la nueva forma de tratar los datos
+		{
+			//tengo la plantilla
+			Template propertiesTemplate = generator.getTemplate("properties.ftl");
+			//ahora necesito el modelo
+			PropertiesModel propertiesModel = new PropertiesModel();
+
+			//ahora cargo el modelo con datos. De alguna forma
+			propertiesModel.setClassName(generator.packageName.concat(".").concat(game.name));
+			propertiesModel.setTitle("FP4G - ".concat(game.name));
+			propertiesModel.setWidth(game.width);
+			propertiesModel.setHeight(game.height);
+			propertiesModel.setResizable(false);
+			propertiesModel.setResizable(true);
+			
+			//genero
+			generator.createFile(generator.sourceDir,"game.properties",propertiesTemplate, propertiesModel);			
+			
+			
+		}
 		
 		HashMap<String,Object> root = new HashMap<String, Object>();
 		HashMap<String,Object> clazz = new HashMap<String, Object>();

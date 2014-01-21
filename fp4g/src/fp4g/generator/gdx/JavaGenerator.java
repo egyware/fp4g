@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -434,6 +436,12 @@ public class JavaGenerator extends Generator
 		{
 			return resolvers.getResolver(define);
 		}		
+	}
+
+	@Override
+	protected void copyFiles(Collection<File> files) 
+	{
+		//TODO por hacer todavía (esta cosa usa ajva 1.6)		
 	}
 
 }
