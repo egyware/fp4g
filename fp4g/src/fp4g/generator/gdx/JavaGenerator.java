@@ -276,27 +276,15 @@ public class JavaGenerator extends Generator
 		//aún no hemos encontrado el JDK,sigamos buscando
 		if(javaCompiler == null)
 		{
-			//asumiendo que estamos en windows
-			Scanner scan = null;
+			//asumiendo que estamos en windows			
 			try 
 			{
-				ProcessBuilder ps = new ProcessBuilder("java.exe","-version");
-				ps.redirectErrorStream(true);
-				
-				Process java_version = ps.start();
-				
-				java_version.waitFor();
-				
-				String text = "";
-				scan = new Scanner(java_version.getInputStream());
-				while(scan.hasNextLine())
-				{
-					text += scan.nextLine();
-				}								
+				String out = run("java.exe","-version");
+												
 				//TODO expresión regular plz
 				final String verToken = "version";
-				final int offset = text.indexOf(verToken)+verToken.length()+2;
-				final String version = text.substring(offset,text.indexOf('"',offset));
+				final int offset = out.indexOf(verToken)+verToken.length()+2;
+				final String version = out.substring(offset,out.indexOf('"',offset));
 				
 				//buscar en windows
 				File jdkDir;
@@ -308,13 +296,16 @@ public class JavaGenerator extends Generator
 				
 				if(jdkDir.exists())
 				{
-					System.setProperty("java.home", jdkDir.getAbsolutePath());
-					fp4g.Configuration.setProperty("java.home",jdkDir.getAbsolutePath());
+					System.setProperty("java.home", jdkDir.getCanonicalPath());					
 				}
 				
 				//try again...
 				javaCompiler = ToolProvider.getSystemJavaCompiler();
-				
+				//solo si podemos encontrarlo, no nos ilusionemos antes
+				if(javaCompiler != null && jdkDir.exists())
+				{
+					fp4g.Configuration.setProperty("java.home",jdkDir.getCanonicalPath());
+				}
 			}
 			catch (IOException e) 
 			{				
@@ -324,16 +315,76 @@ public class JavaGenerator extends Generator
 			{			
 				e.printStackTrace();
 			}
-			finally
+		}
+		
+		
+		
+		//sigue siendo null
+		if(javaCompiler == null)
+		{		
+			try
 			{
-				if(scan != null) scan.close();
+				File jdkDir = null;
+				String text = run("cmd","/c where javac");
+				String split[] = text.split("[\n\r]+");
+				for(String s: split)
+				{
+					jdkDir = new File(s,"../..");
+					if(jdkDir.exists())
+					{
+						System.setProperty("java.home", jdkDir.getCanonicalPath());
+						javaCompiler = ToolProvider.getSystemJavaCompiler();
+						if(javaCompiler != null)
+						{
+							//YAY lo encontramos :D
+							break;
+						}
+					}
+				}
+				//solo si podemos encontrarlo, no nos ilusionemos antes
+				if(javaCompiler != null)
+				{
+					fp4g.Configuration.setProperty("java.home",jdkDir.getCanonicalPath());
+				}
 			}
-			if(javaCompiler != null)
-			{
-				
+			catch (IOException e)
+			{			
+				e.printStackTrace();
+			}
+			catch (InterruptedException e) 
+			{			
+				e.printStackTrace();
 			}
 		}
+		
+		
 		return javaCompiler;
+	}
+
+	private String run(String ...args) throws InterruptedException, IOException 
+	{
+		ProcessBuilder ps = new ProcessBuilder(args);
+		ps.redirectErrorStream(true);
+		
+		Process java_version = ps.start();
+		
+		java_version.waitFor();
+		
+		String text = "";
+		Scanner scan = null;
+		try
+		{
+			scan = new Scanner(java_version.getInputStream());		
+			while(scan.hasNextLine())
+			{
+				text += scan.nextLine();
+			}
+		}		
+		finally
+		{
+			if(scan != null)scan.close();
+		}
+		return text;
 	}
 
 	@Override
