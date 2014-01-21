@@ -71,12 +71,12 @@ public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 	{
 		if(enableAutoGun)
 		{
-			currentTime += delta;
 			if(currentTime >= delayTime)
 			{
 				currentTime -= delayTime;
 				onShotGun(rot, dist, vel);
 			}
+			currentTime += delta;
 		}
 	}
 	
@@ -126,7 +126,7 @@ public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 	{
 		this.enableAutoGun = (delayTime != 0);
 		this.delayTime = delayTime*0.001f;
-		currentTime = 0;		
+		currentTime = this.delayTime;		
 	}
 	
 	@Override
