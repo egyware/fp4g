@@ -44,6 +44,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		
 		HashMap<String,Object> buildRoot = new HashMap<String, Object>();	
 		HashMap<String,Object> entityRoot = new HashMap<String, Object>();
+		List<On> entityBuild_onMessages = new LinkedList<On>();
 		
 		JavaCodeModel modelBuild = new JavaCodeModel();
 		modelBuild.pckg = String.format("%s.%s",generator.packageName,"entity");
@@ -156,12 +157,25 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			//por cada on! que es lo que necesitaré
 			//La categoria del mensaje Key,Contact,Life, etc..
 			//Obvio el code
-			List<OnModel> onList = new LinkedList<OnModel>();
+			List<OnModel> onList = new LinkedList<OnModel>();			
 			for(On on: entity_onMessages)
 			{
+				//evitamos que los on_entity se pasen a la entidad.
+				if(on.message != null && on.message.name.equals("Entity"))
+				{
+					entityBuild_onMessages.add(on);
+					continue;
+				}
 				onList.add(new OnModel(on,generator,modelEntity));
 			}
 			entityRoot.put("messages", onList);
+			
+			List<OnModel> onListBuild = new LinkedList<OnModel>();			
+			for(On on: entityBuild_onMessages)
+			{
+				onListBuild.add(new OnModel(on,generator,modelBuild));
+			}
+			buildRoot.put("messages", onListBuild);
 			
 			//revisar si tiene attachments, basta con uno..
 			boolean hasAttachments = false;
@@ -209,7 +223,19 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 					depende.perform(on.message, modelEntity);
 				}
 			}				
-		}			
+		}		
+		
+		if(entityBuild_onMessages.size()>0)
+		{	
+			for(On on:entityBuild_onMessages)
+			{					
+				Depend depende = generator.resolveDependency(on.message);
+				if(depende != null)
+				{
+					depende.perform(on.message, modelBuild);
+				}
+			}				
+		}
 		
 		
 		if(entityPackageDir == null)

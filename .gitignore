@@ -1,4 +1,4 @@
 bin
 /Apollo/bin
-Libs
+Libs/*.jar
 /*.properties

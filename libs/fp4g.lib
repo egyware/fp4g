@@ -1,0 +1,167 @@
+DEFINE GAME
+[
+	DEFINE BEHAVIOR CircleBody
+	[	
+		SET group = "body";
+	]
+	DEFINE BEHAVIOR BoxBody
+	[	
+		SET group = "body";
+	]
+	DEFINE ASSET Texture
+	[
+		SET name   = "Texture"; //el nombre de esta clase...
+		SET parameter = "TextureParameters"; //nombre de los parametros.
+		SET group = "atlas"; //define el nombre del pariente si es que está dentro de un bloque adicional.				
+	]
+	DEFINE ASSET Atlas
+	[
+	]
+	DEFINE ASSET Sprite
+	[
+	]
+	DEFINE ASSET TileMap
+	[
+	]
+	DEFINE ASSET Sound
+	[
+	]
+	DEFINE ASSET Music
+	[
+	]
+	DEFINE MESSAGE Key
+	[
+		SET press   = 
+		{ 
+			name = "press", valueReplace = "Input.Keys.%s == key", params = "int key", attachInputProcessor = true, message = current
+		} AS MessageMethod;
+		SET release = 
+		{			
+			name="release", valueReplace="Input.Keys.%s == key", params = "int key", attachInputProcessor = true, message = current
+		} AS MessageMethod;
+	]
+	
+	DEFINE MESSAGE Move
+	[
+		SET translate    = { name = "begin",  params = "float x, float y", message = current } AS MessageMethod;
+		SET rotate       = { name = "rotate", params = "float grad", message = current }   AS MessageMethod;
+		SET angularSpeed = { name = "angularSpeed", params = "float w", message = current} AS MessageMethod;
+		SET speed        = { name = "speed",   params = "float x, float y", message = current} AS MessageMethod;
+		SET forward      = { name = "forward", params = "float units", message = current} AS MessageMethod;
+	]
+	
+	DEFINE MESSAGE Contact
+	[		
+		SET begin = { name = "begin", valueReplace="other instanceof %s", params = "Entity other, Fixture otherFix, Fixture ownFix, Contact contact", message = current } AS MessageMethod;
+		SET end   = { name = "end",   valueReplace="other instanceof %s", params = "Entity other, Fixture otherFix, Fixture ownFix, Contact contact", message = current } AS MessageMethod;
+	]
+	
+	DEFINE MESSAGE Gun
+	[
+		SET shot = { name = "shot", params = "float rot, float dist, float vel", message = current} AS MessageMethod;
+		SET reload = { name = "reload", params = "int ammo", message = current}  AS MessageMethod;
+		SET changeBullet = { name = "changeBullet", params = "String entityName", message = current} AS MessageMethod;
+	]
+	
+	DEFINE MESSAGE AutoGun
+	[
+		SET SetDelayShot = { name = "setDelayShot", params = "int delay", message = current} AS MessageMethod;
+		SET SetShot      = { name = "setShot", params = "float rot, float dist, float vel", message = current} AS MessageMethod;
+	]
+	
+	DEFINE MESSAGE Entity
+	[
+		SET init   = { name = "init",   params = "", message = current} AS MessageMethod;
+		SET deinit = { name = "deinit", params = "", message = current} AS MessageMethod;
+	]
+	
+	SET methods  = {
+		press = Key.press, release = Key.release,
+		translate = Move.translate, rotate = Move.rotate, angularSpeed = Move.angularSpeed, speed = Move.speed, forward = Move.forward,
+		begin = Contact.begin,end = Contact.end,
+		shot = Gun.shot, reload = Gun.reload, changeBullet = Gun.changeBullet,
+		setDelayShot = AutoGun.SetDelayShot, setShot = AutoGun.SetShot,
+		init = Entity.init, deinit = Entity.deinit,
+		
+	} AS MessageMethods;
+	
+	SET resolvers = 
+	{ 		
+		Entity =
+		{ 
+			Builder = 
+			{
+				"com.apollo.Message",
+				"com.apollo.MessageHandler",
+				"com.apollo.EntityBuilder",
+				"com.apollo.Entity",
+				"com.apollo.WorldContainer",				
+			},
+			Entity = 
+			{
+				"com.apollo.Entity",			
+				"com.apollo.WorldContainer",				
+				"com.apollo.Behavior",		
+				"com.apollo.messages.EntityMessage",				
+				"com.apollo.utils.Bag",
+				"java.util.HashMap",
+				"java.util.Map",
+			},
+			Behaviors = 
+			{
+				"com.apollo.components.%sBehavior"
+			},
+			Message = 
+			{
+				"com.apollo.Message",
+				"com.apollo.utils.Bag",
+				"com.apollo.MessageHandler",
+				"com.apollo.utils.ImmutableBag"
+			}
+		} AS EntityDependResolver,
+		Message = 
+		{
+			Key     = 
+			{
+				"com.badlogic.gdx.Input",
+				"com.apollo.messages.KeyMessage",
+				"com.apollo.messages.KeyMessageHandler"		
+			},
+			Move    = 
+			{
+				"com.apollo.messages.MoveMessage",
+				"com.apollo.messages.MoveMessageHandler"
+			},
+			Contact =
+			{
+				"com.badlogic.gdx.physics.box2d.Fixture",
+				"com.badlogic.gdx.physics.box2d.Contact",
+				"com.apollo.messages.ContactMessage",
+				"com.apollo.messages.ContactMessageHandler"	
+			},
+			Gun = 
+			{
+				"com.apollo.messages.GunMessage",
+				"com.apollo.messages.GunMessageHandler"
+			},
+			AutoGun = 
+			{
+				"com.apollo.messages.AutoGunMessage",
+				"com.apollo.messages.AutoGunMessageHandler"
+			},
+			Entity =
+			{
+				"com.apollo.messages.EntityMessage",
+				"com.apollo.messages.EntityMessageHandler"
+			}
+		} AS DependResolver,
+		Asset =
+		{
+			Texture =
+			{
+				"com.badlogic.gdx.graphics.Texture"
+			}
+		} AS DependResolver,
+	} AS DependResolvers;		
+]
+

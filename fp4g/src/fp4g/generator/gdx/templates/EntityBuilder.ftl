@@ -1,3 +1,4 @@
+<#import "fp4g.ftl" as fp4g />
 package ${class.pckg};
 
 <#if class.imports??>
@@ -17,21 +18,21 @@ public class ${class.name} implements EntityBuilder
 	}
 	
 	@Override
-	public Entity buildEntity(WorldContainer container, Object... params)
+	public Entity buildEntity(final WorldContainer container, final Object... params)
 	{ 
 		<#if params??>
 		//parametros de entrada!
 		final int length = params.length;		
 		<#list params as param>		
 		<#if param.defaultValue?has_content>		
-		${param.type} ${param.name} = (${param_index}<length)?((${param.type})params[${param_index}]):${param.defaultValue};
+		final ${param.type} ${param.name} = (${param_index}<length)?((${param.type})params[${param_index}]):${param.defaultValue};
 		<#else>
-		${param.type} ${param.name} = (${param.type})params[${param_index}];
+		final ${param.type} ${param.name} = (${param.type})params[${param_index}];
 		</#if>
 		</#list>	
 		</#if>
 		
-		${entity.name} entity = new ${entity.name}(container);
+		final ${entity.name} entity = new ${entity.name}(container);
 		
 		<#if behaviors??>
 		//crear los behaviors
@@ -49,6 +50,26 @@ public class ${class.name} implements EntityBuilder
 		</#list>
 		</#if>
 		entity.pack();
+		
+		<#if messages?has_content>
+		<#list messages as message>
+		<#assign messageName = message.name?cap_first />		
+		//Categoria ${messageName}
+		${messageName}MessageHandler ${message.name?uncap_first}MessageHandler = new ${messageName}MessageHandler()
+		{
+			<@fp4g.on_message message = message />
+			
+			//TODO Parche
+			public void onMessage(Message<? extends MessageHandler> message, Object... args) 
+			{
+				entity.onMessage(message,args);
+			}
+		};
+		<#list message.methodHandlers as method>		
+		entity.addEventHandler(${messageName}Message.on${method.name?cap_first}${messageName}, ${message.name?uncap_first}MessageHandler);
+		</#list>
+		</#list>
+		</#if>		
 		
 		return entity;
 	}		

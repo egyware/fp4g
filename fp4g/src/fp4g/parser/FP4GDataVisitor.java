@@ -164,7 +164,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		
 		super.visitOn(ctx);
 		
-		//al evento on, se crea un nuevo codigo y se le aï¿½aden los filtros, si es que existen.
+		//al evento on, se crea un nuevo codigo y se le añaden los filtros, si es que existen.
 		//falta solo agregarle el codigo :)
 		Source source = on.addSource(statements);
 		statements = null;

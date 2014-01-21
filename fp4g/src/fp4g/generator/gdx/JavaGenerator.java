@@ -212,7 +212,8 @@ public class JavaGenerator extends Generator
 				cp,
 				"-d",				
 				binaryDir.getAbsolutePath(),
-				"-Xlint:deprecation"
+				"-Xlint:deprecation",
+				"-Xlint:unchecked",
 		};
 			
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();

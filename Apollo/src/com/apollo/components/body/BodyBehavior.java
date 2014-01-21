@@ -6,6 +6,7 @@ package com.apollo.components.body;
 import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
+import com.apollo.messages.MoveMessage;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -21,31 +22,24 @@ public abstract class BodyBehavior extends PhysicsFamily
 	@Override
 	public void initialize()
 	{
+		owner.addEventHandler(MoveMessage.onTranslateMove, this);
+		owner.addEventHandler(MoveMessage.onSpeedMove, this);
+		owner.addEventHandler(MoveMessage.onRotateMove, this);
+		owner.addEventHandler(MoveMessage.onForwardMove, this);
 		simpleBody.setUserData(owner);
 	}
 	
 	@Override
 	public void uninitialize()
 	{
+		owner.removeEventHandler(MoveMessage.onTranslateMove, this);
+		owner.removeEventHandler(MoveMessage.onSpeedMove, this);
+		owner.removeEventHandler(MoveMessage.onRotateMove, this);
+		owner.removeEventHandler(MoveMessage.onForwardMove, this);
+		
 		simpleBody.setUserData(null);
 		simpleBody.getWorld().destroyBody(simpleBody);
 	}
-	
-
-	
-//	public static BodyBehavior build(com.apollo.WorldContainer world, FixtureDef fixDef, Number x, Number y, Number dx,Number dy) {
-//		return new BodyBehavior(world,fixDef,x.intValue(),y.intValue(),dx.intValue(),dy.intValue());
-//	}
-//	
-//	public static BodyBehavior build(com.apollo.WorldContainer world, FixtureDef fixDef)
-//	{
-//		return new BodyBehavior(world,fixDef);		
-//	}
-//	
-//	public static BodyBehavior build(com.apollo.WorldContainer managers,FixtureDef fixDef, Number x, Number y)
-//	{
-//		return new BodyBehavior(managers,fixDef,x.intValue(),y.intValue());
-//	}
 	
 	/* (non-Javadoc)
 	 * @see com.apollo.components.BodyBehavior#getBody()
