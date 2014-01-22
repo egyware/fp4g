@@ -1,10 +1,13 @@
 package fp4g.runner;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Properties;
 
 import com.esotericsoftware.reflectasm.FieldAccess;
 
@@ -12,14 +15,16 @@ public class Main
 {
 	public static void main(String[] args) 
 	{
-		if(args.length < 2)
+		if(args.length < 1)
 		{
-			System.out.println("Modo de uso: Runner path class");
+			System.out.println("Modo de uso: Runner path [class]");
 			return;
 		}		
 		
 		
 	    RunnerClassLoader loader = null;
+	    Properties properties = null;
+	    String gameClass = null;
 		try 
 		{
 			URL urls[] = new URL[]
@@ -31,10 +36,38 @@ public class Main
 				new URL("file:libs/gdx-backend-lwjgl-natives.jar"),
 				new URL("file:libs/apollo-fp4g.jar")
 			};
-					
+			
 			loader = new RunnerClassLoader(urls);
 			
-			Class<?> appClass     = loader.loadClass(args[1]);
+			//cargar propiedades
+			InputStream in = loader.getResourceAsStream("game.properties");
+			if(in != null)
+			{
+				try 
+				{
+					properties = new Properties();
+					properties.load(in);
+					gameClass = properties.getProperty("game.class");
+				}
+				catch (IOException e) 
+				{
+					System.err.println("Peligro: No se encontró game.properties");
+					properties = null;
+				}				
+			}
+			//sobreescribe la propiedad
+			if(args.length >=2)
+			{
+				gameClass = args[1];
+			}
+			
+			if(gameClass == null)
+			{
+				System.err.println("Error: No se encontró y/o especifico un juego");
+				return;
+			}
+			
+			Class<?> appClass     = loader.loadClass(gameClass);
 			Class<?> confClass    = loader.loadClass("com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration");
 			Class<?> bindClass    = loader.loadClass("com.badlogic.gdx.backends.lwjgl.LwjglApplication");
 			Class<?> appInterface = loader.loadClass("com.badlogic.gdx.ApplicationListener"); 
@@ -42,12 +75,26 @@ public class Main
 			Object instanceConf = confClass.newInstance();
 			FieldAccess confField = FieldAccess.get(confClass);
 			
-			confField.set(instanceConf, "title", String.format("FP4G - %s",appClass.getSimpleName()));
 			
-			confField.set(instanceConf, "useGL20", true);
-			confField.set(instanceConf, "width", 640);
-			confField.set(instanceConf, "height", 480);
-			confField.set(instanceConf, "resizable", false);
+			
+			if(properties != null)
+			{
+				confField.set(instanceConf, "title", properties.getProperty("game.title"));
+				
+				confField.set(instanceConf, "useGL20", Boolean.parseBoolean(properties.getProperty("game.useGL20")));
+				confField.set(instanceConf, "width",   Integer.parseInt(properties.getProperty("game.width")));
+				confField.set(instanceConf, "height",  Integer.parseInt(properties.getProperty("game.height")));
+				confField.set(instanceConf, "resizable", Boolean.parseBoolean(properties.getProperty("game.resizable")));
+			}
+			else
+			{
+				confField.set(instanceConf, "title", String.format("FP4G - %s",appClass.getSimpleName()));
+				
+				confField.set(instanceConf, "useGL20", true);
+				confField.set(instanceConf, "width", 640);
+				confField.set(instanceConf, "height", 480);
+				confField.set(instanceConf, "resizable", false);
+			}
 			
 			Constructor<?> constructor = bindClass.getConstructor(appInterface, confClass);
 			

@@ -1,3 +1,16 @@
+:::0.1.26 (prototipo)
++ Más metodos de busqueda del JDK para el generador Java.
++ El generador ahora crea un archivo de configuración y lo copia de src a build.
++ Ahora en el launcher (FP4GRunner) lee un archivo de configuración  en donde encuentra las propiedades del juego a cargar.
+B Cuando no encuentra un mensaje deberia abortar y no caerse.
+B No copia nada.
+P Falta especificar cuando el mensaje va para otra entidad.
+P Ordenar el codigo de OnModel tiene demasiadas responsabilidades
+P Debe quedar prueba de tontos, se ha mejorado con la mejora del launcher.
+P Falta la capacidad de ordenar los managers según prioridad
+P Definir la utilidad de la clase Utils: Talvez cambiarle el nombre a Assets y mantener los punteros de los assets.
+P Hacer que los Managers envien mensaje
+
 :::0.1.25 (prototipo)
 + Se agregaron los metodos Init y Deinit del mensaje Entity, el nombre puede ser confuso pero indica cuando inicializa una entidad.
 + Las variables de entrada se comparten solo con el mensaje Init.

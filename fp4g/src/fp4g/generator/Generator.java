@@ -35,9 +35,11 @@ public abstract class Generator {
 	protected abstract void generateCode(ICode gameData,File path);
 	protected abstract void compileFiles(Collection<File> files); //TODO: compile file add throw some exception
 	protected abstract Collection<File> getRequiredFiles(File path,File file);
+	protected abstract void copyFiles(Collection<File> files);
 	
 	protected final LibContainer libContainer = new LibContainer();
 	private TreeSet<File> filesToCompile = new TreeSet<File>();
+	private TreeSet<File> filesToCopy = new TreeSet<File>();
 	private Configuration cfg;
 	
 		
@@ -59,8 +61,12 @@ public abstract class Generator {
 		System.out.println("Compilig...");
 		//compilar archivos...
 		compileFiles(filesToCompile);		
+
+		//copy files
+		copyFiles(filesToCopy);
 		System.out.println("Done!");
 	}
+	
 	//functiones de utilidad proxies
 	public Template getTemplate(String name) throws IOException
 	{	
@@ -97,7 +103,14 @@ public abstract class Generator {
 		template.process(buildRoot, out);
 		System.out.println(String.format("Generado: %s",name));
 		
-		filesToCompile.add(file);
+		if(name.endsWith("java"))
+		{		
+			filesToCompile.add(file);
+		}
+		else
+		{
+			filesToCopy.add(file);
+		}
 	}
 	
 	public void loadLib(String libFileName)
