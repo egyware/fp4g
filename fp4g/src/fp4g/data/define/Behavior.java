@@ -3,8 +3,8 @@ package fp4g.data.define;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
+import fp4g.data.ILib;
 import fp4g.data.IValue;
-import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.literals.StringLiteral;
 
 /**
@@ -19,6 +19,11 @@ public class Behavior extends Define
 	public Behavior(String name,IDefine parent) 
 	{
 		super(DefineType.BEHAVIOR, name,parent);		
+	}
+	
+	public Behavior(String name, ILib lib) 
+	{
+		super(DefineType.BEHAVIOR, name,null,lib);		
 	}
 	
 	public void set(String key, IValue<?> value)

@@ -20,6 +20,7 @@ import fp4g.data.DefineType;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
+import fp4g.data.ILib;
 import fp4g.data.Instance;
 import fp4g.data.NameList;
 import fp4g.data.On;
@@ -198,7 +199,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 	@Override
 	public Code visitGameValues(FP4GParser.GameValuesContext ctx)
 	{
-		current.push(lib);		
+		current.push(lib);
 		super.visitGameValues(ctx);		
 		current.pop();
 		return null;

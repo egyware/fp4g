@@ -4,11 +4,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import fp4g.data.Add;
 import fp4g.data.Code;
+import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
 import fp4g.data.ILib;
 import fp4g.data.IValue;
+import fp4g.data.On;
+import fp4g.exceptions.DefineNotFoundException;
 
 /**
  * Esta clase nos permite integrar las bibliotecas sin tener que "modificar tanto" codigo. (Mentira, ok no solo muchas refractorizaciones) 
@@ -19,7 +23,7 @@ import fp4g.data.IValue;
  * @author Edgardo
  *
  */
-public class Lib extends Code implements fp4g.data.expresion.Map,ILib
+public class Lib extends Code implements fp4g.data.expresion.Map,ILib,IDefine
 {
 	private final Map<DefineType,Map<String,? extends IDefine>> defines;
 	private final Map<String,IValue<?>> variables;
@@ -101,6 +105,67 @@ public class Lib extends Code implements fp4g.data.expresion.Map,ILib
 			defines.put(type, map);
 		}
 		map.put(define.getName(), define);		
+	}
+
+	@Override
+	public DefineType getType() 
+	{	
+		return null;
+	}
+
+	@Override
+	public String getName() 
+	{
+		return Lib.class.getName();
+	}
+
+	@Override
+	public On getOn(String messageName) 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IDefine getParent() 
+	{	
+		return null;
+	}
+
+	@Override
+	public void setOn(On on) 
+	{
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public <T extends IDefine> T getDefine(String defineName)
+	throws DefineNotFoundException 
+	{
+		T define = findDefine(defineName);
+		if(define == null)
+		{
+			throw new DefineNotFoundException(defineName);
+		}
+		return define;
+	}
+
+	@Override
+	public <T extends Define> T getDefine(DefineType type, String name)
+	throws DefineNotFoundException 
+	{
+		T define = findDefine(type,name);
+		if(define == null)
+		{
+			throw new DefineNotFoundException(type, name);
+		}
+		return define;
+	}
+
+	@Override
+	public void setAdd(Add add) 
+	{
+		// TODO Auto-generated method stub		
 	}
 
 //	public final <T extends IDefine> T getDefine(String defineName) throws DefineNotFoundException 
