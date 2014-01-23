@@ -2,8 +2,8 @@ package fp4g.classes;
 
 import java.util.HashMap;
 
+import fp4g.data.IValue;
 import fp4g.data.expresion.ClassMap;
-import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.Map;
 
 /**
@@ -35,7 +35,8 @@ public final class MessageMethods implements Map
 	
 	//--- complaciendo el publico
 	@Override
-	public void set(String k, Literal<?> v) {
+	public void set(String k, IValue<?> v) {
+		//TODO que pasa si es v null?
 		//rechazar si
 		if(!(v.getValue() instanceof MessageMethod))
 		{
@@ -46,7 +47,7 @@ public final class MessageMethods implements Map
 	}
 	
 	@Override
-	public Literal<?> get(String k) {
+	public IValue<?> get(String k) {
 		return map.get(k);				
 	}
 	

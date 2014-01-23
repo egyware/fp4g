@@ -6,6 +6,7 @@ import java.util.Map;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
+import fp4g.data.IValue;
 import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.expresion.ArrayList;
@@ -96,13 +97,13 @@ public class EntityDependResolver implements fp4g.data.expresion.Map, Depend
 	
 
 	@Override
-	public void set(String key, Literal<?> value) 
+	public void set(String key, IValue<?> value) 
 	{
 		importsRequired.put(key, (ArrayList)value);
 	}
 
 	@Override
-	public Literal<?> get(String key) 
+	public IValue<?> get(String key) 
 	{		
 		return importsRequired.get(key);
 	}

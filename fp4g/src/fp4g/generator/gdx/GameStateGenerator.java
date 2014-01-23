@@ -246,6 +246,12 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		};
 		Arrays.sort(arrayImports);
 		modelClass.imports.addAll(Arrays.asList(arrayImports));
+		
+		if(generator.isDebug)
+		{
+			modelClass.addImport("com.badlogic.gdx.graphics.FPSLogger");
+		}
+		
 		if(state_addentities.size() > 0)
 		{
 			modelClass.imports.add("com.apollo.Entity");

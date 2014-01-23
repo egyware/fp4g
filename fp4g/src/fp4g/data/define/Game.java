@@ -6,6 +6,7 @@ import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
+import fp4g.data.IValue;
 import fp4g.data.On;
 import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.literals.BoolLiteral;
@@ -25,7 +26,7 @@ public class Game extends Define
 	
 	public Game(LibContainer lc)
 	{
-		super(DefineType.GAME,"game",lc);	
+		super(DefineType.GAME,"game",lc);		
 	}
 	
 	public void set(String key, Literal<?> value)
@@ -50,7 +51,7 @@ public class Game extends Define
 		}
 	}
 	
-	public Literal<?> get(String key)
+	public IValue<?> get(String key)
 	{
 		if(key.equalsIgnoreCase("width"))
 		{
@@ -71,6 +72,8 @@ public class Game extends Define
 			return super.get(key);
 		}
 	}
+	
+	
 	
 //	/**
 //	 * @param name

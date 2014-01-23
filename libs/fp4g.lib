@@ -8,6 +8,10 @@ DEFINE GAME
 	[	
 		SET group = "body";
 	]
+	DEFINE BEHAVIOR Timer
+	[
+	]
+	
 	DEFINE ASSET Texture
 	[
 		SET name   = "Texture"; //el nombre de esta clase...
@@ -43,7 +47,7 @@ DEFINE GAME
 	
 	DEFINE MESSAGE Move
 	[
-		SET translate    = { name = "begin",  params = "float x, float y", message = current } AS MessageMethod;
+		SET translate    = { name = "translate",  params = "float x, float y", message = current } AS MessageMethod;
 		SET rotate       = { name = "rotate", params = "float grad", message = current }   AS MessageMethod;
 		SET angularSpeed = { name = "angularSpeed", params = "float w", message = current} AS MessageMethod;
 		SET speed        = { name = "speed",   params = "float x, float y", message = current} AS MessageMethod;
@@ -75,6 +79,13 @@ DEFINE GAME
 		SET deinit = { name = "deinit", params = "", message = current} AS MessageMethod;
 	]
 	
+	DEFINE MESSAGE Timer
+	[
+		SET active  = { name = "active",  valueReplace="index == %s", params = "int index", message = current} AS MessageMethod;
+		SET setTime = { name = "setTime", params = "int index, int time", message = current} AS MessageMethod;
+		SET cancel  = { name = "cancel",  params = "int index", message = current} AS MessageMethod;
+	]
+	
 	SET methods  = {
 		press = Key.press, release = Key.release,
 		translate = Move.translate, rotate = Move.rotate, angularSpeed = Move.angularSpeed, speed = Move.speed, forward = Move.forward,
@@ -82,6 +93,7 @@ DEFINE GAME
 		shot = Gun.shot, reload = Gun.reload, changeBullet = Gun.changeBullet,
 		setDelayShot = AutoGun.SetDelayShot, setShot = AutoGun.SetShot,
 		init = Entity.init, deinit = Entity.deinit,
+		active = Message.Timer.active, setTime=Message.Timer.setTime, cancel = Message.Timer.cancel,
 		
 	} AS MessageMethods;
 	
@@ -153,6 +165,11 @@ DEFINE GAME
 			{
 				"com.apollo.messages.EntityMessage",
 				"com.apollo.messages.EntityMessageHandler"
+			},
+			Timer =
+			{
+				"com.apollo.messages.TimerMessage",
+				"com.apollo.messages.TimerMessageHandler"
 			}
 		} AS DependResolver,
 		Asset =

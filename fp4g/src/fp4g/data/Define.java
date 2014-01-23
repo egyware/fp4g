@@ -11,11 +11,9 @@ import java.util.Set;
 
 import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassMap;
-import fp4g.data.expresion.Literal;
-import fp4g.data.libs.LibDefine;
 import fp4g.exceptions.DefineNotFoundException;
 
-public abstract class Define extends LibDefine implements fp4g.data.expresion.Map,IDefine
+public abstract class Define extends Code implements fp4g.data.expresion.Map,IValue<Define>,IDefine
 {
 	public final static List<Add> emptyList = new ArrayList<Add>(0);
 	
@@ -24,7 +22,11 @@ public abstract class Define extends LibDefine implements fp4g.data.expresion.Ma
 	public String name;
 	public NameList paramNameList;
 		
-	private final Map<String,Literal<?>> variables;
+	public final IDefine parent;
+	
+	private final ILib lib;
+	private final Map<DefineType,Map<String,? extends IDefine>> defines;
+	private final Map<String,IValue<?>> variables;
 	
 	private final Map<DefineType,List<Add>> adds;	
 	private final Map<String,On> onMessages;	
@@ -32,17 +34,35 @@ public abstract class Define extends LibDefine implements fp4g.data.expresion.Ma
 	
 	public Define(DefineType type,String name)
 	{
-		this(type,name,null);		
+		this(type,name,null,null);		
 	}
 	
-	public Define(DefineType type,String name, IDefine parent)
+	public Define(DefineType type,String name,ILib lib)
 	{
-		super(parent);
+		this(type,name,null,lib);		
+	}
+	
+	public Define(DefineType type,String name, IDefine parent, ILib lib)
+	{
+		this.parent = parent;
 		this.type = type;
-		this.name = name;		
-		variables = new HashMap<String,Literal<?>>();		
+		this.name = name;
+		this.lib = lib;
+		variables = new HashMap<String, IValue<?>>();		
 		adds    = new HashMap<DefineType, List<Add>>(DefineType.values().length,1);		
-		onMessages= new HashMap<String, On>();		
+		onMessages= new HashMap<String, On>();
+		defines = new HashMap<DefineType,Map<String,? extends IDefine>>();
+		
+		//definir namespaces o algo por el estilo.
+//		for(DefineType t: DefineType.values())
+//		{
+//			set(t.name(), new ObjectLiteral(new Namespace(t,this)));
+//		}
+	}
+	
+	public Define getValue()
+	{
+		return this;
 	}
 		
 	public DefineType getType()
@@ -97,25 +117,18 @@ public abstract class Define extends LibDefine implements fp4g.data.expresion.Ma
 		return onMessages.get(messageName);
 	}
 	
-	public final <T extends Define> T getDefine(DefineType type,String name) throws DefineNotFoundException 
-	{	
-		T value = findDefine(type,name);
-		if(value == null)throw new DefineNotFoundException(name);
-		return value;
-	}
-		
 	public final Collection<On> getOnMessages()
 	{
 		return onMessages.values();
 	}
-	
 	
 	/**
 	 * Establece una variable  
 	 * @param key nombre de la variable
 	 * @param value valor de la variable
 	 */
-	public void set(String key, Literal<?> value)
+	@Override
+	public void set(String key, IValue<?> value)
 	{
 		variables.put(key, value);
 	}
@@ -124,7 +137,7 @@ public abstract class Define extends LibDefine implements fp4g.data.expresion.Ma
 	 * @param key nombre de la variable
 	 * @param value valor de la variable
 	 */
-	public final void set(String key, Object  value)
+	public final void set(String key, Object value)
 	{		
 		if(value instanceof fp4g.data.expresion.Map)
 		{
@@ -141,18 +154,24 @@ public abstract class Define extends LibDefine implements fp4g.data.expresion.Ma
 	 * @param key
 	 * @return
 	 */
-	public Literal<?> get(String key)
+	public IValue<?> get(String key)
 	{
-		Literal<?> ret = variables.get(key);
+		IValue<?> ret = variables.get(key);
 		if(ret == null && parent != null)			
 		{
 			ret = parent.get(key);
-		}
+		}		
 		return ret;		 
 	}
 	
 	
-	public final Set<Entry<String,Literal<?>>> entrySet()
+	/**
+	 * 
+	 * Devuelve todos las variables definidas en este define
+	 * 
+	 * @return
+	 */
+	public final Set<Entry<String,IValue<?>>> entrySet()
 	{
 		return variables.entrySet();
 	}
@@ -168,7 +187,6 @@ public abstract class Define extends LibDefine implements fp4g.data.expresion.Ma
 		return variables.containsKey(key);
 	}
 	
-	
 	public String toString()
 	{
 		//TODO mostrar los add y On
@@ -180,5 +198,117 @@ public abstract class Define extends LibDefine implements fp4g.data.expresion.Ma
 		//builder.append('\n');
 					
 		return builder.toString();
+	}
+
+	@Override
+	public final <T extends IDefine> T findDefine(String defineName) 
+	{
+		for(DefineType type: DefineType.values())
+		{
+			T define = findDefine(type,defineName);
+			if(define != null)
+			{
+				return define;
+			}
+		}
+		if(lib != null)
+		{
+			T define = lib.findDefine(defineName);
+			if(define != null) return define;
+		}
+		return null;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public final <T extends IDefine> T findDefine(DefineType type,String defineName)
+	{
+		final Map<String,T> map = (Map<String, T>) defines.get(type);
+		T value = null;		
+		if(map != null)
+		{
+			value = map.get(defineName);
+		}
+		else 
+		if(lib != null)
+		{
+			T define = lib.findDefine(type,defineName);
+			if(define != null) return define;
+		}
+		return value;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")	
+	public <T extends IDefine> Collection<T> getDefines(DefineType defineType) 
+	{
+		Map<String,T> map = (Map<String, T>) defines.get(type);
+		if(map != null)
+		{
+			return map.values();
+		}
+		else
+		if(lib != null)
+		{
+			return lib.getDefines(defineType);			
+		}
+		return null;
+	}
+	
+	@Override
+	public final <T extends Define> T getDefine(DefineType type,String name) throws DefineNotFoundException 
+	{	
+		T value = findDefine(type,name);
+		if(value == null)throw new DefineNotFoundException(name);
+		return value;
+	}
+	
+	@Override
+	public <T extends IDefine> T getDefine(String defineName)
+	throws DefineNotFoundException 
+	{
+		for(DefineType type :DefineType.values())
+		{
+				T define = findDefine(type,defineName);
+				if(define != null) return define;
+									
+		}
+		throw new DefineNotFoundException(defineName);	
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T extends IDefine> boolean isSetDefine(DefineType type, String name) 
+	{
+		Map<String,T> map = (Map<String, T>) defines.get(type);
+		if(map != null)
+		{
+			return map.containsKey(name);
+		}
+		else
+		if(lib != null)
+		{
+			return lib.isSetDefine(type, name);
+		}
+		return false;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T extends IDefine> void setDefine(T define) {
+		final DefineType type = define.getType();		
+		Map<String,T> map = (Map<String, T>) defines.get(type);
+		if(map == null)
+		{
+			map = new HashMap<String, T>();
+			defines.put(type, map);
+		}
+		map.put(define.getName(), define);
+	}
+	
+	@Override
+	public IDefine getParent() 
+	{
+		return parent;
 	}
 }

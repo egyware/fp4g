@@ -2,8 +2,10 @@ package fp4g.data;
 
 import java.util.Collection;
 
+import fp4g.data.expresion.Map;
 
-public interface ILib
+
+public interface ILib extends Map
 {
 	
 	/**

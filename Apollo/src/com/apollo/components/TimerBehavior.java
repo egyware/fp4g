@@ -79,13 +79,13 @@ public final class TimerBehavior extends BaseBehavior implements TimerMessageHan
 	@Override
 	public void onSetTimeTimer(int index, int time)
 	{
-		index = (index<=0)?1:(index >= timers.length)?timers.length-1:index;
+		index = (index<0)?0:(index >= timers.length)?timers.length-1:index;
 		timers[index] = time * 0.001f;
 	}
 	@Override
 	public void onCancelTimer(int index) 
 	{
-		index = (index<=0)?1:(index >= timers.length)?timers.length-1:index;
+		index = (index<0)?0:(index >= timers.length)?timers.length-1:index;
 		timers[index] = 0;	
 	}
 }

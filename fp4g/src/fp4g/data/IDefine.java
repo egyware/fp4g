@@ -1,5 +1,4 @@
 package fp4g.data;
-import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.Map;
 import fp4g.exceptions.DefineNotFoundException;
 
@@ -43,13 +42,5 @@ public interface IDefine extends ILib, ICode, Map
 	 * @param code
 	 */
 	public void setAdd(Add add);
-	
-
-	/**
-	 * Devuelve todas las variables de tiene almacenado este define
-	 * @return
-	 */
-	public void set(String key, Literal<?> eval);
-	
 	
 }

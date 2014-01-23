@@ -2,6 +2,7 @@ package fp4g.data.expresion;
 
 import com.esotericsoftware.reflectasm.ConstructorAccess;
 
+import fp4g.data.IValue;
 import fp4g.exceptions.NotAllowedOperatorException;
 
 public final class CustomClassMap extends Literal<Map> implements Map
@@ -16,12 +17,12 @@ public final class CustomClassMap extends Literal<Map> implements Map
 		bean = value;		
 	}
 	@Override
-	public void set(String key, Literal<?> literal) 
+	public void set(String key, IValue<?> literal) 
 	{
 		bean.set(key, literal);
 	}
 	@Override
-	public Literal<?> get(String key) 
+	public IValue<?> get(String key) 
 	{
 		return bean.get(key);		
 	}

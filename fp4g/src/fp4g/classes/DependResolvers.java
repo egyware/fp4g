@@ -3,8 +3,8 @@ package fp4g.classes;
 import java.util.HashMap;
 
 import fp4g.data.Define;
+import fp4g.data.IValue;
 import fp4g.data.expresion.CustomClassMap;
-import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.Map;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.generator.Depend;
@@ -19,13 +19,13 @@ public class DependResolvers implements Map
 	}
 	
 	@Override
-	public void set(String key, Literal<?> value)
+	public void set(String key, IValue<?> value)
 	{
 		resolvers.put(key.toLowerCase(), (CustomClassMap)value);		
 	}
 
 	@Override
-	public Literal<?> get(String key)
+	public IValue<?> get(String key)
 	{		
 		return resolvers.get(key);
 	}

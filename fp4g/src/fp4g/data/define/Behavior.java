@@ -3,6 +3,7 @@ package fp4g.data.define;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
+import fp4g.data.IValue;
 import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.literals.StringLiteral;
 
@@ -20,7 +21,7 @@ public class Behavior extends Define
 		super(DefineType.BEHAVIOR, name,parent);		
 	}
 	
-	public void set(String key, Literal<?> value)
+	public void set(String key, IValue<?> value)
 	{
 		if(key.equalsIgnoreCase("group"))
 		{
@@ -32,7 +33,7 @@ public class Behavior extends Define
 		}
 	}
 	
-	public Literal<?> get(String key)
+	public IValue<?> get(String key)
 	{
 		if(key.equalsIgnoreCase("group"))
 		{
@@ -43,7 +44,7 @@ public class Behavior extends Define
 			return super.get(key);
 		}
 	}
-	
+
 	//public Behavior parent;
 	//public String name;
 	//public ExprList parameters;

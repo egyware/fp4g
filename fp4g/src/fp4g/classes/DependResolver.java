@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fp4g.data.Define;
+import fp4g.data.IValue;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.List;
 import fp4g.data.expresion.Literal;
@@ -49,7 +50,7 @@ public class DependResolver implements fp4g.data.expresion.Map, Depend
 	}
 	
 	@Override
-	public void set(String key, Literal<?> value) 
+	public void set(String key, IValue<?> value) 
 	{
 		importsRequired.put(key, (ArrayList)value);
 	}

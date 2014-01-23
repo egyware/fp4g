@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -421,11 +419,12 @@ public class JavaGenerator extends Generator
     	//TODO Posible error.
     	CustomClassMap map = (CustomClassMap)libContainer.get("resolvers");
     	resolvers = (DependResolvers)map.getValue();
-    	
-    	libContainer.setManager(new JavaRenderManager());
-    	libContainer.setManager(new JavaEntityManager());
-    	libContainer.setManager(new JavaSoundManager());
-    	libContainer.setManager(new JavaPhysicsManager());
+
+    	//TODO must be lib files
+//    	libContainer.setManager(new JavaRenderManager());
+//    	libContainer.setManager(new JavaEntityManager());
+//    	libContainer.setManager(new JavaSoundManager());
+//    	libContainer.setManager(new JavaPhysicsManager());
     	
 //        //agregar componentes		    	
 ////    String components[][] = 

@@ -10,6 +10,7 @@ import fp4g.Log.WarnType;
 import fp4g.classes.MessageMethod;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
+import fp4g.data.IValue;
 import fp4g.data.On;
 import fp4g.data.On.Filter;
 import fp4g.data.On.Source;
@@ -41,9 +42,10 @@ public class OnModel implements Model
 		HashMap<String,MethodHandlerModel> methods = new HashMap<String, MethodHandlerModel>();
 		//agregar los metodos, aunque están vacios y asumiento que todos son MessageMethod
 		//TODO da un error cuando el mensaje está sin definir
-		for(Entry<String,Literal<?>> entry:on.message.entrySet())
+		//TODO esto no es claro, y no deberia usarse para este motivo aunque sea seguro.
+		for(Entry<String,IValue<?>> entry:on.message.entrySet())
 		{
-			Literal<MessageMethod> literal = (Literal<MessageMethod>)entry.getValue();
+			IValue<MessageMethod> literal = (IValue<MessageMethod>)entry.getValue();
 			methods.put(entry.getKey(), new MethodHandlerModel(literal.getValue()));
 		}
 		//tengo que recorrer los sources en busca de los methodHandlers y subirlos acï¿½

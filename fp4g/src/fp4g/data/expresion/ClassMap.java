@@ -5,6 +5,7 @@ import org.antlr.v4.misc.Utils;
 import com.esotericsoftware.reflectasm.ConstructorAccess;
 import com.esotericsoftware.reflectasm.MethodAccess;
 
+import fp4g.data.IValue;
 import fp4g.data.expresion.literals.BoolLiteral;
 import fp4g.data.expresion.literals.FloatLiteral;
 import fp4g.data.expresion.literals.IntegerLiteral;
@@ -33,13 +34,13 @@ public final class ClassMap<T> extends Literal<T> implements Map
 		method = MethodAccess.get(value.getClass());	
 	}
 	@Override
-	public void set(String key, Literal<?> literal) 
+	public void set(String key, IValue<?> literal) 
 	{			
 		method.invoke(bean, String.format("set%s",Utils.capitalize(key)),literal.getValue());		
 	}
 	
 	@Override
-	public Literal<?> get(String key) 
+	public IValue<?> get(String key) 
 	{
 		final String methods[] = method.getMethodNames();
 		key = Utils.capitalize(key);

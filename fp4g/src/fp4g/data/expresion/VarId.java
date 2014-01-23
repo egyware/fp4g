@@ -9,7 +9,8 @@ import fp4g.exceptions.CannotEvalException;
 /*
  * Una expresión que indica que se ha usado una variable.
  */
-public class VarId extends Expresion{
+public class VarId extends Expresion
+{
 	public static final VarId parent = new VarId("parent");
 	public static final VarId current = new VarId("current");
 	public final String varName;
@@ -34,7 +35,7 @@ public class VarId extends Expresion{
 			return new CustomClassMap(define);
 		}else
 		{
-			Literal<?> value = define.get(varName);
+			Literal<?> value = (Literal<?>) define.get(varName);
 			if(value == null)
 			{
 				Log.Show(ErrType.VarNameNotFound,define,varName);
