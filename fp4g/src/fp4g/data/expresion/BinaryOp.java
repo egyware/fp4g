@@ -2,6 +2,7 @@ package fp4g.data.expresion;
 
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
+import fp4g.data.IValue;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.IncompatibleTypesException;
 
@@ -24,10 +25,10 @@ public class BinaryOp extends Expresion{
 	}
 	
 	@Override
-	public Literal<?> eval(IDefine define) throws CannotEvalException 
+	public IValue<?> eval(IValue<?> define) throws CannotEvalException 
 	{
-		Literal<?>  leftR  = left.eval(define);
-		Literal<?>  rightR = right.eval(define);		
+		IValue<?>  leftR  = left.eval(define);
+		IValue<?>  rightR = right.eval(define);		
 		try
 		{		
 			//obtener el mayor autocasting posible byte->short->int->long , float->double

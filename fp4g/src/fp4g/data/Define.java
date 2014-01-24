@@ -13,7 +13,7 @@ import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.exceptions.DefineNotFoundException;
 
-public abstract class Define extends Code implements fp4g.data.expresion.Map,IValue<Define>,IDefine
+public abstract class Define extends Code implements IDefine
 {
 	public final static List<Add> emptyList = new ArrayList<Add>(0);
 	
@@ -149,7 +149,11 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map,IVa
 	 */
 	public IValue<?> get(String key)
 	{
-		IValue<?> ret = variables.get(key);
+		IValue<?> ret = findDefine(key); 
+		if(ret == null)
+		{
+			ret = variables.get(key);;
+		}				
 		if(ret == null && parent != null)
 		{
 				ret = parent.get(key);

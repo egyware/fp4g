@@ -4,6 +4,7 @@ import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
+import fp4g.data.IValue;
 import fp4g.exceptions.CannotEvalException;
 
 /*
@@ -20,7 +21,7 @@ public class VarId extends Expresion
 	}
 	
 	@Override
-	public Literal<?> eval(IDefine define) throws CannotEvalException 
+	public IValue<?> eval(IValue<?> define) throws CannotEvalException 
 	{
 		if(parent == this)
 		{

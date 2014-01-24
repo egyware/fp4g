@@ -2,9 +2,8 @@ package fp4g.data.expresion;
 
 import fp4g.Log;
 import fp4g.Log.ErrType;
-import fp4g.data.IDefine;
+import fp4g.data.IValue;
 import fp4g.exceptions.CannotEvalException;
-import fp4g.exceptions.DefineNotFoundException;
 
 /**
  * Esta clase corresponde a la operación Variable.propiedad.
@@ -28,29 +27,34 @@ public class VarDot extends VarId
 	}	
 	
 	@Override
-	public Literal<?> eval(IDefine define) throws CannotEvalException 
+	public IValue<?> eval(IValue<?> current) throws CannotEvalException 
 	{		
 		//a que define accedo si no me sé el tipo?
-		IDefine sub;
+		IValue<?> sub = null;
 		if(VarDot.parent == varName)
 		{
-			sub = define.getParent();
+			//sub = current.getParent();
 		}else
 		if(VarDot.current == varName)
 		{
-			sub = define;
+			sub = current;
 		}else
 		{
-			try {
-				sub = define.getDefine(varName);
-			} catch (DefineNotFoundException e) {
-				Log.Show(ErrType.VarNameNotFound, define, varName);
-				throw new CannotEvalException(e,this);
+			if(current instanceof Map)
+			{
+				sub = ((Map)current).get(varName);				
+			}
+			else
+			{
+				//TODO Log.Show(ErrType.VarNameNotFound, this, varName);
+				Log.Show(ErrType.VarNameNotFound, varName);
+				throw new CannotEvalException(this);
 			}
 		}
 		if(sub == null)
 		{			
-			Log.Show(ErrType.VarNameNotFound, define, varName);
+			//TODO Log.Show(ErrType.VarNameNotFound, current, varName);
+			Log.Show(ErrType.VarNameNotFound, varName);
 			throw new CannotEvalException(this);
 		}
 		return property.eval(sub);

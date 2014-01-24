@@ -2,7 +2,7 @@ package fp4g.data;
 import fp4g.data.expresion.Map;
 import fp4g.exceptions.DefineNotFoundException;
 
-public interface IDefine extends ILib, ICode, Map
+public interface IDefine extends ILib, ICode, Map, IValue<IDefine>
 {
 	public DefineType getType();
 	public String getName();

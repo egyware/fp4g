@@ -168,6 +168,12 @@ public class Lib extends Code implements fp4g.data.expresion.Map,ILib,IDefine
 		// TODO Auto-generated method stub		
 	}
 
+	@Override
+	public IDefine getValue() 
+	{	
+		return this;
+	}
+
 //	public final <T extends IDefine> T getDefine(String defineName) throws DefineNotFoundException 
 //	{
 //		for(DefineType type :DefineType.values())

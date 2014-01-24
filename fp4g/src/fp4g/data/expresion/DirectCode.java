@@ -3,8 +3,8 @@
  */
 package fp4g.data.expresion;
 
-import fp4g.data.IDefine;
 import fp4g.data.Expresion;
+import fp4g.data.IValue;
 
 /**
  * @author Edgardo
@@ -18,8 +18,8 @@ public class DirectCode extends Expresion {
 	}
 	
 	@Override
-	public Literal<?> eval(IDefine define) 
+	public IValue<?> eval(IValue<?> define) 
 	{
 		throw new RuntimeException("No Implementado");
-	}
+	}	
 }

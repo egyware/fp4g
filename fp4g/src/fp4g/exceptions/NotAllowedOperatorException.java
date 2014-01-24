@@ -1,11 +1,11 @@
 package fp4g.exceptions;
 
+import fp4g.data.IValue;
 import fp4g.data.expresion.BinaryOp.Type;
-import fp4g.data.expresion.Literal;
 
 public class NotAllowedOperatorException extends CannotEvalException 
 {
-	public NotAllowedOperatorException(Literal<?> literal, Type mult) 
+	public NotAllowedOperatorException(IValue<?> literal, Type mult) 
 	{
 		super(null);
 	}

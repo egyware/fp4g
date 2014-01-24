@@ -1,5 +1,6 @@
 package fp4g.data.expresion.literals;
 
+import fp4g.data.IValue;
 import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.Literal;
 import fp4g.exceptions.NotAllowedOperatorException;
@@ -19,26 +20,26 @@ public class StringLiteral extends Literal<String> {
 	}
 
 	@Override
-	public Literal<?> sum(Literal<?> right) 
+	public IValue<?> sum(IValue<?> right) 
 	{
 		Object other = right.getValue();
 		return new StringLiteral(value.concat(other.toString()));		
 	}
 
 	@Override
-	public Literal<?> mult(Literal<?> right) throws NotAllowedOperatorException 
+	public IValue<?> mult(IValue<?> right) throws NotAllowedOperatorException 
 	{
 		throw new NotAllowedOperatorException(this,BinaryOp.Type.Mult);		
 	}
 
 	@Override
-	public Literal<?> div(Literal<?> right) throws NotAllowedOperatorException 
+	public IValue<?> div(IValue<?> right) throws NotAllowedOperatorException 
 	{
 		throw new NotAllowedOperatorException(this,BinaryOp.Type.Div);		
 	}
 
 	@Override
-	public Literal<?> sub(Literal<?> right) throws NotAllowedOperatorException 
+	public IValue<?> sub(IValue<?> right) throws NotAllowedOperatorException 
 	{
 		throw new NotAllowedOperatorException(this,BinaryOp.Type.Sub);
 	}

@@ -22,6 +22,7 @@ import fp4g.data.DefineType;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
+import fp4g.data.IValue;
 import fp4g.data.Instance;
 import fp4g.data.NameList;
 import fp4g.data.On;
@@ -265,7 +266,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		return null;
 	}
 	
-	public static Literal<?> eval(IDefine define, Expresion expr) throws CannotEvalException 
+	public static IValue<?> eval(IValue<?> define, Expresion expr) throws CannotEvalException 
 	{
 		return expr.eval(define);
 	}

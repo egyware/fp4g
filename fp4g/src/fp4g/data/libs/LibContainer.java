@@ -159,6 +159,12 @@ public class LibContainer extends Code implements ILib, IDefine
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public IDefine getValue() 
+	{	
+		return this;
+	}
 	
 		
 }

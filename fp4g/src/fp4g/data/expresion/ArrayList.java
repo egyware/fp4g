@@ -2,6 +2,7 @@ package fp4g.data.expresion;
 
 import java.util.Iterator;
 
+import fp4g.data.IValue;
 import fp4g.exceptions.NotAllowedOperatorException;
 
 // también deberia ser literal
@@ -53,25 +54,25 @@ public final class ArrayList extends Literal<List> implements List
 	}
 	
 	@Override
-	public Literal<?> sum(Literal<?> right) throws NotAllowedOperatorException 
+	public IValue<?> sum(IValue<?> right) throws NotAllowedOperatorException 
 	{
 		throw new NotAllowedOperatorException(this,BinaryOp.Type.Add);		
 	}
 
 	@Override
-	public Literal<?> mult(Literal<?> right) throws NotAllowedOperatorException 
+	public IValue<?> mult(IValue<?> right) throws NotAllowedOperatorException 
 	{
 		throw new NotAllowedOperatorException(this,BinaryOp.Type.Mult);
 	}
 
 	@Override
-	public Literal<?> div(Literal<?> right) throws NotAllowedOperatorException 
+	public IValue<?> div(IValue<?> right) throws NotAllowedOperatorException 
 	{
 		throw new NotAllowedOperatorException(this,BinaryOp.Type.Div);
 	}
 
 	@Override
-	public Literal<?> sub(Literal<?> right) throws NotAllowedOperatorException 
+	public IValue<?> sub(IValue<?> right) throws NotAllowedOperatorException 
 	{
 		throw new NotAllowedOperatorException(this,BinaryOp.Type.Sub);
 	}
