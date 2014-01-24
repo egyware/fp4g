@@ -24,7 +24,6 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map,IVa
 		
 	public final IDefine parent;
 	
-	private final ILib lib;
 	private final Map<DefineType,Map<String,? extends IDefine>> defines;
 	private final Map<String,IValue<?>> variables;
 	
@@ -34,30 +33,24 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map,IVa
 	
 	public Define(DefineType type,String name)
 	{
-		this(type,name,null,null);		
+		this(type,name,null);		
 	}
 	
-	public Define(DefineType type,String name,ILib lib)
-	{
-		this(type,name,null,lib);		
-	}
-	
-	public Define(DefineType type,String name, IDefine parent, ILib lib)
+	public Define(DefineType type,String name, IDefine parent)
 	{
 		this.parent = parent;
 		this.type = type;
-		this.name = name;
-		this.lib = lib;
+		this.name = name;		
 		variables = new HashMap<String, IValue<?>>();		
 		adds    = new HashMap<DefineType, List<Add>>(DefineType.values().length,1);		
 		onMessages= new HashMap<String, On>();
 		defines = new HashMap<DefineType,Map<String,? extends IDefine>>();
 		
 		//definir namespaces o algo por el estilo.
-//		for(DefineType t: DefineType.values())
-//		{
-//			set(t.name(), new ObjectLiteral(new Namespace(t,this)));
-//		}
+		for(DefineType t: DefineType.values())
+		{
+			set(t.name(), new Namespace(t,this));
+		}
 	}
 	
 	public Define getValue()
@@ -157,9 +150,9 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map,IVa
 	public IValue<?> get(String key)
 	{
 		IValue<?> ret = variables.get(key);
-		if(ret == null && parent != null)			
+		if(ret == null && parent != null)
 		{
-			ret = parent.get(key);
+				ret = parent.get(key);
 		}		
 		return ret;		 
 	}
@@ -210,12 +203,11 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map,IVa
 			{
 				return define;
 			}
-		}
-		if(lib != null)
-		{
-			T define = lib.findDefine(defineName);
-			if(define != null) return define;
-		}
+			if(define == null && parent != null)
+			{
+				define = parent.findDefine(type,defineName);
+			}
+		}		
 		return null;
 	}
 
@@ -229,11 +221,9 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map,IVa
 		{
 			value = map.get(defineName);
 		}
-		else 
-		if(lib != null)
+		if(value == null && parent != null)
 		{
-			T define = lib.findDefine(type,defineName);
-			if(define != null) return define;
+			value = parent.findDefine(type,defineName);
 		}
 		return value;
 	}
@@ -246,12 +236,7 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map,IVa
 		if(map != null)
 		{
 			return map.values();
-		}
-		else
-		if(lib != null)
-		{
-			return lib.getDefines(defineType);			
-		}
+		}		
 		return null;
 	}
 	
@@ -269,9 +254,11 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map,IVa
 	{
 		for(DefineType type :DefineType.values())
 		{
-				T define = findDefine(type,defineName);
-				if(define != null) return define;
-									
+			T define = findDefine(type,defineName);
+			if(define != null) 
+			{
+				return define;
+			}						
 		}
 		throw new DefineNotFoundException(defineName);	
 	}
@@ -283,12 +270,14 @@ public abstract class Define extends Code implements fp4g.data.expresion.Map,IVa
 		Map<String,T> map = (Map<String, T>) defines.get(type);
 		if(map != null)
 		{
-			return map.containsKey(name);
+			if(map.containsKey(name))
+			{
+				return true; 
+			}
 		}
-		else
-		if(lib != null)
+		if(parent != null)
 		{
-			return lib.isSetDefine(type, name);
+			return parent.isSetDefine(type,name);
 		}
 		return false;
 	}

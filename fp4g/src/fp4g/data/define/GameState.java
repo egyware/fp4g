@@ -6,7 +6,6 @@ import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
-import fp4g.data.ILib;
 import fp4g.data.On;
 
 public class GameState extends Define{
@@ -14,11 +13,6 @@ public class GameState extends Define{
 	public GameState(String name,IDefine parent) 
 	{
 		super(DefineType.STATE, name,parent);
-	}
-	
-	public GameState(String name,ILib lib) 
-	{
-		super(DefineType.STATE, name,null,lib);
 	}
 	
 	@Override
