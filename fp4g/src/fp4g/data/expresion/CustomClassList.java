@@ -20,19 +20,19 @@ public class CustomClassList extends Literal<List> implements List
 	}
 
 	@Override
-	public Iterator<Literal<?>> iterator() 
+	public Iterator<IValue<?>> iterator() 
 	{
 		return bean.iterator();
 	}
 
 	@Override
-	public void add(Literal<?> item) 
+	public void add(IValue<?> item) 
 	{
 		bean.add(item);
 	}
 
 	@Override
-	public Literal<?> get(int index)
+	public IValue<?> get(int index)
 	{
 		return bean.get(index);
 	}

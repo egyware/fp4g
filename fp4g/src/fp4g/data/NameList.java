@@ -18,7 +18,7 @@ public class NameList implements Iterable<DeclVar>
 	{
 		nameVars.add(new DeclVar(type,name));
 	}
-	public void add(VarType type, String name,Literal<?> initValue)
+	public void add(VarType type, String name,IValue<?> initValue)
 	{
 		nameVars.add(new DeclVar(type,name,initValue));
 	}

@@ -12,7 +12,9 @@ import fp4g.data.IDefine;
 import fp4g.data.ILib;
 import fp4g.data.IValue;
 import fp4g.data.On;
+import fp4g.data.expresion.BinaryOp;
 import fp4g.exceptions.DefineNotFoundException;
+import fp4g.exceptions.NotAllowedOperatorException;
 
 public class LibContainer extends Code implements ILib, IDefine
 {
@@ -81,9 +83,20 @@ public class LibContainer extends Code implements ILib, IDefine
 		}
 		return null;
 	}
-
+	
 	//IDefine implements
-
+	
+	@Override
+	public IValue<?> getWithoutDefines(String key) 
+	{
+		for(Lib lib:libs)
+		{
+			IValue<?> value = lib.getWithoutDefines(key);
+			if(value != null) return value;
+		}
+		return null;
+	}
+	
 	@Override
 	public void set(String key, IValue<?> value) 
 	{
@@ -164,6 +177,30 @@ public class LibContainer extends Code implements ILib, IDefine
 	public IDefine getValue() 
 	{	
 		return this;
+	}
+	
+	public IValue<?> sum(IValue<?> right)
+	throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this,BinaryOp.Type.Add);
+	}
+	
+	public IValue<?> mult(IValue<?> right)
+	throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this,BinaryOp.Type.Mult);
+	}
+	
+	public IValue<?> div(IValue<?> right)
+	throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this,BinaryOp.Type.Div);
+	}
+	
+	public IValue<?> sub(IValue<?> right)
+	throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this,BinaryOp.Type.Sub);
 	}
 	
 		

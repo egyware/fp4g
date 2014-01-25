@@ -192,6 +192,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitAssetValue(@NotNull FP4GParser.AssetValueContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#varID}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarID(@NotNull FP4GParser.VarIDContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#assets}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

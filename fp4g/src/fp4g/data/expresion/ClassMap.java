@@ -33,6 +33,7 @@ public final class ClassMap<T> extends Literal<T> implements Map
 		bean = value;
 		method = MethodAccess.get(value.getClass());	
 	}
+	
 	@Override
 	public void set(String key, IValue<?> literal) 
 	{			

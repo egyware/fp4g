@@ -1,7 +1,6 @@
 package fp4g.data.expresion;
 
 import fp4g.data.Expresion;
-import fp4g.data.IDefine;
 import fp4g.data.IValue;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.IncompatibleTypesException;

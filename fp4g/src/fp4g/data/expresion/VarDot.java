@@ -33,7 +33,7 @@ public class VarDot extends VarId
 		IValue<?> sub = null;
 		if(VarDot.parent == varName)
 		{
-			//sub = current.getParent();
+			sub = current.getParent();
 		}else
 		if(VarDot.current == varName)
 		{

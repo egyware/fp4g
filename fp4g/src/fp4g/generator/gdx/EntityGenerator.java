@@ -99,7 +99,8 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				ParamCodeModel param;
 				if(par.initValue != null)
 				{
-					param = new ParamCodeModel(name, par.name,generator.expresion(modelBuild, par.initValue));
+					//param = new ParamCodeModel(name, par.name,generator.expresion(modelBuild, par.initValue));
+					param = new ParamCodeModel(name,par.name);
 				}
 				else
 				{

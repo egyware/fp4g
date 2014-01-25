@@ -12,9 +12,16 @@ public abstract class Literal<T> extends Expresion implements IValue<T>
 		return this;
 	}
 	
-	public abstract IValue<?> sum(IValue<?> right) throws NotAllowedOperatorException;
-	public abstract IValue<?> mult(IValue<?> right)throws NotAllowedOperatorException;
-	public abstract IValue<?> div(IValue<?> right) throws NotAllowedOperatorException;
-	public abstract IValue<?> sub(IValue<?> right) throws NotAllowedOperatorException;
 	
+	@Override
+	public IValue<?> get(String name)
+	{
+		return null;
+	}
+	
+	@Override
+	final public IValue<?> getParent() throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this,BinaryOp.Type.Div);
+	}
 }

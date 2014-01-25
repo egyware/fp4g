@@ -2,6 +2,8 @@
 + Más metodos de busqueda del JDK para el generador Java.
 + El generador ahora crea un archivo de configuración y lo copia de src a build.
 + Ahora en el launcher (FP4GRunner) lee un archivo de configuración  en donde encuentra las propiedades del juego a cargar.
++ Namespace, permiten filtrar los Define de un contenedor
++ Se agrego la clase IValue que encapsula un valor y permite tratar a los defines como variables también (aunque solo de lectura).
 B Cuando no encuentra un mensaje deberia abortar y no caerse.
 B No copia nada.
 P Falta especificar cuando el mensaje va para otra entidad.

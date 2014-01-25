@@ -20,26 +20,29 @@ public class VarId extends Expresion
 		this.varName = name;
 	}
 	
+	//TODO talvez seria bueno hacer que value get tuviese los valores puesto de current y parent
 	@Override
-	public IValue<?> eval(IValue<?> define) throws CannotEvalException 
+	public IValue<?> eval(IValue<?> container) throws CannotEvalException 
 	{
 		if(parent == this)
 		{
-			if(define.getParent() == null)
+			if(container.getParent() == null)
 			{
-				Log.Show(ErrType.VarNameNotFound,define,varName);
+				//TODO Log.Show(ErrType.VarNameNotFound,define,varName);
+				Log.Show(ErrType.VarNameNotFound,varName);
 			}
-			return new CustomClassMap(define.getParent());	
+			return container.getParent();	
 		}else
 		if(current == this)
 		{
-			return new CustomClassMap(define);
+			return container;
 		}else
 		{
-			Literal<?> value = (Literal<?>) define.get(varName);
+			IValue<?> value = container.get(varName);
 			if(value == null)
 			{
-				Log.Show(ErrType.VarNameNotFound,define,varName);
+				//TODO Log.Show(ErrType.VarNameNotFound,define,varName);
+				Log.Show(ErrType.VarNameNotFound,varName);
 			}
 			return value;
 		}

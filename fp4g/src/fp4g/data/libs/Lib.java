@@ -11,8 +11,11 @@ import fp4g.data.DefineType;
 import fp4g.data.IDefine;
 import fp4g.data.ILib;
 import fp4g.data.IValue;
+import fp4g.data.Namespace;
 import fp4g.data.On;
+import fp4g.data.expresion.BinaryOp;
 import fp4g.exceptions.DefineNotFoundException;
+import fp4g.exceptions.NotAllowedOperatorException;
 
 /**
  * Esta clase nos permite integrar las bibliotecas sin tener que "modificar tanto" codigo. (Mentira, ok no solo muchas refractorizaciones) 
@@ -32,6 +35,12 @@ public class Lib extends Code implements fp4g.data.expresion.Map,ILib,IDefine
 	{			
 		defines = new HashMap<DefineType, Map<String, ? extends IDefine>>(DefineType.values().length,1);
 		variables = new HashMap<String,IValue<?>>();
+		
+		//definir namespaces o algo por el estilo.
+		for(DefineType t: DefineType.values())
+		{
+			set(t.name(), new Namespace(t,this));
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -90,8 +99,20 @@ public class Lib extends Code implements fp4g.data.expresion.Map,ILib,IDefine
 	@Override
 	public IValue<?> get(String key) 
 	{
+		IDefine define = findDefine(key);
+		if(define != null)
+		{
+			return define;
+		}
 		return variables.get(key);
 	}
+	
+	@Override
+	public IValue<?> getWithoutDefines(String key) 
+	{
+		return variables.get(key);
+	}
+	
 	
 	
 	@SuppressWarnings("unchecked")
@@ -185,4 +206,28 @@ public class Lib extends Code implements fp4g.data.expresion.Map,ILib,IDefine
 //		throw new DefineNotFoundException(defineName);		
 //	}	
 		
+	
+	public IValue<?> sum(IValue<?> right)
+	throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this,BinaryOp.Type.Add);
+	}
+	
+	public IValue<?> mult(IValue<?> right)
+	throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this,BinaryOp.Type.Mult);
+	}
+	
+	public IValue<?> div(IValue<?> right)
+	throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this,BinaryOp.Type.Div);
+	}
+	
+	public IValue<?> sub(IValue<?> right)
+	throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this,BinaryOp.Type.Sub);
+	}
 }

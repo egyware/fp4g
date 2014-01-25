@@ -31,16 +31,19 @@ parentVarOp
 returns
 [String name]
 		:
-		   CURRENT_LITERAL                    #currentOperator                  
-		 | PARENT_LITERAL                     #parentOperator 
-		 | varName=ID {$name=$varName.text;}  #varNameOperator
+		   CURRENT_LITERAL                         #currentOperator                  
+		 | PARENT_LITERAL                          #parentOperator 
+		 | varName = varID {$name=$varName.text;}  #varNameOperator
 		;
 varOp
 		:
 		   CURRENT_LITERAL  #varCurrent                  
 		 | PARENT_LITERAL	#varParent 
-		 | varName=ID		#varName
+		 | varName = varID	#varName
+		 
 		;
+		
+varID   : MANAGER | GAME | STATE | ASSET | BEHAVIOR | ENTITY | GOAL | MESSAGE | ID ;		
 	 
 array   
 returns [ String bean ] 

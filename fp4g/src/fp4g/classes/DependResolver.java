@@ -7,7 +7,6 @@ import fp4g.data.Define;
 import fp4g.data.IValue;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.List;
-import fp4g.data.expresion.Literal;
 import fp4g.generator.Depend;
 import fp4g.generator.gdx.models.JavaCodeModel;
 
@@ -31,7 +30,7 @@ public class DependResolver implements fp4g.data.expresion.Map, Depend
 		List imports = importsRequired.get(s);		
 		if(imports != null)
 		{
-			for(Literal<?> i:imports)
+			for(IValue<?> i:imports)
 			{
 				model.imports.add((String) i.getValue());
 			}
@@ -56,7 +55,7 @@ public class DependResolver implements fp4g.data.expresion.Map, Depend
 	}
 
 	@Override
-	public Literal<?> get(String key) 
+	public IValue<?> get(String key) 
 	{		
 		return importsRequired.get(key);
 	}

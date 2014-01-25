@@ -43,4 +43,12 @@ public interface IDefine extends ILib, ICode, Map, IValue<IDefine>
 	 */
 	public void setAdd(Add add);
 	
+	
+	/**
+	 * Realiza get(String key) pero sin devolver los defines. 
+	 * @param key
+	 * @return
+	 */
+	public IValue<?> getWithoutDefines(String key);	
+	
 }

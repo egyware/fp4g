@@ -9,9 +9,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.exceptions.DefineNotFoundException;
+import fp4g.exceptions.NotAllowedOperatorException;
 
 public abstract class Define extends Code implements IDefine
 {
@@ -152,7 +154,7 @@ public abstract class Define extends Code implements IDefine
 		IValue<?> ret = findDefine(key); 
 		if(ret == null)
 		{
-			ret = variables.get(key);;
+			ret = variables.get(key);
 		}				
 		if(ret == null && parent != null)
 		{
@@ -161,6 +163,16 @@ public abstract class Define extends Code implements IDefine
 		return ret;		 
 	}
 	
+	
+	public IValue<?> getWithoutDefines(String key)
+	{
+		IValue<?> ret = variables.get(key);		
+		if(ret == null && parent != null)
+		{
+				ret = parent.getWithoutDefines(key);
+		}		
+		return ret;		 
+	}
 	
 	/**
 	 * 
@@ -303,5 +315,29 @@ public abstract class Define extends Code implements IDefine
 	public IDefine getParent() 
 	{
 		return parent;
+	}
+	
+	public IValue<?> sum(IValue<?> right)
+	throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this,BinaryOp.Type.Add);
+	}
+	
+	public IValue<?> mult(IValue<?> right)
+	throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this,BinaryOp.Type.Mult);
+	}
+	
+	public IValue<?> div(IValue<?> right)
+	throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this,BinaryOp.Type.Div);
+	}
+	
+	public IValue<?> sub(IValue<?> right)
+	throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this,BinaryOp.Type.Sub);
 	}
 }

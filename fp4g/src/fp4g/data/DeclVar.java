@@ -1,17 +1,15 @@
 package fp4g.data;
 
-import fp4g.data.expresion.Literal;
-
 public class DeclVar extends Code 
 {
 	public final VarType type;
 	public final String name;
-	public final Literal<?> initValue;
+	public final IValue<?> initValue;
 	public DeclVar(VarType type, String name)
 	{
 		this(type,name,null);		
 	}
-	public DeclVar(VarType type, String name, Literal<?> initValue)
+	public DeclVar(VarType type, String name, IValue<?> initValue)
 	{
 		this.type = type;
 		this.name = name;

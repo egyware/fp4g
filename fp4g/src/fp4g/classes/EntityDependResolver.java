@@ -11,7 +11,6 @@ import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.List;
-import fp4g.data.expresion.Literal;
 import fp4g.generator.Depend;
 import fp4g.generator.gdx.models.JavaCodeModel;
 
@@ -37,7 +36,7 @@ public class EntityDependResolver implements fp4g.data.expresion.Map, Depend
 	private void addBehaviorsImports(Entity entity, JavaCodeModel model) 
 	{
 		List imports = importsRequired.get(BEHAVIORS);
-		for(Literal<?> i:imports)
+		for(IValue<?> i:imports)
 		{
 			for(Add bhvr: entity.getAdd(DefineType.BEHAVIOR))
 			{
@@ -63,7 +62,7 @@ public class EntityDependResolver implements fp4g.data.expresion.Map, Depend
 		List imports = importsRequired.get(s);		
 		if(imports != null)
 		{
-			for(Literal<?> i:imports)
+			for(IValue<?> i:imports)
 			{
 				model.imports.add((String) i.getValue());
 			}

@@ -5,15 +5,15 @@ import java.util.Iterator;
 import fp4g.data.IValue;
 import fp4g.exceptions.NotAllowedOperatorException;
 
-// también deberia ser literal
+
 public final class ArrayList extends Literal<List> implements List
 {
-	private final java.util.List<Literal<?>> list;
+	private final java.util.List<IValue<?>> list;
 	
-	public ArrayList(Literal<?> lits[])
+	public ArrayList(IValue<?> lits[])
 	{		
-		list = new java.util.ArrayList<Literal<?>>(lits.length);		
-		for(Literal<?> lit:lits)
+		list = new java.util.ArrayList<IValue<?>>(lits.length);		
+		for(IValue<?> lit:lits)
 		{
 			list.add(lit);
 		}
@@ -21,7 +21,7 @@ public final class ArrayList extends Literal<List> implements List
 	
 	public ArrayList()
 	{
-		list = new java.util.ArrayList<Literal<?>>();
+		list = new java.util.ArrayList<IValue<?>>();
 	}
 	
 	@Override
@@ -30,19 +30,19 @@ public final class ArrayList extends Literal<List> implements List
 	}
 
 	@Override
-	public Iterator<Literal<?>> iterator() 
+	public Iterator<IValue<?>> iterator() 
 	{
 		return list.iterator();
 	}
 
 	@Override
-	public void add(Literal<?> item) 
+	public void add(IValue<?> item) 
 	{
 		list.add(item);		
 	}
 
 	@Override
-	public Literal<?> get(int index) 
+	public IValue<?> get(int index) 
 	{
 		return list.get(index);
 	}
