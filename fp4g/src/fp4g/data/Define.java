@@ -248,7 +248,7 @@ public abstract class Define extends Code implements IDefine
 	@SuppressWarnings("unchecked")	
 	public <T extends IDefine> Collection<T> getDefines(DefineType defineType) 
 	{
-		Map<String,T> map = (Map<String, T>) defines.get(type);
+		Map<String,T> map = (Map<String, T>) defines.get(defineType);
 		if(map != null)
 		{
 			return map.values();

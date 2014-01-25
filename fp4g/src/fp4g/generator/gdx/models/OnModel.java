@@ -15,6 +15,7 @@ import fp4g.data.On;
 import fp4g.data.On.Filter;
 import fp4g.data.On.Source;
 import fp4g.data.define.Message;
+import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.Literal;
 import fp4g.data.statements.Destroy;
 import fp4g.data.statements.Send;
@@ -41,12 +42,18 @@ public class OnModel implements Model
 		methodHandlers = new LinkedList<MethodHandlerModel>();
 		HashMap<String,MethodHandlerModel> methods = new HashMap<String, MethodHandlerModel>();
 		//agregar los metodos, aunque están vacios y asumiento que todos son MessageMethod
-		//TODO da un error cuando el mensaje está sin definir
-		//TODO esto no es claro, y no deberia usarse para este motivo aunque sea seguro.
+		//TODO da un error cuando el mensaje está sin definir		
 		for(Entry<String,IValue<?>> entry:on.message.entrySet())
-		{
-			IValue<MessageMethod> literal = (IValue<MessageMethod>)entry.getValue();
-			methods.put(entry.getKey(), new MethodHandlerModel(literal.getValue()));
+		{	
+			IValue<?> value = entry.getValue();
+			if(value instanceof ClassMap)
+			{
+				Object bean = ((ClassMap<?>)value).getValue();				
+				if(bean instanceof MessageMethod)
+				{
+					methods.put(entry.getKey(), new MethodHandlerModel((MessageMethod) bean));
+				}
+			}
 		}
 		//tengo que recorrer los sources en busca de los methodHandlers y subirlos acï¿½
 		for(Source source:on.sources)

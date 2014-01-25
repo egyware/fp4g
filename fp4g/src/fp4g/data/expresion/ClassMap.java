@@ -15,6 +15,10 @@ import fp4g.exceptions.NotAllowedOperatorException;
 
 public final class ClassMap<T> extends Literal<T> implements Map
 {	
+	public String toString()
+	{
+		return String.format("ClassMap<%s> (%s)",bean.getClass().getSimpleName(),bean);
+	}
 	private MethodAccess method;
 	private T bean;	
 	
