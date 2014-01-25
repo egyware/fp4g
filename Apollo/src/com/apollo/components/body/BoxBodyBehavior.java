@@ -63,13 +63,13 @@ public class BoxBodyBehavior extends BodyBehavior
 		return new BoxBodyBehavior();
 	}
 	
-	public static BoxBodyBehavior build(int x, int y)
+	public static BoxBodyBehavior build(Number x, Number y)
 	{
-		return new BoxBodyBehavior(x, y);
+		return new BoxBodyBehavior(x.intValue(), y.intValue());
 	}
 	
-	public static BoxBodyBehavior build(int x, int y, int w, int h)
+	public static BoxBodyBehavior build(Number x, Number y, Number w, Number h)
 	{
-		return new BoxBodyBehavior(x,y,w,h);
+		return new BoxBodyBehavior(x.intValue(),y.intValue(),w.intValue(),h.intValue());
 	}		
 }
