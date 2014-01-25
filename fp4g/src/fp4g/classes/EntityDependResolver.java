@@ -42,9 +42,9 @@ public class EntityDependResolver implements fp4g.data.expresion.Map, Depend
 			{
 				String packageName;
 				Behavior behavior = (Behavior)bhvr.define;
-				if(behavior != null)
+				if(behavior != null && behavior.group != null)
 				{					
-					packageName = behavior.group.concat(".").concat(bhvr.name);
+					packageName = behavior.group.concat(".").concat(bhvr.name);				
 				}
 				else
 				{

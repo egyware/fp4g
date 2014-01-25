@@ -22,6 +22,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import fp4g.IO;
 import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.Options;
@@ -36,6 +37,7 @@ import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Goal;
 import fp4g.data.define.Manager;
+import fp4g.data.define.Message;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.data.libs.LibContainer;
@@ -148,10 +150,10 @@ public class JavaGenerator extends Generator
 		generators.put(Game.class,      GameGenerator.class);
 		generators.put(Goal.class,      GoalGenerator.class);
 		generators.put(Behavior.class,  BehaviorGenerator.class);
+		generators.put(Message.class,   MessageGenerator.class);
 				
 	}
 
-	
 	@Override
 	protected void generateCode(ICode gameData, File path) 
 	{		
@@ -421,10 +423,10 @@ public class JavaGenerator extends Generator
     	resolvers = (DependResolvers)map.getValue();
 
     	//TODO must be lib files
-//    	libContainer.setManager(new JavaRenderManager());
-//    	libContainer.setManager(new JavaEntityManager());
-//    	libContainer.setManager(new JavaSoundManager());
-//    	libContainer.setManager(new JavaPhysicsManager());
+    	//libContainer.setManager(new JavaRenderManager());
+    	//libContainer.setManager(new JavaEntityManager());
+    	//libContainer.setManager(new JavaSoundManager());
+    	//libContainer.setManager(new JavaPhysicsManager());
     	
 //        //agregar componentes		    	
 ////    String components[][] = 
@@ -491,7 +493,20 @@ public class JavaGenerator extends Generator
 	@Override
 	protected void copyFiles(Collection<File> files) 
 	{
-		//TODO por hacer todavía (esta cosa usa ajva 1.6)		
+		try 
+		{
+			final String src = sourceDir.getCanonicalPath();
+		 
+			for(File file:files)
+			{
+				String relativePath = file.getCanonicalPath().substring(src.length()+1);
+				IO.copy(file, new File(binaryDir,relativePath));
+			}			
+		} 
+		catch (IOException e) 
+		{		
+			e.printStackTrace();
+		}
 	}
 
 }

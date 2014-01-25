@@ -4,11 +4,12 @@
 + Ahora en el launcher (FP4GRunner) lee un archivo de configuración  en donde encuentra las propiedades del juego a cargar.
 + Namespace, permiten filtrar los Define de un contenedor
 + Se agrego la clase IValue que encapsula un valor y permite tratar a los defines como variables también (aunque solo de lectura).
++ Generador de Mensajes agregado para que se pueda usar "USING MESSAGE {id}", esto no significa que se puedan hace mensajes todavía.
+F Ahora copia :)
 B Cuando no encuentra un mensaje deberia abortar y no caerse.
-B No copia nada.
+P Debe quedar prueba de tontos II: Se ha vuelto mejorar el launcher esto es para cuando se lanze desde un jar no tener que modificarlo.
 P Falta especificar cuando el mensaje va para otra entidad.
 P Ordenar el codigo de OnModel tiene demasiadas responsabilidades
-P Debe quedar prueba de tontos, se ha mejorado con la mejora del launcher.
 P Falta la capacidad de ordenar los managers según prioridad
 P Definir la utilidad de la clase Utils: Talvez cambiarle el nombre a Assets y mantener los punteros de los assets.
 P Hacer que los Managers envien mensaje
