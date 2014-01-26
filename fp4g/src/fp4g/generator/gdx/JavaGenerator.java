@@ -31,6 +31,7 @@ import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
+import fp4g.data.IValue;
 import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
@@ -395,6 +396,10 @@ public class JavaGenerator extends Generator
 
 	@Override
 	public <CodeModel> String expresion(CodeModel model,Expresion expr) throws GeneratorException
+	{
+		return exprGen.generate((JavaCodeModel) model,expr);
+	}
+	public <CodeModel> String expresion(CodeModel model,IValue<?> expr) throws GeneratorException
 	{
 		return exprGen.generate((JavaCodeModel) model,expr);
 	}

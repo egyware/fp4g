@@ -8,6 +8,9 @@ DEFINE GAME
 	[	
 		SET group = "body";
 	]
+	DEFINE BEHAVIOR Texture
+	[
+	]
 	DEFINE BEHAVIOR Timer
 	[
 	]
@@ -42,6 +45,26 @@ DEFINE GAME
 		SET release = 
 		{			
 			name="release", valueReplace="Input.Keys.%s == key", params = "int key", attachInputProcessor = true, message = current
+		} AS MessageMethod;
+	]
+	
+	DEFINE MESSAGE Mouse
+	[
+		SET pressButton   = 
+		{ 
+			name = "pressButton", valueReplace = "Input.Buttons.%s == button", params = "int button, int x, int y", attachInputProcessor = true, message = current
+		} AS MessageMethod;
+		SET releaseButton = 
+		{			
+			name="releaseButton", valueReplace="Input.Buttons.%s == button", params = "int button, int x,int y", attachInputProcessor = true, message = current
+		} AS MessageMethod;
+		SET move = 
+		{			
+			name="move", params = "int x, int y", attachInputProcessor = true, message = current
+		} AS MessageMethod;
+		SET dragged = 
+		{			
+			name="dragged", params = "int x, int y", attachInputProcessor = true, message = current
 		} AS MessageMethod;
 	]
 	
@@ -94,7 +117,7 @@ DEFINE GAME
 		setDelayShot = AutoGun.SetDelayShot, setShot = AutoGun.SetShot,
 		init = Entity.init, deinit = Entity.deinit,
 		active = MESSAGE.Timer.active, setTime=MESSAGE.Timer.setTime, cancel = MESSAGE.Timer.cancel,
-		
+		//move   = MESSAGE.Mouse.move,   pressButton = MESSAGE.Mouse.pressButton, releaseButton = MESSAGE.Mouse.releaseButton, dragged = MESSAGE.Mouse.dragged,
 	} AS MessageMethods;
 	
 	SET resolvers = 
@@ -138,6 +161,12 @@ DEFINE GAME
 				"com.badlogic.gdx.Input",
 				"com.apollo.messages.KeyMessage",
 				"com.apollo.messages.KeyMessageHandler"		
+			},
+			Mouse =
+			{
+				"com.badlogic.gdx.Input",
+				"com.apollo.messages.MouseMessage",
+				"com.apollo.messages.MouseMessageHandler"		
 			},
 			Move    = 
 			{

@@ -1,6 +1,7 @@
 package fp4g.generator;
 
 import fp4g.data.Expresion;
+import fp4g.data.IValue;
 import fp4g.exceptions.GeneratorException;
 
 /**
@@ -32,6 +33,8 @@ public abstract class ExpresionGenerator <T extends Generator,M extends Model> {
 		this.generator = generator;
 	}
 	
+	
+	public abstract String generate(M model,IValue<?> expr) throws GeneratorException;
 	public abstract String generate(M model,Expresion expr) throws GeneratorException;
 
 }
