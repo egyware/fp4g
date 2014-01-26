@@ -50,7 +50,4 @@ public final class MessageMethods implements Map
 	public IValue<?> get(String k) {
 		return map.get(k);				
 	}
-	
-	
-	
 }

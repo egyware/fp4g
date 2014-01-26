@@ -1,200 +1,214 @@
 package fp4g.generator.gdx;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import fp4g.Log;
 import fp4g.Log.WarnType;
+import fp4g.classes.ManagerData;
 import fp4g.data.Add;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
+import fp4g.data.IValue;
 import fp4g.data.define.Asset;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
+import fp4g.data.define.Manager;
+import fp4g.data.expresion.ArrayList;
 import fp4g.exceptions.DependResolverNotFoundException;
+import fp4g.exceptions.GeneratorException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
+import fp4g.generator.gdx.models.AddModel;
 import fp4g.generator.gdx.models.AssetModel;
+import fp4g.generator.gdx.models.GameModel;
+import fp4g.generator.gdx.models.GameStateModel;
 import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.generator.gdx.models.ManagerModel;
 import freemarker.template.Template;
 
 public class GameStateGenerator extends CodeGenerator<JavaGenerator> {	
 	
-	private static HashMap<String,Map<String,Object>> mngrData;
-	static
-	{
-		mngrData = new HashMap<String, Map<String, Object>>();
-		
-		HashMap<String,Object> entityMngrData = new HashMap<String, Object>();
-		entityMngrData.put("setMethod", "EntityManager");
-		
-		HashMap<String,Object> renderMngrData = new HashMap<String, Object>();		
-		
-		renderMngrData.put("preinit",Arrays.asList("batch = new SpriteBatch()","camera = new OrthographicCamera()","camera.setToOrtho(false,w,h)"));
-		renderMngrData.put("dparams", Arrays.asList("batch"));
-		renderMngrData.put("preupdate",Arrays.asList("batch.setProjectionMatrix(camera.combined)","batch.begin()"));
-		renderMngrData.put("postupdate",Arrays.asList("batch.end()"));		
-		renderMngrData.put("fields", Arrays.asList("OrthographicCamera camera","SpriteBatch batch"));
-		renderMngrData.put("imports",Arrays.asList("com.badlogic.gdx.graphics.g2d.SpriteBatch"));
-				
-		mngrData.put("EntityManager", entityMngrData);
-		mngrData.put("GdxRenderManager", renderMngrData);
-	}
+	private static final String EXTRA = "extra";
 
 	public GameStateGenerator(JavaGenerator generator) 
 	{
 		super(generator);
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
+	
+	@Override	
 	public void generateCode(ICode gameData, File path) 
-	throws Exception {
+	throws Exception 
+	{
 		GameState state = (GameState)gameData;
 		Game game = (Game)state.parent;
 		
-		Template temp = generator.getTemplate("GameState.ftl"); 
-		HashMap<String,Object> root = new HashMap<String, Object>();	
+		Template temp = generator.getTemplate("GameState.ftl");
 		
-		HashMap<String,Object> gamez = new HashMap<String, Object>();
-		List<AssetModel>  assets = new LinkedList<AssetModel>();
-		JavaCodeModel modelClass = new JavaCodeModel();
-		modelClass.pckg    = generator.packageName;
-		modelClass.name    = state.name;
-		modelClass.javadoc = JavaGenerator.autodoc;
-			
-		gamez.put("width",  game.width);
-		gamez.put("height", game.height);
-		gamez.put("name", game.name);
-		root.put("class",modelClass);
-		root.put("game", gamez);
-		root.put("debug", generator.isDebug);		
+		GameStateModel gameStateModel = new GameStateModel();
 		
-		List<Map<String, Object>> managers = new LinkedList<Map<String, Object>>();
+		//class
+		JavaCodeModel code = new JavaCodeModel();		
+		code.pckg    = generator.packageName;
+		code.name    = state.name;
+		code.javadoc = JavaGenerator.autodoc;		
+		gameStateModel.setCode(code);
+		
+		//game
+		//TODO más adelante, si este modelo ya existe reutilizarlo de alguna manera entre generadores.
+		GameModel gameModel = new GameModel();
+		gameModel.setWidth(game.width);
+		gameModel.setWidth(game.height);
+		gameModel.setName(game.name);
+		gameStateModel.setGame(gameModel);
+		
+		//manager, adds
+		List<ManagerModel> managers = new LinkedList<ManagerModel>();
 		for(Add manager:state.getAdd(DefineType.MANAGER))
 		{
-			Map<String,Object> mngr = new HashMap<String, Object>(2);
-			mngr.put("name", manager.name);
-			//acÃ¡, buscar las cosas extras y añadirselas.
-			Map<String,Object> extras = mngrData.get(manager.name);
-			if(extras != null)
+			Manager define = (Manager) manager.define;
+			ManagerModel managerModel = new ManagerModel();
+			
+			managerModel.name = manager.name;
+			ManagerData extras = null;
+			if(define != null)
 			{
-				mngr.putAll(extras);
-				
-				//si existe algÃºn dato adicional a importar,se lo añadimos a los imports
-				List<String> imports = (List<String>) extras.get("imports");
-				if(imports != null)
+				managerModel.priority = define.getPriority();
+				//acá, buscar las cosas extras y añadirselas.
+				IValue<?> extrasValue = define.get(EXTRA);
+				if(extrasValue != null)
 				{
-					modelClass.imports.addAll(imports);
+					extras = (ManagerData) extrasValue.getValue();
+					
+					managerModel.setMethod = extras.getSetMethod();
+					managerModel.preInitialize = toList(extras.getPreInitialize());
+					managerModel.postInitialize = toList(extras.getPostInitialize());
+					managerModel.fields = toList(extras.getFields());
+					managerModel.preUpdate = toList(extras.getPreUpdate());
+					managerModel.postUpdate = toList(extras.getPostUpdate());
 				}				
+				
 			}
+			
 			
 			if(manager.varName != null)
 			{
-				mngr.put("varName", manager.varName);
+				managerModel.varName = manager.varName;
 			}
 			else
-			{								
-				mngr.put("varName", Generator.uncap_first(manager.name));
+			{	
+				managerModel.varName = Generator.uncap_first(manager.name);				
 			}
+			
+			
 			if(manager.params != null)
 			{
 				List<String> params = new LinkedList<String>();
 				if(extras != null)
 				{
-					List<String> dparams = (List<String>) extras.get("dparams");
+					ArrayList dparams = extras.getParams();
 					if(dparams != null)
 					{
-						params.addAll(dparams);
+						for(IValue<?> value:dparams)
+						{
+							params.add(generator.expresion(code, value));
+						}
 					}
 				}
 				for(Expresion expr: manager.params)
 				{
-					String result = generator.expresion(modelClass,expr);
+					String result = generator.expresion(code,expr);
 					if(result != null)
 					{
 						params.add(result);
 					}
 					//TODO: probablemente mostrar un error...
 				}
-				mngr.put("params",params);
+				managerModel.params = params;				
 			}
 			else
 			{  //si no hay, y existe parametros por defecto. Entonces usamos este				
 				if(extras != null)
 				{
-					List<String> dparams = (List<String>) extras.get("dparams");
-					if(dparams != null)
+					List<String> params = new LinkedList<String>();
+					if(extras != null)
 					{
-						mngr.put("params", dparams);
+						ArrayList dparams = extras.getParams();
+						if(dparams != null)
+						{
+							for(IValue<?> value:dparams)
+							{
+								params.add(generator.expresion(code, value));
+							}
+						}
 					}
+					managerModel.params = params;
 				}
 			}
-			managers.add(mngr);
-			//import
-			modelClass.imports.add(String.format("com.apollo.managers.%s", manager.name));
+			managers.add(managerModel);
 		}
-		root.put("managers", managers);
+		Collections.sort(managers);
+		gameStateModel.setManagers(managers);
 		
-		//agregamos todos las entidades definidas ens el game
-		List<String> entityBuilders = new LinkedList<String>();
-		final Collection<Entity> state_entities = game.getDefines(DefineType.ENTITY);
-		if(state_entities != null && state_entities.size()>0)
-		{
-			for(Entity entity:state_entities)
-			{
-				entityBuilders.add(entity.name);
-				//agregar imports
-				modelClass.imports.add(String.format("%s.entity.%sBuilder",generator.packageName,entity.name));						
-			}
-		}
-		root.put("entityBuilders", entityBuilders);
-		
-		//acÃ¡ tengo que revisar quien tiene mensajes y cuales debo registrar al sistema.
-		List<Map<String, Object>> entities = new LinkedList<Map<String, Object>>();
+		 //agregamos todos las entidades definidas ens el game
+        List<String> builders = new LinkedList<String>();
+        final Collection<Entity> state_entities = game.getDefines(DefineType.ENTITY);
+        if(state_entities != null && state_entities.size()>0)
+        {
+            for(Entity entity:state_entities)
+            {
+                builders.add(entity.name);
+                //agregar imports
+                code.imports.add(String.format("%s.entity.%sBuilder",generator.packageName,entity.name));                                                
+            }
+        }
+        gameStateModel.setBuilders(builders);
+        
+        //add entities
+		List<AddModel> entities = new LinkedList<AddModel>();
 		final List<Add> state_addentities = state.getAdd(DefineType.ENTITY);
 		for(Add entity:state_addentities)
 		{			
-			Map<String,Object> ent = new HashMap<String, Object>(2);
-			ent.put("name", entity.name);			
+			AddModel addEntity = new AddModel();
+			addEntity.name = entity.name;						
 			if(entity.varName != null)
 			{
-				ent.put("varName", entity.varName);
+				addEntity.varName = entity.varName;
 			}			
 			if(entity.params != null)
 			{
 				List<String> params = new LinkedList<String>();
 				for(Expresion expr: entity.params)
 				{
-					String result = generator.expresion(modelClass,expr);
+					String result = generator.expresion(code,expr);
 					if(result != null)
 					{
 						params.add(result);
 					}
 					//TODO: probablemente mostrar un error...
 				}
-				ent.put("params",params);
+				addEntity.params = params;
 			}
-			entities.add(ent);
+			entities.add(addEntity);
 		}
-		root.put("entities", entities);
+		gameStateModel.setEntities(entities);
 		
 		//agregar assets 
 		int asset_number = 0;
+		final List<AssetModel>  assets = new LinkedList<AssetModel>();
 		final List<Add> assetsList = state.getAdd(DefineType.ASSET);			
 		for(Add asset:assetsList)
 		{			
 			//Buscamos el dtefine para poder definir lo siguiente.
-			Asset define = state.getDefine(DefineType.ASSET,asset.name);
+			Asset define = (Asset) asset.define;
 			
 			if(asset.varName == null)
 			{
@@ -205,11 +219,11 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			Iterator<Expresion> it = asset.params.iterator();
 			//sacamos el primer valor (siempre va tener uno, esto porque la gramatica de lo obliga.
 			Expresion first = it.next();			
-			String assetPath = generator.expresion(modelClass,first);			
+			String assetPath = generator.expresion(code,first);			
 			for(;it.hasNext();)
 			{
 				Expresion expr = it.next();
-				String result = generator.expresion(modelClass,expr);
+				String result = generator.expresion(code,expr);
 				if(result != null)
 				{
 					params.add(result);
@@ -223,7 +237,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			
 			try{
 				Depend depend = generator.resolveDependency(define);
-				depend.perform(define, modelClass);
+				depend.perform(define, code);
 			}
 			catch(DependResolverNotFoundException ex)
 			{
@@ -231,35 +245,73 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			}
 									
 		}
-		root.put("assets", assets);
+		gameStateModel.setAssets(assets);
+
 		
-		
-		String arrayImports[] = new String[]
+		try
 		{
-				"com.apollo.WorldContainer",				
-				"com.apollo.managers.GameManager",
-				"com.apollo.managers.GameState",
-				"com.badlogic.gdx.Gdx",
-				"com.badlogic.gdx.graphics.GL10",
-				"com.badlogic.gdx.graphics.OrthographicCamera"
+			Depend depend = generator.resolveDependency(state);
+			depend.perform(state, code);
+		}
+		catch(DependResolverNotFoundException drnfe)
+		{
+			Log.Show(WarnType.DependResolverNotFound,state);
+		}
+		
+		for(Add manager:state.getAdd(DefineType.MANAGER))
+		{
+			if(manager.define != null)
+			{
+				try
+				{
+					Depend depend = generator.resolveDependency(manager.define);
+					depend.perform(manager.define, code);
+				}
+				catch(DependResolverNotFoundException drnfe)
+				{
+					Log.Show(WarnType.DependResolverNotFound,manager.define);
+					
+					code.imports.add(String.format("com.apollo.managers.%sManager", manager.name));
+
+				}
+			}
+			else
+			{
+				Log.Show(WarnType.DependResolverNotFound,manager,manager.name);
+				Log.Show(WarnType.MissingDefineAdd,manager,manager.name);
 				
-		};
-		Arrays.sort(arrayImports);
-		modelClass.imports.addAll(Arrays.asList(arrayImports));
-		
-		if(generator.isDebug)
-		{
-			modelClass.addImport("com.badlogic.gdx.graphics.FPSLogger");
+				code.imports.add(String.format("com.apollo.managers.%sManager", manager.name));
+			}
 		}
 		
 		if(state_addentities.size() > 0)
 		{
-			modelClass.imports.add("com.apollo.Entity");
+			code.imports.add("com.apollo.Entity");
 		}
-						
-		generator.addJavaCode(state, modelClass);
-		generator.createFile(path,String.format("%s.java",state.name), temp, root);
+		
+		if(generator.isDebug)
+		{
+			code.addImport("com.badlogic.gdx.graphics.FPSLogger");
+		}
+		
+		generator.createFile(path,String.format("%s.java",state.name), temp, gameStateModel);
+
 	}
+
+	private List<String> toList(ArrayList arrayList) throws GeneratorException 
+	{
+		if(arrayList != null)
+		{
+			List<String> list = new LinkedList<String>();
+			for(IValue<?> value:arrayList)
+			{
+				list.add(generator.expresion(null, value));
+			}
+			return list;
+		}
+		return null;
+	}
+
 
 	@Override
 	public void usingCode(ICode gameData, File path) 

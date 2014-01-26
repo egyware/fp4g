@@ -23,6 +23,7 @@ public class MessageGenerator extends CodeGenerator<JavaGenerator> {
 	public void usingCode(ICode gameData, File path) 
 	{
 		Message message = (Message)gameData;
-		generator.usingFile(generator.sourceDir, String.format("com/apollo/messages/%s.java",message.name));		
+		generator.usingFile(generator.sourceDir, String.format("com/apollo/messages/%sMessage.java",message.name));		
+		generator.usingFile(generator.sourceDir, String.format("com/apollo/messages/%sMessageHandler.java",message.name));
 	}	
 }

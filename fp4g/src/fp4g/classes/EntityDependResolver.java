@@ -1,8 +1,5 @@
 package fp4g.classes;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
@@ -19,23 +16,21 @@ import fp4g.generator.gdx.models.JavaCodeModel;
  * @author Edgardo
  *
  */
-public class EntityDependResolver implements fp4g.data.expresion.Map, Depend
+public class EntityDependResolver implements Depend
 {
-	private final static String GENERAL    = "General";
-	private final static String BUILDER   = "Builder";
-	private final static String ENTITY    = "Entity";
-	private final static String BEHAVIORS = "Behaviors"; 
-	private final static String MESSAGE   = "Message";
-	private final Map<String,ArrayList> importsRequired;
+	private ArrayList generalList;
+	private ArrayList builderList;
+	private ArrayList entityList;
+	private ArrayList behaviorsList;
+	private ArrayList messageList;	
 	
 	public EntityDependResolver()
-	{
-		importsRequired = new HashMap<String,ArrayList>();
+	{	
 	}
 	
 	private void addBehaviorsImports(Entity entity, JavaCodeModel model) 
 	{
-		List imports = importsRequired.get(BEHAVIORS);
+		List imports = behaviorsList;
 		for(IValue<?> i:imports)
 		{
 			for(Add bhvr: entity.getAdd(DefineType.BEHAVIOR))
@@ -57,9 +52,8 @@ public class EntityDependResolver implements fp4g.data.expresion.Map, Depend
 		
 	}
 	
-	public void addImports(final String s,JavaCodeModel model)
+	public void addImports(final List imports,JavaCodeModel model)
 	{
-		List imports = importsRequired.get(s);		
 		if(imports != null)
 		{
 			for(IValue<?> i:imports)
@@ -78,32 +72,39 @@ public class EntityDependResolver implements fp4g.data.expresion.Map, Depend
 		Entity entity = (Entity)data;
 		if(model.name.endsWith("Builder")) //TODO por ahora no se me ocurre una manera limpia de diferenciarlos.
 		{
-			addImports(BUILDER,model);
+			addImports(builderList,model);
 			addBehaviorsImports(entity, model);			
 		}
 		else
 		{			
-			addImports(ENTITY,model);
+			addImports(entityList,model);
 			if(!data.getOnMessages().isEmpty())
 			{
-				addImports(MESSAGE,model);
+				addImports(messageList,model);
 			}
 			addBehaviorsImports(entity, model);			
 		}
-		addImports(GENERAL, model);
+		addImports(generalList, model);
 	}
-	
-	
 
-	@Override
-	public void set(String key, IValue<?> value) 
+	public final void setGeneral(ArrayList general) 
 	{
-		importsRequired.put(key, (ArrayList)value);
+		this.generalList = general;
 	}
-
-	@Override
-	public IValue<?> get(String key) 
-	{		
-		return importsRequired.get(key);
+	public final void setBuilder(ArrayList builder) 
+	{
+		this.builderList = builder;
+	}
+	public final void setEntity(ArrayList entity) 
+	{
+		this.entityList = entity;
+	}
+	public final void setBehaviors(ArrayList behaviors) 
+	{
+		this.behaviorsList = behaviors;
+	}
+	public final void setMessage(ArrayList message) 
+	{
+		this.messageList = message;
 	}
 }

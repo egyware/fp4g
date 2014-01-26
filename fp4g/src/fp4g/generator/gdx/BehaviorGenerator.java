@@ -24,7 +24,7 @@ public class BehaviorGenerator extends CodeGenerator<JavaGenerator> {
 	public void usingCode(ICode gameData, File path)
 	{
 		Behavior behavior = (Behavior)gameData;
-		generator.usingFile(generator.sourceDir, String.format("com/apollo/components/%s.java",behavior.name));		
+		generator.usingFile(generator.sourceDir, String.format("com/apollo/components/%sBehavior.java",behavior.name));		
 		
 	}
 

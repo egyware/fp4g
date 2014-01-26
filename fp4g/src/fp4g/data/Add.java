@@ -13,7 +13,7 @@ public class Add extends Code
 	public final Define define;
 	public final String name;	
 	public String varName;
-	public ExprList params;	
+	public ExprList params;		
 	public Add(DefineType type,String name)
 	{
 		this(type,name,null);		
@@ -31,8 +31,7 @@ public class Add extends Code
 		this.type = define.getType();
 		this.name = define.name;
 		this.varName = varName;
-		this.define = define;
-		
+		this.define = define;		
 	}
 	
 	public void addParams(ExprList params)

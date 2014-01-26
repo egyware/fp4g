@@ -29,7 +29,7 @@ public class PhysicsManager extends Manager implements ContactListener{
 	public PhysicsManager(Vector2 gravity)
 	{		
 		world = new World(gravity, true);
-		world.setContactListener(this);
+		world.setContactListener(this);		
 	}
 	
 	public void update(float delta)

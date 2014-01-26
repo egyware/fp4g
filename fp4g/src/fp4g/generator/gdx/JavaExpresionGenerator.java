@@ -56,7 +56,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	{
 		//TODO generalmente estos se les evalua y solo contiene el valor.
 		//TODO esto es raro, ni yo lo entiendo.
-		if(value instanceof Literal)
+		if(value instanceof Expresion)
 		{
 			Expresion expr = (Expresion)value;
 			EG_Expresion eg = expresions.get(expr.getClass());		
@@ -71,7 +71,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 					return eg.expr2string(model,expr);
 				}			
 			}
-		}
+		}		
 		throw new ExpresionGeneratorException(value.getClass().getSimpleName());
 	}
 	

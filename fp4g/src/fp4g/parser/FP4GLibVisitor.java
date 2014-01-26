@@ -20,7 +20,6 @@ import fp4g.data.DefineType;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
-import fp4g.data.ILib;
 import fp4g.data.IValue;
 import fp4g.data.Instance;
 import fp4g.data.NameList;
@@ -32,8 +31,8 @@ import fp4g.data.define.Asset;
 import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.define.GameState;
+import fp4g.data.define.Manager;
 import fp4g.data.define.Message;
-import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.data.libs.Lib;
 import fp4g.data.statements.Destroy;
@@ -64,15 +63,16 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 	@Override
 	public Code visitUsing(FP4GParser.UsingContext ctx)
 	{	
+		final String usingName = ctx.name.getText();
 		switch(ctx.type)
 		{		
 		case BEHAVIOR:
-			Behavior behavior = new Behavior(ctx.name.getText(),lib);
+			Behavior behavior = new Behavior(usingName,lib);
 			behavior.setBuild(false);
 			lib.setDefine(behavior);
 			break;
 		case ENTITY:
-			Entity entity = new Entity(ctx.name.getText(),lib);
+			Entity entity = new Entity(usingName,lib);
 			entity.setBuild(false);
 			lib.setDefine(entity);
 			break;
@@ -83,7 +83,9 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 //			game.setDefine(behavior);
 			break;
 		case MANAGER:
-			//TODO por hacer...
+			Manager manager = new Manager(usingName,lib);
+			manager.setBuild(false);
+			lib.setDefine(manager);
 			break;
 		case MESSAGE:
 			//TODO por hacer..
@@ -223,10 +225,8 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 				define = new Entity(defName,parent);
 			break;
 			case MANAGER:
-				//TODO: No implementado a�n
-				Show(ErrType.NotImplement);
-				throw new RuntimeException("No implementado");
-				//break;		  		
+				define = new Manager(defName,parent);				
+				break;		  		
 		  	case BEHAVIOR:		  		
 		  		define = new Behavior(defName,parent);
 		  		break;		  		

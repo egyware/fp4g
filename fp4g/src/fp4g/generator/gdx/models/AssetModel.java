@@ -6,7 +6,6 @@ import fp4g.Log;
 import fp4g.Log.ErrType;
 import fp4g.data.IValue;
 import fp4g.data.define.Asset;
-import fp4g.data.expresion.Literal;
 
 public class AssetModel
 {	

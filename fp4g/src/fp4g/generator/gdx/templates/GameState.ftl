@@ -1,13 +1,13 @@
-package ${class.pckg};
+package ${code.pckg};
 
-<#if class.imports??>
-<#list class.imports as import>
+<#if code.imports??>
+<#list code.imports as import>
 import ${import};
 </#list>
 </#if>
 
-${class.javadoc}
-public final class ${class.name} extends GameState{
+${code.javadoc}
+public final class ${code.name} extends GameState{
 	private final WorldContainer container;	
 	<#if debug>
 	<#if physicsManager??>
@@ -35,7 +35,7 @@ public final class ${class.name} extends GameState{
 	</#list>
 	</#if>
 	
-	public ${class.name}(GameManager manager)
+	public ${code.name}(GameManager manager)
 	{
 		container = new WorldContainer(manager);		
 	}
@@ -48,8 +48,8 @@ public final class ${class.name} extends GameState{
 		
 		<#if managers??>
 		<#list managers as manager>
-		<#if manager.preupdate?has_content>
-		<#list manager.preupdate as preupdate>
+		<#if manager.preUpdate?has_content>
+		<#list manager.preUpdate as preupdate>
 		${preupdate};		
 		</#list>
 		</#if>
@@ -65,8 +65,8 @@ public final class ${class.name} extends GameState{
 		
 		<#if managers??>
 		<#list managers?reverse as manager>
-		<#if manager.postupdate?has_content>
-		<#list manager.postupdate as postupdate>
+		<#if manager.postUpdate?has_content>
+		<#list manager.postUpdate as postupdate>
 		${postupdate};
 		</#list>
 		</#if>
@@ -90,8 +90,8 @@ public final class ${class.name} extends GameState{
 		</#if>
 		
 		//entityBuilders
-		<#if entityBuilders??>		
-		<#list entityBuilders as builder>
+		<#if builders??>		
+		<#list builders as builder>
 		container.setEntityBuilder(new ${builder}Builder());
 		</#list>
 		</#if>
@@ -99,8 +99,8 @@ public final class ${class.name} extends GameState{
 		//managers
 		<#if managers??>
 		<#list managers as manager>
-		<#if manager.preinit??>
-		<#list manager.preinit as preinit>
+		<#if manager.preInitialize??>
+		<#list manager.preInitialize as preinit>
 		${preinit};
 		</#list>
 		</#if>

@@ -1,5 +1,46 @@
 DEFINE GAME
 [
+	DEFINE MANAGER EntityManager
+	[
+		SET priority = 1;
+		SET extra = 
+		{
+			setMethod = "EntityManager",
+		}
+		AS ManagerData;
+	]
+	
+	DEFINE MANAGER PhysicsManager
+	[
+		SET priority = 2;		
+	]
+	
+	DEFINE MANAGER GdxRenderManager
+	[
+		SET priority = 3;
+		SET extra = 
+		{
+			preInitialize = 
+				{
+					@'batch = new SpriteBatch()',
+					@'camera = new OrthographicCamera()',
+					@'camera.setToOrtho(false,w,h)'
+				},
+			params        = {@'batch'},
+			preUpdate     = 
+				{
+					@'batch.setProjectionMatrix(camera.combined)',
+					@'batch.begin()'
+				},
+			postUpdate    = {@'batch.end()'},
+			fields        = 
+				{
+					@'OrthographicCamera camera',
+					@'SpriteBatch batch'
+				}			
+		}
+		AS ManagerData;
+	]
 	DEFINE BEHAVIOR CircleBody
 	[	
 		SET group = "body";
@@ -122,6 +163,34 @@ DEFINE GAME
 	
 	SET resolvers = 
 	{ 		
+		State = 
+		{
+			General =
+			{
+				"com.apollo.WorldContainer",					
+				"com.apollo.managers.GameManager",
+				"com.apollo.managers.GameState",
+				"com.badlogic.gdx.Gdx",
+				"com.badlogic.gdx.graphics.GL10",
+				"com.badlogic.gdx.graphics.OrthographicCamera"
+			}
+		} AS DependResolver,
+		Manager = 
+		{
+			GdxRenderManager = 
+			{
+				"com.apollo.managers.GdxRenderManager",
+				"com.badlogic.gdx.graphics.g2d.SpriteBatch",				
+			},
+			PhysicsManager = 
+			{
+				"com.apollo.managers.PhysicsManager"				
+			},
+			EntityManager = 
+			{
+				"com.apollo.managers.EntityManager",				
+			} 
+		} AS DependResolver,
 		Entity =
 		{ 
 			Builder = 

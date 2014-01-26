@@ -16,7 +16,6 @@ import fp4g.data.On.Filter;
 import fp4g.data.On.Source;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.ClassMap;
-import fp4g.data.expresion.Literal;
 import fp4g.data.statements.Destroy;
 import fp4g.data.statements.Send;
 import fp4g.exceptions.DependResolverNotFoundException;
@@ -33,8 +32,7 @@ public class OnModel implements Model
 	private final List<MethodHandlerModel> methodHandlers;	
 	
 	//TODO claramente acá el generator es una solución parche
-	//TODO Lo que paso acá. Que este modelo empezo a generar codigo. por eso este desasastre...
-	@SuppressWarnings("unchecked")
+	//TODO Lo que paso acá. Que este modelo empezo a generar codigo. por eso este desasastre...	
 	public OnModel(On on, JavaGenerator generator,JavaCodeModel model)
 	{
 		name = on.name;

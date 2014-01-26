@@ -246,7 +246,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				entityPackageDir.mkdir();
 			}
 		}
-		generator.addJavaCode(entity, modelBuild);
+		
 		generator.createFile(generator.packageDir,String.format("entity/%sBuilder.java",entity.name),entityBuilderTempl,buildRoot);
 		generator.createFile(generator.packageDir,String.format("entity/%s.java",entity.name),entityTempl,entityRoot);		
 	}

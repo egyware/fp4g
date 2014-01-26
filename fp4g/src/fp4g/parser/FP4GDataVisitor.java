@@ -36,7 +36,6 @@ import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.CustomClassMap;
-import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.data.statements.Destroy;
 import fp4g.data.statements.Send;
@@ -445,6 +444,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		IDefine parent = current.peek();	
 
 		//spaceship = ADD ASSET Texture({name="spacheship",atlas = assets_group_1})
+		
 		String varName  = (ctx.assetName != null)?ctx.assetName.getText():null;
 		String assetFile = ctx.asset.getText(); //TODO hay que evualuar esto más adelante
 		assetFile = assetFile.substring(1, assetFile.length()-1);
@@ -453,11 +453,30 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		Add assetAdd;		
 		if(varName == null)
 		{
-			assetAdd = new Add(DefineType.ASSET,assetType.name());
+			try 
+			{
+				Define define = parent.getDefine(DefineType.ASSET,assetType.name());
+				assetAdd = new Add(define,assetType.name());
+			}
+			catch (DefineNotFoundException e)
+			{
+				assetAdd = new Add(DefineType.ASSET,assetType.name());
+				Log.Show(WarnType.MissingDefineAdd);
+			}
 		}
 		else
 		{
-			assetAdd = new Add(DefineType.ASSET,assetType.name(),varName);
+			try 
+			{
+				Define define = parent.getDefine(DefineType.ASSET,assetType.name());
+				assetAdd = new Add(define, varName);				
+			}
+			catch (DefineNotFoundException e)
+			{
+				assetAdd = new Add(DefineType.ASSET,assetType.name(),varName);
+				Log.Show(WarnType.MissingDefineAdd);
+			}
+			
 		}
 		ExprList paramsList = new ExprList(1);
 		//TODO soportar muchas opciones

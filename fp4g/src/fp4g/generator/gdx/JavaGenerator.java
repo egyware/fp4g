@@ -37,7 +37,6 @@ import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Goal;
-import fp4g.data.define.Manager;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.FunctionCall;
@@ -61,7 +60,6 @@ public class JavaGenerator extends Generator
 	public File sourceDir;
 	public final JavaExpresionGenerator exprGen;
 	public final JavaFunctionGenerator funcGen;
-	public final Map<Define,JavaCodeModel> parDefineJavaCode;
 	
 	public final Map<Class<? extends Code>,Class<? extends CodeGenerator<JavaGenerator>>> generators;
 	
@@ -69,8 +67,7 @@ public class JavaGenerator extends Generator
 	
 	public JavaGenerator()
 	{
-		generators = new HashMap<Class<? extends Code>, Class<? extends CodeGenerator<JavaGenerator>>>(10,1);
-		parDefineJavaCode = new HashMap<Define, JavaCodeModel>(10);		
+		generators = new HashMap<Class<? extends Code>, Class<? extends CodeGenerator<JavaGenerator>>>(10,1);				
 		
 		exprGen = new JavaExpresionGenerator(this);
 		funcGen = new JavaFunctionGenerator(this);
@@ -404,12 +401,6 @@ public class JavaGenerator extends Generator
 		return exprGen.generate((JavaCodeModel) model,expr);
 	}
 	
-	public void addJavaCode(Define define,JavaCodeModel value)	
-	{
-		parDefineJavaCode.put(define, value);
-	}
-
-	
 	public void setDefaults(Game gameConf)
 	{
 		gameConf.name = "GameApp";
@@ -455,32 +446,32 @@ public class JavaGenerator extends Generator
 	}
 	
 	//TODO esto deberia cambiar... para bien claro :)
-	private static class JavaRenderManager extends Manager
-	{
-		public JavaRenderManager() {
-			super("GdxRenderManager",1);		
-		}
-	}
-	private static class JavaEntityManager extends Manager 
-	{
-		public JavaEntityManager() 
-		{
-			super("EntityManager",3);		
-		}		
-	}
-	private static class JavaPhysicsManager extends Manager 
-	{
-
-		public JavaPhysicsManager() {
-			super("PhysicsManager",2);		
-		}		
-	}
-	private static class JavaSoundManager extends Manager {
-
-		public JavaSoundManager() {
-			super("SoundManager",4);
-		}
-	}
+//	private static class JavaRenderManager extends Manager
+//	{
+//		public JavaRenderManager() {
+//			super("GdxRenderManager",1);		
+//		}
+//	}
+//	private static class JavaEntityManager extends Manager 
+//	{
+//		public JavaEntityManager() 
+//		{
+//			super("EntityManager",3);		
+//		}		
+//	}
+//	private static class JavaPhysicsManager extends Manager 
+//	{
+//
+//		public JavaPhysicsManager() {
+//			super("PhysicsManager",2);		
+//		}		
+//	}
+//	private static class JavaSoundManager extends Manager {
+//
+//		public JavaSoundManager() {
+//			super("SoundManager",4);
+//		}
+//	}
 	@Override	
 	public Depend resolveDependency(Define define) throws DependResolverNotFoundException 
 	{

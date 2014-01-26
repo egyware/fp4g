@@ -2,6 +2,9 @@ package fp4g.data.define;
 
 import fp4g.data.Define;
 import fp4g.data.DefineType;
+import fp4g.data.IDefine;
+import fp4g.data.IValue;
+import fp4g.data.expresion.literals.IntegerLiteral;
 
 
 /**
@@ -10,16 +13,41 @@ import fp4g.data.DefineType;
  * @author Edgardo
  *
  */
-public abstract class Manager extends Define implements Comparable<Manager>{
-	private final int priority;
+public class Manager extends Define 
+{
+	private int priority;
 	
-	public Manager(String name,int p) {
-		super(DefineType.MANAGER, name);
-		priority = p;
+	public Manager(String name,IDefine parent) 
+	{
+		super(DefineType.MANAGER, name, parent);		
 	}
 	
-	public int compareTo(Manager other)
+	public void set(String key,IValue<?> value)
 	{
-		return (priority - other.priority);
+		if(key.toLowerCase().equals("priority"))
+		{
+			priority = ((Number)value.getValue()).intValue();
+		}
+		else
+		{
+			super.set(key, value);
+		}
+	}
+	
+	public IValue<?> get(String key)
+	{
+		if(key.toLowerCase().equals("priority"))
+		{
+			return new IntegerLiteral(priority);
+		}
+		else
+		{
+			return super.get(key);
+		}
+	}
+
+	public int getPriority() 
+	{
+		return priority;
 	}
 }
