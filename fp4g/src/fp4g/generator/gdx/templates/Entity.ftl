@@ -57,19 +57,22 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 		for (int i = 0, s = behaviors.size(); s > i; i++) {
 			behaviors.get(i).initialize();
 		}
+		
 		<#if messages??>
-		<#list messages as message>
+		<#if hasAttachments>		
+		ApolloInputProcessor inputProcessor = world.getInputProcessor();
+		</#if>		
+		<#list messages as message>				
 		<#assign messageName = message.name?cap_first />		
 		<#list message.methodHandlers as method>		
 		<#if method.sources?has_content>		
 		addEventHandler(${messageName}Message.on${method.name?cap_first}${messageName}, this);
-		</#if>
+		</#if>		
 		</#list>
 		
 		<#if hasAttachments>
-		ApolloInputProcessor inputProcessor = world.getInputProcessor();
 		<#list message.methodHandlers as method>
-		<#if method.attach>
+		<#if method.attach && method.sources?has_content>
 		inputProcessor.addEventHandler(${messageName}Message.on${method.name?cap_first}${messageName}, (MessageHandler)this);
 		</#if>
 		</#list>

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.apollo.messages.KeyMessage;
+import com.apollo.messages.MouseMessage;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 import com.badlogic.gdx.InputProcessor;
@@ -100,7 +101,7 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 	@Override
 	public boolean mouseMoved(int x, int y) 
 	{
-		// TODO Auto-generated method stub
+		this.onMessage(MouseMessage.onMoveMouse,x,y);
 		return false;
 	}
 
@@ -114,21 +115,24 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) 
 	{
-		// TODO Auto-generated method stub
+		// TODO Se ignora pointer
+		this.onMessage(MouseMessage.onPressButtonMouse,button,x,y);
 		return false;
 	}
 	
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) 
 	{
-		// TODO Auto-generated method stub
+		// TODO Se ignora pointer
+		this.onMessage(MouseMessage.onReleaseButtonMouse,button,x,y);
 		return false;
 	}
 
 	@Override
 	public boolean touchDragged(int x, int y, int pointer) 
 	{
-		// TODO Auto-generated method stub
+		// TODO Se ignora pointer
+		this.onMessage(MouseMessage.onDraggedMouse,x,y);
 		return false;
 	}
 

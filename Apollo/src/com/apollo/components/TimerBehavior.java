@@ -38,10 +38,10 @@ public final class TimerBehavior extends BaseBehavior implements TimerMessageHan
 	public void update(float delta)
 	{	
 		for(int index = 0; index < timers.length; index ++)
-		{
-			float time = timers[index];
+		{			
+			float time = timers[index];			
 			if(time > 0)
-			{
+			{				
 				time -= delta;
 				if(time <= 0)
 				{

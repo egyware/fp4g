@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fp4g.data.Expresion;
+import fp4g.data.IValue;
 import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
@@ -48,6 +49,30 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	private abstract class EG_Expresion
 	{		
 		public abstract String expr2string(JavaCodeModel model,Expresion expr) throws GeneratorException;
+	}
+	
+	@Override
+	public String generate(JavaCodeModel model, IValue<?> value) throws GeneratorException 
+	{
+		//TODO generalmente estos se les evalua y solo contiene el valor.
+		//TODO esto es raro, ni yo lo entiendo.
+		if(value instanceof Literal)
+		{
+			Expresion expr = (Expresion)value;
+			EG_Expresion eg = expresions.get(expr.getClass());		
+			if(eg != null)
+			{
+				if(expr.hasPar())
+				{
+					return String.format("(%s)",eg.expr2string(model,expr));
+				}
+				else
+				{
+					return eg.expr2string(model,expr);
+				}			
+			}
+		}
+		throw new ExpresionGeneratorException(value.getClass().getSimpleName());
 	}
 	
 	@Override
