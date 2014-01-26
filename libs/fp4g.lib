@@ -12,12 +12,48 @@ DEFINE GAME
 	
 	DEFINE MANAGER PhysicsManager
 	[
-		SET priority = 2;		
+		SET priority = 2;	
+		SET debug = 
+		{
+			//imports adicionales, solo usar con debug
+			imports       = 
+			{
+				@'com.badlogic.gdx.physics.box2d.Box2DDebugRenderer',
+				@'com.badlogic.gdx.physics.box2d.World',
+				@'static com.apollo.managers.PhysicsManager.*',
+			},
+			fields        = 
+			{
+				@'OrthographicCamera debugCamera',
+				@'Box2DDebugRenderer debugRender = new Box2DDebugRenderer(true,true,true,true,true,true)',
+				@'World world',
+			},
+			preInitialize = 
+			{
+				@'debugCamera = new OrthographicCamera()',
+				@'debugCamera.setToOrtho(false,w*SCALE,h*SCALE)'		
+			},
+			postInitialize = 
+			{
+				@'world = container.getManager(PhysicsManager.class).getb2World()',				
+			},
+			preUpdate     = 
+			{
+				@'debugCamera.position.set(camera.position).scl(SCALE)',
+				@'debugCamera.update()',
+			},
+			postUpdate    = 
+			{
+				@'debugRender.render(world,debugCamera.combined)'
+			},			
+		}
+		AS ManagerData;		
 	]
 	
 	DEFINE MANAGER GdxRenderManager
 	[
 		SET priority = 3;
+		
 		SET extra = 
 		{
 			preInitialize = 
@@ -279,4 +315,3 @@ DEFINE GAME
 		} AS DependResolver,
 	} AS DependResolvers;		
 ]
-

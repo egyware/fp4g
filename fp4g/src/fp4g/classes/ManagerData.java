@@ -18,6 +18,7 @@ public class ManagerData
 	private ArrayList preUpdate;
 	private ArrayList postUpdate;
 	private ArrayList fields;
+	private ArrayList imports; //!< Solo use en modo depuración
 	
 	public ManagerData()
 	{
@@ -77,6 +78,14 @@ public class ManagerData
 
 	public final void setFields(ArrayList fields) {
 		this.fields = fields;
+	}
+
+	public ArrayList getImports() {
+		return imports;
+	}
+
+	public void setImports(ArrayList imports) {
+		this.imports = imports;
 	}
 
 	

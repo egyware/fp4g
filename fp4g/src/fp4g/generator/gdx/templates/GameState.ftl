@@ -9,13 +9,6 @@ import ${import};
 ${code.javadoc}
 public final class ${code.name} extends GameState{
 	private final WorldContainer container;	
-	<#if debug>
-	<#if physicsManager??>
-	private OrthographicCamera debugCamera;
-	private Box2DDebugRenderer debugRender = new Box2DDebugRenderer(true,true,true,true,true);
-	</#if>
-	private FPSLogger fpsLogger = new FPSLogger();	
-	</#if>		
 	
 	//sistemas o manejadores
 	<#if managers??>
@@ -82,13 +75,6 @@ public final class ${code.name} extends GameState{
 		
 		Gdx.input.setInputProcessor(container.getInputProcessor());
 		
-		<#if debug>
-		<#if physicsManager??>
-		debugCamera = new OrthographicCamera();
-		debugCamera.setToOrtho(false,w*SCALE,h*SCALE);
-		</#if>
-		</#if>
-		
 		//entityBuilders
 		<#if builders??>		
 		<#list builders as builder>
@@ -119,6 +105,11 @@ public final class ${code.name} extends GameState{
 		container.set${manager.setMethod}(${manager.varName});
 		<#else>
 		container.setManager(${manager.varName});		
+		</#if>		
+		<#if manager.postInitialize??>
+		<#list manager.postInitialize as postinit>
+		${postinit};
+		</#list>
 		</#if>
 		</#list>
 		</#if>		

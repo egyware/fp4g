@@ -37,6 +37,7 @@ import freemarker.template.Template;
 public class GameStateGenerator extends CodeGenerator<JavaGenerator> {	
 	
 	private static final String EXTRA = "extra";
+	private static final String DEBUG = "debug";
 
 	public GameStateGenerator(JavaGenerator generator) 
 	{
@@ -83,7 +84,20 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			{
 				managerModel.priority = define.getPriority();
 				//acá, buscar las cosas extras y añadirselas.
-				IValue<?> extrasValue = define.get(EXTRA);
+				IValue<?> extrasValue;
+				if(generator.isDebug)
+				{
+					extrasValue = define.get(DEBUG);
+					if(extrasValue == null)
+					{
+						extrasValue = define.get(EXTRA);
+					}					
+				}
+				else
+				{
+					extrasValue = define.get(EXTRA);
+				}
+				 
 				if(extrasValue != null)
 				{
 					extras = (ManagerData) extrasValue.getValue();
@@ -94,6 +108,16 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 					managerModel.fields = toList(extras.getFields());
 					managerModel.preUpdate = toList(extras.getPreUpdate());
 					managerModel.postUpdate = toList(extras.getPostUpdate());
+					
+					//a pesar que va quedar general, para ambos casos solo use para la depuración
+					ArrayList imports = extras.getImports();
+					if(imports != null)
+					{
+						for(IValue<?> i:imports)
+						{
+							code.addImport(generator.expresion(code, i));
+						}
+					}					
 				}				
 				
 			}
