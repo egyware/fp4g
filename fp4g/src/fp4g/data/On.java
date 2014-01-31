@@ -96,7 +96,7 @@ public class On extends Code
 				}
 				else
 				{
-					Log.Show(ErrType.FilterMethodMissing);					
+					Log.Show(ErrorType.FilterMethodMissing);					
 				}
 			}
 			filters.add(filter);

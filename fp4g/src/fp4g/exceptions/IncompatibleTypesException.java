@@ -4,12 +4,13 @@ import fp4g.data.Expresion;
 
 public class IncompatibleTypesException extends CannotEvalException {
 
-	public IncompatibleTypesException(Throwable e, Expresion expr) {
-		super(e, expr);		
+	public IncompatibleTypesException(Expresion expr, Throwable e) {
+		super(expr,"Tipos incomplatibles",e);		
 	}
 	
-	public IncompatibleTypesException(Expresion expr) {
-		super(expr);		
+	public IncompatibleTypesException(Expresion expr) 
+	{
+		super(expr,"Tipos incomplatibles");
 	}
 	
 	private static final long serialVersionUID = 1L;

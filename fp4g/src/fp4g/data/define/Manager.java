@@ -4,6 +4,7 @@ import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
 import fp4g.data.IValue;
+import fp4g.data.expresion.literals.BoolLiteral;
 import fp4g.data.expresion.literals.IntegerLiteral;
 
 
@@ -16,6 +17,7 @@ import fp4g.data.expresion.literals.IntegerLiteral;
 public class Manager extends Define 
 {
 	private int priority;
+	private boolean receiver;
 	
 	public Manager(String name,IDefine parent) 
 	{
@@ -27,6 +29,11 @@ public class Manager extends Define
 		if(key.toLowerCase().equals("priority"))
 		{
 			priority = ((Number)value.getValue()).intValue();
+		}
+		else
+		if(key.toLowerCase().equals("receiver"))
+		{
+			receiver = ((Boolean)value.getValue()).booleanValue();
 		}
 		else
 		{
@@ -41,6 +48,11 @@ public class Manager extends Define
 			return new IntegerLiteral(priority);
 		}
 		else
+		if(key.toLowerCase().equals("receiver"))
+		{
+			return new BoolLiteral(receiver);
+		}
+		else
 		{
 			return super.get(key);
 		}
@@ -50,4 +62,9 @@ public class Manager extends Define
 	{
 		return priority;
 	}
+	
+	public boolean isReceiver()
+	{
+		return receiver;
+	}	
 }

@@ -163,7 +163,7 @@ public class LibContainer extends Code implements ILib, IDefine
 			T define = lib.findDefine(type,name);
 			if(define != null) return define;
 		}
-		throw new DefineNotFoundException(name);
+		throw new DefineNotFoundException(type,name);
 	}
 
 	@Override

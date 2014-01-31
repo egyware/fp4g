@@ -58,8 +58,6 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		exprVisitor = new FP4GExpresionVisitor(current);
 	}
 	
-	
-	
 	@Override
 	public Code visitUsing(FP4GParser.UsingContext ctx)
 	{	
@@ -129,7 +127,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 			catch (DefineNotFoundException e) 
 			{
 				//Muestra un error, pero sigue funcionando...
-				Log.Show(ErrType.MessageExpected,ctx.start.getLine(),ctx.messageName);
+				Log.Show(ErrorType.MessageExpected,ctx.start.getLine(),ctx.messageName);
 				on = new On(ctx.messageName);
 			}
 			
@@ -232,7 +230,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		  		break;		  		
 		  	case GOAL:
 		  		//TODO: No implementado aún
-		  		Show(ErrType.NotImplement);
+		  		Show(ErrorType.NotImplement);
 				throw new RuntimeException("No implementado");
 		  		//break;
 		  	case MESSAGE:
@@ -243,7 +241,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		  		define = new Asset(type,parent);
 		  		break;
 		  	default:
-		  		Show(ErrType.UnknowError);		  		
+		  		Show(ErrorType.UnknowError);		  		
 		  	break;
 		 }
 		define.setLine(define_ctx.getStart().getLine());

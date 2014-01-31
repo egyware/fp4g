@@ -1,18 +1,25 @@
 package fp4g.exceptions;
 
+import fp4g.CannotEval;
 import fp4g.data.Expresion;
 
-public class CannotEvalException extends Exception 
+public class CannotEvalException extends FP4GRuntimeException 
 {
-	public CannotEvalException(Throwable e, Expresion expr) 
+	private static final long serialVersionUID = 1L;	
+	private final Expresion cannotEvalued;
+	public CannotEvalException(CannotEval type,Expresion expr, String reason) 
 	{
-		super(String.format("No se pudo evaluar la expresion %s", expr.toString()),e);
-	}
-	public CannotEvalException(Expresion expr) 
-	{
-		super(String.format("No se pudo evaluar la expresion %s", expr.toString()));
+		super(type, reason);
+		cannotEvalued = expr;
 	}
 
-	private static final long serialVersionUID = 1L;
+	public CannotEvalException(CannotEval type,Expresion expr, String reason, Throwable parent) 
+	{
+		super(type, reason, parent);
+		cannotEvalued = expr;
+	}
 
+	public Expresion getExpresion() {
+		return cannotEvalued;
+	}
 }

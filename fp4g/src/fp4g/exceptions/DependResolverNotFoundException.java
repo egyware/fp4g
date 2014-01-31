@@ -1,15 +1,21 @@
 package fp4g.exceptions;
 
-public class DependResolverNotFoundException extends Exception {
+import fp4g.Log.WarnType;
 
-	public DependResolverNotFoundException(String name) 
+public class DependResolverNotFoundException extends FP4GRuntimeException 
+{
+
+	public DependResolverNotFoundException(int line, String reason) 
 	{
-		super(String.format("No se encontró un resolvedor de dependencias para: %s", name));
+		super(WarnType.DependResolverNotFound, line, reason);		
+	}
+	
+	public DependResolverNotFoundException(int line, String reason, Throwable parent) 
+	{
+		super(WarnType.DependResolverNotFound, line, reason, parent);
+		
 	}
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 }

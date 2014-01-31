@@ -3,8 +3,7 @@
  */
 package fp4g.data.define;
 
-import fp4g.Log;
-import fp4g.Log.ErrType;
+import fp4g.NotAllowed;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
@@ -30,8 +29,9 @@ public class Message extends Define
 	 * @see fp4g.data.Define#addADD(fp4g.data.Add)
 	 */
 	@Override
-	public void setAdd(Add add) {
-		Log.Show(ErrType.NotExpectedType,add);
+	public void setAdd(Add add)
+	{
+		throw new NotAllowedException(NotAllowed.NotExpectedAdd, add, "No se esperaba una instrución Add en Mesage");
 	}
 
 	/* (non-Javadoc)
@@ -39,7 +39,7 @@ public class Message extends Define
 	 */
 	@Override
 	public void setDefine(IDefine define) {
-		Log.Show(ErrType.NotExpectedType,define);
+		throw new NotAllowedException(NotAllowed.NotExpectedDefine, define, "No se esperaba una instrucción Define en Message");
 	}
 
 	/* (non-Javadoc)
@@ -47,6 +47,6 @@ public class Message extends Define
 	 */
 	@Override
 	public void setOn(On on) {
-		Log.Show(ErrType.NotExpectedType,on);
+		throw new NotAllowedException(NotAllowed.NotExpectedOn, on, "No se esperaba una instrucción ON en Message");
 	}
 }

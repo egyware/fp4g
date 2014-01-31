@@ -5,6 +5,7 @@ package fp4g.parser;
 
 import static fp4g.Log.Show;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
@@ -34,6 +35,7 @@ import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
+import fp4g.data.define.Manager;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.literals.StringLiteral;
@@ -154,7 +156,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			catch (DefineNotFoundException e) 
 			{
 				//Muestra un error, pero sigue funcionando...
-				Log.Show(ErrType.MessageExpected,ctx.start.getLine(),ctx.messageName);
+				Log.Show(ErrorType.MessageExpected,ctx.start.getLine(),ctx.messageName);
 				on = new On(ctx.messageName);
 			}
 			
@@ -209,10 +211,12 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	@Override
 	public Code visitSend(FP4GParser.SendContext ctx)
 	{
+		Define define = (Define)current.peek();
+		
 		MessageMethod method = methods.getMessageMethod(ctx.messageMethodName);
 		if(method == null)
 		{
-			Log.Show(ErrType.MessageMethodNotFound,ctx.start.getLine());
+			Log.Show(ErrorType.MessageMethodNotFound,ctx.start.getLine());
 			//TODO ?
 		}
 		Send.SendTo type = null;
@@ -223,22 +227,57 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		//3.- Componente
 		//4.- Tag
 		//5.- Sistema
-		type = ctx.receiverType;
-		switch(ctx.receiverType)
+		type = (ctx.receiverType == null)?Send.SendTo.Behavior:ctx.receiverType;
+		
+		switch(type)
 		{		
 		case Other:
 			//nada que hacer ;)
 			break;
 		case Self:
 			//nada que hacer ;)
-			break;					
+			break;
 		default:
-		//Behavior,System, no se puede determinar desde el lexer
-			receiver = ctx.receiverName;			
-			type = Send.SendTo.System; //asumiré que es un sistema pero no será de mucha ayuda.			
-			//type = Send.SendTo.Behavior;
+			receiver = ctx.receiverName;
+		//Behavior
+			//buscar en los add de la entidad.
+			List<Add> behaviors = define.getAdd(DefineType.BEHAVIOR);
+			for(Add bhvr:behaviors)
+			{
+				//buscar de forma iterativa
+				if((bhvr.varName != null && bhvr.equals(receiver))||bhvr.name.equals(receiver))
+				{
+					type = Send.SendTo.Behavior; //Es un behavior!
+					break;
+				}
+			}
+	    //Tag
+			//buscar algún tag, si es que existe
+			
+	    //System			
+			Collection<IDefine> managers = game.getDefines(DefineType.MANAGER);
+			for(IDefine manager:managers)
+			{
+				if(manager.getName().equals(receiver))
+				{
+					if(((Manager)manager).isReceiver())
+					{
+						type = Send.SendTo.System; //es un sistema!, ojo que el sistema puede que no esté definido...							
+					}
+					else
+					{
+						//lanzar error
+						Log.Show(ErrorType.ManagerIsNotAReceiver,ctx.start.getLine(),receiver);	
+						throw new StatementRuntimeException(); 
+					}
+					break;
+				}
+			}
+			//buscar en los defines de sistemas.					
+		
 			break;		
 		}		
+		
 		Send send = new Send(type,method,receiver);	
 		
 		ExprList list = exprVisitor.getExprList(ctx.exprList());
@@ -247,6 +286,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			//TODO checkar la exprList, checkar que?, Compararla contra MessageMethod.Params se requiere conocimiento adicional.
 			send.setArguments(list);		
 		}
+		
 		
 		return send;		
 	}
@@ -265,7 +305,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		return null;
 	}
 	
-	public static IValue<?> eval(IValue<?> define, Expresion expr) throws CannotEvalException 
+	public static IValue<?> eval(IValue<?> define, Expresion expr) 
+	throws CannotEvalException 
 	{
 		return expr.eval(define);
 	}
@@ -305,17 +346,17 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			break;
 			case MANAGER:
 				//TODO: No implementado aï¿½n
-				Show(ErrType.NotImplement);
+				Show(ErrorType.NotImplement);
 				throw new RuntimeException("No implementado");
 				//break;		  		
 		  	case BEHAVIOR:
 		  		//TODO: No implementado aï¿½n
-		  		Show(ErrType.NotImplement);
+		  		Show(ErrorType.NotImplement);
 				throw new RuntimeException("No implementado");
 		  		//break;		  		
 		  	case GOAL:
 		  		//TODO: No implementado aún
-		  		Show(ErrType.NotImplement);
+		  		Show(ErrorType.NotImplement);
 				throw new RuntimeException("No implementado");
 		  		//break;
 		  	case MESSAGE:
@@ -326,7 +367,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		  		define = new Asset(type,parent);
 		  		break;
 		  	default:
-		  		Show(ErrType.UnknowError);		  		
+		  		Show(ErrorType.UnknowError);		  		
 		  	break;
 		 }
 		define.setLine(define_ctx.getStart().getLine());

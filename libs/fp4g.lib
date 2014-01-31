@@ -3,6 +3,7 @@ DEFINE GAME
 	DEFINE MANAGER EntityManager
 	[
 		SET priority = 1;
+		SET receiver = true;
 		SET extra = 
 		{
 			setMethod = "EntityManager",
@@ -12,7 +13,7 @@ DEFINE GAME
 	
 	DEFINE MANAGER PhysicsManager
 	[
-		SET priority = 2;	
+		SET priority = 2;			
 		SET debug = 
 		{
 			//imports adicionales, solo usar con debug

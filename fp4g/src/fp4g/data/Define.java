@@ -249,18 +249,37 @@ public abstract class Define extends Code implements IDefine
 	public <T extends IDefine> Collection<T> getDefines(DefineType defineType) 
 	{
 		Map<String,T> map = (Map<String, T>) defines.get(defineType);
+		Collection<T> defines = null;
 		if(map != null)
 		{
-			return map.values();
-		}		
-		return null;
+			defines = map.values();
+		}
+		if(parent != null)
+		{
+			Collection<T> parentsCollection = parent.getDefines(defineType);
+			if(defines == null)
+			{
+				defines = parentsCollection;
+			}
+			else if(parentsCollection != null)
+			{
+				ArrayList<T> defines2= new ArrayList<T>(defines.size()+parentsCollection.size());
+				
+				defines2.addAll(defines);
+				defines2.addAll(parentsCollection);
+				
+				defines = defines2;				
+			}
+		}
+		
+		return defines;
 	}
 	
 	@Override
 	public final <T extends Define> T getDefine(DefineType type,String name) throws DefineNotFoundException 
 	{	
 		T value = findDefine(type,name);
-		if(value == null)throw new DefineNotFoundException(name);
+		if(value == null)throw new DefineNotFoundException(type,name);
 		return value;
 	}
 	

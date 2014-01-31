@@ -1,7 +1,6 @@
 package fp4g.data.define;
 
-import static fp4g.Log.Show;
-import fp4g.Log.ErrType;
+import fp4g.NotAllowed;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
@@ -177,21 +176,14 @@ public class Game extends Define
 	public void setAdd(Add code) {
 		switch(code.getType())
 		{	
-			case MANAGER:
-			case GAME:
-			case ENTITY:
-			case BEHAVIOR:
-				Show(ErrType.NotExpectedType,code);
-				break;
 			case GOAL:
 				super.setAdd(code);
 				break;
 			case STATE:
 				super.setAdd(code);
-				break;
+				break;			
 			default:
-				Show(ErrType.UnknowError,code);
-				break;		
+				throw new NotAllowedException(NotAllowed.NotExpectedAdd, code,"No se esperaba estos tipos en Game");					
 		}		
 	}
 	/**
@@ -207,10 +199,7 @@ public class Game extends Define
 	public void setDefine(IDefine define) {
 		switch(define.getType())
 		{
-			case GAME:			
-			case MANAGER:			
-				Show(ErrType.NotExpectedType,define);
-				break;
+			
 			case ASSET:
 				super.setDefine(define);
 				break;
@@ -228,16 +217,15 @@ public class Game extends Define
 				break;
 			case MESSAGE:
 				super.setDefine(define);								
-				break;
+				break;						
 			default:
-				Show(ErrType.UnknowError,define);
-				break;		
+				throw new NotAllowedException(NotAllowed.NotExpectedAdd, define,String.format("No se esperaba el define \"%s\" en Game",define.getName()));		
 		}		
 	}
 
 	@Override
 	public void setOn(On on) {
-		Show(ErrType.NotExpectedOn,on);		
+		throw new NotAllowedException(NotAllowed.NotExpectedOn, on, "No se esperaba una instrucción ON en Game");		
 	}
 
 	public void setStart(GameState state) {

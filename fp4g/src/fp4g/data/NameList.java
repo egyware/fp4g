@@ -3,10 +3,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import fp4g.data.expresion.Literal;
-
-
-
 public class NameList implements Iterable<DeclVar>
 {
 	private final List<DeclVar> nameVars;

@@ -29,7 +29,7 @@ public class VarId extends Expresion
 			if(container.getParent() == null)
 			{
 				//TODO Log.Show(ErrType.VarNameNotFound,define,varName);
-				Log.Show(ErrType.VarNameNotFound,varName);
+				Log.Show(ErrorType.VarNameNotFound,varName);
 			}
 			return container.getParent();	
 		}else
@@ -42,7 +42,7 @@ public class VarId extends Expresion
 			if(value == null)
 			{
 				//TODO Log.Show(ErrType.VarNameNotFound,define,varName);
-				Log.Show(ErrType.VarNameNotFound,varName);
+				Log.Show(ErrorType.VarNameNotFound,varName);
 			}
 			return value;
 		}

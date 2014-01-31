@@ -7,7 +7,8 @@ import fp4g.exceptions.CannotEvalException;
  * @author Edgardo
  *
  */
-public abstract class Expresion {	
+public abstract class Expresion
+{	
 	private boolean hasPar;
 	
 	public boolean hasPar()

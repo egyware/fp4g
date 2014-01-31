@@ -1,7 +1,6 @@
 package fp4g.data.define;
 
-import static fp4g.Log.Show;
-import fp4g.Log.ErrType;
+import fp4g.NotAllowed;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
@@ -19,18 +18,18 @@ public class Goal extends Define {
 	}	
 	
 	@Override
-	public void setAdd(Add code) {
-		Show(ErrType.NotExpectedAdd,code);
+	public void setAdd(Add code) 
+	{
+		throw new NotAllowedException(NotAllowed.NotExpectedAdd, code, "No se esperaba una instrución Add en Goal");
 		
 	}
 	@Override
 	public void setDefine(IDefine define) {
-		Show(ErrType.NotExpectedDefine,define);
-		
+		throw new NotAllowedException(NotAllowed.NotExpectedDefine, define, "No se esperaba una instrucción Define en Goal");
 	}
 	@Override
-	public void setOn(On on) {
-		Show(ErrType.NotExpectedOn,on);
-		
+	public void setOn(On on) 
+	{
+		throw new NotAllowedException(NotAllowed.NotExpectedOn, on, "No se esperaba una instrucción On en Goal");		
 	}	
 }

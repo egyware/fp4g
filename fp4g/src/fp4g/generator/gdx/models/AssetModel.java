@@ -22,7 +22,7 @@ public class AssetModel
 		if(lparams.size() > 0)
 		{
 			IValue<?> value = define.get("parameter");
-			if(null == value) Log.Show(ErrType.UnExpectedParams,resource);
+			if(null == value) Log.Show(Error.UnExpectedParams,resource);
 			parameterClass = (String)value.getValue();
 			params = lparams;
 		}

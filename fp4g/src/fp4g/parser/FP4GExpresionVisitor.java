@@ -3,15 +3,13 @@
  */
 package fp4g.parser;
 
-import static fp4g.Log.Show;
 
 import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import fp4g.Log;
-import fp4g.Log.ErrType;
-import fp4g.Log.WarnType;
+import fp4g.CannotEval;
+import fp4g.Error;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
@@ -34,6 +32,7 @@ import fp4g.data.expresion.literals.FloatLiteral;
 import fp4g.data.expresion.literals.IntegerLiteral;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.CannotEvalException;
+import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.parser.FP4GParser.ArrayBodyContext;
 
 /**
@@ -270,8 +269,10 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 				{
 					map = new ClassMap<Object>(clazz);
 				}
-			} catch (ClassNotFoundException e) {				
-				Show(ErrType.ClassNotFound,ctx.bean);
+			}
+			catch (ClassNotFoundException e)
+			{
+				throw new FP4GRuntimeException(Error.ClassNotFound,e.getMessage(),e);
 			}
 		}
 		//ctx.arrayBody()
@@ -305,7 +306,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 					throw new IllegalStateException("No se puede crear una lista de esto!");
 				}
 			} catch (ClassNotFoundException e) {				
-				Show(ErrType.ClassNotFound,ctx.bean);
+				throw new FP4GRuntimeException(Error.ClassNotFound,e.getMessage(),e);
 			}
 		}
 		//ctx.arrayBody()
@@ -331,13 +332,13 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		}
 		else
 		{
-			try 
+			try
 			{
 				list.add(FP4GDataVisitor.eval(current.peek(),expr));
 			}
-			catch (CannotEvalException e) 
+			catch(CannotEvalException e)
 			{
-				Log.Show(WarnType.CannotEvalExpr,ctx.expr().start.getLine());
+				//TODO URGENTE, LOGGEAR ESTE ERROR CAPTURADO!!!!!
 			}
 		}		
 		return null;

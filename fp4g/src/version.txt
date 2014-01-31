@@ -1,5 +1,6 @@
 :::0.1.27 (prototipo)
 + Los managers se ordenan según prioridad
++ Depuración visual para Box2D
 F Se refactorizo la clase GameStateGenerator
 B Cuando no encuentra un mensaje deberia abortar y no caerse.
 P Debe quedar prueba de tontos II: Se ha vuelto mejorar el launcher esto es para cuando se lanze desde un jar no tener que modificarlo.

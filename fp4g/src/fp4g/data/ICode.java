@@ -1,10 +1,7 @@
 package fp4g.data;
 
-public interface ICode {
-
-	public abstract void setLine(int line);
-
-	public abstract int getLine();
+public interface ICode extends ILine
+{
 
 	public abstract void setBuild(boolean b);
 

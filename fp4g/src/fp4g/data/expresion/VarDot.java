@@ -1,7 +1,6 @@
 package fp4g.data.expresion;
 
-import fp4g.Log;
-import fp4g.Log.ErrType;
+import fp4g.CannotEval;
 import fp4g.data.IValue;
 import fp4g.exceptions.CannotEvalException;
 
@@ -46,16 +45,12 @@ public class VarDot extends VarId
 			}
 			else
 			{
-				//TODO Log.Show(ErrType.VarNameNotFound, this, varName);
-				Log.Show(ErrType.VarNameNotFound, varName);
-				throw new CannotEvalException(this);
+				throw new CannotEvalException(CannotEval.VarNameNotFound,this, String.format("No se encontro la variable \"%s\"",varName));
 			}
 		}
 		if(sub == null)
 		{			
-			//TODO Log.Show(ErrType.VarNameNotFound, current, varName);
-			Log.Show(ErrType.VarNameNotFound, varName);
-			throw new CannotEvalException(this);
+			throw new CannotEvalException(CannotEval.VarNameNotFound,this, String.format("No se encontro la variable \"%s\"",varName));
 		}
 		return property.eval(sub);
 	}

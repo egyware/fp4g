@@ -195,7 +195,7 @@ public class JavaGenerator extends Generator
 		}
 		else
 		{
-			Log.Show(ErrType.CriticalErrorGeneratorNotFound,gameData);
+			Log.Show(ErrorType.CriticalErrorGeneratorNotFound,gameData);
 			throw new RuntimeException("Epa, generador incorrecto");
 		}		
 	}
@@ -222,7 +222,7 @@ public class JavaGenerator extends Generator
 			javaCompiler = findJDK();
 			if(javaCompiler == null)
 			{
-				Log.Show(ErrType.CompilerNotFound);
+				Log.Show(ErrorType.CompilerNotFound);
 				return;
 			}
 

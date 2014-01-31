@@ -1,7 +1,6 @@
 package fp4g.data.define;
 
-import static fp4g.Log.Show;
-import fp4g.Log.ErrType;
+import fp4g.NotAllowed;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
@@ -18,18 +17,13 @@ public class GameState extends Define{
 	@Override
 	public void setAdd(Add code) {
 		switch(code.getType())
-		{				
-		case BEHAVIOR:
-		case GAME:
-		case STATE:
-			Show(ErrType.NotExpectedType,code);
-			break;
+		{		
 		case ENTITY:			
 			super.setAdd(code);
 			break;
 		case GOAL:
 			//TODO: No implementado aún
-			throw new RuntimeException("No implementado");
+			throw new NotAllowedException(NotAllowed.NotImplementedYet, code, "No se ha implementado esta caracteristica todavía");
 			//break;
 		case MANAGER:
 			super.setAdd(code);
@@ -37,19 +31,21 @@ public class GameState extends Define{
 		case ASSET:			
 			super.setAdd(code);
 			break;
+		case BEHAVIOR:
+		case GAME:
+		case STATE:
 		default:
-			Show(ErrType.UnknowError,code);
-			break;			
+			throw new NotAllowedException(NotAllowed.NotExpectedAdd, code, "No se esperaban estos tipos en GameState");			
 		}		
 	}
 
 	@Override
 	public void setDefine(IDefine define) {
-		Show(ErrType.NotExpectedDefine,define);
+		throw new NotAllowedException(NotAllowed.NotExpectedDefine, define, "No se esperaba una instrucción Define en GameState");
 	}
 
 	@Override
 	public void setOn(On on) {
-		Show(ErrType.NotExpectedOn,on);
+		throw new NotAllowedException(NotAllowed.NotExpectedOn, on, "No se esperaba una instrucción ON en GameState");
 	}
 }

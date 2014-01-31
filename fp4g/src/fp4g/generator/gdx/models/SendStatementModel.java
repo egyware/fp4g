@@ -23,9 +23,14 @@ public final class SendStatementModel extends StatementModel
 		{
 		case Other:
 			to = "other";
-			break;		
+			break;
+		case Behavior:
+			//TODO chequear cuando es init/deinit
+			to = "this.".concat(send.toReceiverName);
+			break;
 		case System:
-			to = "System";
+			//TODO falta importar dependencia
+			to = "owner.getWorld().getManager(".concat(send.toReceiverName).concat(".class)");			
 			break;
 		case Self:
 		default:

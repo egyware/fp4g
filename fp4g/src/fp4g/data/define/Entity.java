@@ -1,7 +1,6 @@
 package fp4g.data.define;
 
-import static fp4g.Log.Show;
-import fp4g.Log.ErrType;
+import fp4g.NotAllowed;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
@@ -18,27 +17,25 @@ public class Entity extends Define
 	@Override
 	public void setAdd(Add code) {
 		switch(code.getType())
-		{
+		{		
+		case BEHAVIOR:
+			super.setAdd(code);
+			break;
 		case ASSET:			
 		case ENTITY:		
 		case GAME:			
 		case GOAL:			
 		case MANAGER:			
 		case STATE:
-			Show(ErrType.NotExpectedType,code);
-			break;
-		case BEHAVIOR:
-			super.setAdd(code);
-			break;			
 		default:
-			Show(ErrType.UnknowError,code);
-			break;		 
+			throw new NotAllowedException(NotAllowed.NotExpectedAdd,code, "No se permite estos tipos en Entity");			
 		}		
 	}
 
 	@Override
-	public void setDefine(IDefine define) {
-		Show(ErrType.NotExpectedDefine,define);		
+	public void setDefine(IDefine define) 
+	{
+		throw new NotAllowedException(NotAllowed.NotExpectedAdd, define, "No se la instrucción Entity en ");		
 	}
 
 
