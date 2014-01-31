@@ -41,6 +41,7 @@ import fp4g.data.statements.Send;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.FP4GRuntimeException;
+import fp4g.log.Log;
 import fp4g.log.info.NotAllowed;
 import fp4g.log.info.Warn;
 import fp4g.log.info.Error;
@@ -400,8 +401,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		{			
 			add = new Add(ctx.type,ctx.addName,ctx.varName);
 			add.setLine(ctx.start.getLine());
-			//TODO no se encontró un Define lanzar warning
-			Show(Warn.MissingDefineAdd,add);			
+			Log.Exception(e, ctx.start.getLine());		
 		}
 		
 		ExprList list = exprVisitor.getExprList(ctx.exprList());
@@ -438,14 +438,13 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			}
 			catch (CannotEvalException e) 
 			{
-				Show(Warn.CannotEvalExpr,ctx.initValue.start.getLine());				
+				Log.Exception(e,ctx.start.getLine());
 			}
 		}
 		else
 		{
 			nameList.add(type, ctx.varName.getText());
 		}
-		//nameList.add(type,ctx.ID().getText());
 		return null;		
 	}
 		

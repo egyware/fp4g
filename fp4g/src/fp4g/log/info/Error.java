@@ -1,5 +1,7 @@
 package fp4g.log.info;
 
+import fp4g.log.ErrorType;
+
 public enum Error implements ErrorType 
 {
 //DontMatchTypes("Los tipos no coinciden"),

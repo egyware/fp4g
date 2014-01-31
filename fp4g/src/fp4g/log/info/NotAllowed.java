@@ -1,5 +1,7 @@
 package fp4g.log.info;
 
+import fp4g.log.ErrorType;
+
 
 //TODO hacer que pertenesca a WarnType
 public enum NotAllowed implements ErrorType 

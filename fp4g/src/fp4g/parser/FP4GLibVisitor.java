@@ -28,12 +28,15 @@ import fp4g.data.define.Entity;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Manager;
 import fp4g.data.define.Message;
+import fp4g.data.define.NotAllowedException;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.data.libs.Lib;
 import fp4g.data.statements.Destroy;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
+import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.log.Log;
+import fp4g.log.info.NotAllowed;
 import fp4g.log.info.Warn;
 import fp4g.log.info.Error;
 
@@ -228,8 +231,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		  		break;		  		
 		  	case GOAL:
 		  		//TODO: No implementado aún
-		  		Show(Error.NotImplement);
-				throw new RuntimeException("No implementado");
+		  		throw new NotAllowedException(NotAllowed.NotImplementedYet, null, "No se ha implementado esta caracteristica todavía");
 		  		//break;
 		  	case MESSAGE:
 		  		define = new Message(defName,parent);		  		
@@ -239,8 +241,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		  		define = new Asset(type,parent);
 		  		break;
 		  	default:
-		  		Show(Error.UnknowError);		  		
-		  	break;
+		  		throw new FP4GRuntimeException(Error.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");
 		 }
 		define.setLine(define_ctx.getStart().getLine());
 		parent.setDefine(define);
@@ -276,7 +277,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 			add = new Add(ctx.type,ctx.addName,ctx.varName);
 			add.setLine(ctx.start.getLine());
 			//TODO no se encontró un Define lanzar warning
-			Show(Warn.MissingDefineAdd,add);			
+			Log.Exception(e, ctx.start.getLine());			
 		}
 		
 		ExprList list = exprVisitor.getExprList(ctx.exprList());
@@ -313,7 +314,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 			}
 			catch (CannotEvalException e) 
 			{
-				Show(Warn.CannotEvalExpr,ctx.initValue.start.getLine());				
+				Log.Exception(e, ctx.start.getLine());
 			}
 		}
 		else

@@ -1,6 +1,5 @@
-package fp4g.log.info;
+package fp4g.log;
 
-import fp4g.log.IMessageType;
 
 
 public interface ErrorType extends IMessageType

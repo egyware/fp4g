@@ -1,5 +1,7 @@
 package fp4g.log.info;
 
+import fp4g.log.WarnType;
+
 
 public enum Warn implements WarnType
 {			

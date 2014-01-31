@@ -19,8 +19,8 @@ import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Manager;
 import fp4g.data.expresion.ArrayList;
+import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
-import fp4g.exceptions.GeneratorException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
@@ -320,7 +320,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 
 	}
 
-	private List<String> toList(ArrayList arrayList) throws GeneratorException 
+	private List<String> toList(ArrayList arrayList) throws CannotEvalException  
 	{
 		if(arrayList != null)
 		{
