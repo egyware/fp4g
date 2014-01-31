@@ -41,12 +41,15 @@ import fp4g.data.expresion.FunctionCall;
 import fp4g.data.libs.LibContainer;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
+import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.exceptions.GeneratorException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
 import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.log.Log;
 import fp4g.log.info.GeneratorError;
+import fp4g.log.info.Warn;
 import freemarker.template.Configuration;
 
 public class JavaGenerator extends Generator 
@@ -110,9 +113,9 @@ public class JavaGenerator extends Generator
 			}
 			return list;			
 		}
-		catch(Exception e)
+		catch(IOException e)
 		{
-			//TODO: ehhh que hacer con esto?
+			Log.Show(Warn.IOException,e.getMessage());
 		}
 		return Collections.emptyList();
 	}
@@ -417,13 +420,7 @@ public class JavaGenerator extends Generator
     	CustomClassMap map = (CustomClassMap)libContainer.get("resolvers");
     	resolvers = (DependResolvers)map.getValue();
 
-    	//TODO must be lib files
-    	//libContainer.setManager(new JavaRenderManager());
-    	//libContainer.setManager(new JavaEntityManager());
-    	//libContainer.setManager(new JavaSoundManager());
-    	//libContainer.setManager(new JavaPhysicsManager());
-    	
-//        //agregar componentes		    	
+    	  //agregar componentes		    	
 ////    String components[][] = 
 ////    	{
 ////    		{"BodyBehavior"},
@@ -444,40 +441,12 @@ public class JavaGenerator extends Generator
     	return libContainer;
 	}
 	
-	//TODO esto deberia cambiar... para bien claro :)
-//	private static class JavaRenderManager extends Manager
-//	{
-//		public JavaRenderManager() {
-//			super("GdxRenderManager",1);		
-//		}
-//	}
-//	private static class JavaEntityManager extends Manager 
-//	{
-//		public JavaEntityManager() 
-//		{
-//			super("EntityManager",3);		
-//		}		
-//	}
-//	private static class JavaPhysicsManager extends Manager 
-//	{
-//
-//		public JavaPhysicsManager() {
-//			super("PhysicsManager",2);		
-//		}		
-//	}
-//	private static class JavaSoundManager extends Manager {
-//
-//		public JavaSoundManager() {
-//			super("SoundManager",4);
-//		}
-//	}
 	@Override	
 	public Depend resolveDependency(Define define) throws DependResolverNotFoundException 
 	{
 		if(define == null)
 		{
-			//TODO lanzar una excepción
-			return null;
+			throw new DependResolverNotFoundException("El define es null");
 		}
 		else		
 		{

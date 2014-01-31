@@ -30,6 +30,8 @@ import fp4g.generator.gdx.models.GameModel;
 import fp4g.generator.gdx.models.GameStateModel;
 import fp4g.generator.gdx.models.JavaCodeModel;
 import fp4g.generator.gdx.models.ManagerModel;
+import fp4g.log.Log;
+import fp4g.log.info.Warn;
 import freemarker.template.Template;
 
 public class GameStateGenerator extends CodeGenerator<JavaGenerator> {	
@@ -257,13 +259,14 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			
 			assets.add(assetModel);
 			
-			try{
+			try
+			{
 				Depend depend = generator.resolveDependency(define);
 				depend.perform(define, code);
 			}
 			catch(DependResolverNotFoundException ex)
 			{
-				//TODO URGENTE ERROR CAPTURADO
+				Log.Exception(ex, define.getLine());
 			}
 									
 		}
@@ -275,9 +278,9 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			Depend depend = generator.resolveDependency(state);
 			depend.perform(state, code);
 		}
-		catch(DependResolverNotFoundException drnfe)
+		catch(DependResolverNotFoundException ex)
 		{
-			//TODO URGENTE ERROR CAPTURADO
+			Log.Exception(ex, state.getLine());
 		}
 		
 		for(Add manager:state.getAdd(DefineType.MANAGER))
@@ -291,17 +294,13 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				}
 				catch(DependResolverNotFoundException drnfe)
 				{
-					//TODO ERROR CAPTURADO
-					//Log.Show(Warn.DependResolverNotFound,manager,manager.name);
+					Log.Exception(drnfe, manager.getLine());
 					code.imports.add(String.format("com.apollo.managers.%sManager", manager.name));
-
 				}
 			}
 			else
 			{
-				//TODO ERROR CAPTURADO				
-				//Log.Show(Warn.MissingDefineAdd,manager,manager.name);
-				
+				Log.Show(Warn.MissingDefineAdd, manager.getLine(),"Se asumirá que existe un Define asociado.");				
 				code.imports.add(String.format("com.apollo.managers.%sManager", manager.name));
 			}
 		}

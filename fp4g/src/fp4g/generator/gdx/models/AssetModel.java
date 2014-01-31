@@ -4,7 +4,8 @@ import java.util.List;
 
 import fp4g.data.IValue;
 import fp4g.data.define.Asset;
-import fp4g.log.Log;
+import fp4g.exceptions.FP4GRuntimeException;
+import fp4g.log.info.Error;
 
 public class AssetModel
 {	
@@ -21,7 +22,7 @@ public class AssetModel
 		if(lparams.size() > 0)
 		{
 			IValue<?> value = define.get("parameter");
-			if(null == value) Log.Show(Error.UnExpectedParams,resource);
+			if(null == value) new FP4GRuntimeException(Error.UnExpectedParams,"Faltan parametros");
 			parameterClass = (String)value.getValue();
 			params = lparams;
 		}

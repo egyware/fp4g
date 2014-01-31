@@ -37,32 +37,32 @@ public class DirectCode extends Expresion implements IValue<DirectCode> {
 	}
 
 	@Override
-	public IValue<?> getParent() throws NotAllowedOperatorException {
-		// TODO Auto-generated method stub
-		return null;
+	public IValue<?> getParent() throws NotAllowedOperatorException 
+	{
+		throw new NotAllowedOperatorException(this, BinaryOp.Type.Sub);
 	}
 
 	@Override
-	public IValue<?> sum(IValue<?> right) throws NotAllowedOperatorException {
-		// TODO Auto-generated method stub
-		return null;
+	public IValue<?> sum(IValue<?> right) throws NotAllowedOperatorException 
+	{
+		throw new NotAllowedOperatorException(this, BinaryOp.Type.Add);
 	}
 
 	@Override
-	public IValue<?> mult(IValue<?> right) throws NotAllowedOperatorException {
-		// TODO Auto-generated method stub
-		return null;
+	public IValue<?> mult(IValue<?> right) throws NotAllowedOperatorException 
+	{
+		throw new NotAllowedOperatorException(this, BinaryOp.Type.Mult);
 	}
 
 	@Override
-	public IValue<?> div(IValue<?> right) throws NotAllowedOperatorException {
-		// TODO Auto-generated method stub
-		return null;
+	public IValue<?> div(IValue<?> right) throws NotAllowedOperatorException
+	{
+		throw new NotAllowedOperatorException(this, BinaryOp.Type.Div);
 	}
 
 	@Override
-	public IValue<?> sub(IValue<?> right) throws NotAllowedOperatorException {
-		// TODO Auto-generated method stub
-		return null;
+	public IValue<?> sub(IValue<?> right) throws NotAllowedOperatorException 
+	{
+		throw new NotAllowedOperatorException(this, BinaryOp.Type.Sub);
 	}	
 }

@@ -198,13 +198,12 @@ public abstract class Define extends Code implements IDefine
 	
 	public String toString()
 	{
-		//TODO mostrar los add y On
 		StringBuilder builder = new StringBuilder();
 		builder.append("DEFINE ");
 		builder.append(type.name());
 		builder.append(' ');
 		builder.append(name);
-		//builder.append('\n');
+		builder.append("[ ... ]");		
 					
 		return builder.toString();
 	}

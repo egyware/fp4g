@@ -40,8 +40,10 @@ import fp4g.data.statements.Destroy;
 import fp4g.data.statements.Send;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
+import fp4g.exceptions.FP4GException;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.log.Log;
+import fp4g.log.info.GeneratorError;
 import fp4g.log.info.NotAllowed;
 import fp4g.log.info.Warn;
 import fp4g.log.info.Error;
@@ -104,7 +106,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			break;
 		case GAME:			
 		default:			
-			//TODO error :/ estado ilegal					
+			throw new FP4GRuntimeException(GeneratorError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");					
 		}
 		return null;		
 	}
@@ -124,9 +126,10 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			} 
 			catch (DefineNotFoundException e) 
 			{				
-				//TODO URGENTE ERROR CAPTURADO
+				Log.Exception(e, ctx.start.getLine());
 				//creo un elemento temporal para solucionar el state faltante, sin embargo no se generará
 				state = new GameState(ctx.state,define);
+				state.setLine(ctx.start.getLine());
 				state.setBuild(false);
 			}			
 			((Game) define).setStart(state);
@@ -157,8 +160,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			}
 			catch (DefineNotFoundException e) 
 			{
-				//Muestra un error, pero sigue funcionando...
-				//TODO URGENTE ERROR CAPTURADO
+				Log.Exception(e, ctx.start.getLine());
 				on = new On(ctx.messageName);
 			}
 			
@@ -177,7 +179,15 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			List<List<String>> filtros = ctx.filters.or;
 			for(List<String> filtro:filtros)
 			{
-				source.addFilter(filtro);
+				try
+				{
+					source.addFilter(filtro);
+				}
+				catch(FP4GException e)
+				{
+					//Error, acá tratamos de ahcer el mejor esfuerzo posible.
+					Log.Exception(e,ctx.start.getLine());
+				}
 			}
 		}
 		return null;		
@@ -218,8 +228,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		MessageMethod method = methods.getMessageMethod(ctx.messageMethodName);
 		if(method == null)
 		{
-			//TODO URGENTE ERROR CAPTURADO
-			
+			throw new FP4GRuntimeException(Error.FilterMethodMissing,"No se encontró un metodo para el filtro:  ".concat(ctx.messageMethodName));
 		}
 		Send.SendTo type = null;
 		String receiver = null;
@@ -269,8 +278,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 					else
 					{
 						//lanzar error
-						Log.Show(Error.ManagerIsNotAReceiver,ctx.start.getLine(),receiver);	
-						throw new StatementRuntimeException(); 
+						throw new FP4GRuntimeException(Error.ManagerIsNotAReceiver,String.format("El manager \"%s\" no puede recibir mensajes.",receiver));							 
 					}
 					break;
 				}
@@ -351,7 +359,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 				throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
 				//break;		  		
 		  	case BEHAVIOR:
-		  		//TODO: No implementado aï¿½n
+		  		//TODO: No implementado aún
 				throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
 		  		//break;		  		
 		  	case GOAL:
@@ -366,7 +374,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		  		define = new Asset(type,parent);
 		  		break;
 		  	default:
-		  		throw new FP4GRuntimeException(Error.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");
+		  		throw new FP4GRuntimeException(GeneratorError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");
 		 }
 		define.setLine(define_ctx.getStart().getLine());
 		parent.setDefine(define);
@@ -498,7 +506,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			catch (DefineNotFoundException e)
 			{
 				assetAdd = new Add(DefineType.ASSET,assetType.name());
-				Log.Show(Warn.MissingDefineAdd);
+				Log.Exception(e, ctx.assetName.getLine());
 			}
 		}
 		else
@@ -511,8 +519,9 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			catch (DefineNotFoundException e)
 			{
 				assetAdd = new Add(DefineType.ASSET,assetType.name(),varName);
-				//TODO URGENTE ERROR CAPTURADO
+				Log.Exception(e, ctx.assetName.getLine());
 			}
+			assetAdd.setLine(ctx.start.getLine());
 			
 		}
 		ExprList paramsList = new ExprList(1);

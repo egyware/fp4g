@@ -338,7 +338,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 			}
 			catch(CannotEvalException e)
 			{
-				//TODO URGENTE, LOGGEAR ESTE ERROR CAPTURADO!!!!!
+				Log.Exception(e, ctx.start.getLine());
 			}
 		}		
 		return null;

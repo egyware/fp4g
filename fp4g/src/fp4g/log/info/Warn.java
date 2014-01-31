@@ -10,25 +10,23 @@ public enum Warn implements WarnType
 	UnformatedFilter,
 	CannotEvalExpr,
 	DependResolverNotFound,
-	PropertiesCantSave,
-//		NotFoundDefine("No se encontró una definición previa, se omitirá y se asumirá que existe"),
-//		CustomAddState, 
-//		NotExpectedThis,
-//		ParentBehaviorNull,
-		;
+	PropertiesCantSave, 
+	IOException,
+	
+	;
 		
-		private String message;
-		private Warn()
-		{
-			message = this.name();
-		}
-		private Warn(String msg)		
-		{		
-			message = msg;
-		}
-
-		@Override
-		public String getMessage() {			
-			return message;		
-		}		
+	private String message;
+	private Warn()
+	{
+		message = this.name();
 	}
+	private Warn(String msg)		
+	{		
+		message = msg;
+	}
+
+	@Override
+	public String getMessage() {			
+		return message;		
+	}		
+}

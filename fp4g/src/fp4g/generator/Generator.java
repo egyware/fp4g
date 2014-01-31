@@ -22,6 +22,7 @@ import fp4g.data.libs.LibContainer;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.exceptions.GeneratorException;
+import fp4g.log.Log;
 import fp4g.parser.FP4GLexer;
 import fp4g.parser.FP4GLibVisitor;
 import fp4g.parser.FP4GParser;
@@ -62,7 +63,7 @@ public abstract class Generator {
 		}
 		catch(GeneratorException ge)
 		{
-			//TODO URGENTE Loggear ERROR
+			Log.Exception(ge, 0);
 			return;
 		}
 		System.out.println("Done!");
@@ -75,7 +76,7 @@ public abstract class Generator {
 		}
 		catch(GeneratorException ge)
 		{
-			//TODO URGENTE Loggear ERROR
+			Log.Exception(ge, 0);
 			return;
 		}
 

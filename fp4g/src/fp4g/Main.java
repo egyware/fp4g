@@ -10,8 +10,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import fp4g.data.define.Game;
 import fp4g.data.libs.LibContainer;
+import fp4g.exceptions.FP4GException;
+import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.generator.Generator;
 import fp4g.generator.gdx.JavaGenerator;
+import fp4g.log.Log;
+import fp4g.log.info.GeneratorError;
 import fp4g.parser.FP4GDataVisitor;
 import fp4g.parser.FP4GLexer;
 import fp4g.parser.FP4GParser;
@@ -33,13 +37,16 @@ public class Main
 			public void uncaughtException(Thread t, Throwable e) 
 			{
 				e.printStackTrace(System.err);
-				//Log.Show(Error.UncaughtException);
-				//TODO URGENTE, LOGEAR ESTE ERROR CAPTURADO!!!
-				System.exit(1);
-//				System.err.println(String.format("%s %s",e.getClass().getSimpleName(),e.getMessage()));
-//				System.err.println(e.getStackTrace()[0]);
-//				System.err.println(e.getStackTrace()[1]);
-//				System.err.println(e.getStackTrace()[2]);
+				if(e instanceof FP4GRuntimeException)
+				{
+					Log.Exception((FP4GRuntimeException)e, -1);					
+					System.exit(1);
+				}else
+				if(e instanceof FP4GException)
+				{
+					Log.Exception((FP4GRuntimeException)e, -1);
+					System.exit(1);
+				}
 			}
 		});
 		
@@ -86,16 +93,12 @@ public class Main
 			else
 			{
 				System.out.println(String.format("Parsing incomplete: %s",inputFile));
-			}			
-			
-	        
-			
-		} catch (IOException e) {
-			//TODO personalizar error
-			e.printStackTrace();
+			}		
+		} 
+		catch (IOException e) 
+		{
+			throw new FP4GRuntimeException(GeneratorError.CannotParseFile,"No se pudo leer: ".concat(inputFile),e);
 		}
-		    	
-
 	}
 	private static String help[] = {
 		"*** Modo de uso ***",

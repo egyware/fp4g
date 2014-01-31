@@ -34,8 +34,10 @@ import fp4g.data.libs.Lib;
 import fp4g.data.statements.Destroy;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
+import fp4g.exceptions.FP4GException;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.log.Log;
+import fp4g.log.info.GeneratorError;
 import fp4g.log.info.NotAllowed;
 import fp4g.log.info.Warn;
 import fp4g.log.info.Error;
@@ -96,7 +98,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 			break;
 		case GAME:			
 		default:			
-			//TODO error :/ estado ilegal					
+			throw new FP4GRuntimeException(GeneratorError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");				
 		}
 		return null;		
 	}
@@ -147,7 +149,15 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 			List<List<String>> filtros = ctx.filters.or;
 			for(List<String> filtro:filtros)
 			{
-				source.addFilter(filtro);
+				try
+				{
+					source.addFilter(filtro);
+				}
+				catch(FP4GException e)
+				{
+					//Error, acá tratamos de ahcer el mejor esfuerzo posible.
+					Log.Exception(e,ctx.start.getLine());
+				}
 			}
 		}
 		return null;		
@@ -241,7 +251,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		  		define = new Asset(type,parent);
 		  		break;
 		  	default:
-		  		throw new FP4GRuntimeException(Error.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");
+		  		throw new FP4GRuntimeException(GeneratorError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");
 		 }
 		define.setLine(define_ctx.getStart().getLine());
 		parent.setDefine(define);
@@ -276,7 +286,6 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		{			
 			add = new Add(ctx.type,ctx.addName,ctx.varName);
 			add.setLine(ctx.start.getLine());
-			//TODO no se encontró un Define lanzar warning
 			Log.Exception(e, ctx.start.getLine());			
 		}
 		

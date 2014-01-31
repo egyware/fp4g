@@ -31,7 +31,6 @@ UncaughtException,
 ManagerIsNotAReceiver,
 DefineNotFound, 
 UnformatedFilter,
-IllegalState,
 ;
 
 	private final String message;

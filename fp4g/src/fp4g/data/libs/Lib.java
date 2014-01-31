@@ -13,9 +13,11 @@ import fp4g.data.ILib;
 import fp4g.data.IValue;
 import fp4g.data.Namespace;
 import fp4g.data.On;
+import fp4g.data.define.NotAllowedException;
 import fp4g.data.expresion.BinaryOp;
 import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.NotAllowedOperatorException;
+import fp4g.log.info.NotAllowed;
 
 /**
  * Esta clase nos permite integrar las bibliotecas sin tener que "modificar tanto" codigo. (Mentira, ok no solo muchas refractorizaciones) 
@@ -156,7 +158,7 @@ public class Lib extends Code implements fp4g.data.expresion.Map,ILib,IDefine
 	@Override
 	public void setOn(On on) 
 	{
-		// TODO Auto-generated method stub		
+		throw new NotAllowedException(NotAllowed.NotExpectedOn, on, "No se esperaba una instrucción ON en Lib");		
 	}
 
 	@Override
@@ -186,7 +188,7 @@ public class Lib extends Code implements fp4g.data.expresion.Map,ILib,IDefine
 	@Override
 	public void setAdd(Add add) 
 	{
-		// TODO Auto-generated method stub		
+		throw new NotAllowedException(NotAllowed.NotExpectedAdd, add, "No se esperaba una instrución Add en Lib");		
 	}
 
 	@Override
@@ -195,18 +197,6 @@ public class Lib extends Code implements fp4g.data.expresion.Map,ILib,IDefine
 		return this;
 	}
 
-//	public final <T extends IDefine> T getDefine(String defineName) throws DefineNotFoundException 
-//	{
-//		for(DefineType type :DefineType.values())
-//		{
-//			T define = findDefine(type,defineName);
-//			if(define != null) return define;
-//								
-//		}
-//		throw new DefineNotFoundException(defineName);		
-//	}	
-		
-	
 	public IValue<?> sum(IValue<?> right)
 	throws NotAllowedOperatorException
 	{

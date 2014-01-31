@@ -5,7 +5,10 @@ import fp4g.log.ErrorType;
 public enum GeneratorError implements ErrorType 
 {
 	CriticalErrorGeneratorNotFound,		
-	CompilerNotFound, ExpresionGeneratorError,
+	CompilerNotFound,
+	ExpresionGeneratorError,
+	CannotParseFile,
+	IllegalState,
 	;
 	private final String message;
 	private GeneratorError()

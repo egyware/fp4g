@@ -1,14 +1,13 @@
 package fp4g.log.info;
 
-import fp4g.log.ErrorType;
+import fp4g.log.WarnType;
 
-
-//TODO hacer que pertenesca a WarnType
-public enum NotAllowed implements ErrorType 
+public enum NotAllowed implements WarnType 
 {
 	NotExpectedDefine,
 	NotExpectedOn, 
-	NotExpectedAdd, NotImplementedYet,;
+	NotExpectedAdd,
+	NotImplementedYet,;
 	
 	private final String message;
 	private NotAllowed()

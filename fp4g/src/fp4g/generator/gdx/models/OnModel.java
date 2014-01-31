@@ -17,7 +17,7 @@ import fp4g.data.expresion.ClassMap;
 import fp4g.data.statements.Destroy;
 import fp4g.data.statements.Send;
 import fp4g.exceptions.DependResolverNotFoundException;
-import fp4g.exceptions.GeneratorException;
+import fp4g.exceptions.CannotEvalException;
 import fp4g.generator.Depend;
 import fp4g.generator.Model;
 import fp4g.generator.gdx.JavaGenerator;
@@ -101,7 +101,7 @@ public class OnModel implements Model
 								}						
 							}
 						}
-						catch(GeneratorException gex)
+						catch(CannotEvalException gex)
 						{
 							//TODO error mal escrito, deberia haber cada uno de sus hijos de la excepcion y por cada uno un mensaje personalizado 
 							Log.Show(Warn.CannotEvalExpr,gex.getMessage());
