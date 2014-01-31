@@ -5,18 +5,18 @@ import fp4g.log.IMessageType;
 
 
 
-public class FP4GRuntimeException extends RuntimeException 
+public class FP4GException extends Exception 
 {
 	private static final long serialVersionUID = 1L;
 	private final IMessageType type;	
 	private final String reason;
-	public FP4GRuntimeException(IMessageType type, String reason)
+	public FP4GException(IMessageType type, String reason)
 	{	
 		super(type.getMessage());
 		this.type = type;		
 		this.reason = reason;
 	}	
-	public FP4GRuntimeException(IMessageType type, String reason,Throwable parent)
+	public FP4GException(IMessageType type, String reason,Throwable parent)
 	{
 		super(type.getMessage(),parent);
 		this.type = type;

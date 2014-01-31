@@ -2,8 +2,7 @@
 
 package fp4g.parser;
 
-import static fp4g.Log.*;
-
+import static fp4g.log.Log.*;
 import fp4g.data.*;
 import fp4g.data.statements.*;
 import fp4g.data.define.*;
@@ -12,11 +11,13 @@ import fp4g.data.vartypes.*;
 import java.util.LinkedList;
 
 
+
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
+
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;

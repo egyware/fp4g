@@ -2,19 +2,17 @@
  * 
  */
 package fp4g.data;
-import static fp4g.Log.Show;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fp4g.Log;
-import fp4g.Log.ErrType;
-import fp4g.Log.WarnType;
 import fp4g.classes.MessageMethod;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.ClassMap;
+import fp4g.exceptions.FP4GException;
+import fp4g.log.info.Error;
 
 /**
  * @author egyware
@@ -62,7 +60,8 @@ public class On extends Code
 		}
 		
 		@SuppressWarnings("unchecked")
-		public void addFilter(List<String> listFilter)
+		public void addFilter(List<String> listFilter) 
+		throws FP4GException
 		{
 			//chequeamos que todos los filtros existan y que estï¿½n definidos
 			Filter filter = new Filter(listFilter.size());			
@@ -83,8 +82,7 @@ public class On extends Code
 				}				
 				else
 				{
-					Show(WarnType.UnformatedFilter,elementFilter);
-					methodName = elementFilter.toLowerCase();
+					throw new FP4GException(Error.UnformatedFilter, elementFilter);					
 				}
 				
 				ClassMap<MessageMethod> cm = (ClassMap<MessageMethod>) message.get(methodName);
@@ -96,7 +94,7 @@ public class On extends Code
 				}
 				else
 				{
-					Log.Show(ErrorType.FilterMethodMissing);					
+					throw new FP4GException(Error.FilterMethodMissing, String.format("No se encontró un metodo del mensaje \"%s\" para el filtro", methodName));					
 				}
 			}
 			filters.add(filter);

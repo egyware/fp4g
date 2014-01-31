@@ -10,10 +10,10 @@ import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
-import fp4g.exceptions.FunctionGeneratorException;
-import fp4g.exceptions.GeneratorException;
+import fp4g.exceptions.CannotEvalException;
 import fp4g.generator.FunctionGenerator;
 import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.log.info.CannotEval;
 
 /**
  * @author Edgardo
@@ -38,25 +38,25 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	
 	private abstract class Function
 	{
-		public abstract Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException;
+		public abstract Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException;
 	}
 		
 	@Override
-	public Expresion generate(JavaCodeModel model,FunctionCall fc) throws GeneratorException
+	public Expresion generate(JavaCodeModel model,FunctionCall fc) throws CannotEvalException
 	{
 		Function fg = functions.get(fc.functionName);
 		if(fg != null)
 		{
 			return fg.generate(model,fc.params);
 		}
-		throw new FunctionGeneratorException(fc.functionName);
+		throw new CannotEvalException(CannotEval.FunctionNotFound,fc, String.format("La función \"%s\", no se ha encontrado.",fc.functionName));
 	}
 	
 	
 	private class GetSprite extends Function
 	{
 		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException
+		public Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException
 		{
 			String resourceName = generator.expresion(model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));			
@@ -67,7 +67,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	private class GetSound extends Function
 	{
 		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException
+		public Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException
 		{
 			String resourceName = generator.expresion(model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
@@ -79,7 +79,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	{
 
 		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException
+		public Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException
 		{
 			String resourceName = generator.expresion(model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
@@ -90,7 +90,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	private class GetMusic extends Function
 	{
 		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException
+		public Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException
 		{			
 			String resourceName = generator.expresion(model,list.get(0));
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));			
@@ -103,7 +103,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	{
 
 		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException
+		public Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException
 		{
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
 			Expresion width  = list.get(0);			
@@ -116,7 +116,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	{
 
 		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list) throws GeneratorException
+		public Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException
 		{
 			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
 			Expresion ratio = list.get(0);			

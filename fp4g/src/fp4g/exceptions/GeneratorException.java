@@ -1,11 +1,13 @@
 package fp4g.exceptions;
 
-public class GeneratorException extends Exception 
+import fp4g.log.info.GeneratorError;
+
+public class GeneratorException extends FP4GException 
 {
 	private static final long serialVersionUID = 1L;
-	public GeneratorException(String message)
+	public GeneratorException(GeneratorError error,String message)
 	{
-		super(message);
+		super(error,message);
 	}
 
 }

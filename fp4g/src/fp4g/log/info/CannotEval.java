@@ -1,10 +1,14 @@
-package fp4g;
+package fp4g.log.info;
 
 public enum CannotEval implements ErrorType
 {
 	CannotEvalExpresion,
 	VarNameNotFound,
-	NotAllowedOperation;
+	NotAllowedOperation, 
+	IncomplatibleTypes, 
+	IsNotAValidExpresion,
+	ExpresionGeneratorNotFound,
+	FunctionNotFound;
 	
 	
 	private final String message;

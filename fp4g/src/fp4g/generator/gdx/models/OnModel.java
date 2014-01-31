@@ -5,8 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import fp4g.Log;
-import fp4g.Log.WarnType;
 import fp4g.classes.MessageMethod;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
@@ -23,6 +21,8 @@ import fp4g.exceptions.GeneratorException;
 import fp4g.generator.Depend;
 import fp4g.generator.Model;
 import fp4g.generator.gdx.JavaGenerator;
+import fp4g.log.Log;
+import fp4g.log.info.Warn;
 
 public class OnModel implements Model
 {
@@ -104,7 +104,7 @@ public class OnModel implements Model
 						catch(GeneratorException gex)
 						{
 							//TODO error mal escrito, deberia haber cada uno de sus hijos de la excepcion y por cada uno un mensaje personalizado 
-							Log.Show(WarnType.CannotEvalExpr,gex.getMessage());
+							Log.Show(Warn.CannotEvalExpr,gex.getMessage());
 						}
 						statements.add(sendModel);
 						Message msg = send.method.getMessage();					
@@ -112,7 +112,7 @@ public class OnModel implements Model
 							Depend depend = generator.resolveDependency(msg);
 							depend.perform(msg, model);
 						} catch (DependResolverNotFoundException e) {
-							Log.Show(WarnType.DependResolverNotFound,msg);
+							Log.Show(Warn.DependResolverNotFound,msg);
 							e.printStackTrace();
 						}				
 					}

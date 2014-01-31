@@ -8,8 +8,6 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import fp4g.CannotEval;
-import fp4g.Error;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
@@ -33,6 +31,9 @@ import fp4g.data.expresion.literals.IntegerLiteral;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.FP4GRuntimeException;
+import fp4g.log.info.CannotEval;
+import fp4g.log.info.Error;
+import fp4g.log.info.Warn;
 import fp4g.parser.FP4GParser.ArrayBodyContext;
 
 /**
@@ -364,7 +365,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 			}
 			catch(CannotEvalException cee)
 			{
-				Log.Show(WarnType.CannotEvalExpr,ctx.start.getLine());
+				Log.Show(Warn.CannotEvalExpr,ctx.start.getLine());
 			}
 		}		
 		return null;		

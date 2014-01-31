@@ -3,7 +3,6 @@
  */
 package fp4g.parser;
 
-import static fp4g.Log.Show;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,9 +10,6 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import fp4g.Log;
-import fp4g.Log.ErrType;
-import fp4g.Log.WarnType;
 import fp4g.classes.MessageMethod;
 import fp4g.classes.MessageMethods;
 import fp4g.data.Add;
@@ -37,12 +33,17 @@ import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Manager;
 import fp4g.data.define.Message;
+import fp4g.data.define.NotAllowedException;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.data.statements.Destroy;
 import fp4g.data.statements.Send;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
+import fp4g.exceptions.FP4GRuntimeException;
+import fp4g.log.info.NotAllowed;
+import fp4g.log.info.Warn;
+import fp4g.log.info.Error;
 
 
 /**
@@ -122,7 +123,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			} 
 			catch (DefineNotFoundException e) 
 			{				
-				Show(WarnType.MissingAdd,ctx.start.getLine());
+				//TODO URGENTE ERROR CAPTURADO
 				//creo un elemento temporal para solucionar el state faltante, sin embargo no se generará
 				state = new GameState(ctx.state,define);
 				state.setBuild(false);
@@ -156,7 +157,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			catch (DefineNotFoundException e) 
 			{
 				//Muestra un error, pero sigue funcionando...
-				Log.Show(ErrorType.MessageExpected,ctx.start.getLine(),ctx.messageName);
+				//TODO URGENTE ERROR CAPTURADO
 				on = new On(ctx.messageName);
 			}
 			
@@ -216,8 +217,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		MessageMethod method = methods.getMessageMethod(ctx.messageMethodName);
 		if(method == null)
 		{
-			Log.Show(ErrorType.MessageMethodNotFound,ctx.start.getLine());
-			//TODO ?
+			//TODO URGENTE ERROR CAPTURADO
+			
 		}
 		Send.SendTo type = null;
 		String receiver = null;
@@ -267,7 +268,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 					else
 					{
 						//lanzar error
-						Log.Show(ErrorType.ManagerIsNotAReceiver,ctx.start.getLine(),receiver);	
+						Log.Show(Error.ManagerIsNotAReceiver,ctx.start.getLine(),receiver);	
 						throw new StatementRuntimeException(); 
 					}
 					break;
@@ -300,7 +301,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		try {
 			define.set(ctx.key, eval(define,expr));
 		} catch (CannotEvalException e) {			
-			Log.Show(WarnType.CannotEvalExpr,ctx.getStart().getLine(),expr.toString());
+			Log.Show(Warn.CannotEvalExpr,ctx.getStart().getLine(),expr.toString());
 		}
 		return null;
 	}
@@ -345,19 +346,16 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 				define = new Entity(defName,parent);
 			break;
 			case MANAGER:
-				//TODO: No implementado aï¿½n
-				Show(ErrorType.NotImplement);
-				throw new RuntimeException("No implementado");
+				//TODO: No implementado aún
+				throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
 				//break;		  		
 		  	case BEHAVIOR:
 		  		//TODO: No implementado aï¿½n
-		  		Show(ErrorType.NotImplement);
-				throw new RuntimeException("No implementado");
+				throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
 		  		//break;		  		
 		  	case GOAL:
 		  		//TODO: No implementado aún
-		  		Show(ErrorType.NotImplement);
-				throw new RuntimeException("No implementado");
+				throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
 		  		//break;
 		  	case MESSAGE:
 		  		define = new Message(defName,parent);		  		
@@ -367,8 +365,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		  		define = new Asset(type,parent);
 		  		break;
 		  	default:
-		  		Show(ErrorType.UnknowError);		  		
-		  	break;
+		  		throw new FP4GRuntimeException(Error.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");
 		 }
 		define.setLine(define_ctx.getStart().getLine());
 		parent.setDefine(define);
@@ -404,7 +401,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			add = new Add(ctx.type,ctx.addName,ctx.varName);
 			add.setLine(ctx.start.getLine());
 			//TODO no se encontró un Define lanzar warning
-			Show(WarnType.MissingDefineAdd,add);			
+			Show(Warn.MissingDefineAdd,add);			
 		}
 		
 		ExprList list = exprVisitor.getExprList(ctx.exprList());
@@ -441,7 +438,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			}
 			catch (CannotEvalException e) 
 			{
-				Show(WarnType.CannotEvalExpr,ctx.initValue.start.getLine());				
+				Show(Warn.CannotEvalExpr,ctx.initValue.start.getLine());				
 			}
 		}
 		else
@@ -502,7 +499,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			catch (DefineNotFoundException e)
 			{
 				assetAdd = new Add(DefineType.ASSET,assetType.name());
-				Log.Show(WarnType.MissingDefineAdd);
+				Log.Show(Warn.MissingDefineAdd);
 			}
 		}
 		else
@@ -515,7 +512,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			catch (DefineNotFoundException e)
 			{
 				assetAdd = new Add(DefineType.ASSET,assetType.name(),varName);
-				Log.Show(WarnType.MissingDefineAdd);
+				//TODO URGENTE ERROR CAPTURADO
 			}
 			
 		}

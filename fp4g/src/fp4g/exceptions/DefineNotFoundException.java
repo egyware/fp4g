@@ -3,8 +3,8 @@
  */
 package fp4g.exceptions;
 
-import fp4g.Error;
 import fp4g.data.DefineType;
+import fp4g.log.info.Error;
 
 /**
  * @author Edgardo

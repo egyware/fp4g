@@ -1,4 +1,7 @@
-package fp4g;
+package fp4g.log.info;
+
+import fp4g.log.IMessageType;
+
 public enum InfoType implements IMessageType
 	{	
 		//NoValidTestType("NO VALIDO!")

@@ -16,7 +16,7 @@ import fp4g.data.On;
 import fp4g.data.define.Entity;
 import fp4g.data.vartypes.BasicType;
 import fp4g.data.vartypes.CustomType;
-import fp4g.exceptions.UnknowException;
+import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
@@ -24,6 +24,7 @@ import fp4g.generator.gdx.models.JavaCodeModel;
 import fp4g.generator.gdx.models.OnModel;
 import fp4g.generator.gdx.models.OnModel.MethodHandlerModel;
 import fp4g.generator.gdx.models.ParamCodeModel;
+import fp4g.log.info.Error;
 import freemarker.template.Template;
 
 public class EntityGenerator extends CodeGenerator<JavaGenerator> {
@@ -86,7 +87,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 						name = "Name";
 						break;
 					default:
-						throw new UnknowException("Estado no valido del generador");
+						throw new FP4GRuntimeException(Error.IllegalState,"Estado no valido del generador");
 					}
 				}
 				else

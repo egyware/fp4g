@@ -1,18 +1,18 @@
 package fp4g.exceptions;
 
-import fp4g.Log.WarnType;
+import fp4g.log.info.Warn;
 
-public class DependResolverNotFoundException extends FP4GRuntimeException 
+public class DependResolverNotFoundException extends FP4GException 
 {
 
-	public DependResolverNotFoundException(int line, String reason) 
+	public DependResolverNotFoundException(String reason) 
 	{
-		super(WarnType.DependResolverNotFound, line, reason);		
+		super(Warn.DependResolverNotFound, reason);		
 	}
 	
-	public DependResolverNotFoundException(int line, String reason, Throwable parent) 
+	public DependResolverNotFoundException(String reason, Throwable parent) 
 	{
-		super(WarnType.DependResolverNotFound, line, reason, parent);
+		super(Warn.DependResolverNotFound, reason, parent);
 		
 	}
 

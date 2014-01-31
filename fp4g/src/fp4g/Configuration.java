@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import fp4g.exceptions.FP4GRuntimeException;
+import fp4g.log.info.Error;
+import fp4g.log.info.Warn;
 
 public final class Configuration implements Runnable
 {
@@ -73,7 +75,7 @@ public final class Configuration implements Runnable
 		}
 		catch (IOException e) 
 		{
-			throw new FP4GRuntimeException(WarnType.PropertiesCantSave,e.getMessage(),e);
+			throw new FP4GRuntimeException(Warn.PropertiesCantSave,e.getMessage(),e);
 		}		
 	}
 

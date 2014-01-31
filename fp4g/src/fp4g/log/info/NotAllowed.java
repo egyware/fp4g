@@ -1,4 +1,4 @@
-package fp4g;
+package fp4g.log.info;
 
 
 //TODO hacer que pertenesca a WarnType

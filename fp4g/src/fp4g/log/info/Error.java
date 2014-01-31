@@ -1,4 +1,4 @@
-package fp4g;
+package fp4g.log.info;
 
 public enum Error implements ErrorType 
 {
@@ -19,17 +19,17 @@ UnknowError,
 FilterMethodMissing,
 YouCanUseOnceTimeAssets,
 MissingError("Falta un error descriptivo o no corresponde un error grave"), 
-ClassNotFound, 
-ExpresionGeneratorNotFound, 
+ClassNotFound,
+
 MessageNotFound,
 MessageMethodNotFound,
-CriticalErrorGeneratorNotFound,		
 UnExpectedParams,
-CompilerNotFound,
 PropertiesCantLoad,
 UncaughtException,
 ManagerIsNotAReceiver,
-DefineNotFound,
+DefineNotFound, 
+UnformatedFilter,
+IllegalState,
 ;
 
 	private final String message;

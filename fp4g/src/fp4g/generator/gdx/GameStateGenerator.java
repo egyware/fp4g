@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import fp4g.Log;
-import fp4g.Log.WarnType;
 import fp4g.classes.ManagerData;
 import fp4g.data.Add;
 import fp4g.data.DefineType;
@@ -265,7 +263,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			}
 			catch(DependResolverNotFoundException ex)
 			{
-				Log.Show(WarnType.DependResolverNotFound,define.name);				
+				//TODO URGENTE ERROR CAPTURADO
 			}
 									
 		}
@@ -279,7 +277,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		}
 		catch(DependResolverNotFoundException drnfe)
 		{
-			Log.Show(WarnType.DependResolverNotFound,state);
+			//TODO URGENTE ERROR CAPTURADO
 		}
 		
 		for(Add manager:state.getAdd(DefineType.MANAGER))
@@ -293,16 +291,16 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				}
 				catch(DependResolverNotFoundException drnfe)
 				{
-					Log.Show(WarnType.DependResolverNotFound,manager.define);
-					
+					//TODO ERROR CAPTURADO
+					//Log.Show(Warn.DependResolverNotFound,manager,manager.name);
 					code.imports.add(String.format("com.apollo.managers.%sManager", manager.name));
 
 				}
 			}
 			else
 			{
-				Log.Show(WarnType.DependResolverNotFound,manager,manager.name);
-				Log.Show(WarnType.MissingDefineAdd,manager,manager.name);
+				//TODO ERROR CAPTURADO				
+				//Log.Show(Warn.MissingDefineAdd,manager,manager.name);
 				
 				code.imports.add(String.format("com.apollo.managers.%sManager", manager.name));
 			}

@@ -2,7 +2,7 @@ package fp4g.generator;
 
 import fp4g.data.Expresion;
 import fp4g.data.IValue;
-import fp4g.exceptions.GeneratorException;
+import fp4g.exceptions.CannotEvalException;
 
 /**
  * @author Edgardo
@@ -34,7 +34,7 @@ public abstract class ExpresionGenerator <T extends Generator,M extends Model> {
 	}
 	
 	
-	public abstract String generate(M model,IValue<?> expr) throws GeneratorException;
-	public abstract String generate(M model,Expresion expr) throws GeneratorException;
+	public abstract String generate(M model,IValue<?> expr) throws CannotEvalException;
+	public abstract String generate(M model,Expresion expr) throws CannotEvalException;
 
 }

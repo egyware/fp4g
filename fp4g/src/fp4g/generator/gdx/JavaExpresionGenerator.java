@@ -16,10 +16,10 @@ import fp4g.data.expresion.literals.FloatLiteral;
 import fp4g.data.expresion.literals.IntegerLiteral;
 import fp4g.data.expresion.literals.ObjectLiteral;
 import fp4g.data.expresion.literals.StringLiteral;
-import fp4g.exceptions.ExpresionGeneratorException;
-import fp4g.exceptions.GeneratorException;
+import fp4g.exceptions.CannotEvalException;
 import fp4g.generator.ExpresionGenerator;
 import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.log.info.CannotEval;
 
 /**
  * @author Edgardo
@@ -48,11 +48,11 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	
 	private abstract class EG_Expresion
 	{		
-		public abstract String expr2string(JavaCodeModel model,Expresion expr) throws GeneratorException;
+		public abstract String expr2string(JavaCodeModel model,Expresion expr) throws CannotEvalException;
 	}
 	
 	@Override
-	public String generate(JavaCodeModel model, IValue<?> value) throws GeneratorException 
+	public String generate(JavaCodeModel model, IValue<?> value) throws CannotEvalException 
 	{
 		//TODO generalmente estos se les evalua y solo contiene el valor.
 		//TODO esto es raro, ni yo lo entiendo.
@@ -72,13 +72,12 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 				}			
 			}
 		}		
-		throw new ExpresionGeneratorException(value.getClass().getSimpleName());
+		throw new CannotEvalException(CannotEval.IsNotAValidExpresion, value,"No se puede evualuar: ".concat(value.getClass().getSimpleName()));
 	}
 	
 	@Override
-	public String generate(JavaCodeModel model, Expresion expr) throws GeneratorException 
+	public String generate(JavaCodeModel model, Expresion expr) throws CannotEvalException
 	{		
-		
 		EG_Expresion eg = expresions.get(expr.getClass());		
 		if(eg != null)
 		{
@@ -92,7 +91,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 			}			
 			 
 		}
-		throw new ExpresionGeneratorException(expr.getClass().getSimpleName());		
+		throw new CannotEvalException(CannotEval.ExpresionGeneratorNotFound, expr,"No se puede evualuar: ".concat(expr.getClass().getSimpleName()));
 	}
 	
 	private class VarExprGen extends EG_Expresion
@@ -124,7 +123,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	private class FunctionCallExprGen extends EG_Expresion
 	{
 		@Override
-		public String expr2string(JavaCodeModel model, Expresion expr) throws GeneratorException 
+		public String expr2string(JavaCodeModel model, Expresion expr) throws CannotEvalException 
 		{			
 			Expresion resultExpr = generator.function(model,(FunctionCall)expr);
 			return generate(model,resultExpr);			
@@ -143,7 +142,8 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	private class UnaryExprGen extends EG_Expresion
 	{
 		@Override
-		public String expr2string(JavaCodeModel model,Expresion expr) throws GeneratorException {
+		public String expr2string(JavaCodeModel model,Expresion expr) throws CannotEvalException
+		{
 			UnaryOp un = (UnaryOp)expr;
 			StringBuilder builder = new StringBuilder();
 			switch(un.type)
@@ -165,7 +165,8 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	private class BinaryExprGen extends EG_Expresion
 	{
 		@Override
-		public String expr2string(JavaCodeModel model,Expresion expr) throws GeneratorException {
+		public String expr2string(JavaCodeModel model,Expresion expr) throws CannotEvalException
+		{
 			BinaryOp bin = (BinaryOp)expr;
 			StringBuilder builder = new StringBuilder();
 			builder.append(generate(model, bin.left));

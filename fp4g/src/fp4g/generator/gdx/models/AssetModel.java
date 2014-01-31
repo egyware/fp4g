@@ -2,10 +2,9 @@ package fp4g.generator.gdx.models;
 
 import java.util.List;
 
-import fp4g.Log;
-import fp4g.Log.ErrType;
 import fp4g.data.IValue;
 import fp4g.data.define.Asset;
+import fp4g.log.Log;
 
 public class AssetModel
 {	

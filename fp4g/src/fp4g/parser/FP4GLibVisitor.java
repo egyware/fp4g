@@ -3,16 +3,11 @@
  */
 package fp4g.parser;
 
-import static fp4g.Log.Show;
-
 import java.util.List;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import fp4g.Log;
-import fp4g.Log.ErrType;
-import fp4g.Log.WarnType;
 import fp4g.data.Add;
 import fp4g.data.Code;
 import fp4g.data.Define;
@@ -38,6 +33,9 @@ import fp4g.data.libs.Lib;
 import fp4g.data.statements.Destroy;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
+import fp4g.log.Log;
+import fp4g.log.info.Warn;
+import fp4g.log.info.Error;
 
 
 /**
@@ -127,7 +125,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 			catch (DefineNotFoundException e) 
 			{
 				//Muestra un error, pero sigue funcionando...
-				Log.Show(ErrorType.MessageExpected,ctx.start.getLine(),ctx.messageName);
+				Log.Show(Error.MessageExpected,ctx.start.getLine(),ctx.messageName);
 				on = new On(ctx.messageName);
 			}
 			
@@ -187,7 +185,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		try {
 			define.set(ctx.key, eval(define,expr));
 		} catch (CannotEvalException e) {			
-			Log.Show(WarnType.CannotEvalExpr,ctx.getStart().getLine(),expr.toString());
+			Log.Show(Warn.CannotEvalExpr,ctx.getStart().getLine(),expr.toString());
 		}
 		return null;
 	}
@@ -230,7 +228,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		  		break;		  		
 		  	case GOAL:
 		  		//TODO: No implementado aún
-		  		Show(ErrorType.NotImplement);
+		  		Show(Error.NotImplement);
 				throw new RuntimeException("No implementado");
 		  		//break;
 		  	case MESSAGE:
@@ -241,7 +239,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		  		define = new Asset(type,parent);
 		  		break;
 		  	default:
-		  		Show(ErrorType.UnknowError);		  		
+		  		Show(Error.UnknowError);		  		
 		  	break;
 		 }
 		define.setLine(define_ctx.getStart().getLine());
@@ -278,7 +276,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 			add = new Add(ctx.type,ctx.addName,ctx.varName);
 			add.setLine(ctx.start.getLine());
 			//TODO no se encontró un Define lanzar warning
-			Show(WarnType.MissingDefineAdd,add);			
+			Show(Warn.MissingDefineAdd,add);			
 		}
 		
 		ExprList list = exprVisitor.getExprList(ctx.exprList());
@@ -315,7 +313,7 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 			}
 			catch (CannotEvalException e) 
 			{
-				Show(WarnType.CannotEvalExpr,ctx.initValue.start.getLine());				
+				Show(Warn.CannotEvalExpr,ctx.initValue.start.getLine());				
 			}
 		}
 		else

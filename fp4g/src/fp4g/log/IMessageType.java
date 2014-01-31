@@ -1,4 +1,4 @@
-package fp4g;
+package fp4g.log;
 
 /**
  * Interface común para los tipos de mensajes de error.

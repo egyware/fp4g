@@ -1,8 +1,8 @@
 package fp4g.data.define;
 
-import fp4g.NotAllowed;
 import fp4g.data.ICode;
 import fp4g.exceptions.FP4GRuntimeException;
+import fp4g.log.info.NotAllowed;
 
 public class NotAllowedException extends FP4GRuntimeException 
 {

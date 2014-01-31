@@ -1,11 +1,10 @@
 package fp4g.data.expresion;
 
-import fp4g.Log;
-import fp4g.Log.ErrType;
 import fp4g.data.Expresion;
-import fp4g.data.IDefine;
 import fp4g.data.IValue;
 import fp4g.exceptions.CannotEvalException;
+import fp4g.exceptions.NotAllowedOperatorException;
+import fp4g.log.info.CannotEval;
 
 /*
  * Una expresión que indica que se ha usado una variable.
@@ -24,27 +23,32 @@ public class VarId extends Expresion
 	@Override
 	public IValue<?> eval(IValue<?> container) throws CannotEvalException 
 	{
-		if(parent == this)
+		try
 		{
-			if(container.getParent() == null)
+			if(parent == this)
 			{
-				//TODO Log.Show(ErrType.VarNameNotFound,define,varName);
-				Log.Show(ErrorType.VarNameNotFound,varName);
-			}
-			return container.getParent();	
-		}else
-		if(current == this)
-		{
-			return container;
-		}else
-		{
-			IValue<?> value = container.get(varName);
-			if(value == null)
+				if(container.getParent() == null)
+				{
+					throw new CannotEvalException(CannotEval.VarNameNotFound,this,String.format("No se puede acceder al contenedor superior de la variable \"%s\"",varName));
+				}
+				return container.getParent();	
+			}else
+			if(current == this)
 			{
-				//TODO Log.Show(ErrType.VarNameNotFound,define,varName);
-				Log.Show(ErrorType.VarNameNotFound,varName);
+				return container;
+			}else
+			{
+				IValue<?> value = container.get(varName);
+				if(value == null)
+				{
+					throw new CannotEvalException(CannotEval.VarNameNotFound,this,String.format("No se encontró la variable \"%s\"",varName));
+				}
+				return value;
 			}
-			return value;
+		}
+		catch(NotAllowedOperatorException e)
+		{
+			throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Uno de los operandos de la expresión, no permite cierta operación",e);
 		}
 	}
 }

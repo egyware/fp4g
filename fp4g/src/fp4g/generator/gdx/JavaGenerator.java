@@ -23,8 +23,6 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 import fp4g.IO;
-import fp4g.Log;
-import fp4g.Log.ErrType;
 import fp4g.Options;
 import fp4g.classes.DependResolvers;
 import fp4g.data.Code;
@@ -41,12 +39,14 @@ import fp4g.data.define.Message;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.data.libs.LibContainer;
+import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.exceptions.GeneratorException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
 import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.log.info.GeneratorError;
 import freemarker.template.Configuration;
 
 public class JavaGenerator extends Generator 
@@ -153,7 +153,7 @@ public class JavaGenerator extends Generator
 	}
 
 	@Override
-	protected void generateCode(ICode gameData, File path) 
+	protected void generateCode(ICode gameData, File path) throws GeneratorException 
 	{		
 		Class<? extends CodeGenerator<JavaGenerator>> codegen = generators.get(gameData.getClass());
 		
@@ -195,13 +195,13 @@ public class JavaGenerator extends Generator
 		}
 		else
 		{
-			Log.Show(ErrorType.CriticalErrorGeneratorNotFound,gameData);
-			throw new RuntimeException("Epa, generador incorrecto");
+			throw new GeneratorException(GeneratorError.CriticalErrorGeneratorNotFound, String.format("El generador para \"%s\" no se encontró",gameData.getClass().getSimpleName()));			
 		}		
 	}
 	
 	@Override
 	protected void compileFiles(Collection<File> files)
+	throws GeneratorException	
 	{
 		final String path = packageDir.getAbsolutePath();
 		final int start = path.length()-packageNameDir.length();
@@ -221,9 +221,8 @@ public class JavaGenerator extends Generator
 		{
 			javaCompiler = findJDK();
 			if(javaCompiler == null)
-			{
-				Log.Show(ErrorType.CompilerNotFound);
-				return;
+			{	
+				throw new GeneratorException(GeneratorError.CompilerNotFound, "Compilador no encontrado");			
 			}
 
 		}
@@ -386,17 +385,17 @@ public class JavaGenerator extends Generator
 	}
 
 	@Override
-	public <CodeModel> Expresion function(CodeModel model,	FunctionCall fcall) throws GeneratorException
+	public <CodeModel> Expresion function(CodeModel model,	FunctionCall fcall) throws CannotEvalException
 	{		
 		return funcGen.generate((JavaCodeModel)model,fcall);
 	}
 
 	@Override
-	public <CodeModel> String expresion(CodeModel model,Expresion expr) throws GeneratorException
+	public <CodeModel> String expresion(CodeModel model,Expresion expr) throws CannotEvalException
 	{
 		return exprGen.generate((JavaCodeModel) model,expr);
 	}
-	public <CodeModel> String expresion(CodeModel model,IValue<?> expr) throws GeneratorException
+	public <CodeModel> String expresion(CodeModel model,IValue<?> expr) throws CannotEvalException
 	{
 		return exprGen.generate((JavaCodeModel) model,expr);
 	}

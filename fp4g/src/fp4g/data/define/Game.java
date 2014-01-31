@@ -1,6 +1,5 @@
 package fp4g.data.define;
 
-import fp4g.NotAllowed;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
@@ -11,6 +10,7 @@ import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.literals.BoolLiteral;
 import fp4g.data.expresion.literals.IntegerLiteral;
 import fp4g.data.libs.LibContainer;
+import fp4g.log.info.NotAllowed;
 /**
  * Esta clase contendrá todos los datos necesarios para construir un juego
  * @author Edgardo

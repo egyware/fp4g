@@ -19,6 +19,7 @@ import fp4g.data.define.Game;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.data.libs.Lib;
 import fp4g.data.libs.LibContainer;
+import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.exceptions.GeneratorException;
 import fp4g.parser.FP4GLexer;
@@ -32,8 +33,8 @@ import freemarker.template.Version;
 
 public abstract class Generator {	
 	protected abstract void initialize(File path,Options options,Configuration cfg);
-	protected abstract void generateCode(ICode gameData,File path);
-	protected abstract void compileFiles(Collection<File> files); //TODO: compile file add throw some exception
+	protected abstract void generateCode(ICode gameData,File path) throws GeneratorException;
+	protected abstract void compileFiles(Collection<File> files) throws GeneratorException; 
 	protected abstract Collection<File> getRequiredFiles(File path,File file);
 	protected abstract void copyFiles(Collection<File> files);
 	
@@ -55,12 +56,28 @@ public abstract class Generator {
 		
 		System.out.println("Generating...");        	
 		//generar el codigo
-		generateCode(gameData,path);
+		try
+		{
+			generateCode(gameData,path);
+		}
+		catch(GeneratorException ge)
+		{
+			//TODO URGENTE Loggear ERROR
+			return;
+		}
 		System.out.println("Done!");
         
 		System.out.println("Compilig...");
 		//compilar archivos...
-		compileFiles(filesToCompile);		
+		try
+		{
+			compileFiles(filesToCompile);
+		}
+		catch(GeneratorException ge)
+		{
+			//TODO URGENTE Loggear ERROR
+			return;
+		}
 
 		//copy files
 		copyFiles(filesToCopy);
@@ -74,8 +91,8 @@ public abstract class Generator {
 	}
 	
 	
-	public abstract <CodeModel> Expresion function(CodeModel model, FunctionCall fcall) throws  GeneratorException;
-	public abstract <CodeModel> String   expresion(CodeModel model, Expresion expr) throws GeneratorException;
+	public abstract <CodeModel> Expresion function(CodeModel model, FunctionCall fcall) throws CannotEvalException;
+	public abstract <CodeModel> String   expresion(CodeModel model, Expresion expr) throws CannotEvalException;
 	
 	
 	
