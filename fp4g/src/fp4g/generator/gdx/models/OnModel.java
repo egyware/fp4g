@@ -58,7 +58,7 @@ public class OnModel implements Model
 		//tengo que recorrer los sources en busca de los methodHandlers y subirlos acï¿½
 		for(Source source:on.sources)
 		{			
-			SourceModel.findAndInsert(source,methods,generator,model);
+			SourceModel.findAndInsert(on,source,methods,generator,model);
 		}
 		methodHandlers.addAll(methods.values());		
 	}
@@ -70,7 +70,7 @@ public class OnModel implements Model
 		//Una lista de filtros (disyunción)
 		private final List<FilterD> filters;
 				
-		public SourceModel(Source source, JavaGenerator generator,JavaCodeModel model)
+		public SourceModel(On on,Source source, JavaGenerator generator,JavaCodeModel model)
 		{			
 			filters = new LinkedList<FilterD>();
 			if(source.statements != null && source.statements.size() > 0)
@@ -106,13 +106,18 @@ public class OnModel implements Model
 							direct = false;
 							break;
 						case Behavior:
-							//TODO aún no puedo acceder a un nivel superior. No logro saber si estoy si estoy en un ON init/deinit							
-							to = "this.".concat(Utils.decapitalize(send.toReceiverName));
+							if(on.message.isFactory())
+							{
+								to = "entity.".concat(Utils.decapitalize(send.toReceiverName));
+							}
+							else
+							{
+								to = "this.".concat(Utils.decapitalize(send.toReceiverName));
+							}
 							message = String.format("on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
 							direct = true;
 							break;
 						case System:
-							//TODO falta importar dependencia			
 							to = "world.getManager(".concat(send.toReceiverName).concat(".class)");
 							message = String.format("on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
 							direct = true;
@@ -173,7 +178,7 @@ public class OnModel implements Model
 			}
 		}
 		
-		public static void findAndInsert(final Source source,final HashMap<String,MethodHandlerModel> methods, JavaGenerator generator,JavaCodeModel model)
+		public static void findAndInsert(final On on,final Source source,final HashMap<String,MethodHandlerModel> methods, JavaGenerator generator,JavaCodeModel model)
 		{			
 			final HashMap<MethodHandlerModel,SourceModel> sourcesMap = new HashMap<MethodHandlerModel, SourceModel>();
 			
@@ -199,7 +204,7 @@ public class OnModel implements Model
 						SourceModel sm = sourcesMap.get(m);
 						if(sm == null)
 						{
-							sm = new SourceModel(source,generator,model);
+							sm = new SourceModel(on,source,generator,model);
 							sourcesMap.put(m, sm);						
 						}					
 						//ya tengo el metodo manejador, que hago con el?
@@ -221,7 +226,7 @@ public class OnModel implements Model
 				for(Entry<String,MethodHandlerModel> entry:methods.entrySet())
 				{
 					//cuando hay 0 filtros, el source se agrega a cada uno de los metodos
-					entry.getValue().addSource(new SourceModel(source,generator,model));					
+					entry.getValue().addSource(new SourceModel(on,source,generator,model));					
 				}
 			}
 			//al finalizar
