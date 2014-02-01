@@ -14,10 +14,18 @@ public enum LevelMessage implements Message<LevelMessageHandler> {
 	}
 
 	@Override
-	public void dispatch(MessageHandler h, Object... args) {
+	public void dispatch(MessageHandler h, Object... args) 
+	{
 		final LevelMessageHandler handler = (LevelMessageHandler)h;
-		// TODO Auto-generated method stub
-		
+		switch(this)
+		{
+		case onChangeLevel:
+			handler.onChangeLevel((String)args[0]);
+			break;
+		case onReloadLevel:
+			handler.onReloadLevel();
+			break;
+		}		
 	}
 
 }

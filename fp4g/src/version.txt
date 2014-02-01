@@ -1,14 +1,16 @@
 :::0.1.27 (prototipo)
 + Los managers se ordenan según prioridad
 + Depuración visual para Box2D
++ Se puede especificar un mensaje cuando va para otra entidad/behvior o sistema.
++ Ahora se puede enviar un mensaje a GAME (GameManager), eventualmente se podrán especificar eventos tipo ON, pero todavía no.
+F Se refactorizo la clase SendStatementModel dejandola como debe ser POJO.
 F Refactorización de las excepciones
 F Se refactorizo la clase GameStateGenerator
 B Cuando no encuentra un mensaje deberia abortar y no caerse.
+P Hacer que los Managers reciban mensajes.
+P Reprogramar OnModel, tiene demasiadas responsabilidades. Si llego agregar más instrucciones para Source la complejidad de este código puede aumentar.
 P Debe quedar prueba de tontos II: Se ha vuelto mejorar el launcher esto es para cuando se lanze desde un jar no tener que modificarlo.
-P Falta especificar cuando el mensaje va para otra entidad.
-P Ordenar el codigo de OnModel tiene demasiadas responsabilidades
 P Definir la utilidad de la clase Utils: Talvez cambiarle el nombre a Assets y mantener los punteros de los assets.
-P Hacer que los Managers envien mensaje
 
 :::0.1.26 (prototipo)
 + Más metodos de busqueda del JDK para el generador Java.

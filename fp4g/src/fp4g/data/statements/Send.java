@@ -9,7 +9,7 @@ public class Send extends Code
 {
 	public static enum SendTo
 	{
-		Self,Other,Behavior,System
+		Self,Other,Behavior,System,Game
 	}
 	//Send que se caracteriza por tener
 	//Mensaje a enviar (methodo de message y el mensaje)

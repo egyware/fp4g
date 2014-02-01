@@ -100,6 +100,18 @@ public class OnModel implements Model
 						
 						switch(send.toReceiverType)
 						{
+						case Game:
+							message = String.format("%1$sMessage.on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
+							direct = false;
+							if(on.message.isFactory())
+							{
+								to = "container.gameManager";
+							}
+							else
+							{
+								to = "world.gameManager";
+							}
+							break;
 						case Other:
 							to = "other";
 							message = String.format("%1$sMessage.on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));

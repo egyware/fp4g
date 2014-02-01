@@ -13,15 +13,13 @@ public class GoalGenerator extends CodeGenerator<JavaGenerator> {
 
 	@Override
 	public void generateCode(ICode gameData, File path) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// TODO Hacer el generador de Metas.		
 	}
 
 	@Override
 	public void usingCode(ICode gameData, File path) 
 	{
-		// TODO Auto-generated method stub
-		
+		// TODO Hacer el using de Metas.		
 	}
 
 	

@@ -206,8 +206,8 @@ DEFINE GAME
 			General =
 			{
 				"com.apollo.WorldContainer",					
-				"com.apollo.managers.GameManager",
-				"com.apollo.managers.GameState",
+				"com.apollo.GameManager",
+				"com.apollo.GameState",
 				"com.badlogic.gdx.Gdx",
 				"com.badlogic.gdx.graphics.GL10",
 				"com.badlogic.gdx.graphics.OrthographicCamera"

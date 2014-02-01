@@ -240,17 +240,19 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		Send.SendTo type = null;
 		String receiver = null;
 		//Busqueda de quien envia mensaje.
-		//1.- Self
-		//2.- Other
-		//3.- Componente
-		//4.- Tag
-		//5.- Sistema
+		//1.- Game
+		//2.- Self
+		//3.- Other
+		//4.- Componente
+		//5.- Tag
+		//6.- Sistema
 		type = (ctx.receiverType == null)?Send.SendTo.Behavior:ctx.receiverType;
 		
 		
 		Send send = null;
 		switch(type)
 		{		
+		case Game:			
 		case Other:			
 		case Self:
 			send = new Send(type,method,receiver);

@@ -37,5 +37,12 @@ public class ${class.name} extends GameManager {
 	{
 		Utils.dispose();
 		super.dispose();		
-	}	
+	}
+	
+	public void onChangeLevel(String level)
+	{
+	}
+	public void onReloadLevel()
+	{
+	}
 }

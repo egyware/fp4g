@@ -5,7 +5,7 @@ import Lexer,Expr;
 {
 package fp4g.parser;
 
-import static fp4g.Log.*;
+import static fp4g.log.Log.*;
 
 import fp4g.data.*;
 import fp4g.data.statements.*;
@@ -13,8 +13,8 @@ import fp4g.data.define.*;
 import fp4g.data.vartypes.*;
 
 import java.util.LinkedList;
-
 }
+
 @lexer::header
 {
 package fp4g.parser;
@@ -162,11 +162,13 @@ returns
 	(
 	 TO (
 	       receiver=OTHER {$receiverType = Send.SendTo.Other;}
+	     | receiver=GAME  {$receiverType = Send.SendTo.Game;}  
 	     | receiver=ID    {$receiverType = null;} //sin especificar todavía
 	 	)
 	 {$receiverName = $receiver.text;}
 	)?
 	;
+	
 //filtros On:pressA pressB (parsea la disyuncion pressA or pressB)
 onFilters
 returns

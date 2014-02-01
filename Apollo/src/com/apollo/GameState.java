@@ -1,4 +1,4 @@
-package com.apollo.managers;
+package com.apollo;
 
 
 public abstract class GameState {

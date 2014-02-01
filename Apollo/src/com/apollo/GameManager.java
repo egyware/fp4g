@@ -1,16 +1,14 @@
-package com.apollo.managers;
+package com.apollo;
 
-import com.apollo.Message;
-import com.apollo.MessageHandler;
-import com.apollo.MessageReceiver;
+import com.apollo.messages.LevelMessageHandler;
 import com.apollo.utils.ImmutableBag;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 
-//TODO estas clases están temporalmente en este paquete hasta su reubicación
-public class GameManager implements ApplicationListener,MessageReceiver {
+public abstract class GameManager implements ApplicationListener, MessageReceiver, LevelMessageHandler
+{
 	private GameState next;
 	private GameState current;
 	private final Array<GameState> states;
@@ -55,7 +53,8 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 	{
 		Gdx.app.log("GameCycleLife", String.format("next: %s",_next.getClass().getSimpleName()));
 		next = _next;
-	}	
+	}
+	
 	/**
 	 * Pausa el actual contexto y le da prioridad a este
 	 * @param next
@@ -84,6 +83,7 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 		current.enter();
 		states.add(current);	
 	}
+	
 	public void resumeState()
 	{
 		Gdx.app.log("GameCycleLife", String.format("resume"));
@@ -142,13 +142,14 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 	}
 
 	@Override
-	public void resize(int x,int y) {
+	public void resize(int x,int y) 
+	{
 		Gdx.app.log("AppCycleLife", "resize");
-
 	}
 
 	@Override
-	public void resume() {
+	public void resume() 
+	{
 		Gdx.app.log("AppCycleLife", "resume");
 		if(current != null)
 		{
@@ -164,10 +165,17 @@ public class GameManager implements ApplicationListener,MessageReceiver {
 	}
 
 	@Override
-	public void onMessage(Message<? extends MessageHandler> message,
-			Object... args) {
-		// TODO Auto-generated method stub
-		
+	public void onMessage(Message<? extends MessageHandler> message,Object... args) 
+	{
+		//TODO por ahora solo aceptaré mensajes tipo LevelMessageHandler
+		if(message.getClassHandler() == LevelMessageHandler.class)
+		{
+			message.dispatch(this, args);
+		}
+		else
+		{
+			Gdx.app.error("OnMessage", "No se puede recibir este mensaje");
+		}
 	}
 
 }
