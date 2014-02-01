@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.antlr.v4.misc.Utils;
+
 import fp4g.classes.MessageMethod;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
@@ -89,7 +91,52 @@ public class OnModel implements Model
 						//MessageSender.instance().send(receiver, message);
 						Send send = (Send)stmnt;
 						
-						SendStatementModel sendModel = new SendStatementModel(send);
+						//construir acá la instrucción sendModel
+						Message msg = send.method.getMessage();
+						
+						final String message;						
+						final String to;
+						final boolean direct;
+						
+						switch(send.toReceiverType)
+						{
+						case Other:
+							to = "other";
+							message = String.format("%1$sMessage.on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
+							direct = false;
+							break;
+						case Behavior:
+							//TODO aún no puedo acceder a un nivel superior. No logro saber si estoy si estoy en un ON init/deinit							
+							to = "this.".concat(Utils.decapitalize(send.toReceiverName));
+							message = String.format("on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
+							direct = true;
+							break;
+						case System:
+							//TODO falta importar dependencia			
+							to = "world.getManager(".concat(send.toReceiverName).concat(".class)");
+							message = String.format("on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
+							direct = true;
+							
+							try 
+							{
+								Depend resolve = generator.resolveDependency(send.toReceiverSystem);
+								resolve.perform(send.toReceiverSystem, model);
+							}
+							catch (DependResolverNotFoundException e1) 
+							{
+								Log.Exception(e1, send.getLine());
+								model.addImport("com.apollo.managers.".concat(send.toReceiverName));
+							}
+							break;
+						case Self:
+						default:
+							to = "this";
+							message = String.format("%1$sMessage.on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
+							direct = false;
+							break;
+						}	
+						
+						SendStatementModel sendModel = new SendStatementModel(message,to, direct);
 						try
 						{
 							if(send.args != null && send.args.size() > 0)
@@ -106,8 +153,7 @@ public class OnModel implements Model
 							//TODO error mal escrito, deberia haber cada uno de sus hijos de la excepcion y por cada uno un mensaje personalizado 
 							Log.Show(Warn.CannotEvalExpr,gex.getMessage());
 						}
-						statements.add(sendModel);
-						Message msg = send.method.getMessage();					
+						statements.add(sendModel);									
 						try {
 							Depend depend = generator.resolveDependency(msg);
 							depend.perform(msg, model);

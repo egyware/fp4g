@@ -247,13 +247,13 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		//5.- Sistema
 		type = (ctx.receiverType == null)?Send.SendTo.Behavior:ctx.receiverType;
 		
+		
+		Send send = null;
 		switch(type)
 		{		
-		case Other:
-			//nada que hacer ;)
-			break;
+		case Other:			
 		case Self:
-			//nada que hacer ;)
+			send = new Send(type,method,receiver);
 			break;
 		default:
 			receiver = ctx.receiverName;
@@ -266,13 +266,16 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 				if((bhvr.varName != null && bhvr.equals(receiver))||bhvr.name.equals(receiver))
 				{
 					type = Send.SendTo.Behavior; //Es un behavior!
+					send = new Send(type,method,receiver);
 					break;
 				}
 			}
 	    //Tag
 			//buscar algún tag, si es que existe
 			
-	    //System			
+	    //System
+			
+			//buscar en los defines de sistemas.
 			Collection<IDefine> managers = game.getDefines(DefineType.MANAGER);
 			for(IDefine manager:managers)
 			{
@@ -280,22 +283,20 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 				{
 					if(((Manager)manager).isReceiver())
 					{
-						type = Send.SendTo.System; //es un sistema!, ojo que el sistema puede que no esté definido...							
+						type = Send.SendTo.System; //es un sistema!, ojo que el sistema puede que no esté definido...
+						send = new Send(type,method,(Manager)manager);
 					}
 					else
 					{
-						//lanzar error
+						//lanzar error						
 						throw new FP4GRuntimeException(Error.ManagerIsNotAReceiver,String.format("El manager \"%s\" no puede recibir mensajes.",receiver));							 
 					}
 					break;
 				}
-			}
-			//buscar en los defines de sistemas.					
+			}					
 		
 			break;		
 		}		
-		
-		Send send = new Send(type,method,receiver);	
 		
 		ExprList list = exprVisitor.getExprList(ctx.exprList());
 		if(list != null)
