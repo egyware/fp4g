@@ -16,6 +16,7 @@ import fp4g.log.info.NotAllowed;
  */
 public class Message extends Define
 {
+	private boolean factory;
 
 	public Message(String name,IDefine parent) {
 		super(DefineType.MESSAGE, name,parent);		
@@ -49,4 +50,13 @@ public class Message extends Define
 	public void setOn(On on) {
 		throw new NotAllowedException(NotAllowed.NotExpectedOn, on, "No se esperaba una instrucción ON en Message");
 	}
+	
+	public boolean isFactory() {
+		return factory;
+	}
+
+	public void setFactory(boolean factory) {
+		this.factory = factory;
+	}	
+	
 }

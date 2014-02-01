@@ -31,5 +31,9 @@ public class FP4GRuntimeException extends RuntimeException
 	{
 		return reason;
 	}
-
+	
+	public String getMessage()
+	{
+		return super.getMessage().concat(": ").concat(reason);
+	}
 }

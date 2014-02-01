@@ -176,7 +176,8 @@ DEFINE GAME
 	
 	DEFINE MESSAGE Entity
 	[
-		SET init   = { name = "init",   params = "", message = current} AS MessageMethod;
+		SET factory = true;
+		SET init   = { name = "init", params = "", message = current} AS MessageMethod;
 		SET deinit = { name = "deinit", params = "", message = current} AS MessageMethod;
 	]
 	
@@ -188,7 +189,7 @@ DEFINE GAME
 	]
 	
 	SET methods  = {
-		press = Key.press, release = Key.release,
+		Press = Key.press, release = Key.release,
 		translate = Move.translate, rotate = Move.rotate, angularSpeed = Move.angularSpeed, speed = Move.speed, forward = Move.forward,
 		begin = Contact.begin,end = Contact.end,
 		shot = Gun.shot, reload = Gun.reload, changeBullet = Gun.changeBullet,

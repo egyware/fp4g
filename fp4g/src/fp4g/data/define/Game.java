@@ -4,11 +4,7 @@ import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
-import fp4g.data.IValue;
 import fp4g.data.On;
-import fp4g.data.expresion.Literal;
-import fp4g.data.expresion.literals.BoolLiteral;
-import fp4g.data.expresion.literals.IntegerLiteral;
 import fp4g.data.libs.LibContainer;
 import fp4g.log.info.NotAllowed;
 /**
@@ -28,52 +24,7 @@ public class Game extends Define
 		super(DefineType.GAME,"game",lc);		
 	}
 	
-	public void set(String key, Literal<?> value)
-	{
-		if(key.equalsIgnoreCase("width"))
-		{
-			width = ((Integer)value.getValue()).intValue();
-		}
-		else
-		if(key.equalsIgnoreCase("height"))
-		{
-			width = ((Integer)value.getValue()).intValue();
-		}
-		else
-		if(key.equalsIgnoreCase("debug"))
-		{
-			debug = ((Boolean)value.getValue()).booleanValue();
-		}
-		else
-		{
-			super.set(key, value);
-		}
-	}
-	
-	public IValue<?> get(String key)
-	{
-		if(key.equalsIgnoreCase("width"))
-		{
-			return new IntegerLiteral(width);
-		}
-		else
-		if(key.equalsIgnoreCase("height"))
-		{
-			return new IntegerLiteral(height);
-		}
-		else
-		if(key.equalsIgnoreCase("debug"))
-		{
-			return new BoolLiteral(debug);
-		}
-		else
-		{
-			return super.get(key);
-		}
-	}
-	
-	
-	
+		
 //	/**
 //	 * @param name
 //	 * @param manager
@@ -230,5 +181,29 @@ public class Game extends Define
 
 	public void setStart(GameState state) {
 		startState = state;		
+	}
+
+	public final int getWidth() {
+		return width;
+	}
+
+	public final int getHeight() {
+		return height;
+	}
+
+	public final boolean isDebug() {
+		return debug;
+	}
+
+	public final void setWidth(int width) {
+		this.width = width;
+	}
+
+	public final void setHeight(int height) {
+		this.height = height;
+	}
+
+	public final void setDebug(boolean debug) {
+		this.debug = debug;
 	}	
 }

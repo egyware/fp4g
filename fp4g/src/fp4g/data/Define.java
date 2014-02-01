@@ -9,9 +9,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.antlr.v4.misc.Utils;
+
+import com.esotericsoftware.reflectasm.MethodAccess;
+
 import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassMap;
+import fp4g.data.expresion.literals.BoolLiteral;
+import fp4g.data.expresion.literals.FloatLiteral;
+import fp4g.data.expresion.literals.IntegerLiteral;
+import fp4g.data.expresion.literals.ObjectLiteral;
+import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.NotAllowedOperatorException;
 
@@ -32,6 +41,8 @@ public abstract class Define extends Code implements IDefine
 	private final Map<DefineType,List<Add>> adds;	
 	private final Map<String,On> onMessages;	
 	
+	private final MethodAccess method;
+	
 	
 	public Define(DefineType type,String name)
 	{
@@ -47,6 +58,8 @@ public abstract class Define extends Code implements IDefine
 		adds    = new HashMap<DefineType, List<Add>>(DefineType.values().length,1);		
 		onMessages= new HashMap<String, On>();
 		defines = new HashMap<DefineType,Map<String,? extends IDefine>>();
+		
+		method = MethodAccess.get(type.getDefineClass());
 		
 		//definir namespaces o algo por el estilo.
 		for(DefineType t: DefineType.values())
@@ -123,9 +136,18 @@ public abstract class Define extends Code implements IDefine
 	 * @param value valor de la variable
 	 */
 	@Override
-	public void set(String key, IValue<?> value)
-	{
-		variables.put(key, value);
+	public final void set(String key, IValue<?> value) 
+	{			
+		try
+		{		
+			method.invoke(this, String.format("set%s",Utils.capitalize(key)), value.getValue());
+			return;
+		}
+		catch(IllegalArgumentException e)
+		{
+			//solo ignoro el error
+		}
+		variables.put(key, value);		
 	}
 	/**
 	 * Establece una variable  
@@ -134,6 +156,15 @@ public abstract class Define extends Code implements IDefine
 	 */
 	public final void set(String key, Object value)
 	{		
+		try
+		{
+			method.invoke(this, String.format("set%s",Utils.capitalize(key)), value);
+			return;
+		}
+		catch(IllegalArgumentException e)
+		{
+			//solo te ignoro
+		}
 		if(value instanceof fp4g.data.expresion.Map)
 		{
 			variables.put(key,new CustomClassMap((fp4g.data.expresion.Map)value));
@@ -149,13 +180,49 @@ public abstract class Define extends Code implements IDefine
 	 * @param key
 	 * @return
 	 */
-	public IValue<?> get(String key)
+	public final IValue<?> get(String key)
 	{
-		IValue<?> ret = findDefine(key); 
+		IValue<?> ret = findDefine(key);
+		if(ret == null)
+		{
+			final String methods[] = method.getMethodNames();
+			String keyMethod = Utils.capitalize(key);
+			int indexMethod;
+			for(indexMethod = 0 ;indexMethod<methods.length;indexMethod++)
+			{
+				if(methods[indexMethod].endsWith(keyMethod) && (methods[indexMethod].startsWith("get")||methods[indexMethod].startsWith("is")))
+				{
+					Object r = method.invoke(this,indexMethod);
+					if(r instanceof Float)
+					{
+						return new FloatLiteral((Float)r);
+					}
+					else
+					if(r instanceof Integer)
+					{
+						return new IntegerLiteral((Integer)r);
+					}
+					else
+					if(r instanceof Boolean)
+					{
+						return new BoolLiteral((Boolean)r);
+					}
+					else
+					if(r instanceof String)
+					{
+						return new StringLiteral((String)r);
+					}
+					else
+					{
+						return new ObjectLiteral(r);
+					}
+				}
+			}
+		}
 		if(ret == null)
 		{
 			ret = variables.get(key);
-		}				
+		}		
 		if(ret == null && parent != null)
 		{
 				ret = parent.get(key);

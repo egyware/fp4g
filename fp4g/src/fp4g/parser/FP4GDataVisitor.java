@@ -66,8 +66,15 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		this.game = game;		
 		current = new Stack<IDefine>();		
 		exprVisitor = new FP4GExpresionVisitor(current);
-		CustomClassMap map = ((CustomClassMap)game.get("methods"));
-		methods = (MessageMethods)map.getValue();
+		try
+		{
+			CustomClassMap map = ((CustomClassMap)game.get("methods"));
+			methods = (MessageMethods)map.getValue();
+		}
+		catch(NullPointerException e)
+		{
+			throw new FP4GRuntimeException(Error.MessageMethodNotFound,"Los metodos para los mensajes no se encontrarón",e);
+		}
 	}
 	
 	

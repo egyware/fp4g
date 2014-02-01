@@ -41,7 +41,6 @@ import fp4g.data.expresion.FunctionCall;
 import fp4g.data.libs.LibContainer;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
-import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.exceptions.GeneratorException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
