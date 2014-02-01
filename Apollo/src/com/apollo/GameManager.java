@@ -177,5 +177,4 @@ public abstract class GameManager implements ApplicationListener, MessageReceive
 			Gdx.app.error("OnMessage", "No se puede recibir este mensaje");
 		}
 	}
-
 }

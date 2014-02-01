@@ -1,5 +1,8 @@
 package ${class.package};
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import com.apollo.GameState;
 <#if class.imports??>
 <#list class.imports as import>
 import ${import};
@@ -41,8 +44,41 @@ public class ${class.name} extends GameManager {
 	
 	public void onChangeLevel(String level)
 	{
+		try 
+		{
+			Class<?> state = Class.forName("${class.package}.".concat(level));
+			Constructor<?> constructor = state.getConstructor(GameManager.class);
+			GameState gameState = (GameState) constructor.newInstance(this);
+			nextState(gameState);
+		} 
+		catch (ClassNotFoundException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
 	public void onReloadLevel()
-	{
+	{		
 	}
+	
+	
 }

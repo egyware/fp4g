@@ -3,6 +3,7 @@
 + Depuración visual para Box2D
 + Se puede especificar un mensaje cuando va para otra entidad/behvior o sistema.
 + Ahora se puede enviar un mensaje a GAME (GameManager), eventualmente se podrán especificar eventos tipo ON, pero todavía no.
++ Se pueden cambiar de state usando el mensaje Level, pero no me gusta la forma actual de hacerlo.
 F Se refactorizo la clase SendStatementModel dejandola como debe ser POJO.
 F Refactorización de las excepciones
 F Se refactorizo la clase GameStateGenerator

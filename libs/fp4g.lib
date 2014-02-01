@@ -187,6 +187,12 @@ DEFINE GAME
 		SET setTime = { name = "setTime", params = "int index, int time", message = current} AS MessageMethod;
 		SET cancel  = { name = "cancel",  params = "int index", message = current} AS MessageMethod;
 	]
+	DEFINE MESSAGE Level
+	[
+		SET change = { name = "change",  params = "String state", message = current} AS MessageMethod;
+		SET reload = { name = "reload", params = "", message = current} AS MessageMethod;
+	]
+	
 	
 	SET methods  = {
 		Press = Key.press, release = Key.release,
@@ -196,6 +202,7 @@ DEFINE GAME
 		setDelayShot = AutoGun.SetDelayShot, setShot = AutoGun.SetShot,
 		init = Entity.init, deinit = Entity.deinit,
 		active = MESSAGE.Timer.active, setTime=MESSAGE.Timer.setTime, cancel = MESSAGE.Timer.cancel,
+		change = MESSAGE.Level.change, reload = MESSAGE.Level.reload,
 		//move   = MESSAGE.Mouse.move,   pressButton = MESSAGE.Mouse.pressButton, releaseButton = MESSAGE.Mouse.releaseButton, dragged = MESSAGE.Mouse.dragged,
 	} AS MessageMethods;
 	
@@ -263,6 +270,11 @@ DEFINE GAME
 		} AS EntityDependResolver,
 		Message = 
 		{
+			Level   = 
+			{				
+				"com.apollo.messages.LevelMessage",
+				"com.apollo.messages.LevelMessageHandler"		
+			},
 			Key     = 
 			{
 				"com.badlogic.gdx.Input",
