@@ -51,6 +51,10 @@ public class Message extends Define
 		throw new NotAllowedException(NotAllowed.NotExpectedOn, on, "No se esperaba una instrucción ON en Message");
 	}
 	
+	/**
+	 * Devuelve si los mensajes se requiren necesariamente estár en el Factory de entidades.
+	 * @return
+	 */
 	public boolean isFactory() {
 		return factory;
 	}

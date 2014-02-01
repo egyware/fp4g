@@ -1,7 +1,11 @@
 <#macro translate statement>
 <#switch statement.type>
-<#case 0><#-- Send MessageSender.instance().send(receiver, message); -->	
+<#case 0><#-- Send MessageSender.instance().send(receiver, message); -->
+<#if statement.direct>	
+		${statement.to}.${statement.message}(<#if statement.params?has_content><@params p=statement.params /></#if>);
+<#else>
 		${statement.to}.onMessage(${statement.message}<#if statement.params?has_content>,<@params p=statement.params /></#if>);
+</#if>
 <#break>
 <#case 1><#-- delete owner -->			
 		getWorld().deleteEntity(this);
