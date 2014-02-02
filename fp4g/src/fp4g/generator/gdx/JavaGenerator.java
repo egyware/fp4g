@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeSet;
@@ -207,11 +209,14 @@ public class JavaGenerator extends Generator
 	{
 		final String path = packageDir.getAbsolutePath();
 		final int start = path.length()-packageNameDir.length();
-		final String cp = "libs/apollo-fp4g.jar;libs/gdx.jar";		
+		final String cp[] = {
+				"libs/apollo-fp4g.jar",
+				"libs/gdx.jar"
+			};				
 			  
 		final String options[] = {
 				"-cp",
-				cp,
+				implode(cp,File.pathSeparatorChar),
 				"-d",				
 				binaryDir.getAbsolutePath(),
 				"-Xlint:deprecation",
@@ -258,6 +263,21 @@ public class JavaGenerator extends Generator
 			e.printStackTrace();
 		}
 		
+	}
+
+	private String implode(String[] cp, char d) 
+	{
+		final StringBuilder builder = new StringBuilder();
+		final List<String> list = Arrays.asList(cp);
+		for(Iterator<String> it = list.iterator(); it.hasNext();)
+		{
+			builder.append(it.next());
+			if(it.hasNext())
+			{
+				builder.append(d);
+			}
+		}				
+		return builder.toString();
 	}
 
 	private JavaCompiler findJDK() 
