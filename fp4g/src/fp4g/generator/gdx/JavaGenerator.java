@@ -95,9 +95,14 @@ public class JavaGenerator extends Generator
 				String clazz = results.group(3);				
 				if(clazz != null)
 				{
-					if(clazz.startsWith("com.apollo.components")||clazz.startsWith(packageName))
+					if(clazz.startsWith("com.apollo.components"))
 					{
 						File file = new File(path,clazz.replace('.', File.separatorChar).concat(".java"));
+						list.add(file);
+					}
+					else if(clazz.startsWith(packageName))
+					{
+						File file = new File(path,clazz.substring(packageName.length()+1).replace('.', File.separatorChar).concat(".java"));
 						list.add(file);
 					}
 				}
