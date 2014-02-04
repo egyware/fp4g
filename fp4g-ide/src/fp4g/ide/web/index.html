@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FP4G IDE: Blockly</title>    
+  <script type="text/javascript" src="blockly_compressed.js"></script>
+  <script type="text/javascript" src="blocks_compressed.js"></script>  
+  <script type="text/javascript" src="blocks.js"></script>
+  <script type="text/javascript" src="msg/messages.js"></script>
+  <script type="text/javascript" src="fp4g.js"></script>  
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    #blocklyDiv
+    {
+    	width:100%;
+    	heigth:600px;
+    }
+  </style>
+</head>
+<body>  
+  <div id="blocklyDiv"></div>
+  <xml id="toolbox" style="display: none">
+  	<category name="Definiciones">  		
+  		<block type="block_define"></block>
+  		<block type="block_set"></block>
+  		<block type="text"></block>
+  	</category>  	
+  	<category name="Addiciones">
+  		<block type="block_add"></block>  	
+  	</category>
+  	<category name="Instrucciones">  		
+  	</category>
+   </xml>   
+</body>
+</html>
