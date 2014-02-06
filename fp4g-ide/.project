@@ -20,4 +20,41 @@
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/fp4g/ide/web/lib</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>bin/fp4g/ide/web/lib/blockly_compressed.js</name>
+			<type>1</type>
+			<location>C:/Users/edgardo.moreno/git/blockly/blockly_compressed.js</location>
+		</link>
+		<link>
+			<name>bin/fp4g/ide/web/lib/blocks_compressed.js</name>
+			<type>1</type>
+			<location>C:/Users/edgardo.moreno/git/blockly/blocks_compressed.js</location>
+		</link>
+		<link>
+			<name>src/fp4g/ide/web/lib/blockly_compressed.js</name>
+			<type>1</type>
+			<location>C:/Users/edgardo.moreno/git/blockly/blockly_compressed.js</location>
+		</link>
+		<link>
+			<name>src/fp4g/ide/web/lib/blocks_compressed.js</name>
+			<type>1</type>
+			<location>C:/Users/edgardo.moreno/git/blockly/blocks_compressed.js</location>
+		</link>
+		<link>
+			<name>src/fp4g/ide/web/lib/media</name>
+			<type>2</type>
+			<location>C:/Users/edgardo.moreno/git/blockly/media</location>
+		</link>
+		<link>
+			<name>src/fp4g/ide/web/lib/msg</name>
+			<type>2</type>
+			<location>C:/Users/edgardo.moreno/git/blockly/msg</location>
+		</link>
+	</linkedResources>
 </projectDescription>

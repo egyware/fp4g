@@ -9,7 +9,7 @@ function init()
 {
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blocklyDiv'),
-                 {path: './', toolbox: toolbox});
+                 {path: './lib', toolbox: toolbox});
 
   // Create the root block.
   rootBlock = new Blockly.Block.obtain(Blockly.mainWorkspace, 'block_game');
@@ -17,5 +17,19 @@ function init()
   rootBlock.render();
   rootBlock.setMovable(false);
   rootBlock.setDeletable(false);  
+  
+  
 }
 window.addEventListener('load', init);
+
+function generate()
+{
+	var code = Blockly.FP4G.blockToCode(rootBlock);
+	setCode(code);
+}
+
+function setCode(code)
+{
+	console.log(code);
+}
+

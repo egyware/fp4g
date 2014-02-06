@@ -6,7 +6,7 @@ Blockly.Blocks['block_game'] = {
     this.setColour(230);
     this.appendDummyInput()
         .appendField("GAME")
-        .appendField(new Blockly.FieldTextInput("default"), "NAME");
+        .appendField(new Blockly.FieldTextInput("default"), "name");
     this.appendStatementInput("game_defines")
         .setCheck(["block_define","block_set"]);    
     this.setPreviousStatement(true);
@@ -21,7 +21,7 @@ Blockly.Blocks['block_define'] = {
 		    this.appendValueInput("name")
 		        .setCheck("String")
 		        .appendField("DEFINE")
-		        .appendField(new Blockly.FieldDropdown([["Entity", "entity"], ["GameState", "gamestate"]]), "NAME");
+		        .appendField(new Blockly.FieldDropdown([["Entity", "ENTITY"], ["GameState", "STATE"]]), "type");
 		    this.appendStatementInput("defines")
 		        .setCheck(["block_define", "block_add", "block_on", "block_set"]);
 		    this.setPreviousStatement(true, ["block_define", "block_add", "block_on", "block_set"]);

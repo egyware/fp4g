@@ -3,24 +3,26 @@
 <head>
   <meta charset="utf-8">
   <title>FP4G IDE: Blockly</title>    
-  <script type="text/javascript" src="blockly_compressed.js"></script>
-  <script type="text/javascript" src="blocks_compressed.js"></script>  
+  <script type="text/javascript" src="lib/blockly_compressed.js"></script>
+  <script type="text/javascript" src="lib/blocks_compressed.js"></script>  
   <script type="text/javascript" src="blocks.js"></script>
-  <script type="text/javascript" src="msg/messages.js"></script>
+  <script type="text/javascript" src="lib/msg/messages.js"></script>
   <script type="text/javascript" src="fp4g.js"></script>  
+  <script type="text/javascript" src="fp4g-generator.js"></script>
   <style>
-    body {
+    html, body 
+    {
+      height: 100%;
+    }
+    body 
+    {
       background-color: #fff;
       font-family: sans-serif;
-    }
-    h1 {
-      font-weight: normal;
-      font-size: 140%;
-    }
+      margin: 0 0px;
+      overflow: hidden;
+    }   
     #blocklyDiv
-    {
-    	width:100%;
-    	heigth:600px;
+    {       	
     }
   </style>
 </head>
@@ -32,11 +34,11 @@
   		<block type="block_set"></block>
   		<block type="text"></block>
   	</category>  	
-  	<category name="Addiciones">
+  	<category name="Adiciones">
   		<block type="block_add"></block>  	
   	</category>
   	<category name="Instrucciones">  		
   	</category>
-   </xml>   
+   </xml>
 </body>
 </html>
