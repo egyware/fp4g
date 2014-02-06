@@ -17,5 +17,19 @@ function init()
   rootBlock.render();
   rootBlock.setMovable(false);
   rootBlock.setDeletable(false);  
+  
+  
 }
 window.addEventListener('load', init);
+
+function generate()
+{
+	var code = Blockly.FP4G.blockToCode(rootBlock);
+	setCode(code);
+}
+
+function setCode(code)
+{
+	console.log(code);
+}
+
