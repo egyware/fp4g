@@ -2,9 +2,7 @@ package fp4g.ide;
 
 
 import netscape.javascript.JSObject;
-
 import org.w3c.dom.Document;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
