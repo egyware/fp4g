@@ -27,6 +27,10 @@ public final class MessageMethod
 	{		
 	}
 	
+	public String toString()
+	{
+		return message.name.concat(":").concat(methodName);
+	}	
 	
 	public final Message getMessage()
 	{

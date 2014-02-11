@@ -13,17 +13,16 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import fp4g.classes.MessageMethod;
 import fp4g.classes.MessageMethods;
 import fp4g.data.Add;
-import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
+import fp4g.data.ILine;
 import fp4g.data.IValue;
 import fp4g.data.Instance;
 import fp4g.data.NameList;
 import fp4g.data.On;
-import fp4g.data.On.Source;
 import fp4g.data.Statements;
 import fp4g.data.VarType;
 import fp4g.data.define.Asset;
@@ -36,24 +35,27 @@ import fp4g.data.define.Message;
 import fp4g.data.define.NotAllowedException;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.literals.StringLiteral;
+import fp4g.data.statements.AndFilters;
 import fp4g.data.statements.Destroy;
+import fp4g.data.statements.Filter;
+import fp4g.data.statements.OrFilters;
 import fp4g.data.statements.Send;
+import fp4g.data.statements.Source;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
-import fp4g.exceptions.FP4GException;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.log.Log;
+import fp4g.log.info.Error;
 import fp4g.log.info.GeneratorError;
 import fp4g.log.info.NotAllowed;
 import fp4g.log.info.Warn;
-import fp4g.log.info.Error;
 
 
 /**
  * Visita el arbol construido.
  * @author Edgardo
  */
-public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
+public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 {
 	private final Game game;
 	private MessageMethods methods;
@@ -80,7 +82,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	
 	
 	@Override
-	public Code visitUsing(FP4GParser.UsingContext ctx)
+	public ILine visitUsing(FP4GParser.UsingContext ctx)
 	{	
 		switch(ctx.type)
 		{		
@@ -119,7 +121,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	}
 	
 	@Override
-	public Code visitStart(FP4GParser.StartContext ctx)
+	public ILine visitStart(FP4GParser.StartContext ctx)
 	{
 		IDefine define = current.peek();
 		
@@ -149,7 +151,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	}
 	
 	@Override
-	public Code visitOn(FP4GParser.OnContext ctx)
+	public ILine visitOn(FP4GParser.OnContext ctx)
 	{
 		IDefine parent = current.peek();
 		
@@ -175,33 +177,90 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 			parent.setOn(on);
 		}
 		
-		super.visitOn(ctx);
-		
 		//al evento on, se crea un nuevo codigo y se le añaden los filtros, si es que existen.
 		//falta solo agregarle el codigo :)
 		Source source = on.addSource(statements);
 		statements = null;
 		if(ctx.filters != null)
-		{			
-			List<List<String>> filtros = ctx.filters.or;
-			for(List<String> filtro:filtros)
+		{		
+			try
 			{
-				try
-				{
-					source.addFilter(filtro);
-				}
-				catch(FP4GException e)
-				{
-					//Error, acá tratamos de ahcer el mejor esfuerzo posible.
-					Log.Exception(e,ctx.start.getLine());
-				}
+				ctx.filters.orFilters = source.filters;
+				visit(ctx.filters);				
 			}
-		}
+			catch(FP4GRuntimeException e)
+			{
+				//Error, acá tratamos de ahcer el mejor esfuerzo posible.
+				Log.Exception(e,ctx.start.getLine());
+			}
+
+		}		
+		
 		return null;		
 	}
 	
+	@Override 
+	//Corresponde al O
+	public ILine visitOnFilters(FP4GParser.OnFiltersContext ctx)
+	{
+		//utilizamos el de source.
+		OrFilters or = ctx.orFilters;
+		
+		if(ctx.children != null)
+		{
+			for(ParseTree c:ctx.children)
+			{
+				AndFilters code = (AndFilters)visit(c);
+				if(code != null)
+				{
+					or.addAnd(code);
+				}
+			}		
+		}
+		
+		return or;		
+	}
+	
+	@Override 
+	public ILine visitAndFilters(FP4GParser.AndFiltersContext ctx)
+	{
+		
+		AndFilters and = new AndFilters();
+		
+		if(ctx.children != null)
+		{
+			for(ParseTree c:ctx.children)
+			{
+				Filter code = (Filter)visit(c);
+				if(code != null)
+				{
+					and.AddFilter(code);
+				}
+			}		
+		}
+		
+		return and;		
+	}
+	
+	@Override 
+	public ILine visitFilter(FP4GParser.FilterContext ctx)
+	{
+		//tendrá eso?
+		ExprList list = exprVisitor.getExprList(ctx.exprList());
+		
+		MessageMethod method = methods.getMessageMethod(ctx.filterName);
+		if(method == null)
+		{
+			throw new FP4GRuntimeException(Error.FilterMethodMissing,"No se encontró un metodo para el filtro:  ".concat(ctx.filterName));
+		}
+		
+		Filter filter = new Filter(method,list);
+		
+		return filter;		
+	}
+	
 	@Override
-	public Code visitOnStatements(FP4GParser.OnStatementsContext ctx)
+	public ILine visitOnStatements(FP4GParser.OnStatementsContext ctx)
 	{
 		statements = new Statements();
 		//TODO talvez deberia usar aggregateResult
@@ -209,7 +268,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 		{
 			for(ParseTree c:ctx.children)
 			{
-				Code code = visit(c);
+				ILine code = visit(c);
 				if(code != null)
 				{
 					statements.add(code);
@@ -221,14 +280,14 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	
 	
 	@Override
-	public Code visitDestroy(FP4GParser.DestroyContext ctx)
+	public ILine visitDestroy(FP4GParser.DestroyContext ctx)
 	{
 		Destroy destroy = new Destroy(Instance.Self);
 		return destroy;
 	}
 	
 	@Override
-	public Code visitSend(FP4GParser.SendContext ctx)
+	public ILine visitSend(FP4GParser.SendContext ctx)
 	{
 		Define define = (Define)current.peek();
 		
@@ -312,7 +371,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	}
 	
 	@Override 
-	public Code visitSet(FP4GParser.SetContext ctx)
+	public ILine visitSet(FP4GParser.SetContext ctx)
 	{
 		IDefine define = current.peek();
 		
@@ -332,7 +391,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	}
 
 	@Override
-	public Code visitGame(FP4GParser.GameContext ctx)
+	public ILine visitGame(FP4GParser.GameContext ctx)
 	{
 		game.name = ctx.name;
 		game.setLine(ctx.getStart().getLine());
@@ -340,7 +399,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	}
 	
 	@Override
-	public Code visitGameValues(FP4GParser.GameValuesContext ctx)
+	public ILine visitGameValues(FP4GParser.GameValuesContext ctx)
 	{
 		current.push(game);		
 		super.visitGameValues(ctx);		
@@ -349,7 +408,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	}	
 	
 	@Override
-	public Code visitDefineValues(FP4GParser.DefineValuesContext ctx)
+	public ILine visitDefineValues(FP4GParser.DefineValuesContext ctx)
 	{
 		FP4GParser.DefineContext define_ctx = (FP4GParser.DefineContext)ctx.parent;
 		IDefine parent = current.peek();
@@ -403,7 +462,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	}	
 	
 	@Override
-	public Code visitAdd(FP4GParser.AddContext ctx)
+	public ILine visitAdd(FP4GParser.AddContext ctx)
 	{
 		IDefine parent = current.peek();
 		
@@ -435,7 +494,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	
 	
 	@Override
-	public Code visitNameList(FP4GParser.NameListContext ctx)
+	public ILine visitNameList(FP4GParser.NameListContext ctx)
 	{
 		nameList = new NameList();
 		super.visitNameList(ctx);
@@ -444,7 +503,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	}
 	
 	@Override 
-	public Code visitDeclareVar(FP4GParser.DeclareVarContext ctx)
+	public ILine visitDeclareVar(FP4GParser.DeclareVarContext ctx)
 	{
 		final VarType type = ctx.varType().type;
 		if(ctx.initValue != null)
@@ -469,7 +528,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	
 	
 	@Override
-	public Code visitAssets(FP4GParser.AssetsContext ctx) 
+	public ILine visitAssets(FP4GParser.AssetsContext ctx) 
 	{
 //		Assets assets = new Assets();		
 //		assets_stack.push(assets);
@@ -482,7 +541,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	}
 	
 	@Override
-	public Code visitAssetValueInner(FP4GParser.AssetValueInnerContext ctx)
+	public ILine visitAssetValueInner(FP4GParser.AssetValueInnerContext ctx)
 	{
 //TODO por hacer		
 //		Assets parent = assets_stack.peek();
@@ -494,7 +553,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<Code>
 	}
 	
 	@Override
-	public Code visitAssetValue(FP4GParser.AssetValueContext ctx)
+	public ILine visitAssetValue(FP4GParser.AssetValueContext ctx)
 	{
 		IDefine parent = current.peek();	
 

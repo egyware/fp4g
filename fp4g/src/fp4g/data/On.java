@@ -5,14 +5,9 @@ package fp4g.data;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import fp4g.classes.MessageMethod;
 import fp4g.data.define.Message;
-import fp4g.data.expresion.ClassMap;
-import fp4g.exceptions.FP4GException;
-import fp4g.log.info.Error;
+import fp4g.data.statements.Source;
 
 /**
  * @author egyware
@@ -20,11 +15,10 @@ import fp4g.log.info.Error;
  */
 public class On extends Code
 {
-	private static final Pattern methodValue = Pattern.compile("([a-z]+)([A-Z0-9][a-zA-Z0-9]*)?");
 	public final String name;
 	public final Message message;
 	public final List<Source> sources;
-	//On Message[:filter]  [...source...]
+	//ON (Message[:filter] (...source...))+
 	public On(Message message) 
 	{
 		this.message = message;
@@ -47,78 +41,5 @@ public class On extends Code
 		Source source = new Source(statements);
 		sources.add(source);
 		return source;
-	}	
-	
-	public final class Source
-	{	
-		public final List<Filter> filters;
-		public final Statements statements;
-		public Source(Statements statements)
-		{
-			this.filters = new LinkedList<Filter>();
-			this.statements = statements;
-		}
-		
-		@SuppressWarnings("unchecked")
-		public void addFilter(List<String> listFilter) 
-		throws FP4GException
-		{
-			//chequeamos que todos los filtros existan y que estï¿½n definidos
-			Filter filter = new Filter(listFilter.size());			
-			for(String elementFilter:listFilter)
-			{
-				//extraer el metodo
-				Matcher m = methodValue.matcher(elementFilter);
-				String methodName = null,value = null;  
-				
-				if(m.matches())
-				{
-					methodName = m.group(1);
-					value      = m.group(2);
-					if(value != null && value.length() == 0)
-					{
-						value = null;
-					}
-				}				
-				else
-				{
-					throw new FP4GException(Error.UnformatedFilter, elementFilter);					
-				}
-				
-				ClassMap<MessageMethod> cm = (ClassMap<MessageMethod>) message.get(methodName);
-				MessageMethod method = cm.getValue();
-				if(method != null)
-				{
-					//setiando, los datos para que no webee mï¿½s tarde (este mensaje no tiene validez, cambie algunas cosas y ya ni recuerdo porque dije eso)
-					filter.add(method, value);					
-				}
-				else
-				{
-					throw new FP4GException(Error.FilterMethodMissing, String.format("No se encontró un metodo del mensaje \"%s\" para el filtro", methodName));					
-				}
-			}
-			filters.add(filter);
-		}
-	}
-	public final static class Filter
-	{	
-		public final MessageMethod methods[]; //podria ser una lista de expresiones...
-		public final String values[];
-		private int lenght;
-		public Filter(final int size)
-		{					
-			methods = new MessageMethod[size];
-			values = new String[size];
-		}		
-		public void add(MessageMethod method, String value)
-		{
-			methods[lenght] = method;
-			values[lenght] = value;
-			lenght++;
-		}
-		public int lenght()
-		{
-			return lenght;
-		}
 	}
 }

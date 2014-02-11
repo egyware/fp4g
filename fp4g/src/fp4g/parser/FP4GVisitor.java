@@ -317,6 +317,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitVarType(@NotNull FP4GParser.VarTypeContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#andFilters}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAndFilters(@NotNull FP4GParser.AndFiltersContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#declareVar}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

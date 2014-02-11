@@ -365,6 +365,14 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitAndFilters(@NotNull FP4GParser.AndFiltersContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitDeclareVar(@NotNull FP4GParser.DeclareVarContext ctx) { return visitChildren(ctx); }
 
 	/**

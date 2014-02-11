@@ -3,7 +3,6 @@
  */
 package fp4g.parser;
 
-import java.util.List;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -19,7 +18,6 @@ import fp4g.data.IValue;
 import fp4g.data.Instance;
 import fp4g.data.NameList;
 import fp4g.data.On;
-import fp4g.data.On.Source;
 import fp4g.data.Statements;
 import fp4g.data.VarType;
 import fp4g.data.define.Asset;
@@ -34,7 +32,6 @@ import fp4g.data.libs.Lib;
 import fp4g.data.statements.Destroy;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
-import fp4g.exceptions.FP4GException;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.log.Log;
 import fp4g.log.info.GeneratorError;
@@ -142,23 +139,24 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		
 		//al evento on, se crea un nuevo codigo y se le aï¿½aden los filtros, si es que existen.
 		//falta solo agregarle el codigo :)
-		Source source = on.addSource(statements);
+//		Source source = on.addSource(statements);
 		statements = null;
 		if(ctx.filters != null)
-		{			
-			List<List<String>> filtros = ctx.filters.or;
-			for(List<String> filtro:filtros)
-			{
-				try
-				{
-					source.addFilter(filtro);
-				}
-				catch(FP4GException e)
-				{
-					//Error, acá tratamos de ahcer el mejor esfuerzo posible.
-					Log.Exception(e,ctx.start.getLine());
-				}
-			}
+		{		
+			//TODO SIN FILTRO
+//			List<List<String>> filtros = ctx.filters.or;
+//			for(List<String> filtro:filtros)
+//			{
+//				try
+//				{
+//					source.addFilter(filtro);
+//				}
+//				catch(FP4GException e)
+//				{
+//					//Error, acá tratamos de ahcer el mejor esfuerzo posible.
+//					Log.Exception(e,ctx.start.getLine());
+//				}
+//			}
 		}
 		return null;		
 	}

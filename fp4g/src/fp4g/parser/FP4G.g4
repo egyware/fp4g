@@ -173,24 +173,31 @@ returns
 onFilters
 returns
 [
-	List<List<String>> or = new LinkedList<List<String>>();
+	OrFilters orFilters;
 ]
 		:
-		filter  {$or.add($filter.filters);} 
-		(filter {$or.add($filter.filters);})*		
+		andFilters 
+		(andFilters)*		
 		;
 
-//filtros y On:pressA,pressB (parsea la conjunciÃ³n pressA and pressB)
+//filtros y On:pressA,pressB (parsea la conjunción pressA and pressB)
 //filtro methodValue
+andFilters
+		:
+		filter
+		(COMA filter)*			
+		;
+
 filter
 returns
 [
-	List<String> filters = new LinkedList<String>();
+	String filterName;
 ]
 		:
-		ID      {$filters.add($ID.text);}
-		(COMA ID {$filters.add($ID.text);})*			
+		ID {$filterName = $ID.text;}
+		( ABRE_PAR exprList CIERRA_PAR )?
 		;
+
 
  
 defineValues
