@@ -26,8 +26,7 @@ public class HomeController
 		final WebEngine engine = webView.getEngine();		
 		JSObject window = (JSObject)engine.executeScript("window");
 		window.setMember("fp4g", new JSFunctions());
-		String url = Thread.currentThread().getContextClassLoader().getResource("fp4g/ide/web/index.html").toString();		
-		engine.load(url);
+		String url = Thread.currentThread().getContextClassLoader().getResource("fp4g/ide/web/index.html").toString();	
 		engine.documentProperty().addListener(new ChangeListener<Document>() 
 		{
 			@Override
@@ -35,7 +34,8 @@ public class HomeController
 			{
 				enableFirebug(engine);				
 			}
-		});		
+		});
+		engine.load(url);
 		
 	} 	
 	

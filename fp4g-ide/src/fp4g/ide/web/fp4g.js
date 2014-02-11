@@ -9,7 +9,7 @@ function init()
 {
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blocklyDiv'),
-                 {path: './lib', toolbox: toolbox});
+                 {path: './lib/', toolbox: toolbox});
 
   // Create the root block.
   rootBlock = new Blockly.Block.obtain(Blockly.mainWorkspace, 'block_game');
