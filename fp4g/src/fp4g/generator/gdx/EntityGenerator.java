@@ -5,15 +5,20 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
+import fp4g.classes.MessageMethod;
 import fp4g.data.Add;
 import fp4g.data.DeclVar;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
+import fp4g.data.IValue;
 import fp4g.data.On;
 import fp4g.data.define.Entity;
+import fp4g.data.expresion.ClassMap;
+import fp4g.data.statements.Source;
 import fp4g.data.vartypes.BasicType;
 import fp4g.data.vartypes.CustomType;
 import fp4g.exceptions.FP4GRuntimeException;
@@ -22,8 +27,8 @@ import fp4g.generator.Depend;
 import fp4g.generator.Generator;
 import fp4g.generator.gdx.models.JavaCodeModel;
 import fp4g.generator.gdx.models.OnModel;
-import fp4g.generator.gdx.models.OnModel.MethodHandlerModel;
 import fp4g.generator.gdx.models.ParamCodeModel;
+import fp4g.generator.gdx.models.On.MethodHandlerModel;
 import fp4g.log.info.GeneratorError;
 import freemarker.template.Template;
 
@@ -162,19 +167,50 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			for(On on: entity_onMessages)
 			{
 				//evitamos que los on_entity se pasen a la entidad.
-				if(on.message != null && on.message.name.equals("Entity"))
+				if(on.message != null && on.message.isFactory())
 				{
 					entityBuild_onMessages.add(on);
 					continue;
 				}
-				onList.add(new OnModel(on,generator,modelEntity));
+				OnModel onModel = new OnModel(on);				
+				//**que hay que hacer ahora?
+				//agregar la interface 
+				modelEntity.addInterface(String.format("%sMessageHandler",on.name));
+
+				//agregar los metodos, aunque están vacios y asumiento que todos son MessageMethod
+				HashMap<String,MethodHandlerModel> methods = new HashMap<String, MethodHandlerModel>();
+				//TODO da un error cuando el mensaje está sin definir		
+				for(Entry<String,IValue<?>> entry:on.message.entrySet())
+				{	
+					IValue<?> value = entry.getValue();
+					if(value instanceof ClassMap)
+					{
+						Object bean = ((ClassMap<?>)value).getValue();				
+						if(bean instanceof MessageMethod)
+						{
+							methods.put(entry.getKey(), new MethodHandlerModel((MessageMethod) bean));
+						}
+					}
+				}
+				
+				//luego tengo que recorrer los sources en busca de los methodHandlers y subirlos acá
+				for(Source source:on.sources)
+				{			
+					//SourceModel.findAndInsert(on,source,methods,generator,model);
+				}
+				onModel.getMethodHandlers().addAll(methods.values());
+				
+				//TODO guardar datos en el modelo!
+				onList.add(onModel);
 			}
 			entityRoot.put("messages", onList);
 			
 			List<OnModel> onListBuild = new LinkedList<OnModel>();			
 			for(On on: entityBuild_onMessages)
 			{
-				onListBuild.add(new OnModel(on,generator,modelBuild));
+				OnModel onModel = new OnModel(on);
+				//TODO guardar datos en el modelo!
+				onListBuild.add(onModel);
 			}
 			buildRoot.put("messages", onListBuild);
 			
@@ -182,18 +218,19 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			boolean hasAttachments = false;
 			for(OnModel onModel:onList)
 			{
-				for(MethodHandlerModel m:onModel.getMethodHandlers())
-				{
-					if(m.isAttach())
-					{
-						hasAttachments = true;
-						break;
-					}					
-				}
-				if(hasAttachments)
-				{					
-					break;
-				}
+				//TODO pendiente reactivar esta funcionalidad
+//				for(MethodHandlerModel m: onModel.getMethodHandlers())
+//				{
+//					if(m.isAttach())
+//					{
+//						hasAttachments = true;
+//						break;
+//					}					
+//				}
+//				if(hasAttachments)
+//				{					
+//					break;
+//				}
 			}	
 			if(hasAttachments)
 			{	

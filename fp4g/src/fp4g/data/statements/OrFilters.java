@@ -21,5 +21,10 @@ public class OrFilters extends Line implements Iterable<AndFilters>
 		filters.add(andFilters);
 		
 	}
+	
+	public int size()
+	{
+		return filters.size();
+	}
 
 }

@@ -23,5 +23,10 @@ public class AndFilters extends Line implements Iterable<Filter>
 	public Iterator<Filter> iterator() 
 	{		
 		return filters.iterator();
-	}	
+	}
+	
+	public int size()
+	{
+		return filters.size();
+	}
 }
