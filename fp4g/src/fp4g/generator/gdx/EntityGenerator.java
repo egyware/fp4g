@@ -12,12 +12,15 @@ import fp4g.data.Add;
 import fp4g.data.DeclVar;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
+import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
 import fp4g.data.IValue;
 import fp4g.data.On;
 import fp4g.data.define.Entity;
 import fp4g.data.expresion.ClassMap;
+import fp4g.data.statements.AndFilters;
+import fp4g.data.statements.Filter;
 import fp4g.data.statements.Source;
 import fp4g.data.vartypes.BasicType;
 import fp4g.data.vartypes.CustomType;
@@ -28,6 +31,8 @@ import fp4g.generator.Generator;
 import fp4g.generator.gdx.models.JavaCodeModel;
 import fp4g.generator.gdx.models.OnModel;
 import fp4g.generator.gdx.models.ParamCodeModel;
+import fp4g.generator.gdx.models.On.FiltersD;
+import fp4g.generator.gdx.models.On.SourceModel;
 import fp4g.generator.gdx.models.On.MethodHandlerModel;
 import fp4g.log.info.GeneratorError;
 import freemarker.template.Template;
@@ -196,11 +201,60 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				//luego tengo que recorrer los sources en busca de los methodHandlers y subirlos acá
 				for(Source source:on.sources)
 				{			
-					//SourceModel.findAndInsert(on,source,methods,generator,model);
+					//este objeto se trata de relacionar los source model con un MethodHandlermodel
+					final HashMap<MethodHandlerModel,SourceModel> sourcesMap = new HashMap<MethodHandlerModel, SourceModel>();
+					
+					if(source.filters.size() > 0)
+					{
+						for(AndFilters f:source.filters)
+						{	
+							for(Filter filter: f.filters)
+							{
+								final MessageMethod method = filter.method;
+								final ExprList exprList = filter.exprList;
+								
+								//encontré un metodo, que hago con el
+								MethodHandlerModel m = methods.get(method.getName());								
+			
+								//obtengo el source model correspondiente 
+								SourceModel sm = sourcesMap.get(m);
+								if(sm == null)
+								{
+									sm = new SourceModel(source);
+									//TODO creo que aqui seria correcto traducir el codigo
+									sourcesMap.put(m, sm);						
+								}					
+								//ya tengo el metodo manejador, que hago con el?
+								//facil, ahora debes agregar este filtro
+								//pero como diferencio si es conjuncion o disyunción?
+								//todos los que están en este for, son una conjunción
+								//13/02/14 Ahora maneja listas de expresiones
+								if(exprList != null) //me aseguro que sea distinto de nulo, asi no agrega nada adicional
+								{
+									FiltersD filterD = sm.getCurrentFilterD(filter);									
+									filterD.add(method, exprList, generator.exprGen); //agrego el filtro actual
+								}
+							}				
+							//ahora como agrego otra disyunciï¿½n?
+							//lo harï¿½ en currentFilter, guardarï¿½ la ultima iteraciï¿½n. Si esta cambia, entonces agregarï¿½ otro filtro.
+						}
+					}
+					else //cuando hay 0 filtros
+					{
+						for(Entry<String,MethodHandlerModel> entry:methods.entrySet())
+						{
+							//cuando hay 0 filtros, el source se agrega a cada uno de los metodos
+							entry.getValue().addSource(new SourceModel(source));					
+						}
+					}
+					//al finalizar
+					for(Entry<MethodHandlerModel, SourceModel> entry:sourcesMap.entrySet())
+					{
+						entry.getKey().addSource(entry.getValue());
+					}
 				}
 				onModel.getMethodHandlers().addAll(methods.values());
 				
-				//TODO guardar datos en el modelo!
 				onList.add(onModel);
 			}
 			entityRoot.put("messages", onList);

@@ -26,11 +26,11 @@
 	{
 		<#if method.sources?has_content>
 		<#list method.sources as source>		
-		<#if source.filtersD?has_content>
-		<#if (source.filtersD?size == 1)>
-		if(<#list source.filtersD as filterD><#list filterD.filtersC as filterC>${filterC}<#if filterC_has_next> && </#if></#list></#list>)
+		<#if source.filters?has_content>
+		<#if (source.filters?size == 1)>
+		if(<#list source.filters as filter><#list filter.iterator() as condition>${condition}<#if condition_has_next> && </#if></#list></#list>)
 		<#else>
-		if(<#list source.filtersD as filterD>(<#list filterD.filtersC as filterC>${filterC}<#if filterC_has_next> && </#if></#list>)<#if filterD_has_next>||</#if></#list>)
+		if(<#list source.filters as filter>(<#list filter.iterator() as condition>${condition}<#if condition_has_next> && </#if></#list>)<#if filter_has_next>||</#if></#list>)
 		</#if>
 		{		
 		<#if source.statements?has_content>		

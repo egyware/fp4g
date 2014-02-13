@@ -34,6 +34,12 @@ public final class MethodHandlerModel implements Model
 		{
 			return sources;
 		}
+		
+		public void addSource(SourceModel source) 
+		{
+			sources.add(source);			
+		}
+		
 		public String getParams()
 		{
 			return params;
@@ -42,5 +48,7 @@ public final class MethodHandlerModel implements Model
 		{
 			return attachMethod;
 		}
+
+		
 	}
 	

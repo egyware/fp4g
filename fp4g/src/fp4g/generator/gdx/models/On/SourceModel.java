@@ -178,7 +178,8 @@ public class SourceModel implements Model
 	public final List<StatementModel> getStatements() {
 		return statements;
 	}
-	public final List<FiltersD> getFiltersD() {
+	
+	public final List<FiltersD> getFilters() {
 		return filters;
 	}
 }
