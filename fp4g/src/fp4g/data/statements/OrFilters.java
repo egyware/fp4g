@@ -6,20 +6,19 @@ import java.util.List;
 
 import fp4g.data.Line;
 
-public class OrFilters extends Line implements Iterable<AndFilters> 
+public class OrFilters extends Line implements Iterable<Filter> 
 {
-	public final List<AndFilters> filters = new LinkedList<AndFilters>();
+	public final List<Filter> filters = new LinkedList<Filter>();
 	
 	@Override
-	public Iterator<AndFilters> iterator() 
+	public Iterator<Filter> iterator() 
 	{
 		return filters.iterator();		
 	}
 
-	public void addAnd(AndFilters andFilters) 
+	public void addAnd(Filter filter) 
 	{
-		filters.add(andFilters);
-		
+		filters.add(filter);		
 	}
 	
 	public int size()

@@ -3,11 +3,13 @@
  */
 package fp4g.data.define;
 
+import fp4g.classes.MessageMethod;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
 import fp4g.data.On;
+import fp4g.data.expresion.ClassMap;
 import fp4g.log.info.NotAllowed;
 
 /**
@@ -61,6 +63,15 @@ public class Message extends Define
 
 	public void setFactory(boolean factory) {
 		this.factory = factory;
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	public MessageMethod getMessageMethod(String filterName) 
+	{
+		//me aseguro que está en minusculas para usarlo de la manera que se me de la gana
+		ClassMap<MessageMethod> cm = (ClassMap<MessageMethod>) get(filterName.toLowerCase());		
+		return cm.getValue();
 	}	
 	
 }

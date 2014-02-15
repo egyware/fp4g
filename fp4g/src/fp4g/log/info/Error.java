@@ -28,8 +28,7 @@ MessageMethodNotFound,
 UnExpectedParams,
 PropertiesCantLoad,
 UncaughtException,
-ManagerIsNotAReceiver,
-DefineNotFound, 
+ManagerIsNotAReceiver, 
 UnformatedFilter,
 ;
 

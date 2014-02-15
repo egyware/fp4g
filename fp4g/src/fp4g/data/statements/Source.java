@@ -11,12 +11,6 @@ public final class Source extends Line
 	{
 		this.filters = new OrFilters();
 		this.statements = statements;
-	}
-	
-	public AndFilters addOrFilter()
-	{
-		AndFilters andFilters = new AndFilters();
-		filters.addAnd(andFilters);
-		return  andFilters;
 	}	
+	
 }

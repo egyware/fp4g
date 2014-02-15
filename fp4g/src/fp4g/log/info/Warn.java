@@ -12,6 +12,7 @@ public enum Warn implements WarnType
 	DependResolverNotFound,
 	PropertiesCantSave, 
 	IOException,
+	DefineNotFound,
 	
 	;
 		

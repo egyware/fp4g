@@ -130,12 +130,17 @@ returns
 [
 	String messageName	
 ]
+locals
+[
+	Message message,
+	OrFilters orFilters
+]
 		:
 		ON 
 		ID {$messageName = $ID.text; }
 		(DOUBLEDOT filters = onFilters)?
 		ABRE_COR
-		onStatements
+		statements = onStatements
 		CIERRA_COR 
 		;
 
@@ -169,29 +174,25 @@ returns
 	)?
 	;
 	
-//filtros On:pressA pressB (parsea la disyuncion pressA or pressB)
+//filtros separados por espacios, es en caso que se cumpla otra condición también
 onFilters
-returns
+locals
 [
-	OrFilters orFilters;
+ 	OrFilters orFilters,
+ 	Message message
 ]
 		:
-		andFilters 
-		(andFilters)*		
-		;
-
-//filtros y On:pressA,pressB (parsea la conjunción pressA and pressB)
-//filtro methodValue
-andFilters
-		:
-		filter
-		(COMA filter)*			
+		filter (filter)*
 		;
 
 filter
 returns
 [
 	String filterName;
+]
+locals
+[
+    Message message
 ]
 		:
 		ID {$filterName = $ID.text;}

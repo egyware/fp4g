@@ -35,7 +35,6 @@ import fp4g.data.define.Message;
 import fp4g.data.define.NotAllowedException;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.literals.StringLiteral;
-import fp4g.data.statements.AndFilters;
 import fp4g.data.statements.Destroy;
 import fp4g.data.statements.Filter;
 import fp4g.data.statements.OrFilters;
@@ -160,11 +159,10 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		if(on == null)
 		{	
 			//es message, cast seguro
-
 			Message message = null;
 			try
 			{
-				message = parent.getDefine(DefineType.MESSAGE,ctx.messageName);
+				message = parent.getDefine(DefineType.MESSAGE,ctx.messageName);				
 				on = new On(message);
 			}
 			catch (DefineNotFoundException e) 
@@ -177,6 +175,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			parent.setOn(on);
 		}
 		
+		visit(ctx.statements);
 		//al evento on, se crea un nuevo codigo y se le añaden los filtros, si es que existen.
 		//falta solo agregarle el codigo :)
 		Source source = on.addSource(statements);
@@ -186,6 +185,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			try
 			{
 				ctx.filters.orFilters = source.filters;
+				ctx.filters.message   = on.message;
 				visit(ctx.filters);				
 			}
 			catch(FP4GRuntimeException e)
@@ -210,10 +210,14 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		{
 			for(ParseTree c:ctx.children)
 			{
-				AndFilters code = (AndFilters)visit(c);
-				if(code != null)
+				if(c instanceof FP4GParser.FilterContext)
 				{
-					or.addAnd(code);
+					((FP4GParser.FilterContext) c).message = ctx.message;				
+					Filter code = (Filter)visit(c);
+					if(code != null)
+					{
+						or.addAnd(code);
+					}
 				}
 			}		
 		}
@@ -222,33 +226,16 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	}
 	
 	@Override 
-	public ILine visitAndFilters(FP4GParser.AndFiltersContext ctx)
-	{
-		
-		AndFilters and = new AndFilters();
-		
-		if(ctx.children != null)
-		{
-			for(ParseTree c:ctx.children)
-			{
-				Filter code = (Filter)visit(c);
-				if(code != null)
-				{
-					and.AddFilter(code);
-				}
-			}		
-		}
-		
-		return and;		
-	}
-	
-	@Override 
 	public ILine visitFilter(FP4GParser.FilterContext ctx)
 	{
 		//tendrá eso?
 		ExprList list = exprVisitor.getExprList(ctx.exprList());
-		
-		MessageMethod method = methods.getMessageMethod(ctx.filterName);
+		Message message = ctx.message;
+		MessageMethod method = null;
+		if(message != null)
+		{
+			method = message.getMessageMethod(ctx.filterName);
+		}	
 		if(method == null)
 		{
 			throw new FP4GRuntimeException(Error.FilterMethodMissing,"No se encontró un metodo para el filtro:  ".concat(ctx.filterName));
@@ -259,6 +246,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		return filter;		
 	}
 	
+	
+
 	@Override
 	public ILine visitOnStatements(FP4GParser.OnStatementsContext ctx)
 	{

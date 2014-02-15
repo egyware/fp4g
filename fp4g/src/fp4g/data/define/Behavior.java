@@ -5,7 +5,6 @@ import fp4g.data.DefineType;
 import fp4g.data.IDefine;
 
 /**
- * TODO definir si va hacer algo esta clase...
  * Encapsula un comportamiento
  * @author Edgardo
  *
