@@ -16,7 +16,7 @@ public class MessageGenerator extends CodeGenerator<JavaGenerator> {
 	@Override
 	public void generateCode(ICode gameData, File path) throws Exception
 	{
-		// TODO Auto-generated method stub		
+		//FALTA EL GENERADOR DE MENSAJES
 	}
 
 	@Override

@@ -5,24 +5,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
 
-import fp4g.classes.MessageMethod;
 import fp4g.data.Add;
 import fp4g.data.DeclVar;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
-import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
-import fp4g.data.IValue;
 import fp4g.data.On;
 import fp4g.data.define.Entity;
-import fp4g.data.expresion.ClassMap;
-import fp4g.data.statements.Filter;
-import fp4g.data.statements.Source;
 import fp4g.data.vartypes.BasicType;
 import fp4g.data.vartypes.CustomType;
+import fp4g.exceptions.FP4GException;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
@@ -30,9 +24,8 @@ import fp4g.generator.Generator;
 import fp4g.generator.gdx.models.JavaCodeModel;
 import fp4g.generator.gdx.models.OnModel;
 import fp4g.generator.gdx.models.ParamCodeModel;
-import fp4g.generator.gdx.models.On.FiltersD;
-import fp4g.generator.gdx.models.On.SourceModel;
 import fp4g.generator.gdx.models.On.MethodHandlerModel;
+import fp4g.log.info.Error;
 import fp4g.log.info.GeneratorError;
 import freemarker.template.Template;
 
@@ -143,12 +136,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				List<String> params = new LinkedList<String>();
 				for(Expresion expr: addBhvr.params)
 				{
-					String result = generator.expresion(modelBuild,expr);
-					if(result != null)
-					{
-						params.add(result);
-					}
-					//TODO: probablemente mostrar un error...
+					params.add(generator.expresion(modelBuild,expr));
 				}
 				bhvr.put("params",params);				
 			}			
@@ -166,95 +154,31 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			List<OnModel> onList = new LinkedList<OnModel>();			
 			for(On on: entity_onMessages)
 			{
-				//evitamos que los on_entity se pasen a la entidad.
-				if(on.message != null && on.message.isFactory())
+				if(on.message == null)
+				{
+					throw new FP4GException(Error.MessageNotFound,String.format("No se encontró el mensaje %s para la instrucción ON", on.name));
+					//gracias a esta excepción aseguro que siempre on.message != null
+				}
+				
+				//evitamos que los on_entity se pasen a la build entity.
+				if(on.message.isFactory())
 				{
 					entityBuild_onMessages.add(on);
 					continue;
 				}
-				OnModel onModel = new OnModel(on);				
-				//**que hay que hacer ahora?
-				//agregar la interface 
-				modelEntity.addInterface(String.format("%sMessageHandler",on.name));
-
-				//agregar los metodos, aunque están vacios y asumiento que todos son MessageMethod
-				HashMap<String,MethodHandlerModel> methods = new HashMap<String, MethodHandlerModel>();
-				//TODO da un error cuando el mensaje está sin definir		
-				for(Entry<String,IValue<?>> entry:on.message.entrySet())
-				{	
-					IValue<?> value = entry.getValue();
-					if(value instanceof ClassMap)
-					{
-						Object bean = ((ClassMap<?>)value).getValue();				
-						if(bean instanceof MessageMethod)
-						{
-							methods.put(entry.getKey(), new MethodHandlerModel((MessageMethod) bean));
-						}
-					}
-				}
 				
-				//luego tengo que recorrer los sources en busca de los methodHandlers y subirlos acá
-				for(Source source:on.sources)
-				{			
-					//este objeto se trata de relacionar los source model con un MethodHandlermodel
-					final HashMap<MethodHandlerModel,SourceModel> sourcesMap = new HashMap<MethodHandlerModel, SourceModel>();
-					
-					if(source.filters.size() > 0)
-					{
-						for(Filter filter: source.filters)
-						{
-							final MessageMethod method = filter.method;
-							final ExprList exprList = filter.exprList;
-							
-							//encontré un metodo, que hago con el
-							MethodHandlerModel m = methods.get(method.getName());								
-		
-							//obtengo el source model correspondiente 
-							SourceModel sm = sourcesMap.get(m);
-							if(sm == null)
-							{
-								sm = new SourceModel(source,on,modelEntity, generator);								
-								sourcesMap.put(m, sm);						
-							}					
-							//ya tengo el metodo manejador, que hago con el?
-							//facil, ahora debes agregar este filtro
-							//pero como diferencio si es conjuncion o disyunción?
-							//todos los que están en este for, son una conjunción
-							//13/02/14 Ahora maneja listas de expresiones
-							if(exprList != null) //me aseguro que sea distinto de nulo, asi no agrega nada adicional
-							{
-								FiltersD filterD = sm.getCurrentFilterD(filter);									
-								filterD.add(method, exprList, generator.exprGen); //agrego el filtro actual
-							}
-						}				
-						//ahora como agrego otra disyunciï¿½n?
-						//lo harï¿½ en currentFilter, guardarï¿½ la ultima iteraciï¿½n. Si esta cambia, entonces agregarï¿½ otro filtro.						
-					}
-					else //cuando hay 0 filtros
-					{
-						for(Entry<String,MethodHandlerModel> entry:methods.entrySet())
-						{
-							//cuando hay 0 filtros, el source se agrega a cada uno de los metodos
-							entry.getValue().addSource(new SourceModel(source, on, modelEntity, generator));					
-						}
-					}
-					//al finalizar
-					for(Entry<MethodHandlerModel, SourceModel> entry:sourcesMap.entrySet())
-					{
-						entry.getKey().addSource(entry.getValue());
-					}
-				}
-				onModel.getMethodHandlers().addAll(methods.values());
+				OnModel onModel = OnModel.build(on, generator, modelEntity);
 				
 				onList.add(onModel);
 			}
 			entityRoot.put("messages", onList);
 			
+			//de aqui empiezan los mensajes para la factory
 			List<OnModel> onListBuild = new LinkedList<OnModel>();			
 			for(On on: entityBuild_onMessages)
 			{
-				OnModel onModel = new OnModel(on);
-				//TODO guardar datos en el modelo!
+				OnModel onModel = OnModel.build(on,generator, modelBuild);						
+				
 				onListBuild.add(onModel);
 			}
 			buildRoot.put("messages", onListBuild);
@@ -262,20 +186,19 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			//revisar si tiene attachments, basta con uno..
 			boolean hasAttachments = false;
 			for(OnModel onModel:onList)
-			{
-				//TODO pendiente reactivar esta funcionalidad
-//				for(MethodHandlerModel m: onModel.getMethodHandlers())
-//				{
-//					if(m.isAttach())
-//					{
-//						hasAttachments = true;
-//						break;
-//					}					
-//				}
-//				if(hasAttachments)
-//				{					
-//					break;
-//				}
+			{			
+				for(MethodHandlerModel m: onModel.getMethodHandlers())
+				{
+					if(m.isAttach())
+					{
+						hasAttachments = true;
+						break;
+					}					
+				}
+				if(hasAttachments)
+				{					
+					break;
+				}
 			}	
 			if(hasAttachments)
 			{	
