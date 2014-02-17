@@ -194,16 +194,13 @@ DEFINE GAME
 	]
 	
 	
-	SET methods  = {
-		Press = Key.press, release = Key.release,
+	SET methods  = {		
 		translate = Move.translate, rotate = Move.rotate, angularSpeed = Move.angularSpeed, speed = Move.speed, forward = Move.forward,
 		begin = Contact.begin,end = Contact.end,
 		shot = Gun.shot, reload = Gun.reload, changeBullet = Gun.changeBullet,
-		setDelayShot = AutoGun.SetDelayShot, setShot = AutoGun.SetShot,
-		init = Entity.init, deinit = Entity.deinit,
+		setDelayShot = AutoGun.SetDelayShot, setShot = AutoGun.SetShot,		
 		active = MESSAGE.Timer.active, setTime=MESSAGE.Timer.setTime, cancel = MESSAGE.Timer.cancel,
-		change = MESSAGE.Level.change, reload = MESSAGE.Level.reload,
-		//move   = MESSAGE.Mouse.move,   pressButton = MESSAGE.Mouse.pressButton, releaseButton = MESSAGE.Mouse.releaseButton, dragged = MESSAGE.Mouse.dragged,
+		change = MESSAGE.Level.change, reload = MESSAGE.Level.reload,		
 	} AS MessageMethods;
 	
 	SET resolvers = 

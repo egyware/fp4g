@@ -3,7 +3,6 @@ package fp4g.data.expresion;
 import com.esotericsoftware.reflectasm.ConstructorAccess;
 
 import fp4g.data.IValue;
-import fp4g.exceptions.NotAllowedOperatorException;
 
 public final class CustomClassMap extends Literal<Map> implements Map
 {	
@@ -32,29 +31,4 @@ public final class CustomClassMap extends Literal<Map> implements Map
 	{
 		return bean;
 	}
-	
-	@Override
-	public IValue<?> sum(IValue<?> right) throws NotAllowedOperatorException 
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Add);		
-	}
-
-	@Override
-	public IValue<?> mult(IValue<?> right) throws NotAllowedOperatorException 
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Mult);
-	}
-
-	@Override
-	public IValue<?> div(IValue<?> right) throws NotAllowedOperatorException 
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Div);
-	}
-
-	@Override
-	public IValue<?> sub(IValue<?> right) throws NotAllowedOperatorException 
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Sub);
-	}
-	
 }

@@ -1,6 +1,7 @@
 package fp4g.data.expresion;
 
 import fp4g.data.IValue;
+import fp4g.data.operators.IAccessible;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.NotAllowedOperatorException;
 import fp4g.log.info.CannotEval;
@@ -29,13 +30,16 @@ public class VarDot extends VarId
 	@Override
 	public IValue<?> eval(IValue<?> current) throws CannotEvalException 
 	{		
-		//a que define accedo si no me sé el tipo?
-		try
+		if(!(current instanceof IAccessible))
 		{
+			throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Uno de los operandos de la expresión, no permite cierta operación get/getParent");
+		}
+		try
+		{			
 			IValue<?> sub = null;
 			if(VarDot.parent == varName)
 			{
-				sub = current.getParent();
+				sub = ((IAccessible)current).getParent();
 			}else
 			if(VarDot.current == varName)
 			{

@@ -14,9 +14,7 @@ import fp4g.data.IValue;
 import fp4g.data.Namespace;
 import fp4g.data.On;
 import fp4g.data.define.NotAllowedException;
-import fp4g.data.expresion.BinaryOp;
 import fp4g.exceptions.DefineNotFoundException;
-import fp4g.exceptions.NotAllowedOperatorException;
 import fp4g.log.info.NotAllowed;
 
 /**
@@ -195,29 +193,5 @@ public class Lib extends Code implements fp4g.data.expresion.Map,ILib,IDefine
 	public IDefine getValue() 
 	{	
 		return this;
-	}
-
-	public IValue<?> sum(IValue<?> right)
-	throws NotAllowedOperatorException
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Add);
-	}
-	
-	public IValue<?> mult(IValue<?> right)
-	throws NotAllowedOperatorException
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Mult);
-	}
-	
-	public IValue<?> div(IValue<?> right)
-	throws NotAllowedOperatorException
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Div);
-	}
-	
-	public IValue<?> sub(IValue<?> right)
-	throws NotAllowedOperatorException
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Sub);
 	}
 }

@@ -111,7 +111,39 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	}
 	
 	
-	//numeric expresion!
+	@Override
+	public Expresion visitLessThanExpr(FP4GParser.LessThanExprContext ctx)
+	{
+		Expresion left = visit(ctx.left);
+		Expresion right = visit(ctx.right);
+		
+		BinaryOp binaryExpr = new BinaryOp(BinaryOp.OperatorType.LessThan,left,right);
+		
+		return binaryExpr;		
+	}
+	
+	@Override
+	public Expresion visitMoreThanExpr(FP4GParser.MoreThanExprContext ctx)
+	{
+		Expresion left = visit(ctx.left);
+		Expresion right = visit(ctx.right);
+		
+		BinaryOp binaryExpr = new BinaryOp(BinaryOp.OperatorType.MoreThan,left,right);
+		
+		return binaryExpr;		
+	}
+	
+	@Override
+	public Expresion visitEqualExpr(FP4GParser.EqualExprContext ctx)
+	{
+		Expresion left = visit(ctx.left);
+		Expresion right = visit(ctx.right);
+		
+		BinaryOp binaryExpr = new BinaryOp(BinaryOp.OperatorType.Equal,left,right);
+		
+		return binaryExpr;
+	}
+	
 	@Override
 	public Expresion visitMinusExpr(FP4GParser.MinusExprContext ctx)
 	{		
@@ -127,7 +159,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		Expresion left = visit(ctx.left);
 		Expresion right = visit(ctx.right);
 				
-		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Mult,left,right);
+		BinaryOp binaryExpr = new BinaryOp(BinaryOp.OperatorType.Mult,left,right);
 			
 		return binaryExpr;
 	}
@@ -138,7 +170,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		Expresion left = visit(ctx.left);
 		Expresion right = visit(ctx.right);
 		
-		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Div,left,right);
+		BinaryOp binaryExpr = new BinaryOp(BinaryOp.OperatorType.Div,left,right);
 		
 		return binaryExpr;
 	}
@@ -149,7 +181,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		Expresion left = visit(ctx.left);
 		Expresion right = visit(ctx.right);
 		
-		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Add,left,right);
+		BinaryOp binaryExpr = new BinaryOp(BinaryOp.OperatorType.Add,left,right);
 		
 		return binaryExpr;
 	}
@@ -160,7 +192,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		Expresion left = visit(ctx.left);
 		Expresion right = visit(ctx.right);		
 		
-		BinaryOp binaryExpr = new BinaryOp(BinaryOp.Type.Sub,left,right);
+		BinaryOp binaryExpr = new BinaryOp(BinaryOp.OperatorType.Sub,left,right);
 		
 		return binaryExpr;
 	}

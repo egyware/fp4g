@@ -2,6 +2,7 @@ package fp4g.data.expresion;
 
 import fp4g.data.Expresion;
 import fp4g.data.IValue;
+import fp4g.data.operators.IAccessible;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.NotAllowedOperatorException;
 import fp4g.log.info.CannotEval;
@@ -23,22 +24,27 @@ public class VarId extends Expresion
 	@Override
 	public IValue<?> eval(IValue<?> container) throws CannotEvalException 
 	{
+		if(!(container instanceof IAccessible))
+		{
+			throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Uno de los operandos de la expresión, no permite cierta operación get/getParent");
+		}
 		try
 		{
+			IAccessible contenedor = (IAccessible)container;
 			if(parent == this)
 			{
-				if(container.getParent() == null)
+				if(contenedor.getParent() == null)
 				{
 					throw new CannotEvalException(CannotEval.VarNameNotFound,this,String.format("No se puede acceder al contenedor superior de la variable \"%s\"",varName));
 				}
-				return container.getParent();	
+				return contenedor.getParent();	
 			}else
 			if(current == this)
 			{
 				return container;
 			}else
 			{
-				IValue<?> value = container.get(varName);
+				IValue<?> value = contenedor.get(varName);
 				if(value == null)
 				{
 					throw new CannotEvalException(CannotEval.VarNameNotFound,this,String.format("No se encontró la variable \"%s\"",varName));

@@ -15,7 +15,15 @@ public enum CreateEntityMessage implements Message<CreateEntityMessageHandler> {
 	@Override
 	public void dispatch(MessageHandler h, Object... args) {
 		final CreateEntityMessageHandler handler = (CreateEntityMessageHandler)h;
+		switch(this)
+		{
+		case onCreateEntity:
+			//handler.onCreateEntity(args[0].toString(), Arrays.);			
+			break;
+		default:
+			break;
 		
+		}
 	}
 
 }

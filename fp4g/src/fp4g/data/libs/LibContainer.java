@@ -182,25 +182,25 @@ public class LibContainer extends Code implements ILib, IDefine
 	public IValue<?> sum(IValue<?> right)
 	throws NotAllowedOperatorException
 	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Add);
+		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Add);
 	}
 	
 	public IValue<?> mult(IValue<?> right)
 	throws NotAllowedOperatorException
 	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Mult);
+		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Mult);
 	}
 	
 	public IValue<?> div(IValue<?> right)
 	throws NotAllowedOperatorException
 	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Div);
+		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Div);
 	}
 	
 	public IValue<?> sub(IValue<?> right)
 	throws NotAllowedOperatorException
 	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Sub);
+		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Sub);
 	}
 	
 		

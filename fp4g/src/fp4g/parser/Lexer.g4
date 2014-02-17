@@ -57,6 +57,8 @@ PLUS  : '+';
 MINUS : '-';
 MULTIPLY : '*';
 DIVIDE : '/';
+MORE_THAN : '>';
+LESS_THAN : '<';
 AND : 'AND';
 OR  : 'OR';
 XOR : 'XOR';

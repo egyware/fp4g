@@ -1,11 +1,13 @@
 package fp4g.data.expresion.literals;
 
 import fp4g.data.IValue;
-import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.Literal;
+import fp4g.data.operators.IAddable;
+import fp4g.data.operators.IComparable;
 import fp4g.exceptions.NotAllowedOperatorException;
 
-public class StringLiteral extends Literal<String> {
+public class StringLiteral extends Literal<String> implements IAddable, IComparable
+{
 	private final String value;
 	
 	public StringLiteral(String value)
@@ -20,28 +22,51 @@ public class StringLiteral extends Literal<String> {
 	}
 
 	@Override
-	public IValue<?> sum(IValue<?> right) 
+	public BoolLiteral lessThan(IValue<?> right)
+	throws NotAllowedOperatorException 
 	{
-		Object other = right.getValue();
-		return new StringLiteral(value.concat(other.toString()));		
+		if(value.compareTo(right.getValue().toString()) < 0)
+		{
+			return BoolLiteral.TRUE;
+		}
+		else
+		{
+			return BoolLiteral.FALSE;
+		}		
 	}
 
 	@Override
-	public IValue<?> mult(IValue<?> right) throws NotAllowedOperatorException 
+	public BoolLiteral moreThan(IValue<?> right)
+	throws NotAllowedOperatorException 
 	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Mult);		
+		if(value.compareTo(right.getValue().toString()) > 0)
+		{
+			return BoolLiteral.TRUE;
+		}
+		else
+		{
+			return BoolLiteral.FALSE;
+		}
 	}
 
 	@Override
-	public IValue<?> div(IValue<?> right) throws NotAllowedOperatorException 
+	public BoolLiteral equals(IValue<?> right)
+	throws NotAllowedOperatorException 
 	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Div);		
+		if(value.equals(right.getValue().toString()))
+		{
+			return BoolLiteral.TRUE;
+		}
+		else
+		{
+			return BoolLiteral.FALSE;
+		}
 	}
 
 	@Override
-	public IValue<?> sub(IValue<?> right) throws NotAllowedOperatorException 
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Sub);
+	public IValue<?> add(IValue<?> right) throws NotAllowedOperatorException
+	{	
+		return new StringLiteral(value.concat(right.getValue().toString()));
 	}
 
 }

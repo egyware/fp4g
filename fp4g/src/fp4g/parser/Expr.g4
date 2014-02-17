@@ -2,14 +2,17 @@ parser grammar Expr;
 
 expr  
 		 :
-		   array                         #arrayExpr
-		 | ABRE_PAR op=expr CIERRA_PAR   #parExpr
-		 | NOT op=expr	                 #notExpr		 
-		 | MINUS op=expr                 #minusExpr		 
-		 | left=expr MULTIPLY right=expr #multExpr
-		 | left=expr DIVIDE   right=expr #divExpr
-		 | left=expr PLUS     right=expr #addExpr
-		 | left=expr MINUS    right=expr #subExpr
+		   array                          #arrayExpr
+		 | ABRE_PAR op=expr CIERRA_PAR    #parExpr
+		 | NOT op=expr	                  #notExpr		 
+		 | MINUS op=expr                  #minusExpr
+		 | left=expr LESS_THAN right=expr #lessThanExpr
+		 | left=expr MORE_THAN right=expr #moreThanExpr
+		 | left=expr EQUAL     right=expr #equalExpr
+		 | left=expr MULTIPLY  right=expr #multExpr
+		 | left=expr DIVIDE    right=expr #divExpr
+		 | left=expr PLUS      right=expr #addExpr
+		 | left=expr MINUS     right=expr #subExpr
 			 
 		 | INT_LITERAL                   #intLiteral
          | DECIMAL_LITERAL               #decimalLiteral         

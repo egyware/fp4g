@@ -3,9 +3,16 @@ package fp4g.data.expresion.literals;
 import fp4g.data.IValue;
 import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.Literal;
+import fp4g.data.operators.IAddable;
+import fp4g.data.operators.IComparable;
+import fp4g.data.operators.IDivisible;
+import fp4g.data.operators.IMultipliable;
+import fp4g.data.operators.ISubtractable;
 import fp4g.exceptions.NotAllowedOperatorException;
 
-public class IntegerLiteral extends Literal<Integer> {
+public class IntegerLiteral extends Literal<Integer>
+implements IAddable, ISubtractable, IMultipliable, IDivisible, IComparable
+{
 	private final Integer value;
 	
 	public IntegerLiteral(Integer value)
@@ -20,7 +27,7 @@ public class IntegerLiteral extends Literal<Integer> {
 	}
 
 	@Override
-	public IValue<?> sum(IValue<?> right) throws NotAllowedOperatorException 
+	public IValue<?> add(IValue<?> right) throws NotAllowedOperatorException 
 	{
 		Object other = right.getValue();
 		if(other instanceof Integer)
@@ -39,7 +46,7 @@ public class IntegerLiteral extends Literal<Integer> {
 		}
 		else
 		{
-			throw new NotAllowedOperatorException(this,BinaryOp.Type.Add);
+			throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Add);
 		}		
 	}
 
@@ -58,7 +65,7 @@ public class IntegerLiteral extends Literal<Integer> {
 		}		
 		else
 		{
-			throw new NotAllowedOperatorException(this,BinaryOp.Type.Mult);
+			throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Mult);
 		}
 	}
 
@@ -77,7 +84,7 @@ public class IntegerLiteral extends Literal<Integer> {
 		}		
 		else
 		{
-			throw new NotAllowedOperatorException(this,BinaryOp.Type.Div);
+			throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Div);
 		}
 	}
 
@@ -96,7 +103,52 @@ public class IntegerLiteral extends Literal<Integer> {
 		}		
 		else
 		{
-			throw new NotAllowedOperatorException(this,BinaryOp.Type.Sub);
+			throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Sub);
+		}
+	}
+
+	@Override
+	public BoolLiteral lessThan(IValue<?> right)
+	throws NotAllowedOperatorException 
+	{
+		Object other = right.getValue();
+		if(other instanceof Number)
+		{
+			return (value.intValue() < ((Number)other).intValue())?BoolLiteral.TRUE: BoolLiteral.FALSE;
+		}				
+		else
+		{
+			throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Sub);
+		}
+	}
+
+	@Override
+	public BoolLiteral moreThan(IValue<?> right)
+	throws NotAllowedOperatorException 
+	{
+		Object other = right.getValue();
+		if(other instanceof Number)
+		{
+			return (value.intValue() > ((Number)other).intValue())?BoolLiteral.TRUE: BoolLiteral.FALSE;
+		}				
+		else
+		{
+			throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Sub);
+		}
+	}
+
+	@Override
+	public BoolLiteral equals(IValue<?> right)
+	throws NotAllowedOperatorException 
+	{
+		Object other = right.getValue();
+		if(other instanceof Number)
+		{
+			return (value.intValue() == ((Number)other).intValue())?BoolLiteral.TRUE: BoolLiteral.FALSE;
+		}				
+		else
+		{
+			throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Sub);
 		}
 	}
 

@@ -205,6 +205,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitAssets(@NotNull FP4GParser.AssetsContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#moreThanExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMoreThanExpr(@NotNull FP4GParser.MoreThanExprContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#varNameOperator}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -240,18 +247,18 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitItemArray(@NotNull FP4GParser.ItemArrayContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#nameList}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNameList(@NotNull FP4GParser.NameListContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link FP4GParser#parentOperator}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParentOperator(@NotNull FP4GParser.ParentOperatorContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#nameList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNameList(@NotNull FP4GParser.NameListContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#onStatement}.
@@ -280,6 +287,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAssetValuesInner(@NotNull FP4GParser.AssetValuesInnerContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#equalExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEqualExpr(@NotNull FP4GParser.EqualExprContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#assetValueInner}.
@@ -378,6 +392,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDivExpr(@NotNull FP4GParser.DivExprContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#lessThanExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLessThanExpr(@NotNull FP4GParser.LessThanExprContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#define}.

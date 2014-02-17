@@ -46,7 +46,15 @@ public class FiltersD implements Model, Iterable<String>
 		if(iterator.hasNext())
 		{
 			Expresion first = iterator.next();
-			condiciones.add(String.format(mm.getValueReplace(),jeg.generate(null, first)));
+			String valueReplace = mm.getValueReplace();
+			if(valueReplace == null)
+			{
+				condiciones.add(jeg.generate(null, first));
+			}
+			else
+			{
+				condiciones.add(String.format(mm.getValueReplace(),jeg.generate(null, first)));
+			}
 		}
 		for(;iterator.hasNext();)
 		{

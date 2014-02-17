@@ -3,7 +3,6 @@ package fp4g.data.expresion;
 import java.util.HashMap;
 
 import fp4g.data.IValue;
-import fp4g.exceptions.NotAllowedOperatorException;
 
 // también deberia ser literal
 public final class ArrayMap extends Literal<Map> implements Map
@@ -38,29 +37,4 @@ public final class ArrayMap extends Literal<Map> implements Map
 	public Map getValue() {
 		return this;
 	}
-	
-	@Override
-	public IValue<?> sum(IValue<?> right) throws NotAllowedOperatorException 
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Add);		
-	}
-
-	@Override
-	public IValue<?> mult(IValue<?> right) throws NotAllowedOperatorException 
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Mult);
-	}
-
-	@Override
-	public IValue<?> div(IValue<?> right) throws NotAllowedOperatorException 
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Div);
-	}
-
-	@Override
-	public IValue<?> sub(IValue<?> right) throws NotAllowedOperatorException 
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.Type.Sub);
-	}
-
 }

@@ -184,8 +184,17 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 			case Sub:
 				builder.append('-');
 				break;
-			default:
+			case Equal:
+				builder.append("==");
 				break;
+			case LessThan:
+				builder.append('<');
+				break;
+			case MoreThan:
+				builder.append('>');
+				break;
+			default:
+				break;	
 							
 			}
 			builder.append(generate(model, bin.right));						
