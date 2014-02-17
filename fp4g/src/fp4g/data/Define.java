@@ -13,7 +13,6 @@ import org.antlr.v4.misc.Utils;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
 
-import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.literals.BoolLiteral;
@@ -22,7 +21,6 @@ import fp4g.data.expresion.literals.IntegerLiteral;
 import fp4g.data.expresion.literals.ObjectLiteral;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.DefineNotFoundException;
-import fp4g.exceptions.NotAllowedOperatorException;
 
 public abstract class Define extends Code implements IDefine
 {
@@ -400,29 +398,5 @@ public abstract class Define extends Code implements IDefine
 	public IDefine getParent() 
 	{
 		return parent;
-	}
-	
-	public IValue<?> sum(IValue<?> right)
-	throws NotAllowedOperatorException
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Add);
-	}
-	
-	public IValue<?> mult(IValue<?> right)
-	throws NotAllowedOperatorException
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Mult);
-	}
-	
-	public IValue<?> div(IValue<?> right)
-	throws NotAllowedOperatorException
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Div);
-	}
-	
-	public IValue<?> sub(IValue<?> right)
-	throws NotAllowedOperatorException
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Sub);
-	}
+	}	
 }
