@@ -296,13 +296,6 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitEqualExpr(@NotNull FP4GParser.EqualExprContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#assetValueInner}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAssetValueInner(@NotNull FP4GParser.AssetValueInnerContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link FP4GParser#set}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -406,6 +399,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDefine(@NotNull FP4GParser.DefineContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#assetValueWithInnerValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssetValueWithInnerValue(@NotNull FP4GParser.AssetValueWithInnerValueContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#directCode}.

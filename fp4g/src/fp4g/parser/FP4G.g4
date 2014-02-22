@@ -236,18 +236,24 @@ returns
         
 assets:
 	ASSETS
-	ABRE_COR assetValue (COMA assetValue)* COMA? CIERRA_COR
+	ABRE_COR 
+		assetValueWithInnerValue
+		(
+			COMA
+			assetValueWithInnerValue
+		)* COMA?
+	 CIERRA_COR
+;
+
+assetValueWithInnerValue:
+	value = assetValue (innerAssets = assetValuesInner)?
 ;
 
 assetValue:
-	assetType=ID assetName=ID? DOUBLEDOT asset=STRING_LITERAL (innerAssetValues = assetValuesInner)?	
+	assetType=ID assetName=ID? DOUBLEDOT asset = STRING_LITERAL ( ABRE_PAR exprlist = exprList CIERRA_PAR)?
 ;
 
-/** diseñadas para no permitir otro nivel adicional de profundidad en los assets */
+
 assetValuesInner:
-	ABRE_COR assetValueInner (COMA assetValueInner)* COMA? CIERRA_COR
-;
-
-assetValueInner:
-	assetType=ID assetName=ID? DOUBLEDOT asset=STRING_LITERAL
+	ABRE_COR assetValue (COMA assetValue)* COMA? CIERRA_COR
 ;

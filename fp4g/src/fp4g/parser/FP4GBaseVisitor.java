@@ -341,14 +341,6 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitAssetValueInner(@NotNull FP4GParser.AssetValueInnerContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
 	@Override public T visitSet(@NotNull FP4GParser.SetContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -462,6 +454,14 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitDefine(@NotNull FP4GParser.DefineContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitAssetValueWithInnerValue(@NotNull FP4GParser.AssetValueWithInnerValueContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

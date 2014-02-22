@@ -27,7 +27,6 @@ import fp4g.data.define.GameState;
 import fp4g.data.define.Manager;
 import fp4g.data.define.Message;
 import fp4g.data.define.NotAllowedException;
-import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.data.libs.Lib;
 import fp4g.data.statements.Destroy;
 import fp4g.exceptions.CannotEvalException;
@@ -337,60 +336,14 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 	@Override
 	public Code visitAssets(FP4GParser.AssetsContext ctx) 
 	{
-//		Assets assets = new Assets();		
-//		assets_stack.push(assets);
-		visitChildren(ctx);
-//		assets_stack.pop();
-//		
-//		Define parent = current.peek();
-//		parent.setAssets(assets);
-		return null;
-	}
-	
-	@Override
-	public Code visitAssetValueInner(FP4GParser.AssetValueInnerContext ctx)
-	{
-//TODO por hacer		
-//		Assets parent = assets_stack.peek();
-//		AssetType type = ctx.assetType().type;		
-//		String name = (ctx.assetName != null)? ctx.assetName.getText(): null;
-//		String assetFile = ctx.asset.getText();
-//		parent.add(type,name,assetFile);
+		//TODO falta implementación
 		return null;
 	}
 	
 	@Override
 	public Code visitAssetValue(FP4GParser.AssetValueContext ctx)
 	{
-		IDefine parent = current.peek();	
-
-		//spaceship = ADD ASSET Texture({name="spacheship",atlas = assets_group_1})
-		String varName  = (ctx.assetName != null)?ctx.assetName.getText():null;
-		String assetFile = ctx.asset.getText(); //TODO hay que evualuar esto más adelante
-		assetFile = assetFile.substring(1, assetFile.length()-1);
-		Asset.Type assetType = Asset.Type.valueOf(ctx.assetType.getText());
-		
-		Add assetAdd;		
-		if(varName == null)
-		{
-			assetAdd = new Add(DefineType.ASSET,assetType.name());
-		}
-		else
-		{
-			assetAdd = new Add(DefineType.ASSET,assetType.name(),varName);
-		}
-		ExprList paramsList = new ExprList(1);
-		//TODO soportar muchas opciones
-		paramsList.add(new StringLiteral(assetFile));
-		
-		assetAdd.addParams(paramsList);		
-		parent.setAdd(assetAdd);
-		
-		if(ctx.innerAssetValues != null)
-		{	
-			//TODO más opciones...
-		}
-		
+		//TODO falta implementación		
 		return null;		
 	}
 }

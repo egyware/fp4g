@@ -53,16 +53,16 @@ DOTCOMA   : ';';
 DOUBLEDOT  : ':';
 
 /* OPERATORS */
-PLUS  : '+';
-MINUS : '-';
-MULTIPLY : '*';
-DIVIDE : '/';
+PLUS      : '+';
+MINUS     : '-';
+MULTIPLY  : '*';
+DIVIDE    : '/';
 MORE_THAN : '>';
 LESS_THAN : '<';
-AND : 'AND';
-OR  : 'OR';
-XOR : 'XOR';
-NOT : 'NOT';
+AND       : 'AND';
+OR        : 'OR';
+XOR       : 'XOR';
+NOT       : 'NOT';
 
 /* Tipos */
 NUMBER_TYPE : 'Number';

@@ -517,27 +517,21 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	
 	
 	@Override
-	public ILine visitAssets(FP4GParser.AssetsContext ctx) 
+	public ILine visitAssetValueWithInnerValue(FP4GParser.AssetValueWithInnerValueContext ctx) 
 	{
-//		Assets assets = new Assets();		
-//		assets_stack.push(assets);
-		visitChildren(ctx);
-//		assets_stack.pop();
-//		
-//		Define parent = current.peek();
-//		parent.setAssets(assets);
-		return null;
-	}
-	
-	@Override
-	public ILine visitAssetValueInner(FP4GParser.AssetValueInnerContext ctx)
-	{
-//TODO por hacer		
-//		Assets parent = assets_stack.peek();
-//		AssetType type = ctx.assetType().type;		
-//		String name = (ctx.assetName != null)? ctx.assetName.getText(): null;
-//		String assetFile = ctx.asset.getText();
-//		parent.add(type,name,assetFile);
+		Add asset = (Add)visit(ctx.value);		
+		if(ctx.innerAssets!= null)
+		{
+			StringLiteral param = (StringLiteral)asset.params.get(0);
+			for(ParseTree children:ctx.innerAssets.children)
+			{
+				Add assetChildren = (Add)visit(children);
+				if(assetChildren != null)
+				{
+					assetChildren.params.insertElementAt(param, 1);//lo insertamos en la posición 2!! nada más solo eso!!!
+				}
+			}
+		}
 		return null;
 	}
 	
@@ -546,8 +540,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	{
 		IDefine parent = current.peek();	
 
-		//spaceship = ADD ASSET Texture({name="spacheship",atlas = assets_group_1})
-		
+		//spaceship = ADD ASSET Texture({name="spacheship",atlas = assets_group_1})		
 		String varName  = (ctx.assetName != null)?ctx.assetName.getText():null;
 		String assetFile = ctx.asset.getText(); //TODO hay que evualuar esto más adelante
 		assetFile = assetFile.substring(1, assetFile.length()-1);
@@ -582,18 +575,18 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			assetAdd.setLine(ctx.start.getLine());
 			
 		}
-		ExprList paramsList = new ExprList(1);
-		//TODO soportar muchas opciones
-		paramsList.add(new StringLiteral(assetFile));
 		
-		assetAdd.addParams(paramsList);		
+		ExprList paramList = exprVisitor.getExprList(ctx.exprList());
+		if(paramList == null)
+		{
+			paramList = new ExprList(1);
+		}
+		paramList.addFirst(new StringLiteral(assetFile)); //jé suerte que lo agregue		
+		
+		assetAdd.addParams(paramList);		
 		parent.setAdd(assetAdd);
 		
-		if(ctx.innerAssetValues != null)
-		{	
-			//TODO más opciones...
-		}
 		
-		return null;		
+		return assetAdd;		
 	}
 }

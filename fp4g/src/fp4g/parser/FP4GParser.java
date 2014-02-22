@@ -56,7 +56,7 @@ public class FP4GParser extends Parser {
 		RULE_onStatement = 13, RULE_destroy = 14, RULE_send = 15, RULE_onFilters = 16, 
 		RULE_filter = 17, RULE_defineValues = 18, RULE_defineValue = 19, RULE_exprList = 20, 
 		RULE_nameList = 21, RULE_declareVar = 22, RULE_varType = 23, RULE_assets = 24, 
-		RULE_assetValue = 25, RULE_assetValuesInner = 26, RULE_assetValueInner = 27, 
+		RULE_assetValueWithInnerValue = 25, RULE_assetValue = 26, RULE_assetValuesInner = 27, 
 		RULE_expr = 28, RULE_accessVarOp = 29, RULE_parentVarOp = 30, RULE_varOp = 31, 
 		RULE_varID = 32, RULE_array = 33, RULE_arrayBody = 34, RULE_itemArray = 35, 
 		RULE_parArray = 36;
@@ -64,8 +64,8 @@ public class FP4GParser extends Parser {
 		"program", "usings", "using", "game", "gameLib", "gameValues", "gameValue", 
 		"set", "start", "add", "define", "on", "onStatements", "onStatement", 
 		"destroy", "send", "onFilters", "filter", "defineValues", "defineValue", 
-		"exprList", "nameList", "declareVar", "varType", "assets", "assetValue", 
-		"assetValuesInner", "assetValueInner", "expr", "accessVarOp", "parentVarOp", 
+		"exprList", "nameList", "declareVar", "varType", "assets", "assetValueWithInnerValue", 
+		"assetValue", "assetValuesInner", "expr", "accessVarOp", "parentVarOp", 
 		"varOp", "varID", "array", "arrayBody", "itemArray", "parArray"
 	};
 
@@ -1563,14 +1563,14 @@ public class FP4GParser extends Parser {
 	}
 
 	public static class AssetsContext extends ParserRuleContext {
-		public AssetValueContext assetValue(int i) {
-			return getRuleContext(AssetValueContext.class,i);
-		}
 		public TerminalNode ABRE_COR() { return getToken(FP4GParser.ABRE_COR, 0); }
-		public List<AssetValueContext> assetValue() {
-			return getRuleContexts(AssetValueContext.class);
+		public AssetValueWithInnerValueContext assetValueWithInnerValue(int i) {
+			return getRuleContext(AssetValueWithInnerValueContext.class,i);
 		}
 		public TerminalNode CIERRA_COR() { return getToken(FP4GParser.CIERRA_COR, 0); }
+		public List<AssetValueWithInnerValueContext> assetValueWithInnerValue() {
+			return getRuleContexts(AssetValueWithInnerValueContext.class);
+		}
 		public TerminalNode ASSETS() { return getToken(FP4GParser.ASSETS, 0); }
 		public List<TerminalNode> COMA() { return getTokens(FP4GParser.COMA); }
 		public TerminalNode COMA(int i) {
@@ -1597,7 +1597,7 @@ public class FP4GParser extends Parser {
 			{
 			setState(310); match(ASSETS);
 			setState(311); match(ABRE_COR);
-			setState(312); assetValue();
+			setState(312); assetValueWithInnerValue();
 			setState(317);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,23,_ctx);
@@ -1606,7 +1606,7 @@ public class FP4GParser extends Parser {
 					{
 					{
 					setState(313); match(COMA);
-					setState(314); assetValue();
+					setState(314); assetValueWithInnerValue();
 					}
 					} 
 				}
@@ -1636,17 +1636,68 @@ public class FP4GParser extends Parser {
 		return _localctx;
 	}
 
+	public static class AssetValueWithInnerValueContext extends ParserRuleContext {
+		public AssetValueContext value;
+		public AssetValuesInnerContext innerAssets;
+		public AssetValueContext assetValue() {
+			return getRuleContext(AssetValueContext.class,0);
+		}
+		public AssetValuesInnerContext assetValuesInner() {
+			return getRuleContext(AssetValuesInnerContext.class,0);
+		}
+		public AssetValueWithInnerValueContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_assetValueWithInnerValue; }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitAssetValueWithInnerValue(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final AssetValueWithInnerValueContext assetValueWithInnerValue() throws RecognitionException {
+		AssetValueWithInnerValueContext _localctx = new AssetValueWithInnerValueContext(_ctx, getState());
+		enterRule(_localctx, 50, RULE_assetValueWithInnerValue);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(325); ((AssetValueWithInnerValueContext)_localctx).value = assetValue();
+			setState(327);
+			_la = _input.LA(1);
+			if (_la==ABRE_COR) {
+				{
+				setState(326); ((AssetValueWithInnerValueContext)_localctx).innerAssets = assetValuesInner();
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
 	public static class AssetValueContext extends ParserRuleContext {
 		public Token assetType;
 		public Token assetName;
 		public Token asset;
-		public AssetValuesInnerContext innerAssetValues;
+		public ExprListContext exprlist;
 		public TerminalNode DOUBLEDOT() { return getToken(FP4GParser.DOUBLEDOT, 0); }
+		public ExprListContext exprList() {
+			return getRuleContext(ExprListContext.class,0);
+		}
 		public TerminalNode STRING_LITERAL() { return getToken(FP4GParser.STRING_LITERAL, 0); }
 		public List<TerminalNode> ID() { return getTokens(FP4GParser.ID); }
-		public AssetValuesInnerContext assetValuesInner() {
-			return getRuleContext(AssetValuesInnerContext.class,0);
-		}
+		public TerminalNode CIERRA_PAR() { return getToken(FP4GParser.CIERRA_PAR, 0); }
+		public TerminalNode ABRE_PAR() { return getToken(FP4GParser.ABRE_PAR, 0); }
 		public TerminalNode ID(int i) {
 			return getToken(FP4GParser.ID, i);
 		}
@@ -1663,27 +1714,29 @@ public class FP4GParser extends Parser {
 
 	public final AssetValueContext assetValue() throws RecognitionException {
 		AssetValueContext _localctx = new AssetValueContext(_ctx, getState());
-		enterRule(_localctx, 50, RULE_assetValue);
+		enterRule(_localctx, 52, RULE_assetValue);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(325); ((AssetValueContext)_localctx).assetType = match(ID);
-			setState(327);
+			setState(329); ((AssetValueContext)_localctx).assetType = match(ID);
+			setState(331);
 			_la = _input.LA(1);
 			if (_la==ID) {
 				{
-				setState(326); ((AssetValueContext)_localctx).assetName = match(ID);
+				setState(330); ((AssetValueContext)_localctx).assetName = match(ID);
 				}
 			}
 
-			setState(329); match(DOUBLEDOT);
-			setState(330); ((AssetValueContext)_localctx).asset = match(STRING_LITERAL);
-			setState(332);
+			setState(333); match(DOUBLEDOT);
+			setState(334); ((AssetValueContext)_localctx).asset = match(STRING_LITERAL);
+			setState(339);
 			_la = _input.LA(1);
-			if (_la==ABRE_COR) {
+			if (_la==ABRE_PAR) {
 				{
-				setState(331); ((AssetValueContext)_localctx).innerAssetValues = assetValuesInner();
+				setState(335); match(ABRE_PAR);
+				setState(336); ((AssetValueContext)_localctx).exprlist = exprList();
+				setState(337); match(CIERRA_PAR);
 				}
 			}
 
@@ -1701,12 +1754,12 @@ public class FP4GParser extends Parser {
 	}
 
 	public static class AssetValuesInnerContext extends ParserRuleContext {
-		public AssetValueInnerContext assetValueInner(int i) {
-			return getRuleContext(AssetValueInnerContext.class,i);
+		public AssetValueContext assetValue(int i) {
+			return getRuleContext(AssetValueContext.class,i);
 		}
 		public TerminalNode ABRE_COR() { return getToken(FP4GParser.ABRE_COR, 0); }
-		public List<AssetValueInnerContext> assetValueInner() {
-			return getRuleContexts(AssetValueInnerContext.class);
+		public List<AssetValueContext> assetValue() {
+			return getRuleContexts(AssetValueContext.class);
 		}
 		public TerminalNode CIERRA_COR() { return getToken(FP4GParser.CIERRA_COR, 0); }
 		public List<TerminalNode> COMA() { return getTokens(FP4GParser.COMA); }
@@ -1726,91 +1779,39 @@ public class FP4GParser extends Parser {
 
 	public final AssetValuesInnerContext assetValuesInner() throws RecognitionException {
 		AssetValuesInnerContext _localctx = new AssetValuesInnerContext(_ctx, getState());
-		enterRule(_localctx, 52, RULE_assetValuesInner);
+		enterRule(_localctx, 54, RULE_assetValuesInner);
 		int _la;
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(334); match(ABRE_COR);
-			setState(335); assetValueInner();
-			setState(340);
+			setState(341); match(ABRE_COR);
+			setState(342); assetValue();
+			setState(347);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,27,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,28,_ctx);
 			while ( _alt!=2 && _alt!=-1 ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(336); match(COMA);
-					setState(337); assetValueInner();
+					setState(343); match(COMA);
+					setState(344); assetValue();
 					}
 					} 
 				}
-				setState(342);
+				setState(349);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,27,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,28,_ctx);
 			}
-			setState(344);
+			setState(351);
 			_la = _input.LA(1);
 			if (_la==COMA) {
 				{
-				setState(343); match(COMA);
+				setState(350); match(COMA);
 				}
 			}
 
-			setState(346); match(CIERRA_COR);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class AssetValueInnerContext extends ParserRuleContext {
-		public Token assetType;
-		public Token assetName;
-		public Token asset;
-		public TerminalNode DOUBLEDOT() { return getToken(FP4GParser.DOUBLEDOT, 0); }
-		public TerminalNode STRING_LITERAL() { return getToken(FP4GParser.STRING_LITERAL, 0); }
-		public List<TerminalNode> ID() { return getTokens(FP4GParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(FP4GParser.ID, i);
-		}
-		public AssetValueInnerContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_assetValueInner; }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitAssetValueInner(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final AssetValueInnerContext assetValueInner() throws RecognitionException {
-		AssetValueInnerContext _localctx = new AssetValueInnerContext(_ctx, getState());
-		enterRule(_localctx, 54, RULE_assetValueInner);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(348); ((AssetValueInnerContext)_localctx).assetType = match(ID);
-			setState(350);
-			_la = _input.LA(1);
-			if (_la==ID) {
-				{
-				setState(349); ((AssetValueInnerContext)_localctx).assetName = match(ID);
-				}
-			}
-
-			setState(352); match(DOUBLEDOT);
-			setState(353); ((AssetValueInnerContext)_localctx).asset = match(STRING_LITERAL);
+			setState(353); match(CIERRA_COR);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2951,10 +2952,10 @@ public class FP4GParser extends Parser {
 		"\13\26\3\27\3\27\3\27\7\27\u0124\n\27\f\27\16\27\u0127\13\27\3\30\3\30"+
 		"\3\30\3\30\5\30\u012d\n\30\3\31\3\31\3\31\3\31\3\31\3\31\3\31\3\31\5\31"+
 		"\u0137\n\31\3\32\3\32\3\32\3\32\3\32\7\32\u013e\n\32\f\32\16\32\u0141"+
-		"\13\32\3\32\5\32\u0144\n\32\3\32\3\32\3\33\3\33\5\33\u014a\n\33\3\33\3"+
-		"\33\3\33\5\33\u014f\n\33\3\34\3\34\3\34\3\34\7\34\u0155\n\34\f\34\16\34"+
-		"\u0158\13\34\3\34\5\34\u015b\n\34\3\34\3\34\3\35\3\35\5\35\u0161\n\35"+
-		"\3\35\3\35\3\35\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36"+
+		"\13\32\3\32\5\32\u0144\n\32\3\32\3\32\3\33\3\33\5\33\u014a\n\33\3\34\3"+
+		"\34\5\34\u014e\n\34\3\34\3\34\3\34\3\34\3\34\3\34\5\34\u0156\n\34\3\35"+
+		"\3\35\3\35\3\35\7\35\u015c\n\35\f\35\16\35\u015f\13\35\3\35\5\35\u0162"+
+		"\n\35\3\35\3\35\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36"+
 		"\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\5\36\u017b\n\36\3\36"+
 		"\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36"+
 		"\3\36\3\36\3\36\3\36\3\36\3\36\7\36\u0192\n\36\f\36\16\36\u0195\13\36"+
@@ -2969,7 +2970,7 @@ public class FP4GParser extends Parser {
 		"\2\2\34\u00df\3\2\2\2\36\u00e1\3\2\2\2 \u00e3\3\2\2\2\"\u00f9\3\2\2\2"+
 		"$\u0100\3\2\2\2&\u010b\3\2\2\2(\u0116\3\2\2\2*\u0118\3\2\2\2,\u0120\3"+
 		"\2\2\2.\u0128\3\2\2\2\60\u0136\3\2\2\2\62\u0138\3\2\2\2\64\u0147\3\2\2"+
-		"\2\66\u0150\3\2\2\28\u015e\3\2\2\2:\u017a\3\2\2\2<\u019c\3\2\2\2>\u01a3"+
+		"\2\66\u014b\3\2\2\28\u0157\3\2\2\2:\u017a\3\2\2\2<\u019c\3\2\2\2>\u01a3"+
 		"\3\2\2\2@\u01a8\3\2\2\2B\u01aa\3\2\2\2D\u01ac\3\2\2\2F\u01ca\3\2\2\2H"+
 		"\u01cc\3\2\2\2J\u01ce\3\2\2\2LM\5\4\3\2MN\5\b\5\2NO\7\2\2\3O\3\3\2\2\2"+
 		"PR\5\6\4\2QP\3\2\2\2RU\3\2\2\2SQ\3\2\2\2ST\3\2\2\2T\5\3\2\2\2US\3\2\2"+
@@ -3046,24 +3047,24 @@ public class FP4GParser extends Parser {
 		"\u013c\u013e\5\64\33\2\u013d\u013b\3\2\2\2\u013e\u0141\3\2\2\2\u013f\u013d"+
 		"\3\2\2\2\u013f\u0140\3\2\2\2\u0140\u0143\3\2\2\2\u0141\u013f\3\2\2\2\u0142"+
 		"\u0144\7\'\2\2\u0143\u0142\3\2\2\2\u0143\u0144\3\2\2\2\u0144\u0145\3\2"+
-		"\2\2\u0145\u0146\7$\2\2\u0146\63\3\2\2\2\u0147\u0149\7@\2\2\u0148\u014a"+
-		"\7@\2\2\u0149\u0148\3\2\2\2\u0149\u014a\3\2\2\2\u014a\u014b\3\2\2\2\u014b"+
-		"\u014c\7+\2\2\u014c\u014e\7<\2\2\u014d\u014f\5\66\34\2\u014e\u014d\3\2"+
-		"\2\2\u014e\u014f\3\2\2\2\u014f\65\3\2\2\2\u0150\u0151\7!\2\2\u0151\u0156"+
-		"\58\35\2\u0152\u0153\7\'\2\2\u0153\u0155\58\35\2\u0154\u0152\3\2\2\2\u0155"+
-		"\u0158\3\2\2\2\u0156\u0154\3\2\2\2\u0156\u0157\3\2\2\2\u0157\u015a\3\2"+
-		"\2\2\u0158\u0156\3\2\2\2\u0159\u015b\7\'\2\2\u015a\u0159\3\2\2\2\u015a"+
-		"\u015b\3\2\2\2\u015b\u015c\3\2\2\2\u015c\u015d\7$\2\2\u015d\67\3\2\2\2"+
-		"\u015e\u0160\7@\2\2\u015f\u0161\7@\2\2\u0160\u015f\3\2\2\2\u0160\u0161"+
-		"\3\2\2\2\u0161\u0162\3\2\2\2\u0162\u0163\7+\2\2\u0163\u0164\7<\2\2\u0164"+
-		"9\3\2\2\2\u0165\u0166\b\36\1\2\u0166\u0167\7\65\2\2\u0167\u017b\5:\36"+
-		"\2\u0168\u0169\7-\2\2\u0169\u017b\5:\36\2\u016a\u017b\5D#\2\u016b\u016c"+
-		"\7\"\2\2\u016c\u016d\5:\36\2\u016d\u016e\7%\2\2\u016e\u017b\3\2\2\2\u016f"+
-		"\u017b\7:\2\2\u0170\u017b\7;\2\2\u0171\u017b\7=\2\2\u0172\u017b\7<\2\2"+
-		"\u0173\u017b\79\2\2\u0174\u0175\7@\2\2\u0175\u0176\7\"\2\2\u0176\u0177"+
-		"\5*\26\2\u0177\u0178\7%\2\2\u0178\u017b\3\2\2\2\u0179\u017b\5<\37\2\u017a"+
-		"\u0165\3\2\2\2\u017a\u0168\3\2\2\2\u017a\u016a\3\2\2\2\u017a\u016b\3\2"+
-		"\2\2\u017a\u016f\3\2\2\2\u017a\u0170\3\2\2\2\u017a\u0171\3\2\2\2\u017a"+
+		"\2\2\u0145\u0146\7$\2\2\u0146\63\3\2\2\2\u0147\u0149\5\66\34\2\u0148\u014a"+
+		"\58\35\2\u0149\u0148\3\2\2\2\u0149\u014a\3\2\2\2\u014a\65\3\2\2\2\u014b"+
+		"\u014d\7@\2\2\u014c\u014e\7@\2\2\u014d\u014c\3\2\2\2\u014d\u014e\3\2\2"+
+		"\2\u014e\u014f\3\2\2\2\u014f\u0150\7+\2\2\u0150\u0155\7<\2\2\u0151\u0152"+
+		"\7\"\2\2\u0152\u0153\5*\26\2\u0153\u0154\7%\2\2\u0154\u0156\3\2\2\2\u0155"+
+		"\u0151\3\2\2\2\u0155\u0156\3\2\2\2\u0156\67\3\2\2\2\u0157\u0158\7!\2\2"+
+		"\u0158\u015d\5\66\34\2\u0159\u015a\7\'\2\2\u015a\u015c\5\66\34\2\u015b"+
+		"\u0159\3\2\2\2\u015c\u015f\3\2\2\2\u015d\u015b\3\2\2\2\u015d\u015e\3\2"+
+		"\2\2\u015e\u0161\3\2\2\2\u015f\u015d\3\2\2\2\u0160\u0162\7\'\2\2\u0161"+
+		"\u0160\3\2\2\2\u0161\u0162\3\2\2\2\u0162\u0163\3\2\2\2\u0163\u0164\7$"+
+		"\2\2\u01649\3\2\2\2\u0165\u0166\b\36\1\2\u0166\u0167\7\65\2\2\u0167\u017b"+
+		"\5:\36\2\u0168\u0169\7-\2\2\u0169\u017b\5:\36\2\u016a\u017b\5D#\2\u016b"+
+		"\u016c\7\"\2\2\u016c\u016d\5:\36\2\u016d\u016e\7%\2\2\u016e\u017b\3\2"+
+		"\2\2\u016f\u017b\7:\2\2\u0170\u017b\7;\2\2\u0171\u017b\7=\2\2\u0172\u017b"+
+		"\7<\2\2\u0173\u017b\79\2\2\u0174\u0175\7@\2\2\u0175\u0176\7\"\2\2\u0176"+
+		"\u0177\5*\26\2\u0177\u0178\7%\2\2\u0178\u017b\3\2\2\2\u0179\u017b\5<\37"+
+		"\2\u017a\u0165\3\2\2\2\u017a\u0168\3\2\2\2\u017a\u016a\3\2\2\2\u017a\u016b"+
+		"\3\2\2\2\u017a\u016f\3\2\2\2\u017a\u0170\3\2\2\2\u017a\u0171\3\2\2\2\u017a"+
 		"\u0172\3\2\2\2\u017a\u0173\3\2\2\2\u017a\u0174\3\2\2\2\u017a\u0179\3\2"+
 		"\2\2\u017b\u0193\3\2\2\2\u017c\u017d\6\36\2\3\u017d\u017e\7\61\2\2\u017e"+
 		"\u0192\5:\36\2\u017f\u0180\6\36\3\3\u0180\u0181\7\60\2\2\u0181\u0192\5"+
@@ -3096,7 +3097,7 @@ public class FP4GParser extends Parser {
 		"\2\2\u01cf\u01d0\b&\1\2\u01d0\u01d1\7(\2\2\u01d1\u01d2\5:\36\2\u01d2K"+
 		"\3\2\2\2-Scy\u0087\u0096\u00a3\u00ab\u00bc\u00c4\u00cf\u00da\u00df\u00eb"+
 		"\u00f4\u00f7\u00fd\u0106\u010b\u0116\u011d\u0125\u012c\u0136\u013f\u0143"+
-		"\u0149\u014e\u0156\u015a\u0160\u017a\u0191\u0193\u019a\u019c\u01a3\u01a8"+
+		"\u0149\u014d\u0155\u015d\u0161\u017a\u0191\u0193\u019a\u019c\u01a3\u01a8"+
 		"\u01b2\u01b9\u01bd\u01c4\u01c8\u01ca";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());

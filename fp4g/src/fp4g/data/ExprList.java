@@ -1,70 +1,45 @@
 package fp4g.data;
 
 import java.util.Iterator;
+import java.util.Vector;
 
 
 
-public class ExprList implements Iterable<Expresion> {
-	private final Expresion[] list;	
-	private int tail;
-	private int head;
+public class ExprList implements Iterable<Expresion> 
+{	
+	private final Vector<Expresion> list;		
+	
 	public ExprList(int n)
 	{
-		list = new Expresion[n];				
-		tail = n-1;
-		head = 0;		
+		list = new Vector<Expresion>(n,2);				
 	}
 	
-	public void add(Expresion expr)
-	{
-		list[head++] = expr;		
-	}
 	/**
 	 * Parche para la inserción con una lista.
 	 * Cumple la misma función de add, pero a la inversa.
 	 * @param expr
 	 */
-	public void addFirst(Expresion expr) {		
-		list[tail--] = expr;
+	public void addFirst(Expresion expr)
+	{		
+		list.insertElementAt(expr, 0);
+	}
+	public void insertElementAt(Expresion expr, int index)
+	{
+		list.insertElementAt(expr, index);
 	}
 	
 	public Expresion get(int index)
 	{
-		return list[index];
+		return list.get(index);
 	}
 	public int size()
 	{
-		return list.length;
+		return list.size();
 	}
 
 	@Override
-	public Iterator<Expresion> iterator() {		
-		return new ExprListIterator(list);
+	public Iterator<Expresion> iterator() 
+	{		
+		return list.iterator();
 	}
-	
-	private static class ExprListIterator implements Iterator<Expresion>
-	{
-		private final Expresion[] list;
-		private int index = 0;		
-
-		public ExprListIterator(Expresion[] list) {
-			this.list = list;
-		}
-
-		@Override
-		public boolean hasNext() {			
-			return index < list.length;
-		}
-
-		@Override
-		public Expresion next() {			
-			return list[index++];
-		}
-
-		@Override
-		public void remove() {
-			//nope, no remove			
-		}
-	}
-	
 }
