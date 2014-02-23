@@ -3,8 +3,6 @@ package fp4g.data;
 import java.util.Iterator;
 import java.util.Vector;
 
-
-
 public class ExprList implements Iterable<Expresion> 
 {	
 	private final Vector<Expresion> list;		
@@ -22,6 +20,10 @@ public class ExprList implements Iterable<Expresion>
 	public void addFirst(Expresion expr)
 	{		
 		list.insertElementAt(expr, 0);
+	}
+	public void add(Expresion expr) 
+	{
+		list.add(expr);		
 	}
 	public void insertElementAt(Expresion expr, int index)
 	{
@@ -42,4 +44,6 @@ public class ExprList implements Iterable<Expresion>
 	{		
 		return list.iterator();
 	}
+
+
 }

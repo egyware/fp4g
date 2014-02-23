@@ -3,9 +3,11 @@ package fp4g.generator.gdx;
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import fp4g.classes.ManagerData;
 import fp4g.data.Add;
@@ -19,6 +21,8 @@ import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Manager;
 import fp4g.data.expresion.ArrayList;
+import fp4g.data.expresion.ArrayMap;
+import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.generator.CodeGenerator;
@@ -31,6 +35,7 @@ import fp4g.generator.gdx.models.GameStateModel;
 import fp4g.generator.gdx.models.JavaCodeModel;
 import fp4g.generator.gdx.models.ManagerModel;
 import fp4g.log.Log;
+import fp4g.log.info.CannotEval;
 import fp4g.log.info.Warn;
 import freemarker.template.Template;
 
@@ -211,13 +216,8 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			{
 				List<String> params = new LinkedList<String>();
 				for(Expresion expr: entity.params)
-				{
-					String result = generator.expresion(code,expr);
-					if(result != null)
-					{
-						params.add(result);
-					}
-					//TODO: probablemente mostrar un error...
+				{					
+					params.add(generator.expresion(code,expr));					
 				}
 				addEntity.params = params;
 			}
@@ -239,22 +239,39 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				asset.varName = String.format("asset_%d", asset_number++);
 			}
 			//ahora assetModel deberia tener: el tipo de textura, nombre recurso y parametros adicionales.
-			List<String> params = new LinkedList<String>();
+			HashMap<String,String> params = new HashMap<String,String>();
 			Iterator<Expresion> it = asset.params.iterator();
 			//sacamos el primer valor (siempre va tener uno, esto porque la gramatica de lo obliga.
 			Expresion first = it.next();			
-			String assetPath = generator.expresion(code,first);			
+			String assetPath = generator.expresion(code,first);
+			IValue<?> groupNameValue = asset.define.get("groupName");			
+			String groupName = (groupNameValue!=null)?groupNameValue.getValue().toString():null;			
 			for(;it.hasNext();)
 			{
 				Expresion expr = it.next();
-				String result = generator.expresion(code,expr);
-				if(result != null)
+				if(expr instanceof StringLiteral) //entonces es grupo
 				{
-					params.add(result);
+					if(groupName != null)
+					{
+						params.put(groupName, generator.expresion(code,expr));
+					}
+					else
+					{
+						Log.Show(CannotEval.IncomplatibleTypes,asset,"No se esperaba este asset en un grupo.");
+					}
 				}
-				//TODO: probablemente mostrar un error...
+				else 
+				if(expr instanceof ArrayMap)
+				{
+					ArrayMap map = (ArrayMap)expr;
+					for(Entry<String,IValue<?>> entry: map.set())
+					{
+						params.put(entry.getKey(), generator.expresion(code,entry.getValue()));
+					}					
+				}
 			}
 			//TODO, no sé en que momento deberia usar la varName de add...
+			//TODO  para guardarla en un map en GameState, para poder acceder mas facilmente a los recursos
 			AssetModel assetModel = new AssetModel(define, assetPath, params);
 			
 			assets.add(assetModel);

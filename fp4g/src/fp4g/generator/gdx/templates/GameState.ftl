@@ -123,7 +123,7 @@ public final class ${code.name} extends GameState{
 		<#assign paramName = "${asset.parameterName?uncap_first}_${counter}" />
 		${asset.parameterName} ${paramName} = new ${asset.parameterName}();				
 		<#list asset.params as param>
-		//${paramName}.;
+		${paramName}.${param.key} = ${param.value};		
 		<#assign counter = counter + 1 />
 		</#list>
 		Utils.loadAsset(${asset.resource}, ${asset.type}.class, ${paramName});

@@ -1,6 +1,8 @@
 package fp4g.data.expresion;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import fp4g.data.IValue;
 
@@ -26,6 +28,11 @@ public final class ArrayMap extends Literal<Map> implements Map
 	public IValue<?> get(String key)
 	{
 		return map.get(key);		
+	}
+	
+	public Set<Entry<String,IValue<?>>> set()
+	{
+		return map.entrySet();
 	}
 
 		@Override

@@ -1,5 +1,6 @@
 :::0.1.28 (desarrollo-prototipo)
 + Se cambio filtroValor por filtro(Valor1, Valor2,Valor3)
+F Se arreglaron los assets
 F Se refactorizo la clase SourceModel y OnModel
 B Cuando no encuentra un mensaje deberia abortar y no caerse.
 P Reprogramar SourceModel, tiene demasiadas responsabilidades. Si llego agregar más instrucciones para Source la complejidad de este código puede aumentar.

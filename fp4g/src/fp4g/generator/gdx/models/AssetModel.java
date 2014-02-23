@@ -1,6 +1,8 @@
 package fp4g.generator.gdx.models;
 
-import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import fp4g.data.IValue;
 import fp4g.data.define.Asset;
@@ -12,16 +14,16 @@ public class AssetModel
 	public final String type;
 	public final String asset;
 	public final String parameterClass;
-	public final List<String> params;
+	public final Map<String,String> params;
 	
-	public AssetModel(Asset define, String resource,List<String> lparams)
+	public AssetModel(Asset define, String resource, Map<String,String> lparams)
 	{
 		//nombre de la clase a usar
-		type = (String)define.get("name").getValue();		
+		type = (String)define.get("className").getValue();		
 		asset = resource;
 		if(lparams.size() > 0)
 		{
-			IValue<?> value = define.get("parameter");
+			IValue<?> value = define.get("classParameter");
 			if(null == value) new FP4GRuntimeException(Error.UnExpectedParams,"Faltan parametros");
 			parameterClass = (String)value.getValue();
 			params = lparams;
@@ -51,8 +53,8 @@ public class AssetModel
 		return parameterClass;
 	}
 	
-	public final List<String> getParams()
+	public final Set<Entry<String,String>> getParams()
 	{
-		return params;
+		return params.entrySet();
 	}	
 }

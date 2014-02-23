@@ -24,6 +24,5 @@ public class Asset extends Define
 	{
 		super(DefineType.ASSET, assetType.name(), parent);
 		this.assetType = assetType;
-	}
-	
+	}	
 }

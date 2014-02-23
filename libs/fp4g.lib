@@ -95,15 +95,18 @@ DEFINE GAME
 	
 	DEFINE ASSET Texture
 	[
-		SET name   = "Texture"; //el nombre de esta clase...
-		SET parameter = "TextureParameters"; //nombre de los parametros.
-		SET group = "atlas"; //define el nombre del pariente si es que está dentro de un bloque adicional.				
+		SET className      = "Texture"; //el nombre de esta clase...
+		SET classParameter = "TextureParameter"; //nombre de los parametros								
 	]
 	DEFINE ASSET Atlas
 	[
+		SET className = "TextureAtlas";
 	]
 	DEFINE ASSET Sprite
 	[
+		SET className      = "Sprite";
+		SET classParameter = "SpriteParameter"; 
+		SET groupName      = "textureAtlasPath";
 	]
 	DEFINE ASSET TileMap
 	[
@@ -321,7 +324,12 @@ DEFINE GAME
 		{
 			Texture =
 			{
-				"com.badlogic.gdx.graphics.Texture"
+				"com.badlogic.gdx.graphics.Texture",
+				"com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter"
+			},
+			Atlas =
+			{
+				"com.badlogic.gdx.graphics.g2d.TextureAtlas"
 			}
 		} AS DependResolver,
 	} AS DependResolvers;		

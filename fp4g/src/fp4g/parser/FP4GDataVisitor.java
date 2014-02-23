@@ -44,6 +44,7 @@ import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.log.Log;
+import fp4g.log.info.CannotEval;
 import fp4g.log.info.Error;
 import fp4g.log.info.GeneratorError;
 import fp4g.log.info.NotAllowed;
@@ -520,7 +521,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	public ILine visitAssetValueWithInnerValue(FP4GParser.AssetValueWithInnerValueContext ctx) 
 	{
 		Add asset = (Add)visit(ctx.value);		
-		if(ctx.innerAssets!= null)
+		if(ctx.innerAssets != null)
 		{
 			StringLiteral param = (StringLiteral)asset.params.get(0);
 			for(ParseTree children:ctx.innerAssets.children)
@@ -576,10 +577,19 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			
 		}
 		
-		ExprList paramList = exprVisitor.getExprList(ctx.exprList());
-		if(paramList == null)
+		ExprList paramList = new ExprList(3);
+		
+		Expresion exprParams = (ctx.exprParams == null)? null: exprVisitor.visitArray(ctx.exprParams);
+		if(exprParams!=null)
 		{
-			paramList = new ExprList(1);
+			if(exprParams instanceof List)
+			{
+				Log.Show(CannotEval.IncomplatibleTypes, assetAdd, "Se esperaba un map");			
+			}	
+			else
+			{
+				paramList.add(exprParams);
+			}
 		}
 		paramList.addFirst(new StringLiteral(assetFile)); //jé suerte que lo agregue		
 		

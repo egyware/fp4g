@@ -138,10 +138,11 @@ public class SpriteLoader extends
 
 	public static class AnimationParameter extends AssetLoaderParameters<Sprite> 
 	{
-		public final String textureAtlasPath;
+		public String textureAtlasPath;
+		public AnimationParameter()	{ }
 		public AnimationParameter(String _textureAtlasPath)
-		{
-			textureAtlasPath = _textureAtlasPath;
+		{ 
+			textureAtlasPath = _textureAtlasPath;	
 		}
 	}
 }

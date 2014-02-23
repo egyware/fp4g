@@ -250,7 +250,7 @@ assetValueWithInnerValue:
 ;
 
 assetValue:
-	assetType=ID assetName=ID? DOUBLEDOT asset = STRING_LITERAL ( ABRE_PAR exprlist = exprList CIERRA_PAR)?
+	assetType=ID assetName=ID? DOUBLEDOT asset = STRING_LITERAL ( exprParams = array )?
 ;
 
 
