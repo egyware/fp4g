@@ -105,7 +105,7 @@ DEFINE GAME
 	DEFINE ASSET Sprite
 	[
 		SET className      = "Sprite";
-		SET classParameter = "SpriteParameter"; 
+		SET classParameter = "AnimationParameter"; 
 		SET groupName      = "textureAtlasPath";
 	]
 	DEFINE ASSET TileMap
@@ -330,6 +330,11 @@ DEFINE GAME
 			Atlas =
 			{
 				"com.badlogic.gdx.graphics.g2d.TextureAtlas"
+			},
+			Sprite = 
+			{
+				"com.apollo.managers.graphics.Sprite",
+				"com.apollo.managers.graphics.SpriteLoader.AnimationParameter",
 			}
 		} AS DependResolver,
 	} AS DependResolvers;		

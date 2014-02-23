@@ -7,7 +7,7 @@ package fp4g.data;
  * @author egyware
  *
  */
-public class Add extends Code
+public class Add extends Code implements IValue<Add>
 {		
 	private final DefineType type;
 	public final Define define;
@@ -42,6 +42,12 @@ public class Add extends Code
 	public DefineType getType()
 	{
 		return type;
+	}
+
+	@Override
+	public Add getValue() 
+	{
+		return this;
 	}
 
 }

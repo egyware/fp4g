@@ -119,7 +119,6 @@ public final class ${code.name} extends GameState{
 		<#assign counter = 0 />
 		<#list assets as asset>		
 		<#if asset.parameterName??>
-		//TODO quedo pendiente esto...
 		<#assign paramName = "${asset.parameterName?uncap_first}_${counter}" />
 		${asset.parameterName} ${paramName} = new ${asset.parameterName}();				
 		<#list asset.params as param>

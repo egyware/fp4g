@@ -22,6 +22,7 @@ import fp4g.data.define.GameState;
 import fp4g.data.define.Manager;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.ArrayMap;
+import fp4g.data.expresion.Map;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
@@ -228,7 +229,8 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		//agregar assets 
 		int asset_number = 0;
 		final List<AssetModel>  assets = new LinkedList<AssetModel>();
-		final List<Add> assetsList = state.getAdd(DefineType.ASSET);			
+		final List<Add> assetsList = state.getAdd(DefineType.ASSET);
+		final Map assetsMap = state.getAssets();
 		for(Add asset:assetsList)
 		{			
 			//Buscamos el dtefine para poder definir lo siguiente.
@@ -270,8 +272,8 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 					}					
 				}
 			}
-			//TODO, no sé en que momento deberia usar la varName de add...
-			//TODO  para guardarla en un map en GameState, para poder acceder mas facilmente a los recursos
+			//TODO a pesar que se guardará en el define para tener un mejor acceso, en ENTITY no podemos aprovecharnos de esto.
+			assetsMap.set(asset.varName, asset);			
 			AssetModel assetModel = new AssetModel(define, assetPath, params);
 			
 			assets.add(assetModel);
