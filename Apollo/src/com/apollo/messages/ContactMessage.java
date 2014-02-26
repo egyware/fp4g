@@ -24,7 +24,7 @@ public enum ContactMessage implements Message<ContactMessageHandler> {
 			handler.onBeginContact((Entity)args[0], (Fixture)args[1], (Fixture)args[2], (Contact)args[3]);
 			break;
 		case onEndContact:
-			handler.onBeginContact((Entity)args[0], (Fixture)args[1], (Fixture)args[2], (Contact)args[3]);
+			handler.onEndContact((Entity)args[0], (Fixture)args[1], (Fixture)args[2], (Contact)args[3]);
 			break;
 		default:
 			break;		

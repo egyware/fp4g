@@ -84,7 +84,15 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			Manager define = (Manager) manager.define;
 			ManagerModel managerModel = new ManagerModel();
 			
-			managerModel.name = manager.name;
+			IValue<?> managerClass = define.get("managerClass");
+			if(managerClass != null)
+			{
+				managerModel.name = managerClass.getValue().toString();
+			}
+			else
+			{
+				managerModel.name = manager.name;
+			}
 			ManagerData extras = null;
 			if(define != null)
 			{

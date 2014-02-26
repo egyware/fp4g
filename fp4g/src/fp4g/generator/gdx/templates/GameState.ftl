@@ -82,6 +82,25 @@ public final class ${code.name} extends GameState{
 		</#list>
 		</#if>
 		
+		//cargar los assets aqui.
+		<#if assets?has_content>
+		<#assign counter = 0 />
+		<#list assets as asset>		
+		<#if asset.parameterName??>
+		<#assign paramName = "${asset.parameterName?uncap_first}_${counter}" />
+		${asset.parameterName} ${paramName} = new ${asset.parameterName}();				
+		<#list asset.params as param>
+		${paramName}.${param.key} = ${param.value};		
+		<#assign counter = counter + 1 />
+		</#list>
+		Utils.loadAsset(${asset.resource}, ${asset.type}.class, ${paramName});
+		<#else>
+		Utils.loadAsset(${asset.resource}, ${asset.type}.class);
+		</#if>		
+		</#list>
+		Utils.loadAssets();
+		</#if>
+		
 		//managers
 		<#if managers??>
 		<#list managers as manager>
@@ -114,25 +133,6 @@ public final class ${code.name} extends GameState{
 		</#list>
 		</#if>		
 		
-		//cargar los assets aqui.
-		<#if assets?has_content>
-		<#assign counter = 0 />
-		<#list assets as asset>		
-		<#if asset.parameterName??>
-		<#assign paramName = "${asset.parameterName?uncap_first}_${counter}" />
-		${asset.parameterName} ${paramName} = new ${asset.parameterName}();				
-		<#list asset.params as param>
-		${paramName}.${param.key} = ${param.value};		
-		<#assign counter = counter + 1 />
-		</#list>
-		Utils.loadAsset(${asset.resource}, ${asset.type}.class, ${paramName});
-		<#else>
-		Utils.loadAsset(${asset.resource}, ${asset.type}.class);
-		</#if>		
-		</#list>
-		Utils.loadAssets();
-		</#if>
-			
 		//entidades
 		<#if entities??>		
 		<#list entities as entity>
