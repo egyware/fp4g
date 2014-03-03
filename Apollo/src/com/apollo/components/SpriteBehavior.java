@@ -16,7 +16,7 @@ public class SpriteBehavior extends ActorBehavior
 	private float time;
 	
 	@InjectComponent
-	private TransformBehavior transform;
+	private TransformFamily transform;
 	
 	public SpriteBehavior(Sprite sprite)
 	{

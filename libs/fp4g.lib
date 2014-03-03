@@ -51,29 +51,26 @@ DEFINE GAME
 		AS ManagerData;		
 	]
 	
-	DEFINE MANAGER GdxRenderManager
+	DEFINE MANAGER RenderManager
 	[
 		SET priority = 3;
 		
+		SET managerClass = "StageRenderManager";
 		SET extra = 
 		{
 			preInitialize = 
 				{
-					@'batch = new SpriteBatch()',
-					@'camera = new OrthographicCamera()',
-					@'camera.setToOrtho(false,w,h)'
+					@'batch = new SpriteBatch()'					
 				},
-			params        = {@'batch'},
-			preUpdate     = 
-				{
-					@'batch.setProjectionMatrix(camera.combined)',
-					@'batch.begin()'
-				},
-			postUpdate    = {@'batch.end()'},
+			postInitialize=
+			{
+				@'camera = container.getManager(StageRenderManager.class).getCamera()'
+			},
+			params        = {@'w',@'h',@'batch'},			
 			fields        = 
-				{
-					@'OrthographicCamera camera',
-					@'SpriteBatch batch'
+				{					
+					@'SpriteBatch batch',
+					@'Camera camera'
 				}			
 		}
 		AS ManagerData;
@@ -110,6 +107,7 @@ DEFINE GAME
 	]
 	DEFINE ASSET TileMap
 	[
+		SET className      = "TiledMap";		
 	]
 	DEFINE ASSET Sound
 	[
@@ -217,14 +215,15 @@ DEFINE GAME
 				"com.apollo.GameState",
 				"com.badlogic.gdx.Gdx",
 				"com.badlogic.gdx.graphics.GL10",
-				"com.badlogic.gdx.graphics.OrthographicCamera"
+				"com.badlogic.gdx.graphics.Camera",
+				"com.badlogic.gdx.graphics.OrthographicCamera"				
 			}
 		} AS DependResolver,
 		Manager = 
 		{
-			GdxRenderManager = 
+			RenderManager = 
 			{
-				"com.apollo.managers.GdxRenderManager",
+				"com.apollo.managers.StageRenderManager",
 				"com.badlogic.gdx.graphics.g2d.SpriteBatch",				
 			},
 			PhysicsManager = 
@@ -335,6 +334,10 @@ DEFINE GAME
 			{
 				"com.apollo.managers.graphics.Sprite",
 				"com.apollo.managers.graphics.SpriteLoader.AnimationParameter",
+			},
+			TileMap = 
+			{
+				"com.badlogic.gdx.maps.tiled.TiledMap"
 			}
 		} AS DependResolver,
 	} AS DependResolvers;		
