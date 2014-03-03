@@ -88,6 +88,8 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 			{					
 				"com.apollo.managers.graphics.Sprite",
 				"com.apollo.managers.graphics.SpriteLoader",
+				"com.badlogic.gdx.maps.tiled.TiledMap",
+				"com.badlogic.gdx.maps.tiled.TmxMapLoader",
 				"com.badlogic.gdx.assets.AssetLoaderParameters",
 				"com.badlogic.gdx.assets.AssetManager",
 				"com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver",

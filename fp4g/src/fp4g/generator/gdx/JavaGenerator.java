@@ -428,7 +428,6 @@ public class JavaGenerator extends Generator
     	gameConf.width = 640;
     	gameConf.height = 480;
     	gameConf.debug = false;
-
 	}
 	
 	public LibContainer loadLibs() 

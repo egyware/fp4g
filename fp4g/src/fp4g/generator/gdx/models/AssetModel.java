@@ -19,7 +19,8 @@ public class AssetModel
 	public AssetModel(Asset define, String resource, Map<String,String> lparams)
 	{
 		//nombre de la clase a usar
-		type = (String)define.get("className").getValue();		
+		IValue<?> className = define.get("className");
+		type = (className != null)?(String)className.getValue():define.name;		
 		asset = resource;
 		if(lparams.size() > 0)
 		{

@@ -25,7 +25,7 @@ public abstract class FunctionGenerator <T extends Generator,M extends Model>
 	 * A partir de los parametros puestos en el generador, devolverá una expresión.
 	 * Tal expresión, será luego convertida en codigo según el generador.
 	 * 
-	 * @param generator Generador actual
+	 * @param current define actual donde se invoca esta clase
 	 * @param parent padre quien contiene a la función actual.
 	 * @param model modelo del codigo fuente que se genera
 	 * @param list

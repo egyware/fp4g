@@ -264,7 +264,8 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		
 		ExprList exprList = getExprList(ctx.exprList()); //acá se crea un nuevo stack!
 				
-		FunctionCall functionCall = new FunctionCall(callName,exprList);
+		//le paso también el define donde se está invocando 01-03-2014
+		FunctionCall functionCall = new FunctionCall(callName, current.peek(), exprList);
 		exprList = null;		
 		
 		//restablecemos el stack anterior

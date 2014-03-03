@@ -6,9 +6,9 @@ package fp4g.generator.gdx;
 import java.util.HashMap;
 import java.util.Map;
 
-import fp4g.data.ExprList;
+import org.antlr.v4.misc.Utils;
+
 import fp4g.data.Expresion;
-import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.generator.FunctionGenerator;
@@ -21,109 +21,46 @@ import fp4g.log.info.CannotEval;
  */
 public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaCodeModel>
 {		
-	private final Map<String,Function> functions;	
+	private final Map<String, GdxFunction> functions;
 	public JavaFunctionGenerator(JavaGenerator jg)
-	{
+	{		
 		super(jg);
-		functions = new HashMap<String, Function>(10,1);
-		
-		functions.put("getSprite" , new GetSprite());
-		functions.put("getSound"  , new GetSound());
-		functions.put("getMusic"  , new GetMusic());
-		functions.put("getTexture", new GetTexture());
-		functions.put("createBox", new CreateBox());
-		functions.put("createCircle", new CreateCircle());
-
-	}	
-	
-	private abstract class Function
-	{
-		public abstract Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException;
+		functions = new HashMap<String, GdxFunction>();
 	}
-		
+	
 	@Override
+	@SuppressWarnings("unchecked")	
 	public Expresion generate(JavaCodeModel model,FunctionCall fc) throws CannotEvalException
 	{
-		Function fg = functions.get(fc.functionName);
+		GdxFunction fg = functions.get(fc.functionName);
+		if(fg == null)
+		{
+			String className = "fp4g.generator.gdx.functions.".concat(Utils.capitalize(fc.functionName));
+			try 
+			{
+				//JavaFunctionGenerator.class.
+				Class<? extends GdxFunction> clazz = (Class<? extends GdxFunction>) Class.forName(className);
+				fg = clazz.newInstance();
+				functions.put(fc.functionName, fg);				
+			}
+			catch (ClassNotFoundException e) 
+			{
+				// TODO Auto-generated catch block
+			}
+			catch (InstantiationException e) 
+			{
+				// TODO Auto-generated catch block
+			}
+			catch (IllegalAccessException e) 
+			{
+				// TODO Auto-generated catch block			
+			}
+		}
 		if(fg != null)
 		{
-			return fg.generate(model,fc.params);
+			return fg.generate(generator, model, fc.params);
 		}
 		throw new CannotEvalException(CannotEval.FunctionNotFound,fc, String.format("La función \"%s\", no se ha encontrado.",fc.functionName));
 	}
 	
-	
-	private class GetSprite extends Function
-	{
-		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException
-		{
-			String resourceName = generator.expresion(model,list.get(0));
-			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));			
-			DirectCode expr = new DirectCode(String.format("Utils.getSprite(%s)",resourceName));						
-			return expr;
-		}		
-	}
-	private class GetSound extends Function
-	{
-		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException
-		{
-			String resourceName = generator.expresion(model,list.get(0));
-			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			DirectCode expr = new DirectCode(String.format("Utils.getSound(%s)",resourceName));			
-			return expr;
-		}		
-	}
-	private class GetTexture extends Function
-	{
-
-		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException
-		{
-			String resourceName = generator.expresion(model,list.get(0));
-			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			DirectCode expr = new DirectCode(String.format("Utils.getTexture(%s)",resourceName));					
-			return expr;
-		}		
-	}
-	private class GetMusic extends Function
-	{
-		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException
-		{			
-			String resourceName = generator.expresion(model,list.get(0));
-			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));			
-			DirectCode expr = new DirectCode(String.format("Utils.getMusic(%s)",resourceName));					
-			return expr;
-		}		
-	}	
-
-	private class CreateBox extends Function
-	{
-
-		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException
-		{
-			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			Expresion width  = list.get(0);			
-			Expresion height = list.get(1);
-			DirectCode expr = new DirectCode(String.format("Utils.createBox(%s,%s)",generator.expresion(model,width),generator.expresion(model,height)));			
-			return expr;
-		}		
-	}
-	private class CreateCircle extends Function
-	{
-
-		@Override
-		public Expresion generate(JavaCodeModel model,ExprList list) throws CannotEvalException
-		{
-			model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-			Expresion ratio = list.get(0);			
-			DirectCode expr = new DirectCode(String.format("Utils.createCircle(%s)",generator.expresion(model,ratio)));			
-			return expr;
-		}		
-	}
-
-
 }
