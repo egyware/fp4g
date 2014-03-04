@@ -74,12 +74,12 @@ public class Namespace implements IDefine
 	}
 
 	@Override
-	public void setBuild(boolean b) 
+	public void setGenerable(boolean b) 
 	{		
 	}
 
 	@Override
-	public boolean canBuild() 
+	public boolean isGenerable() 
 	{
 		return false;
 	}
@@ -208,6 +208,17 @@ public class Namespace implements IDefine
 	throws NotAllowedOperatorException
 	{
 		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Sub);
+	}
+
+	@Override
+	public void setUsable(boolean b) 
+	{			
+	}
+
+	@Override
+	public boolean isUsable() 
+	{	
+		return false;
 	}
 
 }

@@ -98,6 +98,8 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 				"com.badlogic.gdx.physics.box2d.CircleShape",
 				"com.badlogic.gdx.physics.box2d.PolygonShape",
 				"com.badlogic.gdx.physics.box2d.FixtureDef",
+				"com.apollo.managers.physics.Terrain2D",
+				"com.apollo.managers.physics.Terrain2DLoader",
 				
 			};
 			Arrays.sort(arrayImports);

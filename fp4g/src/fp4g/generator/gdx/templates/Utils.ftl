@@ -22,10 +22,10 @@ public class Utils {
 	public static void initialize()
 	{
 		final InternalFileHandleResolver fileResolver = new InternalFileHandleResolver();
-		assetManager = new AssetManager();
-		//TODO talvez mas adelante, ir detectando que assets añadir o no...
+		assetManager = new AssetManager();		
 		assetManager.setLoader(Sprite.class,new SpriteLoader(fileResolver));
 		assetManager.setLoader(TiledMap.class,new TmxMapLoader(fileResolver));
+		assetManager.setLoader(Terrain2D.class,new Terrain2DLoader(fileResolver));
 	}	
 	
 	public static void dispose()
@@ -46,6 +46,10 @@ public class Utils {
 		return assetManager.get(asset);
 	}
 	public static TiledMap getTiled(String asset)
+	{
+		return assetManager.get(asset);
+	}
+	public static Terrain2D getTerrain2D(String asset) 
 	{
 		return assetManager.get(asset);
 	}

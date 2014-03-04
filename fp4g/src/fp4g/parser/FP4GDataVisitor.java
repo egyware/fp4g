@@ -88,12 +88,14 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		{		
 		case BEHAVIOR:
 			Behavior behavior = new Behavior(ctx.name.getText(),game);
-			behavior.setBuild(false);
+			behavior.setGenerable(false);
+			behavior.setUsable(true);
 			game.setDefine(behavior);
 			break;
 		case ENTITY:
 			Entity entity = new Entity(ctx.name.getText(),game);
-			entity.setBuild(false);
+			entity.setGenerable(false);
+			entity.setUsable(true);
 			game.setDefine(entity);
 			break;
 		case GOAL:
@@ -110,7 +112,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			break;
 		case STATE:
 			GameState state = new GameState(ctx.name.getText(),game);
-			state.setBuild(false);
+			state.setGenerable(false);
+			state.setUsable(true);
 			game.setDefine(state);			
 			break;
 		case GAME:			
@@ -139,7 +142,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 				//creo un elemento temporal para solucionar el state faltante, sin embargo no se generará
 				state = new GameState(ctx.state,define);
 				state.setLine(ctx.start.getLine());
-				state.setBuild(false);
+				state.setGenerable(false);
 			}			
 			((Game) define).setStart(state);
 			return state;

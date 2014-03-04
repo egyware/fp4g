@@ -163,12 +163,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				}
 				for(Expresion expr: manager.params)
 				{
-					String result = generator.expresion(code,expr);
-					if(result != null)
-					{
-						params.add(result);
-					}
-					//TODO: probablemente mostrar un error...
+					params.add(generator.expresion(code,expr));					
 				}
 				managerModel.params = params;				
 			}

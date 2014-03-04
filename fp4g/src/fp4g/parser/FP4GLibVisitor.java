@@ -65,12 +65,14 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		{		
 		case BEHAVIOR:
 			Behavior behavior = new Behavior(usingName,lib);
-			behavior.setBuild(false);
+			behavior.setGenerable(false);
+			behavior.setUsable(true);
 			lib.setDefine(behavior);
 			break;
 		case ENTITY:
 			Entity entity = new Entity(usingName,lib);
-			entity.setBuild(false);
+			entity.setGenerable(false);
+			entity.setUsable(true);
 			lib.setDefine(entity);
 			break;
 		case GOAL:
@@ -81,7 +83,8 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 			break;
 		case MANAGER:
 			Manager manager = new Manager(usingName,lib);
-			manager.setBuild(false);
+			manager.setGenerable(false);
+			manager.setUsable(true);
 			lib.setDefine(manager);
 			break;
 		case MESSAGE:
@@ -89,7 +92,8 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 			break;
 		case STATE:
 			GameState state = new GameState(ctx.name.getText(),lib);
-			state.setBuild(false);
+			state.setGenerable(false);
+			state.setUsable(true);
 			lib.setDefine(state);			
 			break;
 		case GAME:			
@@ -164,7 +168,6 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 	public Code visitOnStatement(FP4GParser.OnStatementContext ctx)
 	{
 		statements = new Statements();
-		//TODO talvez deberia usar aggregateResult
 		for(ParseTree c:ctx.children)
 		{
 			statements.add(visit(c));
@@ -235,6 +238,8 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 				break;		  		
 		  	case BEHAVIOR:		  		
 		  		define = new Behavior(defName,parent);
+		  		define.setGenerable(false); //no se genera
+		  		define.setUsable(false); //no es usable
 		  		break;		  		
 		  	case GOAL:
 		  		//TODO: No implementado aún

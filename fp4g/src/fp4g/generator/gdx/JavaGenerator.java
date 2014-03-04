@@ -166,11 +166,11 @@ public class JavaGenerator extends Generator
 			try{
 				Constructor<? extends CodeGenerator<JavaGenerator>> constructor = codegen.getConstructor(JavaGenerator.class);
 				CodeGenerator<? extends JavaGenerator> generator = constructor.newInstance(this);
-				if(gameData.canBuild()) //se puede contruir?
+				if(gameData.isGenerable()) //se puede contruir?
 				{
 					generator.generateCode(gameData, packageDir);
 				}
-				else //si no, utilizamos su codigo :B
+				else if(gameData.isUsable()) //si no, utilizamos su codigo :B
 				{
 					generator.usingCode(gameData, packageDir);
 				}
