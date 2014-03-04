@@ -6,8 +6,8 @@ import com.apollo.annotate.ComponentInjector;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
-//TODO arreglar mensajeria
-public class EntityManager extends Manager {
+public class EntityManager extends Manager 
+{
 	private Bag<Entity> entities;
 		
 	public EntityManager()

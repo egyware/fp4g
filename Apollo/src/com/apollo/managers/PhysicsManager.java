@@ -1,6 +1,7 @@
 package com.apollo.managers;
 
 import com.apollo.Entity;
+import com.apollo.managers.physics.Terrain2D;
 import com.apollo.messages.ContactMessage;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -26,10 +27,22 @@ public class PhysicsManager extends Manager implements ContactListener{
 	{
 		this(Vector2.Zero);
 	}
+	
+	public PhysicsManager(Terrain2D terrain)
+	{
+		this(Vector2.Zero,terrain);
+	}
 	public PhysicsManager(Vector2 gravity)
 	{		
 		world = new World(gravity, true);
 		world.setContactListener(this);		
+	}
+	public PhysicsManager(Vector2 gravity, Terrain2D terrain)
+	{		
+		world = new World(gravity, true);
+		world.setContactListener(this);	
+		
+		//TODO queda pendiente terrain
 	}
 	
 	public void update(float delta)

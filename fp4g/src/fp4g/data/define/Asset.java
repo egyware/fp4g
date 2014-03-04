@@ -12,7 +12,8 @@ public class Asset extends Define
 		Sprite,
 		TileMap,
 		Sound,
-		Music
+		Music,
+		Terrain2D,
 	}
 	
 	final public Type assetType;

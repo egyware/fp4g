@@ -109,6 +109,11 @@ DEFINE GAME
 	[
 		SET className      = "TiledMap";		
 	]
+	DEFINE ASSET Terrain2D
+	[
+		SET className      = "Terrain2D";
+		SET classParameter = "TerrainParameter";
+	]
 	DEFINE ASSET Sound
 	[
 	]
@@ -338,6 +343,10 @@ DEFINE GAME
 			TileMap = 
 			{
 				"com.badlogic.gdx.maps.tiled.TiledMap"
+			},
+			Terrain2D =
+			{
+				"com.apollo.managers.physics.Terrain2D"
 			}
 		} AS DependResolver,
 	} AS DependResolvers;		
