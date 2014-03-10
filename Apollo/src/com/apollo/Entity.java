@@ -3,6 +3,7 @@ package com.apollo;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.apollo.annotate.ComponentInjector;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
@@ -127,4 +128,11 @@ public abstract class Entity implements MessageReceiver
 	void initialize();
 
 
+	public void applyComponentAnnotations() 
+	{
+		for (Behavior component : getBehaviors()) 
+		{
+			ComponentInjector.applyAnnotations(component);
+		}
+	}
 }

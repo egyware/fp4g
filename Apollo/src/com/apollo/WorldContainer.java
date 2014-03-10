@@ -27,24 +27,23 @@ public class WorldContainer
 	
 	private final ApolloInputProcessor inputProcessor;
 
-	public WorldContainer(GameManager game) {
-		entityManager = new EntityManager();
-		gameManager = game;
-		
+	public WorldContainer(GameManager game) 
+	{		
+		gameManager = game;		
 		addedManagers = new Bag<Manager>();
 		added   = new Bag<Entity>();		
 		deleted = new Bag<Entity>();
 		
 		managers = new LinkedHashMap<Class<? extends Manager>, Manager>();
-		managersBag = new Bag<Manager>();
-		setManager(entityManager);
+		managersBag = new Bag<Manager>();	
 		
 		entityBuildersByType = new HashMap<String, EntityBuilder>();
 		
 		inputProcessor = new ApolloInputProcessor();
 	}
 
-	public EntityManager getEntityManager() {
+	public EntityManager getEntityManager() 
+	{
 		return entityManager;
 	}
 		
@@ -60,9 +59,9 @@ public class WorldContainer
 
 	public void setEntityManager(EntityManager manager)
 	{
-		if(entityManager == null)
+		if(manager == null)
 		{
-			return;
+			throw new RuntimeException("EntityManager no puede ser null");
 		}
 		entityManager = manager;
 		setManager(entityManager);		
@@ -108,7 +107,7 @@ public class WorldContainer
 		}
 		for(int i = 0; added.size() > i; i++) {
 			Entity e = added.get(i);
-			entityManager.applyComponentAnnotations(e);
+			e.applyComponentAnnotations();
 			e.initialize();
 		}
 		added.clear();

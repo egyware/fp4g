@@ -49,14 +49,7 @@ public class EntityManager extends Manager
 	public void added(Entity entity) {
 		entities.add(entity);		
 	}
-
-	public void applyComponentAnnotations(Entity entity) {
-		for (Behavior component : entity.getBehaviors()) 
-		{
-			ComponentInjector.applyAnnotations(component);
-		}
-	}
-
+	
 	@Override
 	public void removed(Entity e) {
 		entities.remove(e);		
