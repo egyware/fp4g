@@ -1,7 +1,6 @@
 package fp4g.generator.gdx;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -67,7 +66,8 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 			List<String> imports = new LinkedList<String>();
 			String arrayImports[] = new String[]
 			{
-				"com.apollo.GameManager"				
+				"com.apollo.GameManager",
+				"com.apollo.Assets",
 			};
 			//Arrays.sort(arrayImports);
 			Collections.addAll(imports, arrayImports);
@@ -80,40 +80,6 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 		}
 		
 		generator.createFile(path,String.format("%s.java",game.name), temp,root);
-		
-		//generar Assets...
-		{
-			List<String> imports = new LinkedList<String>();
-			String arrayImports[] = new String[]
-			{					
-				"com.apollo.managers.graphics.Sprite",
-				"com.apollo.managers.graphics.SpriteLoader",
-				"com.badlogic.gdx.maps.tiled.TiledMap",
-				"com.badlogic.gdx.maps.tiled.TmxMapLoader",
-				"com.badlogic.gdx.assets.AssetLoaderParameters",
-				"com.badlogic.gdx.assets.AssetManager",
-				"com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver",
-				"com.badlogic.gdx.graphics.Texture",
-				"com.badlogic.gdx.graphics.g2d.TextureRegion",				
-				"com.badlogic.gdx.physics.box2d.CircleShape",
-				"com.badlogic.gdx.physics.box2d.PolygonShape",
-				"com.badlogic.gdx.physics.box2d.FixtureDef",
-				"com.apollo.managers.physics.Terrain2D",
-				"com.apollo.managers.physics.Terrain2DLoader",
-				
-			};
-			Arrays.sort(arrayImports);
-			Collections.addAll(imports, arrayImports);
-			HashMap<String,Object> assetsRoot = new HashMap<String, Object>();
-			HashMap<String,Object> assetsClazz = new HashMap<String, Object>();
-			assetsClazz.put("package", generator.packageName);
-			assetsClazz.put("imports", imports);
-			assetsRoot.put("class",assetsClazz);
-			assetsRoot.put("autodoc", JavaGenerator.autodoc);			
-			
-			generator.createFile(path,"Utils.java",generator.getTemplate("Utils.ftl"), assetsRoot);
-		}
-		
 		
 		final Collection<Entity> game_entities = game.getDefines(DefineType.ENTITY);
 		if(game_entities != null)
@@ -145,8 +111,7 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 	public void usingCode(ICode gameData, File path)
 	{
 		Game game = (Game)gameData;
-		generator.usingFile(path,String.format("%s.java",game.name));
-		generator.usingFile(path,"Utils.java");
+		generator.usingFile(path,String.format("%s.java",game.name));		
 	}
 	
 }

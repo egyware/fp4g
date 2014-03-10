@@ -93,12 +93,12 @@ public final class ${code.name} extends GameState{
 		${paramName}.${param.key} = ${param.value};		
 		<#assign counter = counter + 1 />
 		</#list>
-		Utils.loadAsset(${asset.resource}, ${asset.type}.class, ${paramName});
+		Assets.loadAsset(${asset.resource}, ${asset.type}.class, ${paramName});
 		<#else>
-		Utils.loadAsset(${asset.resource}, ${asset.type}.class);
+		Assets.loadAsset(${asset.resource}, ${asset.type}.class);
 		</#if>		
 		</#list>
-		Utils.loadAssets();
+		Assets.loadAssets();
 		</#if>
 		
 		//managers

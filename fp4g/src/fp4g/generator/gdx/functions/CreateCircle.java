@@ -13,9 +13,9 @@ public class CreateCircle extends GdxFunction
 	@Override
 	public Expresion generate(JavaGenerator generator, JavaCodeModel model, ExprList list) throws CannotEvalException
 	{
-		model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
+		model.addImport("com.apollo.Assets");
 		Expresion ratio = list.get(0);			
-		DirectCode expr = new DirectCode(String.format("Utils.createCircle(%s)",generator.expresion(model,ratio)));			
+		DirectCode expr = new DirectCode(String.format("Assets.createCircle(%s)",generator.expresion(model,ratio)));			
 		return expr;
 	}		
 }

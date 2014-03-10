@@ -1,20 +1,33 @@
-package ${class.package};
+package com.apollo;
 
-//TODO parche, esto deberia estár en alguna clase de constantes o algo por el estilo..
+//TODO parche, esto deberia est?r en alguna clase de constantes o algo por el estilo..
 import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
-<#if class.imports??>
-<#list class.imports as import>
-import ${import};
-</#list>
-</#if>
+import com.apollo.managers.entity.EntitySpawn;
+import com.apollo.managers.graphics.Sprite;
+import com.apollo.managers.graphics.SpriteLoader;
+import com.apollo.managers.physics.Terrain2D;
+import com.apollo.managers.physics.Terrain2DLoader;
+import com.badlogic.gdx.assets.AssetLoaderParameters;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 
-${autodoc}
-public class Utils {	
+/**
+  * Autogenerado por FP4G
+  * [NO MODIFICAR]
+  */
+public class Assets {	
 	private static CircleShape circleShape;
 	private static PolygonShape boxShape;  
-	private Utils(){}
+	private Assets(){}
 	
 	private static AssetManager assetManager;
 	

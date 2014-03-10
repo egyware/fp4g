@@ -114,12 +114,17 @@ DEFINE GAME
 		SET className      = "Terrain2D";
 		SET classParameter = "TerrainParameter";
 	]
+	DEFINE ASSET EntitySpawn
+	[
+		SET className     = "EntitySpawn";
+		SET classParamter = "EntitySpawnParamter";
+	]
 	DEFINE ASSET Sound
 	[
 	]
 	DEFINE ASSET Music
 	[
-	]
+	]	
 	DEFINE MESSAGE Key
 	[
 		SET press   = 
@@ -347,6 +352,11 @@ DEFINE GAME
 			Terrain2D =
 			{
 				"com.apollo.managers.physics.Terrain2D"
+			},
+			EntitySpawn =
+			{
+				"com.apollo.managers.entity.EntitySpawn",
+				"com.apollo.managers.entity.EntitySpawnLoader.EntitySpawnParameter",
 			}
 		} AS DependResolver,
 	} AS DependResolvers;		

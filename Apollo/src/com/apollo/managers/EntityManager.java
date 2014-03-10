@@ -14,7 +14,7 @@ public class EntityManager extends Manager
 	{
 		entities = new Bag<Entity>();
 	}
-
+	
 	public ImmutableBag<Entity> getEntities() 
 	{
 		return entities;

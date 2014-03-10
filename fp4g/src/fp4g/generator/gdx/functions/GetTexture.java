@@ -14,8 +14,8 @@ public class GetTexture extends GdxFunction
 	public Expresion generate(JavaGenerator generator, JavaCodeModel model, ExprList list) throws CannotEvalException
 	{
 		String resourceName = generator.expresion(model,list.get(0));
-		model.addImport(String.format("%s.%s",generator.packageName,"Utils"));
-		DirectCode expr = new DirectCode(String.format("Utils.getTexture(%s)",resourceName));					
+		model.addImport("com.apollo.Assets");
+		DirectCode expr = new DirectCode(String.format("Assets.getTexture(%s)",resourceName));					
 		return expr;
 	}	
 }

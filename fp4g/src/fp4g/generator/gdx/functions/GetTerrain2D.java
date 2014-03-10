@@ -14,8 +14,8 @@ public class GetTerrain2D extends GdxFunction
 	public Expresion generate(JavaGenerator generator, JavaCodeModel model, ExprList list) throws CannotEvalException	
 	{
 		String resourceName = generator.expresion(model,list.get(0));
-		model.addImport(String.format("%s.%s",generator.packageName,"Utils"));			
-		DirectCode expr = new DirectCode(String.format("Utils.getTerrain2D(%s)",resourceName));						
+		model.addImport("com.apollo.Assets");
+		DirectCode expr = new DirectCode(String.format("Assets.getTerrain2D(%s)",resourceName));						
 		return expr;
 	}		
 }

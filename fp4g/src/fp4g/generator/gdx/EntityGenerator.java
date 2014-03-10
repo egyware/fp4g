@@ -216,9 +216,6 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		dr.perform(entity, modelBuild);
 		dr.perform(entity, modelEntity);
 		
-		//TODO no todo es perfecto en la vida, no todo sale como lo planeo. Espero que esto no se aplique al generador.
-		modelBuild.addImport(String.format("%s.Utils",generator.packageName));
-		
 		if(entity_onMessages.size()>0)
 		{	
 			for(On on:entity_onMessages)

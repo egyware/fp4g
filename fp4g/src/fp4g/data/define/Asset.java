@@ -14,6 +14,7 @@ public class Asset extends Define
 		Sound,
 		Music,
 		Terrain2D,
+		EntitySpawn,
 	}
 	
 	final public Type assetType;

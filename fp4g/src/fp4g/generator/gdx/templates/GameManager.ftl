@@ -18,7 +18,7 @@ public class ${class.name} extends GameManager {
 	public void create()
 	{		
 		super.create();
-		Utils.initialize();
+		Assets.initialize();
 		
 		<#if start_state??>
 		//iniciando el juego 
@@ -38,7 +38,7 @@ public class ${class.name} extends GameManager {
 	@Override
 	public void dispose()
 	{
-		Utils.dispose();
+		Assets.dispose();
 		super.dispose();		
 	}
 	
