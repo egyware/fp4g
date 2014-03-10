@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import com.apollo.ApolloException;
 import com.apollo.Behavior;
 import com.apollo.Entity;
-import com.apollo.BaseBehavior;
 import com.apollo.managers.Manager;
 import com.apollo.managers.TagManager;
 
@@ -21,7 +20,7 @@ public abstract class ComponentInjector<T>
 			InjectComponent inject = field.getAnnotation(InjectComponent.class);
 			Class<? extends Behavior> clazz = inject.value(); //familia
 			Class<? extends Behavior> fieldClazz = Class.class.cast(field.getType());
-			if(clazz == BaseBehavior.class)
+			if(clazz == Behavior.class)
 			{
 				return component.getComponentFromOwner(fieldClazz);
 			}

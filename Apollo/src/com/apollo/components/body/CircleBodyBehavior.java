@@ -3,7 +3,6 @@
  */
 package com.apollo.components.body;
 
-import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
 import com.apollo.managers.PhysicsManager;

@@ -1,10 +1,10 @@
 package com.apollo;
 
 //TODO parche, esto deberia est?r en alguna clase de constantes o algo por el estilo..
-import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
 import com.apollo.managers.entity.EntitySpawn;
+import com.apollo.managers.entity.EntitySpawnLoader;
 import com.apollo.managers.graphics.Sprite;
 import com.apollo.managers.graphics.SpriteLoader;
 import com.apollo.managers.physics.Terrain2D;
@@ -13,7 +13,6 @@ import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -39,6 +38,7 @@ public class Assets {
 		assetManager.setLoader(Sprite.class,new SpriteLoader(fileResolver));
 		assetManager.setLoader(TiledMap.class,new TmxMapLoader(fileResolver));
 		assetManager.setLoader(Terrain2D.class,new Terrain2DLoader(fileResolver));
+		assetManager.setLoader(EntitySpawn.class,new EntitySpawnLoader(fileResolver));
 	}	
 	
 	public static void dispose()
@@ -67,7 +67,7 @@ public class Assets {
 		return assetManager.get(asset);
 	}
 	public static EntitySpawn getEntities(String asset)
-	{
+	{		
 		return assetManager.get(asset);
 	}
 	public static <T> void loadAsset(String asset, Class<T> clazz){

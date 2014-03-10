@@ -3,16 +3,41 @@ package com.apollo.managers;
 import com.apollo.Behavior;
 import com.apollo.Entity;
 import com.apollo.annotate.ComponentInjector;
+import com.apollo.managers.entity.EntitySpawn;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
 public class EntityManager extends Manager 
 {
 	private Bag<Entity> entities;
+	private EntitySpawn spawner; 
 		
 	public EntityManager()
 	{
-		entities = new Bag<Entity>();
+		entities = new Bag<Entity>();		
+	}
+	
+	public EntityManager(EntitySpawn spawner)
+	{
+		this();
+		this.spawner = spawner;		
+	}
+	
+	@Override
+	public void initialize()
+	{
+		//agregamos todas las entidades		
+		if(spawner != null)
+		{
+			for(int i=0; i < spawner.lenght; i++)
+			{
+				Entity entity = world.createEntity(spawner.entities[i], spawner.params[i]);
+				if(entity != null)
+				{
+					world.addEntity(entity);
+				}
+			}
+		}
 	}
 	
 	public ImmutableBag<Entity> getEntities() 
