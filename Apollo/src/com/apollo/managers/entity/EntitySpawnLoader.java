@@ -75,9 +75,8 @@ public class EntitySpawnLoader extends SynchronousAssetLoader<EntitySpawn, Entit
 		int index = 0;
 		for(RectangleMapObject rmo: list)
 		{
-			Rectangle r = rmo.getRectangle();
-			
-			entitySpawn.entities[index] = rmo.getName();
+			Rectangle r = rmo.getRectangle();				
+			entitySpawn.entities[index] = rmo.getProperties().get("type",rmo.getName(), String.class);;
 			entitySpawn.params[index] = new Object[] {r.x,r.y,r.width,r.height}; 
 			index ++;
 		}

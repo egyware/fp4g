@@ -20,7 +20,7 @@ expr
          | STRING_LITERAL                #stringLiteral         
          | DIRECTCODE                    #directCode
          | functionName=ID 
-		    ABRE_PAR exprList CIERRA_PAR #functionCallExpr         
+		    ABRE_PAR exprList? CIERRA_PAR #functionCallExpr         
          | accessVarOp                   #varExpr         		          
 		 ;		
 	

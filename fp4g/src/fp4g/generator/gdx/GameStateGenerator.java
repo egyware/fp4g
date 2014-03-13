@@ -84,10 +84,17 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			Manager define = (Manager) manager.define;
 			ManagerModel managerModel = new ManagerModel();
 			
-			IValue<?> managerClass = define.get("managerClass");
-			if(managerClass != null)
+			if(define != null)
 			{
-				managerModel.name = managerClass.getValue().toString();
+				IValue<?> managerClass = define.get("managerClass");
+				if(managerClass != null)
+				{
+					managerModel.name = managerClass.getValue().toString();
+				}
+				else
+				{
+					managerModel.name = manager.name;
+				}
 			}
 			else
 			{
@@ -317,13 +324,13 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				catch(DependResolverNotFoundException drnfe)
 				{
 					Log.Exception(drnfe, manager.getLine());
-					code.imports.add(String.format("com.apollo.managers.%sManager", manager.name));
+					code.imports.add(String.format("com.apollo.managers.%s", manager.name));
 				}
 			}
 			else
 			{
 				Log.Show(Warn.MissingDefineAdd, manager.getLine(),"Se asumirá que existe un Define asociado.");				
-				code.imports.add(String.format("com.apollo.managers.%sManager", manager.name));
+				code.imports.add(String.format("com.apollo.managers.%s", manager.name));
 			}
 		}
 		
