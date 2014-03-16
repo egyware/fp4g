@@ -86,7 +86,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 						name = "Number";
 						break;
 					case String:
-						name = "Name";
+						name = "String";
 						break;
 					default:
 						throw new FP4GRuntimeException(GeneratorError.IllegalState,"Estado no valido del generador");
@@ -94,9 +94,10 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				}
 				else
 				{
+					//TODO realmente sirve de algo esto?
 					CustomType custom = (CustomType)par.type;
 					Define define = entity.getDefine(custom.name);
-					generator.resolveDependency(define).perform(define, modelEntity);
+					generator.resolveDependency(define).perform(define, modelBuild);
 					name = custom.name;
 				}
 				ParamCodeModel param;

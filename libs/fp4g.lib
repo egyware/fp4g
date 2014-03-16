@@ -359,5 +359,24 @@ DEFINE GAME
 				"com.apollo.managers.entity.EntitySpawnLoader.EntitySpawnParameter",
 			}
 		} AS DependResolver,
-	} AS DependResolvers;		
+		STRUCT =
+		{
+			Rectangle = 
+			{
+				"com.badlogic.gdx.math.Rectangle",
+			},
+			MapProperties = 
+			{
+				"com.badlogic.gdx.maps.MapProperties",
+			}			
+		} AS DependResolver,
+	} AS DependResolvers;
+	
+	DEFINE STRUCT Rectangle 
+	[		
+	]
+	
+	DEFINE STRUCT MapProperties
+	[		
+	]	
 ]

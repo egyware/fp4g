@@ -8,6 +8,7 @@ import fp4g.data.define.Manager;
 import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Message;
+import fp4g.data.define.Struct;
 
 //están ordenados
 public enum DefineType
@@ -19,7 +20,8 @@ public enum DefineType
 	BEHAVIOR(Behavior.class),
 	ENTITY(Entity.class),
 	GOAL(Goal.class),
-	MESSAGE(Message.class)
+	MESSAGE(Message.class),
+	STRUCT(Struct.class)
 	;
 	
 	//talvez incluir esta variable adicional, sea demasiado, pero servirá de pista para más adelante cuando se quiere usar cualquier tipo de define.

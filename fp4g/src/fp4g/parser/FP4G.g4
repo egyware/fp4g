@@ -38,6 +38,7 @@ returns
 			 | ENTITY   { $type = DefineType.ENTITY;  }
 			 | GOAL     { $type = DefineType.GOAL;    }
 			 | MESSAGE  { $type = DefineType.MESSAGE; }
+			 | ID       { $type = DefineType.valueOf($ID.text);}
 			) 
 		  name = ID DOTCOMA
 		;
@@ -96,7 +97,7 @@ returns
 			  | STATE    { $type = DefineType.STATE;    }
 			  | BEHAVIOR { $type = DefineType.BEHAVIOR; }
 			  | ENTITY   { $type = DefineType.ENTITY;  }
-			  | GOAL     { $type = DefineType.GOAL;  }
+			  | GOAL     { $type = DefineType.GOAL;  }			  
 		  )
 		  ID { $addName = $ID.text; }
 		  ( ABRE_PAR exprList CIERRA_PAR )? 
@@ -119,6 +120,7 @@ returns
 		  		| GOAL      { $type = DefineType.GOAL;    }
 		  		| MESSAGE   { $type = DefineType.MESSAGE; }		  		
 		  		| ASSET     { $type = DefineType.ASSET;   }
+		  		| ID       { $type = DefineType.valueOf($ID.text);}
 		  	) 
 		  ID { $defName = $ID.text; } 
 		  ( ABRE_PAR nameList CIERRA_PAR )?		  

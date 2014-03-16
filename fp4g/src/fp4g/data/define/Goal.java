@@ -5,6 +5,7 @@ import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
 import fp4g.data.On;
+import fp4g.exceptions.NotAllowedException;
 import fp4g.log.info.NotAllowed;
 
 /**

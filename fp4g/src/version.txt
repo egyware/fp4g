@@ -1,12 +1,13 @@
 :::0.1.28 (desarrollo-prototipo)
 + Se cambio filtroValor por filtro(Valor1, Valor2,Valor3)
++ Se agrego soporte para Tiled.
 F Se arreglaron los assets
 F Se refactorizo la clase SourceModel y OnModel
 B Cuando no encuentra un mensaje deberia abortar y no caerse.
 P Reprogramar SourceModel, tiene demasiadas responsabilidades. Si llego agregar más instrucciones para Source la complejidad de este código puede aumentar.
 P Hacer que los Managers reciban mensajes.
 P Debe quedar prueba de tontos II: Se ha vuelto mejorar el launcher esto es para cuando se lanze desde un jar no tener que modificarlo.
-P Definir la utilidad de la clase Utils: Talvez cambiarle el nombre a Assets y mantener los punteros de los assets.
+P Definir la utilidad de la clase Assets
 
 :::0.1.27 (prototipo)
 + Los managers se ordenan según prioridad

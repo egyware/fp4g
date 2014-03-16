@@ -7,6 +7,7 @@ import fp4g.data.IDefine;
 import fp4g.data.On;
 import fp4g.data.expresion.ArrayMap;
 import fp4g.data.expresion.Map;
+import fp4g.exceptions.NotAllowedException;
 import fp4g.log.info.NotAllowed;
 
 public class GameState extends Define

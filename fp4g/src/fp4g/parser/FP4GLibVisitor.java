@@ -26,12 +26,13 @@ import fp4g.data.define.Entity;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Manager;
 import fp4g.data.define.Message;
-import fp4g.data.define.NotAllowedException;
+import fp4g.data.define.Struct;
 import fp4g.data.libs.Lib;
 import fp4g.data.statements.Destroy;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.FP4GRuntimeException;
+import fp4g.exceptions.NotAllowedException;
 import fp4g.log.Log;
 import fp4g.log.info.GeneratorError;
 import fp4g.log.info.NotAllowed;
@@ -251,6 +252,9 @@ public class FP4GLibVisitor extends FP4GBaseVisitor<Code>
 		  	case ASSET:
 		  		Asset.Type type = Asset.Type.valueOf(defName);
 		  		define = new Asset(type,parent);
+		  		break;
+		  	case STRUCT:
+		  		define = new Struct(defName, parent);
 		  		break;
 		  	default:
 		  		throw new FP4GRuntimeException(GeneratorError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");

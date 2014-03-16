@@ -13,8 +13,8 @@ import fp4g.data.ILib;
 import fp4g.data.IValue;
 import fp4g.data.Namespace;
 import fp4g.data.On;
-import fp4g.data.define.NotAllowedException;
 import fp4g.exceptions.DefineNotFoundException;
+import fp4g.exceptions.NotAllowedException;
 import fp4g.log.info.NotAllowed;
 
 /**
