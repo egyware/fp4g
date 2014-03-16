@@ -1,16 +1,22 @@
 package com.apollo.managers;
 
-import com.apollo.Behavior;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.apollo.Entity;
-import com.apollo.annotate.ComponentInjector;
+import com.apollo.Message;
+import com.apollo.MessageHandler;
+import com.apollo.MessageReceiver;
 import com.apollo.managers.entity.EntitySpawn;
+import com.apollo.messages.EntityMessage;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
-public class EntityManager extends Manager 
+public class EntityManager extends Manager implements MessageReceiver
 {
 	private Bag<Entity> entities;
 	private EntitySpawn spawner; 
+	private Map<Message<?>,Bag<MessageHandler>> handlersByEventType;
 		
 	public EntityManager()
 	{
@@ -46,13 +52,18 @@ public class EntityManager extends Manager
 	}
 
 	@Override
-	public void added(Entity entity) {
+	public void added(Entity entity) 
+	{
+		onMessage(EntityMessage.onAddedEntity, entity);
 		entities.add(entity);		
 	}
 	
 	@Override
-	public void removed(Entity e) {
-		entities.remove(e);		
+	public void removed(Entity entity) 
+	{
+		onMessage(EntityMessage.onRemoveEntity, entity);
+		entities.remove(entity);		
+		
 	}
 
 	@Override
@@ -61,6 +72,58 @@ public class EntityManager extends Manager
 			Entity entity = entities.get(i);
 			entity.update(delta);
 		}
+	}
+
+	@Override
+	public ImmutableBag<MessageHandler> getMessageHandler(Message<?> messageType) 
+	{
+		if(handlersByEventType == null)
+			return null;		
+		return handlersByEventType.get(messageType); 
+	}
+	
+	public <T extends Message<?>> void removeEventHandler(Message<?> messagetType, MessageHandler listener) 
+	{
+		if(handlersByEventType == null)
+		{
+			return;
+		}		
+		Bag<MessageHandler> listeners = handlersByEventType.get(messagetType);
+		if(listeners == null) {
+			return;
+		}
+		listeners.remove(listener);
+	}
+	/**
+	 * 
+	 * @param messageType Class of Message Type
+	 * @param listener
+	 */	
+	public <T extends Message<?>> void addEventHandler(Message<?> messageType, MessageHandler listener) {
+		if(handlersByEventType == null)
+			handlersByEventType = new HashMap<Message<?>,Bag<MessageHandler>>();
+		
+		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
+		if(listeners == null) {
+			listeners = new Bag<MessageHandler>();
+			handlersByEventType.put(messageType,listeners);
+		}
+		listeners.add(listener);
+	}
+
+	@Override
+	public void onMessage(Message<? extends MessageHandler> message, Object... args) 
+	{
+		ImmutableBag<MessageHandler> listeners = getMessageHandler(message);
+		if(listeners != null)
+		{
+			final int size = listeners.size();
+			for(int i=0; i<size; i++)
+			{
+				MessageHandler handler = listeners.get(i);
+				message.dispatch(handler,args);			
+			}
+		}		
 	}
 	
 }

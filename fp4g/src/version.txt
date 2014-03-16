@@ -1,4 +1,5 @@
 :::0.1.28 (desarrollo-prototipo)
++ Se agrego CameraBehavior y CameraMessage
 + Se cambio filtroValor por filtro(Valor1, Valor2,Valor3)
 + Se agrego soporte para Tiled.
 F Se arreglaron los assets

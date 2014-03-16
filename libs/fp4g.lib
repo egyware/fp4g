@@ -137,6 +137,18 @@ DEFINE GAME
 		} AS MessageMethod;
 	]
 	
+	DEFINE MESSAGE Camera
+	[
+		SET follow   = 
+		{ 
+			name = "follow", params = "Entity entity", message = current
+		} AS MessageMethod;
+		SET release = 
+		{			
+			name = "unfollow", params="", message = current
+		} AS MessageMethod;
+	]
+	
 	DEFINE MESSAGE Mouse
 	[
 		SET pressButton   = 
@@ -211,7 +223,8 @@ DEFINE GAME
 		shot = Gun.shot, reload = Gun.reload, changeBullet = Gun.changeBullet,
 		setDelayShot = AutoGun.SetDelayShot, setShot = AutoGun.SetShot,		
 		active = MESSAGE.Timer.active, setTime=MESSAGE.Timer.setTime, cancel = MESSAGE.Timer.cancel,
-		change = MESSAGE.Level.change, reload = MESSAGE.Level.reload,		
+		change = MESSAGE.Level.change, reload = MESSAGE.Level.reload,
+		follow = MESSAGE.Camera.follow, unfollow = MESSAGE.Camera.unfollow,		
 	} AS MessageMethods;
 	
 	SET resolvers = 
@@ -279,6 +292,11 @@ DEFINE GAME
 		} AS EntityDependResolver,
 		Message = 
 		{
+			Level   = 
+			{				
+				"com.apollo.messages.CameraMessage",
+				"com.apollo.messages.CameraMessageHandler"		
+			},
 			Level   = 
 			{				
 				"com.apollo.messages.LevelMessage",
