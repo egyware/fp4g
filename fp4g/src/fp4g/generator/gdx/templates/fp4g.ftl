@@ -10,6 +10,12 @@
 <#case 1><#-- delete owner -->			
 		getWorld().deleteEntity(this);
 <#break>
+<#case 2>
+		//subscribeTo;
+	    //String message;
+	    //List<String> method; 
+	    //boolean isSubscribe;
+<#break>
 <#default>
 		//TODO No se reconoce la instrucción: "${statement.class.simpleName}"
 </#switch>

@@ -1,15 +1,12 @@
 package com.apollo.messages;
 
-import com.apollo.Entity;
 import com.apollo.Message;
 import com.apollo.MessageHandler;
 
 public enum EntityMessage implements Message<EntityMessageHandler> 
 {
 	onInitEntity,
-	onDeinitEntity,
-	onAddedEntity, 
-	onRemoveEntity,
+	onDeinitEntity,	
 	;
 
 	@Override
@@ -23,13 +20,7 @@ public enum EntityMessage implements Message<EntityMessageHandler>
 			break;
 		case onDeinitEntity:
 			handler.onDeinitEntity();
-			break;
-		case onAddedEntity:
-			handler.onAddedEntity((Entity)args[0]);
-			break;
-		case onRemoveEntity:
-			handler.onRemoveEntity((Entity)args[0]);
-			break;
+			break;	
 		}		
 	}
 

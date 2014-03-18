@@ -39,6 +39,8 @@ import fp4g.data.statements.Filter;
 import fp4g.data.statements.OrFilters;
 import fp4g.data.statements.Send;
 import fp4g.data.statements.Source;
+import fp4g.data.statements.Subscribe;
+import fp4g.data.statements.Unsubscribe;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.FP4GRuntimeException;
@@ -277,6 +279,52 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	{
 		Destroy destroy = new Destroy(Instance.Self);
 		return destroy;
+	}
+	
+	@Override 
+	public ILine visitSubscribe(FP4GParser.SubscribeContext ctx)
+	{
+		Define define = (Define)current.peek();
+		Subscribe subscribe;
+		//where=ID ON message=ID (DOUBLEDOT method=ID)?
+		String whereName = ctx.where.getText();
+		Instance whereType = Instance.Self;
+		String messageName = ctx.message.getText();
+		String methodName = (ctx.method != null)?ctx.method.getText():null;
+		
+		//obtener message
+		Message message = define.getDefine(DefineType.MESSAGE, messageName);
+		//objetener  method
+		MessageMethod method = message.getMessageMethod(methodName);
+		
+		//identificar where que es
+		whereType = Instance.System;
+		subscribe = new Subscribe(whereType, whereName, message, method);
+		
+		return subscribe;
+	}
+	
+	@Override 
+	public ILine visitUnsubscribe(FP4GParser.UnsubscribeContext ctx)
+	{
+		Define define = (Define)current.peek();
+		Unsubscribe subscribe;
+		//where=ID ON message=ID (DOUBLEDOT method=ID)?
+		String whereName = ctx.where.getText();
+		Instance whereType = Instance.Self;
+		String messageName = ctx.message.getText();
+		String methodName = (ctx.method != null)?ctx.method.getText():null;
+		
+		//obtener message
+		Message message = define.getDefine(DefineType.MESSAGE, messageName);
+		//objetener  method
+		MessageMethod method = message.getMessageMethod(methodName);
+		
+		//identificar where que es
+		whereType = Instance.System;
+		subscribe = new Unsubscribe(whereType, whereName, message, method);
+		
+		return subscribe;
 	}
 	
 	@Override

@@ -13,6 +13,8 @@ import fp4g.data.statements.Destroy;
 import fp4g.data.statements.Filter;
 import fp4g.data.statements.Send;
 import fp4g.data.statements.Source;
+import fp4g.data.statements.Subscribe;
+import fp4g.data.statements.Unsubscribe;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.generator.Depend;
@@ -22,6 +24,7 @@ import fp4g.generator.gdx.models.DestroyStatementModel;
 import fp4g.generator.gdx.models.JavaCodeModel;
 import fp4g.generator.gdx.models.SendStatementModel;
 import fp4g.generator.gdx.models.StatementModel;
+import fp4g.generator.gdx.models.SubscribeStatementModel;
 import fp4g.log.Log;
 import fp4g.log.info.Warn;
 
@@ -41,7 +44,20 @@ public class SourceModel implements Model
 			
 			//TODO vamos por parte, hoy no arreglaré toda la embarrada con el codigo ON
 			for(ILine stmnt:source.statements)
-			{					
+			{			
+					if(stmnt instanceof Subscribe)
+					{
+						Subscribe subscribe = (Subscribe)stmnt;
+						SubscribeStatementModel subscribeModel = new SubscribeStatementModel(subscribe);
+						statements.add(subscribeModel);						
+					}
+					else
+					if(stmnt instanceof Unsubscribe)
+					{
+						Unsubscribe unsubscribe = (Unsubscribe)stmnt;
+						SubscribeStatementModel subscribeModel = new SubscribeStatementModel(unsubscribe);
+						statements.add(subscribeModel);
+					}
 					if(stmnt instanceof Destroy)
 					{
 						Destroy destroy = (Destroy)stmnt;

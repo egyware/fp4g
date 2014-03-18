@@ -201,8 +201,15 @@ DEFINE GAME
 	[
 		SET factory = true;
 		SET init   = { name = "init", params = "", message = current} AS MessageMethod;
-		SET deinit = { name = "deinit", params = "", message = current} AS MessageMethod;
+		SET deinit = { name = "deinit", params = "", message = current} AS MessageMethod;		
 	]
+	
+	DEFINE MESSAGE Spawn
+	[
+		SET added    = { name = "added",  valueReplace="entity instanceof %s", params = "Entity entity", message = current} AS MessageMethod;
+		SET removed  = { name = "removed",valueReplace="entity instanceof %s", params = "Entity entity", message = current} AS MessageMethod;
+	]
+	
 	
 	DEFINE MESSAGE Timer
 	[
@@ -224,7 +231,7 @@ DEFINE GAME
 		setDelayShot = AutoGun.SetDelayShot, setShot = AutoGun.SetShot,		
 		active = MESSAGE.Timer.active, setTime=MESSAGE.Timer.setTime, cancel = MESSAGE.Timer.cancel,
 		change = MESSAGE.Level.change, reload = MESSAGE.Level.reload,
-		follow = MESSAGE.Camera.follow, unfollow = MESSAGE.Camera.unfollow,		
+		follow = MESSAGE.Camera.follow, unfollow = MESSAGE.Camera.unfollow,
 	} AS MessageMethods;
 	
 	SET resolvers = 
@@ -340,6 +347,16 @@ DEFINE GAME
 			{
 				"com.apollo.messages.EntityMessage",
 				"com.apollo.messages.EntityMessageHandler"
+			},
+			Spawn =
+			{
+				"com.apollo.messages.SpawnMessage",
+				"com.apollo.messages.SpawnMessageHandler"
+			},
+			Camera =
+			{
+				"com.apollo.messages.CameraMessage",
+				"com.apollo.messages.CameraMessageHandler"
 			},
 			Timer =
 			{

@@ -6,8 +6,8 @@ import com.apollo.MessageHandler;
 
 public enum CameraMessage implements Message<CameraMessageHandler>
 {
-	onFollow,
-	onUnfollow,	
+	onFollowCamera,
+	onUnfollowCamera,	
 	;
 
 	@Override
@@ -16,10 +16,10 @@ public enum CameraMessage implements Message<CameraMessageHandler>
 		final CameraMessageHandler handler = (CameraMessageHandler)h;
 		switch(this)
 		{		
-		case onFollow:
+		case onFollowCamera:
 			handler.onFollow((Entity)args[0]);
 			break;
-		case onUnfollow:
+		case onUnfollowCamera:
 			handler.onUnfollow();
 			break;
 		}

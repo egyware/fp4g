@@ -82,6 +82,16 @@ returns
 	START ID { $state = $ID.text; }
 ;
 
+subscribe
+    :
+    SUBSCRIBE where=ID ON message=ID (DOUBLEDOT method=ID)?
+;
+
+unsubscribe
+    :
+    UNSUBSCRIBE where=ID ON message=ID (DOUBLEDOT method=ID)?    
+;
+
 add 
 returns
 [
@@ -153,6 +163,8 @@ onStatements:
 onStatement :
 			  send
 			| destroy
+			| subscribe
+			| unsubscribe
 			;
 			
 destroy		:
@@ -211,7 +223,7 @@ defineValues
 defineValue
 		:
 		  add DOTCOMA
-		| set DOTCOMA
+		| set DOTCOMA		
 		| on
 		| assets
 		;

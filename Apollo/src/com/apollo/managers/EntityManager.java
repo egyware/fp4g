@@ -8,7 +8,7 @@ import com.apollo.Message;
 import com.apollo.MessageHandler;
 import com.apollo.MessageReceiver;
 import com.apollo.managers.entity.EntitySpawn;
-import com.apollo.messages.EntityMessage;
+import com.apollo.messages.SpawnMessage;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
@@ -54,14 +54,14 @@ public class EntityManager extends Manager implements MessageReceiver
 	@Override
 	public void added(Entity entity) 
 	{
-		onMessage(EntityMessage.onAddedEntity, entity);
+		onMessage(SpawnMessage.onAddedSpawn, entity);
 		entities.add(entity);		
 	}
 	
 	@Override
 	public void removed(Entity entity) 
 	{
-		onMessage(EntityMessage.onRemoveEntity, entity);
+		onMessage(SpawnMessage.onRemoveSpawn, entity);
 		entities.remove(entity);		
 		
 	}

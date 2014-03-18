@@ -36,8 +36,8 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	@Override
 	public void initialize()
 	{
-		owner.addEventHandler(CameraMessage.onFollow, this);
-		owner.addEventHandler(CameraMessage.onUnfollow, this);
+		owner.addEventHandler(CameraMessage.onFollowCamera, this);
+		owner.addEventHandler(CameraMessage.onUnfollowCamera, this);
 		
 	}
 	
