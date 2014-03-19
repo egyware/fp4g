@@ -11,10 +11,15 @@
 		getWorld().deleteEntity(this);
 <#break>
 <#case 2>
-		//subscribeTo;
-	    //String message;
-	    //List<String> method; 
-	    //boolean isSubscribe;
+<#if statement.subscribe>
+	<#list statement.method as method>
+		entity.getWorld().getManager(${statement.subscribeTo}.class).addEventHandler(${statement.message}Message.on${method?capitalize}${statement.message});
+	</#list>
+<#else>
+		//${statement.subscribeTo};
+	    //${statement.message};
+	    //List<String> method;
+</#if>
 <#break>
 <#default>
 		//TODO No se reconoce la instrucción: "${statement.class.simpleName}"

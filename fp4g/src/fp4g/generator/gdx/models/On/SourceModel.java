@@ -49,7 +49,18 @@ public class SourceModel implements Model
 					{
 						Subscribe subscribe = (Subscribe)stmnt;
 						SubscribeStatementModel subscribeModel = new SubscribeStatementModel(subscribe);
-						statements.add(subscribeModel);						
+						statements.add(subscribeModel);
+						
+						try 
+						{
+							Depend resolve = generator.resolveDependency(subscribe.message);
+							resolve.perform(subscribe.message, model);
+						}
+						catch (DependResolverNotFoundException e1) 
+						{
+							Log.Exception(e1, subscribe.getLine());
+							model.addImport("com.apollo.message.".concat(subscribe.message.name).concat("Message"));
+						}
 					}
 					else
 					if(stmnt instanceof Unsubscribe)
@@ -57,6 +68,17 @@ public class SourceModel implements Model
 						Unsubscribe unsubscribe = (Unsubscribe)stmnt;
 						SubscribeStatementModel subscribeModel = new SubscribeStatementModel(unsubscribe);
 						statements.add(subscribeModel);
+						
+						try 
+						{
+							Depend resolve = generator.resolveDependency(unsubscribe.message);
+							resolve.perform(unsubscribe.message, model);
+						}
+						catch (DependResolverNotFoundException e1) 
+						{
+							Log.Exception(e1, unsubscribe.getLine());
+							model.addImport("com.apollo.message.".concat(unsubscribe.message.name).concat("Message"));
+						}
 					}
 					if(stmnt instanceof Destroy)
 					{
