@@ -48,8 +48,19 @@ public class SourceModel implements Model
 					if(stmnt instanceof Subscribe)
 					{
 						Subscribe subscribe = (Subscribe)stmnt;
-						SubscribeStatementModel subscribeModel = new SubscribeStatementModel(subscribe);
+						SubscribeStatementModel subscribeModel = new SubscribeStatementModel(subscribe,on.message.isFactory());
 						statements.add(subscribeModel);
+						
+						try 
+						{
+							Depend resolve = generator.resolveDependency(subscribe.instance);
+							resolve.perform(subscribe.instance, model);
+						}
+						catch (DependResolverNotFoundException e1) 
+						{
+							Log.Exception(e1, subscribe.getLine());							
+						}
+						
 						
 						try 
 						{
@@ -66,8 +77,18 @@ public class SourceModel implements Model
 					if(stmnt instanceof Unsubscribe)
 					{
 						Unsubscribe unsubscribe = (Unsubscribe)stmnt;
-						SubscribeStatementModel subscribeModel = new SubscribeStatementModel(unsubscribe);
+						SubscribeStatementModel subscribeModel = new SubscribeStatementModel(unsubscribe,on.message.isFactory());
 						statements.add(subscribeModel);
+						
+						try 
+						{
+							Depend resolve = generator.resolveDependency(unsubscribe.instance);
+							resolve.perform(unsubscribe.instance, model);
+						}
+						catch (DependResolverNotFoundException e1) 
+						{
+							Log.Exception(e1, unsubscribe.getLine());							
+						}
 						
 						try 
 						{

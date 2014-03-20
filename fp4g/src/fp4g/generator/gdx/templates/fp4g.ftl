@@ -13,12 +13,10 @@
 <#case 2>
 <#if statement.subscribe>
 	<#list statement.method as method>
-		entity.getWorld().getManager(${statement.subscribeTo}.class).addEventHandler(${statement.message}Message.on${method?capitalize}${statement.message});
+		${statement.attach}.getWorld().getManager(${statement.subscribeTo}.class).addEventHandler(${statement.message}Message.on${method?capitalize}${statement.message},${statement.attach});
 	</#list>
 <#else>
-		//${statement.subscribeTo};
-	    //${statement.message};
-	    //List<String> method;
+		${statement.attach}.getWorld().getManager(${statement.subscribeTo}.class).removeEventHandler(${statement.message}Message.on${method?capitalize}${statement.message},${statement.attach});
 </#if>
 <#break>
 <#default>

@@ -297,9 +297,11 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		//objetener  method
 		MessageMethod method = message.getMessageMethod(methodName);
 		
+		Define where = define.getDefine(whereName);
+		
 		//identificar where que es
 		whereType = Instance.System;
-		subscribe = new Subscribe(whereType, whereName, message, method);
+		subscribe = new Subscribe(whereType, where, message, method);
 		
 		return subscribe;
 	}
@@ -320,9 +322,11 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		//objetener  method
 		MessageMethod method = message.getMessageMethod(methodName);
 		
+		Define where = define.getDefine(whereName);
+		
 		//identificar where que es
 		whereType = Instance.System;
-		subscribe = new Unsubscribe(whereType, whereName, message, method);
+		subscribe = new Unsubscribe(whereType, where, message, method);
 		
 		return subscribe;
 	}

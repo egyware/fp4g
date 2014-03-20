@@ -13,12 +13,14 @@ public final class SubscribeStatementModel extends StatementModel
 	private final String message;
 	private final List<String> method; 
 	private final boolean isSubscribe;
+	private final String attach;
 	
-	public SubscribeStatementModel(Subscribe subscribe) 
+	public SubscribeStatementModel(Subscribe subscribe,boolean b) 
 	{
 		super(StatementModel.Type.SubscribeStatement);
+		attach = b?"entity":"this";
 		isSubscribe = true;
-		subscribeTo = subscribe.instance;
+		subscribeTo = subscribe.instance.name;
 		message = subscribe.message.name;
 		method = new LinkedList<String>();
 		if(subscribe.method == null)
@@ -31,11 +33,12 @@ public final class SubscribeStatementModel extends StatementModel
 		}
 	}
 	
-	public SubscribeStatementModel(Unsubscribe subscribe) 
+	public SubscribeStatementModel(Unsubscribe subscribe,boolean b) 
 	{
 		super(StatementModel.Type.SubscribeStatement);
+		attach = b?"entity":"this";
 		isSubscribe = false;
-		subscribeTo = subscribe.instance;
+		subscribeTo = subscribe.instance.name;
 		message = subscribe.message.name;
 		method = new LinkedList<String>();
 		if(subscribe.method == null)
@@ -62,5 +65,9 @@ public final class SubscribeStatementModel extends StatementModel
 
 	public final boolean isSubscribe() {
 		return isSubscribe;
+	}
+
+	public final String getAttach() {
+		return attach;
 	}
 }
