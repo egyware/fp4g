@@ -14,21 +14,43 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	private Entity player;
 	private TransformFamily transform_player;
 
-	private int x;
-	private int y;
+	private int xo;
+	private int yo;
 	private int w;
 	private int h;
+	private int screen_width;
+	private int screen_height;
+	private int screen_width_2;
+	private int screen_height_4;
+	
 	
 	public CameraBehavior(OrthographicCamera cam) 
 	{		
 		camera = cam;
 	}
 	
-	public CameraBehavior(OrthographicCamera cam, int x, int y, int w, int h) 
+	public CameraBehavior(OrthographicCamera cam, int sw, int sh, int w, int h) 
 	{		
 		this(cam);
-		this.x = x;
-		this.y = y;
+		this.xo = 0;
+		this.yo = 0;
+		this.screen_width = sw;
+		this.screen_height = sh;
+		this.screen_width_2 = sw/2;
+		this.screen_height_4 = sh/4;
+		this.w = w;
+		this.h = h;
+	}
+	
+	public CameraBehavior(OrthographicCamera cam, int sw, int sh, int x, int y, int w, int h) 
+	{		
+		this(cam);
+		this.xo = x;
+		this.yo = y;
+		this.screen_width = sw;		
+		this.screen_height = sh;
+		this.screen_width_2 = sw/2;
+		this.screen_height_4 = sh/4;
 		this.w = w;
 		this.h = h;
 	}
@@ -37,8 +59,7 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	public void initialize()
 	{
 		owner.addEventHandler(CameraMessage.onFollowCamera, this);
-		owner.addEventHandler(CameraMessage.onUnfollowCamera, this);
-		
+		owner.addEventHandler(CameraMessage.onUnfollowCamera, this);		
 	}
 	
 	@Override
@@ -52,22 +73,31 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 		return new CameraBehavior((OrthographicCamera)cam);
 	}
 	
-	public static CameraBehavior build(Camera cam, Number x, Number y, Number w, Number h)
+	public static CameraBehavior build(Camera cam, Number screen_width, Number screen_height,Number w, Number h)
 	{
-		return new CameraBehavior((OrthographicCamera)cam, x.intValue(),y.intValue(), w.intValue(), h.intValue());
+		return new CameraBehavior((OrthographicCamera)cam, w.intValue(), h.intValue(),screen_width.intValue()/2, screen_height.intValue()/4);
+		
 	}
 	
-	public static CameraBehavior build(Camera cam, Rectangle r)
+	public static CameraBehavior build(Camera cam,  Number screen_width, Number screen_height, Rectangle r)
 	{
-		return new CameraBehavior((OrthographicCamera)cam, (int)r.x, (int)r.y, (int)r.width, (int)r.height);
+		return new CameraBehavior((OrthographicCamera)cam, screen_width.intValue(), screen_height.intValue(), (int)r.x, (int)r.y, (int)r.width, (int)r.height);
 	}
 	
 	public void update(float delta)
 	{			
 		if(player != null && !player.isDeleted())
 		{						
-			camera.position.x = transform_player.x;
-			camera.position.y = transform_player.y;
+			int x = (int)transform_player.x;
+			int y = (int)transform_player.y;
+			if(x >= xo + screen_width_2  && x <= xo + w - screen_width_2 )
+			{
+				camera.position.x = transform_player.x+screen_width;
+			}
+			if(y >= yo + screen_height_4 && y <= yo + h - screen_height_4)
+			{
+				camera.position.y = transform_player.y + screen_height_4;
+			}
 		}		
 	}
 
@@ -76,8 +106,15 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	@Override
 	public void onFollow(Entity entity)
 	{
-		player = entity;
-		transform_player = player.getBehavior(TransformFamily.class);				
+ 		player = entity;
+		transform_player = player.getBehavior(TransformFamily.class);
+		int x = (int)transform_player.x;
+		int y = (int)transform_player.y;
+		if((x >= xo  && x <= xo + w) && (y >= yo && y <= yo + h))
+		{
+			camera.position.x = xo+screen_width;
+			camera.position.y = yo+screen_height;
+		}		
 	}
 
 	@Override
