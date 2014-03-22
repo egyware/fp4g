@@ -47,8 +47,8 @@ public class Terrain2DLoader extends SynchronousAssetLoader<Terrain2D, Terrain2D
 		int tw = Integer.parseInt(header[0]);
     	int th = Integer.parseInt(header[1]);
     	//ancho y alto del mapa
-    	int mw = Integer.parseInt(header[2]);
-    	int mh = Integer.parseInt(header[3]);
+    	int mw = Integer.parseInt(header[2])*tw;
+    	int mh = Integer.parseInt(header[3])*th;
 		
 		
 		Terrain2D terrain2D = new Terrain2D(mw, mh,lines.length-1);
@@ -58,8 +58,8 @@ public class Terrain2DLoader extends SynchronousAssetLoader<Terrain2D, Terrain2D
 		for(int i = 1; i < lines.length; i++)
 		{
 			final String r[] = splitSpaces.split(lines[i]);			
-			final int _x = (Integer.parseInt(r[0]))*tw;
-			final int _y = (mh-Integer.parseInt(r[1]))*th;
+			final int _x = Integer.parseInt(r[0])*tw;
+			final int _y = Integer.parseInt(r[1])*th;
 			final int _w = Integer.parseInt(r[2])*tw;
 			final int _h = Integer.parseInt(r[3])*th;
     		
