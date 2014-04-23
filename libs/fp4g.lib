@@ -37,14 +37,11 @@ DEFINE GAME
 			postInitialize = 
 			{
 				@'world = container.getManager(PhysicsManager.class).getb2World()',				
-			},
-			preUpdate     = 
+			},			
+			postUpdate    = 
 			{
 				@'debugCamera.position.set(camera.position).scl(SCALE)',
 				@'debugCamera.update()',
-			},
-			postUpdate    = 
-			{
 				@'debugRender.render(world,debugCamera.combined)'
 			},			
 		}
@@ -76,6 +73,10 @@ DEFINE GAME
 		AS ManagerData;
 	]
 	DEFINE BEHAVIOR CircleBody
+	[	
+		SET group = "body";
+	]
+	DEFINE BEHAVIOR PlatformBody
 	[	
 		SET group = "body";
 	]
@@ -139,11 +140,12 @@ DEFINE GAME
 	
 	DEFINE MESSAGE Camera
 	[
+		//ADD METHOD follow(Entity entity);
 		SET follow   = 
 		{ 
 			name = "follow", params = "Entity entity", message = current
 		} AS MessageMethod;
-		SET release = 
+		SET unfollow = 
 		{			
 			name = "unfollow", params="", message = current
 		} AS MessageMethod;
@@ -169,13 +171,23 @@ DEFINE GAME
 		} AS MessageMethod;
 	]
 	
-	DEFINE MESSAGE Move
+	DEFINE MESSAGE Translate
 	[
 		SET translate    = { name = "translate",  params = "float x, float y", message = current } AS MessageMethod;
-		SET rotate       = { name = "rotate", params = "float grad", message = current }   AS MessageMethod;
+		SET rotate       = { name = "rotate",     params = "float grad", message = current }   AS MessageMethod;		
+	]
+	
+	DEFINE MESSAGE Move
+	[		
 		SET angularSpeed = { name = "angularSpeed", params = "float w", message = current} AS MessageMethod;
-		SET speed        = { name = "speed",   params = "float x, float y", message = current} AS MessageMethod;
-		SET forward      = { name = "forward", params = "float units", message = current} AS MessageMethod;
+		SET speed        = { name = "speed",        params = "float x, float y", message = current} AS MessageMethod;
+		SET forward      = { name = "forward",      params = "float units", message = current} AS MessageMethod;
+	]
+	
+	DEFINE MESSAGE Platform
+	[
+		SET jump = { name = "translate", params = "float vel", message = current } AS MessageMethod;
+		SET move = { name = "move",      params = "float vel", message = current} AS MessageMethod;
 	]
 	
 	DEFINE MESSAGE Contact
@@ -199,17 +211,59 @@ DEFINE GAME
 	
 	DEFINE MESSAGE Entity
 	[
+		//como deberia quedar?
 		SET factory = true;
+		//ADD METHOD init();
+		//ADD METHOD deinit();
+		//sin embargo para poder utilzar este add, es necesario cambiar unas cosas ya que el ADD está diseñado solo para agregar defines.
 		SET init   = { name = "init", params = "", message = current} AS MessageMethod;
-		SET deinit = { name = "deinit", params = "", message = current} AS MessageMethod;		
+		SET deinit = { name = "deinit", params = "", message = current} AS MessageMethod;
 	]
 	
+	
+	//El define, cual será su futuro? hace poco tuve problemas con el tipo STRUCT
+	//hasta ahora la jerarquia de clases es así.
+	//   IDEFINE
+	//   /     \ 
+	// Define Lib
+	//    /
+	//todos los defiens.	
+	//
+	//
+	// E idealmente?
+	// STRUCT 
+	//	 -> Define -> otros defines
+	//   -> Lib
+	//   -> Method
+	//   -> Otros tipos
+	// en este caso seria algo así la estructura general
+	// {estructura} más cosas  [ bloque ]
+	// el problema del sin cosas se ve sin definir, como que no quedará claro.
+	// a menos que podamos llamar una regla de antlr dinamicamente.
 	DEFINE MESSAGE Spawn
 	[
+		//Podemos decir que el ADD es para agregar, pero que tipo de agregue?
+		//Definido por el tipo el cual puede ser un tipo de define, u otra cosa.
+		//Ya ahora el tipo define la estructura a usar o añadir. Pero... COMO diferencio la estructura a usar y además que metodo debo usar para almacenar los datos.
+		//hay que revisar la estructura define.
+		//ADD definetype definename(arguments)[more arguments?]		
+		//ADD type   method(params) [arguments]
+		//ADD METHOD added(Entity entity)
+		//[
+		//    valueReplace = "entity instanceof"
+		//]
+		//ADD METHOD added(Entitity entity)
+		//{
+		//   valueReplace = "entity instanceof %s"
+		//}
+		//un add por cada estructura tipo define? o un ADD dependiendo de tipo
+		//Creo que es más conveniente un ADD dependiendo del tipo y que la verificacion se haga cuadno se intenta añadir el ADD
+		//ya pero, el ADD tipo METHOD... no es un define en comparación a los otros ADDs si quiero mantener la misma estructura
+		//debe tener algo de equivalencia, talvez añada un tipo struct...
+		//el varname debe ser eliminado
 		SET added    = { name = "added",  valueReplace="entity instanceof %s", params = "Entity entity", message = current} AS MessageMethod;
 		SET removed  = { name = "removed",valueReplace="entity instanceof %s", params = "Entity entity", message = current} AS MessageMethod;
-	]
-	
+	]	
 	
 	DEFINE MESSAGE Timer
 	[

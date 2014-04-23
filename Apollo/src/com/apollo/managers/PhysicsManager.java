@@ -41,6 +41,11 @@ public class PhysicsManager extends Manager implements ContactListener{
 		world = new World(gravity, true);
 		world.setContactListener(this);		
 	}
+	public PhysicsManager(float x, float y, Terrain2D terrain)
+	{
+		this(new Vector2(x,y),terrain);
+	}
+	
 	public PhysicsManager(Vector2 gravity, Terrain2D terrain)
 	{		
 		world = new World(gravity, true);

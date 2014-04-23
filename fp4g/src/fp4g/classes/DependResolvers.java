@@ -1,14 +1,16 @@
 package fp4g.classes;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import fp4g.data.Define;
 import fp4g.data.IValue;
-import fp4g.data.expresion.Map;
+import fp4g.data.expresion.IMap;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.generator.Depend;
 
-public class DependResolvers implements Map
+public class DependResolvers implements IMap
 {		
 	private HashMap<String, IValue<?>> resolvers;
 	
@@ -35,6 +37,13 @@ public class DependResolvers implements Map
 		if(null == dependInMap) throw new DependResolverNotFoundException(define.name);
 		
 		return (Depend)dependInMap.getValue();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<Entry<String, IValue<?>>> entrySet() 
+	{
+		return resolvers.entrySet();
 	}
 
 }

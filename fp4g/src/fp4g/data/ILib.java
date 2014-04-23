@@ -2,10 +2,10 @@ package fp4g.data;
 
 import java.util.Collection;
 
-import fp4g.data.expresion.Map;
+import fp4g.data.expresion.IMap;
 
 
-public interface ILib extends Map
+public interface ILib extends IMap
 {
 	
 	/**

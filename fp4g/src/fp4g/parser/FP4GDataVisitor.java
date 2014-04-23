@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fp4g.parser;
 
 
@@ -13,6 +10,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import fp4g.classes.MessageMethod;
 import fp4g.classes.MessageMethods;
 import fp4g.data.Add;
+import fp4g.data.AddAsset;
+import fp4g.data.AddDefine;
+import fp4g.data.AddMethod;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.ExprList;
@@ -24,7 +24,6 @@ import fp4g.data.Instance;
 import fp4g.data.NameList;
 import fp4g.data.On;
 import fp4g.data.Statements;
-import fp4g.data.VarType;
 import fp4g.data.define.Asset;
 import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
@@ -33,7 +32,8 @@ import fp4g.data.define.GameState;
 import fp4g.data.define.Manager;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.CustomClassMap;
-import fp4g.data.expresion.literals.StringLiteral;
+import fp4g.data.expresion.IMap;
+import fp4g.data.libs.Lib;
 import fp4g.data.statements.Destroy;
 import fp4g.data.statements.Filter;
 import fp4g.data.statements.OrFilters;
@@ -51,25 +51,37 @@ import fp4g.log.info.Error;
 import fp4g.log.info.GeneratorError;
 import fp4g.log.info.NotAllowed;
 import fp4g.log.info.Warn;
+import fp4g.parser.FP4GParser.ArrayContext;
 
 
 /**
  * Visita el arbol construido.
+ * 
+ * Visita el arbol construido y construye los datos necesarios.
  * @author Edgardo
  */
 public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 {
-	private final Game game;
+	private final IDefine container;
 	private MessageMethods methods;
-	private final Stack<IDefine> current;
-	private NameList nameList;
+	private final Stack<IDefine> current;	
 	private Statements statements;
 	private final FP4GExpresionVisitor exprVisitor;
-	public FP4GDataVisitor(final Game game)
+	private final FP4GNameListVisitor nameListVisitor;
+	
+	public FP4GDataVisitor(final Lib lib)
 	{
-		this.game = game;		
+		this.container = lib;		
 		current = new Stack<IDefine>();		
 		exprVisitor = new FP4GExpresionVisitor(current);
+		nameListVisitor = new FP4GNameListVisitor(exprVisitor,current);
+	}
+	public FP4GDataVisitor(final Game game)
+	{
+		this.container = game;		
+		current = new Stack<IDefine>();		
+		exprVisitor = new FP4GExpresionVisitor(current);
+		nameListVisitor = new FP4GNameListVisitor(exprVisitor,current);
 		try
 		{
 			CustomClassMap map = ((CustomClassMap)game.get("methods"));
@@ -86,19 +98,20 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	@Override
 	public ILine visitUsing(FP4GParser.UsingContext ctx)
 	{	
+		IDefine define = null;
 		switch(ctx.type)
 		{		
 		case BEHAVIOR:
-			Behavior behavior = new Behavior(ctx.name.getText(),game);
-			behavior.setGenerable(false);
-			behavior.setUsable(true);
-			game.setDefine(behavior);
+			define = new Behavior(ctx.name.getText(),container);
+			define.setGenerable(false);
+			define.setUsable(true);
+			container.setDefine(define);
 			break;
 		case ENTITY:
-			Entity entity = new Entity(ctx.name.getText(),game);
-			entity.setGenerable(false);
-			entity.setUsable(true);
-			game.setDefine(entity);
+			define = new Entity(ctx.name.getText(),container);
+			define.setGenerable(false);
+			define.setUsable(true);
+			container.setDefine(define);			
 			break;
 		case GOAL:
 			//TODO por hacer...
@@ -113,21 +126,34 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			//TODO por hacer..
 			break;
 		case STATE:
-			GameState state = new GameState(ctx.name.getText(),game);
-			state.setGenerable(false);
-			state.setUsable(true);
-			game.setDefine(state);			
+			define = new GameState(ctx.name.getText(),container);
+			define.setGenerable(false);
+			define.setUsable(true);
+			container.setDefine(define);			
 			break;
 		case GAME:			
 		default:			
 			throw new FP4GRuntimeException(GeneratorError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");					
 		}
+		
+		if(define != null)
+		{
+			current.push(define);
+			visit(ctx.usingValues());			
+			current.pop();
+		}
+		
 		return null;		
 	}
 	
 	@Override
 	public ILine visitStart(FP4GParser.StartContext ctx)
 	{
+		if(container instanceof Lib)
+		{
+			//TODO null
+			throw new NotAllowedException(NotAllowed.NotExpectedGame,null, "Start dentro de Lib");
+		}
 		IDefine define = current.peek();
 		
 		if(define instanceof Game)
@@ -341,7 +367,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		{
 			throw new FP4GRuntimeException(Error.FilterMethodMissing,"No se encontró un metodo para el filtro:  ".concat(ctx.messageMethodName));
 		}
-		Send.SendTo type = null;
+		Instance type = null;
 		String receiver = null;
 		//Busqueda de quien envia mensaje.
 		//1.- Game
@@ -350,7 +376,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		//4.- Componente
 		//5.- Tag
 		//6.- Sistema
-		type = (ctx.receiverType == null)?Send.SendTo.Behavior:ctx.receiverType;
+		type = (ctx.receiverType == null)?Instance.Behavior:ctx.receiverType;
 		
 		
 		Send send = null;
@@ -365,13 +391,13 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			receiver = ctx.receiverName;
 		//Behavior
 			//buscar en los add de la entidad.
-			List<Add> behaviors = define.getAdd(DefineType.BEHAVIOR);
-			for(Add bhvr:behaviors)
+			List<AddDefine> behaviors = define.getAdd(DefineType.BEHAVIOR);
+			for(AddDefine bhvr:behaviors)
 			{
 				//buscar de forma iterativa
-				if((bhvr.varName != null && bhvr.equals(receiver))||bhvr.name.equals(receiver))
+				if(bhvr.name.equals(receiver))
 				{
-					type = Send.SendTo.Behavior; //Es un behavior!
+					type = Instance.Behavior; //Es un behavior!
 					send = new Send(type,method,receiver);
 					break;
 				}
@@ -382,14 +408,14 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	    //System
 			
 			//buscar en los defines de sistemas.
-			Collection<IDefine> managers = game.getDefines(DefineType.MANAGER);
+			Collection<IDefine> managers = container.getDefines(DefineType.MANAGER);
 			for(IDefine manager:managers)
 			{
 				if(manager.getName().equals(receiver))
 				{
 					if(((Manager)manager).isReceiver())
 					{
-						type = Send.SendTo.System; //es un sistema!, ojo que el sistema puede que no esté definido...
+						type = Instance.System; //es un sistema!, ojo que el sistema puede que no esté definido...
 						send = new Send(type,method,(Manager)manager);
 					}
 					else
@@ -438,15 +464,24 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	@Override
 	public ILine visitGame(FP4GParser.GameContext ctx)
 	{
-		game.name = ctx.name;
-		game.setLine(ctx.getStart().getLine());
-		return super.visitGame(ctx);		
+		if(container instanceof Game)
+		{
+			final Game game = (Game)container; 
+			game.name = ctx.name;
+			game.setLine(ctx.getStart().getLine());
+			return super.visitGame(ctx);
+		}
+		else
+		{
+			//TODO null
+			throw new NotAllowedException(NotAllowed.NotExpectedGame,null, "No se permite definir el nombre del juego cuando se carga una biblioteca");
+		}
 	}
 	
 	@Override
 	public ILine visitGameValues(FP4GParser.GameValuesContext ctx)
 	{
-		current.push(game);		
+		current.push(container);		
 		super.visitGameValues(ctx);		
 		current.pop();
 		return null;
@@ -497,161 +532,149 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		super.visitDefineValues(ctx);
 		current.pop();
 		
-		if(nameList != null)
+		final FP4GParser.NameListContext nameList_ctx = define_ctx.nameList();
+		if(nameList_ctx != null)
 		{
-			define.setNameList(nameList);
-			nameList = null;
+			final NameList nameList = nameListVisitor.getNameList(nameList_ctx);
+			define.setNameList(nameList);		
 		}
 		
 		return null;		
 	}	
 	
 	@Override
-	public ILine visitAdd(FP4GParser.AddContext ctx)
+	public ILine visitAddMethod(FP4GParser.AddMethodContext ctx)
+	{
+		IDefine parent = current.peek();
+		//String name, NameList list, IMap values		
+		NameList list = nameListVisitor.getNameList(ctx.nameList());
+		
+		final IMap map = getMap(ctx.exprParams,ctx.start.getLine());
+		
+		AddMethod add = new AddMethod(ctx.addName, list, map);
+		
+		parent.setAdd(add);
+		
+		return add;
+	}
+	
+	@Override
+	public ILine visitAddDefine(FP4GParser.AddDefineContext ctx)
 	{
 		IDefine parent = current.peek();
 		
-		Add add;
+		Add add;		
 		//buscar el define que estoy agregando
 		try 
 		{
+			//Define define, ExprList params, IMap values
 			IDefine  define = parent.getDefine(ctx.type,ctx.addName);
-			add = new Add((Define)define, ctx.varName);
+			ExprList list = exprVisitor.getExprList(ctx.exprList());
+			final IMap map = getMap(ctx.exprParams,ctx.start.getLine());
+			add = new AddDefine((Define)define,list, map);			
 			add.setLine(ctx.start.getLine());
 		}
 		catch (DefineNotFoundException e) 
 		{			
-			add = new Add(ctx.type,ctx.addName,ctx.varName);
+			ExprList list = exprVisitor.getExprList(ctx.exprList());
+			final IMap map = getMap(ctx.exprParams,ctx.start.getLine());
+			add = new AddDefine(ctx.type,ctx.addName, list, map);
 			add.setLine(ctx.start.getLine());
 			Log.Exception(e, ctx.start.getLine());		
 		}
-		
-		ExprList list = exprVisitor.getExprList(ctx.exprList());
-		if(list != null)
-		{		
-			add.addParams(list);					
-		}				
 		
 		parent.setAdd(add);		
 		
 		return add; 		
 	}
 	
-	
-	@Override
-	public ILine visitNameList(FP4GParser.NameListContext ctx)
-	{
-		nameList = new NameList();
-		super.visitNameList(ctx);
-	
-		return null;		
-	}
-	
-	@Override 
-	public ILine visitDeclareVar(FP4GParser.DeclareVarContext ctx)
-	{
-		final VarType type = ctx.varType().type;
-		if(ctx.initValue != null)
-		{			
-			try
-			{
-				Expresion initValue = exprVisitor.visit(ctx.initValue);
-				nameList.add(type, ctx.varName.getText(),eval(current.peek(),initValue));
-			}
-			catch (CannotEvalException e) 
-			{
-				Log.Exception(e,ctx.start.getLine());
-			}
-		}
-		else
-		{
-			nameList.add(type, ctx.varName.getText());
-		}
-		return null;		
-	}
-		
-	
-	
 	@Override
 	public ILine visitAssetValueWithInnerValue(FP4GParser.AssetValueWithInnerValueContext ctx) 
 	{
-		Add asset = (Add)visit(ctx.value);		
+		//Asset padre
+		AddAsset assetParent = (AddAsset)visit(ctx.value);		
 		if(ctx.innerAssets != null)
 		{
-			StringLiteral param = (StringLiteral)asset.params.get(0);
+			//visito a los hijos si existen
 			for(ParseTree children:ctx.innerAssets.children)
 			{
-				Add assetChildren = (Add)visit(children);
+				AddAsset assetChildren = (AddAsset)visit(children);
 				if(assetChildren != null)
 				{
-					assetChildren.params.insertElementAt(param, 1);//lo insertamos en la posición 2!! nada más solo eso!!!
+					assetChildren.setParent(assetParent);
 				}
 			}
 		}
 		return null;
 	}
 	
+	private int asset_number = 0;	
 	@Override
 	public ILine visitAssetValue(FP4GParser.AssetValueContext ctx)
 	{
 		IDefine parent = current.peek();	
 
-		//spaceship = ADD ASSET Texture({name="spacheship",atlas = assets_group_1})		
-		String varName  = (ctx.assetName != null)?ctx.assetName.getText():null;
-		String assetFile = ctx.asset.getText(); //TODO hay que evualuar esto más adelante
-		assetFile = assetFile.substring(1, assetFile.length()-1);
-		Asset.Type assetType = Asset.Type.valueOf(ctx.assetType.getText());
+		//me aseguro que no sea null nunca
+		String assetName  = (ctx.assetName != null)?ctx.assetName.getText(): String.format("asset_%d", asset_number++);
+		String assetPath = ctx.assetPath.getText(); 
+		assetPath = assetPath.substring(1, assetPath.length()-1);
 		
-		Add assetAdd;		
-		if(varName == null)
+		//tratar de buscar un define
+		Asset asset;
+		try
 		{
-			try 
-			{
-				Define define = parent.getDefine(DefineType.ASSET,assetType.name());
-				assetAdd = new Add(define,assetType.name());
-			}
-			catch (DefineNotFoundException e)
-			{
-				assetAdd = new Add(DefineType.ASSET,assetType.name());
-				Log.Exception(e, ctx.assetName.getLine());
-			}
+			asset = parent.getDefine(DefineType.ASSET, ctx.assetType.getText());
+		}
+		catch (DefineNotFoundException e)
+		{			
+			//si no se encuentra, reemplazarlo por otro
+			Log.Exception(e, ctx.assetName.getLine());
+			//TODO evaluar si seguir usando el Asset.Type
+			asset = new Asset(Asset.Type.valueOf(ctx.assetType.getText()), parent);
+			asset.setUsable(false);
+			asset.setGenerable(false);
+		}
+		
+		final IMap map = getMap(ctx.exprParams,ctx.start.getLine());
+		
+		AddAsset assetAdd;
+		if(assetName == null)
+		{
+			//Asset asset, String resourceName, String resource, IMap values
+			assetAdd = new AddAsset(asset,assetName, assetPath, map);			
 		}
 		else
 		{
-			try 
-			{
-				Define define = parent.getDefine(DefineType.ASSET,assetType.name());
-				assetAdd = new Add(define, varName);				
-			}
-			catch (DefineNotFoundException e)
-			{
-				assetAdd = new Add(DefineType.ASSET,assetType.name(),varName);
-				Log.Exception(e, ctx.assetName.getLine());
-			}
-			assetAdd.setLine(ctx.start.getLine());
-			
+			assetAdd = new AddAsset(asset,assetName, assetPath, map);				
+			//assetAdd = new Add(DefineType.ASSET,assetType.name(),assetName);
 		}
+		assetAdd.setLine(ctx.start.getLine());
 		
-		ExprList paramList = new ExprList(3);
+		parent.setAdd(assetAdd);
 		
-		Expresion exprParams = (ctx.exprParams == null)? null: exprVisitor.visitArray(ctx.exprParams);
+		return assetAdd;		
+	}
+	
+	private IMap getMap(ArrayContext ctx, int line) 
+	{
+		final IMap map;
+		Expresion exprParams = (ctx == null)? null: exprVisitor.visitArray(ctx);
 		if(exprParams!=null)
 		{
 			if(exprParams instanceof List)
 			{
-				Log.Show(CannotEval.IncomplatibleTypes, assetAdd, "Se esperaba un map");			
+				Log.Show(CannotEval.IncomplatibleTypes, line, "Se esperaba un map");
+				map = null;
 			}	
 			else
 			{
-				paramList.add(exprParams);
+				map = (IMap) exprParams;
 			}
 		}
-		paramList.addFirst(new StringLiteral(assetFile)); //jé suerte que lo agregue		
-		
-		assetAdd.addParams(paramList);		
-		parent.setAdd(assetAdd);
-		
-		
-		return assetAdd;		
+		else
+		{
+			map = null;
+		}
+		return map;
 	}
 }

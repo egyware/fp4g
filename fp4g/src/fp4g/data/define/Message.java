@@ -5,12 +5,15 @@ package fp4g.data.define;
 
 import fp4g.classes.MessageMethod;
 import fp4g.data.Add;
+import fp4g.data.AddMethod;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
 import fp4g.data.On;
 import fp4g.data.expresion.ClassMap;
+import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.exceptions.NotAllowedException;
+import fp4g.log.info.GeneratorError;
 import fp4g.log.info.NotAllowed;
 
 /**
@@ -28,14 +31,30 @@ public class Message extends Define
 	public Message(String name) {
 		super(DefineType.MESSAGE, name);		
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see fp4g.data.Define#addADD(fp4g.data.Add)
 	 */
 	@Override
-	public void setAdd(Add add)
+	public void setAdd(Add code) 
 	{
-		throw new NotAllowedException(NotAllowed.NotExpectedAdd, add, "No se esperaba una instrución Add en Mesage");
+		switch(code.addType)
+		{
+		case AddAsset:
+			throw new NotAllowedException(NotAllowed.NotExpectedAdd,code, "No se permite estos tipos en Message");			
+		case AddDefine:
+			throw new NotAllowedException(NotAllowed.NotExpectedAdd,code, "No se permite estos tipos en Message");			
+		case AddMethod:
+			setAdd((AddMethod)code);
+			break;
+		default:
+			throw new FP4GRuntimeException(GeneratorError.IllegalState, code.getAddType().toString());
+		}		
+	}
+	
+	public void setAdd(AddMethod add)
+	{
+		//TODO por hacer todavía		
 	}
 
 	/* (non-Javadoc)

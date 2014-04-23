@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import fp4g.data.Add;
+import fp4g.data.AddDefine;
 import fp4g.data.DeclVar;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
@@ -117,21 +117,17 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		//agregar behaviors
 				
 		List<HashMap<String,Object>> behaviors = new LinkedList<HashMap<String, Object>>();
-		final Collection<Add> entity_addBehaviors = entity.getAdd(DefineType.BEHAVIOR);
-		for(Add addBhvr:entity_addBehaviors)
+		final Collection<AddDefine> entity_addBehaviors = entity.getAdd(DefineType.BEHAVIOR);
+		for(AddDefine addBhvr:entity_addBehaviors)
 		{
 			HashMap<String,Object> bhvr = new HashMap<String, Object>();			
 			bhvr.put("name", addBhvr.name);			
-			if(addBhvr.varName != null)
-			{
-				bhvr.put("varName", addBhvr.varName);
-			}
-			else
-			{
-				StringBuilder varName = new StringBuilder();				
-				varName.append(Generator.uncap_first(addBhvr.name));				
-				bhvr.put("varName", varName.toString());
-			}			
+			
+			//aún usaré el varName
+			StringBuilder varName = new StringBuilder();				
+			varName.append(Generator.uncap_first(addBhvr.name));				
+			bhvr.put("varName", varName.toString());
+						
 			if(addBhvr.params != null)
 			{	
 				List<String> params = new LinkedList<String>();

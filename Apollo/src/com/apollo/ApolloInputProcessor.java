@@ -22,9 +22,10 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 	}
 	
 	public <T extends Message<?>> void addEventHandler(Message<?> messageType, MessageHandler listener) 
-	{		
+	{	
 		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
-		if(listeners == null) {
+		if(listeners == null) 
+		{
 			listeners = new Bag<MessageHandler>();
 			handlersByEventType.put(messageType,listeners);
 		}
@@ -140,12 +141,12 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 	@Override
 	public void onMessage(Message<? extends MessageHandler> message, Object... args) 
 	{
-		ImmutableBag<MessageHandler> listeners = getMessageHandler(message);
-		if(listeners == null) return;
-		final int size = listeners.size();
+		ImmutableBag<MessageHandler> listeners = getMessageHandler(message);		
+		if(listeners == null) return;		
+		final int size = listeners.size();		
 		for(int i=0; i<size; i++)
-		{
-			MessageHandler handler = listeners.get(i);
+		{			
+			MessageHandler handler = listeners.get(i);			
 			message.dispatch(handler,args);			
 		}				
 	}	

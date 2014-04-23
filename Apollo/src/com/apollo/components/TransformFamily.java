@@ -1,12 +1,12 @@
 package com.apollo.components;
 
 import com.apollo.BaseBehavior;
-import com.apollo.messages.MoveMessageHandler;
+import com.apollo.messages.TransformMessageHandler;
 import com.apollo.utils.TrigLUT;
 import com.apollo.utils.Utils;
 
 public abstract class TransformFamily extends BaseBehavior
-implements MoveMessageHandler
+implements TransformMessageHandler
 {
 	//estos campos deben ser actualizados por los hijos para asegurar maxima compatibilidad
 	protected float x;
@@ -15,6 +15,7 @@ implements MoveMessageHandler
 	
 	//interfaz publica util para la herencia de las transformaciones como box2d
 	public abstract void setPosition(float x, float y);
+	public abstract void setRotation(float rotation);
 	
 	public void addX(float dx){
 		x += dx;
@@ -55,8 +56,12 @@ implements MoveMessageHandler
 		rotation = (rotation + angle) % 360;
 		setRotation(rotation);
 	}
+	
+	public Class<TransformFamily> getType(){
+		return TransformFamily.class;
+	}
 
-	public abstract void setRotation(float rotation);
+	
 	
 	public float getRotation()
 	{
@@ -88,8 +93,5 @@ implements MoveMessageHandler
 		return Utils.angleInRadians(this.x, this.y, x, y);
 	}
 	
-	public Class<TransformFamily> getType(){
-		return TransformFamily.class;
-	}
-
+	
 }

@@ -86,7 +86,7 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	
 	public void update(float delta)
 	{			
-		if(false && player != null && !player.isDeleted())
+		if(player != null && !player.isDeleted())
 		{						
 			int x = (int)transform_player.x;
 			int y = (int)transform_player.y;

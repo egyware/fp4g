@@ -3,6 +3,8 @@ package fp4g.data.libs;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import fp4g.data.Add;
 import fp4g.data.Code;
@@ -26,7 +28,7 @@ import fp4g.log.info.NotAllowed;
  * @author Edgardo
  *
  */
-public class Lib extends Code implements fp4g.data.expresion.Map,ILib,IDefine
+public class Lib extends Code implements fp4g.data.expresion.IMap,ILib,IDefine
 {
 	private final Map<DefineType,Map<String,? extends IDefine>> defines;
 	private final Map<String,IValue<?>> variables;
@@ -193,5 +195,11 @@ public class Lib extends Code implements fp4g.data.expresion.Map,ILib,IDefine
 	public IDefine getValue() 
 	{	
 		return this;
+	}
+
+	@Override
+	public <V extends IValue<?>> Set<Entry<String, V>> entrySet() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -1,6 +1,6 @@
 package fp4g.data;
 
-public class DeclVar extends Code 
+public class DeclVar extends Line 
 {
 	public final VarType type;
 	public final String name;

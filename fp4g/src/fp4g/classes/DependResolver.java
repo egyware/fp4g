@@ -2,11 +2,13 @@ package fp4g.classes;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import fp4g.data.Define;
 import fp4g.data.IValue;
 import fp4g.data.expresion.ArrayList;
-import fp4g.data.expresion.List;
+import fp4g.data.expresion.IList;
 import fp4g.generator.Depend;
 import fp4g.generator.gdx.models.JavaCodeModel;
 
@@ -15,7 +17,7 @@ import fp4g.generator.gdx.models.JavaCodeModel;
  * @author Edgardo
  *
  */
-public class DependResolver implements fp4g.data.expresion.Map, Depend
+public class DependResolver implements fp4g.data.expresion.IMap, Depend
 {
 	private final static String GENERAL   = "General";	
 	private final Map<String,ArrayList> importsRequired;
@@ -27,7 +29,7 @@ public class DependResolver implements fp4g.data.expresion.Map, Depend
 	
 	public void addImports(final String s,JavaCodeModel model)
 	{
-		List imports = importsRequired.get(s);		
+		IList imports = importsRequired.get(s);		
 		if(imports != null)
 		{
 			for(IValue<?> i:imports)
@@ -58,5 +60,12 @@ public class DependResolver implements fp4g.data.expresion.Map, Depend
 	public IValue<?> get(String key) 
 	{		
 		return importsRequired.get(key);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<Entry<String, ArrayList>> entrySet() 
+	{
+		return importsRequired.entrySet();
 	}
 }

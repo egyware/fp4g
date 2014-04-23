@@ -3,49 +3,33 @@
  */
 package fp4g.data;
 
+import fp4g.data.expresion.IMap;
+
 /**
  * @author egyware
  *
  */
-public class Add extends Code implements IValue<Add>
+public abstract class Add extends Line implements IValue<Add>
 {		
-	private final DefineType type;
-	public final Define define;
 	public final String name;	
-	public String varName;
-	public ExprList params;		
-	public Add(DefineType type,String name)
-	{
-		this(type,name,null);		
-	}		
-		
-	public Add(DefineType type, String name, String varName) {
-		this.type = type;
-		this.name = name;
-		this.varName = varName;
-		this.define = null;
-	}
+	public final IMap values;
+	public final AddType addType;
 	
 	
-	public Add(Define define, String varName) {
-		this.type = define.getType();
-		this.name = define.name;
-		this.varName = varName;
-		this.define = define;		
-	}
+	public Add(String name, AddType type, IMap values) 
+	{		
+		this.name = name;		
+		this.values = values;
+		this.addType = type;
+	}	
 	
-	public void addParams(ExprList params)
+	public AddType getAddType()
 	{
-		this.params = params;
-	}
-
-	public DefineType getType()
-	{
-		return type;
+		return addType;
 	}
 
 	@Override
-	public Add getValue() 
+	public final Add getValue() 
 	{
 		return this;
 	}

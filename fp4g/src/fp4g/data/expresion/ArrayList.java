@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import fp4g.data.IValue;
 
-public final class ArrayList extends Literal<List> implements List
+public final class ArrayList extends Literal<IList> implements IList
 {
 	private final java.util.List<IValue<?>> list;
 	
@@ -23,7 +23,7 @@ public final class ArrayList extends Literal<List> implements List
 	}
 	
 	@Override
-	public List getValue() {
+	public IList getValue() {
 		return this;
 	}
 

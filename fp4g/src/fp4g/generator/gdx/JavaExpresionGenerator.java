@@ -113,6 +113,10 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 			{
 				return String.format("\"%s\"",value);
 			}
+			else if(value instanceof Float)
+			{
+				return value.toString().concat("f");
+			}
 			else
 			{
 				return value.toString();

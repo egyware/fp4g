@@ -41,7 +41,18 @@ returns
 			 | ID       { $type = DefineType.valueOf($ID.text);}
 			) 
 		  name = ID DOTCOMA
+		  (ABRE_COR usingValues CIERRA_COR)?
 		;
+usingValues
+:
+	(usingValue)*
+;
+
+usingValue
+:
+	  add DOTCOMA
+	| set DOTCOMA			
+;
 
 game 
 returns [String name]  
@@ -93,25 +104,41 @@ unsubscribe
 ;
 
 add 
+:	      	
+	  ADD
+	  addDefine |
+	  addMethod 
+;
+
+addDefine
 returns
 [
 	DefineType type = null,
-	String addName = null,
-	String varName = null,	
+	String addName = null	
 ]
-	    :
-	      (ID EQUAL {$varName = $ID.text;})?	
-		  ADD 
-		  ( 
+:
+		 (
 			  	MANAGER  { $type = DefineType.MANAGER;  }			  	
 			  | STATE    { $type = DefineType.STATE;    }
 			  | BEHAVIOR { $type = DefineType.BEHAVIOR; }
 			  | ENTITY   { $type = DefineType.ENTITY;  }
 			  | GOAL     { $type = DefineType.GOAL;  }			  
-		  )
-		  ID { $addName = $ID.text; }
-		  ( ABRE_PAR exprList CIERRA_PAR )? 
-		;	
+		 )
+		 ID { $addName = $ID.text; }
+		 ( ABRE_PAR exprList CIERRA_PAR )?
+		 ( exprParams = array )?
+;	
+
+addMethod
+returns
+[
+	String addName = null	
+]
+:
+	 ID { $addName = $ID.text; }
+	 ABRE_PAR nameList CIERRA_PAR
+	 ( exprParams = array )?
+;
 
 define  
 returns
@@ -133,7 +160,7 @@ returns
 		  		| ID       { $type = DefineType.valueOf($ID.text);}
 		  	) 
 		  ID { $defName = $ID.text; } 
-		  ( ABRE_PAR nameList CIERRA_PAR )?		  
+		  ( ABRE_PAR  = nameList CIERRA_PAR )?		  
           ABRE_COR defineValues CIERRA_COR         
         ;
 
@@ -173,15 +200,15 @@ destroy		:
 
 send
 returns
-[String messageMethodName,String receiverName, Send.SendTo receiverType]
+[String messageMethodName,String receiverName, Instance receiverType]
 	:
-	{$receiverType = Send.SendTo.Self;}
+	{$receiverType = Instance.Self;}
 	SEND method=ID {$messageMethodName = $method.text;}
 	(ABRE_PAR exprList CIERRA_PAR)?
 	(
 	 TO (
-	       receiver=OTHER {$receiverType = Send.SendTo.Other;}
-	     | receiver=GAME  {$receiverType = Send.SendTo.Game;}  
+	       receiver=OTHER {$receiverType = Instance.Other;}
+	     | receiver=GAME  {$receiverType = Instance.Game;}  
 	     | receiver=ID    {$receiverType = null;} //sin especificar todavía
 	 	)
 	 {$receiverName = $receiver.text;}
@@ -263,8 +290,9 @@ assetValueWithInnerValue:
 	value = assetValue (innerAssets = assetValuesInner)?
 ;
 
-assetValue:
-	assetType=ID assetName=ID? DOUBLEDOT asset = STRING_LITERAL ( exprParams = array )?
+assetValue
+:
+	assetType=ID assetName=ID? DOUBLEDOT assetPath = STRING_LITERAL ( exprParams = array )?
 ;
 
 

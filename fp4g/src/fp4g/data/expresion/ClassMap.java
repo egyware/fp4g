@@ -1,5 +1,9 @@
 package fp4g.data.expresion;
 
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.antlr.v4.misc.Utils;
 
 import com.esotericsoftware.reflectasm.ConstructorAccess;
@@ -12,7 +16,7 @@ import fp4g.data.expresion.literals.IntegerLiteral;
 import fp4g.data.expresion.literals.ObjectLiteral;
 import fp4g.data.expresion.literals.StringLiteral;
 
-public final class ClassMap<T> extends Literal<T> implements Map
+public final class ClassMap<T> extends Literal<T> implements IMap
 {	
 	public String toString()
 	{
@@ -85,5 +89,31 @@ public final class ClassMap<T> extends Literal<T> implements Map
 	@Override
 	public T getValue() {
 		return bean;
-	}	
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<Entry<String, IValue<?>>> entrySet() 
+	{
+		Set<Entry<String, IValue<?>>> set = new TreeSet<Entry<String, IValue<?>>>();
+		final String methods[] = method.getMethodNames();
+		for(int i = 0; i < methods.length; i++)
+		{
+			if(methods[i].startsWith("is"))				
+			{
+				final String key = Utils.decapitalize(methods[i].substring(2));
+				IValue<?> value = get(key);
+				set.add(new IMap.MapEntry<String,IValue<?>>(key,value));
+			}
+			else
+			if(methods[i].startsWith("get"))
+			{				
+				final String key = Utils.decapitalize(methods[i].substring(3));
+				IValue<?> value = get(key);
+				set.add(new IMap.MapEntry<String,IValue<?>>(key,value));
+			}
+		}
+		
+		return set;
+	}
 }

@@ -2,7 +2,7 @@ package fp4g.log;
 
 import java.io.PrintStream;
 
-import fp4g.data.ICode;
+import fp4g.data.ILine;
 import fp4g.exceptions.FP4GException;
 import fp4g.exceptions.FP4GRuntimeException;
 
@@ -41,7 +41,7 @@ public class Log {
 		}
 	}
 	
-	public static <T extends IMessageType> void Show(T type,ICode c,String more)
+	public static <T extends IMessageType> void Show(T type,ILine c,String more)
 	{
 		if(type instanceof WarnType)
 		{			
@@ -57,7 +57,7 @@ public class Log {
 		}
 	}
 	
-	public static <T extends IMessageType> void Show(T type,ICode c)
+	public static <T extends IMessageType> void Show(T type,ILine c)
 	{
 		if(type instanceof WarnType)
 		{			

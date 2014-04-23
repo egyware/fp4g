@@ -11,6 +11,8 @@ import java.util.Map.Entry;
 
 import fp4g.classes.ManagerData;
 import fp4g.data.Add;
+import fp4g.data.AddAsset;
+import fp4g.data.AddDefine;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
@@ -22,7 +24,7 @@ import fp4g.data.define.GameState;
 import fp4g.data.define.Manager;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.ArrayMap;
-import fp4g.data.expresion.Map;
+import fp4g.data.expresion.IMap;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
@@ -79,7 +81,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		
 		//manager, adds
 		List<ManagerModel> managers = new LinkedList<ManagerModel>();
-		for(Add manager:state.getAdd(DefineType.MANAGER))
+		for(AddDefine manager:state.getAdd(DefineType.MANAGER))
 		{
 			Manager define = (Manager) manager.define;
 			ManagerModel managerModel = new ManagerModel();
@@ -143,15 +145,8 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				
 			}
 			
+			managerModel.varName = Generator.uncap_first(manager.name);				
 			
-			if(manager.varName != null)
-			{
-				managerModel.varName = manager.varName;
-			}
-			else
-			{	
-				managerModel.varName = Generator.uncap_first(manager.name);				
-			}
 			
 			
 			if(manager.params != null)
@@ -214,15 +209,11 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
         
         //add entities
 		List<AddModel> entities = new LinkedList<AddModel>();
-		final List<Add> state_addentities = state.getAdd(DefineType.ENTITY);
-		for(Add entity:state_addentities)
+		final List<AddDefine> state_addentities = state.getAdd(DefineType.ENTITY);
+		for(AddDefine entity:state_addentities)
 		{			
 			AddModel addEntity = new AddModel();
-			addEntity.name = entity.name;						
-			if(entity.varName != null)
-			{
-				addEntity.varName = entity.varName;
-			}			
+			addEntity.name = entity.name;
 			if(entity.params != null)
 			{
 				List<String> params = new LinkedList<String>();
@@ -236,54 +227,49 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		}
 		gameStateModel.setEntities(entities);
 		
-		//agregar assets 
-		int asset_number = 0;
+		//agregar assets
 		final List<AssetModel>  assets = new LinkedList<AssetModel>();
-		final List<Add> assetsList = state.getAdd(DefineType.ASSET);
-		final Map assetsMap = state.getAssets();
-		for(Add asset:assetsList)
+		final Collection<AddAsset> assetsList = state.getAssets();		
+		for(AddAsset add:assetsList)
 		{			
 			//Buscamos el dtefine para poder definir lo siguiente.
-			Asset define = (Asset) asset.define;
+			Asset define = add.asset;
 			
-			if(asset.varName == null)
-			{
-				asset.varName = String.format("asset_%d", asset_number++);
-			}
 			//ahora assetModel deberia tener: el tipo de textura, nombre recurso y parametros adicionales.
+			String assetPath = add.resource;
+			
 			HashMap<String,String> params = new HashMap<String,String>();
-			Iterator<Expresion> it = asset.params.iterator();
-			//sacamos el primer valor (siempre va tener uno, esto porque la gramatica de lo obliga.
-			Expresion first = it.next();			
-			String assetPath = generator.expresion(code,first);
-			IValue<?> groupNameValue = asset.define.get("groupName");			
-			String groupName = (groupNameValue!=null)?groupNameValue.getValue().toString():null;			
-			for(;it.hasNext();)
+			
+			IValue<?> groupNameValue = define.get("groupName");			
+			String groupName = (groupNameValue!=null)?groupNameValue.getValue().toString():null;
+			
+			//ahora los parametros están en un IMap, el problema es como recorro un IMap?
+			
+			for(Entry<String, IValue<?>> entry: add.values.entrySet())
 			{
-				Expresion expr = it.next();
-				if(expr instanceof StringLiteral) //entonces es grupo
-				{
-					if(groupName != null)
-					{
-						params.put(groupName, generator.expresion(code,expr));
-					}
-					else
-					{
-						Log.Show(CannotEval.IncomplatibleTypes,asset,"No se esperaba este asset en un grupo.");
-					}
-				}
-				else 
-				if(expr instanceof ArrayMap)
-				{
-					ArrayMap map = (ArrayMap)expr;
-					for(Entry<String,IValue<?>> entry: map.set())
-					{
-						params.put(entry.getKey(), generator.expresion(code,entry.getValue()));
-					}					
-				}
-			}
-			//TODO a pesar que se guardará en el define para tener un mejor acceso, en ENTITY no podemos aprovecharnos de esto.
-			assetsMap.set(asset.varName, asset);			
+				//TODO acá rehacer esto según las nuevas especificaciones de ADD
+//				Expresion expr = it.next();
+//				if(expr instanceof StringLiteral) //entonces es grupo
+//				{
+//					if(groupName != null)
+//					{
+//						params.put(groupName, generator.expresion(code,expr));
+//					}
+//					else
+//					{
+//						Log.Show(CannotEval.IncomplatibleTypes,add,"No se esperaba este asset en un grupo.");
+//					}
+//				}
+//				else 
+//				if(expr instanceof ArrayMap)
+//				{
+//					ArrayMap map = (ArrayMap)expr;
+//					for(Entry<String,IValue<?>> entry: map.set())
+//					{
+//						params.put(entry.getKey(), generator.expresion(code,entry.getValue()));
+//					}					
+//				}
+			}						
 			AssetModel assetModel = new AssetModel(define, assetPath, params);
 			
 			assets.add(assetModel);
@@ -312,7 +298,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			Log.Exception(ex, state.getLine());
 		}
 		
-		for(Add manager:state.getAdd(DefineType.MANAGER))
+		for(AddDefine manager:state.getAdd(DefineType.MANAGER))
 		{
 			if(manager.define != null)
 			{
@@ -343,6 +329,8 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		{
 			code.addImport("com.badlogic.gdx.graphics.FPSLogger");
 		}
+		
+		code.addImport("com.apollo.Assets");
 		
 		generator.createFile(path,String.format("%s.java",state.name), temp, gameStateModel);
 

@@ -7,6 +7,9 @@ import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
 import com.apollo.messages.MoveMessage;
+import com.apollo.messages.MoveMessageHandler;
+import com.apollo.messages.TransformMessage;
+import com.apollo.utils.TrigLUT;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -16,26 +19,30 @@ import com.badlogic.gdx.physics.box2d.Body;
  *
  */
 public abstract class BodyBehavior extends PhysicsFamily 
+implements MoveMessageHandler
 {
 	protected Body simpleBody;
 	
 	@Override
 	public void initialize()
 	{
-		owner.addEventHandler(MoveMessage.onTranslateMove, this);
-		owner.addEventHandler(MoveMessage.onSpeedMove, this);
-		owner.addEventHandler(MoveMessage.onRotateMove, this);
+		owner.addEventHandler(TransformMessage.onTranslateTransform, this);		
+		owner.addEventHandler(TransformMessage.onRotateTransform, this);
+		owner.addEventHandler(MoveMessage.onSpeedMove, this);		
 		owner.addEventHandler(MoveMessage.onForwardMove, this);
+		owner.addEventHandler(MoveMessage.onAngularSpeedMove, this);
+		owner.addEventHandler(MoveMessage.onAngularSpeedMove, this);
 		simpleBody.setUserData(owner);
 	}
 	
 	@Override
 	public void uninitialize()
 	{
-		owner.removeEventHandler(MoveMessage.onTranslateMove, this);
-		owner.removeEventHandler(MoveMessage.onSpeedMove, this);
-		owner.removeEventHandler(MoveMessage.onRotateMove, this);
+		owner.removeEventHandler(TransformMessage.onTranslateTransform, this);
+		owner.removeEventHandler(TransformMessage.onRotateTransform, this);
+		owner.removeEventHandler(MoveMessage.onSpeedMove, this);		
 		owner.removeEventHandler(MoveMessage.onForwardMove, this);
+		owner.removeEventHandler(MoveMessage.onAngularSpeedMove, this);
 		
 		simpleBody.setUserData(null);
 		simpleBody.getWorld().destroyBody(simpleBody);
@@ -45,7 +52,8 @@ public abstract class BodyBehavior extends PhysicsFamily
 	 * @see com.apollo.components.BodyBehavior#getBody()
 	 */
 	@Override
-	public Body getBody() {
+	public Body getBody()
+	{
 		return simpleBody;
 	}
 
@@ -53,7 +61,8 @@ public abstract class BodyBehavior extends PhysicsFamily
 	 * @see com.apollo.components.BodyBehavior#setPosition(float, float)
 	 */
 	@Override
-	public void setPosition(float x, float y) {
+	public void setPosition(float x, float y)
+	{
 		simpleBody.setTransform(x*SCALE, y*SCALE, rotation);		
 		this.x = x*SCALE;
 		this.y = y*SCALE;
@@ -88,29 +97,31 @@ public abstract class BodyBehavior extends PhysicsFamily
 	}
 	
 	@Override
-	public void onTranslateMove(float x, float y) 
+	public void onTranslateTransform(float x, float y) 
 	{
 		simpleBody.setTransform((this.x + x)*SCALE, (this.y + y)*SCALE, rotation);		
 	}
 	
 	@Override
 	public void onSpeedMove(float vX, float vY) 
-	{
+	{		
 		simpleBody.setLinearVelocity(vX*SCALE, vY*SCALE);		
 	}
 	@Override
-	public void onRotateMove(float grad) 
+	public void onRotateTransform(float grad) 
 	{
-		addRotation(grad*MathUtils.degreesToRadians);
+		setRotation(grad*MathUtils.degreesToRadians);
 	}
 	@Override
 	public void onForwardMove(float units)
 	{
-		move(units);
+		float vx = (float) (TrigLUT.cos(rotation+MathUtils.PI/2) * units);
+		float vy = (float) (TrigLUT.sin(rotation+MathUtils.PI/2) * units);		
+		simpleBody.setLinearVelocity(vx*SCALE, vy*SCALE);
 	}
 	@Override
 	public void onAngularSpeedMove(float w)
-	{
-		// TODO Auto-generated method stub		
+	{		
+		simpleBody.setAngularVelocity(w*MathUtils.degreesToRadians);	
 	}
 }

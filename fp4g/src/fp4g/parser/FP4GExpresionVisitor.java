@@ -19,9 +19,9 @@ import fp4g.data.expresion.CustomClassList;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
-import fp4g.data.expresion.List;
+import fp4g.data.expresion.IList;
 import fp4g.data.expresion.Literal;
-import fp4g.data.expresion.Map;
+import fp4g.data.expresion.IMap;
 import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.VarDot;
 import fp4g.data.expresion.VarId;
@@ -44,8 +44,8 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	private final Stack<Stack<Expresion>> stacks = new Stack<Stack<Expresion>>();	
 	private Stack<Expresion> stack;
 	private final Stack<IDefine> current;
-	private final Stack<Map> map_stack = new Stack<Map>();
-	private final Stack<List> list_stack = new Stack<List>();
+	private final Stack<IMap> map_stack = new Stack<IMap>();
+	private final Stack<IList> list_stack = new Stack<IList>();
 	
 	public FP4GExpresionVisitor(Stack<IDefine> d)
 	{
@@ -288,15 +288,15 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	@Override
 	public Expresion visitAssocArray(FP4GParser.AssocArrayContext ctx)
 	{
-		Map map = null;		
+		IMap map = null;		
 		if(ctx.bean != null)
 		{			
 			ClassLoader cl = getClass().getClassLoader();
 			try {
 				Class<?> clazz = cl.loadClass(String.format("fp4g.classes.%s",ctx.bean));								
-				if(Map.class.isAssignableFrom(clazz))
+				if(IMap.class.isAssignableFrom(clazz))
 				{
-					map = new CustomClassMap((Class<? extends Map>) clazz);
+					map = new CustomClassMap((Class<? extends IMap>) clazz);
 				}
 				else
 				{
@@ -324,15 +324,15 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	@Override
 	public Expresion visitListArray(FP4GParser.ListArrayContext ctx)
 	{
-		List list = null;
+		IList list = null;
 		if(ctx.bean != null)
 		{			
 			ClassLoader cl = getClass().getClassLoader();
 			try {
 				Class<?> clazz = cl.loadClass(String.format("fp4g.classes.%s",ctx.bean));
-				if(List.class.isAssignableFrom(clazz))
+				if(IList.class.isAssignableFrom(clazz))
 				{
-					list = new CustomClassList((Class<? extends List>) clazz);
+					list = new CustomClassList((Class<? extends IList>) clazz);
 				}
 				else
 				{
@@ -358,7 +358,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	public Expresion visitItemArray(FP4GParser.ItemArrayContext ctx) 
 	{
 		Expresion expr = visit(ctx.expr());
-		List list = list_stack.peek();
+		IList list = list_stack.peek();
 		if(expr instanceof Literal)
 		{
 			list.add((Literal<?>) expr);
@@ -384,7 +384,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 				
 		Expresion expr = visit(ctx.expr());		
 		
-		Map array = map_stack.peek();
+		IMap array = map_stack.peek();
 		if(expr instanceof Literal)
 		{
 			array.set(key, (Literal<?>) expr);

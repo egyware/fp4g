@@ -7,7 +7,7 @@ import java.util.Set;
 import fp4g.data.IValue;
 
 // también deberia ser literal
-public final class ArrayMap extends Literal<Map> implements Map
+public final class ArrayMap extends Literal<IMap> implements IMap
 {
 	private final java.util.Map<String,IValue<?>> map;
 	
@@ -30,18 +30,21 @@ public final class ArrayMap extends Literal<Map> implements Map
 		return map.get(key);		
 	}
 	
-	public Set<Entry<String,IValue<?>>> set()
+	@Override
+	public void set(String key, IValue<?> value) 
 	{
-		return map.entrySet();
-	}
-
-		@Override
-	public void set(String key, IValue<?> value) {
 		map.put(key, value);
 	}
 
 	@Override
-	public Map getValue() {
+	public IMap getValue() {
 		return this;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<Entry<String, IValue<?>>> entrySet() 
+	{
+		return map.entrySet();
 	}
 }

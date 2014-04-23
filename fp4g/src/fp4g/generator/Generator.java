@@ -23,8 +23,8 @@ import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.exceptions.GeneratorException;
 import fp4g.log.Log;
+import fp4g.parser.FP4GDataVisitor;
 import fp4g.parser.FP4GLexer;
-import fp4g.parser.FP4GLibVisitor;
 import fp4g.parser.FP4GParser;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -144,7 +144,7 @@ public abstract class Generator {
 			ParseTree tree = p.gameLib();			
 			if(tree != null)
 			{
-				FP4GLibVisitor visitor = new FP4GLibVisitor(lib);
+				FP4GDataVisitor visitor = new FP4GDataVisitor(lib);
 				visitor.visit(tree);
 			}
 			else

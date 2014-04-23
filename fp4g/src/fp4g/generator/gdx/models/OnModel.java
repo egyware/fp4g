@@ -57,7 +57,7 @@ public class OnModel implements Model
 		//agregar los metodos, aunque están vacios y asumiento que todos son MessageMethod
 		HashMap<String,MethodHandlerModel> methods = new HashMap<String, MethodHandlerModel>();
 		//TODO da un error cuando el mensaje está sin definir		
-		for(Entry<String,IValue<?>> entry:on.message.entrySet())
+		for(Entry<String, IValue<?>> entry: on.message.entrySet())
 		{	
 			IValue<?> value = entry.getValue();
 			if(value instanceof ClassMap)

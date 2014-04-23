@@ -1,6 +1,8 @@
 package fp4g.data;
 
 import java.util.Collection;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import fp4g.data.expresion.BinaryOp;
 import fp4g.exceptions.DefineNotFoundException;
@@ -219,6 +221,14 @@ public class Namespace implements IDefine
 	public boolean isUsable() 
 	{	
 		return false;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<Entry<String, IValue<?>>> entrySet() 
+	{
+		//TODO está bien esto así? LO DUDO deberia filtrar por lo menos por namespaces
+		return parent.entrySet();
 	}
 
 }

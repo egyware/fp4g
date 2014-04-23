@@ -21,10 +21,12 @@ import fp4g.data.expresion.literals.IntegerLiteral;
 import fp4g.data.expresion.literals.ObjectLiteral;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.DefineNotFoundException;
+import fp4g.exceptions.FP4GRuntimeException;
+import fp4g.log.info.GeneratorError;
 
 public abstract class Define extends Code implements IDefine
 {
-	public final static List<Add> emptyList = new ArrayList<Add>(0);
+	public final static List<AddDefine> emptyList = new ArrayList<AddDefine>(0);
 	
 	public final DefineType type;	
 	
@@ -36,7 +38,9 @@ public abstract class Define extends Code implements IDefine
 	private final Map<DefineType,Map<String,? extends IDefine>> defines;
 	private final Map<String,IValue<?>> variables;
 	
-	private final Map<DefineType,List<Add>> adds;	
+	private final Map<DefineType,List<AddDefine>> addDefines;	
+	private final Map<String,AddAsset> addAssets;
+	private final Map<String,AddMethod> addMethods;
 	private final Map<String,On> onMessages;	
 	
 	private final MethodAccess method;
@@ -53,7 +57,11 @@ public abstract class Define extends Code implements IDefine
 		this.type = type;
 		this.name = name;		
 		variables = new HashMap<String, IValue<?>>();		
-		adds    = new HashMap<DefineType, List<Add>>(DefineType.values().length,1);		
+		
+		addDefines = new HashMap<DefineType, List<AddDefine>>(DefineType.values().length,1);
+		addAssets  = new HashMap<String,     AddAsset>();
+		addMethods = new HashMap<String,     AddMethod>();
+		
 		onMessages= new HashMap<String, On>();
 		defines = new HashMap<DefineType,Map<String,? extends IDefine>>();
 		
@@ -85,13 +93,27 @@ public abstract class Define extends Code implements IDefine
 	
 	public void setAdd(Add add)
 	{
-		List<Add> list = adds.get(add.getType());
-		if(list == null)
+		switch(add.getAddType())
 		{
-			list = new LinkedList<Add>();
-			adds.put(add.getType(), list);
+		case AddAsset:
+			addAssets.put(add.name, (AddAsset)add);
+			break;
+		case AddDefine:
+			AddDefine addDefine = (AddDefine)add;
+			List<AddDefine> list = addDefines.get(addDefine);
+			if(list == null)
+			{
+				list = new LinkedList<AddDefine>();
+				addDefines.put(addDefine.getType(), list);
+			}
+			list.add(addDefine);
+			break;
+		case AddMethod:
+			addMethods.put(add.name, (AddMethod)add);
+			break;
+		default:
+			throw new FP4GRuntimeException(GeneratorError.IllegalState, add.getAddType().toString());			
 		}
-		list.add(add);
 	}
 	
 	public void setOn(On on)
@@ -100,19 +122,30 @@ public abstract class Define extends Code implements IDefine
 	}
 	
 	/**
-	 * Devuelve una lista de adiciones segï¿½n el tipo
+	 * Devuelve una lista de adiciones según el tipo
 	 * @param type
 	 * @return
 	 */
-	public List<Add> getAdd(DefineType type)
-	{
-		List<Add> list = adds.get(type);
+	public List<AddDefine> getAdd(DefineType type)
+	{		
+		List<AddDefine> list = addDefines.get(type);
 		if(list == null)
 		{
 			list = emptyList;
 		}
 		return list;
 	}
+	
+	public Collection<AddAsset> getAssets()
+	{
+		return addAssets.values();
+	}
+	
+	public Collection<AddMethod> getMethods()
+	{
+		return addMethods.values();
+	}
+	
 	/**
 	 * Busca un evento ya agregado y definido
 	 * @param message Nombre del mensaje
@@ -163,9 +196,9 @@ public abstract class Define extends Code implements IDefine
 		{
 			//solo te ignoro
 		}
-		if(value instanceof fp4g.data.expresion.Map)
+		if(value instanceof fp4g.data.expresion.IMap)
 		{
-			variables.put(key,new CustomClassMap((fp4g.data.expresion.Map)value));
+			variables.put(key,new CustomClassMap((fp4g.data.expresion.IMap)value));
 		}
 		else
 		{
@@ -245,6 +278,7 @@ public abstract class Define extends Code implements IDefine
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public final Set<Entry<String,IValue<?>>> entrySet()
 	{
 		return variables.entrySet();

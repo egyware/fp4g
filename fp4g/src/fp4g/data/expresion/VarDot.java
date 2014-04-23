@@ -46,9 +46,9 @@ public class VarDot extends VarId
 				sub = current;
 			}else
 			{
-				if(current instanceof Map)
+				if(current instanceof IMap)
 				{
-					sub = ((Map)current).get(varName);				
+					sub = ((IMap)current).get(varName);				
 				}
 				else
 				{

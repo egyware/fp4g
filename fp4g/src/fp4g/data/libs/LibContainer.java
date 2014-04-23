@@ -3,6 +3,8 @@ package fp4g.data.libs;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import fp4g.data.Add;
 import fp4g.data.Code;
@@ -201,6 +203,12 @@ public class LibContainer extends Code implements ILib, IDefine
 	throws NotAllowedOperatorException
 	{
 		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Sub);
+	}
+
+	@Override
+	public <V extends IValue<?>> Set<Entry<String, V>> entrySet() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 		

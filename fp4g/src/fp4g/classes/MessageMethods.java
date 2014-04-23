@@ -1,10 +1,12 @@
 package fp4g.classes;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import fp4g.data.IValue;
 import fp4g.data.expresion.ClassMap;
-import fp4g.data.expresion.Map;
+import fp4g.data.expresion.IMap;
 
 /**
  * Esta clase auxiliar sirve para almacenar todos los methodos mensajes por nombre
@@ -12,7 +14,7 @@ import fp4g.data.expresion.Map;
  * @author Edgardo
  *
  */
-public final class MessageMethods implements Map
+public final class MessageMethods implements IMap
 {
 	private final HashMap<String, ClassMap<MessageMethod>> map;
 	
@@ -49,5 +51,12 @@ public final class MessageMethods implements Map
 	@Override
 	public IValue<?> get(String k) {
 		return map.get(k);				
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<Entry<String, ClassMap<MessageMethod>>> entrySet() 
+	{
+		return map.entrySet();
 	}
 }

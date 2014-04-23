@@ -4,6 +4,7 @@ import fp4g.log.WarnType;
 
 public enum NotAllowed implements WarnType 
 {
+	NotExpectedGame,
 	NotExpectedDefine,
 	NotExpectedOn, 
 	NotExpectedAdd,

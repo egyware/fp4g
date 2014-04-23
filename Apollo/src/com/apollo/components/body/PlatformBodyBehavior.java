@@ -7,6 +7,8 @@ import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
 import com.apollo.managers.PhysicsManager;
+import com.apollo.messages.PlatformMessage;
+import com.apollo.messages.PlatformMessageHandler;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -21,30 +23,42 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
  * @author egyware
  *
  */
-public class PlatformBodyBehavior extends PhysicsFamily 
+public class PlatformBodyBehavior extends PhysicsFamily
+implements PlatformMessageHandler
 {
 	private Body circle;
 	private Body box;
 	private RevoluteJoint motor;
-
-	public static class Def
+	
+	//initial values
+	public int ratio = 5;
+	public int height = 5;
+	public Vector2 position = new Vector2();
+	
+	public float desiredHorizontalVelocity = 0;
+		
+	public PlatformBodyBehavior()
 	{
-		public int ratio = 5;
-		public int height = 5;
-		public Vector2 position = new Vector2();
 	}
 	
-	public PlatformBodyBehavior(com.apollo.WorldContainer world)
-	{		
-		this(world,new Def());
+	@Override
+	public void uninitialize()
+	{
+		owner.removeEventHandler(PlatformMessage.onMovePlatform, this);
+		owner.removeEventHandler(PlatformMessage.onJumpPlatform, this);
 	}
-	public PlatformBodyBehavior(com.apollo.WorldContainer managers,Def def)
+	
+	@Override	
+	public void initialize()
 	{	
-		World world = managers.getManager(PhysicsManager.class).getb2World();
+		owner.addEventHandler(PlatformMessage.onMovePlatform, this);
+		owner.addEventHandler(PlatformMessage.onJumpPlatform, this);
+		
+		World world = owner.getWorld().getManager(PhysicsManager.class).getb2World();
 	
 		{
 			BodyDef defA = new BodyDef();		
-			defA.position.set(def.position.cpy().scl(SCALE));
+			defA.position.set(position.cpy().scl(SCALE));
 			defA.type = BodyDef.BodyType.DynamicBody;
 			defA.fixedRotation = true;		
 			box = world.createBody(defA);
@@ -53,7 +67,7 @@ public class PlatformBodyBehavior extends PhysicsFamily
 			 //shape
 	//	    Fixture fixtureBox = new Fixture();
 		    PolygonShape boxShape = new PolygonShape();
-		    boxShape.setAsBox((def.ratio)*SCALE,def.height*SCALE);
+		    boxShape.setAsBox(ratio*SCALE,height*SCALE);
 	//	    FixtureDef fixtureDefA;
 	//	    fixtureDefA.density = 1.0f; //!\todo puede ser un parametro
 	//	    fixtureDefA.friction = 1.0f;//!\todo puede ser un parametro
@@ -73,13 +87,13 @@ public class PlatformBodyBehavior extends PhysicsFamily
 			//crear el body B
 		    BodyDef defB = new BodyDef();
 		    defB.type = BodyDef.BodyType.DynamicBody;
-		    defB.position.set(def.position.cpy().add(0,-def.height).scl(SCALE));	    
+		    defB.position.set(position.cpy().add(0,height).scl(SCALE));	    
 		    circle = world.createBody(defB);
 		    circle.setUserData(owner);
 
 		    //shape
 		    CircleShape circleShape = new CircleShape();
-		    circleShape.setRadius(def.ratio*SCALE);
+		    circleShape.setRadius(ratio*SCALE);
 		    //FixtureDef fixtureDefB;
 		    //fixtureDefB.friction = 1.0f;//!\todo puede ser un parametro
 		    //fixtureDefB.density = 1.0f;//!\todo puede ser un parametro
@@ -104,7 +118,8 @@ public class PlatformBodyBehavior extends PhysicsFamily
 	 * @see com.apollo.components.BodyBehavior#getBody()
 	 */
 	@Override
-	public Body getBody() {		
+	public Body getBody()
+	{		
 		return box;
 	}
 	
@@ -122,16 +137,20 @@ public class PlatformBodyBehavior extends PhysicsFamily
 		}
 	}
 	@Override
-	public void setPosition(float x, float y) {
+	public void setPosition(float x, float y)
+	{
 		// TODO Auto-generated method stub		
 	}
 	
-	public void setRotation(float angleRadians) {
+	public void setRotation(float angleRadians)
+	{
 		// TODO Auto-generated method stub
 		
 	}
 	public void update(float dt)
 	{
+		move(desiredHorizontalVelocity);
+		
 		//actualizando transformación
 		rotation = circle.getAngle();
 		Vector2 pos = circle.getPosition();
@@ -139,31 +158,40 @@ public class PlatformBodyBehavior extends PhysicsFamily
 		y = pos.y * INV_SCALE;
 	}
 	@Override
-	public Vector2 getRawPosition() {		
+	public Vector2 getRawPosition()
+	{		
 		return circle.getPosition();
 	}
 	@Override
-	public void onTranslateMove(float x, float y) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void onSpeedMove(float x, float y) {
-		// TODO Auto-generated method stub		
-	}
-	@Override
-	public void onRotateMove(float grad) {
-		// TODO Auto-generated method stub		
-	}
-	@Override
-	public void onForwardMove(float units)
+	public void onTranslateTransform(float x, float y)
 	{
-		// TODO AUTO
+				
 	}
 	@Override
-	public void onAngularSpeedMove(float w) {
-		// TODO Auto-generated method stub
+	public void onRotateTransform(float grad)
+	{
+		// TODO Auto-generated method stub		
+	}
+	@Override
+	public void onMovePlatform(float x)
+	{
+		desiredHorizontalVelocity = x*SCALE;		
+	}
+	@Override
+	public void onJumpPlatform(float y)
+	{
 		
+	}
+		
+	
+	public static PlatformBodyBehavior build(Number x, Number y, Number ratio, Number height)
+	{
+		PlatformBodyBehavior behavior = new PlatformBodyBehavior();
+		behavior.position.x = x.floatValue();
+		behavior.position.y = y.floatValue();
+		behavior.ratio = ratio.intValue();
+		behavior.height = height.intValue();
+		return behavior;
 	}
 		
 }

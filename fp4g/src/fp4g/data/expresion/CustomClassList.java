@@ -6,14 +6,14 @@ import com.esotericsoftware.reflectasm.ConstructorAccess;
 
 import fp4g.data.IValue;
 
-public class CustomClassList extends Literal<List> implements List 
+public class CustomClassList extends Literal<IList> implements IList 
 {
-	private List bean;
-	public CustomClassList(Class<? extends List> type)
+	private IList bean;
+	public CustomClassList(Class<? extends IList> type)
 	{
 		bean = ConstructorAccess.get(type).newInstance();		
 	}
-	public CustomClassList(List value)
+	public CustomClassList(IList value)
 	{
 		bean = value;		
 	}
@@ -43,7 +43,7 @@ public class CustomClassList extends Literal<List> implements List
 	}
 
 	@Override
-	public List getValue() 
+	public IList getValue() 
 	{	
 		return bean;
 	}

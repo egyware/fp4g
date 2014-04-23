@@ -1,17 +1,20 @@
 package fp4g.data.expresion;
 
+import java.util.Map.Entry;
+import java.util.Set;
+
 import com.esotericsoftware.reflectasm.ConstructorAccess;
 
 import fp4g.data.IValue;
 
-public final class CustomClassMap extends Literal<Map> implements Map
+public final class CustomClassMap extends Literal<IMap> implements IMap
 {	
-	private Map bean;
-	public CustomClassMap(Class<? extends Map> type)
+	private IMap bean;
+	public CustomClassMap(Class<? extends IMap> type)
 	{
 		bean = ConstructorAccess.get(type).newInstance();		
 	}
-	public CustomClassMap(Map value)
+	public CustomClassMap(IMap value)
 	{
 		bean = value;		
 	}
@@ -27,8 +30,15 @@ public final class CustomClassMap extends Literal<Map> implements Map
 	}
 	
 	@Override
-	public Map getValue() 
+	public IMap getValue() 
 	{
 		return bean;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<Entry<String, IValue<?>>> entrySet() 
+	{
+		return bean.entrySet();
 	}
 }

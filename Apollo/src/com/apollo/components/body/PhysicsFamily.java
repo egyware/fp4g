@@ -9,7 +9,8 @@ import com.badlogic.gdx.physics.box2d.Body;
  * @author egyware
  *
  */
-public abstract class PhysicsFamily extends TransformFamily {
+public abstract class PhysicsFamily extends TransformFamily 
+{
 	private final Vector2 position = new Vector2();
 
 	public abstract Body getBody();

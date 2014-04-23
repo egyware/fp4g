@@ -1,12 +1,15 @@
 package fp4g.data.define;
 
 import fp4g.data.Add;
+import fp4g.data.AddDefine;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
 import fp4g.data.On;
 import fp4g.data.libs.LibContainer;
+import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.exceptions.NotAllowedException;
+import fp4g.log.info.GeneratorError;
 import fp4g.log.info.NotAllowed;
 /**
  * Esta clase contendrá todos los datos necesarios para construir un juego
@@ -124,9 +127,25 @@ public class Game extends Define
 //	public Entity getDefinedEntity(String name) {
 //		return entitiesByName.get(name);
 //	}
-
+	
 	@Override
-	public void setAdd(Add code) {
+	public void setAdd(Add code) 
+	{
+		switch(code.addType)
+		{
+		case AddAsset:
+			throw new NotAllowedException(NotAllowed.NotExpectedAdd,code, "No se permite estos tipos en Game");			
+		case AddDefine:
+			setAdd((AddDefine)code);
+			break;
+		case AddMethod:
+			throw new NotAllowedException(NotAllowed.NotExpectedAdd,code, "No se permite estos tipos en Game");			
+		default:
+			throw new FP4GRuntimeException(GeneratorError.IllegalState, code.getAddType().toString());
+		}		
+	}
+	
+	public void setAdd(AddDefine code) {
 		switch(code.getType())
 		{	
 			case GOAL:
@@ -139,6 +158,7 @@ public class Game extends Define
 				throw new NotAllowedException(NotAllowed.NotExpectedAdd, code,"No se esperaba estos tipos en Game");					
 		}		
 	}
+	
 	/**
 	 * Bypass para los managers
 	 * @param manager
@@ -152,7 +172,6 @@ public class Game extends Define
 	public void setDefine(IDefine define) {
 		switch(define.getType())
 		{
-			
 			case ASSET:
 				super.setDefine(define);
 				break;
