@@ -22,7 +22,8 @@ public final class ArrayList extends Literal<IList> implements IList
 		list = new java.util.ArrayList<IValue<?>>();
 	}
 	
-	@Override
+	
+	@Override	
 	public IList getValue() {
 		return this;
 	}

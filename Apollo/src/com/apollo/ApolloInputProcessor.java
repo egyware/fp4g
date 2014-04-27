@@ -115,24 +115,21 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) 
 	{
-		// TODO Se ignora pointer
-		this.onMessage(MouseMessage.onPressButtonMouse,button,x,y);
+		this.onMessage(MouseMessage.onPressButtonMouse,x, y, pointer, button);
 		return false;
 	}
 	
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) 
 	{
-		// TODO Se ignora pointer
-		this.onMessage(MouseMessage.onReleaseButtonMouse,button,x,y);
+		this.onMessage(MouseMessage.onReleaseButtonMouse,x,y, pointer, button);
 		return false;
 	}
 
 	@Override
 	public boolean touchDragged(int x, int y, int pointer) 
 	{
-		// TODO Se ignora pointer
-		this.onMessage(MouseMessage.onDraggedMouse,x,y);
+		this.onMessage(MouseMessage.onDraggedMouse,x,y,pointer);
 		return false;
 	}
 

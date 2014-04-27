@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.antlr.v4.misc.Utils;
+
+import fp4g.data.AddMethod;
 import fp4g.data.IValue;
-import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.IMap;
 
 /**
@@ -16,36 +18,28 @@ import fp4g.data.expresion.IMap;
  */
 public final class MessageMethods implements IMap, IValue<MessageMethods>
 {
-	private final HashMap<String, ClassMap<MessageMethod>> map;
+	private final HashMap<String, AddMethod> map;
 	
 	public MessageMethods()
 	{
-		map = new HashMap<String, ClassMap<MessageMethod>>();
+		map = new HashMap<String, AddMethod>();
 	}
-	public void add(MessageMethod mm)
+	public void add(AddMethod am)
 	{
 		//me aseguro que est√© en minusculas para usarlo de la manera que se me de la gana
-		map.put(mm.getName().toLowerCase(), new ClassMap<MessageMethod>(mm));		
+		map.put(am.name,am);		
 	}
-	public MessageMethod getMessageMethod(String k)
+	public AddMethod getMessageMethod(String key)
 	{
-		//me aseguro que est· en minusculas para usarlo de la manera que se me de la gana
-		ClassMap<MessageMethod> cm = map.get(k.toLowerCase());		
-		return cm.getValue();
+		AddMethod addMethod = map.get(Utils.decapitalize(key));
+		return addMethod;
 	}
 
 	
 	//--- complaciendo el publico
 	@Override
 	public void set(String k, IValue<?> v) {
-		//TODO que pasa si es v null?
-		//rechazar si
-		if(!(v.getValue() instanceof MessageMethod))
-		{
-			//TODO LANZAR UN ERROR
-			return;
-		}		
-		map.put(k.toLowerCase(), new ClassMap<MessageMethod>((MessageMethod)v.getValue()));		
+		//TODO no se puede hacer set 
 	}
 	
 	@Override
@@ -55,10 +49,11 @@ public final class MessageMethods implements IMap, IValue<MessageMethods>
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public Set<Entry<String, ClassMap<MessageMethod>>> entrySet() 
+	public Set<Entry<String, AddMethod>> entrySet() 
 	{
 		return map.entrySet();
 	}
+	
 	@Override
 	public MessageMethods getValue()
 	{

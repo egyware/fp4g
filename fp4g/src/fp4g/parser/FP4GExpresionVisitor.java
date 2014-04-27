@@ -283,30 +283,28 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	@SuppressWarnings("unchecked")
 	public Expresion visitEmptyArray(FP4GParser.EmptyArrayContext ctx)
 	{		
-		Literal<?> empty = null;		
-		if(ctx.bean != null)
-		{			
-			ClassLoader cl = getClass().getClassLoader();
-			try {
-				Class<?> clazz = cl.loadClass(String.format("fp4g.classes.%s",ctx.bean));								
-				if(IMap.class.isAssignableFrom(clazz))
-				{
-					empty = new CustomClassMap((Class<? extends IMap>) clazz);
-				}
-				if(IList.class.isAssignableFrom(clazz))
-				{
-					empty = new CustomClassList((Class<? extends IList>) clazz);
-				}
-				else
-				{
-					empty = new ClassMap<Object>(clazz);
-				}
-			}
-			catch (ClassNotFoundException e)
+		Literal<?> empty = null;
+		ClassLoader cl = getClass().getClassLoader();
+		try {
+			Class<?> clazz = cl.loadClass(String.format("fp4g.classes.%s",ctx.bean));								
+			if(IMap.class.isAssignableFrom(clazz))
 			{
-				throw new FP4GRuntimeException(Error.ClassNotFound,e.getMessage(),e);
+				empty = new CustomClassMap((Class<? extends IMap>) clazz);
+			}
+			else
+			if(IList.class.isAssignableFrom(clazz))
+			{
+				empty = new CustomClassList((Class<? extends IList>) clazz);
+			}
+			else
+			{
+				empty = new ClassMap<Object>(clazz);
 			}
 		}
+		catch (ClassNotFoundException e)
+		{
+			throw new FP4GRuntimeException(Error.ClassNotFound,e.getMessage(),e);
+		}	
 		return empty;
 	}
 	

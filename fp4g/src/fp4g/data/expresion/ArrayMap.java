@@ -36,6 +36,7 @@ public final class ArrayMap extends Literal<IMap> implements IMap
 		map.put(key, value);
 	}
 
+	
 	@Override
 	public IMap getValue() {
 		return this;

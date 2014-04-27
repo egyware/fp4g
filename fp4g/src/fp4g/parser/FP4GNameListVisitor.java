@@ -27,6 +27,7 @@ public class FP4GNameListVisitor extends FP4GBaseVisitor<DeclVar>
 	
 	public NameList getNameList(FP4GParser.NameListContext ctx)
 	{
+		if(ctx == null) return null;
 		final NameList list = new NameList();
 		final int n = ctx.getChildCount();		
         for (int i=0; i<n; i++) 

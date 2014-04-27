@@ -123,7 +123,7 @@ public class SourceModel implements Model
 						switch(send.toReceiverType)
 						{
 						case Game:
-							message = String.format("%1$sMessage.on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
+							message = String.format("%1$sMessage.on%2$s%1$s",msg.name,Utils.capitalize(send.method.name));
 							direct = false;
 							if(on.message.isFactory())
 							{
@@ -136,7 +136,7 @@ public class SourceModel implements Model
 							break;
 						case Other:
 							to = "other";
-							message = String.format("%1$sMessage.on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
+							message = String.format("%1$sMessage.on%2$s%1$s",msg.name,Utils.capitalize(send.method.name));
 							direct = false;
 							break;
 						case Behavior:
@@ -148,12 +148,12 @@ public class SourceModel implements Model
 							{
 								to = "this.".concat(Utils.decapitalize(send.toReceiverName));
 							}
-							message = String.format("on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
+							message = String.format("on%2$s%1$s",msg.name,Utils.capitalize(send.method.name));
 							direct = true;
 							break;
 						case System:
 							to = "world.getManager(".concat(send.toReceiverName).concat(".class)");
-							message = String.format("on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
+							message = String.format("on%2$s%1$s",msg.name,Utils.capitalize(send.method.name));
 							direct = true;
 							
 							try 
@@ -170,7 +170,7 @@ public class SourceModel implements Model
 						case Self:
 						default:
 							to = "this";
-							message = String.format("%1$sMessage.on%2$s%1$s",msg.name,Utils.capitalize(send.method.getName()));
+							message = String.format("%1$sMessage.on%2$s%1$s",msg.name,Utils.capitalize(send.method.name));
 							direct = false;
 							break;
 						}	

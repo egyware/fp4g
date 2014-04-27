@@ -17,31 +17,27 @@ public class CustomClassList extends Literal<IList> implements IList
 	{
 		bean = value;		
 	}
-
 	@Override
 	public Iterator<IValue<?>> iterator() 
 	{
 		return bean.iterator();
 	}
-
 	@Override
 	public void add(IValue<?> item) 
 	{
 		bean.add(item);
 	}
-
 	@Override
 	public IValue<?> get(int index)
 	{
 		return bean.get(index);
 	}
-
 	@Override
 	public int size() 
 	{
 		return bean.size();
 	}
-
+	
 	@Override
 	public IList getValue() 
 	{	

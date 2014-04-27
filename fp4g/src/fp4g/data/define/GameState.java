@@ -24,7 +24,8 @@ public class GameState extends Define
 		switch(code.addType)
 		{
 		case AddAsset:
-			throw new NotAllowedException(NotAllowed.NotExpectedAdd,code, "No se permite estos tipos en GameState");			
+			super.setAdd(code);
+			break;
 		case AddDefine:
 			setAdd((AddDefine)code);
 			break;

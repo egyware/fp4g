@@ -3,6 +3,7 @@
  */
 package fp4g.data;
 
+import fp4g.data.define.Message;
 import fp4g.data.expresion.IMap;
 
 /**
@@ -12,8 +13,12 @@ import fp4g.data.expresion.IMap;
  *
  */
 public class AddMethod extends Add
-{		
+{	
+	private final String ATTACHINPUTPROCESOR = "attachInputProcessor";
+	private final String REPLACE = "replace";
 	public final NameList nameList;
+	
+	private Message message;
 	
 	public AddMethod(String name, NameList list)
 	{
@@ -22,8 +27,34 @@ public class AddMethod extends Add
 	
 	public AddMethod(String name, NameList list, IMap values) 
 	{	
-		super(name, AddType.AddMethod, values);
-		this.nameList = list;		
-	}	
+		super(name, AddType.AddMethod, values);		
+		this.nameList = list;
+	}
 	
+	public void setMessage(Message message)
+	{
+		this.message = message;
+	}
+	public Message getMessage()
+	{
+		return message;
+	}
+
+	public boolean isAttachInputProcessor() 
+	{
+		if(values != null)
+		{
+			return (Boolean)values.get(ATTACHINPUTPROCESOR).getValue();
+		}
+		return false;
+	}
+
+	public String getReplace() 
+	{
+		if(values != null)
+		{
+			return (String)values.get(REPLACE).getValue();
+		}
+		return null;
+	}
 }

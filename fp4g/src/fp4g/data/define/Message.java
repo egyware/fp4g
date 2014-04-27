@@ -3,7 +3,6 @@
  */
 package fp4g.data.define;
 
-import fp4g.classes.MessageMethod;
 import fp4g.classes.MessageMethods;
 import fp4g.data.Add;
 import fp4g.data.AddMethod;
@@ -11,7 +10,6 @@ import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
 import fp4g.data.On;
-import fp4g.data.expresion.ClassMap;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.exceptions.NotAllowedException;
 import fp4g.log.info.GeneratorError;
@@ -29,12 +27,12 @@ public class Message extends Define
 
 	public Message(String name,IDefine parent) {
 		super(DefineType.MESSAGE, name,parent);
-		methods = (MessageMethods)parent.get(METHODS);
+		methods = (MessageMethods)parent.get(METHODS).getValue();
 	}
 	
 	public Message(String name) {
 		super(DefineType.MESSAGE, name);
-		methods = (MessageMethods)parent.get(METHODS);
+		methods = (MessageMethods)parent.get(METHODS).getValue();
 	}
 	
 	/* (non-Javadoc)
@@ -51,17 +49,14 @@ public class Message extends Define
 			throw new NotAllowedException(NotAllowed.NotExpectedAdd,code, "No se permite estos tipos en Message");			
 		case AddMethod:
 			final AddMethod method = (AddMethod)code;
-			//ahora que hago con esto?
-			setAdd(method);
+			//también lo agrego a las variables globales :P
+			methods.add(method);
+			super.setAdd(method);
+			method.setMessage(this);
 			break;
 		default:
 			throw new FP4GRuntimeException(GeneratorError.IllegalState, code.getAddType().toString());
 		}		
-	}
-	
-	public void setAdd(AddMethod add)
-	{
-		//TODO por hacer todavía		
 	}
 
 	/* (non-Javadoc)
@@ -90,15 +85,5 @@ public class Message extends Define
 
 	public void setFactory(boolean factory) {
 		this.factory = factory;
-	}
-
-	
-	@SuppressWarnings("unchecked")
-	public MessageMethod getMessageMethod(String filterName) 
-	{
-		//me aseguro que está en minusculas para usarlo de la manera que se me de la gana
-		ClassMap<MessageMethod> cm = (ClassMap<MessageMethod>) get(filterName.toLowerCase());		
-		return cm.getValue();
-	}	
-	
+	}		
 }

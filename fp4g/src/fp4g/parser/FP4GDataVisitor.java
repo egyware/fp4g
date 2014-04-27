@@ -7,7 +7,6 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import fp4g.classes.MessageMethod;
 import fp4g.classes.MessageMethods;
 import fp4g.data.Add;
 import fp4g.data.AddAsset;
@@ -32,7 +31,6 @@ import fp4g.data.define.GameState;
 import fp4g.data.define.Manager;
 import fp4g.data.define.Message;
 import fp4g.data.define.Struct;
-import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.IMap;
 import fp4g.data.libs.Lib;
 import fp4g.data.statements.Destroy;
@@ -85,9 +83,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		nameListVisitor = new FP4GNameListVisitor(exprVisitor,current);
 		try
 		{
-			System.out.println(game.get("methods").getValue().getClass().getSimpleName());
-			CustomClassMap map = ((CustomClassMap)game.get("methods"));
-			methods = (MessageMethods)map.getValue();
+			methods = (MessageMethods)game.get(Message.METHODS).getValue();
 		}
 		catch(NullPointerException e)
 		{
@@ -265,10 +261,10 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		//tendrá eso?
 		ExprList list = exprVisitor.getExprList(ctx.exprList());
 		Message message = ctx.message;
-		MessageMethod method = null;
+		AddMethod method = null;
 		if(message != null)
 		{
-			method = message.getMessageMethod(ctx.filterName);
+			method = message.getAddMethod(ctx.filterName);
 		}	
 		if(method == null)
 		{
@@ -285,8 +281,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	@Override
 	public ILine visitOnStatements(FP4GParser.OnStatementsContext ctx)
 	{
-		statements = new Statements();
-		//TODO talvez deberia usar aggregateResult
+		statements = new Statements();	
 		if(ctx.children != null)
 		{
 			for(ParseTree c:ctx.children)
@@ -323,7 +318,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		//obtener message
 		Message message = define.getDefine(DefineType.MESSAGE, messageName);
 		//objetener  method
-		MessageMethod method = message.getMessageMethod(methodName);
+		AddMethod method = message.getAddMethod(methodName);
 		
 		Define where = define.getDefine(whereName);
 		
@@ -348,7 +343,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		//obtener message
 		Message message = define.getDefine(DefineType.MESSAGE, messageName);
 		//objetener  method
-		MessageMethod method = message.getMessageMethod(methodName);
+		AddMethod method = message.getAddMethod(methodName);
 		
 		Define where = define.getDefine(whereName);
 		
@@ -364,7 +359,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	{
 		Define define = (Define)current.peek();
 		
-		MessageMethod method = methods.getMessageMethod(ctx.messageMethodName);
+		AddMethod method = methods.getMessageMethod(ctx.messageMethodName);
 		if(method == null)
 		{
 			throw new FP4GRuntimeException(Error.FilterMethodMissing,"No se encontró un metodo para el filtro:  ".concat(ctx.messageMethodName));

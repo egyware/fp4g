@@ -252,10 +252,13 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				}
 			}
 			
-			for(Entry<String, IValue<?>> entry: add.values.entrySet())
+			if(add.values != null)
 			{
-				params.put(entry.getKey(), generator.expresion(code,entry.getValue()));				
-			}						
+				for(Entry<String, IValue<?>> entry: add.values.entrySet())
+				{
+					params.put(entry.getKey(), generator.expresion(code,entry.getValue()));				
+				}
+			}
 			AssetModel assetModel = new AssetModel(define, assetPath, params);
 			
 			assets.add(assetModel);

@@ -146,6 +146,11 @@ public abstract class Define extends Code implements IDefine
 		return addMethods.values();
 	}
 	
+	public AddMethod getAddMethod(String method) 
+	{
+		return addMethods.get(method);
+	}
+	
 	/**
 	 * Busca un evento ya agregado y definido
 	 * @param message Nombre del mensaje
@@ -219,9 +224,12 @@ public abstract class Define extends Code implements IDefine
 			final String methods[] = method.getMethodNames();
 			String keyMethod = Utils.capitalize(key);
 			int indexMethod;
-			for(indexMethod = 0 ;indexMethod<methods.length;indexMethod++)
+			for(indexMethod = 0; indexMethod < methods.length;indexMethod++)
 			{
-				if(methods[indexMethod].endsWith(keyMethod) && (methods[indexMethod].startsWith("get")||methods[indexMethod].startsWith("is")))
+				final String nameMethod = methods[indexMethod];
+				final int lenMethod = nameMethod.length();
+				
+				if(nameMethod.endsWith(keyMethod) && ((methods[indexMethod].startsWith("get") && (keyMethod.length() + 3 == lenMethod))||(nameMethod.startsWith("is") && (keyMethod.length() + 2 == lenMethod))))
 				{
 					Object r = method.invoke(this,indexMethod);
 					if(r instanceof Float)

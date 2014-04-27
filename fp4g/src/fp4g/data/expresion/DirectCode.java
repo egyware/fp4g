@@ -23,7 +23,7 @@ public class DirectCode extends Expresion implements IValue<DirectCode> {
 		return (IValue<?>) this;		
 	}
 
-	@Override
+	@Override	
 	public DirectCode getValue() 
 	{
 		return this;

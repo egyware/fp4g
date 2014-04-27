@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 
-//TODO por reeimplementar
 public class TextureBehavior extends ActorBehavior 
 {
 	@InjectComponent

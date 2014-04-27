@@ -29,7 +29,8 @@ public final class CustomClassMap extends Literal<IMap> implements IMap
 		return bean.get(key);		
 	}
 	
-	@Override
+	
+	@Override	
 	public IMap getValue() 
 	{
 		return bean;

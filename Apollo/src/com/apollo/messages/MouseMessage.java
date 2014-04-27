@@ -22,16 +22,16 @@ public enum MouseMessage implements Message<MouseMessageHandler> {
 		switch(this)
 		{
 		case onPressButtonMouse:
-			handler.onPressButtonMouse((Integer)args[0], (Integer)args[1], (Integer)args[2]);
+			handler.onPressButtonMouse((Integer)args[0], (Integer)args[1], (Integer)args[2],(Integer)args[3]);
 			break;
 		case onReleaseButtonMouse:
-			handler.onReleaseButtonMouse((Integer)args[0], (Integer)args[1], (Integer)args[2]);
+			handler.onReleaseButtonMouse((Integer)args[0], (Integer)args[1], (Integer)args[2],(Integer)args[3]);
 			break;
 		case onMoveMouse:
 			handler.onMoveMouse((Integer)args[0], (Integer)args[1]);
 			break;				
 		case onDraggedMouse:
-			handler.onDraggedMouse((Integer)args[0], (Integer)args[1]);
+			handler.onDraggedMouse((Integer)args[0], (Integer)args[1],(Integer)args[3]);
 			break;		
 		}		
 	}

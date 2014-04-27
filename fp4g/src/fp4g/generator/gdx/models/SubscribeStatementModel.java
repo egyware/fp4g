@@ -29,7 +29,7 @@ public final class SubscribeStatementModel extends StatementModel
 		}
 		else
 		{
-			method.add(subscribe.method.getName());
+			method.add(subscribe.method.name);
 		}
 	}
 	
@@ -47,7 +47,7 @@ public final class SubscribeStatementModel extends StatementModel
 		}
 		else
 		{
-			method.add(subscribe.method.getName());
+			method.add(subscribe.method.name);
 		}
 	}
 

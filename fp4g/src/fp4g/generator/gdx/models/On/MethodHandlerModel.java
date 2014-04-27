@@ -3,7 +3,7 @@ package fp4g.generator.gdx.models.On;
 import java.util.LinkedList;
 import java.util.List;
 
-import fp4g.classes.MessageMethod;
+import fp4g.data.AddMethod;
 import fp4g.generator.Model;
 
 public final class MethodHandlerModel implements Model
@@ -18,10 +18,10 @@ public final class MethodHandlerModel implements Model
 		//Se requiere attach?
 		private final boolean attachMethod;
 				
-		public MethodHandlerModel(MessageMethod method)
+		public MethodHandlerModel(AddMethod method, String p)
 		{
-			name = method.getName();
-			params = method.getParams();
+			name = method.name;
+			params = p;
 			sources = new LinkedList<SourceModel>();
 			attachMethod = method.isAttachInputProcessor();
 		}	

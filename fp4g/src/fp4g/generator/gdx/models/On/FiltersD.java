@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import fp4g.classes.MessageMethod;
+import fp4g.data.AddMethod;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.exceptions.CannotEvalException;
@@ -40,20 +40,20 @@ public class FiltersD implements Model, Iterable<String>
 	 * @param jeg Generador de Expresiones para Java
 	 * @throws CannotEvalException 
 	 */
-	public void add(MessageMethod mm, ExprList list, JavaExpresionGenerator jeg) throws CannotEvalException 
+	public void add(AddMethod mm, ExprList list, JavaExpresionGenerator jeg) throws CannotEvalException 
 	{
 		Iterator<Expresion> iterator = list.iterator();
 		if(iterator.hasNext())
 		{
 			Expresion first = iterator.next();
-			String valueReplace = mm.getValueReplace();
+			final String valueReplace = mm.getReplace();
 			if(valueReplace == null)
 			{
 				condiciones.add(jeg.generate(null, first));
 			}
 			else
 			{
-				condiciones.add(String.format(mm.getValueReplace(),jeg.generate(null, first)));
+				condiciones.add(String.format(valueReplace,jeg.generate(null, first)));
 			}
 		}
 		for(;iterator.hasNext();)

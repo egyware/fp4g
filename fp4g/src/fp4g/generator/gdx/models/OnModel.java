@@ -5,11 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import fp4g.classes.MessageMethod;
+import fp4g.data.AddMethod;
+import fp4g.data.DeclVar;
 import fp4g.data.ExprList;
-import fp4g.data.IValue;
 import fp4g.data.On;
-import fp4g.data.expresion.ClassMap;
 import fp4g.data.statements.Filter;
 import fp4g.data.statements.Source;
 import fp4g.exceptions.FP4GException;
@@ -57,17 +56,19 @@ public class OnModel implements Model
 		//agregar los metodos, aunque están vacios y asumiento que todos son MessageMethod
 		HashMap<String,MethodHandlerModel> methods = new HashMap<String, MethodHandlerModel>();
 		//TODO da un error cuando el mensaje está sin definir		
-		for(Entry<String, IValue<?>> entry: on.message.entrySet())
+		for(AddMethod entry: on.message.getAddMethods())
 		{	
-			IValue<?> value = entry.getValue();
-			if(value instanceof ClassMap)
+			StringBuilder builder = new StringBuilder();
+			if(entry.nameList != null)
 			{
-				Object bean = ((ClassMap<?>)value).getValue();				
-				if(bean instanceof MessageMethod)
+				for(DeclVar decl : entry.nameList)
 				{
-					methods.put(entry.getKey(), new MethodHandlerModel((MessageMethod) bean));
+					builder.append(' ');
+					builder.append(decl.name);
+					builder.append(',');
 				}
 			}
+			methods.put(entry.name, new MethodHandlerModel(entry, builder.toString()));
 		}
 		
 		//luego tengo que recorrer los sources en busca de los methodHandlers y subirlos acá
@@ -80,11 +81,11 @@ public class OnModel implements Model
 			{
 				for(Filter filter: source.filters)
 				{
-					final MessageMethod method = filter.method;
+					final AddMethod method = filter.method;
 					final ExprList exprList = filter.exprList;
 					
 					//encontré un metodo, que hago con el
-					MethodHandlerModel m = methods.get(method.getName());								
+					MethodHandlerModel m = methods.get(method.name);								
 
 					//obtengo el source model correspondiente 
 					SourceModel sm = sourcesMap.get(m);

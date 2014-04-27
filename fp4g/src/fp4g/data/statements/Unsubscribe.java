@@ -1,6 +1,6 @@
 package fp4g.data.statements;
 
-import fp4g.classes.MessageMethod;
+import fp4g.data.AddMethod;
 import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.Instance;
@@ -13,9 +13,9 @@ public class Unsubscribe extends Code
 	public final Instance where;
 	public final Define instance;
 	public final Message message;
-	public final MessageMethod method;
+	public final AddMethod method;
 	
-	public Unsubscribe(Instance where,Define instance, Message message, MessageMethod method)
+	public Unsubscribe(Instance where,Define instance, Message message, AddMethod method)
 	{
 		this.where = where;
 		this.instance = instance;
