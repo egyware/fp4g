@@ -191,6 +191,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitGameValues(@NotNull FP4GParser.GameValuesContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#emptyArray}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEmptyArray(@NotNull FP4GParser.EmptyArrayContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#decimalLiteral}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

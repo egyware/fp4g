@@ -106,8 +106,10 @@ unsubscribe
 add 
 :	      	
 	  ADD
-	  addDefine |
-	  addMethod 
+	  (
+	   addDefine |
+	   addMethod
+	  ) 
 ;
 
 addDefine
@@ -136,7 +138,7 @@ returns
 ]
 :
 	 ID { $addName = $ID.text; }
-	 ABRE_PAR nameList CIERRA_PAR
+	 ABRE_PAR nameList? CIERRA_PAR
 	 ( exprParams = array )?
 ;
 
@@ -160,7 +162,7 @@ returns
 		  		| ID       { $type = DefineType.valueOf($ID.text);}
 		  	) 
 		  ID { $defName = $ID.text; } 
-		  ( ABRE_PAR  = nameList CIERRA_PAR )?		  
+		  ( ABRE_PAR nameList CIERRA_PAR )?		  
           ABRE_COR defineValues CIERRA_COR         
         ;
 

@@ -126,7 +126,7 @@ public abstract class Define extends Code implements IDefine
 	 * @param type
 	 * @return
 	 */
-	public List<AddDefine> getAdd(DefineType type)
+	public List<AddDefine> getAddDefines(DefineType type)
 	{		
 		List<AddDefine> list = addDefines.get(type);
 		if(list == null)
@@ -136,12 +136,12 @@ public abstract class Define extends Code implements IDefine
 		return list;
 	}
 	
-	public Collection<AddAsset> getAssets()
+	public Collection<AddAsset> getAddAssets()
 	{
 		return addAssets.values();
 	}
 	
-	public Collection<AddMethod> getMethods()
+	public Collection<AddMethod> getAddMethods()
 	{
 		return addMethods.values();
 	}

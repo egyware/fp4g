@@ -33,7 +33,7 @@ public class EntityDependResolver implements Depend
 		IList imports = behaviorsList;
 		for(IValue<?> i:imports)
 		{
-			for(AddDefine bhvr: entity.getAdd(DefineType.BEHAVIOR))
+			for(AddDefine bhvr: entity.getAddDefines(DefineType.BEHAVIOR))
 			{
 				String packageName;
 				Behavior behavior = (Behavior)bhvr.define;

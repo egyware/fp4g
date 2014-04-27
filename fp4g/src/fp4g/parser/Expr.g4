@@ -48,21 +48,22 @@ varOp
 		
 varID   : MANAGER | GAME | STATE | ASSET | BEHAVIOR | ENTITY | GOAL | MESSAGE | ID ;		
 	 
-array   
-returns [ String bean ] 
-		:
-		 ABRE_LLAV
-		 arrayBody
-		 CIERRA_LLAV
-		 (AS ID {$bean = $ID.text;})?
-   		 ;
+array
+:
+	 arrayBody 
+;
+   		 
 arrayBody
-locals [String bean]
-		:
-		   (parArray (COMA parArray)* COMA?)   #assocArray
-		 | (itemArray (COMA itemArray)* COMA?) #listArray
-		;
-		
+returns
+[
+	String bean
+]
+:
+	   ABRE_LLAV (parArray (COMA parArray)* COMA?)   CIERRA_LLAV (AS ID {$bean = $ID.text;})?  #assocArray
+     | ABRE_LLAV (itemArray (COMA itemArray)* COMA?) CIERRA_LLAV (AS ID {$bean = $ID.text;})?  #listArray
+	 | EMPTY AS ID {$bean = $ID.text;}                                                         #emptyArray		 
+;
+				
 itemArray
 		:
 		expr

@@ -4,6 +4,7 @@
 package fp4g.data.define;
 
 import fp4g.classes.MessageMethod;
+import fp4g.classes.MessageMethods;
 import fp4g.data.Add;
 import fp4g.data.AddMethod;
 import fp4g.data.Define;
@@ -22,14 +23,18 @@ import fp4g.log.info.NotAllowed;
  */
 public class Message extends Define
 {
+	public static final String METHODS = "methods";	
+	private final MessageMethods methods;
 	private boolean factory;
 
 	public Message(String name,IDefine parent) {
-		super(DefineType.MESSAGE, name,parent);		
+		super(DefineType.MESSAGE, name,parent);
+		methods = (MessageMethods)parent.get(METHODS);
 	}
 	
 	public Message(String name) {
-		super(DefineType.MESSAGE, name);		
+		super(DefineType.MESSAGE, name);
+		methods = (MessageMethods)parent.get(METHODS);
 	}
 	
 	/* (non-Javadoc)
@@ -45,7 +50,9 @@ public class Message extends Define
 		case AddDefine:
 			throw new NotAllowedException(NotAllowed.NotExpectedAdd,code, "No se permite estos tipos en Message");			
 		case AddMethod:
-			setAdd((AddMethod)code);
+			final AddMethod method = (AddMethod)code;
+			//ahora que hago con esto?
+			setAdd(method);
 			break;
 		default:
 			throw new FP4GRuntimeException(GeneratorError.IllegalState, code.getAddType().toString());

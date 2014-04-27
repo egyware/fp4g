@@ -35,7 +35,8 @@ BASE    : 'BASE';
 TO      : 'TO';
 SOURCE  : 'SOURCE';	
 AS		: 'AS';
-OTHER   : 'OTHER'; 
+OTHER   : 'OTHER';
+EMPTY   : 'EMPTY';
 
 /* separators */
 ABRE_COR  : '['; 

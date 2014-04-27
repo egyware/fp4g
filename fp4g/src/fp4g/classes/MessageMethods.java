@@ -14,7 +14,7 @@ import fp4g.data.expresion.IMap;
  * @author Edgardo
  *
  */
-public final class MessageMethods implements IMap
+public final class MessageMethods implements IMap, IValue<MessageMethods>
 {
 	private final HashMap<String, ClassMap<MessageMethod>> map;
 	
@@ -59,4 +59,9 @@ public final class MessageMethods implements IMap
 	{
 		return map.entrySet();
 	}
+	@Override
+	public MessageMethods getValue()
+	{
+		return this;
+	}	
 }

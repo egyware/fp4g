@@ -117,7 +117,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		//agregar behaviors
 				
 		List<HashMap<String,Object>> behaviors = new LinkedList<HashMap<String, Object>>();
-		final Collection<AddDefine> entity_addBehaviors = entity.getAdd(DefineType.BEHAVIOR);
+		final Collection<AddDefine> entity_addBehaviors = entity.getAddDefines(DefineType.BEHAVIOR);
 		for(AddDefine addBhvr:entity_addBehaviors)
 		{
 			HashMap<String,Object> bhvr = new HashMap<String, Object>();			

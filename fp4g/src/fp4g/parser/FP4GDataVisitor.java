@@ -31,6 +31,7 @@ import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Manager;
 import fp4g.data.define.Message;
+import fp4g.data.define.Struct;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.IMap;
 import fp4g.data.libs.Lib;
@@ -84,6 +85,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		nameListVisitor = new FP4GNameListVisitor(exprVisitor,current);
 		try
 		{
+			System.out.println(game.get("methods").getValue().getClass().getSimpleName());
 			CustomClassMap map = ((CustomClassMap)game.get("methods"));
 			methods = (MessageMethods)map.getValue();
 		}
@@ -391,7 +393,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			receiver = ctx.receiverName;
 		//Behavior
 			//buscar en los add de la entidad.
-			List<AddDefine> behaviors = define.getAdd(DefineType.BEHAVIOR);
+			List<AddDefine> behaviors = define.getAddDefines(DefineType.BEHAVIOR);
 			for(AddDefine bhvr:behaviors)
 			{
 				//buscar de forma iterativa
@@ -504,13 +506,29 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 				define = new Entity(defName,parent);
 			break;
 			case MANAGER:
-				//TODO: No implementado aún
-				throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
-				//break;		  		
+				if(container instanceof Lib)
+				{
+					define = new Manager(defName,parent);
+					define.setGenerable(false); //no se genera
+			  		define.setUsable(false); //no es usable
+				}				
+				else
+				{
+					throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
+				}
+				break;		  		
 		  	case BEHAVIOR:
-		  		//TODO: No implementado aún
-				throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
-		  		//break;		  		
+		  		if(container instanceof Lib)
+				{
+		  			define = new Behavior(defName,parent);
+		  			define.setGenerable(false); //no se genera
+			  		define.setUsable(false); //no es usable
+				}				
+				else
+				{
+					throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
+				}
+		  		break;		  		
 		  	case GOAL:
 		  		//TODO: No implementado aún
 				throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
@@ -521,6 +539,11 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		  	case ASSET:
 		  		Asset.Type type = Asset.Type.valueOf(defName);
 		  		define = new Asset(type,parent);
+		  		break;
+		  	case STRUCT:
+		  		define = new Struct(defName, parent);
+		  		define.setGenerable(false); //no se genera
+		  		define.setUsable(false); //no es usable
 		  		break;
 		  	default:
 		  		throw new FP4GRuntimeException(GeneratorError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");

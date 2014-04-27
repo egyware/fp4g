@@ -433,6 +433,7 @@ public class JavaGenerator extends Generator
 	public LibContainer loadLibs() 
 	{
 		loadLib("libs/fp4g.lib");
+		loadLib("libs/fp4g.messages.lib");
     	
     	//TODO Posible error.
     	CustomClassMap map = (CustomClassMap)libContainer.get("resolvers");
