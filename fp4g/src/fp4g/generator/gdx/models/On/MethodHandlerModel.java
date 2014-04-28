@@ -5,6 +5,7 @@ import java.util.List;
 
 import fp4g.data.AddMethod;
 import fp4g.generator.Model;
+import fp4g.generator.gdx.models.ParamCodeModel;
 
 public final class MethodHandlerModel implements Model
 	{
@@ -14,11 +15,11 @@ public final class MethodHandlerModel implements Model
 		//Una lista de Source Codes
 		private final List<SourceModel> sources;
 		//Parametros
-		private final String params;
+		private final List<ParamCodeModel> params;
 		//Se requiere attach?
 		private final boolean attachMethod;
 				
-		public MethodHandlerModel(AddMethod method, String p)
+		public MethodHandlerModel(AddMethod method, List<ParamCodeModel> p)
 		{
 			name = method.name;
 			params = p;
@@ -40,7 +41,7 @@ public final class MethodHandlerModel implements Model
 			sources.add(source);			
 		}
 		
-		public String getParams()
+		public List<ParamCodeModel> getParams()
 		{
 			return params;
 		}

@@ -7,17 +7,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import fp4g.data.AddDefine;
-import fp4g.data.DeclVar;
-import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
 import fp4g.data.On;
 import fp4g.data.define.Entity;
-import fp4g.data.vartypes.BasicType;
-import fp4g.data.vartypes.CustomType;
 import fp4g.exceptions.FP4GException;
-import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
@@ -26,7 +21,6 @@ import fp4g.generator.gdx.models.OnModel;
 import fp4g.generator.gdx.models.ParamCodeModel;
 import fp4g.generator.gdx.models.On.MethodHandlerModel;
 import fp4g.log.info.Error;
-import fp4g.log.info.GeneratorError;
 import freemarker.template.Template;
 
 public class EntityGenerator extends CodeGenerator<JavaGenerator> {
@@ -41,9 +35,10 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 	public void generateCode(ICode gameData, File path) 	 
 	throws Exception
 	{
-		Entity entity = (Entity)gameData;		
-		Template entityBuilderTempl = generator.getTemplate("EntityBuilder.ftl");
-		Template entityTempl        = generator.getTemplate("Entity.ftl");
+		final Entity entity = (Entity)gameData;
+		final JavaParamListBuilder paramBuilder = new JavaParamListBuilder(generator);
+		final Template entityBuilderTempl = generator.getTemplate("EntityBuilder.ftl");
+		final Template entityTempl        = generator.getTemplate("Entity.ftl");
 		
 		HashMap<String,Object> buildRoot = new HashMap<String, Object>();	
 		HashMap<String,Object> entityRoot = new HashMap<String, Object>();
@@ -66,51 +61,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		//agregar parametros de entrada
 		if(entity.paramNameList != null)
 		{
-			//lo veo un poco consumidor de recursos, pero bueno...
-			List<ParamCodeModel> pair = new LinkedList<ParamCodeModel>();
-			for(DeclVar par: entity.paramNameList)
-			{
-				//TODO esto debe ir en otro lugar.
-				String name;
-				if(par.type instanceof BasicType)
-				{
-					switch((BasicType)par.type)
-					{
-					case Bool:
-						name = "Boolean";
-						break;
-					case Entity:
-						name = "Entity";
-						break;
-					case Number:
-						name = "Number";
-						break;
-					case String:
-						name = "String";
-						break;
-					default:
-						throw new FP4GRuntimeException(GeneratorError.IllegalState,"Estado no valido del generador");
-					}
-				}
-				else
-				{
-					//TODO realmente sirve de algo esto?
-					CustomType custom = (CustomType)par.type;
-					Define define = entity.getDefine(custom.name);
-					generator.resolveDependency(define).perform(define, modelBuild);
-					name = custom.name;
-				}
-				ParamCodeModel param;
-				if(par.initValue != null)
-				{
-					param = new ParamCodeModel(name, par.name,generator.expresion(modelBuild, par.initValue));					
-				}
-				else
-				{
-					param = new ParamCodeModel(name,par.name);
-				}								
-				pair.add(param);
-			}
+			List<ParamCodeModel> pair = paramBuilder.build(entity.paramNameList, entity, modelBuild);			
 			buildRoot.put("params",pair);
 		}
 		
@@ -164,7 +115,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 					continue;
 				}
 				
-				OnModel onModel = OnModel.build(on, generator, modelEntity);
+				OnModel onModel = OnModel.build(on, entity, generator, modelEntity);
 				
 				onList.add(onModel);
 			}
@@ -174,7 +125,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			List<OnModel> onListBuild = new LinkedList<OnModel>();			
 			for(On on: entityBuild_onMessages)
 			{
-				OnModel onModel = OnModel.build(on,generator, modelBuild);						
+				OnModel onModel = OnModel.build(on, entity, generator, modelBuild);						
 				
 				onListBuild.add(onModel);
 			}

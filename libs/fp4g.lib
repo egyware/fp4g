@@ -300,6 +300,10 @@ DEFINE GAME
 		} AS DependResolver,
 	} AS DependResolvers;
 	
+	DEFINE STRUCT Fixture
+	[		
+	]
+	
 	DEFINE STRUCT Rectangle 
 	[		
 	]

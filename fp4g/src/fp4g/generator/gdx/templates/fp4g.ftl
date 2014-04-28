@@ -31,7 +31,7 @@
 <#list message.methodHandlers as method>	
 <#-- Hacer funciones por cada method Handler -->
 	@Override
-	public void on${method.name?cap_first}${message.name?cap_first}(${method.params})
+	public void on${method.name?cap_first}${message.name?cap_first}(<#if method.params?has_content><#list method.params as param>${param.type} ${param.name}<#if param_has_next>, </#if></#list><#else></#if>)
 	{
 		<#if method.sources?has_content>
 		<#list method.sources as source>		

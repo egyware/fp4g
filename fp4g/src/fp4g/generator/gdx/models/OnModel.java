@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import fp4g.data.AddMethod;
-import fp4g.data.DeclVar;
+import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.On;
 import fp4g.data.statements.Filter;
@@ -14,6 +14,7 @@ import fp4g.data.statements.Source;
 import fp4g.exceptions.FP4GException;
 import fp4g.generator.Model;
 import fp4g.generator.gdx.JavaGenerator;
+import fp4g.generator.gdx.JavaParamListBuilder;
 import fp4g.generator.gdx.models.On.FiltersD;
 import fp4g.generator.gdx.models.On.MethodHandlerModel;
 import fp4g.generator.gdx.models.On.SourceModel;
@@ -47,8 +48,9 @@ public class OnModel implements Model
 		return methodHandlers;
 	}
 
-	public static OnModel build(On on, JavaGenerator generator,	JavaCodeModel model) throws FP4GException
+	public static OnModel build(On on, Define current, JavaGenerator generator,	JavaCodeModel model) throws FP4GException
 	{
+		final JavaParamListBuilder paramBuilder = new JavaParamListBuilder(generator);
 		OnModel onModel = new OnModel(on);
 		//agregar la interface 
 		model.addInterface(String.format("%sMessageHandler",on.name));
@@ -58,17 +60,8 @@ public class OnModel implements Model
 		//TODO da un error cuando el mensaje está sin definir		
 		for(AddMethod entry: on.message.getAddMethods())
 		{	
-			StringBuilder builder = new StringBuilder();
-			if(entry.nameList != null)
-			{
-				for(DeclVar decl : entry.nameList)
-				{
-					builder.append(' ');
-					builder.append(decl.name);
-					builder.append(',');
-				}
-			}
-			methods.put(entry.name, new MethodHandlerModel(entry, builder.toString()));
+			List<ParamCodeModel> params = (entry.nameList != null)?paramBuilder.build(entry.nameList, current, model):null;			
+			methods.put(entry.name, new MethodHandlerModel(entry, params));
 		}
 		
 		//luego tengo que recorrer los sources en busca de los methodHandlers y subirlos acá
