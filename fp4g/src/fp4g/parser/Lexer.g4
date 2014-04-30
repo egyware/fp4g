@@ -69,6 +69,11 @@ NOT       : 'NOT';
 NUMBER_TYPE : 'Number';
 STRING_TYPE : 'String';
 BOOL_TYPE   : 'Bool';
+/* Tipos Basicos */
+INTEGER_TYPE: 'Integer';
+DOUBLE_TYPE : 'Double';
+FLOAT_TYPE  : 'Float';
+
 
 /* Literales */
 DIRECTCODE      : '@\'' .*? '\''; 

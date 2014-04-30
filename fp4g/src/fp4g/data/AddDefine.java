@@ -57,5 +57,10 @@ public class AddDefine extends Add
 	{
 		return type;
 	}
+	
+	public String toString()
+	{
+		return "ADD ".concat(type.name()).concat(" ").concat(name).concat(" (...) [...]");
+	}
 
 }

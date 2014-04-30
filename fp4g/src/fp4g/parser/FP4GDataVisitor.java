@@ -91,8 +91,6 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		}
 	}
 	
-	
-	
 	@Override
 	public ILine visitUsing(FP4GParser.UsingContext ctx)
 	{	
@@ -511,7 +509,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 				{
 					throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
 				}
-				break;		  		
+				break;
 		  	case BEHAVIOR:
 		  		if(container instanceof Lib)
 				{
@@ -579,7 +577,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	@Override
 	public ILine visitAddDefine(FP4GParser.AddDefineContext ctx)
 	{
-		IDefine parent = current.peek();
+		IDefine parent = current.peek();		
 		
 		Add add;		
 		//buscar el define que estoy agregando

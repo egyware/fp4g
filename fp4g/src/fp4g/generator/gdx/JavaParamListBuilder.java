@@ -51,6 +51,15 @@ public class JavaParamListBuilder
 				case String:
 					name = "String";
 					break;
+				case Double:
+					name = "double";
+					break;
+				case Float:
+					name = "float";
+					break;
+				case Integer:
+					name = "int";
+					break;
 				default:
 					throw new FP4GRuntimeException(GeneratorError.IllegalState,"Estado no valido del generador");
 				}

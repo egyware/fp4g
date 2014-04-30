@@ -273,7 +273,10 @@ returns
 		:
 		   NUMBER_TYPE  {$type = BasicType.Number;}
 		 | BOOL_TYPE    {$type = BasicType.Bool;}		 
-		 | STRING_TYPE  {$type = BasicType.String;}		 
+		 | STRING_TYPE  {$type = BasicType.String;}
+		 | INTEGER_TYPE {$type = BasicType.Integer;}
+		 | DOUBLE_TYPE  {$type = BasicType.Double;}
+		 | FLOAT_TYPE   {$type = BasicType.Float;}		 
 		 | ID           {$type = new CustomType($ID.text);} // solo Define del tipo Type
         ;
         

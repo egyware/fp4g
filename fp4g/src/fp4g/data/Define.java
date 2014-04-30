@@ -100,7 +100,7 @@ public abstract class Define extends Code implements IDefine
 			break;
 		case AddDefine:
 			AddDefine addDefine = (AddDefine)add;
-			List<AddDefine> list = addDefines.get(addDefine);
+			List<AddDefine> list = addDefines.get(addDefine.type);
 			if(list == null)
 			{
 				list = new LinkedList<AddDefine>();

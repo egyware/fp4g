@@ -5,12 +5,12 @@ DEFINE GAME
 	
 	DEFINE MESSAGE Key
 	[
-		ADD press(Number key)
+		ADD press(Integer key)
 		{
 			replace = "Input.Keys.%s == key",
 			attachInputProcessor = true
 		} AS MessageMethod;		
-		ADD release(Number key) 
+		ADD release(Integer key) 
 		{			
 			replace = "Input.Keys.%s == key", 
 			attachInputProcessor = true
@@ -25,21 +25,21 @@ DEFINE GAME
 	
 	DEFINE MESSAGE Mouse
 	[
-		ADD pressButton(Number button, Number x, Number y)
+		ADD pressButton(Integer button, Integer x, Integer y)
 		{ 
 			replace = "Input.Buttons.%s == button",
 			attachInputProcessor = true
 		} AS MessageMethod;
-		ADD releaseButton(Number button, Number x,Number y) 
+		ADD releaseButton(Integer button, Integer x,Integer y) 
 		{			
 			replace="Input.Buttons.%s == button",
 			attachInputProcessor = true
 		} AS MessageMethod;
-		ADD move(Number x, Number y) 
+		ADD move(Integer x, Integer y) 
 		{			
 			attachInputProcessor = true
 		} AS MessageMethod;
-		ADD dragged(Number x, Number y) 
+		ADD dragged(Integer x, Integer y) 
 		{			
 			attachInputProcessor = true
 		} AS MessageMethod;
@@ -47,21 +47,21 @@ DEFINE GAME
 	
 	DEFINE MESSAGE Translate
 	[
-		ADD translate(Number x, Number y);
-		ADD rotate(Number grad);		
+		ADD translate(Float x, Float y);
+		ADD rotate(Float grad);		
 	]
 	
 	DEFINE MESSAGE Move
 	[		
-		ADD angularSpeed(Number w);
-		ADD speed  (Number x, Number y);
-		ADD forward(Number units);
+		ADD angularSpeed(Float w);
+		ADD speed  (Float x, Float y);
+		ADD forward(Float units);
 	]
 	
 	DEFINE MESSAGE Platform
 	[
-		ADD jump(Number vel);
-		ADD move(Number vel);
+		ADD jump(Float vel);
+		ADD move(Float vel);
 	]
 	
 	DEFINE MESSAGE Contact
@@ -72,15 +72,15 @@ DEFINE GAME
 	
 	DEFINE MESSAGE Gun
 	[
-		ADD         shot(Number rot, Number dist, Number vel);
-		ADD       reload(Number ammo);
+		ADD         shot(Float rot, Float dist, Float vel);
+		ADD       reload(Integer ammo);
 		ADD changeBullet(String entityName);
 	]
 	
 	DEFINE MESSAGE AutoGun
 	[
-		ADD setDelayShot(Number delay);
-		ADD      setShot(Number rot, Number dist, Number vel);
+		ADD setDelayShot(Integer delay);
+		ADD      setShot(Float rot, Float dist, Float vel);
 	]
 	
 	DEFINE MESSAGE Entity
@@ -98,9 +98,9 @@ DEFINE GAME
 	
 	DEFINE MESSAGE Timer
 	[
-		ADD  active(Number index) { replace="index == %s" } AS MessageMethod;
-		ADD setTime(Number index, Number time);
-		ADD  cancel(Number index);
+		ADD  active(Integer index) { replace="index == %s" } AS MessageMethod;
+		ADD setTime(Integer index, Number time);
+		ADD  cancel(Integer index);
 	]
 	DEFINE MESSAGE Level
 	[
