@@ -214,7 +214,6 @@ public class FP4GParser extends Parser {
 	public final UsingContext using() throws RecognitionException {
 		UsingContext _localctx = new UsingContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_using);
-		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -267,17 +266,23 @@ public class FP4GParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			setState(113); ((UsingContext)_localctx).name = match(ID);
-			setState(114); match(DOTCOMA);
 			setState(119);
-			_la = _input.LA(1);
-			if (_la==ABRE_COR) {
+			switch (_input.LA(1)) {
+			case DOTCOMA:
+				{
+				setState(114); match(DOTCOMA);
+				}
+				break;
+			case ABRE_COR:
 				{
 				setState(115); match(ABRE_COR);
 				setState(116); usingValues();
 				setState(117); match(CIERRA_COR);
 				}
+				break;
+			default:
+				throw new NoViableAltException(this);
 			}
-
 			}
 		}
 		catch (RecognitionException re) {
@@ -3434,8 +3439,8 @@ public class FP4GParser extends Parser {
 		"\2\2a_\3\2\2\2bq\7\17\2\2cd\7\24\2\2dr\b\4\1\2ef\7\26\2\2fr\b\4\1\2gh"+
 		"\7\30\2\2hr\b\4\1\2ij\7\31\2\2jr\b\4\1\2kl\7\32\2\2lr\b\4\1\2mn\7\33\2"+
 		"\2nr\b\4\1\2op\7D\2\2pr\b\4\1\2qc\3\2\2\2qe\3\2\2\2qg\3\2\2\2qi\3\2\2"+
-		"\2qk\3\2\2\2qm\3\2\2\2qo\3\2\2\2rs\3\2\2\2st\7D\2\2ty\7+\2\2uv\7\"\2\2"+
-		"vw\5\b\5\2wx\7%\2\2xz\3\2\2\2yu\3\2\2\2yz\3\2\2\2z\7\3\2\2\2{}\5\n\6\2"+
+		"\2qk\3\2\2\2qm\3\2\2\2qo\3\2\2\2rs\3\2\2\2sy\7D\2\2tz\7+\2\2uv\7\"\2\2"+
+		"vw\5\b\5\2wx\7%\2\2xz\3\2\2\2yt\3\2\2\2yu\3\2\2\2z\7\3\2\2\2{}\5\n\6\2"+
 		"|{\3\2\2\2}\u0080\3\2\2\2~|\3\2\2\2~\177\3\2\2\2\177\t\3\2\2\2\u0080~"+
 		"\3\2\2\2\u0081\u0082\5\34\17\2\u0082\u0083\7+\2\2\u0083\u0088\3\2\2\2"+
 		"\u0084\u0085\5\24\13\2\u0085\u0086\7+\2\2\u0086\u0088\3\2\2\2\u0087\u0081"+

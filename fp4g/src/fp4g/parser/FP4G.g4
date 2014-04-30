@@ -40,9 +40,9 @@ returns
 			 | MESSAGE  { $type = DefineType.MESSAGE; }
 			 | ID       { $type = DefineType.valueOf($ID.text);}
 			) 
-		  name = ID DOTCOMA
-		  (ABRE_COR usingValues CIERRA_COR)?
+		  name = ID (DOTCOMA | ABRE_COR usingValues CIERRA_COR)		  
 		;
+		
 usingValues
 :
 	(usingValue)*

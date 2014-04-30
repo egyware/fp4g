@@ -51,6 +51,7 @@ import fp4g.log.info.GeneratorError;
 import fp4g.log.info.NotAllowed;
 import fp4g.log.info.Warn;
 import fp4g.parser.FP4GParser.ArrayContext;
+import fp4g.parser.FP4GParser.UsingValuesContext;
 
 
 /**
@@ -118,8 +119,11 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		case MANAGER:
 			//TODO por hacer...
 			break;
-		case MESSAGE:
-			//TODO por hacer..
+		case MESSAGE:			
+			define = new Message(ctx.name.getText(), container);
+			define.setGenerable(false);
+			define.setUsable(true);
+			container.setDefine(define);
 			break;
 		case STATE:
 			define = new GameState(ctx.name.getText(),container);
@@ -134,9 +138,13 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		
 		if(define != null)
 		{
-			current.push(define);
-			visit(ctx.usingValues());			
-			current.pop();
+			UsingValuesContext values = ctx.usingValues();
+			if(values != null)
+			{
+				current.push(define);
+				visit(values);			
+				current.pop();
+			}
 		}
 		
 		return null;		
