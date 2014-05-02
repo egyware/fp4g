@@ -86,7 +86,18 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 		generateOthers(game, path);
 	}
 	
+	@Override
+	public void usingCode(ICode gameData, File path)
+	throws Exception
+	{
+		Game game = (Game)gameData;
+		generator.usingFile(path,String.format("%s.java",game.name));
+		
+		generateOthers(game, path);
+		
+	}
 	
+
 
 	private void generateOthers(Game game, File path) throws GeneratorException
 	{
@@ -122,17 +133,6 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 				generator.generateCode(message, path);
 			}
 		}
-		
-	}
-
-	@Override
-	public void usingCode(ICode gameData, File path)
-	throws Exception
-	{
-		Game game = (Game)gameData;
-		generator.usingFile(path,String.format("%s.java",game.name));
-		
-		generateOthers(game, path);
 		
 	}
 	

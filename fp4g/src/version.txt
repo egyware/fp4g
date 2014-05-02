@@ -1,10 +1,13 @@
 :::0.1.28 (desarrollo-prototipo)
++ Se pueden especificar Metodos en los Messages.
++ Se agrego la posibilidad de usar el Using como Define, solo para especificar ciertas propiedades. El comportamiento sigue igual (añadir archivos)
 + Se agrego CameraBehavior y CameraMessage
 + Se cambio filtroValor por filtro(Valor1, Valor2,Valor3)
 + Se agrego soporte para Tiled.
 F Se arreglaron los assets
 F Se refactorizo la clase SourceModel y OnModel
 B Cuando no encuentra un mensaje deberia abortar y no caerse.
+P Agregar un generador para los mensajes.
 P Reprogramar SourceModel, tiene demasiadas responsabilidades. Si llego agregar más instrucciones para Source la complejidad de este código puede aumentar.
 P Hacer que los Managers reciban mensajes.
 P Debe quedar prueba de tontos II: Se ha vuelto mejorar el launcher esto es para cuando se lanze desde un jar no tener que modificarlo.
