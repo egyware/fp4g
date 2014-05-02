@@ -256,7 +256,7 @@ DEFINE GAME
 				"com.apollo.messages.TimerMessage",
 				"com.apollo.messages.TimerMessageHandler"
 			}
-		} AS DependResolver,
+		} AS MessageDependResolver,
 		Asset =
 		{
 			Texture =

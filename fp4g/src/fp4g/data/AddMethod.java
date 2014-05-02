@@ -57,4 +57,38 @@ public class AddMethod extends Add
 		}
 		return null;
 	}
+	
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append(String.format("ADD %s(", name));
+		final DeclVar last = nameList.last();
+		for(DeclVar entry:nameList)
+		{
+			builder.append(entry.type.name());
+			builder.append(' ');
+			builder.append(entry.name);
+			if(entry.initValue != null)
+			{
+				builder.append(" = ");
+				builder.append(entry.initValue);
+			}			
+			if(entry != last)
+			{
+				builder.append(", ");
+			}
+		}
+		builder.append(')');
+		if(values != null)
+		{
+			builder.append(' ');
+			builder.append(values);
+		}
+		else
+		{
+			builder.append(';');
+		}
+		return builder.toString();
+	}
 }

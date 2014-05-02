@@ -26,6 +26,7 @@ public abstract class CodeGenerator <T extends Generator>
 	 * 
 	 * @param gameData
 	 * @param path
+	 * @throws Exception 
 	 */
-	public abstract void usingCode(ICode gameData, File path);
+	public abstract void usingCode(ICode gameData, File path) throws Exception;
 }

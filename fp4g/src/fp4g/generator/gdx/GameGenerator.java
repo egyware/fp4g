@@ -13,6 +13,8 @@ import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
+import fp4g.data.define.Message;
+import fp4g.exceptions.GeneratorException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.gdx.models.PropertiesModel;
 import freemarker.template.Template;
@@ -81,6 +83,13 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 		
 		generator.createFile(path,String.format("%s.java",game.name), temp,root);
 		
+		generateOthers(game, path);
+	}
+	
+	
+
+	private void generateOthers(Game game, File path) throws GeneratorException
+	{
 		final Collection<Entity> game_entities = game.getDefines(DefineType.ENTITY);
 		if(game_entities != null)
 		{
@@ -105,13 +114,26 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 				generator.generateCode(behavior, path);
 			}
 		}
+		final Collection<Message> messages = game.getDefines(DefineType.MESSAGE);
+		if(messages != null)
+		{
+			for(Message message: messages)
+			{
+				generator.generateCode(message, path);
+			}
+		}
+		
 	}
 
 	@Override
 	public void usingCode(ICode gameData, File path)
+	throws Exception
 	{
 		Game game = (Game)gameData;
-		generator.usingFile(path,String.format("%s.java",game.name));		
+		generator.usingFile(path,String.format("%s.java",game.name));
+		
+		generateOthers(game, path);
+		
 	}
 	
 }

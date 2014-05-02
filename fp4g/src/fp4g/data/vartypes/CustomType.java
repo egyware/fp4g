@@ -9,4 +9,8 @@ public class CustomType implements VarType
 	{
 		name = n;
 	}	
+	public String name()
+	{
+		return name;
+	}
 }

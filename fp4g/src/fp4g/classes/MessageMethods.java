@@ -58,5 +58,23 @@ public final class MessageMethods implements IMap, IValue<MessageMethods>
 	public MessageMethods getValue()
 	{
 		return this;
-	}	
+	}
+	
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append('{');
+		builder.append('\n');
+		for(Entry<String, AddMethod> entry:map.entrySet())
+		{
+			builder.append('\t');
+			builder.append(entry.getKey());
+			builder.append(" = ");
+			builder.append(entry.getValue());
+			builder.append('\n');
+		}		
+		builder.append('}');
+		return builder.toString();
+	}
 }

@@ -1,11 +1,10 @@
 package fp4g.data;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 public class NameList implements Iterable<DeclVar>
 {
-	private final List<DeclVar> nameVars;
+	private final LinkedList<DeclVar> nameVars;
 	public NameList()
 	{
 		nameVars = new LinkedList<DeclVar>();
@@ -23,6 +22,10 @@ public class NameList implements Iterable<DeclVar>
 	public void add(VarType type, String name,IValue<?> initValue)
 	{
 		nameVars.add(new DeclVar(type,name,initValue));
+	}
+	public DeclVar last()
+	{
+		return nameVars.getLast();
 	}
 	
 	public int size()
