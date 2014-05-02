@@ -3,11 +3,9 @@
  */
 package com.apollo.components.body;
 
-import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
 import com.apollo.managers.PhysicsManager;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;

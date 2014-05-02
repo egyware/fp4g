@@ -2,7 +2,6 @@ package com.apollo.managers;
 
 import com.apollo.Entity;
 import com.apollo.managers.physics.Terrain2D;
-import com.apollo.managers.physics.Terrain2D.Box;
 import com.apollo.messages.ContactMessage;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;

@@ -99,7 +99,7 @@ DEFINE GAME
 	DEFINE MESSAGE Timer
 	[
 		ADD  active(Integer index) { replace="index == %s" } AS MessageMethod;
-		ADD setTime(Integer index, Number time);
+		ADD setTime(Integer index, Integer time);
 		ADD  cancel(Integer index);
 	]
 	DEFINE MESSAGE Level
