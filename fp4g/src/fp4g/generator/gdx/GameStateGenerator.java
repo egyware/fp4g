@@ -244,7 +244,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			{
 				if(groupName != null)
 				{
-					params.put(groupName, parent.resource);
+					params.put(groupName,String.format("\"%s\"", parent.resource));
 				}
 				else
 				{

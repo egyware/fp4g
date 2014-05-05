@@ -7,8 +7,6 @@ public enum Warn implements WarnType
 {			
 	MissingDefineAdd("No se encontro un Define o Using para el Add"), 
 	MissingAdd("No se encontro un Add"),
-	UnformatedFilter,
-	CannotEvalExpr,
 	DependResolverNotFound,
 	PropertiesCantSave, 
 	IOException,

@@ -49,7 +49,6 @@ import fp4g.log.info.CannotEval;
 import fp4g.log.info.Error;
 import fp4g.log.info.GeneratorError;
 import fp4g.log.info.NotAllowed;
-import fp4g.log.info.Warn;
 import fp4g.parser.FP4GParser.ArrayContext;
 import fp4g.parser.FP4GParser.UsingValuesContext;
 
@@ -453,7 +452,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		try {
 			define.set(ctx.key, eval(define,expr));
 		} catch (CannotEvalException e) {			
-			Log.Show(Warn.CannotEvalExpr,ctx.getStart().getLine(),expr.toString());
+			Log.Show(CannotEval.CannotEvalExpresion,ctx.getStart().getLine(),expr.toString());
 		}
 		return null;
 	}

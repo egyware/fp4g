@@ -26,6 +26,7 @@ import fp4g.generator.gdx.models.SendStatementModel;
 import fp4g.generator.gdx.models.StatementModel;
 import fp4g.generator.gdx.models.SubscribeStatementModel;
 import fp4g.log.Log;
+import fp4g.log.info.CannotEval;
 import fp4g.log.info.Warn;
 
 public class SourceModel implements Model
@@ -190,7 +191,7 @@ public class SourceModel implements Model
 						catch(CannotEvalException gex)
 						{
 							//TODO error mal escrito, deberia haber cada uno de sus hijos de la excepcion y por cada uno un mensaje personalizado 
-							Log.Show(Warn.CannotEvalExpr,gex.getMessage());
+							Log.Show(CannotEval.CannotEvalExpresion,gex.getMessage());
 						}
 						statements.add(sendModel);									
 						try {

@@ -14,8 +14,8 @@ import fp4g.data.expresion.IMap;
  */
 public class AddMethod extends Add
 {	
-	private final String ATTACHINPUTPROCESOR = "attachInputProcessor";
-	private final String REPLACE = "replace";
+	private final static String ATTACHINPUTPROCESOR = "attachInputProcessor";
+	private final static String REPLACE = "replace";
 	public final NameList nameList;
 	
 	private Message message;

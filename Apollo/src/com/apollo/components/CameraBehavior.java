@@ -17,8 +17,7 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	private int xo;
 	private int yo;
 	private int w;
-	private int h;
-	private int screen_width;
+	private int h;	
 	private int screen_height;
 	private int screen_width_2;
 	private int screen_height_4;
@@ -33,8 +32,7 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	{		
 		this(cam);
 		this.xo = 0;
-		this.yo = 0;
-		this.screen_width = sw;
+		this.yo = 0;		
 		this.screen_height = sh;
 		this.screen_width_2 = sw/2;
 		this.screen_height_4 = sh/4;
@@ -46,8 +44,7 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	{		
 		this(cam);
 		this.xo = x;
-		this.yo = y;
-		this.screen_width = sw;		
+		this.yo = y;				
 		this.screen_height = sh;
 		this.screen_width_2 = sw/2;
 		this.screen_height_4 = sh/4;
@@ -92,11 +89,11 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 			int y = (int)transform_player.y;
 			if(x >= xo + screen_width_2  && x <= xo + w - screen_width_2 )
 			{
-				camera.position.x = transform_player.x+screen_width;
+				camera.position.x = transform_player.x;
 			}
 			if(y >= yo + screen_height_4 && y <= yo + h - screen_height_4)
 			{
-				camera.position.y = transform_player.y + screen_height_4;
+				camera.position.y = transform_player.y;
 			}
 		}		
 	}
@@ -112,8 +109,8 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 		int y = (int)transform_player.y;
 		if((x >= xo  && x <= xo + w) && (y >= yo && y <= yo + h))
 		{
-			camera.position.x = xo+screen_width;
-			camera.position.y = yo+screen_height;
+			camera.position.x = xo+screen_width_2;
+			camera.position.y = yo+screen_height/2;
 		}		
 	}
 

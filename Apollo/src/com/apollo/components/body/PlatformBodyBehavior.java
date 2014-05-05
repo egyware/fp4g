@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
@@ -58,25 +59,24 @@ implements PlatformMessageHandler
 	
 		{
 			BodyDef defA = new BodyDef();		
-			defA.position.set(position.cpy().scl(SCALE));
+			defA.position.set(position.cpy().add(0,height).scl(SCALE));
 			defA.type = BodyDef.BodyType.DynamicBody;
 			defA.fixedRotation = true;		
 			box = world.createBody(defA);
 			box.setUserData(owner);
+			
 		
-			 //shape
-	//	    Fixture fixtureBox = new Fixture();
+			//shape
 		    PolygonShape boxShape = new PolygonShape();
 		    boxShape.setAsBox(ratio*SCALE,height*SCALE);
-	//	    FixtureDef fixtureDefA;
-	//	    fixtureDefA.density = 1.0f; //!\todo puede ser un parametro
-	//	    fixtureDefA.friction = 1.0f;//!\todo puede ser un parametro
+		    FixtureDef fixtureDef = new FixtureDef();;
+		    fixtureDef.density = 1.0f; //!\todo puede ser un parametro
+		    fixtureDef.friction = 1.0f;//!\todo puede ser un parametro
 	//	    fixtureDefA.filter.groupIndex = -1; //!\todo puede ser un parametro
 	//	    fixtureDefA.filter.categoryBits = 0x0101;
 	//	    fixtureDefA.filter.maskBits = 0x1101;
-		    //fixtureDefA.shape = &box;
-		    //fixtureBox =
-		    box.createFixture(boxShape, 1.0f);
+		    fixtureDef.shape = boxShape;
+		    box.createFixture(fixtureDef);
 		    boxShape.dispose(); //ya no la usaremos más
 		    //guardo en caché los vertices por decirlo asi
 		    //b2PolygonShape shape = static_cast<b2PolygonShape*>(fixtureBox->GetShape());
@@ -87,29 +87,29 @@ implements PlatformMessageHandler
 			//crear el body B
 		    BodyDef defB = new BodyDef();
 		    defB.type = BodyDef.BodyType.DynamicBody;
-		    defB.position.set(position.cpy().add(0,height).scl(SCALE));	    
+		    defB.position.set(position.cpy().scl(SCALE));	    
 		    circle = world.createBody(defB);
 		    circle.setUserData(owner);
 
 		    //shape
 		    CircleShape circleShape = new CircleShape();
 		    circleShape.setRadius(ratio*SCALE);
-		    //FixtureDef fixtureDefB;
-		    //fixtureDefB.friction = 1.0f;//!\todo puede ser un parametro
-		    //fixtureDefB.density = 1.0f;//!\todo puede ser un parametro
+		    FixtureDef fixtureDef = new FixtureDef();
+		    fixtureDef.friction = 1.0f;//!\todo puede ser un parametro
+		    fixtureDef.density = 1.0f;//!\todo puede ser un parametro
 		    //fixtureDefB.filter.groupIndex = -1; //!\todo puede ser un parametro
 		    //fixtureDefB.filter.categoryBits = 0x0101;
 		    //fixtureDefB.filter.maskBits = 0x1101;
-		    //fixtureDefB.shape = &circle;
-		    circle.createFixture(circleShape,1.0f);		    
+		    fixtureDef.shape = circleShape;
+		    circle.createFixture(fixtureDef);		    
 		}
 		
 		{
 			RevoluteJointDef motorDef = new RevoluteJointDef();
 		    motorDef.initialize(box,circle,circle.getWorldCenter());
 		    //motorDef.maxMotorTorque = 1000.0f;//!\todo puede ser un parametro
-		    motorDef.motorSpeed = 0.0f;//velocidad 0 inicial
-		    motorDef.enableMotor = true; //pues claro motor :)		    
+		    //motorDef.motorSpeed = 0.0f;//velocidad 0 inicial
+		    motorDef.enableMotor = false; //pues claro motor :)		    
 		    motor = (RevoluteJoint)world.createJoint(motorDef);
 		}	
 	}
@@ -124,7 +124,7 @@ implements PlatformMessageHandler
 	}
 	
 	
-	public void move(float desiredVel)
+	public void moveHorizontal(float desiredVel)
 	{
 		//mantener velocidad
 		Vector2 vel = circle.getLinearVelocity();				
@@ -136,6 +136,20 @@ implements PlatformMessageHandler
 			circle.setAngularVelocity(0);
 		}
 	}
+	
+
+	private void jump(float jump) 
+	{
+		Vector2 vel = circle.getLinearVelocity();				
+		float velChange = jump - vel.x;	
+		float impulse = (box.getMass() + circle.getMass()) * velChange;		
+		Vector2 worldCenter = circle.getWorldCenter();
+		circle.applyLinearImpulse(0, impulse, worldCenter.x,worldCenter.y,true);	
+		
+		
+	}
+
+	
 	@Override
 	public void setPosition(float x, float y)
 	{
@@ -149,8 +163,8 @@ implements PlatformMessageHandler
 	}
 	public void update(float dt)
 	{
-		move(desiredHorizontalVelocity);
-		
+		moveHorizontal(desiredHorizontalVelocity);
+//		
 		//actualizando transformación
 		rotation = circle.getAngle();
 		Vector2 pos = circle.getPosition();
@@ -172,15 +186,17 @@ implements PlatformMessageHandler
 	{
 		// TODO Auto-generated method stub		
 	}
+	
 	@Override
 	public void onMovePlatform(float x)
 	{
 		desiredHorizontalVelocity = x*SCALE;		
 	}
+	
 	@Override
 	public void onJumpPlatform(float y)
 	{
-		
+		jump(y*SCALE);
 	}
 		
 	

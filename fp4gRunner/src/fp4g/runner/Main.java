@@ -75,8 +75,6 @@ public class Main
 			Object instanceConf = confClass.newInstance();
 			FieldAccess confField = FieldAccess.get(confClass);
 			
-			
-			
 			if(properties != null)
 			{
 				confField.set(instanceConf, "title", properties.getProperty("game.title"));

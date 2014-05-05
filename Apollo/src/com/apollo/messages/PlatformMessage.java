@@ -16,10 +16,10 @@ public enum PlatformMessage implements  Message<PlatformMessageHandler>
 		switch(this)
 		{
 		case onMovePlatform:
-			h.onMovePlatform((Float)args[0]);
+			h.onMovePlatform(((Number)args[0]).floatValue());
 			break;
 		case onJumpPlatform:
-			h.onJumpPlatform((Float)args[0]);
+			h.onJumpPlatform(((Number)args[0]).floatValue());
 			break;
 		}		
 	}
