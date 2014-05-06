@@ -3,26 +3,25 @@ parser grammar Expr;
 expr  
 		 :
 		   array                          #arrayExpr
-		 | ABRE_PAR op=expr CIERRA_PAR    #parExpr
-		 | NOT op=expr	                  #notExpr		 
-		 | MINUS op=expr                  #minusExpr
+		 | NOT op=expr                    #notExpr			
 		 | left=expr LESS_THAN right=expr #lessThanExpr
 		 | left=expr MORE_THAN right=expr #moreThanExpr
-		 | left=expr EQUAL     right=expr #equalExpr
+		 | left=expr EQUAL     right=expr #equalExpr		
+		 | ABRE_PAR op=expr CIERRA_PAR    #parExpr		 	 
+		 | MINUS op=expr                  #minusExpr		
 		 | left=expr MULTIPLY  right=expr #multExpr
 		 | left=expr DIVIDE    right=expr #divExpr
 		 | left=expr PLUS      right=expr #addExpr
-		 | left=expr MINUS     right=expr #subExpr
-			 
-		 | INT_LITERAL                   #intLiteral
-         | DECIMAL_LITERAL               #decimalLiteral         
-		 | BOOL_LITERAL			         #boolLiteral	 		 
-         | STRING_LITERAL                #stringLiteral         
-         | DIRECTCODE                    #directCode
+		 | left=expr MINUS     right=expr #subExpr			 
+		 | INT_LITERAL                    #intLiteral
+         | DECIMAL_LITERAL                #decimalLiteral
+         | STRING_LITERAL                 #stringLiteral
+         | BOOL_LITERAL			          #boolLiteral         
+         | DIRECTCODE                     #directCode
          | functionName=ID 
 		    ABRE_PAR exprList? CIERRA_PAR #functionCallExpr         
-         | accessVarOp                   #varExpr         		          
-		 ;		
+         | accessVarOp                    #varExpr         
+		 ;	
 	
 accessVarOp
 		:

@@ -23,7 +23,12 @@
 		//TODO No se reconoce la instrucción: "${statement.class.simpleName}"
 </#switch>
 </#macro>
+
 <#macro params p><#list p as param>${param}<#if param_has_next>,</#if></#list></#macro>
+
+<#macro flags list>
+<#list list as flag>	private ${flag.type} ${flag.name}<#if flag.defaultValue??> = ${flag.defaultValue}</#if>;</#list>
+</#macro>
 
 
 <#macro on_message message>

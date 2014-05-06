@@ -79,6 +79,7 @@ gameValue
 		| set DOTCOMA
 		| start DOTCOMA
 		| on
+		| flags
 		;
 		
 set
@@ -186,10 +187,10 @@ locals
 		;
 
 onStatements:
-			(onStatement DOTCOMA) *
+			(statement DOTCOMA) *
 		;		
 
-onStatement :
+statement :
 			  send
 			| destroy
 			| subscribe
@@ -255,6 +256,7 @@ defineValue
 		| set DOTCOMA		
 		| on
 		| assets
+		| flags
 		;
 
 exprList: expr (COMA expr)*;
@@ -301,6 +303,23 @@ assetValue
 ;
 
 
-assetValuesInner:
+assetValuesInner
+:
 	ABRE_COR assetValue (COMA assetValue)* COMA? CIERRA_COR
 ;
+
+flags
+:
+	flag DOTCOMA (flag DOTCOMA)*
+;
+
+flag
+:
+	FLAG declareVar
+;
+
+when
+:
+	WHEN condition = expr THEN stmnt = statement
+;
+

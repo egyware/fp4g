@@ -21,6 +21,8 @@ EXIT       : 'EXIT';
 SET        : 'SET';
 START      : 'START';
 ASSETS     : 'ASSETS';
+FLAG       : 'FLAG';
+WHEN       : 'WHEN';
 
 /* auxiliars keywords */
 MANAGER : 'MANAGER';
@@ -37,6 +39,7 @@ SOURCE  : 'SOURCE';
 AS		: 'AS';
 OTHER   : 'OTHER';
 EMPTY   : 'EMPTY';
+THEN      : 'THEN';
 
 /* separators */
 ABRE_COR  : '['; 

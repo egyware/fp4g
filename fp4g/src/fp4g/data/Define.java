@@ -30,7 +30,8 @@ public abstract class Define extends Code implements IDefine
 	
 	public final DefineType type;	
 	
-	public String name;
+	public String name;	
+	public NameList flags;
 	public NameList paramNameList;
 		
 	public final IDefine parent;
@@ -55,7 +56,7 @@ public abstract class Define extends Code implements IDefine
 	{
 		this.parent = parent;
 		this.type = type;
-		this.name = name;		
+		this.name = name;
 		variables = new HashMap<String, IValue<?>>();		
 		
 		addDefines = new HashMap<DefineType, List<AddDefine>>(DefineType.values().length,1);
@@ -89,7 +90,11 @@ public abstract class Define extends Code implements IDefine
 	}
 	public void setNameList(NameList list) {
 		this.paramNameList = list;		
-	}	
+	}
+	public void setFlagList(NameList list)
+	{
+		this.flags = list;
+	}
 	
 	public void setAdd(Add add)
 	{

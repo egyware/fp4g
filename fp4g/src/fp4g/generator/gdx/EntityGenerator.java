@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import fp4g.data.AddDefine;
+import fp4g.data.DeclVar;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
@@ -18,7 +19,7 @@ import fp4g.generator.Depend;
 import fp4g.generator.Generator;
 import fp4g.generator.gdx.models.JavaCodeModel;
 import fp4g.generator.gdx.models.OnModel;
-import fp4g.generator.gdx.models.ParamCodeModel;
+import fp4g.generator.gdx.models.VarCodeModel;
 import fp4g.generator.gdx.models.On.MethodHandlerModel;
 import fp4g.log.info.Error;
 import freemarker.template.Template;
@@ -38,7 +39,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		final Entity entity = (Entity)gameData;
 		final JavaParamListBuilder paramBuilder = new JavaParamListBuilder(generator);
 		final Template entityBuilderTempl = generator.getTemplate("EntityBuilder.ftl");
-		final Template entityTempl        = generator.getTemplate("Entity.ftl");
+		final Template entityTempl        = generator.getTemplate("Entity.ftl");		
 		
 		HashMap<String,Object> buildRoot = new HashMap<String, Object>();	
 		HashMap<String,Object> entityRoot = new HashMap<String, Object>();
@@ -46,7 +47,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		
 		JavaCodeModel modelBuild = new JavaCodeModel();
 		modelBuild.pckg = String.format("%s.%s",generator.packageName,"entity");
-		modelBuild.name = String.format("%sBuilder",entity.name);;
+		modelBuild.name = String.format("%sBuilder",entity.name);
 		modelBuild.javadoc = JavaGenerator.autodoc;
 		
 		JavaCodeModel modelEntity = new JavaCodeModel();
@@ -61,7 +62,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		//agregar parametros de entrada
 		if(entity.paramNameList != null)
 		{
-			List<ParamCodeModel> pair = paramBuilder.build(entity.paramNameList, entity, modelBuild);			
+			List<VarCodeModel> pair = paramBuilder.build(entity.paramNameList, entity, modelBuild);			
 			buildRoot.put("params",pair);
 		}
 		
@@ -158,6 +159,24 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				entityRoot.put("hasAttachments", false);
 			}			
 		}
+		
+		if(entity.flags != null)
+		{
+			LinkedList<VarCodeModel> flags = new LinkedList<VarCodeModel>();
+			for(DeclVar var:entity.flags)
+			{
+				if(var.initValue != null)
+				{
+					flags.add(new VarCodeModel(paramBuilder.translateType(var.type, modelEntity, entity),var.name,generator.expresion(modelEntity, var.initValue)));
+				}
+				else
+				{
+					flags.add(new VarCodeModel(paramBuilder.translateType(var.type, modelEntity, entity),var.name,null));
+				}
+			}
+			entityRoot.put("flags", flags);
+		}
+		
 		
 		//agregar imports!
 		Depend dr = generator.resolveDependency(entity);

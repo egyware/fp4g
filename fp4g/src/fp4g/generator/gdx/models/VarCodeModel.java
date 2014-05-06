@@ -5,7 +5,7 @@ import java.util.Map;
 
 import fp4g.generator.Model;
 
-public class ParamCodeModel implements Model {
+public class VarCodeModel implements Model {
 	private static final Map<String,String> defaultValues;
 	static
 	{
@@ -20,13 +20,13 @@ public class ParamCodeModel implements Model {
 	private final String type;
 	private final String defaultValue;
 	
-	public ParamCodeModel(String type,String name, String value)
+	public VarCodeModel(String type,String name, String value)
 	{
 		this.name = name;
 		this.type = type;
 		defaultValue = value;
 	}
-	public ParamCodeModel(String type,String name)
+	public VarCodeModel(String type,String name)
 	{
 		this.name = name;
 		this.type = type;

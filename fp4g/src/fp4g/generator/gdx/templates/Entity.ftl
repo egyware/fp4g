@@ -1,8 +1,5 @@
 <#import "fp4g.ftl" as fp4g />
 package ${class.pckg};
-<#macro printParams params>
-<#if params?has_content><#list params as param>${param}<#if param_has_next>, </#if></#list></#if>
-</#macro>
 <#if class.imports??>
 <#list class.imports as import>
 import ${import};
@@ -23,6 +20,9 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 	</#list>
 	<#else>
 	//TODO: Se te olvido agregar los Behaviors?
+	</#if>
+	<#if flags?has_content>
+	<@fp4g.flags list = flags />
 	</#if>
 	
 	

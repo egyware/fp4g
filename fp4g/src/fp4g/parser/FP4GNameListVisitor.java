@@ -42,6 +42,23 @@ public class FP4GNameListVisitor extends FP4GBaseVisitor<DeclVar>
         return list;		
 	}
 	
+	public NameList getFlags(FP4GParser.FlagsContext ctx)
+	{
+		if(ctx == null) return null;
+		final NameList list = new NameList();
+		final int n = ctx.getChildCount();		
+        for (int i=0; i<n; i++) 
+        {
+            ParseTree c = ctx.getChild(i);
+            DeclVar childResult = c.accept(this);
+            if(childResult != null)
+            {
+           	 	list.add(childResult);
+            }                     
+        }
+        return list;		
+	}
+	
 	
 	@Override 
 	public DeclVar visitDeclareVar(FP4GParser.DeclareVarContext ctx)

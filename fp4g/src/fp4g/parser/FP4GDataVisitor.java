@@ -560,10 +560,21 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		{
 			final NameList nameList = nameListVisitor.getNameList(nameList_ctx);
 			define.setNameList(nameList);		
-		}
+		}		
 		
 		return null;		
 	}	
+	
+	@Override
+	public ILine visitFlags(FP4GParser.FlagsContext ctx)
+	{
+		//TODO este casting se ve algo peligroso...
+		Define parent = (Define)current.peek();
+		NameList flags = nameListVisitor.getFlags(ctx);
+		parent.setFlagList(flags);
+		
+		return null;
+	}
 	
 	@Override
 	public ILine visitAddMethod(FP4GParser.AddMethodContext ctx)

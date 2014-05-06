@@ -7,13 +7,14 @@ import fp4g.data.DeclVar;
 import fp4g.data.Define;
 import fp4g.data.IDefine;
 import fp4g.data.NameList;
+import fp4g.data.VarType;
 import fp4g.data.vartypes.BasicType;
 import fp4g.data.vartypes.CustomType;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.generator.gdx.models.JavaCodeModel;
-import fp4g.generator.gdx.models.ParamCodeModel;
+import fp4g.generator.gdx.models.VarCodeModel;
 import fp4g.log.info.GeneratorError;
 
 
@@ -26,63 +27,70 @@ public class JavaParamListBuilder
 		this.generator = generator;
 	}
 	
-	public List<ParamCodeModel> build(NameList nameList, IDefine current, JavaCodeModel model) 
+	public List<VarCodeModel> build(NameList nameList, IDefine current, JavaCodeModel model) 
 	throws DependResolverNotFoundException, CannotEvalException
 	{
 		//lo veo un poco consumidor de recursos, pero bueno...
-		List<ParamCodeModel> pair = new LinkedList<ParamCodeModel>();
+		List<VarCodeModel> pair = new LinkedList<VarCodeModel>();
 		for(DeclVar par: nameList)
 		{
 			//TODO esto debe ir en otro lugar.
-			String name;
-			if(par.type instanceof BasicType)
-			{
-				switch((BasicType)par.type)
-				{
-				case Bool:
-					name = "Boolean";
-					break;
-				case Entity:
-					name = "Entity";
-					break;
-				case Number:
-					name = "Number";
-					break;
-				case String:
-					name = "String";
-					break;
-				case Double:
-					name = "double";
-					break;
-				case Float:
-					name = "float";
-					break;
-				case Integer:
-					name = "int";
-					break;
-				default:
-					throw new FP4GRuntimeException(GeneratorError.IllegalState,"Estado no valido del generador");
-				}
-			}
-			else
-			{
-				CustomType custom = (CustomType)par.type;
-				Define define = current.getDefine(custom.name);
-				generator.resolveDependency(define).perform(define, model);
-				name = custom.name;
-			}
-			ParamCodeModel param;
+			String name = translateType(par.type,model, current);
+			VarCodeModel param;
 			if(par.initValue != null)
 			{
-				param = new ParamCodeModel(name, par.name,generator.expresion(model, par.initValue));					
+				param = new VarCodeModel(name, par.name,generator.expresion(model, par.initValue));					
 			}
 			else
 			{
-				param = new ParamCodeModel(name,par.name);
+				param = new VarCodeModel(name,par.name);
 			}								
 			pair.add(param);
 		}
 		return pair;
+	}
+
+	public String translateType(VarType type, JavaCodeModel model, IDefine current) 
+	throws DependResolverNotFoundException
+	{
+		String name;
+		if(type instanceof BasicType)
+		{
+			switch((BasicType)type)
+			{
+			case Bool:
+				name = "Boolean";
+				break;
+			case Entity:
+				name = "Entity";
+				break;
+			case Number:
+				name = "Number";
+				break;
+			case String:
+				name = "String";
+				break;
+			case Double:
+				name = "double";
+				break;
+			case Float:
+				name = "float";
+				break;
+			case Integer:
+				name = "int";
+				break;
+			default:
+				throw new FP4GRuntimeException(GeneratorError.IllegalState,"Estado no valido del generador");
+			}
+		}
+		else
+		{
+			CustomType custom = (CustomType)type;
+			Define define = current.getDefine(custom.name);
+			generator.resolveDependency(define).perform(define, model);
+			name = custom.name;
+		}
+		return name;
 	}
 	
 

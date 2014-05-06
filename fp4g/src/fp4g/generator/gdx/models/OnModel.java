@@ -60,7 +60,7 @@ public class OnModel implements Model
 		//TODO da un error cuando el mensaje está sin definir		
 		for(AddMethod entry: on.message.getAddMethods())
 		{	
-			List<ParamCodeModel> params = (entry.nameList != null)?paramBuilder.build(entry.nameList, current, model):null;			
+			List<VarCodeModel> params = (entry.nameList != null)?paramBuilder.build(entry.nameList, current, model):null;			
 			methods.put(entry.name, new MethodHandlerModel(entry, params));
 		}
 		

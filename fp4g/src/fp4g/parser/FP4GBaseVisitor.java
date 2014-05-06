@@ -165,6 +165,14 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitWhen(@NotNull FP4GParser.WhenContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitOnFilters(@NotNull FP4GParser.OnFiltersContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -261,7 +269,7 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitAssets(@NotNull FP4GParser.AssetsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitStatement(@NotNull FP4GParser.StatementContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -277,7 +285,23 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitAssets(@NotNull FP4GParser.AssetsContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitVarNameOperator(@NotNull FP4GParser.VarNameOperatorContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitFlag(@NotNull FP4GParser.FlagContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -326,14 +350,6 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitNameList(@NotNull FP4GParser.NameListContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitOnStatement(@NotNull FP4GParser.OnStatementContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -502,6 +518,14 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitDefine(@NotNull FP4GParser.DefineContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitFlags(@NotNull FP4GParser.FlagsContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
