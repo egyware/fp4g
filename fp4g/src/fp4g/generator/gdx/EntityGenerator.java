@@ -14,7 +14,6 @@ import fp4g.data.ICode;
 import fp4g.data.On;
 import fp4g.data.define.Entity;
 import fp4g.exceptions.FP4GException;
-import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
 import fp4g.generator.gdx.models.EntityBuilderModel;
@@ -26,7 +25,8 @@ import fp4g.generator.gdx.models.On.MethodHandlerModel;
 import fp4g.log.info.Error;
 import freemarker.template.Template;
 
-public class EntityGenerator extends CodeGenerator<JavaGenerator> {
+public class EntityGenerator extends JavaCodeGenerator
+{
 
 	public EntityGenerator(JavaGenerator generator) {
 		super(generator);

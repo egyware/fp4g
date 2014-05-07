@@ -11,7 +11,7 @@ import fp4g.exceptions.CannotEvalException;
  * @author Edgardo
  *
  */
-public abstract class FunctionGenerator <T extends Generator,M extends MetaSourceModel>
+public abstract class FunctionGenerator <M extends MetaSourceModel, T extends Generator<M>>
 {
 	//el generador para que esté disponible para las demás instancias...
 	protected final T generator;

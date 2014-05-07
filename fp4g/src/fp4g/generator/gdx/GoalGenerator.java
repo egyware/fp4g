@@ -3,9 +3,8 @@ package fp4g.generator.gdx;
 import java.io.File;
 
 import fp4g.data.ICode;
-import fp4g.generator.CodeGenerator;
 
-public class GoalGenerator extends CodeGenerator<JavaGenerator> {
+public class GoalGenerator extends JavaCodeGenerator {
 
 	public GoalGenerator(JavaGenerator generator) {
 		super(generator);		

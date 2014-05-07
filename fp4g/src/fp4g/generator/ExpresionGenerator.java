@@ -9,7 +9,7 @@ import fp4g.exceptions.CannotEvalException;
  * @param <T>
  *
  */
-public abstract class ExpresionGenerator <T extends Generator,M extends MetaSourceModel>
+public abstract class ExpresionGenerator <M extends MetaSourceModel, T extends Generator<M>>
 {
 	protected final T generator;
 	

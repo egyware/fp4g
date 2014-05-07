@@ -26,7 +26,7 @@ import fp4g.log.info.CannotEval;
  * @param <T>
  *
  */
-public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,JavaMetaSourceModel> 
+public class JavaExpresionGenerator extends ExpresionGenerator<JavaMetaSourceModel, JavaGenerator> 
 {
 	private final  Map<Class<?>, EG_Expresion> expresions = new HashMap<Class<?>, EG_Expresion>(6,1);
 	

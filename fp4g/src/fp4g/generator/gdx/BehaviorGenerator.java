@@ -5,10 +5,9 @@ import java.io.File;
 import fp4g.data.ICode;
 import fp4g.data.define.Behavior;
 import fp4g.exceptions.FP4GException;
-import fp4g.generator.CodeGenerator;
 import fp4g.log.info.Error;
 
-public class BehaviorGenerator extends CodeGenerator<JavaGenerator> 
+public class BehaviorGenerator extends JavaCodeGenerator
 {
 
 	public BehaviorGenerator(JavaGenerator generator) 

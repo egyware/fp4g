@@ -3,7 +3,6 @@ package fp4g.generator.gdx;
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,14 +14,12 @@ import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
 import fp4g.exceptions.GeneratorException;
-import fp4g.generator.CodeGenerator;
-import fp4g.generator.gdx.models.GameFragment;
 import fp4g.generator.gdx.models.GameModel;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.generator.gdx.models.PropertiesFragment;
 import freemarker.template.Template;
 
-public class GameGenerator extends CodeGenerator<JavaGenerator> 
+public class GameGenerator extends JavaCodeGenerator
 {
 
 	public GameGenerator(JavaGenerator generator) {

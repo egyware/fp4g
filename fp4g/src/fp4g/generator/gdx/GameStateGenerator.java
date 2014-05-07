@@ -23,7 +23,6 @@ import fp4g.data.define.Manager;
 import fp4g.data.expresion.ArrayList;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
-import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
 import fp4g.generator.gdx.models.AddModel;
@@ -37,7 +36,8 @@ import fp4g.log.info.CannotEval;
 import fp4g.log.info.Warn;
 import freemarker.template.Template;
 
-public class GameStateGenerator extends CodeGenerator<JavaGenerator> {	
+public class GameStateGenerator extends JavaCodeGenerator
+{	
 	
 	private static final String EXTRA = "extra";
 	private static final String DEBUG = "debug";

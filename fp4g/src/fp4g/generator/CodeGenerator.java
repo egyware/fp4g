@@ -4,7 +4,7 @@ import java.io.File;
 
 import fp4g.data.ICode;
 
-public abstract class CodeGenerator <T extends Generator>
+public abstract class CodeGenerator <M extends MetaSourceModel, T extends Generator<M>>
 {
 	protected final T generator;
 	

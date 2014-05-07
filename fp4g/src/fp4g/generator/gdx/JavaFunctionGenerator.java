@@ -19,7 +19,7 @@ import fp4g.log.info.CannotEval;
  * @author Edgardo
  *
  */
-public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaMetaSourceModel>
+public class JavaFunctionGenerator extends FunctionGenerator<JavaMetaSourceModel, JavaGenerator>
 {		
 	private final Map<String, GdxFunction> functions;
 	public JavaFunctionGenerator(JavaGenerator jg)

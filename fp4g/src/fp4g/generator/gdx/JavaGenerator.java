@@ -65,13 +65,13 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 	public final JavaExpresionGenerator exprGen;
 	public final JavaFunctionGenerator funcGen;
 	
-	public final Map<Class<? extends Code>,Class<? extends CodeGenerator<JavaGenerator>>> generators;
+	public final Map<Class<? extends Code>,Class<? extends CodeGenerator<JavaMetaSourceModel, JavaGenerator>>> generators;
 	
 	public DependResolvers resolvers;
 	
 	public JavaGenerator()
 	{
-		generators = new HashMap<Class<? extends Code>, Class<? extends CodeGenerator<JavaGenerator>>>(10,1);				
+		generators = new HashMap<Class<? extends Code>,Class<? extends CodeGenerator<JavaMetaSourceModel, JavaGenerator>>>(10,1);				
 		
 		exprGen = new JavaExpresionGenerator(this);
 		funcGen = new JavaFunctionGenerator(this);
@@ -159,13 +159,13 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 	@Override
 	protected void generateCode(ICode gameData, File path) throws GeneratorException 
 	{		
-		Class<? extends CodeGenerator<JavaGenerator>> codegen = generators.get(gameData.getClass());
+		Class<? extends CodeGenerator<JavaMetaSourceModel, JavaGenerator>> codegen = generators.get(gameData.getClass());
 		
 		if(codegen != null)
 		{
 			try{
-				Constructor<? extends CodeGenerator<JavaGenerator>> constructor = codegen.getConstructor(JavaGenerator.class);
-				CodeGenerator<? extends JavaGenerator> generator = constructor.newInstance(this);
+				Constructor<? extends CodeGenerator<JavaMetaSourceModel,JavaGenerator>> constructor = codegen.getConstructor(JavaGenerator.class);
+				CodeGenerator<JavaMetaSourceModel,JavaGenerator> generator = constructor.newInstance(this);
 				if(gameData.isGenerable()) //se puede contruir?
 				{
 					generator.generateCode(gameData, packageDir);

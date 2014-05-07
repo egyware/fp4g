@@ -4,9 +4,8 @@ import java.io.File;
 
 import fp4g.data.ICode;
 import fp4g.data.define.Message;
-import fp4g.generator.CodeGenerator;
 
-public class MessageGenerator extends CodeGenerator<JavaGenerator> {
+public class MessageGenerator extends JavaCodeGenerator {
 
 	public MessageGenerator(JavaGenerator generator) 
 	{
