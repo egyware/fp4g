@@ -1,14 +1,14 @@
 <#import "fp4g.ftl" as fp4g />
-package ${class.pckg};
+package ${source.pckg};
 
-<#if class.imports??>
-<#list class.imports as import>
+<#if source.imports?has_content>
+<#list source.imports as import>
 import ${import};
 </#list>
 </#if>
 
-${class.javadoc}
-public class ${class.name} implements EntityBuilder
+${source.javadoc}
+public class ${source.name} implements EntityBuilder
 {
 
 	@Override

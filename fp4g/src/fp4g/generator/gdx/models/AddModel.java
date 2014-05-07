@@ -2,9 +2,7 @@ package fp4g.generator.gdx.models;
 
 import java.util.List;
 
-import fp4g.generator.Model;
-
-public class AddModel implements Model {
+public class AddModel {
 
 	public String name;
 	public String varName;

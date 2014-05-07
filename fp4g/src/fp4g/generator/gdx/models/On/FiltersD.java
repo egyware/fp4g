@@ -8,10 +8,9 @@ import fp4g.data.AddMethod;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.exceptions.CannotEvalException;
-import fp4g.generator.Model;
 import fp4g.generator.gdx.JavaExpresionGenerator;
 
-public class FiltersD implements Model, Iterable<String>
+public class FiltersD implements Iterable<String>
 {
 	//que necesito acá. Por cada FilterS necesito:
 	//Una lista de conjunciones

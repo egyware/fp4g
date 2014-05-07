@@ -4,8 +4,8 @@ package ${class.package};
 import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
-<#if class.imports??>
-<#list class.imports as import>
+<#if source.imports??>
+<#list source.imports as import>
 import ${import};
 </#list>
 </#if>

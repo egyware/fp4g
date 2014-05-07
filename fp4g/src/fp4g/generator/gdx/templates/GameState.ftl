@@ -1,13 +1,13 @@
-package ${code.pckg};
+package ${source.pckg};
 
-<#if code.imports??>
-<#list code.imports as import>
+<#if source.imports??>
+<#list source.imports as import>
 import ${import};
 </#list>
 </#if>
 
-${code.javadoc}
-public final class ${code.name} extends GameState{
+${source.javadoc}
+public final class ${source.name} extends GameState{
 	private final WorldContainer container;	
 	
 	//sistemas o manejadores
@@ -28,7 +28,7 @@ public final class ${code.name} extends GameState{
 	</#list>
 	</#if>
 	
-	public ${code.name}(GameManager manager)
+	public ${source.name}(GameManager manager)
 	{
 		container = new WorldContainer(manager);		
 	}

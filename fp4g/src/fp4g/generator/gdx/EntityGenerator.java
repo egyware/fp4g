@@ -17,7 +17,9 @@ import fp4g.exceptions.FP4GException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
-import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.generator.gdx.models.EntityBuilderModel;
+import fp4g.generator.gdx.models.EntityModel;
+import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.generator.gdx.models.OnModel;
 import fp4g.generator.gdx.models.VarCodeModel;
 import fp4g.generator.gdx.models.On.MethodHandlerModel;
@@ -41,29 +43,27 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 		final Template entityBuilderTempl = generator.getTemplate("EntityBuilder.ftl");
 		final Template entityTempl        = generator.getTemplate("Entity.ftl");		
 		
-		HashMap<String,Object> buildRoot = new HashMap<String, Object>();	
-		HashMap<String,Object> entityRoot = new HashMap<String, Object>();
+		final String entityPackage = String.format("%s.%s",generator.packageName,"entity");
+		
+		EntityModel entityModel = new EntityModel(entityPackage, entity.name);
+		EntityBuilderModel buildModel = new EntityBuilderModel(entityPackage, String.format("%sBuilder",entity.name));
+		
+		JavaMetaSourceModel entityMeta  = entityModel.getMetaSource();
+		JavaMetaSourceModel  buildMeta  = buildModel.getMetaSource();
+		
+		entityMeta.setJavadoc(JavaGenerator.autodoc);
+		 buildMeta.setJavadoc(JavaGenerator.autodoc);
+		 
+		buildModel.setEntity(entityModel);
+			
+		
 		List<On> entityBuild_onMessages = new LinkedList<On>();
-		
-		JavaCodeModel modelBuild = new JavaCodeModel();
-		modelBuild.pckg = String.format("%s.%s",generator.packageName,"entity");
-		modelBuild.name = String.format("%sBuilder",entity.name);
-		modelBuild.javadoc = JavaGenerator.autodoc;
-		
-		JavaCodeModel modelEntity = new JavaCodeModel();
-		modelEntity.pckg = String.format("%s.%s",generator.packageName,"entity");
-		modelEntity.name = entity.name;
-		modelEntity.javadoc = JavaGenerator.autodoc;
-		
-		buildRoot.put("class",modelBuild);
-		buildRoot.put("entity", modelEntity);
-		entityRoot.put("class", modelEntity);				
 				
 		//agregar parametros de entrada
 		if(entity.paramNameList != null)
 		{
-			List<VarCodeModel> pair = paramBuilder.build(entity.paramNameList, entity, modelBuild);			
-			buildRoot.put("params",pair);
+			List<VarCodeModel> pair = paramBuilder.build(entity.paramNameList, entity, buildMeta);			
+			buildModel.setParams(pair);
 		}
 		
 		//agregar behaviors
@@ -85,15 +85,15 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				List<String> params = new LinkedList<String>();
 				for(Expresion expr: addBhvr.params)
 				{
-					params.add(generator.expresion(modelBuild,expr));
+					params.add(generator.expresion(buildMeta,expr));
 				}
 				bhvr.put("params",params);				
 			}			
 			behaviors.add(bhvr);
 		}
 		
-		buildRoot.put("behaviors", behaviors);
-		entityRoot.put("behaviors", behaviors);
+		buildModel.setBehaviors(behaviors);
+		entityModel.setBehaviors(behaviors);
 		
 		//agregar eventos
 		final Collection<On> entity_onMessages = entity.getOnMessages();
@@ -116,21 +116,21 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 					continue;
 				}
 				
-				OnModel onModel = OnModel.build(on, entity, generator, modelEntity);
+				OnModel onModel = OnModel.build(on, entity, generator, entityMeta);
 				
 				onList.add(onModel);
 			}
-			entityRoot.put("messages", onList);
+			entityModel.setMessages(onList);
 			
 			//de aqui empiezan los mensajes para la factory
 			List<OnModel> onListBuild = new LinkedList<OnModel>();			
 			for(On on: entityBuild_onMessages)
 			{
-				OnModel onModel = OnModel.build(on, entity, generator, modelBuild);						
+				OnModel onModel = OnModel.build(on, entity, generator, buildMeta);						
 				
 				onListBuild.add(onModel);
 			}
-			buildRoot.put("messages", onListBuild);
+			buildModel.setMessages(onListBuild);
 			
 			//revisar si tiene attachments, basta con uno..
 			boolean hasAttachments = false;
@@ -151,13 +151,9 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			}	
 			if(hasAttachments)
 			{	
-				modelEntity.addImport("com.apollo.ApolloInputProcessor");
-				entityRoot.put("hasAttachments", true);
-			}
-			else
-			{
-				entityRoot.put("hasAttachments", false);
-			}			
+				entityMeta.addRequireSource("com.apollo.ApolloInputProcessor");
+				entityModel.setHasAttachments(true);
+			}						
 		}
 		
 		if(entity.flags != null)
@@ -167,21 +163,21 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			{
 				if(var.initValue != null)
 				{
-					flags.add(new VarCodeModel(paramBuilder.translateType(var.type, modelEntity, entity),var.name,generator.expresion(modelEntity, var.initValue)));
+					flags.add(new VarCodeModel(paramBuilder.translateType(var.type, entityMeta, entity),var.name,generator.expresion(entityMeta, var.initValue)));
 				}
 				else
 				{
-					flags.add(new VarCodeModel(paramBuilder.translateType(var.type, modelEntity, entity),var.name,null));
+					flags.add(new VarCodeModel(paramBuilder.translateType(var.type, entityMeta, entity),var.name,null));
 				}
 			}
-			entityRoot.put("flags", flags);
+			entityModel.setFlags(flags);
 		}
 		
 		
 		//agregar imports!
 		Depend dr = generator.resolveDependency(entity);
-		dr.perform(entity, modelBuild);
-		dr.perform(entity, modelEntity);
+		dr.perform(entity, buildMeta);
+		dr.perform(entity, entityMeta);
 		
 		if(entity_onMessages.size()>0)
 		{	
@@ -190,7 +186,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				Depend depende = generator.resolveDependency(on.message);
 				if(depende != null)
 				{
-					depende.perform(on.message, modelEntity);
+					depende.perform(on.message, entityMeta);
 				}
 			}				
 		}		
@@ -202,7 +198,7 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 				Depend depende = generator.resolveDependency(on.message);
 				if(depende != null)
 				{
-					depende.perform(on.message, modelBuild);
+					depende.perform(on.message, buildMeta);
 				}
 			}				
 		}
@@ -217,8 +213,8 @@ public class EntityGenerator extends CodeGenerator<JavaGenerator> {
 			}
 		}
 		
-		generator.createFile(generator.packageDir,String.format("entity/%sBuilder.java",entity.name),entityBuilderTempl,buildRoot);
-		generator.createFile(generator.packageDir,String.format("entity/%s.java",entity.name),entityTempl,entityRoot);		
+		generator.createFile(generator.packageDir,String.format("entity/%sBuilder.java",entity.name),entityBuilderTempl,buildModel);
+		generator.createFile(generator.packageDir,String.format("entity/%s.java",entity.name),entityTempl,entityModel);		
 	}
 
 	@Override

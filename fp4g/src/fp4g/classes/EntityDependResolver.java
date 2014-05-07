@@ -9,7 +9,7 @@ import fp4g.data.define.Entity;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.IList;
 import fp4g.generator.Depend;
-import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaMetaSourceModel;
 
 /**
  * Clase que resuelve las dependencias de el KeyMessage
@@ -28,7 +28,7 @@ public class EntityDependResolver implements Depend
 	{	
 	}
 	
-	private void addBehaviorsImports(Entity entity, JavaCodeModel model) 
+	private void addBehaviorsImports(Entity entity, JavaMetaSourceModel model) 
 	{
 		IList imports = behaviorsList;
 		for(IValue<?> i:imports)
@@ -46,19 +46,19 @@ public class EntityDependResolver implements Depend
 					packageName = bhvr.name;
 				}
 				
-				model.imports.add(String.format((String) i.getValue(), packageName));
+				model.addRequireSource(String.format((String) i.getValue(), packageName));
 			}
 		}
 		
 	}
 	
-	public void addImports(final IList imports,JavaCodeModel model)
+	public void addImports(final IList imports,JavaMetaSourceModel model)
 	{
 		if(imports != null)
 		{
 			for(IValue<?> i:imports)
 			{
-				model.imports.add((String) i.getValue());
+				model.addRequireSource((String) i.getValue());
 			}
 		}
 	}	
@@ -67,10 +67,10 @@ public class EntityDependResolver implements Depend
 	 * @see fp4g.classes.IDependResolver#perform(fp4g.data.Define, fp4g.generator.models.JavaCodeModel)
 	 */
 	@Override
-	public void perform(Define data, JavaCodeModel model)
+	public void perform(Define data, JavaMetaSourceModel model)
 	{		
 		Entity entity = (Entity)data;
-		if(model.name.endsWith("Builder")) //TODO por ahora no se me ocurre una manera limpia de diferenciarlos.
+		if(model.getName().endsWith("Builder")) //TODO por ahora no se me ocurre una manera limpia de diferenciarlos.
 		{
 			addImports(builderList,model);
 			addBehaviorsImports(entity, model);			

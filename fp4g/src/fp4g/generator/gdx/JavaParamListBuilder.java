@@ -13,7 +13,7 @@ import fp4g.data.vartypes.CustomType;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.exceptions.FP4GRuntimeException;
-import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.generator.gdx.models.VarCodeModel;
 import fp4g.log.info.GeneratorError;
 
@@ -27,7 +27,7 @@ public class JavaParamListBuilder
 		this.generator = generator;
 	}
 	
-	public List<VarCodeModel> build(NameList nameList, IDefine current, JavaCodeModel model) 
+	public List<VarCodeModel> build(NameList nameList, IDefine current, JavaMetaSourceModel model) 
 	throws DependResolverNotFoundException, CannotEvalException
 	{
 		//lo veo un poco consumidor de recursos, pero bueno...
@@ -50,7 +50,7 @@ public class JavaParamListBuilder
 		return pair;
 	}
 
-	public String translateType(VarType type, JavaCodeModel model, IDefine current) 
+	public String translateType(VarType type, JavaMetaSourceModel model, IDefine current) 
 	throws DependResolverNotFoundException
 	{
 		String name;

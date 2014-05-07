@@ -1,8 +1,6 @@
 package fp4g.generator.gdx.models;
 
-import fp4g.generator.Model;
-
-public abstract class StatementModel implements Model 
+public abstract class StatementModel 
 {
 	public static enum Type
 	{

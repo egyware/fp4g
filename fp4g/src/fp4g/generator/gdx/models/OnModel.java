@@ -12,7 +12,6 @@ import fp4g.data.On;
 import fp4g.data.statements.Filter;
 import fp4g.data.statements.Source;
 import fp4g.exceptions.FP4GException;
-import fp4g.generator.Model;
 import fp4g.generator.gdx.JavaGenerator;
 import fp4g.generator.gdx.JavaParamListBuilder;
 import fp4g.generator.gdx.models.On.FiltersD;
@@ -28,7 +27,7 @@ import fp4g.generator.gdx.models.On.SourceModel;
  * @author Edgardo
  *
  */
-public class OnModel implements Model
+public class OnModel
 {
 	//Nombre categoria mensaje	
 	private final String name;
@@ -48,7 +47,7 @@ public class OnModel implements Model
 		return methodHandlers;
 	}
 
-	public static OnModel build(On on, Define current, JavaGenerator generator,	JavaCodeModel model) throws FP4GException
+	public static OnModel build(On on, Define current, JavaGenerator generator,	JavaMetaSourceModel model) throws FP4GException
 	{
 		final JavaParamListBuilder paramBuilder = new JavaParamListBuilder(generator);
 		OnModel onModel = new OnModel(on);

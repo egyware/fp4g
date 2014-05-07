@@ -1,16 +1,16 @@
-package ${class.package};
+package ${source.pckg};
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import com.apollo.GameState;
-<#if class.imports??>
-<#list class.imports as import>
+<#if source.imports??>
+<#list source.imports as import>
 import ${import};
 </#list>
 </#if>
 
-${autodoc}
-public class ${class.name} extends GameManager {
+${source.javadoc}
+public class ${source.name} extends GameManager {
 	public static final int Width  = ${width};
 	public static final int Height = ${height};
 	
@@ -20,9 +20,9 @@ public class ${class.name} extends GameManager {
 		super.create();
 		Assets.initialize();
 		
-		<#if start_state??>
+		<#if startState??>
 		//iniciando el juego 
-		${start_state} _start = new ${start_state}(this);     	
+		${startState} _start = new ${startState}(this);     	
 		nextState(_start);
 		<#else>
 		throw new RuntimeException("¿Se te olvido usar start?");
@@ -46,7 +46,7 @@ public class ${class.name} extends GameManager {
 	{
 		try 
 		{
-			Class<?> state = Class.forName("${class.package}.".concat(level));
+			Class<?> state = Class.forName("${source.pckg}.".concat(level));
 			Constructor<?> constructor = state.getConstructor(GameManager.class);
 			GameState gameState = (GameState) constructor.newInstance(this);
 			nextState(gameState);

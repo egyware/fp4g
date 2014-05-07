@@ -18,7 +18,7 @@ import fp4g.data.expresion.literals.ObjectLiteral;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.generator.ExpresionGenerator;
-import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.log.info.CannotEval;
 
 /**
@@ -26,7 +26,7 @@ import fp4g.log.info.CannotEval;
  * @param <T>
  *
  */
-public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,JavaCodeModel> 
+public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,JavaMetaSourceModel> 
 {
 	private final  Map<Class<?>, EG_Expresion> expresions = new HashMap<Class<?>, EG_Expresion>(6,1);
 	
@@ -48,11 +48,11 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	
 	private abstract class EG_Expresion
 	{		
-		public abstract String expr2string(JavaCodeModel model,Expresion expr) throws CannotEvalException;
+		public abstract String expr2string(JavaMetaSourceModel model,Expresion expr) throws CannotEvalException;
 	}
 	
 	@Override
-	public String generate(JavaCodeModel model, IValue<?> value) throws CannotEvalException 
+	public String generate(JavaMetaSourceModel model, IValue<?> value) throws CannotEvalException 
 	{
 		//TODO generalmente estos se les evalua y solo contiene el valor.
 		//TODO esto es raro, ni yo lo entiendo.
@@ -76,7 +76,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	}
 	
 	@Override
-	public String generate(JavaCodeModel model, Expresion expr) throws CannotEvalException
+	public String generate(JavaMetaSourceModel model, Expresion expr) throws CannotEvalException
 	{		
 		EG_Expresion eg = expresions.get(expr.getClass());		
 		if(eg != null)
@@ -97,7 +97,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	private class VarExprGen extends EG_Expresion
 	{
 		@Override
-		public String expr2string(JavaCodeModel model, Expresion expr) {
+		public String expr2string(JavaMetaSourceModel model, Expresion expr) {
 			VarId var = (VarId)expr;			
 			return var.varName;
 		}		
@@ -106,7 +106,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	private class LiteralExprGen extends EG_Expresion
 	{
 		@Override
-		public String expr2string(JavaCodeModel model,Expresion expr) {
+		public String expr2string(JavaMetaSourceModel model,Expresion expr) {
 			final Literal<?> literal = (Literal<?>)expr;
 			final Object value = literal.getValue();
 			if(value instanceof String)
@@ -127,7 +127,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	private class FunctionCallExprGen extends EG_Expresion
 	{
 		@Override
-		public String expr2string(JavaCodeModel model, Expresion expr) throws CannotEvalException 
+		public String expr2string(JavaMetaSourceModel model, Expresion expr) throws CannotEvalException 
 		{			
 			Expresion resultExpr = generator.function(model,(FunctionCall)expr);
 			return generate(model,resultExpr);			
@@ -137,7 +137,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	private class DirectCodeExprGen extends EG_Expresion
 	{
 		@Override
-		public String expr2string(JavaCodeModel model, Expresion expr) {
+		public String expr2string(JavaMetaSourceModel model, Expresion expr) {
 			DirectCode direct = (DirectCode)expr;			
 			return direct.code;
 		}		
@@ -146,7 +146,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	private class UnaryExprGen extends EG_Expresion
 	{
 		@Override
-		public String expr2string(JavaCodeModel model,Expresion expr) throws CannotEvalException
+		public String expr2string(JavaMetaSourceModel model,Expresion expr) throws CannotEvalException
 		{
 			UnaryOp un = (UnaryOp)expr;
 			StringBuilder builder = new StringBuilder();
@@ -169,7 +169,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaGenerator,Jav
 	private class BinaryExprGen extends EG_Expresion
 	{
 		@Override
-		public String expr2string(JavaCodeModel model,Expresion expr) throws CannotEvalException
+		public String expr2string(JavaMetaSourceModel model,Expresion expr) throws CannotEvalException
 		{
 			BinaryOp bin = (BinaryOp)expr;
 			StringBuilder builder = new StringBuilder();

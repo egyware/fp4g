@@ -1,15 +1,15 @@
 <#import "fp4g.ftl" as fp4g />
-package ${class.pckg};
-<#if class.imports??>
-<#list class.imports as import>
+package ${source.pckg};
+<#if source.imports??>
+<#list source.imports as import>
 import ${import};
 </#list>
 </#if>
 
-${class.javadoc}
-public class ${class.name} extends Entity
-<#if class.interfaces?has_content>
-implements <#list class.interfaces as interface>${interface}<#if interface_has_next>,</#if></#list>
+${source.javadoc}
+public class ${source.name} extends Entity
+<#if source.interfaces?has_content>
+implements <#list source.interfaces as interface>${interface}<#if interface_has_next>,</#if></#list>
 </#if>
 {
 	<#if behaviors??>
@@ -26,7 +26,7 @@ implements <#list class.interfaces as interface>${interface}<#if interface_has_n
 	</#if>
 	
 	
-	public ${class.name}(WorldContainer container)
+	public ${source.name}(WorldContainer container)
 	{
 		super(container);
 		<#if behaviors??>

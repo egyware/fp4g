@@ -18,10 +18,9 @@ import fp4g.data.statements.Unsubscribe;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.generator.Depend;
-import fp4g.generator.Model;
 import fp4g.generator.gdx.JavaGenerator;
 import fp4g.generator.gdx.models.DestroyStatementModel;
-import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.generator.gdx.models.SendStatementModel;
 import fp4g.generator.gdx.models.StatementModel;
 import fp4g.generator.gdx.models.SubscribeStatementModel;
@@ -29,14 +28,14 @@ import fp4g.log.Log;
 import fp4g.log.info.CannotEval;
 import fp4g.log.info.Warn;
 
-public class SourceModel implements Model
+public class SourceModel
 {
 	//El codigo
 	private final List<StatementModel> statements;
 	//Una lista de filtros (disyunción)
 	private final List<FiltersD> filters;
 	
-	public SourceModel(final Source source,final On on,final JavaCodeModel model, final JavaGenerator generator)
+	public SourceModel(final Source source,final On on,final JavaMetaSourceModel model, final JavaGenerator generator)
 	{		
 		filters = new LinkedList<FiltersD>();
 		if(source.statements != null && source.statements.size() > 0)
@@ -71,7 +70,7 @@ public class SourceModel implements Model
 						catch (DependResolverNotFoundException e1) 
 						{
 							Log.Exception(e1, subscribe.getLine());
-							model.addImport("com.apollo.message.".concat(subscribe.message.name).concat("Message"));
+							model.addRequireSource("com.apollo.message.".concat(subscribe.message.name).concat("Message"));
 						}
 					}
 					else
@@ -99,7 +98,7 @@ public class SourceModel implements Model
 						catch (DependResolverNotFoundException e1) 
 						{
 							Log.Exception(e1, unsubscribe.getLine());
-							model.addImport("com.apollo.message.".concat(unsubscribe.message.name).concat("Message"));
+							model.addRequireSource("com.apollo.message.".concat(unsubscribe.message.name).concat("Message"));
 						}
 					}
 					if(stmnt instanceof Destroy)
@@ -165,7 +164,7 @@ public class SourceModel implements Model
 							catch (DependResolverNotFoundException e1) 
 							{
 								Log.Exception(e1, send.getLine());
-								model.addImport("com.apollo.managers.".concat(send.toReceiverName));
+								model.addRequireSource("com.apollo.managers.".concat(send.toReceiverName));
 							}
 							break;
 						case Self:

@@ -28,9 +28,9 @@ import fp4g.generator.Depend;
 import fp4g.generator.Generator;
 import fp4g.generator.gdx.models.AddModel;
 import fp4g.generator.gdx.models.AssetModel;
-import fp4g.generator.gdx.models.GameModel;
+import fp4g.generator.gdx.models.GameFragment;
 import fp4g.generator.gdx.models.GameStateModel;
-import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.generator.gdx.models.ManagerModel;
 import fp4g.log.Log;
 import fp4g.log.info.CannotEval;
@@ -57,18 +57,13 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		
 		Template temp = generator.getTemplate("GameState.ftl");
 		
-		GameStateModel gameStateModel = new GameStateModel();
+		//modelo para todo el archivo completo
+		GameStateModel gameStateModel = new GameStateModel(generator.packageName,state.name);
+		gameStateModel.getMetaSource().setJavadoc(JavaGenerator.autodoc);
+		JavaMetaSourceModel meta = gameStateModel.getMetaSource();
 		
-		//class
-		JavaCodeModel code = new JavaCodeModel();		
-		code.pckg    = generator.packageName;
-		code.name    = state.name;
-		code.javadoc = JavaGenerator.autodoc;		
-		gameStateModel.setCode(code);
-		
-		//game
-		//TODO más adelante, si este modelo ya existe reutilizarlo de alguna manera entre generadores.
-		GameModel gameModel = new GameModel();
+		//game		
+		GameFragment gameModel = new GameFragment();
 		gameModel.setWidth(game.width);
 		gameModel.setWidth(game.height);
 		gameModel.setName(game.name);
@@ -133,7 +128,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 					{
 						for(IValue<?> i:imports)
 						{
-							code.addImport(generator.expresion(code, i));
+							meta.addRequireSource(generator.expresion(meta, i));
 						}
 					}					
 				}				
@@ -154,13 +149,13 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 					{
 						for(IValue<?> value:dparams)
 						{
-							params.add(generator.expresion(code, value));
+							params.add(generator.expresion(meta, value));
 						}
 					}
 				}
 				for(Expresion expr: manager.params)
 				{
-					params.add(generator.expresion(code,expr));					
+					params.add(generator.expresion(meta,expr));					
 				}
 				managerModel.params = params;				
 			}
@@ -176,7 +171,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 						{
 							for(IValue<?> value:dparams)
 							{
-								params.add(generator.expresion(code, value));
+								params.add(generator.expresion(meta, value));
 							}
 						}
 					}
@@ -197,7 +192,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
             {
                 builders.add(entity.name);
                 //agregar imports
-                code.imports.add(String.format("%s.entity.%sBuilder",generator.packageName,entity.name));                                                
+                meta.addRequireSource(String.format("%s.entity.%sBuilder",generator.packageName,entity.name));                                                
             }
         }
         gameStateModel.setBuilders(builders);
@@ -214,7 +209,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				List<String> params = new LinkedList<String>();
 				for(Expresion expr: entity.params)
 				{					
-					params.add(generator.expresion(code,expr));					
+					params.add(generator.expresion(meta,expr));					
 				}
 				addEntity.params = params;
 			}
@@ -256,7 +251,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			{
 				for(Entry<String, IValue<?>> entry: add.values.entrySet())
 				{
-					params.put(entry.getKey(), generator.expresion(code,entry.getValue()));				
+					params.put(entry.getKey(), generator.expresion(meta,entry.getValue()));				
 				}
 			}
 			AssetModel assetModel = new AssetModel(define, assetPath, params);
@@ -266,7 +261,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 			try
 			{
 				Depend depend = generator.resolveDependency(define);
-				depend.perform(define, code);
+				depend.perform(define, meta);
 			}
 			catch(DependResolverNotFoundException ex)
 			{
@@ -280,7 +275,7 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 		try
 		{
 			Depend depend = generator.resolveDependency(state);
-			depend.perform(state, code);
+			depend.perform(state, meta);
 		}
 		catch(DependResolverNotFoundException ex)
 		{
@@ -294,32 +289,32 @@ public class GameStateGenerator extends CodeGenerator<JavaGenerator> {
 				try
 				{
 					Depend depend = generator.resolveDependency(manager.define);
-					depend.perform(manager.define, code);
+					depend.perform(manager.define, meta);
 				}
 				catch(DependResolverNotFoundException drnfe)
 				{
 					Log.Exception(drnfe, manager.getLine());
-					code.imports.add(String.format("com.apollo.managers.%s", manager.name));
+					meta.addRequireSource(String.format("com.apollo.managers.%s", manager.name));
 				}
 			}
 			else
 			{
 				Log.Show(Warn.MissingDefineAdd, manager.getLine(),"Se asumirá que existe un Define asociado.");				
-				code.imports.add(String.format("com.apollo.managers.%s", manager.name));
+				meta.addRequireSource(String.format("com.apollo.managers.%s", manager.name));
 			}
 		}
 		
 		if(state_addentities.size() > 0)
 		{
-			code.imports.add("com.apollo.Entity");
+			meta.addRequireSource("com.apollo.Entity");
 		}
 		
 		if(generator.isDebug)
 		{
-			code.addImport("com.badlogic.gdx.graphics.FPSLogger");
+			meta.addRequireSource("com.badlogic.gdx.graphics.FPSLogger");
 		}
 		
-		code.addImport("com.apollo.Assets");
+		meta.addRequireSource("com.apollo.Assets");
 		
 		generator.createFile(path,String.format("%s.java",state.name), temp, gameStateModel);
 

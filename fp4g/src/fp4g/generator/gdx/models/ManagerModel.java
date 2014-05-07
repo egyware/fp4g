@@ -3,9 +3,7 @@ package fp4g.generator.gdx.models;
 
 import java.util.List;
 
-import fp4g.generator.Model;
-
-public class ManagerModel implements Model, Comparable<ManagerModel>
+public class ManagerModel implements Comparable<ManagerModel>
 {
 	public String name;
 	public String setMethod;

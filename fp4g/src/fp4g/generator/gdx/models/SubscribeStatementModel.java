@@ -26,6 +26,7 @@ public final class SubscribeStatementModel extends StatementModel
 		if(subscribe.method == null)
 		{	
 			//TODO nadaa? en serio? Sii quiero dormir -.-'
+			//06-05-2014 WTF!??? que traté de hacer acá, y porque chucha estaba cagao de sueño xD
 		}
 		else
 		{

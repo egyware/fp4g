@@ -1,8 +1,8 @@
 package fp4g.generator.gdx.models;
 
-import fp4g.generator.Model;
+import fp4g.generator.Fragment;
 
-public class PropertiesModel implements Model 
+public class PropertiesFragment implements Fragment 
 {
 	private String className;
 	private String title;
@@ -82,6 +82,11 @@ public class PropertiesModel implements Model
 	 */
 	public final void setUseGL20(boolean useGL20) {
 		this.useGL20 = useGL20;
+	}
+	@Override
+	public String getFragmentName() 
+	{
+		return PropertiesFragment.class.getSimpleName();
 	}
 	
 	

@@ -6,15 +6,15 @@ import fp4g.data.expresion.DirectCode;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.generator.gdx.GdxFunction;
 import fp4g.generator.gdx.JavaGenerator;
-import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaMetaSourceModel;
 
 public class CreateBox extends GdxFunction
 {
 
 	@Override
-	public Expresion generate(JavaGenerator generator, JavaCodeModel model, ExprList list) throws CannotEvalException
+	public Expresion generate(JavaGenerator generator, JavaMetaSourceModel model, ExprList list) throws CannotEvalException
 	{
-		model.addImport("com.apollo.Assets");
+		model.addRequireSource("com.apollo.Assets");
 		Expresion width  = list.get(0);			
 		Expresion height = list.get(1);
 		DirectCode expr = new DirectCode(String.format("Assets.createBox(%s,%s)",generator.expresion(model,width),generator.expresion(model,height)));			

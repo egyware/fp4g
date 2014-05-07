@@ -10,7 +10,7 @@ import fp4g.data.IValue;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.IList;
 import fp4g.generator.Depend;
-import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaMetaSourceModel;
 
 /**
  * Clase que resuelve las dependencias de el KeyMessage
@@ -27,14 +27,14 @@ public class DependResolver implements fp4g.data.expresion.IMap, Depend
 		importsRequired = new HashMap<String,ArrayList>();
 	}
 	
-	public void addImports(final String s,JavaCodeModel model)
+	public void addImports(final String s,JavaMetaSourceModel model)
 	{
 		IList imports = importsRequired.get(s);		
 		if(imports != null)
 		{
 			for(IValue<?> i:imports)
 			{
-				model.imports.add((String) i.getValue());
+				model.addRequireSource((String) i.getValue());
 			}
 		}
 	}
@@ -43,7 +43,7 @@ public class DependResolver implements fp4g.data.expresion.IMap, Depend
 	 * @see fp4g.classes.IDependResolver#perform(fp4g.data.Define, fp4g.generator.models.JavaCodeModel)
 	 */
 	@Override
-	public void perform(Define data, JavaCodeModel model)
+	public void perform(Define data, JavaMetaSourceModel model)
 	{		
 		addImports(data.name,model);		
 		//imports generales, si existen...

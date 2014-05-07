@@ -47,13 +47,13 @@ import fp4g.exceptions.GeneratorException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
-import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.log.Log;
 import fp4g.log.info.GeneratorError;
 import fp4g.log.info.Warn;
 import freemarker.template.Configuration;
 
-public class JavaGenerator extends Generator 
+public class JavaGenerator extends Generator<JavaMetaSourceModel> 
 {	
 	public static final String autodoc = "/**\n  * Autogenerado por FP4G\n  * [NO MODIFICAR]\n  */";
 	public String packageName = "";
@@ -407,19 +407,19 @@ public class JavaGenerator extends Generator
 	}
 
 	@Override
-	public <CodeModel> Expresion function(CodeModel model,	FunctionCall fcall) throws CannotEvalException
+	public Expresion function(JavaMetaSourceModel model, FunctionCall fcall) throws CannotEvalException
 	{		
-		return funcGen.generate((JavaCodeModel)model,fcall);
+		return funcGen.generate(model,fcall);
 	}
 
 	@Override
-	public <CodeModel> String expresion(CodeModel model,Expresion expr) throws CannotEvalException
+	public String expresion(JavaMetaSourceModel model,Expresion expr) throws CannotEvalException
 	{
-		return exprGen.generate((JavaCodeModel) model,expr);
+		return exprGen.generate(model,expr);
 	}
 	public <CodeModel> String expresion(CodeModel model,IValue<?> expr) throws CannotEvalException
 	{
-		return exprGen.generate((JavaCodeModel) model,expr);
+		return exprGen.generate((JavaMetaSourceModel) model,expr);
 	}
 	
 	public void setDefaults(Game gameConf)

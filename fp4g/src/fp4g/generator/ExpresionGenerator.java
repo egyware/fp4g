@@ -9,7 +9,8 @@ import fp4g.exceptions.CannotEvalException;
  * @param <T>
  *
  */
-public abstract class ExpresionGenerator <T extends Generator,M extends Model> {
+public abstract class ExpresionGenerator <T extends Generator,M extends MetaSourceModel>
+{
 	protected final T generator;
 	
 	public static enum CompareExpresion

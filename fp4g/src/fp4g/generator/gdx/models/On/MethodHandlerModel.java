@@ -4,10 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import fp4g.data.AddMethod;
-import fp4g.generator.Model;
 import fp4g.generator.gdx.models.VarCodeModel;
 
-public final class MethodHandlerModel implements Model
+public final class MethodHandlerModel
 	{
 		//que necesito acá, por cada MethodHander necesito:
 		//Nombre del metodo

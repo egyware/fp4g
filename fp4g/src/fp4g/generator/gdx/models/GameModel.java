@@ -1,34 +1,43 @@
 package fp4g.generator.gdx.models;
 
-import fp4g.generator.Model;
-
-public class GameModel implements Model
+public final class GameModel extends JavaSourceModel
 {
+	private String startState;
 	private int width;
 	private int height;
-	private String name;
-	
-	
-	public int getWidth() 
+
+	public GameModel(String pckg, String name) 
 	{
-		return width;
+		super(new JavaMetaSourceModel(pckg,name));		
 	}
+
+	public void setStartState(String name)
+	{
+		startState = name;		
+	}
+	
+	public String getStartState()
+	{
+		return startState;
+	}
+
 	public void setWidth(int width) 
 	{
-		this.width = width;
+		this.width = width;		
+	}
+	public int getWidth() 
+	{
+		return width;		
+	}
+
+	public void setHeight(int height) 
+	{
+		this.height = height;		
 	}
 	public int getHeight() 
 	{
-		return height;
+		return height;		
 	}
-	public void setHeight(int height) 
-	{
-		this.height = height;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
+
+	
 }

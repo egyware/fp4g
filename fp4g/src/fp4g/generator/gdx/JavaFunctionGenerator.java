@@ -12,14 +12,14 @@ import fp4g.data.Expresion;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.generator.FunctionGenerator;
-import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.log.info.CannotEval;
 
 /**
  * @author Edgardo
  *
  */
-public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaCodeModel>
+public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaMetaSourceModel>
 {		
 	private final Map<String, GdxFunction> functions;
 	public JavaFunctionGenerator(JavaGenerator jg)
@@ -30,7 +30,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaGenerator,JavaC
 	
 	@Override
 	@SuppressWarnings("unchecked")	
-	public Expresion generate(JavaCodeModel model,FunctionCall fc) throws CannotEvalException
+	public Expresion generate(JavaMetaSourceModel model,FunctionCall fc) throws CannotEvalException
 	{
 		GdxFunction fg = functions.get(fc.functionName);
 		if(fg == null)

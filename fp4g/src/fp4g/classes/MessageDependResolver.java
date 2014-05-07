@@ -10,7 +10,7 @@ import fp4g.data.IValue;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.IList;
 import fp4g.generator.Depend;
-import fp4g.generator.gdx.models.JavaCodeModel;
+import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.log.Log;
 import fp4g.log.info.Warn;
 
@@ -28,27 +28,27 @@ public class MessageDependResolver implements fp4g.data.expresion.IMap, Depend
 	{
 		importsRequired = new HashMap<String,ArrayList>();
 	}
-	public void addImports(final String s,JavaCodeModel model)
+	public void addImports(final String s,JavaMetaSourceModel model)
 	{
 		addImports(s,model,true);
 	}
 	
-	public void addImports(final String s,JavaCodeModel model,boolean defaults)
+	public void addImports(final String s,JavaMetaSourceModel model,boolean defaults)
 	{
 		IList imports = importsRequired.get(s);		
 		if(imports != null)
 		{
 			for(IValue<?> i:imports)
 			{
-				model.imports.add((String) i.getValue());
+				model.addRequireSource((String) i.getValue());
 			}
 		}
 		else if(defaults)
 		{
 			//si los imports no existen usaremos los por defecto
 			Log.Show(Warn.DependResolverNotFound,String.format("Usando imports por defecto para \"%s\"", s));
-			model.addImport(String.format("com.apollo.messages.%sMessage",s));
-			model.addImport(String.format("com.apollo.messages.%sMessageHandler",s));
+			model.addRequireSource(String.format("com.apollo.messages.%sMessage",s));
+			model.addRequireSource(String.format("com.apollo.messages.%sMessageHandler",s));
 		}
 	}
 	
@@ -56,7 +56,7 @@ public class MessageDependResolver implements fp4g.data.expresion.IMap, Depend
 	 * @see fp4g.classes.IDependResolver#perform(fp4g.data.Define, fp4g.generator.models.JavaCodeModel)
 	 */
 	@Override
-	public void perform(Define data, JavaCodeModel model)
+	public void perform(Define data, JavaMetaSourceModel model)
 	{		
 		addImports(data.name,model);		
 		//imports generales, si existen...

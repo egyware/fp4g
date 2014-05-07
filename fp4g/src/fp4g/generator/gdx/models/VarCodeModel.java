@@ -3,9 +3,8 @@ package fp4g.generator.gdx.models;
 import java.util.HashMap;
 import java.util.Map;
 
-import fp4g.generator.Model;
-
-public class VarCodeModel implements Model {
+public class VarCodeModel
+{
 	private static final Map<String,String> defaultValues;
 	static
 	{

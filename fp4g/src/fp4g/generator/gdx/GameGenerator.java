@@ -16,10 +16,14 @@ import fp4g.data.define.GameState;
 import fp4g.data.define.Message;
 import fp4g.exceptions.GeneratorException;
 import fp4g.generator.CodeGenerator;
-import fp4g.generator.gdx.models.PropertiesModel;
+import fp4g.generator.gdx.models.GameFragment;
+import fp4g.generator.gdx.models.GameModel;
+import fp4g.generator.gdx.models.JavaMetaSourceModel;
+import fp4g.generator.gdx.models.PropertiesFragment;
 import freemarker.template.Template;
 
-public class GameGenerator extends CodeGenerator<JavaGenerator> {
+public class GameGenerator extends CodeGenerator<JavaGenerator> 
+{
 
 	public GameGenerator(JavaGenerator generator) {
 		super(generator);		
@@ -34,11 +38,12 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 		
 		
 		//aqui probaré la nueva forma de tratar los datos
+		//06-05-2014: Si, se ve mucho más ordenado así. Estoy implementando de apoco esto en otros generadores.
 		{
 			//tengo la plantilla
 			Template propertiesTemplate = generator.getTemplate("properties.ftl");
 			//ahora necesito el modelo
-			PropertiesModel propertiesModel = new PropertiesModel();
+			PropertiesFragment propertiesModel = new PropertiesFragment();
 
 			//ahora cargo el modelo con datos. De alguna forma
 			propertiesModel.setClassName(generator.packageName.concat(".").concat(game.name));
@@ -49,21 +54,18 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 			propertiesModel.setResizable(false);			
 			
 			//genero
-			generator.createFile(generator.sourceDir,"game.properties",propertiesTemplate, propertiesModel);			
-			
-			
+			generator.createFile(generator.sourceDir,"game.properties",propertiesTemplate, propertiesModel);
 		}
 		
-		HashMap<String,Object> root = new HashMap<String, Object>();
-		HashMap<String,Object> clazz = new HashMap<String, Object>();
-		clazz.put("package", generator.packageName);
-		clazz.put("name",game.name);
-		root.put("class",clazz);
-		root.put("autodoc", JavaGenerator.autodoc);
-		root.put("width", game.width);
-		root.put("height", game.height);
-		//agregar imports!
+		GameModel gameModel = new GameModel(generator.packageName, game.name);
+		JavaMetaSourceModel clazz = gameModel.getMetaSource();
 		
+		clazz.setJavadoc(JavaGenerator.autodoc);
+		
+		gameModel.setWidth(game.width);
+		gameModel.setHeight(game.height);
+
+		//agregar imports!		
 		{
 			List<String> imports = new LinkedList<String>();
 			String arrayImports[] = new String[]
@@ -73,15 +75,15 @@ public class GameGenerator extends CodeGenerator<JavaGenerator> {
 			};
 			//Arrays.sort(arrayImports);
 			Collections.addAll(imports, arrayImports);
-			clazz.put("imports", imports);
+			clazz.addRequireSource(arrayImports);
 		}
 		
 		if(game.startState != null)
 		{			
-			root.put("start_state", game.startState.getName());
+			gameModel.setStartState(game.startState.getName());
 		}
 		
-		generator.createFile(path,String.format("%s.java",game.name), temp,root);
+		generator.createFile(path,String.format("%s.java",game.name), temp,gameModel);
 		
 		generateOthers(game, path);
 	}

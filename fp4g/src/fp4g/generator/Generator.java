@@ -32,7 +32,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.Version;
 
-public abstract class Generator {	
+public abstract class Generator<M extends MetaSourceModel> {	
 	protected abstract void initialize(File path,Options options,Configuration cfg);
 	protected abstract void generateCode(ICode gameData,File path) throws GeneratorException;
 	protected abstract void compileFiles(Collection<File> files) throws GeneratorException; 
@@ -92,8 +92,8 @@ public abstract class Generator {
 	}
 	
 	
-	public abstract <CodeModel> Expresion function(CodeModel model, FunctionCall fcall) throws CannotEvalException;
-	public abstract <CodeModel> String   expresion(CodeModel model, Expresion expr) throws CannotEvalException;
+	public abstract Expresion function(M model, FunctionCall fcall) throws CannotEvalException;
+	public abstract String   expresion(M model, Expresion expr) throws CannotEvalException;
 	
 	
 	

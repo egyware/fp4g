@@ -2,27 +2,26 @@ package fp4g.generator.gdx.models;
 
 import java.util.List;
 
-import fp4g.generator.Model;
-
-public class GameStateModel implements Model 
+public class GameStateModel extends JavaSourceModel
 {
-	private JavaCodeModel code;
 	private List<ManagerModel> managers;
-	private GameModel game;
+	private GameFragment game;
 	private List<String> builders;
 	private List<AssetModel> assets;
 	private boolean debug;
 	private List<AddModel> entities;
 	
-	public final JavaCodeModel getCode() 
+	public GameStateModel(String pckg, String name) 
 	{
-		return code;
+		super(new JavaMetaSourceModel(pckg,name));
+		
 	}
+	
 	public final List<ManagerModel> getManagers() 
 	{
 		return managers;
 	}
-	public final GameModel getGame() 
+	public final GameFragment getGame() 
 	{
 		return game;
 	}
@@ -34,18 +33,16 @@ public class GameStateModel implements Model
 	{
 		return assets;
 	}
-	public final void setCode(JavaCodeModel clazz) 
-	{
-		this.code = clazz;
-	}
+	
 	public final void setManagers(List<ManagerModel> managers) 
 	{
 		this.managers = managers;
 	}
-	public final void setGame(GameModel game) 
+	
+	public final void setGame(GameFragment game) 
 	{
 		this.game = game;
-	}
+	}	
 	public final void setBuilders(List<String> builders) 
 	{
 		this.builders = builders;
