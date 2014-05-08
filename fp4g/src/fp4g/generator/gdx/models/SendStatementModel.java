@@ -3,6 +3,8 @@ package fp4g.generator.gdx.models;
 import java.util.LinkedList;
 import java.util.List;
 
+import fp4g.generator.StatementModel;
+
 public final class SendStatementModel extends StatementModel 
 {	
 	private final String message;

@@ -9,6 +9,7 @@ public final class EntityModel extends JavaSourceModel
 	private List<HashMap<String, Object>> behaviors;
 	private List<OnModel> onList;
 	private List<VarCodeModel> flags;
+	private List<WhenModel> whenList;
 
 	public EntityModel(String pckg, String name) 
 	{
@@ -51,6 +52,16 @@ public final class EntityModel extends JavaSourceModel
 	public List<VarCodeModel> getFlags()
 	{
 		return flags;
+	}
+
+	public void setWhenList(List<WhenModel> whenList) 
+	{
+		this.whenList = whenList;		
+	}
+	
+	public List<WhenModel> getWhenList() 
+	{
+		return this.whenList;		
 	}
 	
 	

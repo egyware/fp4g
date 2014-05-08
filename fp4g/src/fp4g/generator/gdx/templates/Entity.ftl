@@ -50,6 +50,25 @@ implements <#list source.interfaces as interface>${interface}<#if interface_has_
 		for (int i = 0, s = behaviors.size(); s > i; i++) {
 			behaviors.get(i).update(delta);
 		}
+		<#if whenList?has_content>
+		//when
+		<#list whenList as when>
+		final boolean check${when.flagName?cap_first} = (${when.condition});
+		</#list>
+		<#list whenList as when>
+		if(check${when.flagName?cap_first} && !${when.flagName})
+		{
+			${when.flagName} = true;
+			<#list when.statements as stmnt>						
+				<@fp4g.translate statement=stmnt />
+			</#list>
+		}
+		else if(!check${when.flagName?cap_first} && ${when.flagName})	
+		{
+			${when.flagName} = false;
+		}
+		</#list>
+		</#if>
 	}
 	
 	protected void initialize()

@@ -31,7 +31,9 @@ import fp4g.data.Code;
 import fp4g.data.Define;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
+import fp4g.data.ILine;
 import fp4g.data.IValue;
+import fp4g.data.Statements;
 import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
@@ -47,6 +49,7 @@ import fp4g.exceptions.GeneratorException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
+import fp4g.generator.StatementModel;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.log.Log;
 import fp4g.log.info.GeneratorError;
@@ -64,6 +67,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 	public File sourceDir;
 	public final JavaExpresionGenerator exprGen;
 	public final JavaFunctionGenerator funcGen;
+	public final JavaStatementBuilder stmntBuilder;
 	
 	public final Map<Class<? extends Code>,Class<? extends CodeGenerator<JavaMetaSourceModel, JavaGenerator>>> generators;
 	
@@ -75,6 +79,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 		
 		exprGen = new JavaExpresionGenerator(this);
 		funcGen = new JavaFunctionGenerator(this);
+		stmntBuilder = new JavaStatementBuilder(this);
 	}
 	
 	
@@ -491,5 +496,12 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 			e.printStackTrace();
 		}
 	}
+
+	//TODO por mientras lo vamos a llamar así...
+	@Override	
+	public List<StatementModel> generateStatements(JavaMetaSourceModel model, ILine container, Statements statements) 
+	{
+		return stmntBuilder.generateStatements(model,container, statements);
+	}	
 
 }

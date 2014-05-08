@@ -185,6 +185,20 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	}
 	
 	@Override
+	public ILine visitWhen(FP4GParser.WhenContext ctx)
+	{
+		//TODO posible error, hay que chequear bien esto
+		Define parent = (Define)current.peek();
+		final Expresion expresion = exprVisitor.visit(ctx.condition);
+		final ILine statement = visit(ctx.stmnt);
+		//TODO verificar si expresion es realmente una condición y no otra expresión
+		
+		parent.addWhen(expresion, statement);
+		
+		return null;
+	}
+	
+	@Override
 	public ILine visitOn(FP4GParser.OnContext ctx)
 	{
 		IDefine parent = current.peek();
@@ -571,7 +585,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		//TODO este casting se ve algo peligroso...
 		Define parent = (Define)current.peek();
 		NameList flags = nameListVisitor.getFlags(ctx);
-		parent.setFlagList(flags);
+		parent.addFlags(flags);
 		
 		return null;
 	}

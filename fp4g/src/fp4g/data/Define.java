@@ -20,6 +20,7 @@ import fp4g.data.expresion.literals.FloatLiteral;
 import fp4g.data.expresion.literals.IntegerLiteral;
 import fp4g.data.expresion.literals.ObjectLiteral;
 import fp4g.data.expresion.literals.StringLiteral;
+import fp4g.data.vartypes.BasicType;
 import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.log.info.GeneratorError;
@@ -33,6 +34,7 @@ public abstract class Define extends Code implements IDefine
 	public String name;	
 	public NameList flags;
 	public NameList paramNameList;
+	public LinkedList<When> whenList;
 		
 	public final IDefine parent;
 	
@@ -91,9 +93,26 @@ public abstract class Define extends Code implements IDefine
 	public void setNameList(NameList list) {
 		this.paramNameList = list;		
 	}
-	public void setFlagList(NameList list)
+	
+	public void addFlag(DeclVar flag) 
 	{
-		this.flags = list;
+		if(flags == null)
+		{
+			flags = new NameList();
+		}
+		flags.add(flag);		
+	}
+	
+	public void addFlags(NameList list) 
+	{
+		if(flags == null)
+		{
+			flags = new NameList();
+		}
+		for(DeclVar flag: list)
+		{
+			flags.add(flag);
+		}
 	}
 	
 	public void setAdd(Add add)
@@ -445,5 +464,20 @@ public abstract class Define extends Code implements IDefine
 	public IDefine getParent() 
 	{
 		return parent;
-	}	
+	}
+
+	
+	private int when_counter;	
+	public void addWhen(Expresion expresion, ILine statement)
+	{
+		final DeclVar flag = new DeclVar(BasicType.Bool,String.format("whenFlag_%d", ++when_counter));
+		addFlag(flag);
+		if(whenList == null)
+		{
+			whenList = new LinkedList<When>();
+		}
+		whenList.add(new When(expresion, statement, flag));		
+	}
+	
+
 }

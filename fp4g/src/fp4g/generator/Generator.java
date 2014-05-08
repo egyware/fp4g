@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.List;
 import java.util.TreeSet;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
@@ -15,6 +16,8 @@ import fp4g.Options;
 import fp4g.data.Define;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
+import fp4g.data.ILine;
+import fp4g.data.Statements;
 import fp4g.data.define.Game;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.data.libs.Lib;
@@ -32,10 +35,11 @@ import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.Version;
 
-public abstract class Generator<M extends MetaSourceModel> {	
+public abstract class Generator<M extends MetaSourceModel> 
+{	
 	protected abstract void initialize(File path,Options options,Configuration cfg);
 	protected abstract void generateCode(ICode gameData,File path) throws GeneratorException;
-	protected abstract void compileFiles(Collection<File> files) throws GeneratorException; 
+	protected abstract void compileFiles(Collection<File> files) throws GeneratorException;
 	protected abstract Collection<File> getRequiredFiles(File path,File file);
 	protected abstract void copyFiles(Collection<File> files);
 	
@@ -94,6 +98,7 @@ public abstract class Generator<M extends MetaSourceModel> {
 	
 	public abstract Expresion function(M model, FunctionCall fcall) throws CannotEvalException;
 	public abstract String   expresion(M model, Expresion expr) throws CannotEvalException;
+	public abstract List<StatementModel> generateStatements(M model, ILine container, Statements statements);
 	
 	
 	

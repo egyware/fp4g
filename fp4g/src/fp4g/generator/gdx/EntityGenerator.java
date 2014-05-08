@@ -12,15 +12,19 @@ import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
 import fp4g.data.On;
+import fp4g.data.Statements;
+import fp4g.data.When;
 import fp4g.data.define.Entity;
 import fp4g.exceptions.FP4GException;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
+import fp4g.generator.StatementModel;
 import fp4g.generator.gdx.models.EntityBuilderModel;
 import fp4g.generator.gdx.models.EntityModel;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.generator.gdx.models.OnModel;
 import fp4g.generator.gdx.models.VarCodeModel;
+import fp4g.generator.gdx.models.WhenModel;
 import fp4g.generator.gdx.models.On.MethodHandlerModel;
 import fp4g.log.info.Error;
 import freemarker.template.Template;
@@ -171,6 +175,19 @@ public class EntityGenerator extends JavaCodeGenerator
 				}
 			}
 			entityModel.setFlags(flags);
+		}
+		if(entity.whenList != null)
+		{
+			LinkedList<WhenModel> whenList = new LinkedList<WhenModel>();
+			for(When when: entity.whenList)
+			{
+				//TODO null mala cuea xD (ojo hay que implementar una especie de container para funciones)
+				Statements statementsData = new Statements();
+				statementsData.add(when.statement);
+				List<StatementModel> statements = generator.generateStatements(entityMeta, null, statementsData);
+				whenList.add(new WhenModel(when.flag.name, generator.expresion(entityMeta, when.condition),statements));
+			}
+			entityModel.setWhenList(whenList);
 		}
 		
 		

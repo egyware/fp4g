@@ -1,6 +1,7 @@
 package fp4g.generator.gdx.models;
 
 import fp4g.data.statements.Destroy;
+import fp4g.generator.StatementModel;
 
 
 public final class DestroyStatementModel extends StatementModel 

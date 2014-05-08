@@ -13,7 +13,7 @@ import fp4g.data.statements.Source;
  * @author egyware
  *
  */
-public class On extends Code
+public class On extends Line
 {
 	public final String name;
 	public final Message message;

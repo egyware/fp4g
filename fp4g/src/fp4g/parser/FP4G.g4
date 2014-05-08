@@ -78,8 +78,9 @@ gameValue
 		| add DOTCOMA
 		| set DOTCOMA
 		| start DOTCOMA
+		| when DOTCOMA
 		| on
-		| flags
+		| flags		
 		;
 		
 set
@@ -257,6 +258,7 @@ defineValue
 		| on
 		| assets
 		| flags
+		| when DOTCOMA
 		;
 
 exprList: expr (COMA expr)*;

@@ -74,7 +74,7 @@ public class Main
 			p.setBuildParseTree(true);
 			
 			
-			Generator generator = new JavaGenerator();
+			Generator<?> generator = new JavaGenerator();
 			LibContainer libs = generator.loadLibs();
 			Game gameConf = new Game(libs);
 			generator.setDefaults(gameConf);						

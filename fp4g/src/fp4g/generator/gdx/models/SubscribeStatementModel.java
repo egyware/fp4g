@@ -5,6 +5,7 @@ import java.util.List;
 
 import fp4g.data.statements.Subscribe;
 import fp4g.data.statements.Unsubscribe;
+import fp4g.generator.StatementModel;
 
 
 public final class SubscribeStatementModel extends StatementModel 

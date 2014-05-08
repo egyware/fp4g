@@ -1,4 +1,4 @@
-package fp4g.generator.gdx.models;
+package fp4g.generator;
 
 public abstract class StatementModel 
 {
