@@ -10,14 +10,18 @@
 <#case 1><#-- delete owner -->			
 		getWorld().deleteEntity(this);
 <#break>
-<#case 2>
-<#if statement.subscribe>
+<#case 2><#-- Subscribe -->
 	<#list statement.method as method>
 		${statement.attach}.getWorld().getManager(${statement.subscribeTo}.class).addEventHandler(${statement.message}Message.on${method?capitalize}${statement.message},${statement.attach});
 	</#list>
-<#else>
+<#break>
+<#case 3><#-- Unsubscribe -->
+	<#list statement.method as method>
 		${statement.attach}.getWorld().getManager(${statement.subscribeTo}.class).removeEventHandler(${statement.message}Message.on${method?capitalize}${statement.message},${statement.attach});
-</#if>
+	</#list>
+<#break>
+<#case 4>
+		${statement.varName} = (${statement.expresion});
 <#break>
 <#default>
 		//TODO No se reconoce la instrucción: "${statement.class.simpleName}"

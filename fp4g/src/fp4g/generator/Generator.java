@@ -24,6 +24,7 @@ import fp4g.data.libs.Lib;
 import fp4g.data.libs.LibContainer;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
+import fp4g.exceptions.FP4GException;
 import fp4g.exceptions.GeneratorException;
 import fp4g.log.Log;
 import fp4g.parser.FP4GDataVisitor;
@@ -98,7 +99,7 @@ public abstract class Generator<M extends MetaSourceModel>
 	
 	public abstract Expresion function(M model, FunctionCall fcall) throws CannotEvalException;
 	public abstract String   expresion(M model, Expresion expr) throws CannotEvalException;
-	public abstract List<StatementModel> generateStatements(M model, ILine container, Statements statements);
+	public abstract List<StatementModel> generateStatements(M model, ILine container, Statements statements) throws FP4GException ;
 	
 	
 	

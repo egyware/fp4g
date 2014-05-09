@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import fp4g.classes.ManagerData;
-import fp4g.data.AddAsset;
-import fp4g.data.AddDefine;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
 import fp4g.data.IValue;
+import fp4g.data.add.AddAsset;
+import fp4g.data.add.AddDefine;
 import fp4g.data.define.Asset;
 import fp4g.data.define.Entity;
 import fp4g.data.define.Game;

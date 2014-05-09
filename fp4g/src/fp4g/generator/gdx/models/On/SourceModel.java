@@ -6,16 +6,18 @@ import java.util.List;
 import fp4g.data.On;
 import fp4g.data.statements.Filter;
 import fp4g.data.statements.Source;
+import fp4g.exceptions.FP4GException;
 import fp4g.generator.StatementModel;
 import fp4g.generator.gdx.JavaGenerator;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
+import fp4g.log.Log;
 
 public class SourceModel
 {
 	//El codigo
-	private final List<StatementModel> statements;
+	private List<StatementModel> statements;
 	//Una lista de filtros (disyunción)
-	private final List<FiltersD> filters;
+	private List<FiltersD> filters;
 	
 	public SourceModel(final Source source,final On on,final JavaMetaSourceModel model, final JavaGenerator generator)
 	{		
@@ -23,8 +25,14 @@ public class SourceModel
 		if(source.statements != null && source.statements.size() > 0)
 		{
 			
-			statements = generator.generateStatements(model, on, source.statements);
-			
+			try 
+			{
+				statements = generator.generateStatements(model, on, source.statements);
+			} 
+			catch (FP4GException e) 
+			{
+				Log.Exception(e, on.getLine());				
+			}			
 		}
 		else
 		{

@@ -21,7 +21,7 @@ expr
          | functionName=ID 
 		    ABRE_PAR exprList? CIERRA_PAR #functionCallExpr         
          | accessVarOp                    #varExpr         
-		 ;	
+		 ;
 	
 accessVarOp
 		:

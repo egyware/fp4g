@@ -183,11 +183,11 @@ locals
 		ID {$messageName = $ID.text; }
 		(DOUBLEDOT filters = onFilters)?
 		ABRE_COR
-		statements = onStatements
+		statements
 		CIERRA_COR 
 		;
 
-onStatements:
+statements:
 			(statement DOTCOMA) *
 		;		
 
@@ -196,7 +196,13 @@ statement :
 			| destroy
 			| subscribe
 			| unsubscribe
+			| assign
 			;
+
+assign
+:
+	varName = ID  EQUAL expr
+;
 			
 destroy		:
 			DESTROY

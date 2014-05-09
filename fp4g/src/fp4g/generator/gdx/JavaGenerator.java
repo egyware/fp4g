@@ -45,6 +45,7 @@ import fp4g.data.expresion.FunctionCall;
 import fp4g.data.libs.LibContainer;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
+import fp4g.exceptions.FP4GException;
 import fp4g.exceptions.GeneratorException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
@@ -499,7 +500,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 
 	//TODO por mientras lo vamos a llamar así...
 	@Override	
-	public List<StatementModel> generateStatements(JavaMetaSourceModel model, ILine container, Statements statements) 
+	public List<StatementModel> generateStatements(JavaMetaSourceModel model, ILine container, Statements statements) throws FP4GException 
 	{
 		return stmntBuilder.generateStatements(model,container, statements);
 	}	

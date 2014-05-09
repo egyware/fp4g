@@ -3,11 +3,12 @@ package fp4g.data;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class Statements extends Code implements Iterable<ILine>{
+public class Statements extends Code implements Iterable<Statement>
+{
 
-	private final LinkedList<ILine> codigo = new LinkedList<ILine>();
+	private final LinkedList<Statement> codigo = new LinkedList<Statement>();
 	
-	public void add(ILine code)
+	public void add(Statement code)
 	{
 		codigo.add(code);
 	}	
@@ -18,7 +19,7 @@ public class Statements extends Code implements Iterable<ILine>{
 		return codigo.size();
 	}
 	@Override
-	public Iterator<ILine> iterator() 
+	public Iterator<Statement> iterator() 
 	{
 		return codigo.iterator();		
 	}	

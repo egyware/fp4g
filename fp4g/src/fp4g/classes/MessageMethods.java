@@ -6,8 +6,8 @@ import java.util.Set;
 
 import org.antlr.v4.misc.Utils;
 
-import fp4g.data.AddMethod;
 import fp4g.data.IValue;
+import fp4g.data.add.AddMethod;
 import fp4g.data.expresion.IMap;
 
 /**

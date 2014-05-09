@@ -1,8 +1,13 @@
 /**
  * 
  */
-package fp4g.data;
+package fp4g.data.add;
 
+import fp4g.data.Add;
+import fp4g.data.AddType;
+import fp4g.data.Define;
+import fp4g.data.DefineType;
+import fp4g.data.ExprList;
 import fp4g.data.expresion.IMap;
 
 /**

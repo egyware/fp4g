@@ -1,11 +1,10 @@
 package fp4g.data.statements;
 
-import fp4g.data.AddMethod;
 import fp4g.data.ExprList;
-import fp4g.data.ILine;
 import fp4g.data.Line;
+import fp4g.data.add.AddMethod;
 
-public final class Filter extends Line implements ILine
+public final class Filter extends Line
 {	
 	public final AddMethod method;
 	public final ExprList exprList;

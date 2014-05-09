@@ -13,6 +13,9 @@ import org.antlr.v4.misc.Utils;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
 
+import fp4g.data.add.AddAsset;
+import fp4g.data.add.AddDefine;
+import fp4g.data.add.AddMethod;
 import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.literals.BoolLiteral;
@@ -468,7 +471,7 @@ public abstract class Define extends Code implements IDefine
 
 	
 	private int when_counter;	
-	public void addWhen(Expresion expresion, ILine statement)
+	public void addWhen(Expresion expresion, Statement statement)
 	{
 		final DeclVar flag = new DeclVar(BasicType.Bool,String.format("whenFlag_%d", ++when_counter));
 		addFlag(flag);
@@ -478,6 +481,4 @@ public abstract class Define extends Code implements IDefine
 		}
 		whenList.add(new When(expresion, statement, flag));		
 	}
-	
-
 }

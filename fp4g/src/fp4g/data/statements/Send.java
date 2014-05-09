@@ -1,12 +1,12 @@
 package fp4g.data.statements;
 
-import fp4g.data.AddMethod;
-import fp4g.data.Code;
 import fp4g.data.ExprList;
 import fp4g.data.Instance;
+import fp4g.data.Statement;
+import fp4g.data.add.AddMethod;
 import fp4g.data.define.Manager;
 
-public class Send extends Code 
+public class Send extends Statement
 {
 	//Send que se caracteriza por tener
 	//Mensaje a enviar (methodo de message y el mensaje)
@@ -18,6 +18,7 @@ public class Send extends Code
 	
 	public Send(Instance type,AddMethod mm, String receiver)
 	{
+		super(Statement.Type.Send);
 		method = mm;
 		toReceiverType = type;
 		toReceiverName = receiver;
@@ -26,6 +27,7 @@ public class Send extends Code
 	
 	public Send(Instance type,AddMethod mm, Manager manager)
 	{
+		super(Statement.Type.Send);
 		this.method = mm;
 		toReceiverType = type;
 		toReceiverName = manager.name;

@@ -1,17 +1,12 @@
 package fp4g.parser;
 
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import fp4g.classes.MessageMethods;
 import fp4g.data.Add;
-import fp4g.data.AddAsset;
-import fp4g.data.AddDefine;
-import fp4g.data.AddMethod;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.ExprList;
@@ -19,10 +14,13 @@ import fp4g.data.Expresion;
 import fp4g.data.IDefine;
 import fp4g.data.ILine;
 import fp4g.data.IValue;
-import fp4g.data.Instance;
 import fp4g.data.NameList;
 import fp4g.data.On;
+import fp4g.data.Statement;
 import fp4g.data.Statements;
+import fp4g.data.add.AddAsset;
+import fp4g.data.add.AddDefine;
+import fp4g.data.add.AddMethod;
 import fp4g.data.define.Asset;
 import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
@@ -33,13 +31,9 @@ import fp4g.data.define.Message;
 import fp4g.data.define.Struct;
 import fp4g.data.expresion.IMap;
 import fp4g.data.libs.Lib;
-import fp4g.data.statements.Destroy;
 import fp4g.data.statements.Filter;
 import fp4g.data.statements.OrFilters;
-import fp4g.data.statements.Send;
 import fp4g.data.statements.Source;
-import fp4g.data.statements.Subscribe;
-import fp4g.data.statements.Unsubscribe;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.FP4GRuntimeException;
@@ -61,12 +55,11 @@ import fp4g.parser.FP4GParser.UsingValuesContext;
  */
 public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 {
-	private final IDefine container;
-	private MessageMethods methods;
-	private final Stack<IDefine> current;	
-	private Statements statements;
+	private final IDefine container;	
+	private final Stack<IDefine> current;
 	private final FP4GExpresionVisitor exprVisitor;
 	private final FP4GNameListVisitor nameListVisitor;
+	private final FP4GStatementVisitor statementVisitor;
 	
 	public FP4GDataVisitor(final Lib lib)
 	{
@@ -74,6 +67,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		current = new Stack<IDefine>();		
 		exprVisitor = new FP4GExpresionVisitor(current);
 		nameListVisitor = new FP4GNameListVisitor(exprVisitor,current);
+		statementVisitor = new FP4GStatementVisitor(lib,current,exprVisitor);
 	}
 	public FP4GDataVisitor(final Game game)
 	{
@@ -81,14 +75,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		current = new Stack<IDefine>();		
 		exprVisitor = new FP4GExpresionVisitor(current);
 		nameListVisitor = new FP4GNameListVisitor(exprVisitor,current);
-		try
-		{
-			methods = (MessageMethods)game.get(Message.METHODS).getValue();
-		}
-		catch(NullPointerException e)
-		{
-			throw new FP4GRuntimeException(Error.MessageMethodNotFound,"Los metodos para los mensajes no se encontrarón",e);
-		}
+		statementVisitor = new FP4GStatementVisitor(game,current,exprVisitor);
 	}
 	
 	@Override
@@ -188,10 +175,10 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	public ILine visitWhen(FP4GParser.WhenContext ctx)
 	{
 		//TODO posible error, hay que chequear bien esto
-		Define parent = (Define)current.peek();
+		final Define parent       = (Define)current.peek();
 		final Expresion expresion = exprVisitor.visit(ctx.condition);
-		final ILine statement = visit(ctx.stmnt);
-		//TODO verificar si expresion es realmente una condición y no otra expresión
+		final Statement statement = statementVisitor.visit(ctx.stmnt);
+		//TODO verificar si expresion es realmente una condición
 		
 		parent.addWhen(expresion, statement);
 		
@@ -202,7 +189,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	public ILine visitOn(FP4GParser.OnContext ctx)
 	{
 		IDefine parent = current.peek();
-		
+
 		//en vez de solo crearlo, tengo que buscarlo... y si no existe crearlo.
 		On on = parent.getOn(ctx.messageName);
 		if(on == null)
@@ -219,16 +206,15 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 				Log.Exception(e, ctx.start.getLine());
 				on = new On(ctx.messageName);
 			}
-			
+
 			//solo si es nuevito, se agrega
 			parent.setOn(on);
 		}
-		
-		visit(ctx.statements);
+
+		Statements statements = statementVisitor.getStatements(ctx.statements());
 		//al evento on, se crea un nuevo codigo y se le añaden los filtros, si es que existen.
 		//falta solo agregarle el codigo :)
-		Source source = on.addSource(statements);
-		statements = null;
+		Source source = on.addSource(statements);		
 		if(ctx.filters != null)
 		{		
 			try
@@ -244,9 +230,10 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			}
 
 		}		
-		
+
 		return null;		
 	}
+
 	
 	@Override 
 	//Corresponde al O
@@ -293,168 +280,6 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		Filter filter = new Filter(method,list);
 		
 		return filter;		
-	}
-	
-	
-
-	@Override
-	public ILine visitOnStatements(FP4GParser.OnStatementsContext ctx)
-	{
-		statements = new Statements();	
-		if(ctx.children != null)
-		{
-			for(ParseTree c:ctx.children)
-			{
-				ILine code = visit(c);
-				if(code != null)
-				{
-					statements.add(code);
-				}
-			}		
-		}
-		return statements;		
-	}
-	
-	
-	@Override
-	public ILine visitDestroy(FP4GParser.DestroyContext ctx)
-	{
-		Destroy destroy = new Destroy(Instance.Self);
-		return destroy;
-	}
-	
-	@Override 
-	public ILine visitSubscribe(FP4GParser.SubscribeContext ctx)
-	{
-		Define define = (Define)current.peek();
-		Subscribe subscribe;
-		//where=ID ON message=ID (DOUBLEDOT method=ID)?
-		String whereName = ctx.where.getText();
-		Instance whereType = Instance.Self;
-		String messageName = ctx.message.getText();
-		String methodName = (ctx.method != null)?ctx.method.getText():null;
-		
-		//obtener message
-		Message message = define.getDefine(DefineType.MESSAGE, messageName);
-		//objetener  method
-		AddMethod method = message.getAddMethod(methodName);
-		
-		Define where = define.getDefine(whereName);
-		
-		//identificar where que es
-		whereType = Instance.System;
-		subscribe = new Subscribe(whereType, where, message, method);
-		
-		return subscribe;
-	}
-	
-	@Override 
-	public ILine visitUnsubscribe(FP4GParser.UnsubscribeContext ctx)
-	{
-		Define define = (Define)current.peek();
-		Unsubscribe subscribe;
-		//where=ID ON message=ID (DOUBLEDOT method=ID)?
-		String whereName = ctx.where.getText();
-		Instance whereType = Instance.Self;
-		String messageName = ctx.message.getText();
-		String methodName = (ctx.method != null)?ctx.method.getText():null;
-		
-		//obtener message
-		Message message = define.getDefine(DefineType.MESSAGE, messageName);
-		//objetener  method
-		AddMethod method = message.getAddMethod(methodName);
-		
-		Define where = define.getDefine(whereName);
-		
-		//identificar where que es
-		whereType = Instance.System;
-		subscribe = new Unsubscribe(whereType, where, message, method);
-		
-		return subscribe;
-	}
-	
-	@Override
-	public ILine visitSend(FP4GParser.SendContext ctx)
-	{
-		Define define = (Define)current.peek();
-		
-		AddMethod method = methods.getMessageMethod(ctx.messageMethodName);
-		if(method == null)
-		{
-			throw new FP4GRuntimeException(Error.FilterMethodMissing,"No se encontró un metodo para el filtro:  ".concat(ctx.messageMethodName));
-		}
-		Instance type = null;
-		String receiver = null;
-		//Busqueda de quien envia mensaje.
-		//1.- Game
-		//2.- Self
-		//3.- Other
-		//4.- Componente
-		//5.- Tag
-		//6.- Sistema
-		type = (ctx.receiverType == null)?Instance.Behavior:ctx.receiverType;
-		
-		
-		Send send = null;
-		switch(type)
-		{		
-		case Game:			
-		case Other:			
-		case Self:
-			send = new Send(type,method,receiver);
-			break;
-		default:
-			receiver = ctx.receiverName;
-		//Behavior
-			//buscar en los add de la entidad.
-			List<AddDefine> behaviors = define.getAddDefines(DefineType.BEHAVIOR);
-			for(AddDefine bhvr:behaviors)
-			{
-				//buscar de forma iterativa
-				if(bhvr.name.equals(receiver))
-				{
-					type = Instance.Behavior; //Es un behavior!
-					send = new Send(type,method,receiver);
-					break;
-				}
-			}
-	    //Tag
-			//buscar algún tag, si es que existe
-			
-	    //System
-			
-			//buscar en los defines de sistemas.
-			Collection<IDefine> managers = container.getDefines(DefineType.MANAGER);
-			for(IDefine manager:managers)
-			{
-				if(manager.getName().equals(receiver))
-				{
-					if(((Manager)manager).isReceiver())
-					{
-						type = Instance.System; //es un sistema!, ojo que el sistema puede que no esté definido...
-						send = new Send(type,method,(Manager)manager);
-					}
-					else
-					{
-						//lanzar error						
-						throw new FP4GRuntimeException(Error.ManagerIsNotAReceiver,String.format("El manager \"%s\" no puede recibir mensajes.",receiver));							 
-					}
-					break;
-				}
-			}					
-		
-			break;		
-		}		
-		
-		ExprList list = exprVisitor.getExprList(ctx.exprList());
-		if(list != null)
-		{		
-			//TODO checkar la exprList, checkar que?, Compararla contra MessageMethod.Params se requiere conocimiento adicional.
-			send.setArguments(list);		
-		}
-		
-		
-		return send;		
 	}
 	
 	@Override 

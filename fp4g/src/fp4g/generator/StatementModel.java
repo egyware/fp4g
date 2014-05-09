@@ -1,15 +1,11 @@
 package fp4g.generator;
 
+import fp4g.data.Statement;
+
 public abstract class StatementModel 
 {
-	public static enum Type
-	{
-		SendStatement,
-		DestroyStatement,
-		SubscribeStatement,
-	}
-	private final Type type;
-	public StatementModel(Type type)
+	private final Statement.Type type;
+	public StatementModel(Statement.Type type)
 	{
 		this.type = type;
 	}

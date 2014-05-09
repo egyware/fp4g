@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import fp4g.data.AddDefine;
 import fp4g.data.DeclVar;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
@@ -14,6 +13,7 @@ import fp4g.data.ICode;
 import fp4g.data.On;
 import fp4g.data.Statements;
 import fp4g.data.When;
+import fp4g.data.add.AddDefine;
 import fp4g.data.define.Entity;
 import fp4g.exceptions.FP4GException;
 import fp4g.generator.Depend;

@@ -3,6 +3,7 @@ package fp4g.generator.gdx.models;
 import java.util.LinkedList;
 import java.util.List;
 
+import fp4g.data.Statement;
 import fp4g.generator.StatementModel;
 
 public final class SendStatementModel extends StatementModel 
@@ -19,7 +20,7 @@ public final class SendStatementModel extends StatementModel
 	
 	public SendStatementModel(String message, String to, boolean direct) 
 	{
-		super(StatementModel.Type.SendStatement);
+		super(Statement.Type.Send);
 		this.message = message;
 		this.to = to;
 		this.direct = direct;		

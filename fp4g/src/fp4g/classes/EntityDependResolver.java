@@ -1,9 +1,9 @@
 package fp4g.classes;
 
-import fp4g.data.AddDefine;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IValue;
+import fp4g.data.add.AddDefine;
 import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;
 import fp4g.data.expresion.ArrayList;

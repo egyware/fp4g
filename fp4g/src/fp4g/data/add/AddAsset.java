@@ -1,8 +1,10 @@
 /**
  * 
  */
-package fp4g.data;
+package fp4g.data.add;
 
+import fp4g.data.Add;
+import fp4g.data.AddType;
 import fp4g.data.define.Asset;
 import fp4g.data.expresion.IMap;
 

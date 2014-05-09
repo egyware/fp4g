@@ -11,8 +11,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import fp4g.data.AddMethod;
 import fp4g.data.Define;
+import fp4g.data.add.AddMethod;
 import fp4g.data.define.Game;
 import fp4g.data.libs.Lib;
 import fp4g.data.libs.LibContainer;

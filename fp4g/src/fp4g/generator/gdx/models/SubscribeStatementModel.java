@@ -3,6 +3,7 @@ package fp4g.generator.gdx.models;
 import java.util.LinkedList;
 import java.util.List;
 
+import fp4g.data.Statement;
 import fp4g.data.statements.Subscribe;
 import fp4g.data.statements.Unsubscribe;
 import fp4g.generator.StatementModel;
@@ -12,15 +13,13 @@ public final class SubscribeStatementModel extends StatementModel
 {		
 	private final String subscribeTo;
 	private final String message;
-	private final List<String> method; 
-	private final boolean isSubscribe;
+	private final List<String> method;
 	private final String attach;
 	
 	public SubscribeStatementModel(Subscribe subscribe,boolean b) 
 	{
-		super(StatementModel.Type.SubscribeStatement);
-		attach = b?"entity":"this";
-		isSubscribe = true;
+		super(Statement.Type.Subscribe);
+		attach = b?"entity":"this";		
 		subscribeTo = subscribe.instance.name;
 		message = subscribe.message.name;
 		method = new LinkedList<String>();
@@ -37,9 +36,8 @@ public final class SubscribeStatementModel extends StatementModel
 	
 	public SubscribeStatementModel(Unsubscribe subscribe,boolean b) 
 	{
-		super(StatementModel.Type.SubscribeStatement);
-		attach = b?"entity":"this";
-		isSubscribe = false;
+		super(Statement.Type.Unsubscribe);
+		attach = b?"entity":"this";		
 		subscribeTo = subscribe.instance.name;
 		message = subscribe.message.name;
 		method = new LinkedList<String>();
@@ -63,10 +61,6 @@ public final class SubscribeStatementModel extends StatementModel
 
 	public final List<String> getMethod() {
 		return method;
-	}
-
-	public final boolean isSubscribe() {
-		return isSubscribe;
 	}
 
 	public final String getAttach() {

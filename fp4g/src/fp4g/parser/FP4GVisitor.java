@@ -37,6 +37,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitFunctionCallExpr(@NotNull FP4GParser.FunctionCallExprContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#assign}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssign(@NotNull FP4GParser.AssignContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#using}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -112,13 +119,6 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParExpr(@NotNull FP4GParser.ParExprContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#onStatements}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOnStatements(@NotNull FP4GParser.OnStatementsContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#addDefine}.
@@ -406,6 +406,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitSubscribe(@NotNull FP4GParser.SubscribeContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#statements}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatements(@NotNull FP4GParser.StatementsContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#addExpr}.

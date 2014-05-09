@@ -5,10 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import fp4g.data.AddMethod;
 import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.On;
+import fp4g.data.add.AddMethod;
 import fp4g.data.statements.Filter;
 import fp4g.data.statements.Source;
 import fp4g.exceptions.FP4GException;

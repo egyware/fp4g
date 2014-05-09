@@ -3,7 +3,7 @@ package fp4g.generator.gdx.models.On;
 import java.util.LinkedList;
 import java.util.List;
 
-import fp4g.data.AddMethod;
+import fp4g.data.add.AddMethod;
 import fp4g.generator.gdx.models.VarCodeModel;
 
 public final class MethodHandlerModel
