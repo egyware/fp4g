@@ -112,11 +112,31 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 		transform_player = player.getBehavior(TransformFamily.class);
 		int x = (int)transform_player.x;
 		int y = (int)transform_player.y;
-		if((x >= xo  && x <= xo + w) && (y >= yo && y <= yo + h))
+		if(x > xo + screen_width_2 && x < xo + w - screen_width_2 )
 		{
-			camera.position.x = xo+screen_width_2;
-			camera.position.y = yo+screen_height/2;
-		}		
+			camera.position.x = transform_player.x;
+		}
+		else if(x >= xo && x < xo + screen_width_2)
+		{
+			camera.position.x = xo + screen_width_2;
+		}
+		else
+		{
+			camera.position.x = xo + w - screen_width_2;
+		}
+		
+		if(y > yo + screen_height_4 && y < yo + h - screen_height_4)
+		{
+			camera.position.y = transform_player.y;
+		}
+		else if(y >= yo && y < yo + screen_height_4)
+		{
+			camera.position.y = yo + screen_height_4;
+		}
+		else
+		{
+			camera.position.y = yo + h - screen_height_4;
+		}	
 	}
 
 	@Override
