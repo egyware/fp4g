@@ -2,7 +2,7 @@ package com.apollo;
 
 import com.apollo.managers.EntityManager;
 
-public abstract class BaseBehavior implements Behavior
+public abstract class BaseBehavior implements Behavior, MessageHandler
 {
 	protected Entity owner;
 							
@@ -82,6 +82,11 @@ public abstract class BaseBehavior implements Behavior
 	@Override
 	public void uninitialize() 
 	{
+	}
+	
+	public void onMessage(Message<? extends MessageHandler> message, Object... args)
+	{
+		message.dispatch(this, args);				
 	}
 
 }

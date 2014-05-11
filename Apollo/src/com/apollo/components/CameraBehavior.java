@@ -10,9 +10,9 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 {
-	private final OrthographicCamera camera;
-	private Entity player;
+	private final OrthographicCamera camera;	
 	private TransformFamily transform_player;
+	private Entity player;
 
 	private int xo;
 	private int yo;
@@ -56,13 +56,16 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	public void initialize()
 	{
 		owner.addEventHandler(CameraMessage.onFollowCamera, this);
-		owner.addEventHandler(CameraMessage.onUnfollowCamera, this);		
+		owner.addEventHandler(CameraMessage.onUnfollowCamera, this);
+		owner.addEventHandler(CameraMessage.onCheckAndFollowCamera, this);
 	}
 	
 	@Override
 	public void uninitialize()
 	{
-		owner.getWorld().getEntityManager();
+		owner.removeEventHandler(CameraMessage.onFollowCamera, this);
+		owner.removeEventHandler(CameraMessage.onUnfollowCamera, this);
+		owner.removeEventHandler(CameraMessage.onCheckAndFollowCamera, this);
 	}
 	
 	public static CameraBehavior build(Camera cam)
@@ -72,8 +75,7 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	
 	public static CameraBehavior build(Camera cam, Number screen_width, Number screen_height,Number w, Number h)
 	{
-		return new CameraBehavior((OrthographicCamera)cam, w.intValue(), h.intValue(),screen_width.intValue()/2, screen_height.intValue()/4);
-		
+		return new CameraBehavior((OrthographicCamera)cam, w.intValue(), h.intValue(),screen_width.intValue(), screen_height.intValue());		
 	}
 	
 	public static CameraBehavior build(Camera cam,  Number screen_width, Number screen_height, Rectangle r)
@@ -95,13 +97,16 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 			{
 				camera.position.y = transform_player.y;
 			}
+			//notificamos si se salio el cochinon
+			if((x <= xo || x >= xo + w)||(y <= yo || y >= yo + h))
+			{
+				owner.onMessage(CameraMessage.onExitFollowZoneCamera, player);
+			}
 		}		
-	}
-
-	
+	}	
 
 	@Override
-	public void onFollow(Entity entity)
+	public void onFollowCamera(Entity entity)
 	{
  		player = entity;
 		transform_player = player.getBehavior(TransformFamily.class);
@@ -115,9 +120,27 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	}
 
 	@Override
-	public void onUnfollow() 
+	public void onUnfollowCamera() 
 	{	
 		player = null;
 		transform_player = null;
+	}
+
+	@Override
+	public void onExitFollowZoneCamera(Entity entity) 
+	{
+	}
+
+	@Override
+	public void onCheckAndFollowCamera(Entity entity) 
+	{
+		final TransformFamily t = entity.getBehavior(TransformFamily.class);
+		final float x = t.x;
+		final float y = t.y;
+		//revisamos si este mono está dentro de la zona
+		if((x >= xo && x <= xo + w)&&(y >= yo && y <= yo + h))
+		{
+			onFollowCamera(entity); //si es así lo seguimos :)
+		}
 	}
 }

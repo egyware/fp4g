@@ -8,6 +8,8 @@ public enum CameraMessage implements Message<CameraMessageHandler>
 {
 	onFollowCamera,
 	onUnfollowCamera,	
+	onExitFollowZoneCamera,
+	onCheckAndFollowCamera,
 	;
 
 	@Override
@@ -17,11 +19,17 @@ public enum CameraMessage implements Message<CameraMessageHandler>
 		switch(this)
 		{		
 		case onFollowCamera:
-			handler.onFollow((Entity)args[0]);
+			handler.onFollowCamera((Entity)args[0]);
 			break;
 		case onUnfollowCamera:
-			handler.onUnfollow();
+			handler.onUnfollowCamera();
 			break;
+		case onCheckAndFollowCamera:
+			handler.onCheckAndFollowCamera((Entity)args[0]);
+			break;
+		case onExitFollowZoneCamera:
+			handler.onExitFollowZoneCamera((Entity)args[0]);
+			break;		
 		}
 		
 	}

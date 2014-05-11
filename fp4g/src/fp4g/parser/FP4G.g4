@@ -129,7 +129,7 @@ returns
 			  | GOAL     { $type = DefineType.GOAL;  }			  
 		 )
 		 ID { $addName = $ID.text; }
-		 ( ABRE_PAR exprList CIERRA_PAR )?
+		 ( ABRE_PAR exprList? CIERRA_PAR )?
 		 ( exprParams = array )?
 ;	
 
@@ -214,7 +214,7 @@ returns
 	:
 	{$receiverType = Instance.Self;}
 	SEND method=ID {$messageMethodName = $method.text;}
-	(ABRE_PAR exprList CIERRA_PAR)?
+	(ABRE_PAR exprList? CIERRA_PAR)?
 	(
 	 TO (
 	       receiver=OTHER {$receiverType = Instance.Other;}
@@ -247,7 +247,7 @@ locals
 ]
 		:
 		ID {$filterName = $ID.text;}
-		( ABRE_PAR exprList CIERRA_PAR )?
+		( ABRE_PAR exprList? CIERRA_PAR )?
 		;
 
 

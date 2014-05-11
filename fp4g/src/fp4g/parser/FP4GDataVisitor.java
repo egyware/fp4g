@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import fp4g.data.Add;
 import fp4g.data.Define;
@@ -76,6 +77,17 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		exprVisitor = new FP4GExpresionVisitor(current);
 		nameListVisitor = new FP4GNameListVisitor(exprVisitor,current);
 		statementVisitor = new FP4GStatementVisitor(game,current,exprVisitor);
+	}
+	
+	@Override
+	public ILine visit(ParseTree tree)
+	{
+		ILine line = super.visit(tree);
+		if(line != null && tree instanceof TerminalNode)
+		{
+			line.setLine(((TerminalNode)tree).getSymbol().getLine());
+		}
+		return line;
 	}
 	
 	@Override
@@ -217,18 +229,9 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		Source source = on.addSource(statements);		
 		if(ctx.filters != null)
 		{		
-			try
-			{
-				ctx.filters.orFilters = source.filters;
-				ctx.filters.message   = on.message;
-				visit(ctx.filters);				
-			}
-			catch(FP4GRuntimeException e)
-			{
-				//Error, acá tratamos de ahcer el mejor esfuerzo posible.
-				Log.Exception(e,ctx.start.getLine());
-			}
-
+			ctx.filters.orFilters = source.filters;
+			ctx.filters.message   = on.message;
+			visit(ctx.filters);
 		}		
 
 		return null;		
@@ -549,5 +552,5 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			map = null;
 		}
 		return map;
-	}
+	}	
 }

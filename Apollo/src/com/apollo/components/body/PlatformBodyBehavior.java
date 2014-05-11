@@ -33,15 +33,18 @@ implements PlatformMessageHandler
 	
 	//initial values
 	public int ratio = 5;
-	public int height = 5;
-	public Vector2 position = new Vector2();
+	public int height = 5;	
 	
 	public float desiredHorizontalVelocity = 0;
 		
-	public PlatformBodyBehavior()
+	public PlatformBodyBehavior(float x, float y, int ratio,  int height) 
 	{
+		this.x = x;
+		this.y = y;		
+		this.ratio = ratio;
+		this.height = height;
 	}
-	
+
 	@Override
 	public void uninitialize()
 	{
@@ -56,7 +59,7 @@ implements PlatformMessageHandler
 		owner.addEventHandler(PlatformMessage.onJumpPlatform, this);
 		
 		World world = owner.getWorld().getManager(PhysicsManager.class).getb2World();
-	
+		final Vector2 position = new Vector2(x,y);
 		{
 			BodyDef defA = new BodyDef();		
 			defA.position.set(position.cpy().add(0,height).scl(SCALE));
@@ -113,6 +116,7 @@ implements PlatformMessageHandler
 		    motor = (RevoluteJoint)world.createJoint(motorDef);
 		}	
 	}
+		
 	
 	/* (non-Javadoc)
 	 * @see com.apollo.components.BodyBehavior#getBody()
@@ -202,11 +206,8 @@ implements PlatformMessageHandler
 	
 	public static PlatformBodyBehavior build(Number x, Number y, Number ratio, Number height)
 	{
-		PlatformBodyBehavior behavior = new PlatformBodyBehavior();
-		behavior.position.x = x.floatValue();
-		behavior.position.y = y.floatValue();
-		behavior.ratio = ratio.intValue();
-		behavior.height = height.intValue();
+		PlatformBodyBehavior behavior = new PlatformBodyBehavior(x.floatValue(), y.floatValue(),ratio.intValue(),height.intValue());
+		
 		return behavior;
 	}
 		

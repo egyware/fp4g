@@ -36,7 +36,6 @@ public class Main
 			@Override
 			public void uncaughtException(Thread t, Throwable e) 
 			{
-				e.printStackTrace(System.err);
 				if(e instanceof FP4GRuntimeException)
 				{
 					Log.Exception((FP4GRuntimeException)e, -1);					
@@ -84,11 +83,19 @@ public class Main
 			
 			if(tree != null)
 			{
-				FP4GDataVisitor visitor = new FP4GDataVisitor(gameConf);
-				visitor.visit(tree);				
-								
-				generator.generate(options,gameConf, new File(outDirectory));
-				System.out.println(String.format("Parsing complete: %s",inputFile));				
+				try
+				{
+					FP4GDataVisitor visitor = new FP4GDataVisitor(gameConf);				
+					visitor.visit(tree);
+									
+					generator.generate(options,gameConf, new File(outDirectory));
+					System.out.println(String.format("Parsing complete: %s",inputFile));
+				}
+				catch(FP4GRuntimeException e)
+				{
+					Log.Exception(e, e.getLine());  
+					System.out.println(String.format("Parsing incomplete: %s",inputFile));					
+				}
 			}
 			else
 			{

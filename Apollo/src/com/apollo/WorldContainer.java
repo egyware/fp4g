@@ -73,7 +73,8 @@ public class WorldContainer
 		manager.setWorldContainer(this);
 	}
 	
-	public <T extends Manager> T getManager(Class<T> managerType) {
+	public <T extends Manager> T getManager(Class<T> managerType) 
+	{
 		return managerType.cast(managers.get(managerType));
 	}
 	

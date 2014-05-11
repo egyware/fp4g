@@ -121,7 +121,7 @@ public class EntityManager extends Manager implements MessageReceiver
 			for(int i=0; i<size; i++)
 			{
 				MessageHandler handler = listeners.get(i);
-				message.dispatch(handler,args);			
+				handler.onMessage(message, args);			
 			}
 		}		
 	}

@@ -21,6 +21,19 @@ public class FiltersD implements Iterable<String>
 		condiciones = new LinkedList<String>();
 	}
 	
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("FilterD {");
+		for(String c:condiciones)
+		{
+			builder.append(c);
+			builder.append(',');
+		}
+		builder.append('}');
+		return builder.toString();
+	}
+	
 	public List<String> getConditions()
 	{
 		return condiciones;

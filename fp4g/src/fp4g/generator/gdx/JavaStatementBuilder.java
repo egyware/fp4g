@@ -102,8 +102,8 @@ public class JavaStatementBuilder {
 					break;
 				case System:
 					to = "world.getManager(".concat(send.toReceiverName).concat(".class)");
-					message = String.format("on%2$s%1$s", msg.name,	Utils.capitalize(send.method.name));
-					direct = true;
+					message = String.format("%1sMessage.on%2$s%1$s", msg.name,	Utils.capitalize(send.method.name));
+					direct = false;
 
 					try 
 					{

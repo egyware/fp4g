@@ -59,7 +59,7 @@ public class JavaParamListBuilder
 			switch((BasicType)type)
 			{
 			case Bool:
-				name = "Boolean";
+				name = "boolean";
 				break;
 			case Entity:
 				name = "Entity";

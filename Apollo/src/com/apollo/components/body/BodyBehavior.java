@@ -32,7 +32,7 @@ implements MoveMessageHandler
 		owner.addEventHandler(MoveMessage.onForwardMove, this);
 		owner.addEventHandler(MoveMessage.onAngularSpeedMove, this);
 		owner.addEventHandler(MoveMessage.onAngularSpeedMove, this);
-		simpleBody.setUserData(owner);
+		simpleBody.setUserData(owner);	
 	}
 	
 	@Override

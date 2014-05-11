@@ -20,7 +20,9 @@ DEFINE GAME
 	DEFINE MESSAGE Camera
 	[
 		ADD follow(Entity entity);
-		ADD unFollow();
+		ADD unfollow();		
+		ADD exitFollowZone(Entity entity);
+		ADD checkAndFollow(Entity entity);
 	]
 	
 	DEFINE MESSAGE Mouse

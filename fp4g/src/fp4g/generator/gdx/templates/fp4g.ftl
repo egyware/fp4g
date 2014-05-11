@@ -12,12 +12,12 @@
 <#break>
 <#case 2><#-- Subscribe -->
 	<#list statement.method as method>
-		${statement.attach}.getWorld().getManager(${statement.subscribeTo}.class).addEventHandler(${statement.message}Message.on${method?capitalize}${statement.message},${statement.attach});
+		${statement.attach}.getWorld().getManager(${statement.subscribeTo}.class).addEventHandler(${statement.message}Message.on${method?cap_first}${statement.message},${statement.attach});
 	</#list>
 <#break>
 <#case 3><#-- Unsubscribe -->
 	<#list statement.method as method>
-		${statement.attach}.getWorld().getManager(${statement.subscribeTo}.class).removeEventHandler(${statement.message}Message.on${method?capitalize}${statement.message},${statement.attach});
+		${statement.attach}.getWorld().getManager(${statement.subscribeTo}.class).removeEventHandler(${statement.message}Message.on${method?cap_first}${statement.message},${statement.attach});
 	</#list>
 <#break>
 <#case 4>
@@ -45,7 +45,7 @@
 	{
 		<#if method.sources?has_content>
 		<#list method.sources as source>		
-		<#if source.filters?has_content>
+		<#if source.filters?has_content>		
 		<#if (source.filters?size == 1)>
 		if(<#list source.filters as filter><#list filter.iterator() as condition>${condition}<#if condition_has_next> && </#if></#list></#list>)
 		<#else>

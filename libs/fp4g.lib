@@ -10,6 +10,11 @@ DEFINE GAME
 		}
 		AS ManagerData;
 	]
+	DEFINE MANAGER BroadcastManager
+	[
+		SET priority = 4;
+		SET receiver = true;		
+	]
 	
 	DEFINE MANAGER PhysicsManager
 	[
@@ -156,7 +161,11 @@ DEFINE GAME
 			EntityManager = 
 			{
 				"com.apollo.managers.EntityManager",				
-			} 
+			},
+			BroadcastManager = 
+			{
+				"com.apollo.managers.BroadcastManager",
+			}
 		} AS DependResolver,
 		Entity =
 		{ 
