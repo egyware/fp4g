@@ -75,7 +75,12 @@ public class WorldContainer
 	
 	public <T extends Manager> T getManager(Class<T> managerType) 
 	{
-		return managerType.cast(managers.get(managerType));
+		final Manager manager = managers.get(managerType);
+		if(manager == null)
+		{
+			throw new RuntimeException(String.format("%s no puede ser null",managerType.getSimpleName()));
+		}
+		return managerType.cast(manager);
 	}
 	
 	public void setEntityBuilder(String builderType, EntityBuilder entityBuilder) {

@@ -17,8 +17,7 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	private int xo;
 	private int yo;
 	private int w;
-	private int h;	
-	private int screen_height;
+	private int h;
 	private int screen_width_2;
 	private int screen_height_4;
 	
@@ -32,8 +31,7 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	{		
 		this(cam);
 		this.xo = 0;
-		this.yo = 0;		
-		this.screen_height = sh;
+		this.yo = 0;
 		this.screen_width_2 = sw/2;
 		this.screen_height_4 = sh/4;
 		this.w = w;
@@ -44,8 +42,7 @@ public class CameraBehavior extends BaseBehavior implements CameraMessageHandler
 	{		
 		this(cam);
 		this.xo = x;
-		this.yo = y;				
-		this.screen_height = sh;
+		this.yo = y;
 		this.screen_width_2 = sw/2;
 		this.screen_height_4 = sh/4;
 		this.w = w;

@@ -1,23 +1,22 @@
-/**
- * 
- */
 package com.apollo.components.body;
 
 import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
+import com.apollo.Entity;
 import com.apollo.managers.PhysicsManager;
+import com.apollo.messages.ContactMessage;
+import com.apollo.messages.ContactMessageHandler;
 import com.apollo.messages.PlatformMessage;
 import com.apollo.messages.PlatformMessageHandler;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 
 
 /**
@@ -25,23 +24,23 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
  *
  */
 public class PlatformBodyBehavior extends PhysicsFamily
-implements PlatformMessageHandler
+implements PlatformMessageHandler, ContactMessageHandler
 {
-	private Body circle;
 	private Body box;
-	private RevoluteJoint motor;
-	
 	//initial values
-	public int ratio = 5;
+	public int width = 5;
 	public int height = 5;	
 	
 	public float desiredHorizontalVelocity = 0;
+	private Fixture bottonSensor;
+	private Fixture leftSensor;
+	private Fixture rightSensor;
 		
-	public PlatformBodyBehavior(float x, float y, int ratio,  int height) 
+	public PlatformBodyBehavior(float x, float y, int width,  int height) 
 	{
 		this.x = x;
 		this.y = y;		
-		this.ratio = ratio;
+		this.width = width;
 		this.height = height;
 	}
 
@@ -50,6 +49,7 @@ implements PlatformMessageHandler
 	{
 		owner.removeEventHandler(PlatformMessage.onMovePlatform, this);
 		owner.removeEventHandler(PlatformMessage.onJumpPlatform, this);
+		owner.removeEventHandler(ContactMessage.onBeginContact, this);
 	}
 	
 	@Override	
@@ -57,66 +57,53 @@ implements PlatformMessageHandler
 	{	
 		owner.addEventHandler(PlatformMessage.onMovePlatform, this);
 		owner.addEventHandler(PlatformMessage.onJumpPlatform, this);
+		owner.addEventHandler(ContactMessage.onBeginContact, this);
 		
 		World world = owner.getWorld().getManager(PhysicsManager.class).getb2World();
 		final Vector2 position = new Vector2(x,y);
+		final Vector2 temp = new Vector2();
 		{
-			BodyDef defA = new BodyDef();		
-			defA.position.set(position.cpy().add(0,height).scl(SCALE));
-			defA.type = BodyDef.BodyType.DynamicBody;
-			defA.fixedRotation = true;		
-			box = world.createBody(defA);
-			box.setUserData(owner);
-			
+			BodyDef def = new BodyDef();		
+			def.position.set(position.cpy().scl(SCALE));
+			def.type = BodyDef.BodyType.DynamicBody;
+			def.fixedRotation = true;		
+			box = world.createBody(def);
+			box.setUserData(owner);			
 		
+			final float width_2 = width*0.5f;
+			final float height_2 = height*0.5f;
 			//shape
 		    PolygonShape boxShape = new PolygonShape();
-		    boxShape.setAsBox(ratio*SCALE,height*SCALE);
-		    FixtureDef fixtureDef = new FixtureDef();;
-		    fixtureDef.density = 1.0f; //!\todo puede ser un parametro
-		    fixtureDef.friction = 1.0f;//!\todo puede ser un parametro
+		    boxShape.setAsBox(width_2*SCALE,height_2*SCALE);
+		    //FixtureDef fixtureDef = new FixtureDef();
+		    //fixtureDef.density = 1.0f; //!\todo puede ser un parametro
+		    //fixtureDef.friction = 1.0f;//!\todo puede ser un parametro
 	//	    fixtureDefA.filter.groupIndex = -1; //!\todo puede ser un parametro
 	//	    fixtureDefA.filter.categoryBits = 0x0101;
 	//	    fixtureDefA.filter.maskBits = 0x1101;
-		    fixtureDef.shape = boxShape;
-		    box.createFixture(fixtureDef);
-		    boxShape.dispose(); //ya no la usaremos más
-		    //guardo en caché los vertices por decirlo asi
-		    //b2PolygonShape shape = static_cast<b2PolygonShape*>(fixtureBox->GetShape());
-		    //b2Vec2 *vertices = shape->m_vertices;
-		}
-		
-		{
-			//crear el body B
-		    BodyDef defB = new BodyDef();
-		    defB.type = BodyDef.BodyType.DynamicBody;
-		    defB.position.set(position.cpy().scl(SCALE));	    
-		    circle = world.createBody(defB);
-		    circle.setUserData(owner);
+		    //fixtureDef.shape = boxShape;
+		    //box.createFixture(fixtureDef);
+		    box.createFixture(boxShape, 1.0f);
 
-		    //shape
-		    CircleShape circleShape = new CircleShape();
-		    circleShape.setRadius(ratio*SCALE);
-		    FixtureDef fixtureDef = new FixtureDef();
-		    fixtureDef.friction = 1.0f;//!\todo puede ser un parametro
-		    fixtureDef.density = 1.0f;//!\todo puede ser un parametro
-		    //fixtureDefB.filter.groupIndex = -1; //!\todo puede ser un parametro
-		    //fixtureDefB.filter.categoryBits = 0x0101;
-		    //fixtureDefB.filter.maskBits = 0x1101;
-		    fixtureDef.shape = circleShape;
-		    circle.createFixture(fixtureDef);		    
+		    FixtureDef sensorDef = new FixtureDef();
+		    sensorDef.isSensor = true;
+		    sensorDef.density = 1;
+		    sensorDef.shape = boxShape;
+		    //sensor abajo
+		    boxShape.setAsBox(width_2*0.75f*SCALE, 4*SCALE,temp.set(0,-height_2*SCALE),0);
+		    bottonSensor = box.createFixture(sensorDef);		    
+		    //sensor izquierda
+		    boxShape.setAsBox(4*SCALE, height_2*0.75f*SCALE,temp.set(-width_2*SCALE,0),0);
+		    leftSensor = box.createFixture(sensorDef);		    
+		    //sensor derecha
+		    boxShape.setAsBox(4*SCALE, height_2*0.75f*SCALE,temp.set(width_2*SCALE,0),0);
+		    rightSensor = box.createFixture(sensorDef);
+		    
+		    
+		    
+		    boxShape.dispose(); //ya no la usaremos más
 		}
-		
-		{
-			RevoluteJointDef motorDef = new RevoluteJointDef();
-		    motorDef.initialize(box,circle,circle.getWorldCenter());
-		    //motorDef.maxMotorTorque = 1000.0f;//!\todo puede ser un parametro
-		    //motorDef.motorSpeed = 0.0f;//velocidad 0 inicial
-		    motorDef.enableMotor = false; //pues claro motor :)		    
-		    motor = (RevoluteJoint)world.createJoint(motorDef);
-		}	
 	}
-		
 	
 	/* (non-Javadoc)
 	 * @see com.apollo.components.BodyBehavior#getBody()
@@ -131,26 +118,19 @@ implements PlatformMessageHandler
 	public void moveHorizontal(float desiredVel)
 	{
 		//mantener velocidad
-		Vector2 vel = circle.getLinearVelocity();				
+		Vector2 vel = box.getLinearVelocity();				
 		float velChange = desiredVel - vel.x;	
-		float impulse = (box.getMass() + circle.getMass()) * velChange;		
-		Vector2 worldCenter = circle.getWorldCenter();
-		circle.applyLinearImpulse(impulse, 0, worldCenter.x,worldCenter.y,true);		
-		if(desiredVel == 0){
-			circle.setAngularVelocity(0);
-		}
+		float impulse = (box.getMass()) * velChange;		
+		Vector2 worldCenter = box.getWorldCenter();
+		box.applyLinearImpulse(impulse, 0, worldCenter.x,worldCenter.y,true);	
+	
 	}
 	
 
 	private void jump(float jump) 
 	{
-		Vector2 vel = circle.getLinearVelocity();				
-		float velChange = jump - vel.x;	
-		float impulse = (box.getMass() + circle.getMass()) * velChange;		
-		Vector2 worldCenter = circle.getWorldCenter();
-		circle.applyLinearImpulse(0, impulse, worldCenter.x,worldCenter.y,true);	
-		
-		
+		Vector2 worldCenter = box.getWorldCenter();
+		box.applyLinearImpulse(0, jump, worldCenter.x,worldCenter.y,true);		
 	}
 
 	
@@ -169,16 +149,18 @@ implements PlatformMessageHandler
 	{
 		moveHorizontal(desiredHorizontalVelocity);
 //		
+		
+		
+		
 		//actualizando transformación
-		rotation = circle.getAngle();
-		Vector2 pos = circle.getPosition();
+		Vector2 pos = box.getPosition();
 		x = pos.x * INV_SCALE;
 		y = pos.y * INV_SCALE;
 	}
 	@Override
 	public Vector2 getRawPosition()
 	{		
-		return circle.getPosition();
+		return box.getPosition();
 	}
 	@Override
 	public void onTranslateTransform(float x, float y)
@@ -202,7 +184,16 @@ implements PlatformMessageHandler
 	{
 		jump(y*SCALE);
 	}
+	
+	@Override
+	public void onBeginContactPlatform(int value) 
+	{	
+	}
 		
+	@Override
+	public void onEndContactPlatform(int intValue)
+	{	
+	}		
 	
 	public static PlatformBodyBehavior build(Number x, Number y, Number ratio, Number height)
 	{
@@ -210,5 +201,46 @@ implements PlatformMessageHandler
 		
 		return behavior;
 	}
-		
+
+	@Override
+	public void onBeginContact(Entity other, Fixture otherFixture,	Fixture ownFixture, Contact contact) 
+	{
+		if(other == null) // que sea piso
+		{
+			if(bottonSensor == ownFixture)
+			{
+				owner.onMessage(PlatformMessage.onBeginContactPlatform, PlatformMessage.GROUND);
+			}
+			if(leftSensor == ownFixture)
+			{
+				owner.onMessage(PlatformMessage.onBeginContactPlatform, PlatformMessage.LEFTWALL);
+			}
+			if(rightSensor == ownFixture)
+			{
+				owner.onMessage(PlatformMessage.onBeginContactPlatform, PlatformMessage.RIGHTWALL);
+			}
+		}
+	}
+
+	@Override
+	public void onEndContact(Entity other, Fixture otherFixture, Fixture ownFixture, Contact contact) 
+	{
+		if(other == null) // que sea piso
+		{
+			if(bottonSensor == ownFixture)
+			{
+				owner.onMessage(PlatformMessage.onEndContactPlatform, PlatformMessage.GROUND);
+			}
+			if(leftSensor == ownFixture)
+			{
+				owner.onMessage(PlatformMessage.onEndContactPlatform, PlatformMessage.LEFTWALL);
+			}
+			if(rightSensor == ownFixture)
+			{
+				owner.onMessage(PlatformMessage.onEndContactPlatform, PlatformMessage.RIGHTWALL);
+			}
+		}		
+	}
+
+	
 }

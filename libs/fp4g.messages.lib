@@ -64,6 +64,8 @@ DEFINE GAME
 	[
 		ADD jump(Float vel);
 		ADD move(Float vel);
+		ADD beginContact(Integer value) { replace = "PlatformMessage.%s == value" } AS MessageMethod;
+		ADD endContact(Integer value) { replace = "PlatformMessage.%s == value" } AS MessageMethod;
 	]
 	
 	DEFINE MESSAGE Contact
