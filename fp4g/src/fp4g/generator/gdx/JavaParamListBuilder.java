@@ -33,8 +33,7 @@ public class JavaParamListBuilder
 		//lo veo un poco consumidor de recursos, pero bueno...
 		List<VarCodeModel> pair = new LinkedList<VarCodeModel>();
 		for(DeclVar par: nameList)
-		{
-			//TODO esto debe ir en otro lugar.
+		{		
 			String name = translateType(par.type,model, current);
 			VarCodeModel param;
 			if(par.initValue != null)
@@ -49,6 +48,50 @@ public class JavaParamListBuilder
 		}
 		return pair;
 	}
+	
+	public List<VarCodeModel> buildForMessage(NameList nameList, IDefine current, JavaMetaSourceModel model) 
+			throws DependResolverNotFoundException, CannotEvalException
+			{
+				//lo veo un poco consumidor de recursos, pero bueno...
+				List<VarCodeModel> pair = new LinkedList<VarCodeModel>();
+				for(DeclVar par: nameList)
+				{	
+					final String name;
+					final VarType type = par.type;
+					String method = null;
+					if(type instanceof BasicType)
+					{
+						switch((BasicType)type)
+						{
+							case Number:								
+								name = translateType(BasicType.Number,model, current);
+								break;
+							case Float:
+								method = "toFloat";
+								name = translateType(BasicType.Number,model, current);
+								break;
+							case Double:
+								method = "toDouble";
+								name = translateType(BasicType.Number,model, current);
+								break;
+							case Integer:
+								method = "toInt";
+								name = translateType(BasicType.Number,model, current);
+								break;
+							default:
+								name = translateType(par.type,model, current);
+							break;
+						}
+					}else
+					{
+						name = translateType(par.type,model, current);
+					}
+					
+					VarCodeModel param = new VarCodeModel(name,par.name,method);
+					pair.add(param);
+				}
+				return pair;
+			}
 
 	public String translateType(VarType type, JavaMetaSourceModel model, IDefine current) 
 	throws DependResolverNotFoundException

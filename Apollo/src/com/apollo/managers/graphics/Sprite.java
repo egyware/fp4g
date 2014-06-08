@@ -34,7 +34,7 @@ public class Sprite
 
 	public Animation getAnimation(String id) 
 	{
-		return animations.get(id);		
+		return animations.get(id);
 	}
 
 	public TextureRegion getKeyFrame(Animation current_sequence,float current_time)	

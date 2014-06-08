@@ -85,7 +85,11 @@ public class PhysicsManager extends Manager implements ContactListener{
 		world.step(delta, 8,2);
 		world.clearForces();		
 	}	
-
+	
+	public World getb2World()
+	{
+		return world;
+	}
 
 	@Override
 	public void beginContact(Contact contact) {
@@ -105,18 +109,13 @@ public class PhysicsManager extends Manager implements ContactListener{
 		}
 	}
 
-	public World getb2World()
-	{
-		return world;
-	}
-
 	@Override
 	public void endContact(Contact contact) {
-		//onEndContact(Entity other,Fixture otherFixture, Fixture ownFixture,Contact contact);
+		//onEndContact(Entity other,Fixture otherFixture, Fixture ownFixture,Contact contact);		
 		Fixture fixA = contact.getFixtureA();
 		Fixture fixB = contact.getFixtureB();		
-		Entity a = (fixA == null)?null:(Entity)fixA.getBody().getUserData();				
-		Entity b = (fixB == null)?null:(Entity)fixB.getBody().getUserData();
+		Entity a = (Entity)fixA.getBody().getUserData();
+		Entity b = (Entity)fixB.getBody().getUserData();
 		if(a != null)
 		{
 			a.onMessage(ContactMessage.onEndContact, b, fixB, fixA, contact);

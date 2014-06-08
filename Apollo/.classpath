@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="com/apollo/messages/LifeMessage.java|com/apollo/messages/SequenceMessage.java|com/apollo/messages/PhysicsMessage.java" kind="src" path="src"/>
+	<classpathentry excluding="com/apollo/messages/LifeMessage.java|com/apollo/messages/PhysicsMessage.java" kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/reflectasm"/>
 	<classpathentry kind="lib" path="libs/gdx.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>

@@ -104,7 +104,10 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 					if(clazz.startsWith("com.apollo.components")||clazz.startsWith(packageName))
 					{
 						File file = new File(path,clazz.replace('.', File.separatorChar).concat(".java"));
-						list.add(file);					
+						if(file.exists())
+						{
+							list.add(file);
+						}
 					}
 				}
 				else

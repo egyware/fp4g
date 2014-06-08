@@ -1,5 +1,7 @@
 package com.apollo.messages;
 
+import java.util.Arrays;
+
 import com.apollo.Message;
 import com.apollo.MessageHandler;
 
@@ -18,11 +20,10 @@ public enum CreateEntityMessage implements Message<CreateEntityMessageHandler> {
 		switch(this)
 		{
 		case onCreateEntity:
-			//handler.onCreateEntity(args[0].toString(), Arrays.);			
+			handler.onCreateEntity(args[0].toString(), Arrays.copyOfRange(args, 1, args.length));			
 			break;
 		default:
-			break;
-		
+			break;		
 		}
 	}
 

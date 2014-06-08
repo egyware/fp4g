@@ -10,7 +10,7 @@ ${source.javadoc}
 public enum ${source.name}Message implements Message<${source.name}MessageHandler>
 {
 	<#list messages as message>
-	on${message.name}${source.name},
+	on${message.name?cap_first}${source.name},
 	</#list>	
 	;
 
@@ -21,16 +21,16 @@ public enum ${source.name}Message implements Message<${source.name}MessageHandle
 		switch(this)
 		{		
 		<#list messages as message>
-		case on${message.name}${source.name}:
-			handler.on${message.name}${source.name}(<#list arguments as arg><#if arg.method??>((${arg.type})args[${arg_index}]).${arg.method}()<#else>(${arg.type})args[${arg_index}]</#if><#if arg_has_next>, </#if></#list>);
+		case on${message.name?cap_first}${source.name}:
+			handler.on${message.name?cap_first}${source.name}(<#if message.arguments?has_content><#list message.arguments as arg><#if arg.defaultValue??>((${arg.type?cap_first})args[${arg_index}]).${arg.defaultValue}()<#else>(${arg.type?cap_first})args[${arg_index}]</#if><#if arg_has_next>, </#if></#list></#if>);
 			break;
 		</#list>		
 		}		
 	}
 
 	@Override
-	public Class<${message.name}MessageHandler> getClassHandler() 
+	public Class<${source.name}MessageHandler> getClassHandler() 
 	{
-		return ${message.name}MessageHandler.class;		
+		return ${source.name}MessageHandler.class;		
 	}
 }

@@ -31,7 +31,7 @@ implements PlatformMessageHandler, ContactMessageHandler
 	public int width = 5;
 	public int height = 5;	
 	
-	public float desiredHorizontalVelocity = 0;
+	private float desiredVelocity = 0;	
 	private Fixture bottonSensor;
 	private Fixture leftSensor;
 	private Fixture rightSensor;
@@ -50,6 +50,7 @@ implements PlatformMessageHandler, ContactMessageHandler
 		owner.removeEventHandler(PlatformMessage.onMovePlatform, this);
 		owner.removeEventHandler(PlatformMessage.onJumpPlatform, this);
 		owner.removeEventHandler(ContactMessage.onBeginContact, this);
+		owner.removeEventHandler(ContactMessage.onEndContact, this);
 	}
 	
 	@Override	
@@ -58,6 +59,7 @@ implements PlatformMessageHandler, ContactMessageHandler
 		owner.addEventHandler(PlatformMessage.onMovePlatform, this);
 		owner.addEventHandler(PlatformMessage.onJumpPlatform, this);
 		owner.addEventHandler(ContactMessage.onBeginContact, this);
+		owner.addEventHandler(ContactMessage.onEndContact, this);
 		
 		World world = owner.getWorld().getManager(PhysicsManager.class).getb2World();
 		final Vector2 position = new Vector2(x,y);
@@ -122,8 +124,7 @@ implements PlatformMessageHandler, ContactMessageHandler
 		float velChange = desiredVel - vel.x;	
 		float impulse = (box.getMass()) * velChange;		
 		Vector2 worldCenter = box.getWorldCenter();
-		box.applyLinearImpulse(impulse, 0, worldCenter.x,worldCenter.y,true);	
-	
+		box.applyLinearImpulse(impulse, 0, worldCenter.x,worldCenter.y,true);		
 	}
 	
 
@@ -147,10 +148,7 @@ implements PlatformMessageHandler, ContactMessageHandler
 	}
 	public void update(float dt)
 	{
-		moveHorizontal(desiredHorizontalVelocity);
-//		
-		
-		
+		moveHorizontal(desiredVelocity);
 		
 		//actualizando transformación
 		Vector2 pos = box.getPosition();
@@ -176,7 +174,7 @@ implements PlatformMessageHandler, ContactMessageHandler
 	@Override
 	public void onMovePlatform(float x)
 	{
-		desiredHorizontalVelocity = x*SCALE;		
+		desiredVelocity = x*SCALE;
 	}
 	
 	@Override
@@ -240,6 +238,11 @@ implements PlatformMessageHandler, ContactMessageHandler
 				owner.onMessage(PlatformMessage.onEndContactPlatform, PlatformMessage.RIGHTWALL);
 			}
 		}		
+	}
+
+	public Vector2 getVelocity() 
+	{
+		return box.getLinearVelocity();
 	}
 
 	

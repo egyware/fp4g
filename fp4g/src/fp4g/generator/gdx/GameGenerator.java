@@ -69,6 +69,7 @@ public class GameGenerator extends JavaCodeGenerator
 			{
 				"com.apollo.GameManager",
 				"com.apollo.Assets",
+				"java.util.HashMap"
 			};
 			//Arrays.sort(arrayImports);
 			Collections.addAll(imports, arrayImports);

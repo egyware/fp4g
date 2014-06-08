@@ -375,8 +375,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		  		//TODO: No implementado aún
 				throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
 		  		//break;
-		  	case MESSAGE:
-		  		define = new Message(defName,parent);		  		
+		  	case MESSAGE:		  		
+		  		define = new Message(defName,parent);
 		  		break;
 		  	case ASSET:
 		  		Asset.Type type = Asset.Type.valueOf(defName);
@@ -390,6 +390,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		  	default:
 		  		throw new FP4GRuntimeException(GeneratorError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");
 		 }
+		if(container instanceof Lib) define.setGenerable(false);
 		define.setLine(define_ctx.getStart().getLine());
 		parent.setDefine(define);
 				  

@@ -2,11 +2,13 @@ package com.apollo.components;
 
 import com.apollo.Behavior;
 import com.apollo.Entity;
+import com.apollo.Message;
+import com.apollo.MessageHandler;
 import com.apollo.WorldContainer;
 import com.apollo.managers.EntityManager;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public abstract class ActorBehavior extends Actor implements Behavior 
+public abstract class ActorBehavior extends Actor implements Behavior, MessageHandler 
 {
 	protected Entity owner;	
 	@Override
@@ -59,5 +61,10 @@ public abstract class ActorBehavior extends Actor implements Behavior
 	@Override
 	public void update(float delta) 
 	{
+	}
+	
+	public void onMessage(Message<? extends MessageHandler> message, Object... args)
+	{
+		message.dispatch(this, args);				
 	}
 }

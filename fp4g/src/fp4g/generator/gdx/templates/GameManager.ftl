@@ -10,9 +10,21 @@ import ${import};
 </#if>
 
 ${source.javadoc}
-public class ${source.name} extends GameManager {
+public class ${source.name} extends GameManager 
+{
 	public static final int Width  = ${width};
 	public static final int Height = ${height};
+	public final HashMap<String, Class<? extends Gameloop>> gameStates;
+	
+	public ${source.name}()
+	{
+		gameStates = new HashMap<String, Class<? extends Gameloop>>();
+		<#if states?has_content>
+		<#list states as state>
+		gameStates.put("${state}", ${state}.class);
+		</#list>
+		</#if>
+	}
 	
 	@Override
 	public void create()
