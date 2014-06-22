@@ -8,13 +8,13 @@ public class FP4GException extends Exception
 	private static final long serialVersionUID = 1L;
 	private final IMessageType type;	
 	private final String reason;
-	public FP4GException(IMessageType type, String reason)
+	protected FP4GException(IMessageType type, String reason)
 	{	
 		super(type.getMessage().concat(": ").concat(reason));
 		this.type = type;		
 		this.reason = reason;
 	}	
-	public FP4GException(IMessageType type, String reason,Throwable parent)
+	protected FP4GException(IMessageType type, String reason,Throwable parent)
 	{
 		super(type.getMessage(),parent);
 		this.type = type;

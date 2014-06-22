@@ -10,7 +10,7 @@ import fp4g.data.DefineType;
 import fp4g.data.IDefine;
 import fp4g.data.On;
 import fp4g.data.add.AddMethod;
-import fp4g.exceptions.FP4GRuntimeException;
+import fp4g.exceptions.GeneratorException;
 import fp4g.exceptions.NotAllowedException;
 import fp4g.log.info.GeneratorError;
 import fp4g.log.info.NotAllowed;
@@ -22,17 +22,24 @@ import fp4g.log.info.NotAllowed;
 public class Message extends Define
 {
 	public static final String METHODS = "methods";	
-	private final MessageMethods methods;
+	private static MessageMethods methods;
 	private boolean factory;
 
-	public Message(String name,IDefine parent) {
+	public Message(String name,IDefine parent) 
+	{
 		super(DefineType.MESSAGE, name,parent);
-		methods = (MessageMethods)parent.get(METHODS).getValue();
+		if(methods == null)
+		{
+			methods = (MessageMethods)parent.get(METHODS).getValue();
+		}
 	}
 	
 	public Message(String name) {
 		super(DefineType.MESSAGE, name);
-		methods = (MessageMethods)parent.get(METHODS).getValue();
+		if(methods == null)
+		{
+			methods = (MessageMethods)parent.get(METHODS).getValue();
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -55,7 +62,7 @@ public class Message extends Define
 			method.setMessage(this);
 			break;
 		default:
-			throw new FP4GRuntimeException(GeneratorError.IllegalState, code.getAddType().toString());
+			throw new GeneratorException(GeneratorError.IllegalState, code.getAddType().toString());
 		}		
 	}
 

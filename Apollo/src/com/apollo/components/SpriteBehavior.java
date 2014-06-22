@@ -107,4 +107,9 @@ implements SequenceMessageHandler
 	public void onEndSequence() 
 	{		
 	}
+
+	public boolean isEndedCurrentAnimation()
+	{
+		return (Animation.NORMAL == current.getPlayMode()) && current.isAnimationFinished(time);
+	}
 }

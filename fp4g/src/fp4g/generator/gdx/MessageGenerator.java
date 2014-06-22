@@ -35,6 +35,7 @@ public class MessageGenerator extends JavaCodeGenerator
 		
 		messageMeta.setJavadoc(JavaGenerator.autodoc);
 		messageMeta.addRequireSource("com.apollo.Message");
+		messageMeta.addRequireSource("com.apollo.MessageHandler");
 		
 		LinkedList<MessageModel.Method> methods = new LinkedList<MessageModel.Method>();
 		for(AddMethod method:message.getAddMethods())

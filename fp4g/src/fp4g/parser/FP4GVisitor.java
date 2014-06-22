@@ -387,6 +387,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitDestroy(@NotNull FP4GParser.DestroyContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#defineID}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefineID(@NotNull FP4GParser.DefineIDContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#usings}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -6,7 +6,6 @@ public enum Error implements ErrorType
 {
 NotExpectedType("No se esperaba ese tipo"),
 FunctionNotFound,
-NotImplement,
 MessageExpected,
 UnknowError,
 FilterMethodMissing,

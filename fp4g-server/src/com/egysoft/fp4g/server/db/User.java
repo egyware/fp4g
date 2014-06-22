@@ -5,31 +5,59 @@ package com.egysoft.fp4g.server.db;
  * @author Edgardo
  *
  */
-public class User 
+public final class User 
 {
-	private String username;
-	private long lastSeen;
+	private int id;
+	private String user;
+	private String nickname;
+	private long lastseen;
 	
 	public User()
 	{		
 	}
-	
-	public final String getUsername() 
-	{
-		return username;
-	}	
-	public final long getLastSeen() 
-	{
-		return lastSeen;
-	}
-	
-	public final void setUsername(String username) 
-	{
-		this.username = username;
-	}	
-	public final void setLastSeen(long lastSeen)
-	{
-		this.lastSeen = lastSeen;
+
+	public final int getId() {
+		return id;
 	}
 
+	public final String getUser() {
+		return user;
+	}
+
+	public final String getNickname() {
+		return nickname;
+	}
+
+	public final String getLastSeen() 
+	{
+		return null;
+	}
+	public final long lastSeen() 
+	{
+		return lastseen;
+	}
+
+	public final void setId(int id) {
+		this.id = id;
+	}
+
+	public final void setUser(String user) {
+		this.user = user;
+	}
+
+	public final void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public final void setLastseen(String lastSeen) 
+	{	
+	}
+	public final void setPassword(String password)
+	{		
+	}
+	
+	public String toString()
+	{
+		return String.format("User: %15s, nickname = %15s, lastseen = %d", user, nickname, lastseen);
+	}
 }

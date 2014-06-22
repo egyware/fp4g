@@ -45,6 +45,10 @@ public class Main
 				{
 					Log.Exception((FP4GRuntimeException)e, -1);
 					System.exit(1);
+				}else
+				{
+					e.printStackTrace();
+					System.exit(1);
 				}
 			}
 		});

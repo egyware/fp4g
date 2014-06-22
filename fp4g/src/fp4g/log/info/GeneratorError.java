@@ -8,7 +8,7 @@ public enum GeneratorError implements ErrorType
 	CompilerNotFound,
 	ExpresionGeneratorError,
 	CannotParseFile,
-	IllegalState,
+	IllegalState, NotImplement,
 	;
 	private final String message;
 	private GeneratorError()

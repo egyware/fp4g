@@ -1,13 +1,16 @@
 package fp4g.data.vartypes;
 
+import fp4g.data.DefineType;
 import fp4g.data.VarType;
 
 public class CustomType implements VarType
 {
+	public final DefineType type;
 	public final String name;
-	public CustomType(final String n)
+	public CustomType(final DefineType type, final String name)
 	{
-		name = n;
+		this.type = type;
+		this.name = name;
 	}	
 	public String name()
 	{

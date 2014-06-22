@@ -1,8 +1,16 @@
 package com.egysoft.fp4g.server.messages;
 
-public class ConnectMessage
+/**
+ * Mensaje que conecta al juego
+ * @author Edgardo
+ */
+public class ConnectMessage extends MessageBase
 {
-	public int gameID;
-	public int version;
-	public String name;
+	public ConnectMessage()
+	{
+		super(Message.ConnectMessage);	
+	}
+	public int version; ///!< Version del juego
+	public String name; ///!< Tu nombre de usuario
+	
 }

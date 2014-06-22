@@ -62,8 +62,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 	public static final String autodoc = "/**\n  * Autogenerado por FP4G\n  * [NO MODIFICAR]\n  */";
 	public String packageName = "";
 	public String packageNameDir = "";
-	public File packageDir;
-	public boolean isDebug;
+	public File packageDir;	
 	public File binaryDir;
 	public File sourceDir;
 	public final JavaExpresionGenerator exprGen;
@@ -135,7 +134,6 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 	{
 		packageName = (String) options.get("package");
 		packageNameDir = packageName.replace('.', '/');
-		isDebug = (Boolean) options.get("debug");
 		
 		sourceDir = new File(path,"src");
 		if(!sourceDir.exists())

@@ -4,8 +4,8 @@ import java.io.File;
 
 import fp4g.data.ICode;
 import fp4g.data.define.Behavior;
-import fp4g.exceptions.FP4GException;
-import fp4g.log.info.Error;
+import fp4g.exceptions.GeneratorException;
+import fp4g.log.info.GeneratorError;
 
 public class BehaviorGenerator extends JavaCodeGenerator
 {
@@ -18,7 +18,7 @@ public class BehaviorGenerator extends JavaCodeGenerator
 	@Override
 	public void generateCode(ICode gameData, File path) throws Exception 
 	{
-		throw new FP4GException(Error.NotImplement, "No está implementado este generador"); 
+		throw new GeneratorException(GeneratorError.NotImplement, "No está implementado este generador"); 
 	}
 
 	@Override

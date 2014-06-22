@@ -98,7 +98,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 				managerModel.priority = define.getPriority();
 				//acá, buscar las cosas extras y añadirselas.
 				IValue<?> extrasValue;
-				if(generator.isDebug)
+				if(game.isDebug())
 				{
 					extrasValue = define.get(DEBUG);
 					if(extrasValue == null)
@@ -309,7 +309,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 			meta.addRequireSource("com.apollo.Entity");
 		}
 		
-		if(generator.isDebug)
+		if(game.isDebug())
 		{
 			meta.addRequireSource("com.badlogic.gdx.graphics.FPSLogger");
 		}

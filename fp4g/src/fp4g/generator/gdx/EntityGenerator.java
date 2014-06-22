@@ -15,7 +15,7 @@ import fp4g.data.Statements;
 import fp4g.data.When;
 import fp4g.data.add.AddDefine;
 import fp4g.data.define.Entity;
-import fp4g.exceptions.FP4GException;
+import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
 import fp4g.generator.StatementModel;
@@ -109,7 +109,7 @@ public class EntityGenerator extends JavaCodeGenerator
 			{
 				if(on.message == null)
 				{
-					throw new FP4GException(Error.MessageNotFound,String.format("No se encontró el mensaje %s para la instrucción ON", on.name));
+					throw new FP4GRuntimeException(Error.MessageNotFound,String.format("No se encontró el mensaje %s para la instrucción ON", on.name));
 					//gracias a esta excepción aseguro que siempre on.message != null
 				}
 				

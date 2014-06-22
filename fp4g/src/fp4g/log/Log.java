@@ -16,6 +16,14 @@ public class Log {
 	private final static PrintStream out = System.out;
 	private final static PrintStream err = System.err;
 	
+	public static void Exception(FP4GException e)
+	{
+		Show(e.getType(), -1, e.getReason());
+	}
+	public static void Exception(FP4GRuntimeException e)
+	{
+		Show(e.getType(), -1, e.getReason());
+	}
 	public static void Exception(FP4GException e, int line)
 	{
 		Show(e.getType(), line, e.getReason());

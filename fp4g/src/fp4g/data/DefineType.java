@@ -29,7 +29,7 @@ public enum DefineType
 	private Class<? extends IDefine> define;
 	private DefineType(Class<? extends IDefine> define)
 	{
-		this.define = define;
+		this.define = define;		
 	}
 	
 	public Class<? extends IDefine> getDefineClass()

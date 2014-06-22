@@ -11,10 +11,12 @@ import fp4g.data.VarType;
 import fp4g.data.vartypes.BasicType;
 import fp4g.data.vartypes.CustomType;
 import fp4g.exceptions.CannotEvalException;
+import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.DependResolverNotFoundException;
-import fp4g.exceptions.FP4GRuntimeException;
+import fp4g.exceptions.GeneratorException;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.generator.gdx.models.VarCodeModel;
+import fp4g.log.Log;
 import fp4g.log.info.GeneratorError;
 
 
@@ -67,17 +69,17 @@ public class JavaParamListBuilder
 								name = translateType(BasicType.Number,model, current);
 								break;
 							case Float:
-								method = "toFloat";
+								method = "floatValue";
 								name = translateType(BasicType.Number,model, current);
 								break;
 							case Double:
-								method = "toDouble";
+								method = "doubleValue";
 								name = translateType(BasicType.Number,model, current);
 								break;
 							case Integer:
-								method = "toInt";
+								method = "intValue";
 								name = translateType(BasicType.Number,model, current);
-								break;
+								break;							
 							default:
 								name = translateType(par.type,model, current);
 							break;
@@ -103,10 +105,7 @@ public class JavaParamListBuilder
 			{
 			case Bool:
 				name = "boolean";
-				break;
-			case Entity:
-				name = "Entity";
-				break;
+				break;		
 			case Number:
 				name = "Number";
 				break;
@@ -121,16 +120,27 @@ public class JavaParamListBuilder
 				break;
 			case Integer:
 				name = "int";
-				break;
+				break;		
 			default:
-				throw new FP4GRuntimeException(GeneratorError.IllegalState,"Estado no valido del generador");
+				throw new GeneratorException(GeneratorError.IllegalState,"Estado no valido del generador");
 			}
 		}
 		else
 		{
 			CustomType custom = (CustomType)type;
-			Define define = current.getDefine(custom.name);
-			generator.resolveDependency(define).perform(define, model);
+			try
+			{
+				Define define = current.getDefine(custom.type, custom.name);
+				generator.resolveDependency(define).perform(define, model);
+			}
+			catch(DefineNotFoundException e)
+			{
+				Log.Exception(e);
+			}
+			catch(DependResolverNotFoundException e)
+			{
+				Log.Exception(e);
+			}
 			name = custom.name;
 		}
 		return name;

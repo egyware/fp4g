@@ -2,9 +2,6 @@ package fp4g.exceptions;
 
 import fp4g.log.IMessageType;
 
-
-
-
 public class FP4GRuntimeException extends RuntimeException 
 {
 	private static final long serialVersionUID = 1L;

@@ -201,7 +201,7 @@ DEFINE GAME
 		} AS EntityDependResolver,
 		Message = 
 		{
-			Level   = 
+			Camera   = 
 			{				
 				"com.apollo.messages.CameraMessage",
 				"com.apollo.messages.CameraMessageHandler"		
@@ -305,19 +305,27 @@ DEFINE GAME
 			MapProperties = 
 			{
 				"com.badlogic.gdx.maps.MapProperties",
-			}			
+			},
+			Entity = 
+			{
+				"com.apollo.Entity"
+			}
 		} AS DependResolver,
 	} AS DependResolvers;
 	
 	DEFINE STRUCT Fixture
 	[		
-	]
-	
+	]	
 	DEFINE STRUCT Rectangle 
 	[		
-	]
-	
+	]	
 	DEFINE STRUCT MapProperties
 	[		
-	]	
+	]
+	DEFINE STRUCT Entity
+	[	
+	]
+	DEFINE STRUCT Contact
+	[	
+	]
 ]

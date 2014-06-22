@@ -4,5 +4,11 @@ import fp4g.data.VarType;
 
 public enum BasicType implements VarType 
 {
-	Number, Entity,Bool, String, Float, Double, Integer;
+	Bool,
+	String,
+	Number, 
+	Float,
+	Integer,
+	Double,
+	;
 }

@@ -161,7 +161,7 @@ returns
 		  		| GOAL      { $type = DefineType.GOAL;    }
 		  		| MESSAGE   { $type = DefineType.MESSAGE; }		  		
 		  		| ASSET     { $type = DefineType.ASSET;   }
-		  		| ID       { $type = DefineType.valueOf($ID.text);}
+		  		| ID        { $type = DefineType.valueOf($ID.text);}
 		  	) 
 		  ID { $defName = $ID.text; } 
 		  ( ABRE_PAR nameList CIERRA_PAR )?		  
@@ -281,15 +281,25 @@ returns
 	VarType type = null
 ]
 		:
-		   NUMBER_TYPE  {$type = BasicType.Number;}
-		 | BOOL_TYPE    {$type = BasicType.Bool;}		 
-		 | STRING_TYPE  {$type = BasicType.String;}
-		 | INTEGER_TYPE {$type = BasicType.Integer;}
-		 | DOUBLE_TYPE  {$type = BasicType.Double;}
-		 | FLOAT_TYPE   {$type = BasicType.Float;}		 
-		 | ID           {$type = new CustomType($ID.text);} // solo Define del tipo Type
+		   NUMBER_TYPE   {$type = BasicType.Number;}
+		 | BOOL_TYPE     {$type = BasicType.Bool;}		 
+		 | STRING_TYPE   {$type = BasicType.String;}
+		 | INTEGER_TYPE  {$type = BasicType.Integer;}
+		 | DOUBLE_TYPE   {$type = BasicType.Double;}
+		 | FLOAT_TYPE    {$type = BasicType.Float;}
+		 | id = defineID {$type = new CustomType(($id.type != null)?DefineType.valueOf($id.type):DefineType.STRUCT, $id.name);} // solo Define del tipo Type
         ;
-        
+
+defineID
+returns
+[
+	String type,
+	String name
+]
+       :
+       (defineType = ID DOUBLEDOT {$type = $defineType.text;})?
+       defineName = ID {$name = $defineName.text;}
+       ; 
 assets:
 	ASSETS
 	ABRE_COR 
