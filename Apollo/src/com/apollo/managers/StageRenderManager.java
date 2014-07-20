@@ -10,11 +10,12 @@ import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 
 public class StageRenderManager extends Manager 
 {
-	private final Stage stage;	
+	private final Stage stage;
 	private final com.badlogic.gdx.scenes.scene2d.Group backgroundLayer;
 	private final com.badlogic.gdx.scenes.scene2d.Group actorLayer;
 	private final com.badlogic.gdx.scenes.scene2d.Group frontLayer;
@@ -38,13 +39,13 @@ public class StageRenderManager extends Manager
 	{
 		this(new Stage());
 	}
-	public StageRenderManager(int w,int h, SpriteBatch batch)
+	public StageRenderManager(Viewport viewport, SpriteBatch batch)
 	{
-		this(new Stage(w,h,true, batch));		
+		this(new Stage(viewport, batch));		
 	}
-	public StageRenderManager(int w,int h, SpriteBatch batch, TiledMap map)
+	public StageRenderManager(Viewport viewport, SpriteBatch batch, TiledMap map)
 	{
-		this(new Stage(w,h,true, batch));
+		this(new Stage(viewport, batch));
 		this.map = map;
 		this.mapRenderer = new OrthogonalTiledMapRenderer(map,batch); //asumiré que es Tiled (y lo será por mucho tiempo)		
 	}

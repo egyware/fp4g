@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import fp4g.data.Define;
 import fp4g.data.ExprList;
+import fp4g.data.ILib;
 import fp4g.data.On;
 import fp4g.data.add.AddMethod;
 import fp4g.data.statements.Filter;
@@ -47,9 +47,9 @@ public class OnModel
 		return methodHandlers;
 	}
 
-	public static OnModel build(On on, Define current, JavaGenerator generator,	JavaMetaSourceModel model) throws FP4GException
+	public static OnModel build(ILib lib, On on, JavaGenerator generator,	JavaMetaSourceModel model) throws FP4GException
 	{
-		final JavaParamListBuilder paramBuilder = new JavaParamListBuilder(generator);
+		final JavaParamListBuilder paramBuilder = new JavaParamListBuilder(lib, generator);
 		OnModel onModel = new OnModel(on);
 		//agregar la interface 
 		model.addInterface(String.format("%sMessageHandler",on.name));
@@ -59,7 +59,7 @@ public class OnModel
 		//TODO da un error cuando el mensaje está sin definir		
 		for(AddMethod entry: on.message.getAddMethods())
 		{	
-			List<VarCodeModel> params = (entry.nameList != null)?paramBuilder.build(entry.nameList, current, model):null;			
+			List<VarCodeModel> params = (entry.nameList != null)?paramBuilder.build(entry.nameList, model):null;			
 			methods.put(entry.name, new MethodHandlerModel(entry, params));
 		}
 		

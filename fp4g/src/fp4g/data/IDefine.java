@@ -1,55 +1,28 @@
 package fp4g.data;
 import fp4g.data.expresion.IMap;
-import fp4g.data.operators.IAccessible;
-import fp4g.exceptions.DefineNotFoundException;
 
-public interface IDefine extends ILib, ICode, IMap, IValue<IDefine>,IAccessible
+public interface IDefine extends ICode, IMap, IValue<IDefine>
 {
 	public DefineType getType();
-	public String getName();
-	public On getOn(String messageName);
-	public IDefine getParent();
+	/**
+	 * Devuelve el nombre de este Define
+	 * 
+	 */
+	public String getName();	
 	
+	public On getOn(String messageName);
+		
 	/**
-	 * Agrega una definición de codigo
-	 * @param define
-	 */	
-	public <T extends IDefine> void setDefine(T define);
-	/**
-	 * Agrega un evento
+	 * Agrega una captura de un evento
 	 * @param on
 	 */
 	public void setOn(On on);
 
-	
-	/**
-	 * Busca un define de tipo desconocido
-	 * @param name Nombre de la definición
-	 * @return Define La definición buscada, si no devuelve null
-	 * @throws DefineNotFoundException 
-	 */
-	public <T extends IDefine> T getDefine(String defineName) throws DefineNotFoundException;
-	
-	/**
-	 * Obtiene una definición
-	 * @param name
-	 * @return
-	 * @throws DefineNotFoundException 
-	 */	
-	public <T extends Define> T getDefine(DefineType type,String name) throws DefineNotFoundException;
-	
 	/**
 	 * Agrega una adición de codigo
 	 * @param code
 	 */
 	public void setAdd(Add add);
 	
-	
-	/**
-	 * Realiza get(String key) pero sin devolver los defines. 
-	 * @param key
-	 * @return
-	 */
-	public IValue<?> getWithoutDefines(String key);	
-	
+	public ILib getLibrary();
 }

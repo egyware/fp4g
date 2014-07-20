@@ -31,9 +31,11 @@ public class Main
 			{
 				new File(args[0]).toURI().toURL(),				
 				new URL("file:libs/gdx.jar"),
-				new URL("file:libs/gdx-natives.jar"),
+				new URL("file:libs/gdx-natives.jar"),				
 				new URL("file:libs/gdx-backend-lwjgl.jar"),				
 				new URL("file:libs/gdx-backend-lwjgl-natives.jar"),
+				new URL("file:libs/gdx-box2d.jar"),
+				new URL("file:libs/gdx-box2d-natives.jar"),
 				new URL("file:libs/apollo-fp4g.jar")
 			};
 			
@@ -79,7 +81,7 @@ public class Main
 			{
 				confField.set(instanceConf, "title", properties.getProperty("game.title"));
 				
-				confField.set(instanceConf, "useGL20", Boolean.parseBoolean(properties.getProperty("game.useGL20")));
+				confField.set(instanceConf, "useGL30", Boolean.parseBoolean(properties.getProperty("game.useGL30")));
 				confField.set(instanceConf, "width",   Integer.parseInt(properties.getProperty("game.width")));
 				confField.set(instanceConf, "height",  Integer.parseInt(properties.getProperty("game.height")));
 				confField.set(instanceConf, "resizable", Boolean.parseBoolean(properties.getProperty("game.resizable")));
@@ -88,7 +90,7 @@ public class Main
 			{
 				confField.set(instanceConf, "title", String.format("FP4G - %s",appClass.getSimpleName()));
 				
-				confField.set(instanceConf, "useGL20", true);
+				confField.set(instanceConf, "useGL30", true);
 				confField.set(instanceConf, "width", 640);
 				confField.set(instanceConf, "height", 480);
 				confField.set(instanceConf, "resizable", false);

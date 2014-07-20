@@ -3,6 +3,7 @@ package fp4g.data.define;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
+import fp4g.data.ILib;
 
 /**
  * Encapsula un Manager
@@ -15,7 +16,7 @@ public class Manager extends Define
 	private int priority;
 	private boolean receiver;
 	
-	public Manager(String name,IDefine parent) 
+	public Manager(String name,ILib parent) 
 	{
 		super(DefineType.MANAGER, name, parent);		
 	}

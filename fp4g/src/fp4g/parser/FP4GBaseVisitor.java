@@ -2,15 +2,6 @@
 
 package fp4g.parser;
 
-import static fp4g.log.Log.*;
-
-import fp4g.data.*;
-import fp4g.data.statements.*;
-import fp4g.data.define.*;
-import fp4g.data.vartypes.*;
-
-import java.util.LinkedList;
-
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -534,14 +525,6 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitDefine(@NotNull FP4GParser.DefineContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitFlags(@NotNull FP4GParser.FlagsContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

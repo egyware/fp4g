@@ -3,6 +3,7 @@ package fp4g.data.define;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
+import fp4g.data.ILib;
 
 /**
  * Encapsula un comportamiento
@@ -12,9 +13,9 @@ import fp4g.data.IDefine;
 public class Behavior extends Define
 {
 	public String group;
-	public Behavior(String name,IDefine parent) 
+	public Behavior(String name,ILib container) 
 	{
-		super(DefineType.BEHAVIOR, name,parent);		
+		super(DefineType.BEHAVIOR, name,container);		
 	}
 	
 	public final String getGroup() {

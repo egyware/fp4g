@@ -4,6 +4,7 @@ import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
+import fp4g.data.ILib;
 import fp4g.data.On;
 import fp4g.data.add.AddDefine;
 import fp4g.exceptions.FP4GRuntimeException;
@@ -13,9 +14,9 @@ import fp4g.log.info.NotAllowed;
 
 public class Entity extends Define
 {	
-	public Entity(String name, IDefine parent) 
+	public Entity(String name, ILib container) 
 	{
-		super(DefineType.ENTITY, name,parent);
+		super(DefineType.ENTITY, name,container);
 	}	
 	
 	@Override

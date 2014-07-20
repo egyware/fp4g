@@ -6,19 +6,14 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import fp4g.data.Add;
 import fp4g.data.Code;
-import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
 import fp4g.data.ILib;
 import fp4g.data.IValue;
-import fp4g.data.On;
-import fp4g.data.expresion.BinaryOp;
 import fp4g.exceptions.DefineNotFoundException;
-import fp4g.exceptions.NotAllowedOperatorException;
 
-public class LibContainer extends Code implements ILib, IDefine
+public class LibContainer extends Code implements ILib
 {
 	public final List<Lib> libs;
 	
@@ -34,7 +29,14 @@ public class LibContainer extends Code implements ILib, IDefine
 	@Override
 	public <T extends IDefine> T findDefine(String defineName) 
 	{
-		// TODO Auto-generated method stub
+		for(Lib lib:libs)
+		{
+			T define = lib.findDefine(defineName);
+			if(define != null)
+			{
+				return define;
+			}			
+		}
 		return null;
 	}
 
@@ -70,7 +72,10 @@ public class LibContainer extends Code implements ILib, IDefine
 	@Override
 	public <T extends IDefine> boolean isSetDefine(DefineType type, String name) 
 	{
-		// TODO Auto-generated method stub
+		for(Lib lib:libs)
+		{
+			if(lib.isSetDefine(type,name)) return true;			
+		}
 		return false;
 	}
 
@@ -89,120 +94,15 @@ public class LibContainer extends Code implements ILib, IDefine
 	//IDefine implements
 	
 	@Override
-	public IValue<?> getWithoutDefines(String key) 
-	{
-		for(Lib lib:libs)
-		{
-			IValue<?> value = lib.getWithoutDefines(key);
-			if(value != null) return value;
-		}
-		return null;
-	}
-	
-	@Override
-	public void set(String key, IValue<?> value) 
-	{
-		//TODO throw exception, never called
-	}
-
-	@Override
-	public DefineType getType()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String getName() 
 	{
 		return LibContainer.class.getSimpleName();
 	}
 
 	@Override
-	public On getOn(String messageName)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IDefine getParent()
-	{
-		return null;
-	}
-
-	@Override
-	public <T extends IDefine> void setDefine(T define) 
-	{
-		// TODO Auto-generated method stub		
-	}
-
-	@Override
-	public void setOn(On on) 
-	{
+	public void set(String key, IValue<?> value) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public <T extends IDefine> T getDefine(String defineName)
-	throws DefineNotFoundException 
-	{
-		for(Lib lib:libs)
-		{
-			T define = lib.findDefine(defineName);
-			if(define != null) return define;
-		}
-		throw new DefineNotFoundException(defineName);
-	}
-
-	@Override
-	public <T extends Define> T getDefine(DefineType type, String name)
-	throws DefineNotFoundException 
-	{
-		for(Lib lib:libs)
-		{
-			T define = lib.findDefine(type,name);
-			if(define != null) return define;
-		}
-		throw new DefineNotFoundException(type,name);
-	}
-
-	@Override
-	public void setAdd(Add add) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public IDefine getValue() 
-	{	
-		return this;
-	}
-	
-	public IValue<?> sum(IValue<?> right)
-	throws NotAllowedOperatorException
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Add);
-	}
-	
-	public IValue<?> mult(IValue<?> right)
-	throws NotAllowedOperatorException
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Mult);
-	}
-	
-	public IValue<?> div(IValue<?> right)
-	throws NotAllowedOperatorException
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Div);
-	}
-	
-	public IValue<?> sub(IValue<?> right)
-	throws NotAllowedOperatorException
-	{
-		throw new NotAllowedOperatorException(this,BinaryOp.OperatorType.Sub);
 	}
 
 	@Override
@@ -210,6 +110,36 @@ public class LibContainer extends Code implements ILib, IDefine
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public <T extends IDefine> T getDefine(DefineType defineType, String defineName)
+	{
+		T define = findDefine(defineType, defineName);
+		if(define == null)
+		{
+			throw new DefineNotFoundException(defineName);
+		}
+		return define;
+			
+	}
+
+	@Override
+	public <T extends IDefine> T getDefine(String defineName) 
+	{
+		T define = findDefine(defineName);
+		if(define == null)
+		{
+			throw new DefineNotFoundException(defineName);
+		}
+		return define;
+	}
+
+	@Override
+	public <T extends IDefine> void setDefine(T define)
+	{
+		// TODO Auto-generated method stub		
+	}
+
 	
 		
 }

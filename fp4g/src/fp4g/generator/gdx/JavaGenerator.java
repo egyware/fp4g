@@ -218,6 +218,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 		final int start = path.length()-packageNameDir.length();
 		final String cp[] = {
 				"libs/apollo-fp4g.jar",
+				"libs/gdx-box2d.jar",
 				"libs/gdx.jar"
 			};				
 			  

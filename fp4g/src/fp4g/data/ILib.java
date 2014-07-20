@@ -37,4 +37,13 @@ public interface ILib extends IMap
 	 */
 	public <T extends IDefine> boolean isSetDefine(DefineType type,String name);
 
+	public String getName();
+
+	public <T extends IDefine> T getDefine(DefineType message, String messageName);
+
+	public <T extends IDefine> T getDefine(String whereName);
+
+	public <T extends IDefine> void setDefine(T define);
+	
+
 }

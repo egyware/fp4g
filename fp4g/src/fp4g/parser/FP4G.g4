@@ -74,13 +74,13 @@ gameValues
 		;
 
 gameValue  
-		: define
-		| add DOTCOMA
+		: 
+		  add DOTCOMA
 		| set DOTCOMA
 		| start DOTCOMA
 		| when DOTCOMA
 		| on
-		| flags		
+		| flag DOTCOMA
 		;
 		
 set
@@ -260,11 +260,11 @@ defineValues
 defineValue
 		:
 		  add DOTCOMA
-		| set DOTCOMA		
+		| set DOTCOMA
+		| flag DOTCOMA
+		| when DOTCOMA
 		| on
 		| assets
-		| flags
-		| when DOTCOMA
 		;
 
 exprList: expr (COMA expr)*;
@@ -324,11 +324,6 @@ assetValue
 assetValuesInner
 :
 	ABRE_COR assetValue (COMA assetValue)* COMA? CIERRA_COR
-;
-
-flags
-:
-	flag DOTCOMA (flag DOTCOMA)*
 ;
 
 flag

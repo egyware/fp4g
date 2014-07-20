@@ -26,7 +26,8 @@ DEFINE GAME
 			{
 				@'com.badlogic.gdx.physics.box2d.Box2DDebugRenderer',
 				@'com.badlogic.gdx.physics.box2d.World',
-				@'static com.apollo.managers.PhysicsManager.*',
+				@'com.badlogic.gdx.graphics.OrthographicCamera',
+				@'static com.apollo.managers.PhysicsManager.*',				
 			},
 			fields        = 
 			{
@@ -61,21 +62,43 @@ DEFINE GAME
 		SET extra = 
 		{
 			preInitialize = 
-				{
-					@'batch = new SpriteBatch()'					
-				},
-			postInitialize=
 			{
-				@'camera = container.getManager(StageRenderManager.class).getCamera()'
-			},
-			params        = {@'w',@'h',@'batch'},			
+				@'batch = new SpriteBatch()',
+				@'viewport = new FitViewport(w,h)'
+			},			
+			params        = {@'viewport',@'batch'},			
 			fields        = 
 				{					
-					@'SpriteBatch batch',
-					@'Camera camera'
+					@'SpriteBatch batch',					
+					@'FitViewport viewport',
 				}			
 		}
 		AS ManagerData;
+		SET extra = 
+		{
+			imports = 
+			{
+				@'com.badlogic.gdx.graphics.Camera'
+			},
+			preInitialize = 
+			{
+				@'batch = new SpriteBatch()',
+				@'viewport = new FitViewport(w,h)'
+			},
+			postInitialize = 
+			{
+				@'camera = container.getManager(StageRenderManager.class).getCamera()'
+			},
+			params        = {@'viewport',@'batch'},			
+			fields        = 
+			{					
+				@'SpriteBatch batch',					
+				@'FitViewport viewport',
+				@'Camera camera',
+			}			
+		}
+		AS ManagerData;
+		
 	]
 	DEFINE BEHAVIOR CircleBody
 	[	
@@ -142,9 +165,7 @@ DEFINE GAME
 				"com.apollo.GameManager",
 				"com.apollo.GameState",
 				"com.badlogic.gdx.Gdx",
-				"com.badlogic.gdx.graphics.GL10",
-				"com.badlogic.gdx.graphics.Camera",
-				"com.badlogic.gdx.graphics.OrthographicCamera"				
+				"com.badlogic.gdx.graphics.GL20",				
 			}
 		} AS DependResolver,
 		Manager = 
@@ -152,7 +173,8 @@ DEFINE GAME
 			RenderManager = 
 			{
 				"com.apollo.managers.StageRenderManager",
-				"com.badlogic.gdx.graphics.g2d.SpriteBatch",				
+				"com.badlogic.gdx.graphics.g2d.SpriteBatch",
+				"com.badlogic.gdx.utils.viewport.FitViewport",
 			},
 			PhysicsManager = 
 			{

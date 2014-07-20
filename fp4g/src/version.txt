@@ -1,14 +1,17 @@
 :::0.1.29 (pendiente)
 + Generador de Mensajes añadido
++ Se le quito la caracteristica "namespace"
++ Se le quito la caracteristica en donde se podia utilizar un define como un gran contenedor ahora esa caracteristica le pertenece a ILib
++ Se le quito la caracteristica de variables del generador. Ahora solo se puede usar las que están predefinidas.
 F Si se detecta una posible dependencia de archivo al usar using y este archivo no existe, simplemente no se agrega.
 F Se corrigio un bug que permitia utilizar la primera definición con el mismo nombre que se encuentre. Ahora por defecto busca en definiciones tipo STRUCT  si no se especifica el tipo.
 F Parece que reprogramé SourceModel, pero no recuerdo exactamente que hice. Creo que tiene algo que ver con la nueva forma de representar los archivos de java antes de ser generados.
+F Actualizar a la versión 1.2.0 de Libgdx
+F Poder disminuido: La clase Define ya no contiene a los demas defines, ahora eso es responsabilidad de Lib.
 B Cuando no encuentra un mensaje deberia abortar y no caerse.
-P Estará bien que la clase Define sea una clase Dios y que sus hijos limitan lo que hace esa clase?
 P Hacer que los Managers reciban mensajes.
 P Debe quedar prueba de tontos II: Se ha vuelto mejorar el launcher esto es para cuando se lanze desde un jar no tener que modificarlo.
 P Definir la utilidad de la clase Assets
-
 :::0.1.28 (desarrollo-prototipo)
 + Se pueden especificar Metodos en los Messages.
 + Se agrego la posibilidad de usar el Using como Define, solo para especificar ciertas propiedades. El comportamiento sigue igual (añadir archivos)

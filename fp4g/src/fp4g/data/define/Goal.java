@@ -13,10 +13,11 @@ import fp4g.log.info.NotAllowed;
  * @author Edgardo
  *
  */
-public class Goal extends Define {	
+public class Goal extends Define
+{	
 	public Goal(String name) {
 		super(DefineType.GOAL, name);		 
-	}	
+	}
 	
 	@Override
 	public void setAdd(Add code) 
@@ -24,11 +25,6 @@ public class Goal extends Define {
 		throw new NotAllowedException(NotAllowed.NotExpectedAdd, code, "No se esperaba una instrución Add en Goal");
 		
 	}
-	@Override
-	public void setDefine(IDefine define) {
-		throw new NotAllowedException(NotAllowed.NotExpectedDefine, define, "No se esperaba una instrucción Define en Goal");
-	}
-	@Override
 	public void setOn(On on) 
 	{
 		throw new NotAllowedException(NotAllowed.NotExpectedOn, on, "No se esperaba una instrucción On en Goal");		

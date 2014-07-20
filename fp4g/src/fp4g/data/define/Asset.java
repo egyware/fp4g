@@ -1,8 +1,14 @@
 package fp4g.data.define;
 
+import java.util.Map.Entry;
+import java.util.Set;
+
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
+import fp4g.data.ILib;
+import fp4g.data.IValue;
+import fp4g.exceptions.NotAllowedOperatorException;
 
 public class Asset extends Define
 {
@@ -22,7 +28,7 @@ public class Asset extends Define
 	{
 		this(assetType,null);		
 	}
-	public Asset(Type assetType, IDefine parent) 
+	public Asset(Type assetType, ILib parent) 
 	{
 		super(DefineType.ASSET, assetType.name(), parent);
 		this.assetType = assetType;

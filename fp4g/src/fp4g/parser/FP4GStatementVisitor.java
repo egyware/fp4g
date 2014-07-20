@@ -2,7 +2,6 @@ package fp4g.parser;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -13,6 +12,7 @@ import fp4g.data.DefineType;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
+import fp4g.data.ILib;
 import fp4g.data.Instance;
 import fp4g.data.Statement;
 import fp4g.data.Statements;
@@ -30,15 +30,13 @@ import fp4g.log.info.Error;
 
 public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement> 
 {
-	private final Stack<IDefine> current;
 	private final FP4GExpresionVisitor exprVisitor;	
-	private final IDefine container;
+	private final ILib lib;
 	
-	public FP4GStatementVisitor(IDefine container,Stack<IDefine> current, FP4GExpresionVisitor exprVisitor)
+	public FP4GStatementVisitor(ILib lib, FP4GExpresionVisitor exprVisitor)
 	{
-		this.current     = current;
 		this.exprVisitor = exprVisitor;
-		this.container   = container;
+		this.lib   = lib;
 		
 	}
 	
@@ -49,7 +47,7 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 		{
 			if(methods == null)
 			{
-				methods = (MessageMethods)container.get(Message.METHODS).getValue();
+				methods = (MessageMethods)lib.get(Message.METHODS).getValue();
 			}
 			return methods;
 		}
@@ -70,8 +68,10 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 	}
 
 	
-	public Statements getStatements(FP4GParser.StatementsContext ctx)
+	private Define current;
+	public Statements getStatements(Define current, FP4GParser.StatementsContext ctx)
 	{
+		this.current = current;
 		Statements statements = new Statements();	
 		if(ctx.children != null)
 		{
@@ -108,7 +108,6 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 	@Override 
 	public Statement visitSubscribe(FP4GParser.SubscribeContext ctx)
 	{
-		Define define = (Define)current.peek();
 		Subscribe subscribe;
 		//where=ID ON message=ID (DOUBLEDOT method=ID)?
 		String whereName = ctx.where.getText();
@@ -117,11 +116,11 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 		String methodName = (ctx.method != null)?ctx.method.getText():null;
 		
 		//obtener message
-		Message message = define.getDefine(DefineType.MESSAGE, messageName);
+		Message message = current.getDefine(DefineType.MESSAGE, messageName);
 		//objetener  method
 		AddMethod method = message.getAddMethod(methodName);
 		
-		Define where = define.getDefine(whereName);
+		Define where = current.getDefine(whereName);
 		
 		//identificar where que es
 		whereType = Instance.System;
@@ -133,7 +132,6 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 	@Override 
 	public Statement visitUnsubscribe(FP4GParser.UnsubscribeContext ctx)
 	{
-		Define define = (Define)current.peek();
 		Unsubscribe subscribe;
 		//where=ID ON message=ID (DOUBLEDOT method=ID)?
 		String whereName = ctx.where.getText();
@@ -142,11 +140,11 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 		String methodName = (ctx.method != null)?ctx.method.getText():null;
 		
 		//obtener message
-		Message message = define.getDefine(DefineType.MESSAGE, messageName);
+		Message message = lib.getDefine(DefineType.MESSAGE, messageName);
 		//objetener  method
 		AddMethod method = message.getAddMethod(methodName);
 		
-		Define where = define.getDefine(whereName);
+		Define where = lib.getDefine(whereName);
 		
 		//identificar where que es
 		whereType = Instance.System;
@@ -158,8 +156,6 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 	@Override
 	public Statement visitSend(FP4GParser.SendContext ctx)
 	{
-		Define define = (Define)current.peek();
-		
 		AddMethod method = methods().getMessageMethod(ctx.messageMethodName);
 		if(method == null)
 		{
@@ -189,7 +185,7 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 			receiver = ctx.receiverName;
 		//Behavior
 			//buscar en los add de la entidad.
-			List<AddDefine> behaviors = define.getAddDefines(DefineType.BEHAVIOR);
+			List<AddDefine> behaviors = current.getAddDefines(DefineType.BEHAVIOR);
 			for(AddDefine bhvr:behaviors)
 			{
 				//buscar de forma iterativa
@@ -206,7 +202,7 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 	    //System
 			
 			//buscar en los defines de sistemas.
-			Collection<IDefine> managers = container.getDefines(DefineType.MANAGER);
+			Collection<IDefine> managers = lib.getDefines(DefineType.MANAGER);
 			for(IDefine manager:managers)
 			{
 				if(manager.getName().equals(receiver))
@@ -228,7 +224,7 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 			break;		
 		}		
 		
-		ExprList list = exprVisitor.getExprList(ctx.exprList());
+		ExprList list = exprVisitor.getExprList(current,ctx.exprList());
 		if(list != null)
 		{		
 			//TODO checkar la exprList, checkar que?, Compararla contra MessageMethod.Params se requiere conocimiento adicional.

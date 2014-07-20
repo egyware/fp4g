@@ -6,18 +6,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import fp4g.data.Add;
 import fp4g.data.Code;
-import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
 import fp4g.data.ILib;
 import fp4g.data.IValue;
-import fp4g.data.Namespace;
-import fp4g.data.On;
+import fp4g.data.expresion.IMap;
 import fp4g.exceptions.DefineNotFoundException;
-import fp4g.exceptions.NotAllowedException;
-import fp4g.log.info.NotAllowed;
 
 /**
  * Esta clase nos permite integrar las bibliotecas sin tener que "modificar tanto" codigo. (Mentira, ok no solo muchas refractorizaciones) 
@@ -28,7 +23,7 @@ import fp4g.log.info.NotAllowed;
  * @author Edgardo
  *
  */
-public class Lib extends Code implements fp4g.data.expresion.IMap,ILib,IDefine
+public class Lib extends Code implements IMap,ILib
 {
 	private final Map<DefineType,Map<String,? extends IDefine>> defines;
 	private final Map<String,IValue<?>> variables;
@@ -36,13 +31,7 @@ public class Lib extends Code implements fp4g.data.expresion.IMap,ILib,IDefine
 	public Lib()
 	{			
 		defines = new HashMap<DefineType, Map<String, ? extends IDefine>>(DefineType.values().length,1);
-		variables = new HashMap<String,IValue<?>>();
-		
-		//definir namespaces o algo por el estilo.
-		for(DefineType t: DefineType.values())
-		{
-			set(t.name(), new Namespace(t,this));
-		}
+		variables = new HashMap<String,IValue<?>>();		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -109,15 +98,9 @@ public class Lib extends Code implements fp4g.data.expresion.IMap,ILib,IDefine
 		return variables.get(key);
 	}
 	
-	@Override
-	public IValue<?> getWithoutDefines(String key) 
-	{
-		return variables.get(key);
-	}
-	
-	
 	
 	@SuppressWarnings("unchecked")
+	@Override
 	public <T extends IDefine> void setDefine(T define)
 	{
 		final DefineType type = define.getType();		
@@ -130,12 +113,7 @@ public class Lib extends Code implements fp4g.data.expresion.IMap,ILib,IDefine
 		map.put(define.getName(), define);		
 	}
 
-	@Override
-	public DefineType getType() 
-	{	
-		return null;
-	}
-
+	
 	@Override
 	public String getName() 
 	{
@@ -143,27 +121,25 @@ public class Lib extends Code implements fp4g.data.expresion.IMap,ILib,IDefine
 	}
 
 	@Override
-	public On getOn(String messageName) 
-	{
+	public <V extends IValue<?>> Set<Entry<String, V>> entrySet() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public IDefine getParent() 
-	{	
-		return null;
-	}
-
-	@Override
-	public void setOn(On on) 
+	public <T extends IDefine> T getDefine(DefineType defineType, String defineName)
 	{
-		throw new NotAllowedException(NotAllowed.NotExpectedOn, on, "No se esperaba una instrucción ON en Lib");		
+		T define = findDefine(defineType, defineName);
+		if(define == null)
+		{
+			throw new DefineNotFoundException(defineName);
+		}
+		return define;
+			
 	}
 
 	@Override
-	public <T extends IDefine> T getDefine(String defineName)
-	throws DefineNotFoundException 
+	public <T extends IDefine> T getDefine(String defineName) 
 	{
 		T define = findDefine(defineName);
 		if(define == null)
@@ -173,33 +149,4 @@ public class Lib extends Code implements fp4g.data.expresion.IMap,ILib,IDefine
 		return define;
 	}
 
-	@Override
-	public <T extends Define> T getDefine(DefineType type, String name)
-	throws DefineNotFoundException 
-	{
-		T define = findDefine(type,name);
-		if(define == null)
-		{
-			throw new DefineNotFoundException(type, name);
-		}
-		return define;
-	}
-
-	@Override
-	public void setAdd(Add add) 
-	{
-		throw new NotAllowedException(NotAllowed.NotExpectedAdd, add, "No se esperaba una instrución Add en Lib");		
-	}
-
-	@Override
-	public IDefine getValue() 
-	{	
-		return this;
-	}
-
-	@Override
-	public <V extends IValue<?>> Set<Entry<String, V>> entrySet() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

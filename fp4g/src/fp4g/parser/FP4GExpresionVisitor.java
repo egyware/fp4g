@@ -8,9 +8,9 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
-import fp4g.data.IDefine;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.ArrayMap;
 import fp4g.data.expresion.BinaryOp;
@@ -20,8 +20,8 @@ import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.data.expresion.IList;
-import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.IMap;
+import fp4g.data.expresion.Literal;
 import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.VarDot;
 import fp4g.data.expresion.VarId;
@@ -41,14 +41,12 @@ import fp4g.log.info.Error;
 public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion> 
 {
 	private final Stack<Stack<Expresion>> stacks = new Stack<Stack<Expresion>>();	
-	private Stack<Expresion> stack;
-	private final Stack<IDefine> current;
+	private Stack<Expresion> stack;	
 	private final Stack<IMap> map_stack = new Stack<IMap>();
 	private final Stack<IList> list_stack = new Stack<IList>();
 	
-	public FP4GExpresionVisitor(Stack<IDefine> d)
-	{
-		current = d;
+	public FP4GExpresionVisitor()
+	{	
 	}
 		
 	private void pushStack()
@@ -74,9 +72,11 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		return old;
 	}
 	
-	public ExprList getExprList(FP4GParser.ExprListContext ctx)
+	private Define current;
+	public ExprList getExprList(Define current, FP4GParser.ExprListContext ctx)
 	{
 		if(ctx == null) return null; //En cierto codigo aveces ExprList puede ser null porque no se escribio, asi que solo se regresa null. La comprobación se hace desde afuera si este es null o no.
+		this.current = current;
 		pushStack();		
 		
 		//visitamos los hijos personalmente, evitamos usar cada vez menos la pila. (realmente me confunde, le pierdo el paso)
@@ -252,7 +252,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	
 	
 	
-	//otros visitors	
+	//otros visitors
 	@Override
 	public Expresion visitFunctionCallExpr(FP4GParser.FunctionCallExprContext ctx)
 	{
@@ -261,10 +261,10 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		
 		String callName = ctx.functionName.getText();
 		
-		ExprList exprList = getExprList(ctx.exprList()); //acá se crea un nuevo stack!
+		ExprList exprList = getExprList(current,ctx.exprList()); //acá se crea un nuevo stack!
 				
 		//le paso también el define donde se está invocando 01-03-2014
-		FunctionCall functionCall = new FunctionCall(callName, current.peek(), exprList);
+		FunctionCall functionCall = new FunctionCall(callName, current, exprList);
 		exprList = null;		
 		
 		//restablecemos el stack anterior
@@ -391,7 +391,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		{
 			try
 			{
-				list.add(FP4GDataVisitor.eval(current.peek(),expr));
+				list.add(FP4GDataVisitor.eval(current,expr));
 			}
 			catch(CannotEvalException e)
 			{
@@ -417,7 +417,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		{
 			try
 			{
-				array.set(key,FP4GDataVisitor.eval(current.peek(),expr));
+				array.set(key,FP4GDataVisitor.eval(current,expr));
 			}
 			catch(CannotEvalException cee)
 			{

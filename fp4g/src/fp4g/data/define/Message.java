@@ -8,6 +8,7 @@ import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
 import fp4g.data.IDefine;
+import fp4g.data.ILib;
 import fp4g.data.On;
 import fp4g.data.add.AddMethod;
 import fp4g.exceptions.GeneratorException;
@@ -25,12 +26,12 @@ public class Message extends Define
 	private static MessageMethods methods;
 	private boolean factory;
 
-	public Message(String name,IDefine parent) 
+	public Message(String name,ILib container) 
 	{
-		super(DefineType.MESSAGE, name,parent);
+		super(DefineType.MESSAGE, name,container);
 		if(methods == null)
 		{
-			methods = (MessageMethods)parent.get(METHODS).getValue();
+			methods = (MessageMethods)container.get(METHODS).getValue();
 		}
 	}
 	

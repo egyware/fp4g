@@ -20,8 +20,7 @@ public class Game extends Define
 {	
 	public int width = 640;
 	public int height = 480;
-	public boolean debug = false;
-	public boolean shaders = false;
+	public boolean debug = false;	
 	public GameState startState;
 	
 	public Game(LibContainer lc)
@@ -226,13 +225,5 @@ public class Game extends Define
 
 	public final void setDebug(boolean debug) {
 		this.debug = debug;
-	}	
-	public final boolean isShaders()
-	{
-		return shaders;
-	}
-	public final void setShaders(boolean b)
-	{
-		shaders = b;
 	}
 }

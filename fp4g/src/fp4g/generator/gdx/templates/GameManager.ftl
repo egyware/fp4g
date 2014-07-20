@@ -14,11 +14,11 @@ public class ${source.name} extends GameManager
 {
 	public static final int Width  = ${width};
 	public static final int Height = ${height};
-	public final HashMap<String, Class<? extends Gameloop>> gameStates;
+	public final HashMap<String, Class<? extends GameState>> gameStates;
 	
 	public ${source.name}()
 	{
-		gameStates = new HashMap<String, Class<? extends Gameloop>>();
+		gameStates = new HashMap<String, Class<? extends GameState>>();
 		<#if states?has_content>
 		<#list states as state>
 		gameStates.put("${state}", ${state}.class);

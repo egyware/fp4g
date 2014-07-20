@@ -471,13 +471,6 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitDefine(@NotNull FP4GParser.DefineContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#flags}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFlags(@NotNull FP4GParser.FlagsContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link FP4GParser#assetValueWithInnerValue}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

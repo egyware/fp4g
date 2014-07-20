@@ -9,7 +9,7 @@ public class PropertiesFragment implements Fragment
 	private int width;
 	private int height;
 	private boolean resizable;
-	private boolean useGL20;
+	private boolean useGL30;
 	
 	/**
 	 * @return the className
@@ -72,16 +72,16 @@ public class PropertiesFragment implements Fragment
 		this.resizable = resizable;
 	}
 	/**
-	 * @return the useGL20
+	 * @return the useGL30
 	 */
-	public final boolean isUseGL20() {
-		return useGL20;
+	public final boolean isUseGL30() {
+		return useGL30;
 	}
 	/**
-	 * @param useGL20 the useGL20 to set
+	 * @param useGL30 the useGL30 to set
 	 */
-	public final void setUseGL20(boolean useGL20) {
-		this.useGL20 = useGL20;
+	public final void setUseGL30(boolean useGL30) {
+		this.useGL30 = useGL30;
 	}
 	@Override
 	public String getFragmentName() 

@@ -46,8 +46,7 @@ public class GameGenerator extends JavaCodeGenerator
 			propertiesModel.setClassName(generator.packageName.concat(".").concat(game.name));
 			propertiesModel.setTitle("FP4G - ".concat(game.name));
 			propertiesModel.setWidth(game.width);
-			propertiesModel.setHeight(game.height);
-			propertiesModel.setUseGL20(game.shaders);
+			propertiesModel.setHeight(game.height);			
 			propertiesModel.setResizable(false);			
 			
 			//genero

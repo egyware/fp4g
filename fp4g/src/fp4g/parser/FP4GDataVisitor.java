@@ -13,6 +13,7 @@ import fp4g.data.DefineType;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
+import fp4g.data.ILib;
 import fp4g.data.ILine;
 import fp4g.data.IValue;
 import fp4g.data.NameList;
@@ -56,27 +57,18 @@ import fp4g.parser.FP4GParser.UsingValuesContext;
  */
 public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 {
-	private final IDefine container;	
-	private final Stack<IDefine> current;
+	private final ILib container;
 	private final FP4GExpresionVisitor exprVisitor;
 	private final FP4GNameListVisitor nameListVisitor;
 	private final FP4GStatementVisitor statementVisitor;
+	private IDefine current;
 	
 	public FP4GDataVisitor(final Lib lib)
 	{
-		this.container = lib;		
-		current = new Stack<IDefine>();		
-		exprVisitor = new FP4GExpresionVisitor(current);
-		nameListVisitor = new FP4GNameListVisitor(exprVisitor,current);
-		statementVisitor = new FP4GStatementVisitor(lib,current,exprVisitor);
-	}
-	public FP4GDataVisitor(final Game game)
-	{
-		this.container = game;		
-		current = new Stack<IDefine>();		
-		exprVisitor = new FP4GExpresionVisitor(current);
-		nameListVisitor = new FP4GNameListVisitor(exprVisitor,current);
-		statementVisitor = new FP4GStatementVisitor(game,current,exprVisitor);
+		this.container = lib;
+		exprVisitor = new FP4GExpresionVisitor();
+		nameListVisitor = new FP4GNameListVisitor(exprVisitor);
+		statementVisitor = new FP4GStatementVisitor(lib, exprVisitor);
 	}
 	
 	@Override
