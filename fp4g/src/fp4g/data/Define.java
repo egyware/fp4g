@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import fp4g.BeanAccess;
 import fp4g.data.add.AddAsset;
@@ -27,8 +29,8 @@ public abstract class Define extends Code implements IDefine
 	
 	public final DefineType type;	
 	
-	public String name;	
-	public NameList flags;
+	public String name;
+	private NameList flags;
 	public NameList paramNameList;
 	public LinkedList<When> whenList;
 		
@@ -87,17 +89,14 @@ public abstract class Define extends Code implements IDefine
 		}
 		flags.add(flag);		
 	}
+	public NameList getFlags()
+	{
+		return flags;
+	}
 	
 	public void addFlags(NameList list) 
 	{
-		if(flags == null)
-		{
-			flags = new NameList();
-		}
-		for(DeclVar flag: list)
-		{
-			flags.add(flag);
-		}
+		flags = list;		
 	}
 	
 	public void setAdd(Add add)
@@ -257,6 +256,19 @@ public abstract class Define extends Code implements IDefine
 	{
 		return lib;
 	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<Entry<String, IValue<?>>> entrySet() 
+	{
+		String properties[] = beanAccess.getProperties();
+		HashMap<String, IValue<?>> map = new HashMap<String,IValue<?>>();
+		for(String property:properties)
+		{
+			map.put(property, get(property));
+		}		
+		return map.entrySet();
+	}		
 
 	
 	private int when_counter;	

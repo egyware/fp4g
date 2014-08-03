@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import fp4g.data.define.Game;
+import fp4g.data.libs.Lib;
 import fp4g.data.libs.LibContainer;
 import fp4g.exceptions.FP4GException;
 import fp4g.exceptions.FP4GRuntimeException;
@@ -79,8 +79,7 @@ public class Main
 			
 			Generator<?> generator = new JavaGenerator();
 			LibContainer libs = generator.loadLibs();
-			Game gameConf = new Game(libs);
-			generator.setDefaults(gameConf);						
+			Lib local = libs.getLocal();
 			
 	    	System.out.println(String.format("Parsing: %s",inputFile));			
 			ParseTree tree = p.program();
@@ -89,10 +88,10 @@ public class Main
 			{
 				try
 				{
-					FP4GDataVisitor visitor = new FP4GDataVisitor(gameConf);				
+					FP4GDataVisitor visitor = new FP4GDataVisitor(local);				
 					visitor.visit(tree);
 									
-					generator.generate(options,gameConf, new File(outDirectory));
+					generator.generate(options, local, new File(outDirectory));
 					System.out.println(String.format("Parsing complete: %s",inputFile));
 				}
 				catch(FP4GRuntimeException e)

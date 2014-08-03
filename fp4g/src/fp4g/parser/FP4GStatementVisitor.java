@@ -68,8 +68,8 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 	}
 
 	
-	private Define current;
-	public Statements getStatements(Define current, FP4GParser.StatementsContext ctx)
+	private IDefine current;
+	public Statements getStatements(IDefine current, FP4GParser.StatementsContext ctx)
 	{
 		this.current = current;
 		Statements statements = new Statements();	
@@ -116,11 +116,11 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 		String methodName = (ctx.method != null)?ctx.method.getText():null;
 		
 		//obtener message
-		Message message = current.getDefine(DefineType.MESSAGE, messageName);
+		Message message = lib.getDefine(DefineType.MESSAGE, messageName);
 		//objetener  method
 		AddMethod method = message.getAddMethod(methodName);
 		
-		Define where = current.getDefine(whereName);
+		Define where = lib.getDefine(whereName);
 		
 		//identificar where que es
 		whereType = Instance.System;

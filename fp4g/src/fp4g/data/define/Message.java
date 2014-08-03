@@ -7,7 +7,6 @@ import fp4g.classes.MessageMethods;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
-import fp4g.data.IDefine;
 import fp4g.data.ILib;
 import fp4g.data.On;
 import fp4g.data.add.AddMethod;
@@ -39,7 +38,7 @@ public class Message extends Define
 		super(DefineType.MESSAGE, name);
 		if(methods == null)
 		{
-			methods = (MessageMethods)parent.get(METHODS).getValue();
+			methods = (MessageMethods)lib.get(METHODS).getValue();
 		}
 	}
 	
@@ -65,14 +64,6 @@ public class Message extends Define
 		default:
 			throw new GeneratorException(GeneratorError.IllegalState, code.getAddType().toString());
 		}		
-	}
-
-	/* (non-Javadoc)
-	 * @see fp4g.data.Define#addDefine(fp4g.data.Define)
-	 */
-	@Override
-	public void setDefine(IDefine define) {
-		throw new NotAllowedException(NotAllowed.NotExpectedDefine, define, "No se esperaba una instrucción Define en Message");
 	}
 
 	/* (non-Javadoc)

@@ -16,10 +16,13 @@ import fp4g.exceptions.DefineNotFoundException;
 public class LibContainer extends Code implements ILib
 {
 	public final List<Lib> libs;
+	private final Lib localLib;
 	
 	public LibContainer()
 	{	
-		libs = new LinkedList<Lib>();		
+		localLib = new Lib();
+		libs = new LinkedList<Lib>();
+		libs.add(localLib);
 	}
 	
 	public void addLib(Lib lib) {
@@ -138,6 +141,11 @@ public class LibContainer extends Code implements ILib
 	public <T extends IDefine> void setDefine(T define)
 	{
 		// TODO Auto-generated method stub		
+	}
+
+	public Lib getLocal() 
+	{
+		return localLib;
 	}
 
 	

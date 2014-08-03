@@ -81,8 +81,6 @@ public class GameGenerator extends JavaCodeGenerator
 		}
 		
 		generator.createFile(path,String.format("%s.java",game.name), temp,gameModel);
-		
-		generateOthers(game, path);
 	}
 	
 	@Override
@@ -91,9 +89,6 @@ public class GameGenerator extends JavaCodeGenerator
 	{
 		Game game = (Game)gameData;
 		generator.usingFile(path,String.format("%s.java",game.name));
-		
-		generateOthers(game, path);
-		
 	}
 	
 

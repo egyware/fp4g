@@ -3,8 +3,8 @@ package fp4g.parser;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import fp4g.data.DeclVar;
-import fp4g.data.Define;
 import fp4g.data.Expresion;
+import fp4g.data.IDefine;
 import fp4g.data.IValue;
 import fp4g.data.NameList;
 import fp4g.data.VarType;
@@ -22,7 +22,7 @@ public class FP4GNameListVisitor extends FP4GBaseVisitor<DeclVar>
 		this.exprVisitor = exprVisitor;		
 	}
 	
-	public NameList getNameList(Define current, FP4GParser.NameListContext ctx)
+	public NameList getNameList(IDefine current, FP4GParser.NameListContext ctx)
 	{
 		if(ctx == null) return null;
 		final NameList list = new NameList();
@@ -40,7 +40,7 @@ public class FP4GNameListVisitor extends FP4GBaseVisitor<DeclVar>
         return list;		
 	}
 	
-	public NameList getFlags(NameList list, Define current, FP4GParser.FlagContext ctx)
+	public NameList getFlags(NameList list, IDefine current, FP4GParser.FlagContext ctx)
 	{
 		if(ctx == null) return null;
 		if(list ==  null) list = new NameList();
@@ -52,7 +52,7 @@ public class FP4GNameListVisitor extends FP4GBaseVisitor<DeclVar>
 	}
 	
 	
-	public DeclVar visitDeclareVar(Define current, FP4GParser.DeclareVarContext ctx)
+	public DeclVar visitDeclareVar(IDefine current, FP4GParser.DeclareVarContext ctx)
 	{
 		//: varType varName=ID (EQUAL initValue = expr)?;
 		DeclVar declVar;

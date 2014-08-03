@@ -1,14 +1,8 @@
 package fp4g.data.define;
 
-import java.util.Map.Entry;
-import java.util.Set;
-
 import fp4g.data.Define;
 import fp4g.data.DefineType;
-import fp4g.data.IDefine;
 import fp4g.data.ILib;
-import fp4g.data.IValue;
-import fp4g.exceptions.NotAllowedOperatorException;
 
 public class Asset extends Define
 {

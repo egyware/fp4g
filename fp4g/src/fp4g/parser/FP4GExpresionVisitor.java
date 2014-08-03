@@ -8,9 +8,9 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import fp4g.data.Define;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
+import fp4g.data.IDefine;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.ArrayMap;
 import fp4g.data.expresion.BinaryOp;
@@ -72,8 +72,14 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		return old;
 	}
 	
-	private Define current;
-	public ExprList getExprList(Define current, FP4GParser.ExprListContext ctx)
+	private IDefine current;
+	public Expresion getExpr(IDefine current, FP4GParser.ExprContext ctx)
+	{
+		this.current = current;
+		return visit(ctx);
+	}
+	
+	public ExprList getExprList(IDefine current, FP4GParser.ExprListContext ctx)
 	{
 		if(ctx == null) return null; //En cierto codigo aveces ExprList puede ser null porque no se escribio, asi que solo se regresa null. La comprobación se hace desde afuera si este es null o no.
 		this.current = current;

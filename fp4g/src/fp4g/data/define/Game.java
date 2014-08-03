@@ -3,7 +3,7 @@ package fp4g.data.define;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
-import fp4g.data.IDefine;
+import fp4g.data.ILib;
 import fp4g.data.On;
 import fp4g.data.add.AddDefine;
 import fp4g.data.libs.LibContainer;
@@ -23,7 +23,7 @@ public class Game extends Define
 	public boolean debug = false;	
 	public GameState startState;
 	
-	public Game(LibContainer lc)
+	public Game(ILib lc)
 	{
 		super(DefineType.GAME,"game",lc);		
 	}
@@ -158,42 +158,6 @@ public class Game extends Define
 		}		
 	}
 	
-	/**
-	 * Bypass para los managers
-	 * @param manager
-	 */
-	public void setManager(Manager manager)
-	{	
-		super.setDefine(manager);		
-	}
-	
-	@Override
-	public void setDefine(IDefine define) {
-		switch(define.getType())
-		{
-			case ASSET:
-				super.setDefine(define);
-				break;
-			case BEHAVIOR:
-				super.setDefine(define);
-				break;
-			case ENTITY:
-				super.setDefine(define);				
-				break;			
-			case GOAL:
-				super.setDefine(define);
-				break;
-			case STATE:
-				super.setDefine(define);				
-				break;
-			case MESSAGE:
-				super.setDefine(define);								
-				break;						
-			default:
-				throw new NotAllowedException(NotAllowed.NotExpectedAdd, define,String.format("No se esperaba el define \"%s\" en Game",define.getName()));		
-		}		
-	}
-
 	@Override
 	public void setOn(On on) {
 		throw new NotAllowedException(NotAllowed.NotExpectedOn, on, "No se esperaba una instrucción ON en Game");		

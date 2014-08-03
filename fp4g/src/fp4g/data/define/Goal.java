@@ -3,7 +3,6 @@ package fp4g.data.define;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
-import fp4g.data.IDefine;
 import fp4g.data.On;
 import fp4g.exceptions.NotAllowedException;
 import fp4g.log.info.NotAllowed;

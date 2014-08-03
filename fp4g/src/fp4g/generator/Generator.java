@@ -18,7 +18,6 @@ import fp4g.data.Expresion;
 import fp4g.data.ICode;
 import fp4g.data.ILine;
 import fp4g.data.Statements;
-import fp4g.data.define.Game;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.data.libs.Lib;
 import fp4g.data.libs.LibContainer;
@@ -165,8 +164,7 @@ public abstract class Generator<M extends MetaSourceModel>
 		}
 	}
 	
-	public abstract LibContainer loadLibs();
-	public abstract void setDefaults(Game gameConf);
+	public abstract LibContainer loadLibs();	
 	protected abstract Depend resolveDependency(Define define) throws DependResolverNotFoundException;
 	
 }

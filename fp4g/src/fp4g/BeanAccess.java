@@ -1,6 +1,7 @@
 package fp4g;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.antlr.v4.misc.Utils;
 
@@ -9,10 +10,27 @@ import com.esotericsoftware.reflectasm.MethodAccess;
 public final class BeanAccess
 {
 	private final MethodAccess method;
+	private final String properties[];
 	
 	private BeanAccess(Class<?> clazz)
 	{
-		method = MethodAccess.get(clazz);	
+		method = MethodAccess.get(clazz);
+		LinkedList<String> _p = new LinkedList<String>();
+		final String methods[] = method.getMethodNames();		
+		for(int indexMethod = 0; indexMethod < methods.length;indexMethod++)
+		{
+			final String nameMethod = methods[indexMethod];
+			if(methods[indexMethod].startsWith("get"))					
+			{
+				_p.add(Utils.decapitalize(methods[indexMethod].substring(3)));			
+			}
+			else if(nameMethod.startsWith("is"))
+			{
+				_p.add(Utils.decapitalize(methods[indexMethod].substring(2)));
+			}
+		}
+		properties = new String[_p.size()];
+		_p.toArray(properties);
 	}
 	
 	public void set(final Object thiz,final String key,final Object value)
@@ -45,6 +63,12 @@ public final class BeanAccess
 		}
 		return null; //TODO falta error aqui
 	}
+	
+	public String[] getProperties()
+	{
+		return properties;
+	}
+	
 	
 	private static HashMap<Class<?>,BeanAccess> map = new HashMap<Class<?>,BeanAccess>();
 	public static BeanAccess getBeanAccess(Class<?> key)

@@ -1,4 +1,7 @@
 package fp4g.data;
+import java.util.List;
+
+import fp4g.data.add.AddDefine;
 import fp4g.data.expresion.IMap;
 
 public interface IDefine extends ICode, IMap, IValue<IDefine>
@@ -25,4 +28,9 @@ public interface IDefine extends ICode, IMap, IValue<IDefine>
 	public void setAdd(Add add);
 	
 	public ILib getLibrary();
+	
+	public void addFlags(NameList flags);
+	public NameList getFlags();
+	public void addWhen(Expresion expresion, Statement statement);
+	public List<AddDefine> getAddDefines(DefineType behavior);
 }

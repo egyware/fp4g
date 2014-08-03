@@ -2,7 +2,6 @@ package fp4g.parser;
 
 
 import java.util.List;
-import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -131,9 +130,8 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			UsingValuesContext values = ctx.usingValues();
 			if(values != null)
 			{
-				current.push(define);
-				visit(values);			
-				current.pop();
+				current = define;
+				visit(values);
 			}
 		}
 		
@@ -148,7 +146,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			//TODO null
 			throw new NotAllowedException(NotAllowed.NotExpectedGame,null, "Start dentro de Lib");
 		}
-		IDefine define = current.peek();
+		IDefine define = current;
 		
 		if(define instanceof Game)
 		{
@@ -156,13 +154,13 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			GameState state;
 			try 
 			{
-				state = define.getDefine(DefineType.STATE, stateName);
+				state = container.getDefine(DefineType.STATE, stateName);
 			} 
 			catch (DefineNotFoundException e) 
 			{				
 				Log.Exception(e, ctx.start.getLine());
 				//creo un elemento temporal para solucionar el state faltante, sin embargo no se generará
-				state = new GameState(ctx.state,define);
+				state = new GameState(ctx.state,container);
 				state.setLine(ctx.start.getLine());
 				state.setGenerable(false);
 			}			
@@ -178,13 +176,11 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	@Override
 	public ILine visitWhen(FP4GParser.WhenContext ctx)
 	{
-		//TODO posible error, hay que chequear bien esto
-		final Define parent       = (Define)current.peek();
 		final Expresion expresion = exprVisitor.visit(ctx.condition);
 		final Statement statement = statementVisitor.visit(ctx.stmnt);
 		//TODO verificar si expresion es realmente una condición
 		
-		parent.addWhen(expresion, statement);
+		current.addWhen(expresion, statement);
 		
 		return null;
 	}
@@ -192,17 +188,15 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	@Override
 	public ILine visitOn(FP4GParser.OnContext ctx)
 	{
-		IDefine parent = current.peek();
-
 		//en vez de solo crearlo, tengo que buscarlo... y si no existe crearlo.
-		On on = parent.getOn(ctx.messageName);
+		On on = current.getOn(ctx.messageName);
 		if(on == null)
 		{	
 			//es message, cast seguro
 			Message message = null;
 			try
 			{
-				message = parent.getDefine(DefineType.MESSAGE,ctx.messageName);				
+				message = container.getDefine(DefineType.MESSAGE,ctx.messageName);				
 				on = new On(message);
 			}
 			catch (DefineNotFoundException e) 
@@ -212,10 +206,10 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			}
 
 			//solo si es nuevito, se agrega
-			parent.setOn(on);
+			current.setOn(on);
 		}
 
-		Statements statements = statementVisitor.getStatements(ctx.statements());
+		Statements statements = statementVisitor.getStatements(current,ctx.statements());
 		//al evento on, se crea un nuevo codigo y se le añaden los filtros, si es que existen.
 		//falta solo agregarle el codigo :)
 		Source source = on.addSource(statements);		
@@ -260,7 +254,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	public ILine visitFilter(FP4GParser.FilterContext ctx)
 	{
 		//tendrá eso?
-		ExprList list = exprVisitor.getExprList(ctx.exprList());
+		ExprList list = exprVisitor.getExprList(current, ctx.exprList());
 		Message message = ctx.message;
 		AddMethod method = null;
 		if(message != null)
@@ -280,11 +274,9 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	@Override 
 	public ILine visitSet(FP4GParser.SetContext ctx)
 	{
-		IDefine define = current.peek();
-		
-		Expresion expr = exprVisitor.visit(ctx.expr());		
+		Expresion expr = exprVisitor.getExpr(current, ctx.expr());		
 		try {
-			define.set(ctx.key, eval(define,expr));
+			current.set(ctx.key, eval(current,expr));
 		} catch (CannotEvalException e) {			
 			Log.Show(CannotEval.CannotEvalExpresion,ctx.getStart().getLine(),expr.toString());
 		}
@@ -300,49 +292,40 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	@Override
 	public ILine visitGame(FP4GParser.GameContext ctx)
 	{
-		if(container instanceof Game)
-		{
-			final Game game = (Game)container; 
-			game.name = ctx.name;
-			game.setLine(ctx.getStart().getLine());
-			return super.visitGame(ctx);
-		}
-		else
-		{
-			//TODO null
-			throw new NotAllowedException(NotAllowed.NotExpectedGame,null, "No se permite definir el nombre del juego cuando se carga una biblioteca");
-		}
+		final Game game = new Game(container); 
+		game.name = ctx.name;
+		game.setLine(ctx.getStart().getLine());
+		current = game;
+		return super.visitGame(ctx);
+		
 	}
 	
 	@Override
 	public ILine visitGameValues(FP4GParser.GameValuesContext ctx)
 	{
-		current.push(container);		
-		super.visitGameValues(ctx);		
-		current.pop();
+		super.visitGameValues(ctx);
 		return null;
 	}	
 	
 	@Override
 	public ILine visitDefineValues(FP4GParser.DefineValuesContext ctx)
 	{
-		FP4GParser.DefineContext define_ctx = (FP4GParser.DefineContext)ctx.parent;
-		IDefine parent = current.peek();
+		FP4GParser.DefineContext define_ctx = (FP4GParser.DefineContext)ctx.parent;		
 		String defName = define_ctx.defName;
 		
 		Define define = null;		
 		switch(define_ctx.type)
 		{
 			case STATE:
-				define = new GameState(defName,parent);	
+				define = new GameState(defName,container);	
 			break;
 			case ENTITY:
-				define = new Entity(defName,parent);
+				define = new Entity(defName,container);
 			break;
 			case MANAGER:
 				if(container instanceof Lib)
 				{
-					define = new Manager(defName,parent);
+					define = new Manager(defName,container);
 					define.setGenerable(false); //no se genera
 			  		define.setUsable(false); //no es usable
 				}				
@@ -354,7 +337,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		  	case BEHAVIOR:
 		  		if(container instanceof Lib)
 				{
-		  			define = new Behavior(defName,parent);
+		  			define = new Behavior(defName,container);
 		  			define.setGenerable(false); //no se genera
 			  		define.setUsable(false); //no es usable
 				}				
@@ -368,14 +351,14 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 				throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
 		  		//break;
 		  	case MESSAGE:		  		
-		  		define = new Message(defName,parent);
+		  		define = new Message(defName,container);
 		  		break;
 		  	case ASSET:
 		  		Asset.Type type = Asset.Type.valueOf(defName);
-		  		define = new Asset(type,parent);
+		  		define = new Asset(type,container);
 		  		break;
 		  	case STRUCT:
-		  		define = new Struct(defName, parent);
+		  		define = new Struct(defName, container);
 		  		define.setGenerable(false); //no se genera
 		  		define.setUsable(false); //no es usable
 		  		break;
@@ -384,16 +367,15 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		 }
 		if(container instanceof Lib) define.setGenerable(false);
 		define.setLine(define_ctx.getStart().getLine());
-		parent.setDefine(define);
+		container.setDefine(define);
 				  
-		current.push(define);		
+		current = define;		
 		super.visitDefineValues(ctx);
-		current.pop();
 		
 		final FP4GParser.NameListContext nameList_ctx = define_ctx.nameList();
 		if(nameList_ctx != null)
 		{
-			final NameList nameList = nameListVisitor.getNameList(nameList_ctx);
+			final NameList nameList = nameListVisitor.getNameList(define, nameList_ctx);
 			define.setNameList(nameList);		
 		}		
 		
@@ -401,28 +383,24 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	}	
 	
 	@Override
-	public ILine visitFlags(FP4GParser.FlagsContext ctx)
+	public ILine visitFlag(FP4GParser.FlagContext ctx)
 	{
-		//TODO este casting se ve algo peligroso...
-		Define parent = (Define)current.peek();
-		NameList flags = nameListVisitor.getFlags(ctx);
-		parent.addFlags(flags);
-		
+		NameList flags = nameListVisitor.getFlags(current.getFlags(), current, ctx);
+		current.addFlags(flags);		
 		return null;
 	}
 	
 	@Override
 	public ILine visitAddMethod(FP4GParser.AddMethodContext ctx)
 	{
-		IDefine parent = current.peek();
 		//String name, NameList list, IMap values		
-		NameList list = nameListVisitor.getNameList(ctx.nameList());
+		NameList list = nameListVisitor.getNameList(current, ctx.nameList());
 		
 		final IMap map = getMap(ctx.exprParams,ctx.start.getLine());
 		
 		AddMethod add = new AddMethod(ctx.addName, list, map);
 		
-		parent.setAdd(add);
+		current.setAdd(add);
 		
 		return add;
 	}
@@ -430,29 +408,27 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	@Override
 	public ILine visitAddDefine(FP4GParser.AddDefineContext ctx)
 	{
-		IDefine parent = current.peek();		
-		
 		Add add;		
 		//buscar el define que estoy agregando
 		try 
 		{
 			//Define define, ExprList params, IMap values
-			IDefine  define = parent.getDefine(ctx.type,ctx.addName);
-			ExprList list = exprVisitor.getExprList(ctx.exprList());
+			IDefine  define = container.getDefine(ctx.type,ctx.addName);
+			ExprList list = exprVisitor.getExprList(current, ctx.exprList());
 			final IMap map = getMap(ctx.exprParams,ctx.start.getLine());
 			add = new AddDefine((Define)define,list, map);			
 			add.setLine(ctx.start.getLine());
 		}
 		catch (DefineNotFoundException e) 
 		{			
-			ExprList list = exprVisitor.getExprList(ctx.exprList());
+			ExprList list = exprVisitor.getExprList(current, ctx.exprList());
 			final IMap map = getMap(ctx.exprParams,ctx.start.getLine());
 			add = new AddDefine(ctx.type,ctx.addName, list, map);
 			add.setLine(ctx.start.getLine());
 			Log.Exception(e, ctx.start.getLine());		
 		}
 		
-		parent.setAdd(add);		
+		current.setAdd(add);		
 		
 		return add; 		
 	}
@@ -481,8 +457,6 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	@Override
 	public ILine visitAssetValue(FP4GParser.AssetValueContext ctx)
 	{
-		IDefine parent = current.peek();	
-
 		//me aseguro que no sea null nunca
 		String assetName  = (ctx.assetName != null)?ctx.assetName.getText(): String.format("asset_%d", asset_number++);
 		String assetPath = ctx.assetPath.getText(); 
@@ -492,14 +466,14 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		Asset asset;
 		try
 		{
-			asset = parent.getDefine(DefineType.ASSET, ctx.assetType.getText());
+			asset = container.getDefine(DefineType.ASSET, ctx.assetType.getText());
 		}
 		catch (DefineNotFoundException e)
 		{			
 			//si no se encuentra, reemplazarlo por otro
 			Log.Exception(e, ctx.assetName.getLine());
 			//TODO evaluar si seguir usando el Asset.Type
-			asset = new Asset(Asset.Type.valueOf(ctx.assetType.getText()), parent);
+			asset = new Asset(Asset.Type.valueOf(ctx.assetType.getText()), container);
 			asset.setUsable(false);
 			asset.setGenerable(false);
 		}
@@ -519,7 +493,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		}
 		assetAdd.setLine(ctx.start.getLine());
 		
-		parent.setAdd(assetAdd);
+		current.setAdd(assetAdd);
 		
 		return assetAdd;		
 	}

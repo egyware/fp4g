@@ -430,14 +430,6 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 		return exprGen.generate((JavaMetaSourceModel) model,expr);
 	}
 	
-	public void setDefaults(Game gameConf)
-	{
-		gameConf.name = "GameApp";
-    	gameConf.width = 640;
-    	gameConf.height = 480;
-    	gameConf.debug = false;
-	}
-	
 	public LibContainer loadLibs() 
 	{
 		loadLib("libs/fp4g.lib");
