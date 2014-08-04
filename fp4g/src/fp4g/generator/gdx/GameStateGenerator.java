@@ -12,6 +12,7 @@ import fp4g.classes.ManagerData;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
+import fp4g.data.ILib;
 import fp4g.data.IValue;
 import fp4g.data.add.AddAsset;
 import fp4g.data.add.AddDefine;
@@ -49,11 +50,11 @@ public class GameStateGenerator extends JavaCodeGenerator
 	
 	
 	@Override	
-	public void generateCode(ICode gameData, File path) 
+	public void generateCode(ICode codeData, File path) 
 	throws Exception 
 	{
-		GameState state = (GameState)gameData;
-		Game game = (Game)state.parent;
+		GameState state = (GameState)codeData;
+		Game game = (Game)state.lib.getGame();		
 		
 		Template temp = generator.getTemplate("GameState.ftl");
 		
@@ -185,7 +186,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 		
 		 //agregamos todos las entidades definidas ens el game
         List<String> builders = new LinkedList<String>();
-        final Collection<Entity> state_entities = game.getDefines(DefineType.ENTITY);
+        final Collection<Entity> state_entities = game.lib.getDefines(DefineType.ENTITY);
         if(state_entities != null && state_entities.size()>0)
         {
             for(Entity entity:state_entities)

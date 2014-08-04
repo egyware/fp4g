@@ -30,15 +30,7 @@ public class VarId extends Expresion
 		}
 		try
 		{
-			IAccessible contenedor = (IAccessible)container;
-			if(parent == this)
-			{
-				if(contenedor.getParent() == null)
-				{
-					throw new CannotEvalException(CannotEval.VarNameNotFound,this,String.format("No se puede acceder al contenedor superior de la variable \"%s\"",varName));
-				}
-				return contenedor.getParent();	
-			}else
+			IAccessible contenedor = (IAccessible)container;			
 			if(current == this)
 			{
 				return container;

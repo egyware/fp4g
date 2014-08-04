@@ -29,8 +29,10 @@ import fp4g.Options;
 import fp4g.classes.DependResolvers;
 import fp4g.data.Code;
 import fp4g.data.Define;
+import fp4g.data.DefineType;
 import fp4g.data.Expresion;
-import fp4g.data.ICode;
+import fp4g.data.IDefine;
+import fp4g.data.ILib;
 import fp4g.data.ILine;
 import fp4g.data.IValue;
 import fp4g.data.Statements;
@@ -164,22 +166,58 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 	}
 
 	@Override
-	protected void generateCode(ICode gameData, File path) throws GeneratorException 
+	protected void generateCode(ILib local, File path) throws GeneratorException 
 	{		
-		Class<? extends CodeGenerator<JavaMetaSourceModel, JavaGenerator>> codegen = generators.get(gameData.getClass());
+		final Collection<Entity> game_entities = local.getDefines(DefineType.ENTITY);
+		if(game_entities != null)
+		{
+			for(Entity entity: game_entities)
+			{
+				genDefine(entity, path);
+			}
+		}
+		final Collection<GameState> game_states = local.getDefines(DefineType.STATE);
+		if(game_states != null)
+		{
+			for(GameState state: game_states)
+			{
+				genDefine(state, path);
+			}
+		}
+		final Collection<Behavior> behaviors = local.getDefines(DefineType.BEHAVIOR);
+		if(behaviors != null)
+		{
+			for(Behavior behavior: behaviors)
+			{
+				genDefine(behavior, path);
+			}
+		}
+		final Collection<Message> messages = local.getDefines(DefineType.MESSAGE);
+		if(messages != null)
+		{
+			for(Message message: messages)
+			{
+				genDefine(message, path);
+			}
+		}		
+	}
+	
+	private void genDefine(IDefine define, File path)
+	{
+		Class<? extends CodeGenerator<JavaMetaSourceModel, JavaGenerator>> codegen = generators.get(define.getClass());
 		
 		if(codegen != null)
 		{
 			try{
 				Constructor<? extends CodeGenerator<JavaMetaSourceModel,JavaGenerator>> constructor = codegen.getConstructor(JavaGenerator.class);
 				CodeGenerator<JavaMetaSourceModel,JavaGenerator> generator = constructor.newInstance(this);
-				if(gameData.isGenerable()) //se puede contruir?
+				if(define.isGenerable()) //se puede contruir?
 				{
-					generator.generateCode(gameData, packageDir);
+					generator.generateCode(define, packageDir);
 				}
-				else if(gameData.isUsable()) //si no, utilizamos su codigo :B
+				else if(define.isUsable()) //si no, utilizamos su codigo :B
 				{
-					generator.usingCode(gameData, packageDir);
+					generator.usingCode(define, packageDir);
 				}
 			} catch (NoSuchMethodException e) {
 				// TODO Auto-generated catch block
@@ -206,7 +244,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 		}
 		else
 		{
-			throw new GeneratorException(GeneratorError.CriticalErrorGeneratorNotFound, String.format("El generador para \"%s\" no se encontró",gameData.getClass().getSimpleName()));			
+			throw new GeneratorException(GeneratorError.CriticalErrorGeneratorNotFound, String.format("El generador para \"%s\" no se encontró",define.getClass().getSimpleName()));			
 		}		
 	}
 	

@@ -11,6 +11,7 @@ import fp4g.data.DefineType;
 import fp4g.data.IDefine;
 import fp4g.data.ILib;
 import fp4g.data.IValue;
+import fp4g.data.define.Game;
 import fp4g.exceptions.DefineNotFoundException;
 
 public class LibContainer extends Code implements ILib
@@ -20,7 +21,7 @@ public class LibContainer extends Code implements ILib
 	
 	public LibContainer()
 	{	
-		localLib = new Lib();
+		localLib = new Lib(this);
 		libs = new LinkedList<Lib>();
 		libs.add(localLib);
 	}
@@ -86,13 +87,20 @@ public class LibContainer extends Code implements ILib
 	@Override
 	public IValue<?> get(String key)
 	{
+		return find(key);
+	}
+	
+	@Override
+	public IValue<?> find(String key) 
+	{
 		for(Lib lib:libs)
 		{
-			IValue<?> value = lib.get(key);
+			IValue<?> value = lib.find(key);
 			if(value != null) return value;
 		}
 		return null;
 	}
+	
 	
 	//IDefine implements
 	
@@ -148,6 +156,16 @@ public class LibContainer extends Code implements ILib
 		return localLib;
 	}
 
-	
+	@Override
+	public Game getGame() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ILib getValue() 
+	{
+		return this;
+	}
 		
 }

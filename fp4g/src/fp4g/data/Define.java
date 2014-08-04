@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import fp4g.BeanAccess;
 import fp4g.data.add.AddAsset;
@@ -19,7 +19,6 @@ import fp4g.data.expresion.literals.IntegerLiteral;
 import fp4g.data.expresion.literals.ObjectLiteral;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.data.vartypes.BasicType;
-import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.log.info.GeneratorError;
 
@@ -218,23 +217,15 @@ public abstract class Define extends Code implements IDefine
 		}		
 	}
 	
+	
+	//funciones auxiliares
 	public <T extends Define> T getDefine(String name)
 	{
-		T define = lib.findDefine(name);
-		if(define == null)
-		{
-			throw new DefineNotFoundException(name);			
-		}
-		return define;			
+		return lib.getDefine(name);					
 	}
 	public <T extends Define> T getDefine(DefineType type, String name)
 	{
-		T define = lib.findDefine(type, name);
-		if(define == null)
-		{
-			throw new DefineNotFoundException(name);			
-		}
-		return define;			
+		return lib.getDefine(type, name);					
 	}
 	
 	
@@ -242,7 +233,10 @@ public abstract class Define extends Code implements IDefine
 	public String toString()
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append("DEFINE ");
+		if(this.isGenerable())
+			builder.append("DEFINE ");
+		if(this.isUsable())
+			builder.append("USING ");
 		builder.append(type.name());
 		builder.append(' ');
 		builder.append(name);

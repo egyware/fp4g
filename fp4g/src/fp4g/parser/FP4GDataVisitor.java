@@ -60,6 +60,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	private final FP4GExpresionVisitor exprVisitor;
 	private final FP4GNameListVisitor nameListVisitor;
 	private final FP4GStatementVisitor statementVisitor;
+	
 	private IDefine current;
 	
 	public FP4GDataVisitor(final Lib lib)
@@ -125,12 +126,12 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			throw new FP4GRuntimeException(GeneratorError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");					
 		}
 		
+		current = define;
 		if(define != null)
-		{
+		{			
 			UsingValuesContext values = ctx.usingValues();
 			if(values != null)
-			{
-				current = define;
+			{				
 				visit(values);
 			}
 		}
@@ -275,9 +276,19 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	public ILine visitSet(FP4GParser.SetContext ctx)
 	{
 		Expresion expr = exprVisitor.getExpr(current, ctx.expr());		
-		try {
-			current.set(ctx.key, eval(current,expr));
-		} catch (CannotEvalException e) {			
+		try 
+		{
+			if(current == null)
+			{
+				container.set(ctx.key, eval(container,expr));
+			}
+			else
+			{
+				current.set(ctx.key, eval(container,expr));
+			}
+		}
+		catch (CannotEvalException e) 
+		{			
 			Log.Show(CannotEval.CannotEvalExpresion,ctx.getStart().getLine(),expr.toString());
 		}
 		return null;
@@ -295,15 +306,25 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		final Game game = new Game(container); 
 		game.name = ctx.name;
 		game.setLine(ctx.getStart().getLine());
+		container.setDefine(game);
 		current = game;
-		return super.visitGame(ctx);
-		
+		ILine ret = super.visitGame(ctx);
+		current = null;
+		return ret;
+	}
+	
+	@Override
+	public ILine visitGameLib(FP4GParser.GameLibContext ctx)
+	{
+		//biblioteca
+		current = null;		
+		return super.visitGameLib(ctx);		
 	}
 	
 	@Override
 	public ILine visitGameValues(FP4GParser.GameValuesContext ctx)
 	{
-		super.visitGameValues(ctx);
+		super.visitGameValues(ctx);		
 		return null;
 	}	
 	
@@ -365,12 +386,13 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		  	default:
 		  		throw new FP4GRuntimeException(GeneratorError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");
 		 }
-		if(container instanceof Lib) define.setGenerable(false);
+		
 		define.setLine(define_ctx.getStart().getLine());
 		container.setDefine(define);
 				  
 		current = define;		
 		super.visitDefineValues(ctx);
+		current = null;
 		
 		final FP4GParser.NameListContext nameList_ctx = define_ctx.nameList();
 		if(nameList_ctx != null)

@@ -9,6 +9,5 @@ import fp4g.exceptions.NotAllowedOperatorException;
  */
 public interface IAccessible
 {
-	public IValue<?> get(String key) throws NotAllowedOperatorException;
-	public IValue<?> getParent()  throws NotAllowedOperatorException;
+	public IValue<?> get(String key) throws NotAllowedOperatorException;	
 }

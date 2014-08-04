@@ -457,7 +457,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	@Override
 	public Expresion visitAccessVarName(FP4GParser.AccessVarNameContext ctx)
 	{
-		//devuelve el regreso de los nodos hijos. (las 3 siguientes funciones...)
+		//devuelve el regreso de los nodos hijos. (las 2 siguientes funciones...)
 		return visit(ctx.var);
 	}
 	
@@ -465,12 +465,6 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	public Expresion visitVarCurrent(FP4GParser.VarCurrentContext ctx)
 	{
 		return VarId.current;
-	}
-	
-	@Override
-	public Expresion visitVarParent(FP4GParser.VarParentContext ctx)
-	{
-		return VarId.parent;
 	}
 	
 	@Override 
@@ -484,12 +478,6 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	public Expresion visitCurrentOperator(FP4GParser.CurrentOperatorContext ctx)
 	{
 		return VarId.current;
-	}
-	
-	@Override
-	public Expresion visitParentOperator(FP4GParser.ParentOperatorContext ctx)
-	{
-		return VarId.parent;
 	}
 	
 	@Override 
@@ -506,11 +494,6 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		if(varId == VarId.current)
 		{
 			VarDot var = new VarDot(VarDot.current, property);
-			return var;
-		}else
-		if(varId == VarId.parent)
-		{
-			VarDot var = new VarDot(VarDot.parent, property);
 			return var;
 		}
 		else

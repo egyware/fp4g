@@ -26,21 +26,19 @@ expr
 accessVarOp
 		:
 		    var = varOp                                         #accessVarName 
-		|  pVar = parentVarOp (DOT propertyAccess=accessVarOp)? #accessVarOperator				
+		|  pVar = parentVarOp DOT propertyAccess=accessVarOp    #accessVarOperator				
 		;
 		
 parentVarOp
 returns
 [String name]
 		:
-		   CURRENT_LITERAL                         #currentOperator                  
-		 | PARENT_LITERAL                          #parentOperator 
+		   CURRENT_LITERAL                         #currentOperator
 		 | varName = varID {$name=$varName.text;}  #varNameOperator
 		;
 varOp
 		:
-		   CURRENT_LITERAL  #varCurrent                  
-		 | PARENT_LITERAL	#varParent 
+		   CURRENT_LITERAL  #varCurrent
 		 | varName = varID	#varName
 		 
 		;

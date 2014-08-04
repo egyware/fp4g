@@ -58,7 +58,7 @@ public class UsingTest {
 	{
 		LibContainer container = new LibContainer();		
 		{
-			Lib lib = new Lib();
+			Lib lib = new Lib(container);
 			FP4GLexer lexer = new FP4GLexer(new ANTLRInputStream(toOneString(libCode)));
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
 			FP4GParser p = new FP4GParser(tokens);		
@@ -77,8 +77,6 @@ public class UsingTest {
 			container.addLib(lib);
 		}
 		
-		game = new Game(container);		
-				
 		FP4GLexer lexer = new FP4GLexer(new ANTLRInputStream(toOneString(code)));	
 		CommonTokenStream tokens = new CommonTokenStream(lexer);		
 		FP4GParser p = new FP4GParser(tokens);		
@@ -87,8 +85,10 @@ public class UsingTest {
 		ParseTree tree = p.program();			
 		if(tree != null)
 		{
-			FP4GDataVisitor visitor = new FP4GDataVisitor(game);
+			Lib lib = container.getLocal();
+			FP4GDataVisitor visitor = new FP4GDataVisitor(lib);
 			visitor.visit(tree);
+			game = lib.getGame();
 		}
 		else
 		{

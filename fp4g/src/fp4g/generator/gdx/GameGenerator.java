@@ -1,19 +1,12 @@
 package fp4g.generator.gdx;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import fp4g.data.DefineType;
 import fp4g.data.ICode;
-import fp4g.data.define.Behavior;
-import fp4g.data.define.Entity;
 import fp4g.data.define.Game;
-import fp4g.data.define.GameState;
-import fp4g.data.define.Message;
-import fp4g.exceptions.GeneratorException;
 import fp4g.generator.gdx.models.GameModel;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.generator.gdx.models.PropertiesFragment;
@@ -89,45 +82,6 @@ public class GameGenerator extends JavaCodeGenerator
 	{
 		Game game = (Game)gameData;
 		generator.usingFile(path,String.format("%s.java",game.name));
-	}
-	
-
-
-	private void generateOthers(Game game, File path) throws GeneratorException
-	{
-		final Collection<Entity> game_entities = game.getDefines(DefineType.ENTITY);
-		if(game_entities != null)
-		{
-			for(Entity entity: game_entities)
-			{
-				generator.generateCode(entity, path);
-			}
-		}
-		final Collection<GameState> game_states = game.getDefines(DefineType.STATE);
-		if(game_states != null)
-		{
-			for(GameState state: game_states)
-			{
-				generator.generateCode(state, path);
-			}
-		}
-		final Collection<Behavior> behaviors = game.getDefines(DefineType.BEHAVIOR);
-		if(behaviors != null)
-		{
-			for(Behavior behavior: behaviors)
-			{
-				generator.generateCode(behavior, path);
-			}
-		}
-		final Collection<Message> messages = game.getDefines(DefineType.MESSAGE);
-		if(messages != null)
-		{
-			for(Message message: messages)
-			{
-				generator.generateCode(message, path);
-			}
-		}
-		
-	}
+	}	
 	
 }

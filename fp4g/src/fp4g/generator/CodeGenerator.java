@@ -16,17 +16,17 @@ public abstract class CodeGenerator <M extends MetaSourceModel, T extends Genera
 	/**
 	 * Genera codigo dado ciertos datos
 	 * 
-	 * @param gameData
+	 * @param codeData
 	 * @param path
 	 * @throws Exception
 	 */
-	public abstract void generateCode(ICode gameData, File path) throws Exception;
+	public abstract void generateCode(ICode codeData, File path) throws Exception;
 	/**
 	 * Usa codigo prehecho dato ciertos datos.
 	 * 
-	 * @param gameData
+	 * @param codeData
 	 * @param path
 	 * @throws Exception 
 	 */
-	public abstract void usingCode(ICode gameData, File path) throws Exception;
+	public abstract void usingCode(ICode codeData, File path) throws Exception;
 }

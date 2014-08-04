@@ -25,7 +25,7 @@ public class MessageGenerator extends JavaCodeGenerator
 	public void generateCode(ICode gameData, File path) throws Exception
 	{
 		final Message message = (Message)gameData;
-		final JavaParamListBuilder paramBuilder = new JavaParamListBuilder(generator);
+		final JavaParamListBuilder paramBuilder = new JavaParamListBuilder(message.lib, generator);
 		Template    enumTpl  = generator.getTemplate("Message.ftl"); 
 		Template handlerTpl  = generator.getTemplate("MessageHandler.ftl");
 		

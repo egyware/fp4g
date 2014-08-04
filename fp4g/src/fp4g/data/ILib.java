@@ -2,18 +2,19 @@ package fp4g.data;
 
 import java.util.Collection;
 
+import fp4g.data.define.Game;
 import fp4g.data.expresion.IMap;
 
 
-public interface ILib extends IMap
+public interface ILib extends IMap, IValue<ILib>
 {
 	
 	/**
-	 * Obtener un define por nombre
-	 * @param defineName
-	 * @return
+	 * Busca localmente un define por su nombre
+	 * @param name Nombre del define
+	 * @return el define buscado. Null si no lo encuentra. 
 	 */
-	public <T extends IDefine> T findDefine(String defineName);
+	public <T extends IDefine> T findDefine(String name);
 	
 	/**
 	 * Obtener un define sabiendo su tipo
@@ -36,14 +37,32 @@ public interface ILib extends IMap
 	 * @return
 	 */
 	public <T extends IDefine> boolean isSetDefine(DefineType type,String name);
+	
+	/**
+	 * Busca una variable localmente
+	 * @param key
+	 * @return
+	 */
+	public IValue<?> find(String key);
 
 	public String getName();
 
+	/**
+	 * Busca un define localmente y luego busca en el padre en caso que no lo encuentre.
+	 * 
+	 * Si el define buscado no se encuentra, lanzará una excepción.
+	 *  
+	 * @param message
+	 * @param messageName
+	 * @return
+	 */
 	public <T extends IDefine> T getDefine(DefineType message, String messageName);
 
 	public <T extends IDefine> T getDefine(String whereName);
 
 	public <T extends IDefine> void setDefine(T define);
+
+	public Game getGame();
 	
 
 }

@@ -20,11 +20,12 @@ public final class BeanAccess
 		for(int indexMethod = 0; indexMethod < methods.length;indexMethod++)
 		{
 			final String nameMethod = methods[indexMethod];
-			if(methods[indexMethod].startsWith("get"))					
+			final int len = nameMethod.length();
+			if(methods[indexMethod].startsWith("get") && len > 3)					
 			{
 				_p.add(Utils.decapitalize(methods[indexMethod].substring(3)));			
 			}
-			else if(nameMethod.startsWith("is"))
+			else if(nameMethod.startsWith("is") && len > 2)
 			{
 				_p.add(Utils.decapitalize(methods[indexMethod].substring(2)));
 			}

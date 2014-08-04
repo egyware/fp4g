@@ -10,6 +10,7 @@ import fp4g.data.DeclVar;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
+import fp4g.data.NameList;
 import fp4g.data.On;
 import fp4g.data.Statements;
 import fp4g.data.When;
@@ -43,7 +44,7 @@ public class EntityGenerator extends JavaCodeGenerator
 	throws Exception
 	{
 		final Entity entity = (Entity)gameData;
-		final JavaParamListBuilder paramBuilder = new JavaParamListBuilder(generator);
+		final JavaParamListBuilder paramBuilder = new JavaParamListBuilder(entity.lib, generator);
 		final Template entityBuilderTempl = generator.getTemplate("EntityBuilder.ftl");
 		final Template entityTempl        = generator.getTemplate("Entity.ftl");		
 		
@@ -66,7 +67,7 @@ public class EntityGenerator extends JavaCodeGenerator
 		//agregar parametros de entrada
 		if(entity.paramNameList != null)
 		{
-			List<VarCodeModel> pair = paramBuilder.build(entity.paramNameList, entity, buildMeta);			
+			List<VarCodeModel> pair = paramBuilder.build(entity.paramNameList, buildMeta);			
 			buildModel.setParams(pair);
 		}
 		
@@ -120,7 +121,7 @@ public class EntityGenerator extends JavaCodeGenerator
 					continue;
 				}
 				
-				OnModel onModel = OnModel.build(on, entity, generator, entityMeta);
+				OnModel onModel = OnModel.build(entity.lib, on, generator, entityMeta);
 				
 				onList.add(onModel);
 			}
@@ -130,7 +131,7 @@ public class EntityGenerator extends JavaCodeGenerator
 			List<OnModel> onListBuild = new LinkedList<OnModel>();			
 			for(On on: entityBuild_onMessages)
 			{
-				OnModel onModel = OnModel.build(on, entity, generator, buildMeta);						
+				OnModel onModel = OnModel.build(entity.lib, on, generator, buildMeta);						
 				
 				onListBuild.add(onModel);
 			}
@@ -160,21 +161,22 @@ public class EntityGenerator extends JavaCodeGenerator
 			}						
 		}
 		
-		if(entity.flags != null)
+		NameList flags = entity.getFlags();
+		if(flags != null)
 		{
-			LinkedList<VarCodeModel> flags = new LinkedList<VarCodeModel>();
-			for(DeclVar var:entity.flags)
+			LinkedList<VarCodeModel> flagsModel = new LinkedList<VarCodeModel>();
+			for(DeclVar var:flags)
 			{
 				if(var.initValue != null)
 				{
-					flags.add(new VarCodeModel(paramBuilder.translateType(var.type, entityMeta, entity),var.name,generator.expresion(entityMeta, var.initValue)));
+					flagsModel.add(new VarCodeModel(paramBuilder.translateType(var.type, entityMeta),var.name,generator.expresion(entityMeta, var.initValue)));
 				}
 				else
 				{
-					flags.add(new VarCodeModel(paramBuilder.translateType(var.type, entityMeta, entity),var.name,null));
+					flagsModel.add(new VarCodeModel(paramBuilder.translateType(var.type, entityMeta),var.name,null));
 				}
 			}
-			entityModel.setFlags(flags);
+			entityModel.setFlags(flagsModel);
 		}
 		if(entity.whenList != null)
 		{

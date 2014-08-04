@@ -13,14 +13,8 @@ import fp4g.log.info.CannotEval;
  */
 public class VarDot extends VarId
 {		
-	public final static String parent = "parent";
 	public final static String current = "current";
-	public final VarId property;
-	public VarDot(VarId p)
-	{		
-		super(parent);
-		property = p;
-	}	
+	public final VarId property;		
 	public VarDot(String name,VarId p)
 	{
 		super(name);
@@ -36,24 +30,13 @@ public class VarDot extends VarId
 		}
 		try
 		{			
-			IValue<?> sub = null;
-			if(VarDot.parent == varName)
-			{
-				sub = ((IAccessible)current).getParent();
-			}else
+			IValue<?> sub = null;			
 			if(VarDot.current == varName)
 			{
 				sub = current;
 			}else
-			{
-				if(current instanceof IMap)
-				{
-					sub = ((IMap)current).get(varName);				
-				}
-				else
-				{
-					throw new CannotEvalException(CannotEval.VarNameNotFound,this, String.format("No se encontro la variable \"%s\"",varName));
-				}
+			{				
+				sub = ((IAccessible)current).get(varName);				
 			}
 			if(sub == null)
 			{			

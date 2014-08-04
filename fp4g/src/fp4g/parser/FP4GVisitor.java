@@ -135,13 +135,6 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitSubExpr(@NotNull FP4GParser.SubExprContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#varParent}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarParent(@NotNull FP4GParser.VarParentContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link FP4GParser#when}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -294,13 +287,6 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitItemArray(@NotNull FP4GParser.ItemArrayContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#parentOperator}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParentOperator(@NotNull FP4GParser.ParentOperatorContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#nameList}.

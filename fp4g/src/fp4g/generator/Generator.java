@@ -15,7 +15,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import fp4g.Options;
 import fp4g.data.Define;
 import fp4g.data.Expresion;
-import fp4g.data.ICode;
+import fp4g.data.ILib;
 import fp4g.data.ILine;
 import fp4g.data.Statements;
 import fp4g.data.expresion.FunctionCall;
@@ -38,7 +38,7 @@ import freemarker.template.Version;
 public abstract class Generator<M extends MetaSourceModel> 
 {	
 	protected abstract void initialize(File path,Options options,Configuration cfg);
-	protected abstract void generateCode(ICode gameData,File path) throws GeneratorException;
+	protected abstract void generateCode(ILib local,File path) throws GeneratorException;
 	protected abstract void compileFiles(Collection<File> files) throws GeneratorException;
 	protected abstract Collection<File> getRequiredFiles(File path,File file);
 	protected abstract void copyFiles(Collection<File> files);
@@ -49,7 +49,7 @@ public abstract class Generator<M extends MetaSourceModel>
 	private Configuration cfg;
 	
 		
-	public final void generate(Options options,ICode gameData, File path){
+	public final void generate(Options options,ILib gameData, File path){
 		cfg = new Configuration();		
 		cfg.setObjectWrapper(new DefaultObjectWrapper());		
 		cfg.setDefaultEncoding("UTF-8");
@@ -140,7 +140,7 @@ public abstract class Generator<M extends MetaSourceModel>
 	{
 		try
 		{
-			Lib lib = new Lib();
+			Lib lib = new Lib(libContainer);
 			FP4GLexer lexer = new FP4GLexer(new ANTLRFileStream(libFileName));	
 			CommonTokenStream tokens = new CommonTokenStream(lexer);		
 			FP4GParser p = new FP4GParser(tokens);		
