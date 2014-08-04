@@ -1,114 +1,111 @@
-DEFINE GAME
+//primero methods...
+SET methods  = EMPTY AS MessageMethods;	
+
+DEFINE MESSAGE Key
 [
-	//primero methods...
-	SET methods  = EMPTY AS MessageMethods;
-	
-	DEFINE MESSAGE Key
-	[
-		ADD press(Integer key)
-		{
-			replace = "Input.Keys.%s == key",
-			attachInputProcessor = true
-		} AS MessageMethod;		
-		ADD release(Integer key) 
-		{			
-			replace = "Input.Keys.%s == key", 
-			attachInputProcessor = true
-		} AS MessageMethod;
-	]
-	
-	DEFINE MESSAGE Camera
-	[
-		ADD follow(Entity entity);
-		ADD unfollow();		
-		ADD exitFollowZone(Entity entity);
-		ADD checkAndFollow(Entity entity);
-	]
-	
-	DEFINE MESSAGE Mouse
-	[
-		ADD pressButton(Integer button, Integer x, Integer y)
-		{ 
-			replace = "Input.Buttons.%s == button",
-			attachInputProcessor = true
-		} AS MessageMethod;
-		ADD releaseButton(Integer button, Integer x,Integer y) 
-		{			
-			replace="Input.Buttons.%s == button",
-			attachInputProcessor = true
-		} AS MessageMethod;
-		ADD move(Integer x, Integer y) 
-		{			
-			attachInputProcessor = true
-		} AS MessageMethod;
-		ADD dragged(Integer x, Integer y) 
-		{			
-			attachInputProcessor = true
-		} AS MessageMethod;
-	]
-	
-	DEFINE MESSAGE Translate
-	[
-		ADD translate(Float x, Float y);
-		ADD rotate(Float grad);		
-	]
-	
-	DEFINE MESSAGE Move
-	[		
-		ADD angularSpeed(Float w);
-		ADD speed  (Float x, Float y);
-		ADD forward(Float units);
-	]
-	
-	DEFINE MESSAGE Platform
-	[
-		ADD jump(Float vel);
-		ADD move(Float vel);
-		ADD beginContact(Integer value) { replace = "PlatformMessage.%s == value" } AS MessageMethod;
-		ADD endContact(Integer value) { replace = "PlatformMessage.%s == value" } AS MessageMethod;
-	]
-	
-	DEFINE MESSAGE Contact
-	[		
-		ADD begin(Entity other, Fixture otherFix, Fixture ownFix, Contact contact) { replace="other instanceof %s" } AS MessageMethod;
-		ADD   end(Entity other, Fixture otherFix, Fixture ownFix, Contact contact) { replace="other instanceof %s" } AS MessageMethod;
-	]
-	
-	DEFINE MESSAGE Gun
-	[
-		ADD         shot(Float rot, Float dist, Float vel);
-		ADD       reload(Integer ammo);
-		ADD changeBullet(String entityName);
-	]
-	
-	DEFINE MESSAGE AutoGun
-	[
-		ADD setDelayShot(Integer delay);
-		ADD      setShot(Float rot, Float dist, Float vel);
-	]
-	
-	DEFINE MESSAGE Entity
-	[
-		SET factory = true;		
-		ADD   init();
-		ADD deinit();
-	]
-	
-	DEFINE MESSAGE Spawn
-	[	
-		ADD   added(Entity entity) { replace="entity instanceof %s" } AS MessageMethod;
-		ADD removed(Entity entity) { replace="entity instanceof %s" } AS MessageMethod;
-	]	
-	
-	DEFINE MESSAGE Timer
-	[
-		ADD  active(Integer index) { replace="index == %s" } AS MessageMethod;
-		ADD setTime(Integer index, Integer time);
-		ADD  cancel(Integer index);
-	]
-	DEFINE MESSAGE Level
-	[
-		ADD change(String state);
-		ADD reload();
-	]
+	ADD press(Integer key)
+	{
+		replace = "Input.Keys.%s == key",
+		attachInputProcessor = true
+	} AS MessageMethod;		
+	ADD release(Integer key) 
+	{			
+		replace = "Input.Keys.%s == key", 
+		attachInputProcessor = true
+	} AS MessageMethod;
+]
+
+DEFINE MESSAGE Camera
+[
+	ADD follow(Entity entity);
+	ADD unfollow();		
+	ADD exitFollowZone(Entity entity);
+	ADD checkAndFollow(Entity entity);
+]
+
+DEFINE MESSAGE Mouse
+[
+	ADD pressButton(Integer button, Integer x, Integer y)
+	{ 
+		replace = "Input.Buttons.%s == button",
+		attachInputProcessor = true
+	} AS MessageMethod;
+	ADD releaseButton(Integer button, Integer x,Integer y) 
+	{			
+		replace="Input.Buttons.%s == button",
+		attachInputProcessor = true
+	} AS MessageMethod;
+	ADD move(Integer x, Integer y) 
+	{			
+		attachInputProcessor = true
+	} AS MessageMethod;
+	ADD dragged(Integer x, Integer y) 
+	{			
+		attachInputProcessor = true
+	} AS MessageMethod;
+]
+
+DEFINE MESSAGE Translate
+[
+	ADD translate(Float x, Float y);
+	ADD rotate(Float grad);		
+]
+
+DEFINE MESSAGE Move
+[		
+	ADD angularSpeed(Float w);
+	ADD speed  (Float x, Float y);
+	ADD forward(Float units);
+]
+
+DEFINE MESSAGE Platform
+[
+	ADD jump(Float vel);
+	ADD move(Float vel);
+	ADD beginContact(Integer value) { replace = "PlatformMessage.%s == value" } AS MessageMethod;
+	ADD endContact(Integer value) { replace = "PlatformMessage.%s == value" } AS MessageMethod;
+]
+
+DEFINE MESSAGE Contact
+[		
+	ADD begin(Entity other, Fixture otherFix, Fixture ownFix, Contact contact) { replace="other instanceof %s" } AS MessageMethod;
+	ADD   end(Entity other, Fixture otherFix, Fixture ownFix, Contact contact) { replace="other instanceof %s" } AS MessageMethod;
+]
+
+DEFINE MESSAGE Gun
+[
+	ADD         shot(Float rot, Float dist, Float vel);
+	ADD       reload(Integer ammo);
+	ADD changeBullet(String entityName);
+]
+
+DEFINE MESSAGE AutoGun
+[
+	ADD setDelayShot(Integer delay);
+	ADD      setShot(Float rot, Float dist, Float vel);
+]
+
+DEFINE MESSAGE Entity
+[
+	SET factory = true;		
+	ADD   init();
+	ADD deinit();
+]
+
+DEFINE MESSAGE Spawn
+[	
+	ADD   added(Entity entity) { replace="entity instanceof %s" } AS MessageMethod;
+	ADD removed(Entity entity) { replace="entity instanceof %s" } AS MessageMethod;
+]	
+
+DEFINE MESSAGE Timer
+[
+	ADD  active(Integer index) { replace="index == %s" } AS MessageMethod;
+	ADD setTime(Integer index, Integer time);
+	ADD  cancel(Integer index);
+]
+DEFINE MESSAGE Level
+[
+	ADD change(String state);
+	ADD reload();
 ]

@@ -61,10 +61,16 @@ public class LibContainer extends Code implements ILib
 	@Override
 	public <T extends IDefine> Collection<T> getDefines(DefineType defineType) 
 	{
+		return getLocalDefines(defineType);
+	}
+	
+	@Override
+	public <T extends IDefine> Collection<T> getLocalDefines(DefineType defineType) 
+	{
 		List<T> list = new LinkedList<T>();
 		for(Lib lib:libs)
 		{
-			Collection<T> collection = lib.getDefines(defineType);
+			Collection<T> collection = lib.getLocalDefines(defineType);
 			if(collection != null)
 			{
 				list.addAll(collection);
@@ -72,6 +78,7 @@ public class LibContainer extends Code implements ILib
 		}
 		return list;
 	}
+
 
 	@Override
 	public <T extends IDefine> boolean isSetDefine(DefineType type, String name) 

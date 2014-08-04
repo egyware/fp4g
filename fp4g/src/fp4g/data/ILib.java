@@ -30,6 +30,7 @@ public interface ILib extends IMap, IValue<ILib>
 	 * @return
 	 */
 	public <T extends IDefine> Collection<T> getDefines(DefineType defineType);
+	public <T extends IDefine> Collection<T> getLocalDefines(DefineType defineType);
 	
 	/**
 	 * Pregunta si está la definicion

@@ -59,7 +59,7 @@ public final class BeanAccess
 			
 			if(nameMethod.endsWith(keyMethod) && ((methods[indexMethod].startsWith("get") && (keyMethod.length() + 3 == lenMethod))||(nameMethod.startsWith("is") && (keyMethod.length() + 2 == lenMethod))))
 			{
-				return method.invoke(this,indexMethod);
+				return method.invoke(thiz,indexMethod);
 			}
 		}
 		return null; //TODO falta error aqui

@@ -79,7 +79,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 			
 			if(define != null)
 			{
-				IValue<?> managerClass = define.get("managerClass");
+				IValue<?> managerClass = define.find("managerClass");
 				if(managerClass != null)
 				{
 					managerModel.name = managerClass.getValue().toString();
@@ -231,7 +231,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 			
 			HashMap<String,String> params = new HashMap<String,String>();
 			
-			IValue<?> groupNameValue = define.get("groupName");			
+			IValue<?> groupNameValue = define.find("groupName");			
 			String groupName = (groupNameValue!=null)?groupNameValue.getValue().toString():null;
 			
 			//ahora los parametros están en un IMap, el problema es como recorro un IMap?

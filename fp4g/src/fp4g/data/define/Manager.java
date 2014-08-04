@@ -14,6 +14,7 @@ public class Manager extends Define
 {
 	private int priority;
 	private boolean receiver;
+	private String managerClass;
 	
 	public Manager(String name,ILib parent) 
 	{
@@ -30,11 +31,23 @@ public class Manager extends Define
 		return receiver;
 	}
 
-	public final void setPriority(int priority) {
+	public final void setPriority(int priority) 
+	{
 		this.priority = priority;
 	}
 
-	public final void setReceiver(boolean receiver) {
+	public final void setReceiver(boolean receiver) 
+	{
 		this.receiver = receiver;
-	}	
+	}
+
+	public final String getManagerClass() 
+	{
+		return managerClass;
+	}
+
+	public final void setManagerClass(String managerClass)
+	{
+		this.managerClass = managerClass;
+	}
 }

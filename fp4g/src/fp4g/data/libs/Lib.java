@@ -27,6 +27,7 @@ import fp4g.log.info.NotAllowed;
  */
 public class Lib extends Code implements IMap,ILib
 {
+	private static final String GameName = "Game";
 	private final Map<DefineType,Map<String,? extends IDefine>> defines;
 	private final Map<String,IValue<?>> variables;
 	private final ILib parent;
@@ -40,7 +41,7 @@ public class Lib extends Code implements IMap,ILib
 	}
 	
 	@SuppressWarnings("unchecked")
-	public final <T extends IDefine> Collection<T> getDefines(DefineType type)
+	public final <T extends IDefine> Collection<T> getLocalDefines(DefineType type)
 	{
 		Map<String,T> map = (Map<String, T>) defines.get(type);
 		if(map != null)
@@ -48,6 +49,11 @@ public class Lib extends Code implements IMap,ILib
 			return map.values();
 		}
 		return null;
+	}
+	
+	public final <T extends IDefine> Collection<T> getDefines(DefineType type)
+	{
+		return parent.getDefines(type);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -111,7 +117,22 @@ public class Lib extends Code implements IMap,ILib
 		{
 			return define;
 		}
-		return variables.get(key);
+		IValue<?> ret = variables.get(key);
+		if(ret == null)
+		{
+			for(Map<String, ? extends IDefine> mapDefines:defines.values())
+			{
+				for(IDefine def : mapDefines.values())
+				{
+					ret = def.find(key);
+					if(ret != null)
+					{
+						return ret;
+					}
+				}
+			}
+		}
+		return ret;
 	}
 	
 	
@@ -129,6 +150,7 @@ public class Lib extends Code implements IMap,ILib
 			else
 			{
 				game = (Game) define;
+				set(GameName,game);
 			}
 		}
 		Map<String,T> map = (Map<String, T>) defines.get(type);

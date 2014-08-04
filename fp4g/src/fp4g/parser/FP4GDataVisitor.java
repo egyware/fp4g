@@ -1,6 +1,5 @@
 package fp4g.parser;
 
-
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -60,6 +59,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	private final FP4GExpresionVisitor exprVisitor;
 	private final FP4GNameListVisitor nameListVisitor;
 	private final FP4GStatementVisitor statementVisitor;
+	private boolean loadLib;
 	
 	private IDefine current;
 	
@@ -142,11 +142,6 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	@Override
 	public ILine visitStart(FP4GParser.StartContext ctx)
 	{
-		if(container instanceof Lib)
-		{
-			//TODO null
-			throw new NotAllowedException(NotAllowed.NotExpectedGame,null, "Start dentro de Lib");
-		}
 		IDefine define = current;
 		
 		if(define instanceof Game)
@@ -318,6 +313,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	{
 		//biblioteca
 		current = null;		
+		loadLib = true;
 		return super.visitGameLib(ctx);		
 	}
 	
@@ -386,7 +382,10 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		  	default:
 		  		throw new FP4GRuntimeException(GeneratorError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");
 		 }
-		
+		if(loadLib)
+		{
+			define.setGenerable(false);
+		}
 		define.setLine(define_ctx.getStart().getLine());
 		container.setDefine(define);
 				  

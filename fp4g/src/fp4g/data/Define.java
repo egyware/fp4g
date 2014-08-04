@@ -3,6 +3,7 @@ package fp4g.data;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,7 @@ public abstract class Define extends Code implements IDefine
 		
 		onMessages= new HashMap<String, On>();
 		
-		beanAccess = BeanAccess.getBeanAccess(type.getDefineClass());		
+		beanAccess = BeanAccess.getBeanAccess(getClass());		
 	}
 	
 	public Define getValue()
@@ -183,13 +184,23 @@ public abstract class Define extends Code implements IDefine
 	{			
 		beanAccess.set(this, key, value.getValue());			
 	}
+	
+	public final IValue<?> get(String key)
+	{
+		IValue<?> ret = find(key);
+		if(ret == null)
+		{
+			ret = lib.get(key);
+		}
+		return ret;
+	}
 		
 	/**
 	 * Devuelve el valor de una variable.
 	 * @param key
 	 * @return
 	 */
-	public final IValue<?> get(String key)
+	public final IValue<?> find(String key)
 	{
 		Object r = beanAccess.get(this, key);		
 		if(r instanceof Float)
@@ -211,10 +222,14 @@ public abstract class Define extends Code implements IDefine
 		{
 			return new StringLiteral((String)r);
 		}
-		else
+		else if(r != null)
 		{
 			return new ObjectLiteral(r);
 		}		
+		else
+		{
+			return null;
+		}
 	}
 	
 	
@@ -240,6 +255,29 @@ public abstract class Define extends Code implements IDefine
 		builder.append(type.name());
 		builder.append(' ');
 		builder.append(name);
+		if(paramNameList != null)
+		{
+			builder.append(" (");
+			for(Iterator<DeclVar> it = paramNameList.iterator();it.hasNext();)
+			{
+				DeclVar paramName = it.next();
+				builder.append(paramName.type.name());
+				builder.append(' ');
+				builder.append(paramName.name);
+				if(paramName.initValue != null)
+				{
+					builder.append(" = ");
+					builder.append(paramName.initValue);
+				}
+				if(it.hasNext())
+				{
+					builder.append(", ");
+				}
+			}
+			builder.append(')');
+		}
+		//(Number x, Number y)
+		
 		builder.append("[ ... ]");		
 					
 		return builder.toString();

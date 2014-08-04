@@ -3,8 +3,9 @@ import java.util.List;
 
 import fp4g.data.add.AddDefine;
 import fp4g.data.expresion.IMap;
+import fp4g.data.operators.IAccessible;
 
-public interface IDefine extends ICode, IMap, IValue<IDefine>
+public interface IDefine extends ICode, IMap, IValue<IDefine>, IAccessible
 {
 	public DefineType getType();
 	/**
@@ -33,4 +34,6 @@ public interface IDefine extends ICode, IMap, IValue<IDefine>
 	public NameList getFlags();
 	public void addWhen(Expresion expresion, Statement statement);
 	public List<AddDefine> getAddDefines(DefineType behavior);
+	
+	public IValue<?> find(String key);
 }

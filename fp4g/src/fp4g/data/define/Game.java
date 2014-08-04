@@ -6,7 +6,6 @@ import fp4g.data.DefineType;
 import fp4g.data.ILib;
 import fp4g.data.On;
 import fp4g.data.add.AddDefine;
-import fp4g.data.libs.LibContainer;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.exceptions.NotAllowedException;
 import fp4g.log.info.GeneratorError;
@@ -27,105 +26,6 @@ public class Game extends Define
 	{
 		super(DefineType.GAME,"game",lc);		
 	}
-	
-		
-//	/**
-//	 * @param name
-//	 * @param manager
-//	 */
-//	public void addManager(String name,Manager manager)
-//	{
-//		managersByName.put(name, manager);
-//	}
-
-//	/**
-//	 * @param name
-//	 */
-//	public void addBehavior(String name) {
-//		addBehavior(name,(String)null);
-//	}
-//	/**
-//	 * @param name
-//	 * @param parentName
-//	 */
-//	public void addBehavior(String name,String parentName) {
-//		Behavior bhvr = new Behavior();
-//		bhvr.name = name;
-//		if(parentName != null)
-//		{
-//			Behavior parent = behaviorsByName.get(parentName);
-//			if(parent != null)
-//			{
-//				Show(WarnType.ParentBehaviorNull);
-//			}
-//			bhvr.parent = parent;
-//		}	
-//		addBehavior(name,bhvr);
-//	}
-//	/**
-//	 * @param name
-//	 * @param bhvr
-//	 */
-//	public void addBehavior(String name,Behavior bhvr)
-//	{
-//		behaviorsByName.put(name, bhvr);
-//	}
-//	/**
-//	 * @param entity
-//	 */
-//	public void addEntity(Entity entity)
-//	{
-//		entities.add(entity);
-//		entitiesByName.put(entity.name, entity);
-//	}
-//	
-//	/**
-//	 * Agrega y clasifica los valores que se van leyendo
-//	 * @param name Nombre del dato 
-//	 * @param value Valor del dato
-//	 */
-//	/**
-//	 * @param name
-//	 * @param value
-//	 */
-//	public void add(String name,Object value)
-//	{		
-//		if(value instanceof Behavior)
-//		{
-//			addBehavior(name,(Behavior)value);
-//		}
-//	}	
-//	/**
-//	 * @param state
-//	 */
-//	public void addGameState(GameState state)
-//	{
-//		gameStates.add(state);		
-//	}
-//
-//	/**
-//	 * @param name
-//	 * @return
-//	 */
-//	public Manager getDefinedManager(String name) {
-//		return managersByName.get(name);		
-//	}
-//	//@Override
-//	/**
-//	 * @param name
-//	 * @return
-//	 */
-//	public Behavior getDefinedBehavior(String name) {	
-//		return behaviorsByName.get(name);
-//	}
-//
-//	/**
-//	 * @param name
-//	 * @return
-//	 */
-//	public Entity getDefinedEntity(String name) {
-//		return entitiesByName.get(name);
-//	}
 	
 	@Override
 	public void setAdd(Add code) 

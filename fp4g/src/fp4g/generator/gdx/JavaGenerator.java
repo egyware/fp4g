@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -61,7 +62,12 @@ import freemarker.template.Configuration;
 
 public class JavaGenerator extends Generator<JavaMetaSourceModel> 
 {	
-	public static final String autodoc = "/**\n  * Autogenerado por FP4G\n  * [NO MODIFICAR]\n  */";
+	public static final String autodoc;
+	static
+	{
+		Calendar now = Calendar.getInstance();
+		autodoc = String.format("/**\n  * Autogenerado por FP4G\n  * [NO MODIFICAR]\n	* %d:%d:%d */",now.get(Calendar.HOUR),now.get(Calendar.MINUTE),now.get(Calendar.SECOND));
+	}
 	public String packageName = "";
 	public String packageNameDir = "";
 	public File packageDir;	
@@ -167,7 +173,16 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 
 	@Override
 	protected void generateCode(ILib local, File path) throws GeneratorException 
-	{		
+	{	
+		//solo hay uno, pero bueh
+		final Collection<Game> games = local.getDefines(DefineType.GAME);
+		if(games != null)
+		{
+			for(Game game: games)
+			{
+				genDefine(game, path);
+			}
+		}
 		final Collection<Entity> game_entities = local.getDefines(DefineType.ENTITY);
 		if(game_entities != null)
 		{
@@ -477,24 +492,6 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
     	CustomClassMap map = (CustomClassMap)libContainer.get("resolvers");
     	resolvers = (DependResolvers)map.getValue();
 
-    	  //agregar componentes		    	
-////    String components[][] = 
-////    	{
-////    		{"BodyBehavior"},
-////    		{"spatial.Spatial"},
-////    		{"SpriteBehavior","spatial.Spatial"},		        			        		
-////    	};	        
-////    for(String c[]:components)
-////    {
-////    	if(c.length == 1)
-////    	{
-////    		gameConf.addBehavior(c[0]);
-////    	}
-////    	else
-////    	{
-////    		gameConf.addBehavior(c[0],c[1]);
-////    	}
-////    }
     	return libContainer;
 	}
 	

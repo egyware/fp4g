@@ -6,6 +6,10 @@ import fp4g.data.ILib;
 
 public class Asset extends Define
 {
+	private String className;
+	private String classParameter; 
+	private String groupName;
+	
 	public static enum Type {
 		Texture,
 		Atlas,
@@ -26,5 +30,23 @@ public class Asset extends Define
 	{
 		super(DefineType.ASSET, assetType.name(), parent);
 		this.assetType = assetType;
+	}
+	public final String getClassName() {
+		return className;
+	}
+	public final String getClassParameter() {
+		return classParameter;
+	}
+	public final String getGroupName() {
+		return groupName;
+	}
+	public final void setClassName(String className) {
+		this.className = className;
+	}
+	public final void setClassParameter(String classParameter) {
+		this.classParameter = classParameter;
+	}
+	public final void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}	
 }

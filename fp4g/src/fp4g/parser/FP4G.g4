@@ -21,9 +21,13 @@ package fp4g.parser;
 }
 
 // **** PARSER ****
-program : usings game EOF;
+program : usings defines EOF;
+
+parseLib: usings gameLib EOF;
 
 usings  : (using)*;
+
+defines : (game|define)*;
 
 using
 returns
@@ -61,11 +65,8 @@ returns [String name]
 		 ABRE_COR gameValues CIERRA_COR		 
 		;
 
-//Util para las futuras bibliotecas de FP4G		
-gameLib
-		:
-		 DEFINE GAME
-		 ABRE_COR gameValues CIERRA_COR		 
+gameLib:		
+			(gameValue|define)*
 		;
 
 gameValues
