@@ -14,9 +14,9 @@ import fp4g.data.statements.Source;
 import fp4g.exceptions.FP4GException;
 import fp4g.generator.gdx.JavaGenerator;
 import fp4g.generator.gdx.JavaParamListBuilder;
-import fp4g.generator.gdx.models.On.FiltersD;
-import fp4g.generator.gdx.models.On.MethodHandlerModel;
-import fp4g.generator.gdx.models.On.SourceModel;
+import fp4g.generator.gdx.models.on.FiltersD;
+import fp4g.generator.gdx.models.on.MethodHandlerModel;
+import fp4g.generator.gdx.models.on.SourceModel;
 
 
 /**

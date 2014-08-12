@@ -60,7 +60,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaMetaSourceModel
 		{
 			return fg.generate(generator, model, fc.params);
 		}
-		throw new CannotEvalException(CannotEval.FunctionNotFound,fc, String.format("La función \"%s\", no se ha encontrado.",fc.functionName));
+		throw new CannotEvalException(CannotEval.FunctionNotFound,(Expresion)fc, String.format("La función \"%s\", no se ha encontrado.",fc.functionName));
 	}
 	
 }

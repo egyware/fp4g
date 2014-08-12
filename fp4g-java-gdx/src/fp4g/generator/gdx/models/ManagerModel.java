@@ -1,6 +1,7 @@
 package fp4g.generator.gdx.models;
 
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ManagerModel implements Comparable<ManagerModel>
@@ -15,6 +16,7 @@ public class ManagerModel implements Comparable<ManagerModel>
 	public List<String> postUpdate;
 	public List<String> fields;
 	public int priority;
+	public HashMap<String, String> property;
 	
 	public ManagerModel()
 	{				
@@ -65,6 +67,14 @@ public class ManagerModel implements Comparable<ManagerModel>
 	public int compareTo(ManagerModel other)
 	{
 		return (priority - other.priority);
+	}
+
+	public final HashMap<String, String> getProperty() {
+		return property;
+	}
+
+	public final void setProperty(HashMap<String, String> property) {
+		this.property = property;
 	}
 	
 	

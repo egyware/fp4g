@@ -26,7 +26,7 @@ import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.generator.gdx.models.OnModel;
 import fp4g.generator.gdx.models.VarCodeModel;
 import fp4g.generator.gdx.models.WhenModel;
-import fp4g.generator.gdx.models.On.MethodHandlerModel;
+import fp4g.generator.gdx.models.on.MethodHandlerModel;
 import fp4g.log.info.Error;
 import freemarker.template.Template;
 

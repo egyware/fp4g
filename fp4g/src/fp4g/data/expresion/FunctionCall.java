@@ -5,7 +5,7 @@ import fp4g.data.Expresion;
 import fp4g.data.IDefine;
 import fp4g.data.IValue;
 
-public class FunctionCall extends Expresion 
+public class FunctionCall extends Expresion implements IValue<FunctionCall>
 {
 	public final String functionName;
 	public final ExprList params;
@@ -20,7 +20,13 @@ public class FunctionCall extends Expresion
 	@Override
 	public IValue<?> eval(IValue<?> define) 
 	{
-		throw new RuntimeException("No Implementado");
+		return this;
+	}
+
+	@Override
+	public FunctionCall getValue() 
+	{
+		return this;
 	}
 
 }

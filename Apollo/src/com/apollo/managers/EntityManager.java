@@ -14,8 +14,7 @@ import com.apollo.utils.ImmutableBag;
 
 public class EntityManager extends Manager implements MessageReceiver
 {
-	private Bag<Entity> entities;
-	private EntitySpawn spawner; 
+	private Bag<Entity> entities;	 
 	private Map<Message<?>,Bag<MessageHandler>> handlersByEventType;
 		
 	public EntityManager()
@@ -23,27 +22,17 @@ public class EntityManager extends Manager implements MessageReceiver
 		entities = new Bag<Entity>();		
 	}
 	
-	public EntityManager(EntitySpawn spawner)
-	{
-		this();
-		this.spawner = spawner;		
-	}
-	
-	@Override
-	public void initialize()
+	public void setEntities(EntitySpawn spawner)
 	{
 		//agregamos todas las entidades		
-		if(spawner != null)
+		for(int i=0; i < spawner.lenght; i++)
 		{
-			for(int i=0; i < spawner.lenght; i++)
+			Entity entity = world.createEntity(spawner.entities[i], spawner.params[i]);
+			if(entity != null)
 			{
-				Entity entity = world.createEntity(spawner.entities[i], spawner.params[i]);
-				if(entity != null)
-				{
-					world.addEntity(entity);
-				}
+				world.addEntity(entity);
 			}
-		}
+		}		
 	}
 	
 	public ImmutableBag<Entity> getEntities() 

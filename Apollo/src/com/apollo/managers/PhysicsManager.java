@@ -31,25 +31,18 @@ public class PhysicsManager extends Manager implements ContactListener{
 		this(Vector2.Zero);
 	}
 	
-	public PhysicsManager(Terrain2D terrain)
-	{
-		this(Vector2.Zero,terrain);
-	}
 	public PhysicsManager(Vector2 gravity)
 	{		
 		world = new World(gravity, true);
 		world.setContactListener(this);		
 	}
-	public PhysicsManager(float x, float y, Terrain2D terrain)
+	public PhysicsManager(float x, float y)
 	{
-		this(new Vector2(x,y),terrain);
+		this(new Vector2(x,y));
 	}
 	
-	public PhysicsManager(Vector2 gravity, Terrain2D terrain)
-	{		
-		world = new World(gravity, true);
-		world.setContactListener(this);	
-		
+	public void setTerrain(Terrain2D terrain)
+	{
 		//TODO queda pendiente terrain
 		//solo hay cajas
 		PolygonShape shape = new PolygonShape();
@@ -64,18 +57,18 @@ public class PhysicsManager extends Manager implements ContactListener{
 			body.createFixture(shape, 1);
 			
 //			float _x = (Integer.parseInt(r[0]))*tw*SCALE;
-//    		float _y = (mh-Integer.parseInt(r[1]))*th*SCALE;
-//    		float _w = Integer.parseInt(r[2])*tw*SCALE;
-//    		float _h = Integer.parseInt(r[3])*th*SCALE;
-//    		
-//    		BodyDef def = new BodyDef();
-//    		def.position.x = _x + _w/2;
-//    		def.position.y = _y - _h/2;
-//    		def.type = BodyDef.BodyType.StaticBody;
-//    		Body body = w.createBody(def);
-//    		
-//    		PolygonShape shape = new PolygonShape();
-//    		shape.setAsBox(_w/2, _h/2);
+//			float _y = (mh-Integer.parseInt(r[1]))*th*SCALE;
+//			float _w = Integer.parseInt(r[2])*tw*SCALE;
+//			float _h = Integer.parseInt(r[3])*th*SCALE;
+//		   		
+//			BodyDef def = new BodyDef();
+//			def.position.x = _x + _w/2;
+//		    def.position.y = _y - _h/2;
+//		    def.type = BodyDef.BodyType.StaticBody;
+//		    Body body = w.createBody(def);
+//		    		
+//		    PolygonShape shape = new PolygonShape();
+//		    shape.setAsBox(_w/2, _h/2);
 		}
 	}
 	

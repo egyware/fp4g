@@ -1,4 +1,4 @@
-package fp4g.generator.gdx.models.On;
+package fp4g.generator.gdx.models.on;
 
 import java.util.Iterator;
 import java.util.LinkedList;

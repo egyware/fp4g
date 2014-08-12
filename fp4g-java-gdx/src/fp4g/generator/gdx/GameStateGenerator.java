@@ -12,7 +12,6 @@ import fp4g.classes.ManagerData;
 import fp4g.data.DefineType;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
-import fp4g.data.ILib;
 import fp4g.data.IValue;
 import fp4g.data.add.AddAsset;
 import fp4g.data.add.AddDefine;
@@ -22,6 +21,7 @@ import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Manager;
 import fp4g.data.expresion.ArrayList;
+import fp4g.data.expresion.IMap;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.generator.Depend;
@@ -121,8 +121,8 @@ public class GameStateGenerator extends JavaCodeGenerator
 					managerModel.postInitialize = toList(extras.getPostInitialize());
 					managerModel.fields = toList(extras.getFields());
 					managerModel.preUpdate = toList(extras.getPreUpdate());
-					managerModel.postUpdate = toList(extras.getPostUpdate());
-					
+					managerModel.postUpdate = toList(extras.getPostUpdate());					 
+							
 					//a pesar que va quedar general, para ambos casos solo use para la depuración
 					ArrayList imports = extras.getImports();
 					if(imports != null)
@@ -136,6 +136,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 				
 			}
 			
+			managerModel.property = toMap(meta, manager.values);			
 			managerModel.varName = Generator.uncap_first(manager.name);				
 			
 			
@@ -334,6 +335,21 @@ public class GameStateGenerator extends JavaCodeGenerator
 		}
 		return null;
 	}
+	
+	private HashMap<String, String> toMap(JavaMetaSourceModel model, IMap map) throws CannotEvalException
+	{
+		if(map != null)
+		{
+			HashMap<String, String> _map = new HashMap<String, String>();
+			for(Entry<String, IValue<?>> entry:map.entrySet())
+			{
+				_map.put(entry.getKey(), generator.expresion(model, entry.getValue()));						
+				
+			}
+			return _map;
+		}
+		return null;
+	}
 
 
 	@Override
@@ -344,3 +360,4 @@ public class GameStateGenerator extends JavaCodeGenerator
 	}
 	
 }
+

@@ -124,7 +124,7 @@ public final class ${source.name} extends GameState{
 		container.set${manager.setMethod}(${manager.varName});
 		<#else>
 		container.setManager(${manager.varName});		
-		</#if>		
+		</#if>				
 		<#if manager.postInitialize??>
 		<#list manager.postInitialize as postinit>
 		${postinit};
@@ -132,6 +132,18 @@ public final class ${source.name} extends GameState{
 		</#if>
 		</#list>
 		</#if>		
+		
+		<#if managers?has_content>
+		<#list managers as manager>
+		<#if manager.property?has_content>		
+		<#assign map = manager.property>
+		<#list map?keys as key> 
+		${manager.varName}.set${key?cap_first}(${map[key]});
+		</#list>
+		</#if>
+		</#list>
+		</#if>		
+		
 		
 		//entidades
 		<#if entities??>		

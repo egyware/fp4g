@@ -10,7 +10,7 @@ import fp4g.data.IValue;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.IList;
 import fp4g.generator.Depend;
-import fp4g.generator.gdx.models.JavaMetaSourceModel;
+import fp4g.generator.MetaSourceModel;
 import fp4g.log.Log;
 import fp4g.log.info.Warn;
 
@@ -28,12 +28,12 @@ public class MessageDependResolver implements fp4g.data.expresion.IMap, Depend
 	{
 		importsRequired = new HashMap<String,ArrayList>();
 	}
-	public void addImports(final String s,JavaMetaSourceModel model)
+	public void addImports(final String s,MetaSourceModel model)
 	{
 		addImports(s,model,true);
 	}
 	
-	public void addImports(final String s,JavaMetaSourceModel model,boolean defaults)
+	public void addImports(final String s, MetaSourceModel model,boolean defaults)
 	{
 		IList imports = importsRequired.get(s);		
 		if(imports != null)
@@ -56,7 +56,7 @@ public class MessageDependResolver implements fp4g.data.expresion.IMap, Depend
 	 * @see fp4g.classes.IDependResolver#perform(fp4g.data.Define, fp4g.generator.models.JavaCodeModel)
 	 */
 	@Override
-	public void perform(Define data, JavaMetaSourceModel model)
+	public void perform(Define data, MetaSourceModel model)
 	{		
 		addImports(data.name,model);		
 		//imports generales, si existen...

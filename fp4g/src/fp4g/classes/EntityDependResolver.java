@@ -9,7 +9,7 @@ import fp4g.data.define.Entity;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.IList;
 import fp4g.generator.Depend;
-import fp4g.generator.gdx.models.JavaMetaSourceModel;
+import fp4g.generator.MetaSourceModel;
 
 /**
  * Clase que resuelve las dependencias de el KeyMessage
@@ -28,7 +28,7 @@ public class EntityDependResolver implements Depend
 	{	
 	}
 	
-	private void addBehaviorsImports(Entity entity, JavaMetaSourceModel model) 
+	private void addBehaviorsImports(Entity entity, MetaSourceModel model) 
 	{
 		IList imports = behaviorsList;
 		for(IValue<?> i:imports)
@@ -52,7 +52,7 @@ public class EntityDependResolver implements Depend
 		
 	}
 	
-	public void addImports(final IList imports,JavaMetaSourceModel model)
+	public void addImports(final IList imports,MetaSourceModel model)
 	{
 		if(imports != null)
 		{
@@ -67,7 +67,7 @@ public class EntityDependResolver implements Depend
 	 * @see fp4g.classes.IDependResolver#perform(fp4g.data.Define, fp4g.generator.models.JavaCodeModel)
 	 */
 	@Override
-	public void perform(Define data, JavaMetaSourceModel model)
+	public void perform(Define data, MetaSourceModel model)
 	{		
 		Entity entity = (Entity)data;
 		if(model.getName().endsWith("Builder")) //TODO por ahora no se me ocurre una manera limpia de diferenciarlos.

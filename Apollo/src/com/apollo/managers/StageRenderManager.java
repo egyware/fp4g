@@ -50,6 +50,12 @@ public class StageRenderManager extends Manager
 		this.mapRenderer = new OrthogonalTiledMapRenderer(map,batch); //asumiré que es Tiled (y lo será por mucho tiempo)		
 	}
 	
+	public void setStageMap(TiledMap map)
+	{
+		this.map = map;
+		this.mapRenderer = new OrthogonalTiledMapRenderer(map, stage.getBatch());
+	}
+	
 	public void added(Entity e) 
 	{
 		ActorBehavior ab = e.getBehavior(ActorBehavior.class);
