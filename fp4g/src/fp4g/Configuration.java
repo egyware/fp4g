@@ -18,6 +18,7 @@ public final class Configuration implements Runnable
 	public final static String JDK_HOME = "java.home";
 	public final static String DEFAULT_PACKAGE = "default.package";
 	public final static String DEFAULT_DEBUG   = "default.debug";
+	public final static String DEFAULT_COMPILER = "default.compiler";
 	
 	
 	private Configuration()

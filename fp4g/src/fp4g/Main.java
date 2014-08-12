@@ -3,6 +3,8 @@ package fp4g;
 import java.io.File;
 import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.HashMap;
+import java.util.ServiceLoader;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -12,8 +14,8 @@ import fp4g.data.libs.Lib;
 import fp4g.data.libs.LibContainer;
 import fp4g.exceptions.FP4GException;
 import fp4g.exceptions.FP4GRuntimeException;
+import fp4g.exceptions.GeneratorException;
 import fp4g.generator.Generator;
-import fp4g.generator.gdx.JavaGenerator;
 import fp4g.log.Log;
 import fp4g.log.info.GeneratorError;
 import fp4g.parser.FP4GDataVisitor;
@@ -25,6 +27,7 @@ public class Main
 	private static String outDirectory;
 	private static String inputFile;
 	private static Options options = new Options();
+	private static HashMap<String, Plugin> compilers = new HashMap<String, Plugin>();
 	/**
 	 * 
 	 * @param args
@@ -76,8 +79,9 @@ public class Main
 			FP4GParser p = new FP4GParser(tokens);		
 			p.setBuildParseTree(true);
 			
+			loadPlugins();
 			
-			Generator<?> generator = new JavaGenerator();
+			Generator<?> generator = getDefaultGenerator();
 			LibContainer libs = generator.loadLibs();
 			Lib local = libs.getLocal();
 			
@@ -110,6 +114,23 @@ public class Main
 			throw new FP4GRuntimeException(GeneratorError.CannotParseFile,"No se pudo leer: ".concat(inputFile),e);
 		}
 	}
+	private static Generator<?> getDefaultGenerator() 
+	{
+		Plugin plugin = compilers.get(options.get(Options.COMPILER));
+		if(plugin == null)
+		{
+			throw new GeneratorException(GeneratorError.GeneratorNotFound, "Generator no encontrado");
+		}
+		return plugin.createGenerator();
+	}
+	private static void loadPlugins() 
+	{
+		ServiceLoader<Plugin> plugins = ServiceLoader.load(Plugin.class);
+		for(Plugin plugin:plugins)
+		{
+			compilers.put(plugin.getName(), plugin);
+		}		
+	}	
 	private static String help[] = {
 		"*** Modo de uso ***",
 		"",
