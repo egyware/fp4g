@@ -2,8 +2,8 @@ package fp4g.data;
 
 import java.util.Collection;
 
-import fp4g.data.define.Game;
 import fp4g.data.expresion.IMap;
+import fp4g.exceptions.DefineNotFoundException;
 
 
 public interface ILib extends IMap, IValue<ILib>
@@ -57,13 +57,9 @@ public interface ILib extends IMap, IValue<ILib>
 	 * @param messageName
 	 * @return
 	 */
-	public <T extends IDefine> T getDefine(DefineType message, String messageName);
+	public <T extends IDefine> T getDefine(DefineType message, String messageName) throws DefineNotFoundException;
 
-	public <T extends IDefine> T getDefine(String whereName);
+	public <T extends IDefine> T getDefine(String whereName) throws DefineNotFoundException;
 
-	public <T extends IDefine> void setDefine(T define);
-
-	public Game getGame();
-	
-
+	public <T extends IDefine> void setDefine(T define);	
 }

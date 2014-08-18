@@ -3,7 +3,9 @@
  */
 package fp4g.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -12,10 +14,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import fp4g.data.Define;
+import fp4g.data.ILib;
 import fp4g.data.add.AddMethod;
-import fp4g.data.define.Game;
 import fp4g.data.libs.Lib;
 import fp4g.data.libs.LibContainer;
+import fp4g.exceptions.DefineNotFoundException;
 import fp4g.parser.FP4GDataVisitor;
 import fp4g.parser.FP4GLexer;
 import fp4g.parser.FP4GParser;
@@ -25,7 +28,7 @@ import fp4g.parser.FP4GParser;
  *
  */
 public class UsingTest {
-	private static Game game;
+	private static ILib local;
 	private final static String[] libCode =
 		{
 			"DEFINE GAME",
@@ -75,6 +78,7 @@ public class UsingTest {
 				fail("Biblioteca no cargada");			
 			}
 			container.addLib(lib);
+			local = lib;
 		}
 		
 		FP4GLexer lexer = new FP4GLexer(new ANTLRInputStream(toOneString(code)));	
@@ -87,8 +91,7 @@ public class UsingTest {
 		{
 			Lib lib = container.getLocal();
 			FP4GDataVisitor visitor = new FP4GDataVisitor(lib);
-			visitor.visit(tree);
-			game = lib.getGame();
+			visitor.visit(tree);			
 		}
 		else
 		{
@@ -108,30 +111,44 @@ public class UsingTest {
 	@Test
 	public void testUsing() 
 	{
-		Define testA = game.getDefine("TestA");
-		Define testB = game.getDefine("TestB");
-		Define testC = game.getDefine("TestC");
+		try 
+		{
+			Define testA = local.getDefine("TestA");
 		
-		assertTrue("TestA no puede ser Generable", testA.isGenerable() == false);
-		assertTrue("TestA debe ser usable",        testA.isUsable()    == true);
-		
-		assertTrue("TestB no puede ser Generable", testB.isGenerable() == false);
-		assertTrue("TestB debe ser usable",        testB.isUsable()    == true);
-		
-		assertTrue("TestC no puede ser Generable", testC.isGenerable() == false);
-		assertTrue("TestC debe ser usable",        testC.isUsable()    == true);		
-		
+			Define testB = local.getDefine("TestB");
+			Define testC = local.getDefine("TestC");
+			
+			assertTrue("TestA no puede ser Generable", testA.isGenerable() == false);
+			assertTrue("TestA debe ser usable",        testA.isUsable()    == true);
+			
+			assertTrue("TestB no puede ser Generable", testB.isGenerable() == false);
+			assertTrue("TestB debe ser usable",        testB.isUsable()    == true);
+			
+			assertTrue("TestC no puede ser Generable", testC.isGenerable() == false);
+			assertTrue("TestC debe ser usable",        testC.isUsable()    == true);		
+		}
+		catch (DefineNotFoundException e) 
+		{
+			fail(e.toString());
+		}
 	}
 	
 	@Test
 	public void testUsingMessageMethod() 
 	{
-		Define testC = game.getDefine("TestC");
+		try
+		{
+			Define testC = local.getDefine("TestC");
+			
+			AddMethod m1 = testC.getAddMethod("Metodo1");
+			AddMethod m2 = testC.getAddMethod("Metodo2");
 		
-		AddMethod m1 = testC.getAddMethod("Metodo1");
-		AddMethod m2 = testC.getAddMethod("Metodo2");
-		
-		assertNotNull("M1 No puede ser null",m1);
-		assertNotNull("M1 No puede ser null",m2);
+			assertNotNull("M1 No puede ser null",m1);
+			assertNotNull("M1 No puede ser null",m2);
+		}
+		catch (DefineNotFoundException e) 
+		{
+			fail(e.toString());
+		}
 	}
 }

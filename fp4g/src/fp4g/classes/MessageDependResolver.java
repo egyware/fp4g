@@ -11,8 +11,8 @@ import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.IList;
 import fp4g.generator.Depend;
 import fp4g.generator.MetaSourceModel;
+import fp4g.log.FP4GWarn;
 import fp4g.log.Log;
-import fp4g.log.info.Warn;
 
 /**
  * Clase que resuelve las dependencias de el KeyMessage
@@ -46,7 +46,7 @@ public class MessageDependResolver implements fp4g.data.expresion.IMap, Depend
 		else if(defaults)
 		{
 			//si los imports no existen usaremos los por defecto
-			Log.Show(Warn.DependResolverNotFound,String.format("Usando imports por defecto para \"%s\"", s));
+			Log.Show(FP4GWarn.DefineDependResolverNotFound,String.format("Usando imports por defecto para \"%s\"", s));
 			model.addRequireSource(String.format("com.apollo.messages.%sMessage",s));
 			model.addRequireSource(String.format("com.apollo.messages.%sMessageHandler",s));
 		}

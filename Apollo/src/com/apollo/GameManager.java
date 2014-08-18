@@ -13,6 +13,9 @@ public abstract class GameManager implements ApplicationListener, MessageReceive
 	private GameState current;
 	private final Array<GameState> states;
 	
+	public abstract int getWidth();
+	public abstract int getHeight();
+	
 	public GameManager()
 	{
 		states = new Array<GameState>();		

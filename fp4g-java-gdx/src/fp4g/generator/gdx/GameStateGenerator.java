@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import fp4g.classes.ManagerData;
-import fp4g.data.DefineType;
+import fp4g.data.DefineTypes;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
+import fp4g.data.ILib;
 import fp4g.data.IValue;
 import fp4g.data.add.AddAsset;
 import fp4g.data.add.AddDefine;
 import fp4g.data.define.Asset;
 import fp4g.data.define.Entity;
-import fp4g.data.define.Game;
 import fp4g.data.define.GameState;
 import fp4g.data.define.Manager;
 import fp4g.data.expresion.ArrayList;
@@ -28,13 +28,11 @@ import fp4g.generator.Depend;
 import fp4g.generator.Generator;
 import fp4g.generator.gdx.models.AddModel;
 import fp4g.generator.gdx.models.AssetModel;
-import fp4g.generator.gdx.models.GameFragment;
 import fp4g.generator.gdx.models.GameStateModel;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.generator.gdx.models.ManagerModel;
+import fp4g.log.FP4GWarn;
 import fp4g.log.Log;
-import fp4g.log.info.CannotEval;
-import fp4g.log.info.Warn;
 import freemarker.template.Template;
 
 public class GameStateGenerator extends JavaCodeGenerator
@@ -42,6 +40,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 	
 	private static final String EXTRA = "extra";
 	private static final String DEBUG = "debug";
+	private static final String ISDEBUG = "debug"; //solo si es que esas dos variables cambian...
 
 	public GameStateGenerator(JavaGenerator generator) 
 	{
@@ -53,8 +52,10 @@ public class GameStateGenerator extends JavaCodeGenerator
 	public void generateCode(ICode codeData, File path) 
 	throws Exception 
 	{
-		GameState state = (GameState)codeData;
-		Game game = (Game)state.lib.getGame();		
+		final GameState state = (GameState)codeData;
+		final ILib lib = state.lib;
+		final boolean isDebug = (Boolean) lib.get(ISDEBUG).getValue();
+		//Game game = (Game)state.lib.getGame();		
 		
 		Template temp = generator.getTemplate("GameState.ftl");
 		
@@ -63,16 +64,9 @@ public class GameStateGenerator extends JavaCodeGenerator
 		gameStateModel.getMetaSource().setJavadoc(JavaGenerator.autodoc);
 		JavaMetaSourceModel meta = gameStateModel.getMetaSource();
 		
-		//game		
-		GameFragment gameModel = new GameFragment();
-		gameModel.setWidth(game.width);
-		gameModel.setWidth(game.height);
-		gameModel.setName(game.name);
-		gameStateModel.setGame(gameModel);
-		
 		//manager, adds
 		List<ManagerModel> managers = new LinkedList<ManagerModel>();
-		for(AddDefine manager:state.getAddDefines(DefineType.MANAGER))
+		for(AddDefine manager:state.getAddDefines(DefineTypes.MANAGER))
 		{
 			Manager define = (Manager) manager.define;
 			ManagerModel managerModel = new ManagerModel();
@@ -99,7 +93,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 				managerModel.priority = define.getPriority();
 				//acá, buscar las cosas extras y añadirselas.
 				IValue<?> extrasValue;
-				if(game.isDebug())
+				if(isDebug)
 				{
 					extrasValue = define.get(DEBUG);
 					if(extrasValue == null)
@@ -187,7 +181,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 		
 		 //agregamos todos las entidades definidas ens el game
         List<String> builders = new LinkedList<String>();
-        final Collection<Entity> state_entities = game.lib.getDefines(DefineType.ENTITY);
+        final Collection<Entity> state_entities = lib.getDefines(DefineTypes.ENTITY);
         if(state_entities != null && state_entities.size()>0)
         {
             for(Entity entity:state_entities)
@@ -201,7 +195,7 @@ public class GameStateGenerator extends JavaCodeGenerator
         
         //add entities
 		List<AddModel> entities = new LinkedList<AddModel>();
-		final List<AddDefine> state_addentities = state.getAddDefines(DefineType.ENTITY);
+		final List<AddDefine> state_addentities = state.getAddDefines(DefineTypes.ENTITY);
 		for(AddDefine entity:state_addentities)
 		{			
 			AddModel addEntity = new AddModel();
@@ -245,7 +239,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 				}
 				else
 				{
-					Log.Show(CannotEval.IncomplatibleTypes,add,"No se esperaba este asset en un grupo.");
+					throw new CannotEvalException(CannotEvalException.Types.IncomplatibleTypes, add,"No se esperaba este asset en un grupo.");
 				}
 			}
 			
@@ -284,7 +278,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 			Log.Exception(ex, state.getLine());
 		}
 		
-		for(AddDefine manager:state.getAddDefines(DefineType.MANAGER))
+		for(AddDefine manager:state.getAddDefines(DefineTypes.MANAGER))
 		{
 			if(manager.define != null)
 			{
@@ -301,7 +295,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 			}
 			else
 			{
-				Log.Show(Warn.MissingDefineAdd, manager.getLine(),"Se asumirá que existe un Define asociado.");				
+				Log.Show(FP4GWarn.MissingDefineAdd, manager.getLine(),"Se asumirá que existe un Define asociado.");				
 				meta.addRequireSource(String.format("com.apollo.managers.%s", manager.name));
 			}
 		}
@@ -311,7 +305,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 			meta.addRequireSource("com.apollo.Entity");
 		}
 		
-		if(game.isDebug())
+		if(isDebug)
 		{
 			meta.addRequireSource("com.badlogic.gdx.graphics.FPSLogger");
 		}

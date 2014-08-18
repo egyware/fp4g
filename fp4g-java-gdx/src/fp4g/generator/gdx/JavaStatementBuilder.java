@@ -16,7 +16,6 @@ import fp4g.data.statements.Destroy;
 import fp4g.data.statements.Send;
 import fp4g.data.statements.Subscribe;
 import fp4g.data.statements.Unsubscribe;
-import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.exceptions.FP4GException;
 import fp4g.exceptions.FP4GRuntimeException;
@@ -27,10 +26,8 @@ import fp4g.generator.gdx.models.DestroyStatementModel;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.generator.gdx.models.SendStatementModel;
 import fp4g.generator.gdx.models.SubscribeStatementModel;
+import fp4g.log.FP4GError;
 import fp4g.log.Log;
-import fp4g.log.info.CannotEval;
-import fp4g.log.info.GeneratorError;
-import fp4g.log.info.Warn;
 
 public class JavaStatementBuilder {
 	private JavaGenerator generator;
@@ -127,28 +124,22 @@ public class JavaStatementBuilder {
 				}
 
 				SendStatementModel sendModel = new SendStatementModel(message, to, direct);
-				try {
-					if (send.args != null && send.args.size() > 0)
+				
+				if (send.args != null && send.args.size() > 0)
+				{
+					List<String> params = sendModel.getParams();						
+					for (Expresion expr : send.args) 
 					{
-						List<String> params = sendModel.getParams();						
-						for (Expresion expr : send.args) 
-						{
-							params.add(generator.expresion(model, expr));
-						}
+						params.add(generator.expresion(model, expr));
 					}
-				} catch (CannotEvalException gex) {
-					// TODO error mal escrito, deberia haber cada uno de sus
-					// hijos de la excepcion y por cada uno un mensaje
-					// personalizado
-					Log.Show(CannotEval.CannotEvalExpresion, gex.getMessage());
-				}
+				}				
 				statements.add(sendModel);
 				try {
 					Depend depend = generator.resolveDependency(msg);
 					depend.perform(msg, model);
-				} catch (DependResolverNotFoundException e) {
-					Log.Show(Warn.DependResolverNotFound, msg);
-					e.printStackTrace();
+				} catch (DependResolverNotFoundException e)
+				{
+					Log.Exception(e, msg.getLine());					
 				}
 			}
 				break;
@@ -212,7 +203,7 @@ public class JavaStatementBuilder {
 			}
 				break;
 			default:
-				throw new FP4GRuntimeException(GeneratorError.IllegalState, "Estado Ilegal, añadio una nueva Statement?");
+				throw new FP4GRuntimeException(FP4GError.IllegalState, "Estado Ilegal, añadio una nueva Statement?");
 			}			
 		}
 		return statements;

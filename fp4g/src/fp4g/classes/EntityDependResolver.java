@@ -1,7 +1,7 @@
 package fp4g.classes;
 
 import fp4g.data.Define;
-import fp4g.data.DefineType;
+import fp4g.data.DefineTypes;
 import fp4g.data.IValue;
 import fp4g.data.add.AddDefine;
 import fp4g.data.define.Behavior;
@@ -33,7 +33,7 @@ public class EntityDependResolver implements Depend
 		IList imports = behaviorsList;
 		for(IValue<?> i:imports)
 		{
-			for(AddDefine bhvr: entity.getAddDefines(DefineType.BEHAVIOR))
+			for(AddDefine bhvr: entity.getAddDefines(DefineTypes.BEHAVIOR))
 			{
 				String packageName;
 				Behavior behavior = (Behavior)bhvr.define;

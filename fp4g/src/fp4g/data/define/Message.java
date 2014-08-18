@@ -6,14 +6,12 @@ package fp4g.data.define;
 import fp4g.classes.MessageMethods;
 import fp4g.data.Add;
 import fp4g.data.Define;
-import fp4g.data.DefineType;
+import fp4g.data.DefineTypes;
 import fp4g.data.ILib;
 import fp4g.data.On;
 import fp4g.data.add.AddMethod;
-import fp4g.exceptions.GeneratorException;
-import fp4g.exceptions.NotAllowedException;
-import fp4g.log.info.GeneratorError;
-import fp4g.log.info.NotAllowed;
+import fp4g.exceptions.FP4GRuntimeException;
+import fp4g.log.FP4GError;
 
 /**
  * @author Edgardo
@@ -27,7 +25,7 @@ public class Message extends Define
 
 	public Message(String name,ILib container) 
 	{
-		super(DefineType.MESSAGE, name,container);
+		super(DefineTypes.MESSAGE, name,container);
 		if(methods == null)
 		{
 			methods = (MessageMethods)container.get(METHODS).getValue();
@@ -35,7 +33,7 @@ public class Message extends Define
 	}
 	
 	public Message(String name) {
-		super(DefineType.MESSAGE, name);
+		super(DefineTypes.MESSAGE, name);
 		if(methods == null)
 		{
 			methods = (MessageMethods)lib.get(METHODS).getValue();
@@ -51,9 +49,9 @@ public class Message extends Define
 		switch(code.addType)
 		{
 		case AddAsset:
-			throw new NotAllowedException(NotAllowed.NotExpectedAdd,code, "No se permite estos tipos en Message");			
+			throw new FP4GRuntimeException(FP4GError.NotExceptedAdd, code, "No se permite estos tipos en Message");			
 		case AddDefine:
-			throw new NotAllowedException(NotAllowed.NotExpectedAdd,code, "No se permite estos tipos en Message");			
+			throw new FP4GRuntimeException(FP4GError.NotExceptedAdd, code, "No se permite estos tipos en Message");			
 		case AddMethod:
 			final AddMethod method = (AddMethod)code;
 			//también lo agrego a las variables globales :P
@@ -62,7 +60,7 @@ public class Message extends Define
 			method.setMessage(this);
 			break;
 		default:
-			throw new GeneratorException(GeneratorError.IllegalState, code.getAddType().toString());
+			throw new FP4GRuntimeException(FP4GError.IllegalState, code.getAddType().toString());
 		}		
 	}
 
@@ -71,7 +69,7 @@ public class Message extends Define
 	 */
 	@Override
 	public void setOn(On on) {
-		throw new NotAllowedException(NotAllowed.NotExpectedOn, on, "No se esperaba una instrucción ON en Message");
+		throw new FP4GRuntimeException(FP4GError.NotExpectedOn, on, "No se esperaba una instrucción ON en Message");
 	}
 	
 	/**

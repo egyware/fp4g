@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import fp4g.data.Add;
 import fp4g.data.Define;
 import fp4g.data.DefineType;
+import fp4g.data.DefineTypes;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
@@ -37,12 +38,8 @@ import fp4g.data.statements.Source;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.FP4GRuntimeException;
-import fp4g.exceptions.NotAllowedException;
+import fp4g.log.FP4GError;
 import fp4g.log.Log;
-import fp4g.log.info.CannotEval;
-import fp4g.log.info.Error;
-import fp4g.log.info.GeneratorError;
-import fp4g.log.info.NotAllowed;
 import fp4g.parser.FP4GParser.ArrayContext;
 import fp4g.parser.FP4GParser.UsingValuesContext;
 
@@ -86,44 +83,54 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	public ILine visitUsing(FP4GParser.UsingContext ctx)
 	{	
 		IDefine define = null;
-		switch(ctx.type)
-		{		
-		case BEHAVIOR:
+		final DefineType type = ctx.type;
+		if(DefineTypes.BEHAVIOR == type)
+		{
 			define = new Behavior(ctx.name.getText(),container);
 			define.setGenerable(false);
 			define.setUsable(true);
 			container.setDefine(define);
-			break;
-		case ENTITY:
+		}
+		else
+		if(DefineTypes.ENTITY == type)
+		{
 			define = new Entity(ctx.name.getText(),container);
 			define.setGenerable(false);
 			define.setUsable(true);
 			container.setDefine(define);			
-			break;
-		case GOAL:
+		}
+		else
+		if(DefineTypes.GOAL == type)
+		{
 			//TODO por hacer...
 //			Behavior behavior = new Behavior(ctx.name.getText());
 //			behavior.setBuild(false);
 //			game.setDefine(behavior);
-			break;
-		case MANAGER:
+		}
+		else
+		if(DefineTypes.MANAGER == type)
+		{
 			//TODO por hacer...
-			break;
-		case MESSAGE:			
+		}
+		else
+		if(DefineTypes.MESSAGE == type)
+		{
 			define = new Message(ctx.name.getText(), container);
 			define.setGenerable(false);
 			define.setUsable(true);
 			container.setDefine(define);
-			break;
-		case STATE:
+		}
+		else
+		if(DefineTypes.STATE == type)
+		{
 			define = new GameState(ctx.name.getText(),container);
 			define.setGenerable(false);
 			define.setUsable(true);
 			container.setDefine(define);			
-			break;
-		case GAME:			
-		default:			
-			throw new FP4GRuntimeException(GeneratorError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");					
+		}
+		else
+		{					
+			throw new FP4GRuntimeException(FP4GError.IllegalState, "Se esperaba que se use un tipo valido. agrego un define nuevo?");					
 		}
 		
 		current = define;
@@ -150,7 +157,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			GameState state;
 			try 
 			{
-				state = container.getDefine(DefineType.STATE, stateName);
+				state = container.getDefine(DefineTypes.STATE, stateName);
 			} 
 			catch (DefineNotFoundException e) 
 			{				
@@ -192,7 +199,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			Message message = null;
 			try
 			{
-				message = container.getDefine(DefineType.MESSAGE,ctx.messageName);				
+				message = container.getDefine(DefineTypes.MESSAGE,ctx.messageName);				
 				on = new On(message);
 			}
 			catch (DefineNotFoundException e) 
@@ -259,7 +266,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		}	
 		if(method == null)
 		{
-			throw new FP4GRuntimeException(Error.FilterMethodMissing,"No se encontró un metodo para el filtro:  ".concat(ctx.filterName));
+			throw new FP4GRuntimeException(FP4GError.FilterMethodMissing, "No se encontró un metodo para el filtro:  ".concat(ctx.filterName));
 		}
 		
 		Filter filter = new Filter(method,list);
@@ -271,21 +278,14 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	public ILine visitSet(FP4GParser.SetContext ctx)
 	{
 		Expresion expr = exprVisitor.getExpr(current, ctx.expr());		
-		try 
+		if(current == null)
 		{
-			if(current == null)
-			{
-				container.set(ctx.key, eval(container,expr));
-			}
-			else
-			{
-				current.set(ctx.key, eval(container,expr));
-			}
+			container.set(ctx.key, eval(container,expr));
 		}
-		catch (CannotEvalException e) 
-		{			
-			Log.Show(CannotEval.CannotEvalExpresion,ctx.getStart().getLine(),expr.toString());
-		}
+		else
+		{
+			current.set(ctx.key, eval(container,expr));
+		}		
 		return null;
 	}
 	
@@ -331,15 +331,19 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		String defName = define_ctx.defName;
 		
 		Define define = null;		
-		switch(define_ctx.type)
+		final DefineType type = define_ctx.type; 
+		if(DefineTypes.STATE == type)
 		{
-			case STATE:
-				define = new GameState(defName,container);	
-			break;
-			case ENTITY:
-				define = new Entity(defName,container);
-			break;
-			case MANAGER:
+			define = new GameState(defName,container);	
+		}
+		else
+		if(DefineTypes.ENTITY  == type)
+		{
+			define = new Entity(defName,container);
+		}
+		else
+		if(DefineTypes.MANAGER == type)
+		{
 				if(container instanceof Lib)
 				{
 					define = new Manager(defName,container);
@@ -348,10 +352,12 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 				}				
 				else
 				{
-					throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
+					throw new FP4GRuntimeException(FP4GError.NotImplement, define, "No se ha implementado esta caracteristica todavía");
 				}
-				break;
-		  	case BEHAVIOR:
+		}
+		else
+		if(DefineTypes.BEHAVIOR == type)
+		{
 		  		if(container instanceof Lib)
 				{
 		  			define = new Behavior(defName,container);
@@ -360,28 +366,38 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 				}				
 				else
 				{
-					throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
+					throw new FP4GRuntimeException(FP4GError.NotImplement, define, "No se ha implementado esta caracteristica todavía");
 				}
-		  		break;		  		
-		  	case GOAL:
+		}
+		else
+		if(DefineTypes.GOAL == type)
+		{
 		  		//TODO: No implementado aún
-				throw new NotAllowedException(NotAllowed.NotImplementedYet, define, "No se ha implementado esta caracteristica todavía");
-		  		//break;
-		  	case MESSAGE:		  		
+				throw new FP4GRuntimeException(FP4GError.NotImplement, define, "No se ha implementado esta caracteristica todavía");
+		}
+		else
+		if(DefineTypes.MESSAGE  == type)
+		{ 		  		
 		  		define = new Message(defName,container);
-		  		break;
-		  	case ASSET:
-		  		Asset.Type type = Asset.Type.valueOf(defName);
-		  		define = new Asset(type,container);
-		  		break;
-		  	case STRUCT:
+		}
+		else
+		if(DefineTypes.ASSET  == type)
+		{
+		  		Asset.Type addType = Asset.Type.valueOf(defName);
+		  		define = new Asset(addType,container);
+		}
+		else
+		if(DefineTypes.STRUCT == type)
+		{
 		  		define = new Struct(defName, container);
 		  		define.setGenerable(false); //no se genera
-		  		define.setUsable(false); //no es usable
-		  		break;
-		  	default:
-		  		throw new FP4GRuntimeException(GeneratorError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");
-		 }
+		  		define.setUsable(false); //no es usable		  		
+		}
+		else
+		{
+			throw new FP4GRuntimeException(FP4GError.IllegalState,"Se esperaba que se use un tipo valido. agrego un define nuevo?");
+		}
+	
 		if(loadLib)
 		{
 			define.setGenerable(false);
@@ -487,7 +503,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		Asset asset;
 		try
 		{
-			asset = container.getDefine(DefineType.ASSET, ctx.assetType.getText());
+			asset = container.getDefine(DefineTypes.ASSET, ctx.assetType.getText());
 		}
 		catch (DefineNotFoundException e)
 		{			
@@ -527,13 +543,9 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		{
 			if(exprParams instanceof List)
 			{
-				Log.Show(CannotEval.IncomplatibleTypes, line, "Se esperaba un map");
-				map = null;
-			}	
-			else
-			{
-				map = (IMap) exprParams;
-			}
+				throw new FP4GRuntimeException(FP4GError.IncomplatibleTypes, line, "Se esperaba un map");				
+			}				
+			map = (IMap) exprParams;			
 		}
 		else
 		{

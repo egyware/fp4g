@@ -8,8 +8,6 @@ import fp4g.data.operators.IDivisible;
 import fp4g.data.operators.IMultipliable;
 import fp4g.data.operators.ISubtractable;
 import fp4g.exceptions.CannotEvalException;
-import fp4g.exceptions.NotAllowedOperatorException;
-import fp4g.log.info.CannotEval;
 
 public class BinaryOp extends Expresion
 {
@@ -52,80 +50,75 @@ public class BinaryOp extends Expresion
 		//4.1.- Pensemos lo que hizo java: Java tiene dos interfaces que son utiles a la hora de comparar, como por ejemplo comparable y la otra no recuedo bien el nombre pero era para saber si eran iguales.
 		//4.2.- Entonces podria implementar eso: IValue.Sumable, IValue.Containrable, IValue.Comparable (xD nombres qls)
 		
-		try
+		// notita: simplifique el uso de las excepciones  
+		
+		switch(type)
 		{
-			switch(type)
+		case Add:
+			if(leftR instanceof IAddable  && rightR instanceof IAddable)
 			{
-			case Add:
-				if(leftR instanceof IAddable  && rightR instanceof IAddable)
-				{
-					return ((IAddable)leftR).add(rightR);
-				}
-				else
-				{
-					throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Operación no valida para ".concat(type.name()));
-				}				
-			case Div:
-				if(leftR instanceof IDivisible  && rightR instanceof IDivisible)
-				{
-					return ((IDivisible)leftR).div(rightR);
-				}
-				else
-				{
-					throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Operación no valida para ".concat(type.name()));
-				}
-			case Mult:
-				if(leftR instanceof IMultipliable  && rightR instanceof IMultipliable)
-				{
-					return ((IMultipliable)leftR).mult(rightR);
-				}
-				else
-				{
-					throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Operación no valida para ".concat(type.name()));
-				}
-			case Sub:
-				if(leftR instanceof ISubtractable  && rightR instanceof ISubtractable)
-				{
-					return ((ISubtractable)leftR).sub(rightR);
-				}
-				else
-				{
-					throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Operación no valida para ".concat(type.name()));
-				}
-			case LessThan:
-				if(leftR instanceof IComparable  && rightR instanceof IComparable)
-				{
-					return ((IComparable)leftR).lessThan(rightR);
-				}
-				else
-				{
-					throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Operación no valida para ".concat(type.name()));
-				}				
-			case MoreThan:
-				if(leftR instanceof IComparable  && rightR instanceof IComparable)
-				{
-					return ((IComparable)leftR).moreThan(rightR);
-				}
-				else
-				{
-					throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Operación no valida para ".concat(type.name()));
-				}
-			case Equal:
-				if(leftR instanceof IComparable  && rightR instanceof IComparable)
-				{
-					return ((IComparable)leftR).equals(rightR);
-				}
-				else
-				{
-					throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Operación no valida para ".concat(type.name()));
-				}				
-			default:
-				throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Operación no valida para ".concat(type.name()));
-			}	
-		}
-		catch(NotAllowedOperatorException e)
-		{
-			throw new CannotEvalException(CannotEval.NotAllowedOperation,this,String.format("Uno de los operandos, no permite la operación:\"%s\"",type.name()),e);
-		}
+				return ((IAddable)leftR).add(rightR);
+			}
+			else
+			{					
+				throw new CannotEvalException(CannotEvalException.Types.NotAllowedOperation, this,"Operación no valida para ".concat(type.name()));
+			}				
+		case Div:
+			if(leftR instanceof IDivisible  && rightR instanceof IDivisible)
+			{
+				return ((IDivisible)leftR).div(rightR);
+			}
+			else
+			{
+				throw new CannotEvalException(CannotEvalException.Types.NotAllowedOperation, this,"Operación no valida para ".concat(type.name()));
+			}
+		case Mult:
+			if(leftR instanceof IMultipliable  && rightR instanceof IMultipliable)
+			{
+				return ((IMultipliable)leftR).mult(rightR);
+			}
+			else
+			{
+				throw new CannotEvalException(CannotEvalException.Types.NotAllowedOperation, this,"Operación no valida para ".concat(type.name()));
+			}
+		case Sub:
+			if(leftR instanceof ISubtractable  && rightR instanceof ISubtractable)
+			{
+				return ((ISubtractable)leftR).sub(rightR);
+			}
+			else
+			{
+				throw new CannotEvalException(CannotEvalException.Types.NotAllowedOperation, this,"Operación no valida para ".concat(type.name()));
+			}
+		case LessThan:
+			if(leftR instanceof IComparable  && rightR instanceof IComparable)
+			{
+				return ((IComparable)leftR).lessThan(rightR);
+			}
+			else
+			{
+				throw new CannotEvalException(CannotEvalException.Types.NotAllowedOperation, this,"Operación no valida para ".concat(type.name()));
+			}				
+		case MoreThan:
+			if(leftR instanceof IComparable  && rightR instanceof IComparable)
+			{
+				return ((IComparable)leftR).moreThan(rightR);
+			}
+			else
+			{
+				throw new CannotEvalException(CannotEvalException.Types.NotAllowedOperation, this,"Operación no valida para ".concat(type.name()));
+			}
+		case Equal:
+			if(leftR instanceof IComparable  && rightR instanceof IComparable)
+			{
+				return ((IComparable)leftR).equals(rightR);
+			}
+			else
+			{
+				throw new CannotEvalException(CannotEvalException.Types.NotAllowedOperation, this,"Operación no valida para ".concat(type.name()));
+			}				
+		default:
+			throw new CannotEvalException(CannotEvalException.Types.NotAllowedOperation, this,"Operación no valida para ".concat(type.name()));
+		}		
 	}
 }

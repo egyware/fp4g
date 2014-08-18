@@ -21,7 +21,7 @@ import fp4g.data.expresion.literals.ObjectLiteral;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.data.vartypes.BasicType;
 import fp4g.exceptions.FP4GRuntimeException;
-import fp4g.log.info.GeneratorError;
+import fp4g.log.FP4GError;
 
 public abstract class Define extends Code implements IDefine
 {
@@ -55,7 +55,7 @@ public abstract class Define extends Code implements IDefine
 		this.type = type;
 		this.name = name;
 		
-		addDefines = new HashMap<DefineType, List<AddDefine>>(DefineType.values().length,1);
+		addDefines = new HashMap<DefineType, List<AddDefine>>(DefineTypes.values().length,1);
 		addAssets  = new HashMap<String,     AddAsset>();
 		addMethods = new HashMap<String,     AddMethod>();
 		
@@ -120,7 +120,7 @@ public abstract class Define extends Code implements IDefine
 			addMethods.put(add.name, (AddMethod)add);
 			break;
 		default:
-			throw new FP4GRuntimeException(GeneratorError.IllegalState, add.getAddType().toString());			
+			throw new FP4GRuntimeException(FP4GError.IllegalState, add.getAddType().toString());			
 		}
 	}
 	
@@ -232,19 +232,6 @@ public abstract class Define extends Code implements IDefine
 		}
 	}
 	
-	
-	//funciones auxiliares
-	public <T extends Define> T getDefine(String name)
-	{
-		return lib.getDefine(name);					
-	}
-	public <T extends Define> T getDefine(DefineType type, String name)
-	{
-		return lib.getDefine(type, name);					
-	}
-	
-	
-
 	public String toString()
 	{
 		StringBuilder builder = new StringBuilder();

@@ -31,8 +31,8 @@ import fp4g.data.expresion.literals.IntegerLiteral;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.FP4GRuntimeException;
+import fp4g.log.FP4GError;
 import fp4g.log.Log;
-import fp4g.log.info.Error;
 
 /**
  * @author Edgardo
@@ -309,7 +309,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		}
 		catch (ClassNotFoundException e)
 		{
-			throw new FP4GRuntimeException(Error.ClassNotFound,e.getMessage(),e);
+			throw new FP4GRuntimeException(FP4GError.ClassNotFound,e.getMessage(),e);
 		}	
 		return empty;
 	}
@@ -335,7 +335,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 			}
 			catch (ClassNotFoundException e)
 			{
-				throw new FP4GRuntimeException(Error.ClassNotFound,e.getMessage(),e);
+				throw new FP4GRuntimeException(FP4GError.ClassNotFound,e.getMessage(),e);
 			}
 		}
 		//ctx.arrayBody()
@@ -369,7 +369,7 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 					throw new IllegalStateException("No se puede crear una lista de esto!");
 				}
 			} catch (ClassNotFoundException e) {				
-				throw new FP4GRuntimeException(Error.ClassNotFound,e.getMessage(),e);
+				throw new FP4GRuntimeException(FP4GError.ClassNotFound,e.getMessage(),e);
 			}
 		}
 		//ctx.arrayBody()

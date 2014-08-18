@@ -14,10 +14,9 @@ import fp4g.data.libs.Lib;
 import fp4g.data.libs.LibContainer;
 import fp4g.exceptions.FP4GException;
 import fp4g.exceptions.FP4GRuntimeException;
-import fp4g.exceptions.GeneratorException;
 import fp4g.generator.Generator;
+import fp4g.log.FP4GError;
 import fp4g.log.Log;
-import fp4g.log.info.GeneratorError;
 import fp4g.parser.FP4GDataVisitor;
 import fp4g.parser.FP4GLexer;
 import fp4g.parser.FP4GParser;
@@ -111,7 +110,7 @@ public class Main
 		} 
 		catch (IOException e) 
 		{
-			throw new FP4GRuntimeException(GeneratorError.CannotParseFile,"No se pudo leer: ".concat(inputFile),e);
+			throw new FP4GRuntimeException(FP4GError.CannotParseFile,"No se pudo leer: ".concat(inputFile),e);
 		}
 	}
 	private static Generator<?> getDefaultGenerator() 
@@ -119,7 +118,7 @@ public class Main
 		Plugin plugin = compilers.get(options.get(Options.COMPILER));
 		if(plugin == null)
 		{
-			throw new GeneratorException(GeneratorError.GeneratorNotFound, "Generator no encontrado");
+			throw new FP4GRuntimeException(FP4GError.GeneratorNotFound, "Generator no encontrado");
 		}
 		return plugin.createGenerator();
 	}

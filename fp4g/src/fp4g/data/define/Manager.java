@@ -1,7 +1,7 @@
 package fp4g.data.define;
 
 import fp4g.data.Define;
-import fp4g.data.DefineType;
+import fp4g.data.DefineTypes;
 import fp4g.data.ILib;
 
 /**
@@ -18,7 +18,7 @@ public class Manager extends Define
 	
 	public Manager(String name,ILib parent) 
 	{
-		super(DefineType.MANAGER, name, parent);		
+		super(DefineTypes.MANAGER, name, parent);		
 	}
 	
 	public int getPriority() 

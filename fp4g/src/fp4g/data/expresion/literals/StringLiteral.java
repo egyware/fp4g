@@ -4,7 +4,6 @@ import fp4g.data.IValue;
 import fp4g.data.expresion.Literal;
 import fp4g.data.operators.IAddable;
 import fp4g.data.operators.IComparable;
-import fp4g.exceptions.NotAllowedOperatorException;
 
 public class StringLiteral extends Literal<String> implements IAddable, IComparable
 {
@@ -22,8 +21,7 @@ public class StringLiteral extends Literal<String> implements IAddable, ICompara
 	}
 
 	@Override
-	public BoolLiteral lessThan(IValue<?> right)
-	throws NotAllowedOperatorException 
+	public BoolLiteral lessThan(IValue<?> right)	
 	{
 		if(value.compareTo(right.getValue().toString()) < 0)
 		{
@@ -36,8 +34,7 @@ public class StringLiteral extends Literal<String> implements IAddable, ICompara
 	}
 
 	@Override
-	public BoolLiteral moreThan(IValue<?> right)
-	throws NotAllowedOperatorException 
+	public BoolLiteral moreThan(IValue<?> right)	
 	{
 		if(value.compareTo(right.getValue().toString()) > 0)
 		{
@@ -50,8 +47,7 @@ public class StringLiteral extends Literal<String> implements IAddable, ICompara
 	}
 
 	@Override
-	public BoolLiteral equals(IValue<?> right)
-	throws NotAllowedOperatorException 
+	public BoolLiteral equals(IValue<?> right)	
 	{
 		if(value.equals(right.getValue().toString()))
 		{
@@ -64,7 +60,7 @@ public class StringLiteral extends Literal<String> implements IAddable, ICompara
 	}
 
 	@Override
-	public IValue<?> add(IValue<?> right) throws NotAllowedOperatorException
+	public IValue<?> add(IValue<?> right)
 	{	
 		return new StringLiteral(value.concat(right.getValue().toString()));
 	}

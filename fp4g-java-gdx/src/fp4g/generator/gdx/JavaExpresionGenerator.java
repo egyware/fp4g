@@ -19,7 +19,6 @@ import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.generator.ExpresionGenerator;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
-import fp4g.log.info.CannotEval;
 
 /**
  * @author Edgardo
@@ -72,7 +71,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaMetaSourceMod
 				}			
 			}
 		}		
-		throw new CannotEvalException(CannotEval.IsNotAValidExpresion, value,"No se puede evualuar: ".concat(value.getClass().getSimpleName()));
+		throw new CannotEvalException(CannotEvalException.Types.NotValidExpresion, value,"No se puede evualuar: ".concat(value.getClass().getSimpleName()));
 	}
 	
 	@Override
@@ -91,7 +90,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaMetaSourceMod
 			}			
 			 
 		}
-		throw new CannotEvalException(CannotEval.ExpresionGeneratorNotFound, expr,"No se puede evualuar: ".concat(expr.getClass().getSimpleName()));
+		throw new CannotEvalException(CannotEvalException.Types.ExpresionGeneratorNotFound, expr,"No se puede evualuar: ".concat(expr.getClass().getSimpleName()));
 	}
 	
 	private class VarExprGen extends EG_Expresion

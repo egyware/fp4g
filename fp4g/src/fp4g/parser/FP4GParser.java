@@ -51,28 +51,28 @@ public class FP4GParser extends Parser {
 		"STRING_LITERAL", "BOOL_LITERAL", "'current'", "ID", "NL", "WS"
 	};
 	public static final int
-		RULE_program = 0, RULE_parseLib = 1, RULE_usings = 2, RULE_defines = 3, 
-		RULE_using = 4, RULE_usingValues = 5, RULE_usingValue = 6, RULE_game = 7, 
-		RULE_gameLib = 8, RULE_gameValues = 9, RULE_gameValue = 10, RULE_set = 11, 
-		RULE_start = 12, RULE_subscribe = 13, RULE_unsubscribe = 14, RULE_add = 15, 
-		RULE_addDefine = 16, RULE_addMethod = 17, RULE_define = 18, RULE_on = 19, 
-		RULE_statements = 20, RULE_statement = 21, RULE_assign = 22, RULE_destroy = 23, 
-		RULE_send = 24, RULE_onFilters = 25, RULE_filter = 26, RULE_defineValues = 27, 
-		RULE_defineValue = 28, RULE_exprList = 29, RULE_nameList = 30, RULE_declareVar = 31, 
-		RULE_varType = 32, RULE_defineID = 33, RULE_assets = 34, RULE_assetValueWithInnerValue = 35, 
-		RULE_assetValue = 36, RULE_assetValuesInner = 37, RULE_flag = 38, RULE_when = 39, 
-		RULE_expr = 40, RULE_accessVarOp = 41, RULE_parentVarOp = 42, RULE_varOp = 43, 
-		RULE_varID = 44, RULE_array = 45, RULE_arrayBody = 46, RULE_itemArray = 47, 
-		RULE_parArray = 48;
+		RULE_program = 0, RULE_parseLib = 1, RULE_usings = 2, RULE_sets = 3, RULE_defines = 4, 
+		RULE_gameLib = 5, RULE_using = 6, RULE_usingValues = 7, RULE_usingValue = 8, 
+		RULE_game = 9, RULE_gameValues = 10, RULE_gameValue = 11, RULE_set = 12, 
+		RULE_start = 13, RULE_subscribe = 14, RULE_unsubscribe = 15, RULE_add = 16, 
+		RULE_addDefine = 17, RULE_addMethod = 18, RULE_define = 19, RULE_on = 20, 
+		RULE_statements = 21, RULE_statement = 22, RULE_assign = 23, RULE_destroy = 24, 
+		RULE_send = 25, RULE_onFilters = 26, RULE_filter = 27, RULE_defineValues = 28, 
+		RULE_defineValue = 29, RULE_exprList = 30, RULE_nameList = 31, RULE_declareVar = 32, 
+		RULE_varType = 33, RULE_defineID = 34, RULE_assets = 35, RULE_assetValueWithInnerValue = 36, 
+		RULE_assetValue = 37, RULE_assetValuesInner = 38, RULE_flag = 39, RULE_when = 40, 
+		RULE_expr = 41, RULE_accessVarOp = 42, RULE_parentVarOp = 43, RULE_varOp = 44, 
+		RULE_varID = 45, RULE_array = 46, RULE_arrayBody = 47, RULE_itemArray = 48, 
+		RULE_parArray = 49;
 	public static final String[] ruleNames = {
-		"program", "parseLib", "usings", "defines", "using", "usingValues", "usingValue", 
-		"game", "gameLib", "gameValues", "gameValue", "set", "start", "subscribe", 
-		"unsubscribe", "add", "addDefine", "addMethod", "define", "on", "statements", 
-		"statement", "assign", "destroy", "send", "onFilters", "filter", "defineValues", 
-		"defineValue", "exprList", "nameList", "declareVar", "varType", "defineID", 
-		"assets", "assetValueWithInnerValue", "assetValue", "assetValuesInner", 
-		"flag", "when", "expr", "accessVarOp", "parentVarOp", "varOp", "varID", 
-		"array", "arrayBody", "itemArray", "parArray"
+		"program", "parseLib", "usings", "sets", "defines", "gameLib", "using", 
+		"usingValues", "usingValue", "game", "gameValues", "gameValue", "set", 
+		"start", "subscribe", "unsubscribe", "add", "addDefine", "addMethod", 
+		"define", "on", "statements", "statement", "assign", "destroy", "send", 
+		"onFilters", "filter", "defineValues", "defineValue", "exprList", "nameList", 
+		"declareVar", "varType", "defineID", "assets", "assetValueWithInnerValue", 
+		"assetValue", "assetValuesInner", "flag", "when", "expr", "accessVarOp", 
+		"parentVarOp", "varOp", "varID", "array", "arrayBody", "itemArray", "parArray"
 	};
 
 	@Override
@@ -93,6 +93,9 @@ public class FP4GParser extends Parser {
 	}
 	public static class ProgramContext extends ParserRuleContext {
 		public TerminalNode EOF() { return getToken(FP4GParser.EOF, 0); }
+		public SetsContext sets() {
+			return getRuleContext(SetsContext.class,0);
+		}
 		public DefinesContext defines() {
 			return getRuleContext(DefinesContext.class,0);
 		}
@@ -116,9 +119,10 @@ public class FP4GParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(98); usings();
-			setState(99); defines();
-			setState(100); match(EOF);
+			setState(100); usings();
+			setState(101); sets();
+			setState(102); defines();
+			setState(103); match(EOF);
 			}
 		}
 		catch (RecognitionException re) {
@@ -136,6 +140,9 @@ public class FP4GParser extends Parser {
 		public TerminalNode EOF() { return getToken(FP4GParser.EOF, 0); }
 		public GameLibContext gameLib() {
 			return getRuleContext(GameLibContext.class,0);
+		}
+		public SetsContext sets() {
+			return getRuleContext(SetsContext.class,0);
 		}
 		public UsingsContext usings() {
 			return getRuleContext(UsingsContext.class,0);
@@ -157,9 +164,10 @@ public class FP4GParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(102); usings();
-			setState(103); gameLib();
-			setState(104); match(EOF);
+			setState(105); usings();
+			setState(106); sets();
+			setState(107); gameLib();
+			setState(108); match(EOF);
 			}
 		}
 		catch (RecognitionException re) {
@@ -198,16 +206,72 @@ public class FP4GParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(109);
+			setState(113);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==USING) {
 				{
 				{
-				setState(106); using();
+				setState(110); using();
 				}
 				}
-				setState(111);
+				setState(115);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class SetsContext extends ParserRuleContext {
+		public SetContext set(int i) {
+			return getRuleContext(SetContext.class,i);
+		}
+		public TerminalNode DOTCOMA(int i) {
+			return getToken(FP4GParser.DOTCOMA, i);
+		}
+		public List<TerminalNode> DOTCOMA() { return getTokens(FP4GParser.DOTCOMA); }
+		public List<SetContext> set() {
+			return getRuleContexts(SetContext.class);
+		}
+		public SetsContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_sets; }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitSets(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final SetsContext sets() throws RecognitionException {
+		SetsContext _localctx = new SetsContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_sets);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(121);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==SET) {
+				{
+				{
+				setState(116); set();
+				setState(117); match(DOTCOMA);
+				}
+				}
+				setState(123);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -250,32 +314,83 @@ public class FP4GParser extends Parser {
 
 	public final DefinesContext defines() throws RecognitionException {
 		DefinesContext _localctx = new DefinesContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_defines);
+		enterRule(_localctx, 8, RULE_defines);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(116);
+			setState(128);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==DEFINE) {
 				{
-				setState(114);
-				switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
+				setState(126);
+				switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 				case 1:
 					{
-					setState(112); game();
+					setState(124); game();
 					}
 					break;
 
 				case 2:
 					{
-					setState(113); define();
+					setState(125); define();
 					}
 					break;
 				}
 				}
-				setState(118);
+				setState(130);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class GameLibContext extends ParserRuleContext {
+		public DefineContext define(int i) {
+			return getRuleContext(DefineContext.class,i);
+		}
+		public List<DefineContext> define() {
+			return getRuleContexts(DefineContext.class);
+		}
+		public GameLibContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_gameLib; }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitGameLib(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final GameLibContext gameLib() throws RecognitionException {
+		GameLibContext _localctx = new GameLibContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_gameLib);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(134);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==DEFINE) {
+				{
+				{
+				setState(131); define();
+				}
+				}
+				setState(136);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -326,71 +441,71 @@ public class FP4GParser extends Parser {
 
 	public final UsingContext using() throws RecognitionException {
 		UsingContext _localctx = new UsingContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_using);
+		enterRule(_localctx, 12, RULE_using);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(119); match(USING);
-			setState(134);
+			setState(137); match(USING);
+			setState(152);
 			switch (_input.LA(1)) {
 			case MANAGER:
 				{
-				setState(120); match(MANAGER);
-				 ((UsingContext)_localctx).type =  DefineType.MANAGER; 
+				setState(138); match(MANAGER);
+				 ((UsingContext)_localctx).type =  DefineTypes.MANAGER; 
 				}
 				break;
 			case STATE:
 				{
-				setState(122); match(STATE);
-				 ((UsingContext)_localctx).type =  DefineType.STATE;   
+				setState(140); match(STATE);
+				 ((UsingContext)_localctx).type =  DefineTypes.STATE;   
 				}
 				break;
 			case BEHAVIOR:
 				{
-				setState(124); match(BEHAVIOR);
-				 ((UsingContext)_localctx).type =  DefineType.BEHAVIOR;
+				setState(142); match(BEHAVIOR);
+				 ((UsingContext)_localctx).type =  DefineTypes.BEHAVIOR;
 				}
 				break;
 			case ENTITY:
 				{
-				setState(126); match(ENTITY);
-				 ((UsingContext)_localctx).type =  DefineType.ENTITY;  
+				setState(144); match(ENTITY);
+				 ((UsingContext)_localctx).type =  DefineTypes.ENTITY;  
 				}
 				break;
 			case GOAL:
 				{
-				setState(128); match(GOAL);
-				 ((UsingContext)_localctx).type =  DefineType.GOAL;    
+				setState(146); match(GOAL);
+				 ((UsingContext)_localctx).type =  DefineTypes.GOAL;    
 				}
 				break;
 			case MESSAGE:
 				{
-				setState(130); match(MESSAGE);
-				 ((UsingContext)_localctx).type =  DefineType.MESSAGE; 
+				setState(148); match(MESSAGE);
+				 ((UsingContext)_localctx).type =  DefineTypes.MESSAGE; 
 				}
 				break;
 			case ID:
 				{
-				setState(132); ((UsingContext)_localctx).ID = match(ID);
-				 ((UsingContext)_localctx).type =  DefineType.valueOf((((UsingContext)_localctx).ID!=null?((UsingContext)_localctx).ID.getText():null));
+				setState(150); ((UsingContext)_localctx).ID = match(ID);
+				 ((UsingContext)_localctx).type =  DefineTypes.getDefineTypeByName((((UsingContext)_localctx).ID!=null?((UsingContext)_localctx).ID.getText():null));
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			setState(136); ((UsingContext)_localctx).name = match(ID);
-			setState(142);
+			setState(154); ((UsingContext)_localctx).name = match(ID);
+			setState(160);
 			switch (_input.LA(1)) {
 			case DOTCOMA:
 				{
-				setState(137); match(DOTCOMA);
+				setState(155); match(DOTCOMA);
 				}
 				break;
 			case ABRE_COR:
 				{
-				setState(138); match(ABRE_COR);
-				setState(139); usingValues();
-				setState(140); match(CIERRA_COR);
+				setState(156); match(ABRE_COR);
+				setState(157); usingValues();
+				setState(158); match(CIERRA_COR);
 				}
 				break;
 			default:
@@ -429,21 +544,21 @@ public class FP4GParser extends Parser {
 
 	public final UsingValuesContext usingValues() throws RecognitionException {
 		UsingValuesContext _localctx = new UsingValuesContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_usingValues);
+		enterRule(_localctx, 14, RULE_usingValues);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(147);
+			setState(165);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==ADD || _la==SET) {
 				{
 				{
-				setState(144); usingValue();
+				setState(162); usingValue();
 				}
 				}
-				setState(149);
+				setState(167);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -481,22 +596,22 @@ public class FP4GParser extends Parser {
 
 	public final UsingValueContext usingValue() throws RecognitionException {
 		UsingValueContext _localctx = new UsingValueContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_usingValue);
+		enterRule(_localctx, 16, RULE_usingValue);
 		try {
-			setState(156);
+			setState(174);
 			switch (_input.LA(1)) {
 			case ADD:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(150); add();
-				setState(151); match(DOTCOMA);
+				setState(168); add();
+				setState(169); match(DOTCOMA);
 				}
 				break;
 			case SET:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(153); set();
-				setState(154); match(DOTCOMA);
+				setState(171); set();
+				setState(172); match(DOTCOMA);
 				}
 				break;
 			default:
@@ -538,91 +653,17 @@ public class FP4GParser extends Parser {
 
 	public final GameContext game() throws RecognitionException {
 		GameContext _localctx = new GameContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_game);
+		enterRule(_localctx, 18, RULE_game);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(158); match(DEFINE);
-			setState(159); match(GAME);
-			setState(160); ((GameContext)_localctx).ID = match(ID);
+			setState(176); match(DEFINE);
+			setState(177); match(GAME);
+			setState(178); ((GameContext)_localctx).ID = match(ID);
 			 ((GameContext)_localctx).name =  (((GameContext)_localctx).ID!=null?((GameContext)_localctx).ID.getText():null); 
-			setState(162); match(ABRE_COR);
-			setState(163); gameValues();
-			setState(164); match(CIERRA_COR);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class GameLibContext extends ParserRuleContext {
-		public DefineContext define(int i) {
-			return getRuleContext(DefineContext.class,i);
-		}
-		public List<DefineContext> define() {
-			return getRuleContexts(DefineContext.class);
-		}
-		public GameValueContext gameValue(int i) {
-			return getRuleContext(GameValueContext.class,i);
-		}
-		public List<GameValueContext> gameValue() {
-			return getRuleContexts(GameValueContext.class);
-		}
-		public GameLibContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_gameLib; }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitGameLib(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final GameLibContext gameLib() throws RecognitionException {
-		GameLibContext _localctx = new GameLibContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_gameLib);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(170);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << DEFINE) | (1L << ADD) | (1L << ON) | (1L << SET) | (1L << START) | (1L << FLAG) | (1L << WHEN))) != 0)) {
-				{
-				setState(168);
-				switch (_input.LA(1)) {
-				case ADD:
-				case ON:
-				case SET:
-				case START:
-				case FLAG:
-				case WHEN:
-					{
-					setState(166); gameValue();
-					}
-					break;
-				case DEFINE:
-					{
-					setState(167); define();
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				}
-				setState(172);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
+			setState(180); match(ABRE_COR);
+			setState(181); gameValues();
+			setState(182); match(CIERRA_COR);
 			}
 		}
 		catch (RecognitionException re) {
@@ -656,21 +697,21 @@ public class FP4GParser extends Parser {
 
 	public final GameValuesContext gameValues() throws RecognitionException {
 		GameValuesContext _localctx = new GameValuesContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_gameValues);
+		enterRule(_localctx, 20, RULE_gameValues);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(176);
+			setState(187);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ADD) | (1L << ON) | (1L << SET) | (1L << START) | (1L << FLAG) | (1L << WHEN))) != 0)) {
 				{
 				{
-				setState(173); gameValue();
+				setState(184); gameValue();
 				}
 				}
-				setState(178);
+				setState(189);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -720,49 +761,49 @@ public class FP4GParser extends Parser {
 
 	public final GameValueContext gameValue() throws RecognitionException {
 		GameValueContext _localctx = new GameValueContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_gameValue);
+		enterRule(_localctx, 22, RULE_gameValue);
 		try {
-			setState(195);
+			setState(206);
 			switch (_input.LA(1)) {
 			case ADD:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(179); add();
-				setState(180); match(DOTCOMA);
+				setState(190); add();
+				setState(191); match(DOTCOMA);
 				}
 				break;
 			case SET:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(182); set();
-				setState(183); match(DOTCOMA);
+				setState(193); set();
+				setState(194); match(DOTCOMA);
 				}
 				break;
 			case START:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(185); start();
-				setState(186); match(DOTCOMA);
+				setState(196); start();
+				setState(197); match(DOTCOMA);
 				}
 				break;
 			case WHEN:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(188); when();
-				setState(189); match(DOTCOMA);
+				setState(199); when();
+				setState(200); match(DOTCOMA);
 				}
 				break;
 			case ON:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(191); on();
+				setState(202); on();
 				}
 				break;
 			case FLAG:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(192); flag();
-				setState(193); match(DOTCOMA);
+				setState(203); flag();
+				setState(204); match(DOTCOMA);
 				}
 				break;
 			default:
@@ -802,15 +843,15 @@ public class FP4GParser extends Parser {
 
 	public final SetContext set() throws RecognitionException {
 		SetContext _localctx = new SetContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_set);
+		enterRule(_localctx, 24, RULE_set);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(197); match(SET);
-			setState(198); ((SetContext)_localctx).ID = match(ID);
+			setState(208); match(SET);
+			setState(209); ((SetContext)_localctx).ID = match(ID);
 			 ((SetContext)_localctx).key =  (((SetContext)_localctx).ID!=null?((SetContext)_localctx).ID.getText():null); 
-			setState(200); match(EQUAL);
-			setState(201); expr(0);
+			setState(211); match(EQUAL);
+			setState(212); expr(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -842,12 +883,12 @@ public class FP4GParser extends Parser {
 
 	public final StartContext start() throws RecognitionException {
 		StartContext _localctx = new StartContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_start);
+		enterRule(_localctx, 26, RULE_start);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(203); match(START);
-			setState(204); ((StartContext)_localctx).ID = match(ID);
+			setState(214); match(START);
+			setState(215); ((StartContext)_localctx).ID = match(ID);
 			 ((StartContext)_localctx).state =  (((StartContext)_localctx).ID!=null?((StartContext)_localctx).ID.getText():null); 
 			}
 		}
@@ -886,21 +927,21 @@ public class FP4GParser extends Parser {
 
 	public final SubscribeContext subscribe() throws RecognitionException {
 		SubscribeContext _localctx = new SubscribeContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_subscribe);
+		enterRule(_localctx, 28, RULE_subscribe);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(207); match(SUBSCRIBE);
-			setState(208); ((SubscribeContext)_localctx).where = match(ID);
-			setState(209); match(ON);
-			setState(210); ((SubscribeContext)_localctx).message = match(ID);
-			setState(213);
+			setState(218); match(SUBSCRIBE);
+			setState(219); ((SubscribeContext)_localctx).where = match(ID);
+			setState(220); match(ON);
+			setState(221); ((SubscribeContext)_localctx).message = match(ID);
+			setState(224);
 			_la = _input.LA(1);
 			if (_la==DOUBLEDOT) {
 				{
-				setState(211); match(DOUBLEDOT);
-				setState(212); ((SubscribeContext)_localctx).method = match(ID);
+				setState(222); match(DOUBLEDOT);
+				setState(223); ((SubscribeContext)_localctx).method = match(ID);
 				}
 			}
 
@@ -941,21 +982,21 @@ public class FP4GParser extends Parser {
 
 	public final UnsubscribeContext unsubscribe() throws RecognitionException {
 		UnsubscribeContext _localctx = new UnsubscribeContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_unsubscribe);
+		enterRule(_localctx, 30, RULE_unsubscribe);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(215); match(UNSUBSCRIBE);
-			setState(216); ((UnsubscribeContext)_localctx).where = match(ID);
-			setState(217); match(ON);
-			setState(218); ((UnsubscribeContext)_localctx).message = match(ID);
-			setState(221);
+			setState(226); match(UNSUBSCRIBE);
+			setState(227); ((UnsubscribeContext)_localctx).where = match(ID);
+			setState(228); match(ON);
+			setState(229); ((UnsubscribeContext)_localctx).message = match(ID);
+			setState(232);
 			_la = _input.LA(1);
 			if (_la==DOUBLEDOT) {
 				{
-				setState(219); match(DOUBLEDOT);
-				setState(220); ((UnsubscribeContext)_localctx).method = match(ID);
+				setState(230); match(DOUBLEDOT);
+				setState(231); ((UnsubscribeContext)_localctx).method = match(ID);
 				}
 			}
 
@@ -993,12 +1034,12 @@ public class FP4GParser extends Parser {
 
 	public final AddContext add() throws RecognitionException {
 		AddContext _localctx = new AddContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_add);
+		enterRule(_localctx, 32, RULE_add);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(223); match(ADD);
-			setState(226);
+			setState(234); match(ADD);
+			setState(237);
 			switch (_input.LA(1)) {
 			case MANAGER:
 			case STATE:
@@ -1006,12 +1047,12 @@ public class FP4GParser extends Parser {
 			case ENTITY:
 			case GOAL:
 				{
-				setState(224); addDefine();
+				setState(235); addDefine();
 				}
 				break;
 			case ID:
 				{
-				setState(225); addMethod();
+				setState(236); addMethod();
 				}
 				break;
 			default:
@@ -1062,70 +1103,70 @@ public class FP4GParser extends Parser {
 
 	public final AddDefineContext addDefine() throws RecognitionException {
 		AddDefineContext _localctx = new AddDefineContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_addDefine);
+		enterRule(_localctx, 34, RULE_addDefine);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(238);
+			setState(249);
 			switch (_input.LA(1)) {
 			case MANAGER:
 				{
-				setState(228); match(MANAGER);
-				 ((AddDefineContext)_localctx).type =  DefineType.MANAGER;  
+				setState(239); match(MANAGER);
+				 ((AddDefineContext)_localctx).type =  DefineTypes.MANAGER;  
 				}
 				break;
 			case STATE:
 				{
-				setState(230); match(STATE);
-				 ((AddDefineContext)_localctx).type =  DefineType.STATE;    
+				setState(241); match(STATE);
+				 ((AddDefineContext)_localctx).type =  DefineTypes.STATE;    
 				}
 				break;
 			case BEHAVIOR:
 				{
-				setState(232); match(BEHAVIOR);
-				 ((AddDefineContext)_localctx).type =  DefineType.BEHAVIOR; 
+				setState(243); match(BEHAVIOR);
+				 ((AddDefineContext)_localctx).type =  DefineTypes.BEHAVIOR; 
 				}
 				break;
 			case ENTITY:
 				{
-				setState(234); match(ENTITY);
-				 ((AddDefineContext)_localctx).type =  DefineType.ENTITY;  
+				setState(245); match(ENTITY);
+				 ((AddDefineContext)_localctx).type =  DefineTypes.ENTITY;  
 				}
 				break;
 			case GOAL:
 				{
-				setState(236); match(GOAL);
-				 ((AddDefineContext)_localctx).type =  DefineType.GOAL;  
+				setState(247); match(GOAL);
+				 ((AddDefineContext)_localctx).type =  DefineTypes.GOAL;  
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			setState(240); ((AddDefineContext)_localctx).ID = match(ID);
+			setState(251); ((AddDefineContext)_localctx).ID = match(ID);
 			 ((AddDefineContext)_localctx).addName =  (((AddDefineContext)_localctx).ID!=null?((AddDefineContext)_localctx).ID.getText():null); 
-			setState(247);
+			setState(258);
 			_la = _input.LA(1);
 			if (_la==ABRE_PAR) {
 				{
-				setState(242); match(ABRE_PAR);
-				setState(244);
+				setState(253); match(ABRE_PAR);
+				setState(255);
 				_la = _input.LA(1);
 				if (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (MANAGER - 20)) | (1L << (GAME - 20)) | (1L << (STATE - 20)) | (1L << (ASSET - 20)) | (1L << (BEHAVIOR - 20)) | (1L << (ENTITY - 20)) | (1L << (GOAL - 20)) | (1L << (MESSAGE - 20)) | (1L << (EMPTY - 20)) | (1L << (ABRE_PAR - 20)) | (1L << (ABRE_LLAV - 20)) | (1L << (MINUS - 20)) | (1L << (NOT - 20)) | (1L << (DIRECTCODE - 20)) | (1L << (INT_LITERAL - 20)) | (1L << (DECIMAL_LITERAL - 20)) | (1L << (STRING_LITERAL - 20)) | (1L << (BOOL_LITERAL - 20)) | (1L << (CURRENT_LITERAL - 20)) | (1L << (ID - 20)))) != 0)) {
 					{
-					setState(243); exprList();
+					setState(254); exprList();
 					}
 				}
 
-				setState(246); match(CIERRA_PAR);
+				setState(257); match(CIERRA_PAR);
 				}
 			}
 
-			setState(250);
+			setState(261);
 			_la = _input.LA(1);
 			if (_la==EMPTY || _la==ABRE_LLAV) {
 				{
-				setState(249); ((AddDefineContext)_localctx).exprParams = array();
+				setState(260); ((AddDefineContext)_localctx).exprParams = array();
 				}
 			}
 
@@ -1168,28 +1209,28 @@ public class FP4GParser extends Parser {
 
 	public final AddMethodContext addMethod() throws RecognitionException {
 		AddMethodContext _localctx = new AddMethodContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_addMethod);
+		enterRule(_localctx, 36, RULE_addMethod);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(252); ((AddMethodContext)_localctx).ID = match(ID);
+			setState(263); ((AddMethodContext)_localctx).ID = match(ID);
 			 ((AddMethodContext)_localctx).addName =  (((AddMethodContext)_localctx).ID!=null?((AddMethodContext)_localctx).ID.getText():null); 
-			setState(254); match(ABRE_PAR);
-			setState(256);
+			setState(265); match(ABRE_PAR);
+			setState(267);
 			_la = _input.LA(1);
 			if (((((_la - 56)) & ~0x3f) == 0 && ((1L << (_la - 56)) & ((1L << (NUMBER_TYPE - 56)) | (1L << (STRING_TYPE - 56)) | (1L << (BOOL_TYPE - 56)) | (1L << (INTEGER_TYPE - 56)) | (1L << (DOUBLE_TYPE - 56)) | (1L << (FLOAT_TYPE - 56)) | (1L << (ID - 56)))) != 0)) {
 				{
-				setState(255); nameList();
+				setState(266); nameList();
 				}
 			}
 
-			setState(258); match(CIERRA_PAR);
-			setState(260);
+			setState(269); match(CIERRA_PAR);
+			setState(271);
 			_la = _input.LA(1);
 			if (_la==EMPTY || _la==ABRE_LLAV) {
 				{
-				setState(259); ((AddMethodContext)_localctx).exprParams = array();
+				setState(270); ((AddMethodContext)_localctx).exprParams = array();
 				}
 			}
 
@@ -1245,80 +1286,80 @@ public class FP4GParser extends Parser {
 
 	public final DefineContext define() throws RecognitionException {
 		DefineContext _localctx = new DefineContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_define);
+		enterRule(_localctx, 38, RULE_define);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(262); match(DEFINE);
-			setState(279);
+			setState(273); match(DEFINE);
+			setState(290);
 			switch (_input.LA(1)) {
 			case MANAGER:
 				{
-				setState(263); match(MANAGER);
-				 ((DefineContext)_localctx).type =  DefineType.MANAGER; 
+				setState(274); match(MANAGER);
+				 ((DefineContext)_localctx).type =  DefineTypes.MANAGER; 
 				}
 				break;
 			case STATE:
 				{
-				setState(265); match(STATE);
-				 ((DefineContext)_localctx).type =  DefineType.STATE;   
+				setState(276); match(STATE);
+				 ((DefineContext)_localctx).type =  DefineTypes.STATE;   
 				}
 				break;
 			case BEHAVIOR:
 				{
-				setState(267); match(BEHAVIOR);
-				 ((DefineContext)_localctx).type =  DefineType.BEHAVIOR;
+				setState(278); match(BEHAVIOR);
+				 ((DefineContext)_localctx).type =  DefineTypes.BEHAVIOR;
 				}
 				break;
 			case ENTITY:
 				{
-				setState(269); match(ENTITY);
-				 ((DefineContext)_localctx).type =  DefineType.ENTITY;  
+				setState(280); match(ENTITY);
+				 ((DefineContext)_localctx).type =  DefineTypes.ENTITY;  
 				}
 				break;
 			case GOAL:
 				{
-				setState(271); match(GOAL);
-				 ((DefineContext)_localctx).type =  DefineType.GOAL;    
+				setState(282); match(GOAL);
+				 ((DefineContext)_localctx).type =  DefineTypes.GOAL;    
 				}
 				break;
 			case MESSAGE:
 				{
-				setState(273); match(MESSAGE);
-				 ((DefineContext)_localctx).type =  DefineType.MESSAGE; 
+				setState(284); match(MESSAGE);
+				 ((DefineContext)_localctx).type =  DefineTypes.MESSAGE; 
 				}
 				break;
 			case ASSET:
 				{
-				setState(275); match(ASSET);
-				 ((DefineContext)_localctx).type =  DefineType.ASSET;   
+				setState(286); match(ASSET);
+				 ((DefineContext)_localctx).type =  DefineTypes.ASSET;   
 				}
 				break;
 			case ID:
 				{
-				setState(277); ((DefineContext)_localctx).ID = match(ID);
-				 ((DefineContext)_localctx).type =  DefineType.valueOf((((DefineContext)_localctx).ID!=null?((DefineContext)_localctx).ID.getText():null));
+				setState(288); ((DefineContext)_localctx).ID = match(ID);
+				 ((DefineContext)_localctx).type =  DefineTypes.getDefineTypeByName((((DefineContext)_localctx).ID!=null?((DefineContext)_localctx).ID.getText():null));
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			setState(281); ((DefineContext)_localctx).ID = match(ID);
+			setState(292); ((DefineContext)_localctx).ID = match(ID);
 			 ((DefineContext)_localctx).defName =  (((DefineContext)_localctx).ID!=null?((DefineContext)_localctx).ID.getText():null); 
-			setState(287);
+			setState(298);
 			_la = _input.LA(1);
 			if (_la==ABRE_PAR) {
 				{
-				setState(283); match(ABRE_PAR);
-				setState(284); nameList();
-				setState(285); match(CIERRA_PAR);
+				setState(294); match(ABRE_PAR);
+				setState(295); nameList();
+				setState(296); match(CIERRA_PAR);
 				}
 			}
 
-			setState(289); match(ABRE_COR);
-			setState(290); defineValues();
-			setState(291); match(CIERRA_COR);
+			setState(300); match(ABRE_COR);
+			setState(301); defineValues();
+			setState(302); match(CIERRA_COR);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1362,26 +1403,26 @@ public class FP4GParser extends Parser {
 
 	public final OnContext on() throws RecognitionException {
 		OnContext _localctx = new OnContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_on);
+		enterRule(_localctx, 40, RULE_on);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(293); match(ON);
-			setState(294); ((OnContext)_localctx).ID = match(ID);
+			setState(304); match(ON);
+			setState(305); ((OnContext)_localctx).ID = match(ID);
 			((OnContext)_localctx).messageName =  (((OnContext)_localctx).ID!=null?((OnContext)_localctx).ID.getText():null); 
-			setState(298);
+			setState(309);
 			_la = _input.LA(1);
 			if (_la==DOUBLEDOT) {
 				{
-				setState(296); match(DOUBLEDOT);
-				setState(297); ((OnContext)_localctx).filters = onFilters();
+				setState(307); match(DOUBLEDOT);
+				setState(308); ((OnContext)_localctx).filters = onFilters();
 				}
 			}
 
-			setState(300); match(ABRE_COR);
-			setState(301); statements();
-			setState(302); match(CIERRA_COR);
+			setState(311); match(ABRE_COR);
+			setState(312); statements();
+			setState(313); match(CIERRA_COR);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1419,22 +1460,22 @@ public class FP4GParser extends Parser {
 
 	public final StatementsContext statements() throws RecognitionException {
 		StatementsContext _localctx = new StatementsContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_statements);
+		enterRule(_localctx, 42, RULE_statements);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(309);
+			setState(320);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (((((_la - 6)) & ~0x3f) == 0 && ((1L << (_la - 6)) & ((1L << (SEND - 6)) | (1L << (DESTROY - 6)) | (1L << (SUBSCRIBE - 6)) | (1L << (UNSUBSCRIBE - 6)) | (1L << (ID - 6)))) != 0)) {
 				{
 				{
-				setState(304); statement();
-				setState(305); match(DOTCOMA);
+				setState(315); statement();
+				setState(316); match(DOTCOMA);
 				}
 				}
-				setState(311);
+				setState(322);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1480,38 +1521,38 @@ public class FP4GParser extends Parser {
 
 	public final StatementContext statement() throws RecognitionException {
 		StatementContext _localctx = new StatementContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_statement);
+		enterRule(_localctx, 44, RULE_statement);
 		try {
-			setState(317);
+			setState(328);
 			switch (_input.LA(1)) {
 			case SEND:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(312); send();
+				setState(323); send();
 				}
 				break;
 			case DESTROY:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(313); destroy();
+				setState(324); destroy();
 				}
 				break;
 			case SUBSCRIBE:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(314); subscribe();
+				setState(325); subscribe();
 				}
 				break;
 			case UNSUBSCRIBE:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(315); unsubscribe();
+				setState(326); unsubscribe();
 				}
 				break;
 			case ID:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(316); assign();
+				setState(327); assign();
 				}
 				break;
 			default:
@@ -1549,13 +1590,13 @@ public class FP4GParser extends Parser {
 
 	public final AssignContext assign() throws RecognitionException {
 		AssignContext _localctx = new AssignContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_assign);
+		enterRule(_localctx, 46, RULE_assign);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(319); ((AssignContext)_localctx).varName = match(ID);
-			setState(320); match(EQUAL);
-			setState(321); expr(0);
+			setState(330); ((AssignContext)_localctx).varName = match(ID);
+			setState(331); match(EQUAL);
+			setState(332); expr(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1584,11 +1625,11 @@ public class FP4GParser extends Parser {
 
 	public final DestroyContext destroy() throws RecognitionException {
 		DestroyContext _localctx = new DestroyContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_destroy);
+		enterRule(_localctx, 48, RULE_destroy);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(323); match(DESTROY);
+			setState(334); match(DESTROY);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1634,54 +1675,54 @@ public class FP4GParser extends Parser {
 
 	public final SendContext send() throws RecognitionException {
 		SendContext _localctx = new SendContext(_ctx, getState());
-		enterRule(_localctx, 48, RULE_send);
+		enterRule(_localctx, 50, RULE_send);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			((SendContext)_localctx).receiverType =  Instance.Self;
-			setState(326); match(SEND);
-			setState(327); ((SendContext)_localctx).method = match(ID);
+			setState(337); match(SEND);
+			setState(338); ((SendContext)_localctx).method = match(ID);
 			((SendContext)_localctx).messageMethodName =  (((SendContext)_localctx).method!=null?((SendContext)_localctx).method.getText():null);
-			setState(334);
+			setState(345);
 			_la = _input.LA(1);
 			if (_la==ABRE_PAR) {
 				{
-				setState(329); match(ABRE_PAR);
-				setState(331);
+				setState(340); match(ABRE_PAR);
+				setState(342);
 				_la = _input.LA(1);
 				if (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (MANAGER - 20)) | (1L << (GAME - 20)) | (1L << (STATE - 20)) | (1L << (ASSET - 20)) | (1L << (BEHAVIOR - 20)) | (1L << (ENTITY - 20)) | (1L << (GOAL - 20)) | (1L << (MESSAGE - 20)) | (1L << (EMPTY - 20)) | (1L << (ABRE_PAR - 20)) | (1L << (ABRE_LLAV - 20)) | (1L << (MINUS - 20)) | (1L << (NOT - 20)) | (1L << (DIRECTCODE - 20)) | (1L << (INT_LITERAL - 20)) | (1L << (DECIMAL_LITERAL - 20)) | (1L << (STRING_LITERAL - 20)) | (1L << (BOOL_LITERAL - 20)) | (1L << (CURRENT_LITERAL - 20)) | (1L << (ID - 20)))) != 0)) {
 					{
-					setState(330); exprList();
+					setState(341); exprList();
 					}
 				}
 
-				setState(333); match(CIERRA_PAR);
+				setState(344); match(CIERRA_PAR);
 				}
 			}
 
-			setState(346);
+			setState(357);
 			_la = _input.LA(1);
 			if (_la==TO) {
 				{
-				setState(336); match(TO);
-				setState(343);
+				setState(347); match(TO);
+				setState(354);
 				switch (_input.LA(1)) {
 				case OTHER:
 					{
-					setState(337); ((SendContext)_localctx).receiver = match(OTHER);
+					setState(348); ((SendContext)_localctx).receiver = match(OTHER);
 					((SendContext)_localctx).receiverType =  Instance.Other;
 					}
 					break;
 				case GAME:
 					{
-					setState(339); ((SendContext)_localctx).receiver = match(GAME);
+					setState(350); ((SendContext)_localctx).receiver = match(GAME);
 					((SendContext)_localctx).receiverType =  Instance.Game;
 					}
 					break;
 				case ID:
 					{
-					setState(341); ((SendContext)_localctx).receiver = match(ID);
+					setState(352); ((SendContext)_localctx).receiver = match(ID);
 					((SendContext)_localctx).receiverType =  null;
 					}
 					break;
@@ -1727,22 +1768,22 @@ public class FP4GParser extends Parser {
 
 	public final OnFiltersContext onFilters() throws RecognitionException {
 		OnFiltersContext _localctx = new OnFiltersContext(_ctx, getState());
-		enterRule(_localctx, 50, RULE_onFilters);
+		enterRule(_localctx, 52, RULE_onFilters);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(348); filter();
-			setState(352);
+			setState(359); filter();
+			setState(363);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==ID) {
 				{
 				{
-				setState(349); filter();
+				setState(360); filter();
 				}
 				}
-				setState(354);
+				setState(365);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1782,27 +1823,27 @@ public class FP4GParser extends Parser {
 
 	public final FilterContext filter() throws RecognitionException {
 		FilterContext _localctx = new FilterContext(_ctx, getState());
-		enterRule(_localctx, 52, RULE_filter);
+		enterRule(_localctx, 54, RULE_filter);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(355); ((FilterContext)_localctx).ID = match(ID);
+			setState(366); ((FilterContext)_localctx).ID = match(ID);
 			((FilterContext)_localctx).filterName =  (((FilterContext)_localctx).ID!=null?((FilterContext)_localctx).ID.getText():null);
-			setState(362);
+			setState(373);
 			_la = _input.LA(1);
 			if (_la==ABRE_PAR) {
 				{
-				setState(357); match(ABRE_PAR);
-				setState(359);
+				setState(368); match(ABRE_PAR);
+				setState(370);
 				_la = _input.LA(1);
 				if (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (MANAGER - 20)) | (1L << (GAME - 20)) | (1L << (STATE - 20)) | (1L << (ASSET - 20)) | (1L << (BEHAVIOR - 20)) | (1L << (ENTITY - 20)) | (1L << (GOAL - 20)) | (1L << (MESSAGE - 20)) | (1L << (EMPTY - 20)) | (1L << (ABRE_PAR - 20)) | (1L << (ABRE_LLAV - 20)) | (1L << (MINUS - 20)) | (1L << (NOT - 20)) | (1L << (DIRECTCODE - 20)) | (1L << (INT_LITERAL - 20)) | (1L << (DECIMAL_LITERAL - 20)) | (1L << (STRING_LITERAL - 20)) | (1L << (BOOL_LITERAL - 20)) | (1L << (CURRENT_LITERAL - 20)) | (1L << (ID - 20)))) != 0)) {
 					{
-					setState(358); exprList();
+					setState(369); exprList();
 					}
 				}
 
-				setState(361); match(CIERRA_PAR);
+				setState(372); match(CIERRA_PAR);
 				}
 			}
 
@@ -1839,21 +1880,21 @@ public class FP4GParser extends Parser {
 
 	public final DefineValuesContext defineValues() throws RecognitionException {
 		DefineValuesContext _localctx = new DefineValuesContext(_ctx, getState());
-		enterRule(_localctx, 54, RULE_defineValues);
+		enterRule(_localctx, 56, RULE_defineValues);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(367);
+			setState(378);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ADD) | (1L << ON) | (1L << SET) | (1L << ASSETS) | (1L << FLAG) | (1L << WHEN))) != 0)) {
 				{
 				{
-				setState(364); defineValue();
+				setState(375); defineValue();
 				}
 				}
-				setState(369);
+				setState(380);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1903,48 +1944,48 @@ public class FP4GParser extends Parser {
 
 	public final DefineValueContext defineValue() throws RecognitionException {
 		DefineValueContext _localctx = new DefineValueContext(_ctx, getState());
-		enterRule(_localctx, 56, RULE_defineValue);
+		enterRule(_localctx, 58, RULE_defineValue);
 		try {
-			setState(384);
+			setState(395);
 			switch (_input.LA(1)) {
 			case ADD:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(370); add();
-				setState(371); match(DOTCOMA);
+				setState(381); add();
+				setState(382); match(DOTCOMA);
 				}
 				break;
 			case SET:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(373); set();
-				setState(374); match(DOTCOMA);
+				setState(384); set();
+				setState(385); match(DOTCOMA);
 				}
 				break;
 			case FLAG:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(376); flag();
-				setState(377); match(DOTCOMA);
+				setState(387); flag();
+				setState(388); match(DOTCOMA);
 				}
 				break;
 			case WHEN:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(379); when();
-				setState(380); match(DOTCOMA);
+				setState(390); when();
+				setState(391); match(DOTCOMA);
 				}
 				break;
 			case ON:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(382); on();
+				setState(393); on();
 				}
 				break;
 			case ASSETS:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(383); assets();
+				setState(394); assets();
 				}
 				break;
 			default:
@@ -1986,23 +2027,23 @@ public class FP4GParser extends Parser {
 
 	public final ExprListContext exprList() throws RecognitionException {
 		ExprListContext _localctx = new ExprListContext(_ctx, getState());
-		enterRule(_localctx, 58, RULE_exprList);
+		enterRule(_localctx, 60, RULE_exprList);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(386); expr(0);
-			setState(391);
+			setState(397); expr(0);
+			setState(402);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMA) {
 				{
 				{
-				setState(387); match(COMA);
-				setState(388); expr(0);
+				setState(398); match(COMA);
+				setState(399); expr(0);
 				}
 				}
-				setState(393);
+				setState(404);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -2043,23 +2084,23 @@ public class FP4GParser extends Parser {
 
 	public final NameListContext nameList() throws RecognitionException {
 		NameListContext _localctx = new NameListContext(_ctx, getState());
-		enterRule(_localctx, 60, RULE_nameList);
+		enterRule(_localctx, 62, RULE_nameList);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(394); declareVar();
-			setState(399);
+			setState(405); declareVar();
+			setState(410);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMA) {
 				{
 				{
-				setState(395); match(COMA);
-				setState(396); declareVar();
+				setState(406); match(COMA);
+				setState(407); declareVar();
 				}
 				}
-				setState(401);
+				setState(412);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -2100,19 +2141,19 @@ public class FP4GParser extends Parser {
 
 	public final DeclareVarContext declareVar() throws RecognitionException {
 		DeclareVarContext _localctx = new DeclareVarContext(_ctx, getState());
-		enterRule(_localctx, 62, RULE_declareVar);
+		enterRule(_localctx, 64, RULE_declareVar);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(402); varType();
-			setState(403); ((DeclareVarContext)_localctx).varName = match(ID);
-			setState(406);
+			setState(413); varType();
+			setState(414); ((DeclareVarContext)_localctx).varName = match(ID);
+			setState(417);
 			_la = _input.LA(1);
 			if (_la==EQUAL) {
 				{
-				setState(404); match(EQUAL);
-				setState(405); ((DeclareVarContext)_localctx).initValue = expr(0);
+				setState(415); match(EQUAL);
+				setState(416); ((DeclareVarContext)_localctx).initValue = expr(0);
 				}
 			}
 
@@ -2154,57 +2195,57 @@ public class FP4GParser extends Parser {
 
 	public final VarTypeContext varType() throws RecognitionException {
 		VarTypeContext _localctx = new VarTypeContext(_ctx, getState());
-		enterRule(_localctx, 64, RULE_varType);
+		enterRule(_localctx, 66, RULE_varType);
 		try {
-			setState(423);
+			setState(434);
 			switch (_input.LA(1)) {
 			case NUMBER_TYPE:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(408); match(NUMBER_TYPE);
+				setState(419); match(NUMBER_TYPE);
 				((VarTypeContext)_localctx).type =  BasicType.Number;
 				}
 				break;
 			case BOOL_TYPE:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(410); match(BOOL_TYPE);
+				setState(421); match(BOOL_TYPE);
 				((VarTypeContext)_localctx).type =  BasicType.Bool;
 				}
 				break;
 			case STRING_TYPE:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(412); match(STRING_TYPE);
+				setState(423); match(STRING_TYPE);
 				((VarTypeContext)_localctx).type =  BasicType.String;
 				}
 				break;
 			case INTEGER_TYPE:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(414); match(INTEGER_TYPE);
+				setState(425); match(INTEGER_TYPE);
 				((VarTypeContext)_localctx).type =  BasicType.Integer;
 				}
 				break;
 			case DOUBLE_TYPE:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(416); match(DOUBLE_TYPE);
+				setState(427); match(DOUBLE_TYPE);
 				((VarTypeContext)_localctx).type =  BasicType.Double;
 				}
 				break;
 			case FLOAT_TYPE:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(418); match(FLOAT_TYPE);
+				setState(429); match(FLOAT_TYPE);
 				((VarTypeContext)_localctx).type =  BasicType.Float;
 				}
 				break;
 			case ID:
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(420); ((VarTypeContext)_localctx).id = defineID();
-				((VarTypeContext)_localctx).type =  new CustomType((((VarTypeContext)_localctx).id.type != null)?DefineType.valueOf(((VarTypeContext)_localctx).id.type):DefineType.STRUCT, ((VarTypeContext)_localctx).id.name);
+				setState(431); ((VarTypeContext)_localctx).id = defineID();
+				((VarTypeContext)_localctx).type =  new CustomType((((VarTypeContext)_localctx).id.type != null)?DefineTypes.getDefineTypeByName(((VarTypeContext)_localctx).id.type):DefineTypes.STRUCT, ((VarTypeContext)_localctx).id.name);
 				}
 				break;
 			default:
@@ -2245,21 +2286,21 @@ public class FP4GParser extends Parser {
 
 	public final DefineIDContext defineID() throws RecognitionException {
 		DefineIDContext _localctx = new DefineIDContext(_ctx, getState());
-		enterRule(_localctx, 66, RULE_defineID);
+		enterRule(_localctx, 68, RULE_defineID);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(428);
+			setState(439);
 			switch ( getInterpreter().adaptivePredict(_input,38,_ctx) ) {
 			case 1:
 				{
-				setState(425); ((DefineIDContext)_localctx).defineType = match(ID);
-				setState(426); match(DOUBLEDOT);
+				setState(436); ((DefineIDContext)_localctx).defineType = match(ID);
+				setState(437); match(DOUBLEDOT);
 				((DefineIDContext)_localctx).type =  (((DefineIDContext)_localctx).defineType!=null?((DefineIDContext)_localctx).defineType.getText():null);
 				}
 				break;
 			}
-			setState(430); ((DefineIDContext)_localctx).defineName = match(ID);
+			setState(441); ((DefineIDContext)_localctx).defineName = match(ID);
 			((DefineIDContext)_localctx).name =  (((DefineIDContext)_localctx).defineName!=null?((DefineIDContext)_localctx).defineName.getText():null);
 			}
 		}
@@ -2301,40 +2342,40 @@ public class FP4GParser extends Parser {
 
 	public final AssetsContext assets() throws RecognitionException {
 		AssetsContext _localctx = new AssetsContext(_ctx, getState());
-		enterRule(_localctx, 68, RULE_assets);
+		enterRule(_localctx, 70, RULE_assets);
 		int _la;
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(433); match(ASSETS);
-			setState(434); match(ABRE_COR);
-			setState(435); assetValueWithInnerValue();
-			setState(440);
+			setState(444); match(ASSETS);
+			setState(445); match(ABRE_COR);
+			setState(446); assetValueWithInnerValue();
+			setState(451);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,39,_ctx);
 			while ( _alt!=2 && _alt!=-1 ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(436); match(COMA);
-					setState(437); assetValueWithInnerValue();
+					setState(447); match(COMA);
+					setState(448); assetValueWithInnerValue();
 					}
 					} 
 				}
-				setState(442);
+				setState(453);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,39,_ctx);
 			}
-			setState(444);
+			setState(455);
 			_la = _input.LA(1);
 			if (_la==COMA) {
 				{
-				setState(443); match(COMA);
+				setState(454); match(COMA);
 				}
 			}
 
-			setState(446); match(CIERRA_COR);
+			setState(457); match(CIERRA_COR);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2370,17 +2411,17 @@ public class FP4GParser extends Parser {
 
 	public final AssetValueWithInnerValueContext assetValueWithInnerValue() throws RecognitionException {
 		AssetValueWithInnerValueContext _localctx = new AssetValueWithInnerValueContext(_ctx, getState());
-		enterRule(_localctx, 70, RULE_assetValueWithInnerValue);
+		enterRule(_localctx, 72, RULE_assetValueWithInnerValue);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(448); ((AssetValueWithInnerValueContext)_localctx).value = assetValue();
-			setState(450);
+			setState(459); ((AssetValueWithInnerValueContext)_localctx).value = assetValue();
+			setState(461);
 			_la = _input.LA(1);
 			if (_la==ABRE_COR) {
 				{
-				setState(449); ((AssetValueWithInnerValueContext)_localctx).innerAssets = assetValuesInner();
+				setState(460); ((AssetValueWithInnerValueContext)_localctx).innerAssets = assetValuesInner();
 				}
 			}
 
@@ -2424,27 +2465,27 @@ public class FP4GParser extends Parser {
 
 	public final AssetValueContext assetValue() throws RecognitionException {
 		AssetValueContext _localctx = new AssetValueContext(_ctx, getState());
-		enterRule(_localctx, 72, RULE_assetValue);
+		enterRule(_localctx, 74, RULE_assetValue);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(452); ((AssetValueContext)_localctx).assetType = match(ID);
-			setState(454);
+			setState(463); ((AssetValueContext)_localctx).assetType = match(ID);
+			setState(465);
 			_la = _input.LA(1);
 			if (_la==ID) {
 				{
-				setState(453); ((AssetValueContext)_localctx).assetName = match(ID);
+				setState(464); ((AssetValueContext)_localctx).assetName = match(ID);
 				}
 			}
 
-			setState(456); match(DOUBLEDOT);
-			setState(457); ((AssetValueContext)_localctx).assetPath = match(STRING_LITERAL);
-			setState(459);
+			setState(467); match(DOUBLEDOT);
+			setState(468); ((AssetValueContext)_localctx).assetPath = match(STRING_LITERAL);
+			setState(470);
 			_la = _input.LA(1);
 			if (_la==EMPTY || _la==ABRE_LLAV) {
 				{
-				setState(458); ((AssetValueContext)_localctx).exprParams = array();
+				setState(469); ((AssetValueContext)_localctx).exprParams = array();
 				}
 			}
 
@@ -2487,39 +2528,39 @@ public class FP4GParser extends Parser {
 
 	public final AssetValuesInnerContext assetValuesInner() throws RecognitionException {
 		AssetValuesInnerContext _localctx = new AssetValuesInnerContext(_ctx, getState());
-		enterRule(_localctx, 74, RULE_assetValuesInner);
+		enterRule(_localctx, 76, RULE_assetValuesInner);
 		int _la;
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(461); match(ABRE_COR);
-			setState(462); assetValue();
-			setState(467);
+			setState(472); match(ABRE_COR);
+			setState(473); assetValue();
+			setState(478);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,44,_ctx);
 			while ( _alt!=2 && _alt!=-1 ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(463); match(COMA);
-					setState(464); assetValue();
+					setState(474); match(COMA);
+					setState(475); assetValue();
 					}
 					} 
 				}
-				setState(469);
+				setState(480);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,44,_ctx);
 			}
-			setState(471);
+			setState(482);
 			_la = _input.LA(1);
 			if (_la==COMA) {
 				{
-				setState(470); match(COMA);
+				setState(481); match(COMA);
 				}
 			}
 
-			setState(473); match(CIERRA_COR);
+			setState(484); match(CIERRA_COR);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2551,12 +2592,12 @@ public class FP4GParser extends Parser {
 
 	public final FlagContext flag() throws RecognitionException {
 		FlagContext _localctx = new FlagContext(_ctx, getState());
-		enterRule(_localctx, 76, RULE_flag);
+		enterRule(_localctx, 78, RULE_flag);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(475); match(FLAG);
-			setState(476); declareVar();
+			setState(486); match(FLAG);
+			setState(487); declareVar();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2594,14 +2635,14 @@ public class FP4GParser extends Parser {
 
 	public final WhenContext when() throws RecognitionException {
 		WhenContext _localctx = new WhenContext(_ctx, getState());
-		enterRule(_localctx, 78, RULE_when);
+		enterRule(_localctx, 80, RULE_when);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(478); match(WHEN);
-			setState(479); ((WhenContext)_localctx).condition = expr(0);
-			setState(480); match(THEN);
-			setState(481); ((WhenContext)_localctx).stmnt = statement();
+			setState(489); match(WHEN);
+			setState(490); ((WhenContext)_localctx).condition = expr(0);
+			setState(491); match(THEN);
+			setState(492); ((WhenContext)_localctx).stmnt = statement();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2877,14 +2918,14 @@ public class FP4GParser extends Parser {
 		int _parentState = getState();
 		ExprContext _localctx = new ExprContext(_ctx, _parentState, _p);
 		ExprContext _prevctx = _localctx;
-		int _startState = 80;
+		int _startState = 82;
 		enterRecursionRule(_localctx, RULE_expr);
 		int _la;
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(505);
+			setState(516);
 			switch ( getInterpreter().adaptivePredict(_input,47,_ctx) ) {
 			case 1:
 				{
@@ -2892,8 +2933,8 @@ public class FP4GParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(484); match(NOT);
-				setState(485); ((NotExprContext)_localctx).op = expr(17);
+				setState(495); match(NOT);
+				setState(496); ((NotExprContext)_localctx).op = expr(17);
 				}
 				break;
 
@@ -2902,8 +2943,8 @@ public class FP4GParser extends Parser {
 				_localctx = new MinusExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(486); match(MINUS);
-				setState(487); ((MinusExprContext)_localctx).op = expr(12);
+				setState(497); match(MINUS);
+				setState(498); ((MinusExprContext)_localctx).op = expr(12);
 				}
 				break;
 
@@ -2912,7 +2953,7 @@ public class FP4GParser extends Parser {
 				_localctx = new ArrayExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(488); array();
+				setState(499); array();
 				}
 				break;
 
@@ -2921,9 +2962,9 @@ public class FP4GParser extends Parser {
 				_localctx = new ParExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(489); match(ABRE_PAR);
-				setState(490); ((ParExprContext)_localctx).op = expr(0);
-				setState(491); match(CIERRA_PAR);
+				setState(500); match(ABRE_PAR);
+				setState(501); ((ParExprContext)_localctx).op = expr(0);
+				setState(502); match(CIERRA_PAR);
 				}
 				break;
 
@@ -2932,7 +2973,7 @@ public class FP4GParser extends Parser {
 				_localctx = new IntLiteralContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(493); match(INT_LITERAL);
+				setState(504); match(INT_LITERAL);
 				}
 				break;
 
@@ -2941,7 +2982,7 @@ public class FP4GParser extends Parser {
 				_localctx = new DecimalLiteralContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(494); match(DECIMAL_LITERAL);
+				setState(505); match(DECIMAL_LITERAL);
 				}
 				break;
 
@@ -2950,7 +2991,7 @@ public class FP4GParser extends Parser {
 				_localctx = new StringLiteralContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(495); match(STRING_LITERAL);
+				setState(506); match(STRING_LITERAL);
 				}
 				break;
 
@@ -2959,7 +3000,7 @@ public class FP4GParser extends Parser {
 				_localctx = new BoolLiteralContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(496); match(BOOL_LITERAL);
+				setState(507); match(BOOL_LITERAL);
 				}
 				break;
 
@@ -2968,7 +3009,7 @@ public class FP4GParser extends Parser {
 				_localctx = new DirectCodeContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(497); match(DIRECTCODE);
+				setState(508); match(DIRECTCODE);
 				}
 				break;
 
@@ -2977,17 +3018,17 @@ public class FP4GParser extends Parser {
 				_localctx = new FunctionCallExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(498); ((FunctionCallExprContext)_localctx).functionName = match(ID);
-				setState(499); match(ABRE_PAR);
-				setState(501);
+				setState(509); ((FunctionCallExprContext)_localctx).functionName = match(ID);
+				setState(510); match(ABRE_PAR);
+				setState(512);
 				_la = _input.LA(1);
 				if (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (MANAGER - 20)) | (1L << (GAME - 20)) | (1L << (STATE - 20)) | (1L << (ASSET - 20)) | (1L << (BEHAVIOR - 20)) | (1L << (ENTITY - 20)) | (1L << (GOAL - 20)) | (1L << (MESSAGE - 20)) | (1L << (EMPTY - 20)) | (1L << (ABRE_PAR - 20)) | (1L << (ABRE_LLAV - 20)) | (1L << (MINUS - 20)) | (1L << (NOT - 20)) | (1L << (DIRECTCODE - 20)) | (1L << (INT_LITERAL - 20)) | (1L << (DECIMAL_LITERAL - 20)) | (1L << (STRING_LITERAL - 20)) | (1L << (BOOL_LITERAL - 20)) | (1L << (CURRENT_LITERAL - 20)) | (1L << (ID - 20)))) != 0)) {
 					{
-					setState(500); exprList();
+					setState(511); exprList();
 					}
 				}
 
-				setState(503); match(CIERRA_PAR);
+				setState(514); match(CIERRA_PAR);
 				}
 				break;
 
@@ -2996,12 +3037,12 @@ public class FP4GParser extends Parser {
 				_localctx = new VarExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(504); accessVarOp();
+				setState(515); accessVarOp();
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(530);
+			setState(541);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,49,_ctx);
 			while ( _alt!=2 && _alt!=-1 ) {
@@ -3009,17 +3050,17 @@ public class FP4GParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(528);
+					setState(539);
 					switch ( getInterpreter().adaptivePredict(_input,48,_ctx) ) {
 					case 1:
 						{
 						_localctx = new LessThanExprContext(new ExprContext(_parentctx, _parentState, _p));
 						((LessThanExprContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(507);
+						setState(518);
 						if (!(16 >= _localctx._p)) throw new FailedPredicateException(this, "16 >= $_p");
-						setState(508); match(LESS_THAN);
-						setState(509); ((LessThanExprContext)_localctx).right = expr(17);
+						setState(519); match(LESS_THAN);
+						setState(520); ((LessThanExprContext)_localctx).right = expr(17);
 						}
 						break;
 
@@ -3028,10 +3069,10 @@ public class FP4GParser extends Parser {
 						_localctx = new MoreThanExprContext(new ExprContext(_parentctx, _parentState, _p));
 						((MoreThanExprContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(510);
+						setState(521);
 						if (!(15 >= _localctx._p)) throw new FailedPredicateException(this, "15 >= $_p");
-						setState(511); match(MORE_THAN);
-						setState(512); ((MoreThanExprContext)_localctx).right = expr(16);
+						setState(522); match(MORE_THAN);
+						setState(523); ((MoreThanExprContext)_localctx).right = expr(16);
 						}
 						break;
 
@@ -3040,10 +3081,10 @@ public class FP4GParser extends Parser {
 						_localctx = new EqualExprContext(new ExprContext(_parentctx, _parentState, _p));
 						((EqualExprContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(513);
+						setState(524);
 						if (!(14 >= _localctx._p)) throw new FailedPredicateException(this, "14 >= $_p");
-						setState(514); match(EQUAL);
-						setState(515); ((EqualExprContext)_localctx).right = expr(15);
+						setState(525); match(EQUAL);
+						setState(526); ((EqualExprContext)_localctx).right = expr(15);
 						}
 						break;
 
@@ -3052,10 +3093,10 @@ public class FP4GParser extends Parser {
 						_localctx = new MultExprContext(new ExprContext(_parentctx, _parentState, _p));
 						((MultExprContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(516);
+						setState(527);
 						if (!(11 >= _localctx._p)) throw new FailedPredicateException(this, "11 >= $_p");
-						setState(517); match(MULTIPLY);
-						setState(518); ((MultExprContext)_localctx).right = expr(12);
+						setState(528); match(MULTIPLY);
+						setState(529); ((MultExprContext)_localctx).right = expr(12);
 						}
 						break;
 
@@ -3064,10 +3105,10 @@ public class FP4GParser extends Parser {
 						_localctx = new DivExprContext(new ExprContext(_parentctx, _parentState, _p));
 						((DivExprContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(519);
+						setState(530);
 						if (!(10 >= _localctx._p)) throw new FailedPredicateException(this, "10 >= $_p");
-						setState(520); match(DIVIDE);
-						setState(521); ((DivExprContext)_localctx).right = expr(11);
+						setState(531); match(DIVIDE);
+						setState(532); ((DivExprContext)_localctx).right = expr(11);
 						}
 						break;
 
@@ -3076,10 +3117,10 @@ public class FP4GParser extends Parser {
 						_localctx = new AddExprContext(new ExprContext(_parentctx, _parentState, _p));
 						((AddExprContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(522);
+						setState(533);
 						if (!(9 >= _localctx._p)) throw new FailedPredicateException(this, "9 >= $_p");
-						setState(523); match(PLUS);
-						setState(524); ((AddExprContext)_localctx).right = expr(10);
+						setState(534); match(PLUS);
+						setState(535); ((AddExprContext)_localctx).right = expr(10);
 						}
 						break;
 
@@ -3088,16 +3129,16 @@ public class FP4GParser extends Parser {
 						_localctx = new SubExprContext(new ExprContext(_parentctx, _parentState, _p));
 						((SubExprContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(525);
+						setState(536);
 						if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "8 >= $_p");
-						setState(526); match(MINUS);
-						setState(527); ((SubExprContext)_localctx).right = expr(9);
+						setState(537); match(MINUS);
+						setState(538); ((SubExprContext)_localctx).right = expr(9);
 						}
 						break;
 					}
 					} 
 				}
-				setState(532);
+				setState(543);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,49,_ctx);
 			}
@@ -3157,15 +3198,15 @@ public class FP4GParser extends Parser {
 
 	public final AccessVarOpContext accessVarOp() throws RecognitionException {
 		AccessVarOpContext _localctx = new AccessVarOpContext(_ctx, getState());
-		enterRule(_localctx, 82, RULE_accessVarOp);
+		enterRule(_localctx, 84, RULE_accessVarOp);
 		try {
-			setState(538);
+			setState(549);
 			switch ( getInterpreter().adaptivePredict(_input,50,_ctx) ) {
 			case 1:
 				_localctx = new AccessVarNameContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(533); ((AccessVarNameContext)_localctx).var = varOp();
+				setState(544); ((AccessVarNameContext)_localctx).var = varOp();
 				}
 				break;
 
@@ -3173,9 +3214,9 @@ public class FP4GParser extends Parser {
 				_localctx = new AccessVarOperatorContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(534); ((AccessVarOperatorContext)_localctx).pVar = parentVarOp();
-				setState(535); match(DOT);
-				setState(536); ((AccessVarOperatorContext)_localctx).propertyAccess = accessVarOp();
+				setState(545); ((AccessVarOperatorContext)_localctx).pVar = parentVarOp();
+				setState(546); match(DOT);
+				setState(547); ((AccessVarOperatorContext)_localctx).propertyAccess = accessVarOp();
 				}
 				break;
 			}
@@ -3228,15 +3269,15 @@ public class FP4GParser extends Parser {
 
 	public final ParentVarOpContext parentVarOp() throws RecognitionException {
 		ParentVarOpContext _localctx = new ParentVarOpContext(_ctx, getState());
-		enterRule(_localctx, 84, RULE_parentVarOp);
+		enterRule(_localctx, 86, RULE_parentVarOp);
 		try {
-			setState(544);
+			setState(555);
 			switch (_input.LA(1)) {
 			case CURRENT_LITERAL:
 				_localctx = new CurrentOperatorContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(540); match(CURRENT_LITERAL);
+				setState(551); match(CURRENT_LITERAL);
 				}
 				break;
 			case MANAGER:
@@ -3251,7 +3292,7 @@ public class FP4GParser extends Parser {
 				_localctx = new VarNameOperatorContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(541); ((VarNameOperatorContext)_localctx).varName = varID();
+				setState(552); ((VarNameOperatorContext)_localctx).varName = varID();
 				((VarNameOperatorContext)_localctx).name = (((VarNameOperatorContext)_localctx).varName!=null?_input.getText(((VarNameOperatorContext)_localctx).varName.start,((VarNameOperatorContext)_localctx).varName.stop):null);
 				}
 				break;
@@ -3305,15 +3346,15 @@ public class FP4GParser extends Parser {
 
 	public final VarOpContext varOp() throws RecognitionException {
 		VarOpContext _localctx = new VarOpContext(_ctx, getState());
-		enterRule(_localctx, 86, RULE_varOp);
+		enterRule(_localctx, 88, RULE_varOp);
 		try {
-			setState(548);
+			setState(559);
 			switch (_input.LA(1)) {
 			case CURRENT_LITERAL:
 				_localctx = new VarCurrentContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(546); match(CURRENT_LITERAL);
+				setState(557); match(CURRENT_LITERAL);
 				}
 				break;
 			case MANAGER:
@@ -3328,7 +3369,7 @@ public class FP4GParser extends Parser {
 				_localctx = new VarNameContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(547); ((VarNameContext)_localctx).varName = varID();
+				setState(558); ((VarNameContext)_localctx).varName = varID();
 				}
 				break;
 			default:
@@ -3369,12 +3410,12 @@ public class FP4GParser extends Parser {
 
 	public final VarIDContext varID() throws RecognitionException {
 		VarIDContext _localctx = new VarIDContext(_ctx, getState());
-		enterRule(_localctx, 88, RULE_varID);
+		enterRule(_localctx, 90, RULE_varID);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(550);
+			setState(561);
 			_la = _input.LA(1);
 			if ( !(((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (MANAGER - 20)) | (1L << (GAME - 20)) | (1L << (STATE - 20)) | (1L << (ASSET - 20)) | (1L << (BEHAVIOR - 20)) | (1L << (ENTITY - 20)) | (1L << (GOAL - 20)) | (1L << (MESSAGE - 20)) | (1L << (ID - 20)))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -3410,11 +3451,11 @@ public class FP4GParser extends Parser {
 
 	public final ArrayContext array() throws RecognitionException {
 		ArrayContext _localctx = new ArrayContext(_ctx, getState());
-		enterRule(_localctx, 90, RULE_array);
+		enterRule(_localctx, 92, RULE_array);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(552); arrayBody();
+			setState(563); arrayBody();
 			}
 		}
 		catch (RecognitionException re) {
@@ -3502,51 +3543,51 @@ public class FP4GParser extends Parser {
 
 	public final ArrayBodyContext arrayBody() throws RecognitionException {
 		ArrayBodyContext _localctx = new ArrayBodyContext(_ctx, getState());
-		enterRule(_localctx, 92, RULE_arrayBody);
+		enterRule(_localctx, 94, RULE_arrayBody);
 		int _la;
 		try {
 			int _alt;
-			setState(594);
+			setState(605);
 			switch ( getInterpreter().adaptivePredict(_input,59,_ctx) ) {
 			case 1:
 				_localctx = new AssocArrayContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(554); match(ABRE_LLAV);
+				setState(565); match(ABRE_LLAV);
 				{
-				setState(555); parArray();
-				setState(560);
+				setState(566); parArray();
+				setState(571);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,53,_ctx);
 				while ( _alt!=2 && _alt!=-1 ) {
 					if ( _alt==1 ) {
 						{
 						{
-						setState(556); match(COMA);
-						setState(557); parArray();
+						setState(567); match(COMA);
+						setState(568); parArray();
 						}
 						} 
 					}
-					setState(562);
+					setState(573);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,53,_ctx);
 				}
-				setState(564);
+				setState(575);
 				_la = _input.LA(1);
 				if (_la==COMA) {
 					{
-					setState(563); match(COMA);
+					setState(574); match(COMA);
 					}
 				}
 
 				}
-				setState(566); match(CIERRA_LLAV);
-				setState(570);
+				setState(577); match(CIERRA_LLAV);
+				setState(581);
 				switch ( getInterpreter().adaptivePredict(_input,55,_ctx) ) {
 				case 1:
 					{
-					setState(567); match(AS);
-					setState(568); ((AssocArrayContext)_localctx).ID = match(ID);
+					setState(578); match(AS);
+					setState(579); ((AssocArrayContext)_localctx).ID = match(ID);
 					((AssocArrayContext)_localctx).bean =  (((AssocArrayContext)_localctx).ID!=null?((AssocArrayContext)_localctx).ID.getText():null);
 					}
 					break;
@@ -3558,41 +3599,41 @@ public class FP4GParser extends Parser {
 				_localctx = new ListArrayContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(572); match(ABRE_LLAV);
+				setState(583); match(ABRE_LLAV);
 				{
-				setState(573); itemArray();
-				setState(578);
+				setState(584); itemArray();
+				setState(589);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,56,_ctx);
 				while ( _alt!=2 && _alt!=-1 ) {
 					if ( _alt==1 ) {
 						{
 						{
-						setState(574); match(COMA);
-						setState(575); itemArray();
+						setState(585); match(COMA);
+						setState(586); itemArray();
 						}
 						} 
 					}
-					setState(580);
+					setState(591);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,56,_ctx);
 				}
-				setState(582);
+				setState(593);
 				_la = _input.LA(1);
 				if (_la==COMA) {
 					{
-					setState(581); match(COMA);
+					setState(592); match(COMA);
 					}
 				}
 
 				}
-				setState(584); match(CIERRA_LLAV);
-				setState(588);
+				setState(595); match(CIERRA_LLAV);
+				setState(599);
 				switch ( getInterpreter().adaptivePredict(_input,58,_ctx) ) {
 				case 1:
 					{
-					setState(585); match(AS);
-					setState(586); ((ListArrayContext)_localctx).ID = match(ID);
+					setState(596); match(AS);
+					setState(597); ((ListArrayContext)_localctx).ID = match(ID);
 					((ListArrayContext)_localctx).bean =  (((ListArrayContext)_localctx).ID!=null?((ListArrayContext)_localctx).ID.getText():null);
 					}
 					break;
@@ -3604,9 +3645,9 @@ public class FP4GParser extends Parser {
 				_localctx = new EmptyArrayContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(590); match(EMPTY);
-				setState(591); match(AS);
-				setState(592); ((EmptyArrayContext)_localctx).ID = match(ID);
+				setState(601); match(EMPTY);
+				setState(602); match(AS);
+				setState(603); ((EmptyArrayContext)_localctx).ID = match(ID);
 				((EmptyArrayContext)_localctx).bean =  (((EmptyArrayContext)_localctx).ID!=null?((EmptyArrayContext)_localctx).ID.getText():null);
 				}
 				break;
@@ -3640,11 +3681,11 @@ public class FP4GParser extends Parser {
 
 	public final ItemArrayContext itemArray() throws RecognitionException {
 		ItemArrayContext _localctx = new ItemArrayContext(_ctx, getState());
-		enterRule(_localctx, 94, RULE_itemArray);
+		enterRule(_localctx, 96, RULE_itemArray);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(596); expr(0);
+			setState(607); expr(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3679,14 +3720,14 @@ public class FP4GParser extends Parser {
 
 	public final ParArrayContext parArray() throws RecognitionException {
 		ParArrayContext _localctx = new ParArrayContext(_ctx, getState());
-		enterRule(_localctx, 96, RULE_parArray);
+		enterRule(_localctx, 98, RULE_parArray);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(598); ((ParArrayContext)_localctx).ID = match(ID);
+			setState(609); ((ParArrayContext)_localctx).ID = match(ID);
 			 ((ParArrayContext)_localctx).key =  (((ParArrayContext)_localctx).ID!=null?((ParArrayContext)_localctx).ID.getText():null); 
-			setState(600); match(EQUAL);
-			setState(601); expr(0);
+			setState(611); match(EQUAL);
+			setState(612); expr(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3702,7 +3743,7 @@ public class FP4GParser extends Parser {
 
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-		case 40: return expr_sempred((ExprContext)_localctx, predIndex);
+		case 41: return expr_sempred((ExprContext)_localctx, predIndex);
 		}
 		return true;
 	}
@@ -3726,231 +3767,235 @@ public class FP4GParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3H\u025e\4\2\t\2\4"+
+		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3H\u0269\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
 		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\4 \t \4!"+
 		"\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t\'\4(\t(\4)\t)\4*\t*\4+\t+\4"+
-		",\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62\3\2\3\2\3\2\3\2\3"+
-		"\3\3\3\3\3\3\3\3\4\7\4n\n\4\f\4\16\4q\13\4\3\5\3\5\7\5u\n\5\f\5\16\5x"+
-		"\13\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6"+
-		"\u0089\n\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6\u0091\n\6\3\7\7\7\u0094\n\7\f\7"+
-		"\16\7\u0097\13\7\3\b\3\b\3\b\3\b\3\b\3\b\5\b\u009f\n\b\3\t\3\t\3\t\3\t"+
-		"\3\t\3\t\3\t\3\t\3\n\3\n\7\n\u00ab\n\n\f\n\16\n\u00ae\13\n\3\13\7\13\u00b1"+
-		"\n\13\f\13\16\13\u00b4\13\13\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3"+
-		"\f\3\f\3\f\3\f\3\f\3\f\5\f\u00c6\n\f\3\r\3\r\3\r\3\r\3\r\3\r\3\16\3\16"+
-		"\3\16\3\16\3\17\3\17\3\17\3\17\3\17\3\17\5\17\u00d8\n\17\3\20\3\20\3\20"+
-		"\3\20\3\20\3\20\5\20\u00e0\n\20\3\21\3\21\3\21\5\21\u00e5\n\21\3\22\3"+
-		"\22\3\22\3\22\3\22\3\22\3\22\3\22\3\22\3\22\5\22\u00f1\n\22\3\22\3\22"+
-		"\3\22\3\22\5\22\u00f7\n\22\3\22\5\22\u00fa\n\22\3\22\5\22\u00fd\n\22\3"+
-		"\23\3\23\3\23\3\23\5\23\u0103\n\23\3\23\3\23\5\23\u0107\n\23\3\24\3\24"+
-		"\3\24\3\24\3\24\3\24\3\24\3\24\3\24\3\24\3\24\3\24\3\24\3\24\3\24\3\24"+
-		"\3\24\5\24\u011a\n\24\3\24\3\24\3\24\3\24\3\24\3\24\5\24\u0122\n\24\3"+
-		"\24\3\24\3\24\3\24\3\25\3\25\3\25\3\25\3\25\5\25\u012d\n\25\3\25\3\25"+
-		"\3\25\3\25\3\26\3\26\3\26\7\26\u0136\n\26\f\26\16\26\u0139\13\26\3\27"+
-		"\3\27\3\27\3\27\3\27\5\27\u0140\n\27\3\30\3\30\3\30\3\30\3\31\3\31\3\32"+
-		"\3\32\3\32\3\32\3\32\3\32\5\32\u014e\n\32\3\32\5\32\u0151\n\32\3\32\3"+
-		"\32\3\32\3\32\3\32\3\32\3\32\5\32\u015a\n\32\3\32\5\32\u015d\n\32\3\33"+
-		"\3\33\7\33\u0161\n\33\f\33\16\33\u0164\13\33\3\34\3\34\3\34\3\34\5\34"+
-		"\u016a\n\34\3\34\5\34\u016d\n\34\3\35\7\35\u0170\n\35\f\35\16\35\u0173"+
-		"\13\35\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36"+
-		"\3\36\5\36\u0183\n\36\3\37\3\37\3\37\7\37\u0188\n\37\f\37\16\37\u018b"+
-		"\13\37\3 \3 \3 \7 \u0190\n \f \16 \u0193\13 \3!\3!\3!\3!\5!\u0199\n!\3"+
-		"\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\5\"\u01aa\n"+
-		"\"\3#\3#\3#\5#\u01af\n#\3#\3#\3#\3$\3$\3$\3$\3$\7$\u01b9\n$\f$\16$\u01bc"+
-		"\13$\3$\5$\u01bf\n$\3$\3$\3%\3%\5%\u01c5\n%\3&\3&\5&\u01c9\n&\3&\3&\3"+
-		"&\5&\u01ce\n&\3\'\3\'\3\'\3\'\7\'\u01d4\n\'\f\'\16\'\u01d7\13\'\3\'\5"+
-		"\'\u01da\n\'\3\'\3\'\3(\3(\3(\3)\3)\3)\3)\3)\3*\3*\3*\3*\3*\3*\3*\3*\3"+
-		"*\3*\3*\3*\3*\3*\3*\3*\3*\3*\5*\u01f8\n*\3*\3*\5*\u01fc\n*\3*\3*\3*\3"+
-		"*\3*\3*\3*\3*\3*\3*\3*\3*\3*\3*\3*\3*\3*\3*\3*\3*\3*\7*\u0213\n*\f*\16"+
-		"*\u0216\13*\3+\3+\3+\3+\3+\5+\u021d\n+\3,\3,\3,\3,\5,\u0223\n,\3-\3-\5"+
-		"-\u0227\n-\3.\3.\3/\3/\3\60\3\60\3\60\3\60\7\60\u0231\n\60\f\60\16\60"+
-		"\u0234\13\60\3\60\5\60\u0237\n\60\3\60\3\60\3\60\3\60\5\60\u023d\n\60"+
-		"\3\60\3\60\3\60\3\60\7\60\u0243\n\60\f\60\16\60\u0246\13\60\3\60\5\60"+
-		"\u0249\n\60\3\60\3\60\3\60\3\60\5\60\u024f\n\60\3\60\3\60\3\60\3\60\5"+
-		"\60\u0255\n\60\3\61\3\61\3\62\3\62\3\62\3\62\3\62\3\62\2\63\2\4\6\b\n"+
-		"\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\"+
-		"^`b\2\3\4\2\26\35FF\u0296\2d\3\2\2\2\4h\3\2\2\2\6o\3\2\2\2\bv\3\2\2\2"+
-		"\ny\3\2\2\2\f\u0095\3\2\2\2\16\u009e\3\2\2\2\20\u00a0\3\2\2\2\22\u00ac"+
-		"\3\2\2\2\24\u00b2\3\2\2\2\26\u00c5\3\2\2\2\30\u00c7\3\2\2\2\32\u00cd\3"+
-		"\2\2\2\34\u00d1\3\2\2\2\36\u00d9\3\2\2\2 \u00e1\3\2\2\2\"\u00f0\3\2\2"+
-		"\2$\u00fe\3\2\2\2&\u0108\3\2\2\2(\u0127\3\2\2\2*\u0137\3\2\2\2,\u013f"+
-		"\3\2\2\2.\u0141\3\2\2\2\60\u0145\3\2\2\2\62\u0147\3\2\2\2\64\u015e\3\2"+
-		"\2\2\66\u0165\3\2\2\28\u0171\3\2\2\2:\u0182\3\2\2\2<\u0184\3\2\2\2>\u018c"+
-		"\3\2\2\2@\u0194\3\2\2\2B\u01a9\3\2\2\2D\u01ae\3\2\2\2F\u01b3\3\2\2\2H"+
-		"\u01c2\3\2\2\2J\u01c6\3\2\2\2L\u01cf\3\2\2\2N\u01dd\3\2\2\2P\u01e0\3\2"+
-		"\2\2R\u01fb\3\2\2\2T\u021c\3\2\2\2V\u0222\3\2\2\2X\u0226\3\2\2\2Z\u0228"+
-		"\3\2\2\2\\\u022a\3\2\2\2^\u0254\3\2\2\2`\u0256\3\2\2\2b\u0258\3\2\2\2"+
-		"de\5\6\4\2ef\5\b\5\2fg\7\2\2\3g\3\3\2\2\2hi\5\6\4\2ij\5\22\n\2jk\7\2\2"+
-		"\3k\5\3\2\2\2ln\5\n\6\2ml\3\2\2\2nq\3\2\2\2om\3\2\2\2op\3\2\2\2p\7\3\2"+
-		"\2\2qo\3\2\2\2ru\5\20\t\2su\5&\24\2tr\3\2\2\2ts\3\2\2\2ux\3\2\2\2vt\3"+
-		"\2\2\2vw\3\2\2\2w\t\3\2\2\2xv\3\2\2\2y\u0088\7\17\2\2z{\7\26\2\2{\u0089"+
-		"\b\6\1\2|}\7\30\2\2}\u0089\b\6\1\2~\177\7\32\2\2\177\u0089\b\6\1\2\u0080"+
-		"\u0081\7\33\2\2\u0081\u0089\b\6\1\2\u0082\u0083\7\34\2\2\u0083\u0089\b"+
-		"\6\1\2\u0084\u0085\7\35\2\2\u0085\u0089\b\6\1\2\u0086\u0087\7F\2\2\u0087"+
-		"\u0089\b\6\1\2\u0088z\3\2\2\2\u0088|\3\2\2\2\u0088~\3\2\2\2\u0088\u0080"+
-		"\3\2\2\2\u0088\u0082\3\2\2\2\u0088\u0084\3\2\2\2\u0088\u0086\3\2\2\2\u0089"+
-		"\u008a\3\2\2\2\u008a\u0090\7F\2\2\u008b\u0091\7.\2\2\u008c\u008d\7%\2"+
-		"\2\u008d\u008e\5\f\7\2\u008e\u008f\7(\2\2\u008f\u0091\3\2\2\2\u0090\u008b"+
-		"\3\2\2\2\u0090\u008c\3\2\2\2\u0091\13\3\2\2\2\u0092\u0094\5\16\b\2\u0093"+
-		"\u0092\3\2\2\2\u0094\u0097\3\2\2\2\u0095\u0093\3\2\2\2\u0095\u0096\3\2"+
-		"\2\2\u0096\r\3\2\2\2\u0097\u0095\3\2\2\2\u0098\u0099\5 \21\2\u0099\u009a"+
-		"\7.\2\2\u009a\u009f\3\2\2\2\u009b\u009c\5\30\r\2\u009c\u009d\7.\2\2\u009d"+
-		"\u009f\3\2\2\2\u009e\u0098\3\2\2\2\u009e\u009b\3\2\2\2\u009f\17\3\2\2"+
-		"\2\u00a0\u00a1\7\5\2\2\u00a1\u00a2\7\27\2\2\u00a2\u00a3\7F\2\2\u00a3\u00a4"+
-		"\b\t\1\2\u00a4\u00a5\7%\2\2\u00a5\u00a6\5\24\13\2\u00a6\u00a7\7(\2\2\u00a7"+
-		"\21\3\2\2\2\u00a8\u00ab\5\26\f\2\u00a9\u00ab\5&\24\2\u00aa\u00a8\3\2\2"+
-		"\2\u00aa\u00a9\3\2\2\2\u00ab\u00ae\3\2\2\2\u00ac\u00aa\3\2\2\2\u00ac\u00ad"+
-		"\3\2\2\2\u00ad\23\3\2\2\2\u00ae\u00ac\3\2\2\2\u00af\u00b1\5\26\f\2\u00b0"+
-		"\u00af\3\2\2\2\u00b1\u00b4\3\2\2\2\u00b2\u00b0\3\2\2\2\u00b2\u00b3\3\2"+
-		"\2\2\u00b3\25\3\2\2\2\u00b4\u00b2\3\2\2\2\u00b5\u00b6\5 \21\2\u00b6\u00b7"+
-		"\7.\2\2\u00b7\u00c6\3\2\2\2\u00b8\u00b9\5\30\r\2\u00b9\u00ba\7.\2\2\u00ba"+
-		"\u00c6\3\2\2\2\u00bb\u00bc\5\32\16\2\u00bc\u00bd\7.\2\2\u00bd\u00c6\3"+
-		"\2\2\2\u00be\u00bf\5P)\2\u00bf\u00c0\7.\2\2\u00c0\u00c6\3\2\2\2\u00c1"+
-		"\u00c6\5(\25\2\u00c2\u00c3\5N(\2\u00c3\u00c4\7.\2\2\u00c4\u00c6\3\2\2"+
-		"\2\u00c5\u00b5\3\2\2\2\u00c5\u00b8\3\2\2\2\u00c5\u00bb\3\2\2\2\u00c5\u00be"+
-		"\3\2\2\2\u00c5\u00c1\3\2\2\2\u00c5\u00c2\3\2\2\2\u00c6\27\3\2\2\2\u00c7"+
-		"\u00c8\7\21\2\2\u00c8\u00c9\7F\2\2\u00c9\u00ca\b\r\1\2\u00ca\u00cb\7,"+
-		"\2\2\u00cb\u00cc\5R*\2\u00cc\31\3\2\2\2\u00cd\u00ce\7\22\2\2\u00ce\u00cf"+
-		"\7F\2\2\u00cf\u00d0\b\16\1\2\u00d0\33\3\2\2\2\u00d1\u00d2\7\13\2\2\u00d2"+
-		"\u00d3\7F\2\2\u00d3\u00d4\7\7\2\2\u00d4\u00d7\7F\2\2\u00d5\u00d6\7/\2"+
-		"\2\u00d6\u00d8\7F\2\2\u00d7\u00d5\3\2\2\2\u00d7\u00d8\3\2\2\2\u00d8\35"+
-		"\3\2\2\2\u00d9\u00da\7\f\2\2\u00da\u00db\7F\2\2\u00db\u00dc\7\7\2\2\u00dc"+
-		"\u00df\7F\2\2\u00dd\u00de\7/\2\2\u00de\u00e0\7F\2\2\u00df\u00dd\3\2\2"+
-		"\2\u00df\u00e0\3\2\2\2\u00e0\37\3\2\2\2\u00e1\u00e4\7\6\2\2\u00e2\u00e5"+
-		"\5\"\22\2\u00e3\u00e5\5$\23\2\u00e4\u00e2\3\2\2\2\u00e4\u00e3\3\2\2\2"+
-		"\u00e5!\3\2\2\2\u00e6\u00e7\7\26\2\2\u00e7\u00f1\b\22\1\2\u00e8\u00e9"+
-		"\7\30\2\2\u00e9\u00f1\b\22\1\2\u00ea\u00eb\7\32\2\2\u00eb\u00f1\b\22\1"+
-		"\2\u00ec\u00ed\7\33\2\2\u00ed\u00f1\b\22\1\2\u00ee\u00ef\7\34\2\2\u00ef"+
-		"\u00f1\b\22\1\2\u00f0\u00e6\3\2\2\2\u00f0\u00e8\3\2\2\2\u00f0\u00ea\3"+
-		"\2\2\2\u00f0\u00ec\3\2\2\2\u00f0\u00ee\3\2\2\2\u00f1\u00f2\3\2\2\2\u00f2"+
-		"\u00f3\7F\2\2\u00f3\u00f9\b\22\1\2\u00f4\u00f6\7&\2\2\u00f5\u00f7\5<\37"+
-		"\2\u00f6\u00f5\3\2\2\2\u00f6\u00f7\3\2\2\2\u00f7\u00f8\3\2\2\2\u00f8\u00fa"+
-		"\7)\2\2\u00f9\u00f4\3\2\2\2\u00f9\u00fa\3\2\2\2\u00fa\u00fc\3\2\2\2\u00fb"+
-		"\u00fd\5\\/\2\u00fc\u00fb\3\2\2\2\u00fc\u00fd\3\2\2\2\u00fd#\3\2\2\2\u00fe"+
-		"\u00ff\7F\2\2\u00ff\u0100\b\23\1\2\u0100\u0102\7&\2\2\u0101\u0103\5> "+
-		"\2\u0102\u0101\3\2\2\2\u0102\u0103\3\2\2\2\u0103\u0104\3\2\2\2\u0104\u0106"+
-		"\7)\2\2\u0105\u0107\5\\/\2\u0106\u0105\3\2\2\2\u0106\u0107\3\2\2\2\u0107"+
-		"%\3\2\2\2\u0108\u0119\7\5\2\2\u0109\u010a\7\26\2\2\u010a\u011a\b\24\1"+
-		"\2\u010b\u010c\7\30\2\2\u010c\u011a\b\24\1\2\u010d\u010e\7\32\2\2\u010e"+
-		"\u011a\b\24\1\2\u010f\u0110\7\33\2\2\u0110\u011a\b\24\1\2\u0111\u0112"+
-		"\7\34\2\2\u0112\u011a\b\24\1\2\u0113\u0114\7\35\2\2\u0114\u011a\b\24\1"+
-		"\2\u0115\u0116\7\31\2\2\u0116\u011a\b\24\1\2\u0117\u0118\7F\2\2\u0118"+
-		"\u011a\b\24\1\2\u0119\u0109\3\2\2\2\u0119\u010b\3\2\2\2\u0119\u010d\3"+
-		"\2\2\2\u0119\u010f\3\2\2\2\u0119\u0111\3\2\2\2\u0119\u0113\3\2\2\2\u0119"+
-		"\u0115\3\2\2\2\u0119\u0117\3\2\2\2\u011a\u011b\3\2\2\2\u011b\u011c\7F"+
-		"\2\2\u011c\u0121\b\24\1\2\u011d\u011e\7&\2\2\u011e\u011f\5> \2\u011f\u0120"+
-		"\7)\2\2\u0120\u0122\3\2\2\2\u0121\u011d\3\2\2\2\u0121\u0122\3\2\2\2\u0122"+
-		"\u0123\3\2\2\2\u0123\u0124\7%\2\2\u0124\u0125\58\35\2\u0125\u0126\7(\2"+
-		"\2\u0126\'\3\2\2\2\u0127\u0128\7\7\2\2\u0128\u0129\7F\2\2\u0129\u012c"+
-		"\b\25\1\2\u012a\u012b\7/\2\2\u012b\u012d\5\64\33\2\u012c\u012a\3\2\2\2"+
-		"\u012c\u012d\3\2\2\2\u012d\u012e\3\2\2\2\u012e\u012f\7%\2\2\u012f\u0130"+
-		"\5*\26\2\u0130\u0131\7(\2\2\u0131)\3\2\2\2\u0132\u0133\5,\27\2\u0133\u0134"+
-		"\7.\2\2\u0134\u0136\3\2\2\2\u0135\u0132\3\2\2\2\u0136\u0139\3\2\2\2\u0137"+
-		"\u0135\3\2\2\2\u0137\u0138\3\2\2\2\u0138+\3\2\2\2\u0139\u0137\3\2\2\2"+
-		"\u013a\u0140\5\62\32\2\u013b\u0140\5\60\31\2\u013c\u0140\5\34\17\2\u013d"+
-		"\u0140\5\36\20\2\u013e\u0140\5.\30\2\u013f\u013a\3\2\2\2\u013f\u013b\3"+
-		"\2\2\2\u013f\u013c\3\2\2\2\u013f\u013d\3\2\2\2\u013f\u013e\3\2\2\2\u0140"+
-		"-\3\2\2\2\u0141\u0142\7F\2\2\u0142\u0143\7,\2\2\u0143\u0144\5R*\2\u0144"+
-		"/\3\2\2\2\u0145\u0146\7\t\2\2\u0146\61\3\2\2\2\u0147\u0148\b\32\1\2\u0148"+
-		"\u0149\7\b\2\2\u0149\u014a\7F\2\2\u014a\u0150\b\32\1\2\u014b\u014d\7&"+
-		"\2\2\u014c\u014e\5<\37\2\u014d\u014c\3\2\2\2\u014d\u014e\3\2\2\2\u014e"+
-		"\u014f\3\2\2\2\u014f\u0151\7)\2\2\u0150\u014b\3\2\2\2\u0150\u0151\3\2"+
-		"\2\2\u0151\u015c\3\2\2\2\u0152\u0159\7\37\2\2\u0153\u0154\7\"\2\2\u0154"+
-		"\u015a\b\32\1\2\u0155\u0156\7\27\2\2\u0156\u015a\b\32\1\2\u0157\u0158"+
-		"\7F\2\2\u0158\u015a\b\32\1\2\u0159\u0153\3\2\2\2\u0159\u0155\3\2\2\2\u0159"+
-		"\u0157\3\2\2\2\u015a\u015b\3\2\2\2\u015b\u015d\b\32\1\2\u015c\u0152\3"+
-		"\2\2\2\u015c\u015d\3\2\2\2\u015d\63\3\2\2\2\u015e\u0162\5\66\34\2\u015f"+
-		"\u0161\5\66\34\2\u0160\u015f\3\2\2\2\u0161\u0164\3\2\2\2\u0162\u0160\3"+
-		"\2\2\2\u0162\u0163\3\2\2\2\u0163\65\3\2\2\2\u0164\u0162\3\2\2\2\u0165"+
-		"\u0166\7F\2\2\u0166\u016c\b\34\1\2\u0167\u0169\7&\2\2\u0168\u016a\5<\37"+
-		"\2\u0169\u0168\3\2\2\2\u0169\u016a\3\2\2\2\u016a\u016b\3\2\2\2\u016b\u016d"+
-		"\7)\2\2\u016c\u0167\3\2\2\2\u016c\u016d\3\2\2\2\u016d\67\3\2\2\2\u016e"+
-		"\u0170\5:\36\2\u016f\u016e\3\2\2\2\u0170\u0173\3\2\2\2\u0171\u016f\3\2"+
-		"\2\2\u0171\u0172\3\2\2\2\u01729\3\2\2\2\u0173\u0171\3\2\2\2\u0174\u0175"+
-		"\5 \21\2\u0175\u0176\7.\2\2\u0176\u0183\3\2\2\2\u0177\u0178\5\30\r\2\u0178"+
-		"\u0179\7.\2\2\u0179\u0183\3\2\2\2\u017a\u017b\5N(\2\u017b\u017c\7.\2\2"+
-		"\u017c\u0183\3\2\2\2\u017d\u017e\5P)\2\u017e\u017f\7.\2\2\u017f\u0183"+
-		"\3\2\2\2\u0180\u0183\5(\25\2\u0181\u0183\5F$\2\u0182\u0174\3\2\2\2\u0182"+
-		"\u0177\3\2\2\2\u0182\u017a\3\2\2\2\u0182\u017d\3\2\2\2\u0182\u0180\3\2"+
-		"\2\2\u0182\u0181\3\2\2\2\u0183;\3\2\2\2\u0184\u0189\5R*\2\u0185\u0186"+
-		"\7+\2\2\u0186\u0188\5R*\2\u0187\u0185\3\2\2\2\u0188\u018b\3\2\2\2\u0189"+
-		"\u0187\3\2\2\2\u0189\u018a\3\2\2\2\u018a=\3\2\2\2\u018b\u0189\3\2\2\2"+
-		"\u018c\u0191\5@!\2\u018d\u018e\7+\2\2\u018e\u0190\5@!\2\u018f\u018d\3"+
-		"\2\2\2\u0190\u0193\3\2\2\2\u0191\u018f\3\2\2\2\u0191\u0192\3\2\2\2\u0192"+
-		"?\3\2\2\2\u0193\u0191\3\2\2\2\u0194\u0195\5B\"\2\u0195\u0198\7F\2\2\u0196"+
-		"\u0197\7,\2\2\u0197\u0199\5R*\2\u0198\u0196\3\2\2\2\u0198\u0199\3\2\2"+
-		"\2\u0199A\3\2\2\2\u019a\u019b\7:\2\2\u019b\u01aa\b\"\1\2\u019c\u019d\7"+
-		"<\2\2\u019d\u01aa\b\"\1\2\u019e\u019f\7;\2\2\u019f\u01aa\b\"\1\2\u01a0"+
-		"\u01a1\7=\2\2\u01a1\u01aa\b\"\1\2\u01a2\u01a3\7>\2\2\u01a3\u01aa\b\"\1"+
-		"\2\u01a4\u01a5\7?\2\2\u01a5\u01aa\b\"\1\2\u01a6\u01a7\5D#\2\u01a7\u01a8"+
-		"\b\"\1\2\u01a8\u01aa\3\2\2\2\u01a9\u019a\3\2\2\2\u01a9\u019c\3\2\2\2\u01a9"+
-		"\u019e\3\2\2\2\u01a9\u01a0\3\2\2\2\u01a9\u01a2\3\2\2\2\u01a9\u01a4\3\2"+
-		"\2\2\u01a9\u01a6\3\2\2\2\u01aaC\3\2\2\2\u01ab\u01ac\7F\2\2\u01ac\u01ad"+
-		"\7/\2\2\u01ad\u01af\b#\1\2\u01ae\u01ab\3\2\2\2\u01ae\u01af\3\2\2\2\u01af"+
-		"\u01b0\3\2\2\2\u01b0\u01b1\7F\2\2\u01b1\u01b2\b#\1\2\u01b2E\3\2\2\2\u01b3"+
-		"\u01b4\7\23\2\2\u01b4\u01b5\7%\2\2\u01b5\u01ba\5H%\2\u01b6\u01b7\7+\2"+
-		"\2\u01b7\u01b9\5H%\2\u01b8\u01b6\3\2\2\2\u01b9\u01bc\3\2\2\2\u01ba\u01b8"+
-		"\3\2\2\2\u01ba\u01bb\3\2\2\2\u01bb\u01be\3\2\2\2\u01bc\u01ba\3\2\2\2\u01bd"+
-		"\u01bf\7+\2\2\u01be\u01bd\3\2\2\2\u01be\u01bf\3\2\2\2\u01bf\u01c0\3\2"+
-		"\2\2\u01c0\u01c1\7(\2\2\u01c1G\3\2\2\2\u01c2\u01c4\5J&\2\u01c3\u01c5\5"+
-		"L\'\2\u01c4\u01c3\3\2\2\2\u01c4\u01c5\3\2\2\2\u01c5I\3\2\2\2\u01c6\u01c8"+
-		"\7F\2\2\u01c7\u01c9\7F\2\2\u01c8\u01c7\3\2\2\2\u01c8\u01c9\3\2\2\2\u01c9"+
-		"\u01ca\3\2\2\2\u01ca\u01cb\7/\2\2\u01cb\u01cd\7C\2\2\u01cc\u01ce\5\\/"+
-		"\2\u01cd\u01cc\3\2\2\2\u01cd\u01ce\3\2\2\2\u01ceK\3\2\2\2\u01cf\u01d0"+
-		"\7%\2\2\u01d0\u01d5\5J&\2\u01d1\u01d2\7+\2\2\u01d2\u01d4\5J&\2\u01d3\u01d1"+
-		"\3\2\2\2\u01d4\u01d7\3\2\2\2\u01d5\u01d3\3\2\2\2\u01d5\u01d6\3\2\2\2\u01d6"+
-		"\u01d9\3\2\2\2\u01d7\u01d5\3\2\2\2\u01d8\u01da\7+\2\2\u01d9\u01d8\3\2"+
-		"\2\2\u01d9\u01da\3\2\2\2\u01da\u01db\3\2\2\2\u01db\u01dc\7(\2\2\u01dc"+
-		"M\3\2\2\2\u01dd\u01de\7\24\2\2\u01de\u01df\5@!\2\u01dfO\3\2\2\2\u01e0"+
-		"\u01e1\7\25\2\2\u01e1\u01e2\5R*\2\u01e2\u01e3\7$\2\2\u01e3\u01e4\5,\27"+
-		"\2\u01e4Q\3\2\2\2\u01e5\u01e6\b*\1\2\u01e6\u01e7\79\2\2\u01e7\u01fc\5"+
-		"R*\2\u01e8\u01e9\7\61\2\2\u01e9\u01fc\5R*\2\u01ea\u01fc\5\\/\2\u01eb\u01ec"+
-		"\7&\2\2\u01ec\u01ed\5R*\2\u01ed\u01ee\7)\2\2\u01ee\u01fc\3\2\2\2\u01ef"+
-		"\u01fc\7A\2\2\u01f0\u01fc\7B\2\2\u01f1\u01fc\7C\2\2\u01f2\u01fc\7D\2\2"+
-		"\u01f3\u01fc\7@\2\2\u01f4\u01f5\7F\2\2\u01f5\u01f7\7&\2\2\u01f6\u01f8"+
-		"\5<\37\2\u01f7\u01f6\3\2\2\2\u01f7\u01f8\3\2\2\2\u01f8\u01f9\3\2\2\2\u01f9"+
-		"\u01fc\7)\2\2\u01fa\u01fc\5T+\2\u01fb\u01e5\3\2\2\2\u01fb\u01e8\3\2\2"+
-		"\2\u01fb\u01ea\3\2\2\2\u01fb\u01eb\3\2\2\2\u01fb\u01ef\3\2\2\2\u01fb\u01f0"+
-		"\3\2\2\2\u01fb\u01f1\3\2\2\2\u01fb\u01f2\3\2\2\2\u01fb\u01f3\3\2\2\2\u01fb"+
-		"\u01f4\3\2\2\2\u01fb\u01fa\3\2\2\2\u01fc\u0214\3\2\2\2\u01fd\u01fe\6*"+
-		"\2\3\u01fe\u01ff\7\65\2\2\u01ff\u0213\5R*\2\u0200\u0201\6*\3\3\u0201\u0202"+
-		"\7\64\2\2\u0202\u0213\5R*\2\u0203\u0204\6*\4\3\u0204\u0205\7,\2\2\u0205"+
-		"\u0213\5R*\2\u0206\u0207\6*\5\3\u0207\u0208\7\62\2\2\u0208\u0213\5R*\2"+
-		"\u0209\u020a\6*\6\3\u020a\u020b\7\63\2\2\u020b\u0213\5R*\2\u020c\u020d"+
-		"\6*\7\3\u020d\u020e\7\60\2\2\u020e\u0213\5R*\2\u020f\u0210\6*\b\3\u0210"+
-		"\u0211\7\61\2\2\u0211\u0213\5R*\2\u0212\u01fd\3\2\2\2\u0212\u0200\3\2"+
-		"\2\2\u0212\u0203\3\2\2\2\u0212\u0206\3\2\2\2\u0212\u0209\3\2\2\2\u0212"+
-		"\u020c\3\2\2\2\u0212\u020f\3\2\2\2\u0213\u0216\3\2\2\2\u0214\u0212\3\2"+
-		"\2\2\u0214\u0215\3\2\2\2\u0215S\3\2\2\2\u0216\u0214\3\2\2\2\u0217\u021d"+
-		"\5X-\2\u0218\u0219\5V,\2\u0219\u021a\7-\2\2\u021a\u021b\5T+\2\u021b\u021d"+
-		"\3\2\2\2\u021c\u0217\3\2\2\2\u021c\u0218\3\2\2\2\u021dU\3\2\2\2\u021e"+
-		"\u0223\7E\2\2\u021f\u0220\5Z.\2\u0220\u0221\b,\1\2\u0221\u0223\3\2\2\2"+
-		"\u0222\u021e\3\2\2\2\u0222\u021f\3\2\2\2\u0223W\3\2\2\2\u0224\u0227\7"+
-		"E\2\2\u0225\u0227\5Z.\2\u0226\u0224\3\2\2\2\u0226\u0225\3\2\2\2\u0227"+
-		"Y\3\2\2\2\u0228\u0229\t\2\2\2\u0229[\3\2\2\2\u022a\u022b\5^\60\2\u022b"+
-		"]\3\2\2\2\u022c\u022d\7\'\2\2\u022d\u0232\5b\62\2\u022e\u022f\7+\2\2\u022f"+
-		"\u0231\5b\62\2\u0230\u022e\3\2\2\2\u0231\u0234\3\2\2\2\u0232\u0230\3\2"+
-		"\2\2\u0232\u0233\3\2\2\2\u0233\u0236\3\2\2\2\u0234\u0232\3\2\2\2\u0235"+
-		"\u0237\7+\2\2\u0236\u0235\3\2\2\2\u0236\u0237\3\2\2\2\u0237\u0238\3\2"+
-		"\2\2\u0238\u023c\7*\2\2\u0239\u023a\7!\2\2\u023a\u023b\7F\2\2\u023b\u023d"+
-		"\b\60\1\2\u023c\u0239\3\2\2\2\u023c\u023d\3\2\2\2\u023d\u0255\3\2\2\2"+
-		"\u023e\u023f\7\'\2\2\u023f\u0244\5`\61\2\u0240\u0241\7+\2\2\u0241\u0243"+
-		"\5`\61\2\u0242\u0240\3\2\2\2\u0243\u0246\3\2\2\2\u0244\u0242\3\2\2\2\u0244"+
-		"\u0245\3\2\2\2\u0245\u0248\3\2\2\2\u0246\u0244\3\2\2\2\u0247\u0249\7+"+
-		"\2\2\u0248\u0247\3\2\2\2\u0248\u0249\3\2\2\2\u0249\u024a\3\2\2\2\u024a"+
-		"\u024e\7*\2\2\u024b\u024c\7!\2\2\u024c\u024d\7F\2\2\u024d\u024f\b\60\1"+
-		"\2\u024e\u024b\3\2\2\2\u024e\u024f\3\2\2\2\u024f\u0255\3\2\2\2\u0250\u0251"+
-		"\7#\2\2\u0251\u0252\7!\2\2\u0252\u0253\7F\2\2\u0253\u0255\b\60\1\2\u0254"+
-		"\u022c\3\2\2\2\u0254\u023e\3\2\2\2\u0254\u0250\3\2\2\2\u0255_\3\2\2\2"+
-		"\u0256\u0257\5R*\2\u0257a\3\2\2\2\u0258\u0259\7F\2\2\u0259\u025a\b\62"+
-		"\1\2\u025a\u025b\7,\2\2\u025b\u025c\5R*\2\u025cc\3\2\2\2>otv\u0088\u0090"+
-		"\u0095\u009e\u00aa\u00ac\u00b2\u00c5\u00d7\u00df\u00e4\u00f0\u00f6\u00f9"+
-		"\u00fc\u0102\u0106\u0119\u0121\u012c\u0137\u013f\u014d\u0150\u0159\u015c"+
-		"\u0162\u0169\u016c\u0171\u0182\u0189\u0191\u0198\u01a9\u01ae\u01ba\u01be"+
-		"\u01c4\u01c8\u01cd\u01d5\u01d9\u01f7\u01fb\u0212\u0214\u021c\u0222\u0226"+
-		"\u0232\u0236\u023c\u0244\u0248\u024e\u0254";
+		",\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62\4\63\t\63\3\2\3\2"+
+		"\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\4\7\4r\n\4\f\4\16\4u\13\4\3\5\3\5\3"+
+		"\5\7\5z\n\5\f\5\16\5}\13\5\3\6\3\6\7\6\u0081\n\6\f\6\16\6\u0084\13\6\3"+
+		"\7\7\7\u0087\n\7\f\7\16\7\u008a\13\7\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3"+
+		"\b\3\b\3\b\3\b\3\b\3\b\3\b\5\b\u009b\n\b\3\b\3\b\3\b\3\b\3\b\3\b\5\b\u00a3"+
+		"\n\b\3\t\7\t\u00a6\n\t\f\t\16\t\u00a9\13\t\3\n\3\n\3\n\3\n\3\n\3\n\5\n"+
+		"\u00b1\n\n\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\f\7\f\u00bc\n\f\f"+
+		"\f\16\f\u00bf\13\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r"+
+		"\3\r\3\r\3\r\5\r\u00d1\n\r\3\16\3\16\3\16\3\16\3\16\3\16\3\17\3\17\3\17"+
+		"\3\17\3\20\3\20\3\20\3\20\3\20\3\20\5\20\u00e3\n\20\3\21\3\21\3\21\3\21"+
+		"\3\21\3\21\5\21\u00eb\n\21\3\22\3\22\3\22\5\22\u00f0\n\22\3\23\3\23\3"+
+		"\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\5\23\u00fc\n\23\3\23\3\23\3\23"+
+		"\3\23\5\23\u0102\n\23\3\23\5\23\u0105\n\23\3\23\5\23\u0108\n\23\3\24\3"+
+		"\24\3\24\3\24\5\24\u010e\n\24\3\24\3\24\5\24\u0112\n\24\3\25\3\25\3\25"+
+		"\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25"+
+		"\5\25\u0125\n\25\3\25\3\25\3\25\3\25\3\25\3\25\5\25\u012d\n\25\3\25\3"+
+		"\25\3\25\3\25\3\26\3\26\3\26\3\26\3\26\5\26\u0138\n\26\3\26\3\26\3\26"+
+		"\3\26\3\27\3\27\3\27\7\27\u0141\n\27\f\27\16\27\u0144\13\27\3\30\3\30"+
+		"\3\30\3\30\3\30\5\30\u014b\n\30\3\31\3\31\3\31\3\31\3\32\3\32\3\33\3\33"+
+		"\3\33\3\33\3\33\3\33\5\33\u0159\n\33\3\33\5\33\u015c\n\33\3\33\3\33\3"+
+		"\33\3\33\3\33\3\33\3\33\5\33\u0165\n\33\3\33\5\33\u0168\n\33\3\34\3\34"+
+		"\7\34\u016c\n\34\f\34\16\34\u016f\13\34\3\35\3\35\3\35\3\35\5\35\u0175"+
+		"\n\35\3\35\5\35\u0178\n\35\3\36\7\36\u017b\n\36\f\36\16\36\u017e\13\36"+
+		"\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37"+
+		"\5\37\u018e\n\37\3 \3 \3 \7 \u0193\n \f \16 \u0196\13 \3!\3!\3!\7!\u019b"+
+		"\n!\f!\16!\u019e\13!\3\"\3\"\3\"\3\"\5\"\u01a4\n\"\3#\3#\3#\3#\3#\3#\3"+
+		"#\3#\3#\3#\3#\3#\3#\3#\3#\5#\u01b5\n#\3$\3$\3$\5$\u01ba\n$\3$\3$\3$\3"+
+		"%\3%\3%\3%\3%\7%\u01c4\n%\f%\16%\u01c7\13%\3%\5%\u01ca\n%\3%\3%\3&\3&"+
+		"\5&\u01d0\n&\3\'\3\'\5\'\u01d4\n\'\3\'\3\'\3\'\5\'\u01d9\n\'\3(\3(\3("+
+		"\3(\7(\u01df\n(\f(\16(\u01e2\13(\3(\5(\u01e5\n(\3(\3(\3)\3)\3)\3*\3*\3"+
+		"*\3*\3*\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\5+\u0203"+
+		"\n+\3+\3+\5+\u0207\n+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+"+
+		"\3+\3+\3+\3+\3+\7+\u021e\n+\f+\16+\u0221\13+\3,\3,\3,\3,\3,\5,\u0228\n"+
+		",\3-\3-\3-\3-\5-\u022e\n-\3.\3.\5.\u0232\n.\3/\3/\3\60\3\60\3\61\3\61"+
+		"\3\61\3\61\7\61\u023c\n\61\f\61\16\61\u023f\13\61\3\61\5\61\u0242\n\61"+
+		"\3\61\3\61\3\61\3\61\5\61\u0248\n\61\3\61\3\61\3\61\3\61\7\61\u024e\n"+
+		"\61\f\61\16\61\u0251\13\61\3\61\5\61\u0254\n\61\3\61\3\61\3\61\3\61\5"+
+		"\61\u025a\n\61\3\61\3\61\3\61\3\61\5\61\u0260\n\61\3\62\3\62\3\63\3\63"+
+		"\3\63\3\63\3\63\3\63\2\64\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&"+
+		"(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bd\2\3\4\2\26\35FF\u02a0\2f\3\2"+
+		"\2\2\4k\3\2\2\2\6s\3\2\2\2\b{\3\2\2\2\n\u0082\3\2\2\2\f\u0088\3\2\2\2"+
+		"\16\u008b\3\2\2\2\20\u00a7\3\2\2\2\22\u00b0\3\2\2\2\24\u00b2\3\2\2\2\26"+
+		"\u00bd\3\2\2\2\30\u00d0\3\2\2\2\32\u00d2\3\2\2\2\34\u00d8\3\2\2\2\36\u00dc"+
+		"\3\2\2\2 \u00e4\3\2\2\2\"\u00ec\3\2\2\2$\u00fb\3\2\2\2&\u0109\3\2\2\2"+
+		"(\u0113\3\2\2\2*\u0132\3\2\2\2,\u0142\3\2\2\2.\u014a\3\2\2\2\60\u014c"+
+		"\3\2\2\2\62\u0150\3\2\2\2\64\u0152\3\2\2\2\66\u0169\3\2\2\28\u0170\3\2"+
+		"\2\2:\u017c\3\2\2\2<\u018d\3\2\2\2>\u018f\3\2\2\2@\u0197\3\2\2\2B\u019f"+
+		"\3\2\2\2D\u01b4\3\2\2\2F\u01b9\3\2\2\2H\u01be\3\2\2\2J\u01cd\3\2\2\2L"+
+		"\u01d1\3\2\2\2N\u01da\3\2\2\2P\u01e8\3\2\2\2R\u01eb\3\2\2\2T\u0206\3\2"+
+		"\2\2V\u0227\3\2\2\2X\u022d\3\2\2\2Z\u0231\3\2\2\2\\\u0233\3\2\2\2^\u0235"+
+		"\3\2\2\2`\u025f\3\2\2\2b\u0261\3\2\2\2d\u0263\3\2\2\2fg\5\6\4\2gh\5\b"+
+		"\5\2hi\5\n\6\2ij\7\2\2\3j\3\3\2\2\2kl\5\6\4\2lm\5\b\5\2mn\5\f\7\2no\7"+
+		"\2\2\3o\5\3\2\2\2pr\5\16\b\2qp\3\2\2\2ru\3\2\2\2sq\3\2\2\2st\3\2\2\2t"+
+		"\7\3\2\2\2us\3\2\2\2vw\5\32\16\2wx\7.\2\2xz\3\2\2\2yv\3\2\2\2z}\3\2\2"+
+		"\2{y\3\2\2\2{|\3\2\2\2|\t\3\2\2\2}{\3\2\2\2~\u0081\5\24\13\2\177\u0081"+
+		"\5(\25\2\u0080~\3\2\2\2\u0080\177\3\2\2\2\u0081\u0084\3\2\2\2\u0082\u0080"+
+		"\3\2\2\2\u0082\u0083\3\2\2\2\u0083\13\3\2\2\2\u0084\u0082\3\2\2\2\u0085"+
+		"\u0087\5(\25\2\u0086\u0085\3\2\2\2\u0087\u008a\3\2\2\2\u0088\u0086\3\2"+
+		"\2\2\u0088\u0089\3\2\2\2\u0089\r\3\2\2\2\u008a\u0088\3\2\2\2\u008b\u009a"+
+		"\7\17\2\2\u008c\u008d\7\26\2\2\u008d\u009b\b\b\1\2\u008e\u008f\7\30\2"+
+		"\2\u008f\u009b\b\b\1\2\u0090\u0091\7\32\2\2\u0091\u009b\b\b\1\2\u0092"+
+		"\u0093\7\33\2\2\u0093\u009b\b\b\1\2\u0094\u0095\7\34\2\2\u0095\u009b\b"+
+		"\b\1\2\u0096\u0097\7\35\2\2\u0097\u009b\b\b\1\2\u0098\u0099\7F\2\2\u0099"+
+		"\u009b\b\b\1\2\u009a\u008c\3\2\2\2\u009a\u008e\3\2\2\2\u009a\u0090\3\2"+
+		"\2\2\u009a\u0092\3\2\2\2\u009a\u0094\3\2\2\2\u009a\u0096\3\2\2\2\u009a"+
+		"\u0098\3\2\2\2\u009b\u009c\3\2\2\2\u009c\u00a2\7F\2\2\u009d\u00a3\7.\2"+
+		"\2\u009e\u009f\7%\2\2\u009f\u00a0\5\20\t\2\u00a0\u00a1\7(\2\2\u00a1\u00a3"+
+		"\3\2\2\2\u00a2\u009d\3\2\2\2\u00a2\u009e\3\2\2\2\u00a3\17\3\2\2\2\u00a4"+
+		"\u00a6\5\22\n\2\u00a5\u00a4\3\2\2\2\u00a6\u00a9\3\2\2\2\u00a7\u00a5\3"+
+		"\2\2\2\u00a7\u00a8\3\2\2\2\u00a8\21\3\2\2\2\u00a9\u00a7\3\2\2\2\u00aa"+
+		"\u00ab\5\"\22\2\u00ab\u00ac\7.\2\2\u00ac\u00b1\3\2\2\2\u00ad\u00ae\5\32"+
+		"\16\2\u00ae\u00af\7.\2\2\u00af\u00b1\3\2\2\2\u00b0\u00aa\3\2\2\2\u00b0"+
+		"\u00ad\3\2\2\2\u00b1\23\3\2\2\2\u00b2\u00b3\7\5\2\2\u00b3\u00b4\7\27\2"+
+		"\2\u00b4\u00b5\7F\2\2\u00b5\u00b6\b\13\1\2\u00b6\u00b7\7%\2\2\u00b7\u00b8"+
+		"\5\26\f\2\u00b8\u00b9\7(\2\2\u00b9\25\3\2\2\2\u00ba\u00bc\5\30\r\2\u00bb"+
+		"\u00ba\3\2\2\2\u00bc\u00bf\3\2\2\2\u00bd\u00bb\3\2\2\2\u00bd\u00be\3\2"+
+		"\2\2\u00be\27\3\2\2\2\u00bf\u00bd\3\2\2\2\u00c0\u00c1\5\"\22\2\u00c1\u00c2"+
+		"\7.\2\2\u00c2\u00d1\3\2\2\2\u00c3\u00c4\5\32\16\2\u00c4\u00c5\7.\2\2\u00c5"+
+		"\u00d1\3\2\2\2\u00c6\u00c7\5\34\17\2\u00c7\u00c8\7.\2\2\u00c8\u00d1\3"+
+		"\2\2\2\u00c9\u00ca\5R*\2\u00ca\u00cb\7.\2\2\u00cb\u00d1\3\2\2\2\u00cc"+
+		"\u00d1\5*\26\2\u00cd\u00ce\5P)\2\u00ce\u00cf\7.\2\2\u00cf\u00d1\3\2\2"+
+		"\2\u00d0\u00c0\3\2\2\2\u00d0\u00c3\3\2\2\2\u00d0\u00c6\3\2\2\2\u00d0\u00c9"+
+		"\3\2\2\2\u00d0\u00cc\3\2\2\2\u00d0\u00cd\3\2\2\2\u00d1\31\3\2\2\2\u00d2"+
+		"\u00d3\7\21\2\2\u00d3\u00d4\7F\2\2\u00d4\u00d5\b\16\1\2\u00d5\u00d6\7"+
+		",\2\2\u00d6\u00d7\5T+\2\u00d7\33\3\2\2\2\u00d8\u00d9\7\22\2\2\u00d9\u00da"+
+		"\7F\2\2\u00da\u00db\b\17\1\2\u00db\35\3\2\2\2\u00dc\u00dd\7\13\2\2\u00dd"+
+		"\u00de\7F\2\2\u00de\u00df\7\7\2\2\u00df\u00e2\7F\2\2\u00e0\u00e1\7/\2"+
+		"\2\u00e1\u00e3\7F\2\2\u00e2\u00e0\3\2\2\2\u00e2\u00e3\3\2\2\2\u00e3\37"+
+		"\3\2\2\2\u00e4\u00e5\7\f\2\2\u00e5\u00e6\7F\2\2\u00e6\u00e7\7\7\2\2\u00e7"+
+		"\u00ea\7F\2\2\u00e8\u00e9\7/\2\2\u00e9\u00eb\7F\2\2\u00ea\u00e8\3\2\2"+
+		"\2\u00ea\u00eb\3\2\2\2\u00eb!\3\2\2\2\u00ec\u00ef\7\6\2\2\u00ed\u00f0"+
+		"\5$\23\2\u00ee\u00f0\5&\24\2\u00ef\u00ed\3\2\2\2\u00ef\u00ee\3\2\2\2\u00f0"+
+		"#\3\2\2\2\u00f1\u00f2\7\26\2\2\u00f2\u00fc\b\23\1\2\u00f3\u00f4\7\30\2"+
+		"\2\u00f4\u00fc\b\23\1\2\u00f5\u00f6\7\32\2\2\u00f6\u00fc\b\23\1\2\u00f7"+
+		"\u00f8\7\33\2\2\u00f8\u00fc\b\23\1\2\u00f9\u00fa\7\34\2\2\u00fa\u00fc"+
+		"\b\23\1\2\u00fb\u00f1\3\2\2\2\u00fb\u00f3\3\2\2\2\u00fb\u00f5\3\2\2\2"+
+		"\u00fb\u00f7\3\2\2\2\u00fb\u00f9\3\2\2\2\u00fc\u00fd\3\2\2\2\u00fd\u00fe"+
+		"\7F\2\2\u00fe\u0104\b\23\1\2\u00ff\u0101\7&\2\2\u0100\u0102\5> \2\u0101"+
+		"\u0100\3\2\2\2\u0101\u0102\3\2\2\2\u0102\u0103\3\2\2\2\u0103\u0105\7)"+
+		"\2\2\u0104\u00ff\3\2\2\2\u0104\u0105\3\2\2\2\u0105\u0107\3\2\2\2\u0106"+
+		"\u0108\5^\60\2\u0107\u0106\3\2\2\2\u0107\u0108\3\2\2\2\u0108%\3\2\2\2"+
+		"\u0109\u010a\7F\2\2\u010a\u010b\b\24\1\2\u010b\u010d\7&\2\2\u010c\u010e"+
+		"\5@!\2\u010d\u010c\3\2\2\2\u010d\u010e\3\2\2\2\u010e\u010f\3\2\2\2\u010f"+
+		"\u0111\7)\2\2\u0110\u0112\5^\60\2\u0111\u0110\3\2\2\2\u0111\u0112\3\2"+
+		"\2\2\u0112\'\3\2\2\2\u0113\u0124\7\5\2\2\u0114\u0115\7\26\2\2\u0115\u0125"+
+		"\b\25\1\2\u0116\u0117\7\30\2\2\u0117\u0125\b\25\1\2\u0118\u0119\7\32\2"+
+		"\2\u0119\u0125\b\25\1\2\u011a\u011b\7\33\2\2\u011b\u0125\b\25\1\2\u011c"+
+		"\u011d\7\34\2\2\u011d\u0125\b\25\1\2\u011e\u011f\7\35\2\2\u011f\u0125"+
+		"\b\25\1\2\u0120\u0121\7\31\2\2\u0121\u0125\b\25\1\2\u0122\u0123\7F\2\2"+
+		"\u0123\u0125\b\25\1\2\u0124\u0114\3\2\2\2\u0124\u0116\3\2\2\2\u0124\u0118"+
+		"\3\2\2\2\u0124\u011a\3\2\2\2\u0124\u011c\3\2\2\2\u0124\u011e\3\2\2\2\u0124"+
+		"\u0120\3\2\2\2\u0124\u0122\3\2\2\2\u0125\u0126\3\2\2\2\u0126\u0127\7F"+
+		"\2\2\u0127\u012c\b\25\1\2\u0128\u0129\7&\2\2\u0129\u012a\5@!\2\u012a\u012b"+
+		"\7)\2\2\u012b\u012d\3\2\2\2\u012c\u0128\3\2\2\2\u012c\u012d\3\2\2\2\u012d"+
+		"\u012e\3\2\2\2\u012e\u012f\7%\2\2\u012f\u0130\5:\36\2\u0130\u0131\7(\2"+
+		"\2\u0131)\3\2\2\2\u0132\u0133\7\7\2\2\u0133\u0134\7F\2\2\u0134\u0137\b"+
+		"\26\1\2\u0135\u0136\7/\2\2\u0136\u0138\5\66\34\2\u0137\u0135\3\2\2\2\u0137"+
+		"\u0138\3\2\2\2\u0138\u0139\3\2\2\2\u0139\u013a\7%\2\2\u013a\u013b\5,\27"+
+		"\2\u013b\u013c\7(\2\2\u013c+\3\2\2\2\u013d\u013e\5.\30\2\u013e\u013f\7"+
+		".\2\2\u013f\u0141\3\2\2\2\u0140\u013d\3\2\2\2\u0141\u0144\3\2\2\2\u0142"+
+		"\u0140\3\2\2\2\u0142\u0143\3\2\2\2\u0143-\3\2\2\2\u0144\u0142\3\2\2\2"+
+		"\u0145\u014b\5\64\33\2\u0146\u014b\5\62\32\2\u0147\u014b\5\36\20\2\u0148"+
+		"\u014b\5 \21\2\u0149\u014b\5\60\31\2\u014a\u0145\3\2\2\2\u014a\u0146\3"+
+		"\2\2\2\u014a\u0147\3\2\2\2\u014a\u0148\3\2\2\2\u014a\u0149\3\2\2\2\u014b"+
+		"/\3\2\2\2\u014c\u014d\7F\2\2\u014d\u014e\7,\2\2\u014e\u014f\5T+\2\u014f"+
+		"\61\3\2\2\2\u0150\u0151\7\t\2\2\u0151\63\3\2\2\2\u0152\u0153\b\33\1\2"+
+		"\u0153\u0154\7\b\2\2\u0154\u0155\7F\2\2\u0155\u015b\b\33\1\2\u0156\u0158"+
+		"\7&\2\2\u0157\u0159\5> \2\u0158\u0157\3\2\2\2\u0158\u0159\3\2\2\2\u0159"+
+		"\u015a\3\2\2\2\u015a\u015c\7)\2\2\u015b\u0156\3\2\2\2\u015b\u015c\3\2"+
+		"\2\2\u015c\u0167\3\2\2\2\u015d\u0164\7\37\2\2\u015e\u015f\7\"\2\2\u015f"+
+		"\u0165\b\33\1\2\u0160\u0161\7\27\2\2\u0161\u0165\b\33\1\2\u0162\u0163"+
+		"\7F\2\2\u0163\u0165\b\33\1\2\u0164\u015e\3\2\2\2\u0164\u0160\3\2\2\2\u0164"+
+		"\u0162\3\2\2\2\u0165\u0166\3\2\2\2\u0166\u0168\b\33\1\2\u0167\u015d\3"+
+		"\2\2\2\u0167\u0168\3\2\2\2\u0168\65\3\2\2\2\u0169\u016d\58\35\2\u016a"+
+		"\u016c\58\35\2\u016b\u016a\3\2\2\2\u016c\u016f\3\2\2\2\u016d\u016b\3\2"+
+		"\2\2\u016d\u016e\3\2\2\2\u016e\67\3\2\2\2\u016f\u016d\3\2\2\2\u0170\u0171"+
+		"\7F\2\2\u0171\u0177\b\35\1\2\u0172\u0174\7&\2\2\u0173\u0175\5> \2\u0174"+
+		"\u0173\3\2\2\2\u0174\u0175\3\2\2\2\u0175\u0176\3\2\2\2\u0176\u0178\7)"+
+		"\2\2\u0177\u0172\3\2\2\2\u0177\u0178\3\2\2\2\u01789\3\2\2\2\u0179\u017b"+
+		"\5<\37\2\u017a\u0179\3\2\2\2\u017b\u017e\3\2\2\2\u017c\u017a\3\2\2\2\u017c"+
+		"\u017d\3\2\2\2\u017d;\3\2\2\2\u017e\u017c\3\2\2\2\u017f\u0180\5\"\22\2"+
+		"\u0180\u0181\7.\2\2\u0181\u018e\3\2\2\2\u0182\u0183\5\32\16\2\u0183\u0184"+
+		"\7.\2\2\u0184\u018e\3\2\2\2\u0185\u0186\5P)\2\u0186\u0187\7.\2\2\u0187"+
+		"\u018e\3\2\2\2\u0188\u0189\5R*\2\u0189\u018a\7.\2\2\u018a\u018e\3\2\2"+
+		"\2\u018b\u018e\5*\26\2\u018c\u018e\5H%\2\u018d\u017f\3\2\2\2\u018d\u0182"+
+		"\3\2\2\2\u018d\u0185\3\2\2\2\u018d\u0188\3\2\2\2\u018d\u018b\3\2\2\2\u018d"+
+		"\u018c\3\2\2\2\u018e=\3\2\2\2\u018f\u0194\5T+\2\u0190\u0191\7+\2\2\u0191"+
+		"\u0193\5T+\2\u0192\u0190\3\2\2\2\u0193\u0196\3\2\2\2\u0194\u0192\3\2\2"+
+		"\2\u0194\u0195\3\2\2\2\u0195?\3\2\2\2\u0196\u0194\3\2\2\2\u0197\u019c"+
+		"\5B\"\2\u0198\u0199\7+\2\2\u0199\u019b\5B\"\2\u019a\u0198\3\2\2\2\u019b"+
+		"\u019e\3\2\2\2\u019c\u019a\3\2\2\2\u019c\u019d\3\2\2\2\u019dA\3\2\2\2"+
+		"\u019e\u019c\3\2\2\2\u019f\u01a0\5D#\2\u01a0\u01a3\7F\2\2\u01a1\u01a2"+
+		"\7,\2\2\u01a2\u01a4\5T+\2\u01a3\u01a1\3\2\2\2\u01a3\u01a4\3\2\2\2\u01a4"+
+		"C\3\2\2\2\u01a5\u01a6\7:\2\2\u01a6\u01b5\b#\1\2\u01a7\u01a8\7<\2\2\u01a8"+
+		"\u01b5\b#\1\2\u01a9\u01aa\7;\2\2\u01aa\u01b5\b#\1\2\u01ab\u01ac\7=\2\2"+
+		"\u01ac\u01b5\b#\1\2\u01ad\u01ae\7>\2\2\u01ae\u01b5\b#\1\2\u01af\u01b0"+
+		"\7?\2\2\u01b0\u01b5\b#\1\2\u01b1\u01b2\5F$\2\u01b2\u01b3\b#\1\2\u01b3"+
+		"\u01b5\3\2\2\2\u01b4\u01a5\3\2\2\2\u01b4\u01a7\3\2\2\2\u01b4\u01a9\3\2"+
+		"\2\2\u01b4\u01ab\3\2\2\2\u01b4\u01ad\3\2\2\2\u01b4\u01af\3\2\2\2\u01b4"+
+		"\u01b1\3\2\2\2\u01b5E\3\2\2\2\u01b6\u01b7\7F\2\2\u01b7\u01b8\7/\2\2\u01b8"+
+		"\u01ba\b$\1\2\u01b9\u01b6\3\2\2\2\u01b9\u01ba\3\2\2\2\u01ba\u01bb\3\2"+
+		"\2\2\u01bb\u01bc\7F\2\2\u01bc\u01bd\b$\1\2\u01bdG\3\2\2\2\u01be\u01bf"+
+		"\7\23\2\2\u01bf\u01c0\7%\2\2\u01c0\u01c5\5J&\2\u01c1\u01c2\7+\2\2\u01c2"+
+		"\u01c4\5J&\2\u01c3\u01c1\3\2\2\2\u01c4\u01c7\3\2\2\2\u01c5\u01c3\3\2\2"+
+		"\2\u01c5\u01c6\3\2\2\2\u01c6\u01c9\3\2\2\2\u01c7\u01c5\3\2\2\2\u01c8\u01ca"+
+		"\7+\2\2\u01c9\u01c8\3\2\2\2\u01c9\u01ca\3\2\2\2\u01ca\u01cb\3\2\2\2\u01cb"+
+		"\u01cc\7(\2\2\u01ccI\3\2\2\2\u01cd\u01cf\5L\'\2\u01ce\u01d0\5N(\2\u01cf"+
+		"\u01ce\3\2\2\2\u01cf\u01d0\3\2\2\2\u01d0K\3\2\2\2\u01d1\u01d3\7F\2\2\u01d2"+
+		"\u01d4\7F\2\2\u01d3\u01d2\3\2\2\2\u01d3\u01d4\3\2\2\2\u01d4\u01d5\3\2"+
+		"\2\2\u01d5\u01d6\7/\2\2\u01d6\u01d8\7C\2\2\u01d7\u01d9\5^\60\2\u01d8\u01d7"+
+		"\3\2\2\2\u01d8\u01d9\3\2\2\2\u01d9M\3\2\2\2\u01da\u01db\7%\2\2\u01db\u01e0"+
+		"\5L\'\2\u01dc\u01dd\7+\2\2\u01dd\u01df\5L\'\2\u01de\u01dc\3\2\2\2\u01df"+
+		"\u01e2\3\2\2\2\u01e0\u01de\3\2\2\2\u01e0\u01e1\3\2\2\2\u01e1\u01e4\3\2"+
+		"\2\2\u01e2\u01e0\3\2\2\2\u01e3\u01e5\7+\2\2\u01e4\u01e3\3\2\2\2\u01e4"+
+		"\u01e5\3\2\2\2\u01e5\u01e6\3\2\2\2\u01e6\u01e7\7(\2\2\u01e7O\3\2\2\2\u01e8"+
+		"\u01e9\7\24\2\2\u01e9\u01ea\5B\"\2\u01eaQ\3\2\2\2\u01eb\u01ec\7\25\2\2"+
+		"\u01ec\u01ed\5T+\2\u01ed\u01ee\7$\2\2\u01ee\u01ef\5.\30\2\u01efS\3\2\2"+
+		"\2\u01f0\u01f1\b+\1\2\u01f1\u01f2\79\2\2\u01f2\u0207\5T+\2\u01f3\u01f4"+
+		"\7\61\2\2\u01f4\u0207\5T+\2\u01f5\u0207\5^\60\2\u01f6\u01f7\7&\2\2\u01f7"+
+		"\u01f8\5T+\2\u01f8\u01f9\7)\2\2\u01f9\u0207\3\2\2\2\u01fa\u0207\7A\2\2"+
+		"\u01fb\u0207\7B\2\2\u01fc\u0207\7C\2\2\u01fd\u0207\7D\2\2\u01fe\u0207"+
+		"\7@\2\2\u01ff\u0200\7F\2\2\u0200\u0202\7&\2\2\u0201\u0203\5> \2\u0202"+
+		"\u0201\3\2\2\2\u0202\u0203\3\2\2\2\u0203\u0204\3\2\2\2\u0204\u0207\7)"+
+		"\2\2\u0205\u0207\5V,\2\u0206\u01f0\3\2\2\2\u0206\u01f3\3\2\2\2\u0206\u01f5"+
+		"\3\2\2\2\u0206\u01f6\3\2\2\2\u0206\u01fa\3\2\2\2\u0206\u01fb\3\2\2\2\u0206"+
+		"\u01fc\3\2\2\2\u0206\u01fd\3\2\2\2\u0206\u01fe\3\2\2\2\u0206\u01ff\3\2"+
+		"\2\2\u0206\u0205\3\2\2\2\u0207\u021f\3\2\2\2\u0208\u0209\6+\2\3\u0209"+
+		"\u020a\7\65\2\2\u020a\u021e\5T+\2\u020b\u020c\6+\3\3\u020c\u020d\7\64"+
+		"\2\2\u020d\u021e\5T+\2\u020e\u020f\6+\4\3\u020f\u0210\7,\2\2\u0210\u021e"+
+		"\5T+\2\u0211\u0212\6+\5\3\u0212\u0213\7\62\2\2\u0213\u021e\5T+\2\u0214"+
+		"\u0215\6+\6\3\u0215\u0216\7\63\2\2\u0216\u021e\5T+\2\u0217\u0218\6+\7"+
+		"\3\u0218\u0219\7\60\2\2\u0219\u021e\5T+\2\u021a\u021b\6+\b\3\u021b\u021c"+
+		"\7\61\2\2\u021c\u021e\5T+\2\u021d\u0208\3\2\2\2\u021d\u020b\3\2\2\2\u021d"+
+		"\u020e\3\2\2\2\u021d\u0211\3\2\2\2\u021d\u0214\3\2\2\2\u021d\u0217\3\2"+
+		"\2\2\u021d\u021a\3\2\2\2\u021e\u0221\3\2\2\2\u021f\u021d\3\2\2\2\u021f"+
+		"\u0220\3\2\2\2\u0220U\3\2\2\2\u0221\u021f\3\2\2\2\u0222\u0228\5Z.\2\u0223"+
+		"\u0224\5X-\2\u0224\u0225\7-\2\2\u0225\u0226\5V,\2\u0226\u0228\3\2\2\2"+
+		"\u0227\u0222\3\2\2\2\u0227\u0223\3\2\2\2\u0228W\3\2\2\2\u0229\u022e\7"+
+		"E\2\2\u022a\u022b\5\\/\2\u022b\u022c\b-\1\2\u022c\u022e\3\2\2\2\u022d"+
+		"\u0229\3\2\2\2\u022d\u022a\3\2\2\2\u022eY\3\2\2\2\u022f\u0232\7E\2\2\u0230"+
+		"\u0232\5\\/\2\u0231\u022f\3\2\2\2\u0231\u0230\3\2\2\2\u0232[\3\2\2\2\u0233"+
+		"\u0234\t\2\2\2\u0234]\3\2\2\2\u0235\u0236\5`\61\2\u0236_\3\2\2\2\u0237"+
+		"\u0238\7\'\2\2\u0238\u023d\5d\63\2\u0239\u023a\7+\2\2\u023a\u023c\5d\63"+
+		"\2\u023b\u0239\3\2\2\2\u023c\u023f\3\2\2\2\u023d\u023b\3\2\2\2\u023d\u023e"+
+		"\3\2\2\2\u023e\u0241\3\2\2\2\u023f\u023d\3\2\2\2\u0240\u0242\7+\2\2\u0241"+
+		"\u0240\3\2\2\2\u0241\u0242\3\2\2\2\u0242\u0243\3\2\2\2\u0243\u0247\7*"+
+		"\2\2\u0244\u0245\7!\2\2\u0245\u0246\7F\2\2\u0246\u0248\b\61\1\2\u0247"+
+		"\u0244\3\2\2\2\u0247\u0248\3\2\2\2\u0248\u0260\3\2\2\2\u0249\u024a\7\'"+
+		"\2\2\u024a\u024f\5b\62\2\u024b\u024c\7+\2\2\u024c\u024e\5b\62\2\u024d"+
+		"\u024b\3\2\2\2\u024e\u0251\3\2\2\2\u024f\u024d\3\2\2\2\u024f\u0250\3\2"+
+		"\2\2\u0250\u0253\3\2\2\2\u0251\u024f\3\2\2\2\u0252\u0254\7+\2\2\u0253"+
+		"\u0252\3\2\2\2\u0253\u0254\3\2\2\2\u0254\u0255\3\2\2\2\u0255\u0259\7*"+
+		"\2\2\u0256\u0257\7!\2\2\u0257\u0258\7F\2\2\u0258\u025a\b\61\1\2\u0259"+
+		"\u0256\3\2\2\2\u0259\u025a\3\2\2\2\u025a\u0260\3\2\2\2\u025b\u025c\7#"+
+		"\2\2\u025c\u025d\7!\2\2\u025d\u025e\7F\2\2\u025e\u0260\b\61\1\2\u025f"+
+		"\u0237\3\2\2\2\u025f\u0249\3\2\2\2\u025f\u025b\3\2\2\2\u0260a\3\2\2\2"+
+		"\u0261\u0262\5T+\2\u0262c\3\2\2\2\u0263\u0264\7F\2\2\u0264\u0265\b\63"+
+		"\1\2\u0265\u0266\7,\2\2\u0266\u0267\5T+\2\u0267e\3\2\2\2>s{\u0080\u0082"+
+		"\u0088\u009a\u00a2\u00a7\u00b0\u00bd\u00d0\u00e2\u00ea\u00ef\u00fb\u0101"+
+		"\u0104\u0107\u010d\u0111\u0124\u012c\u0137\u0142\u014a\u0158\u015b\u0164"+
+		"\u0167\u016d\u0174\u0177\u017c\u018d\u0194\u019c\u01a3\u01b4\u01b9\u01c5"+
+		"\u01c9\u01cf\u01d3\u01d8\u01e0\u01e4\u0202\u0206\u021d\u021f\u0227\u022d"+
+		"\u0231\u023d\u0241\u0247\u024f\u0253\u0259\u025f";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {

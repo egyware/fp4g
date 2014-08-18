@@ -4,8 +4,6 @@ import fp4g.data.Expresion;
 import fp4g.data.IValue;
 import fp4g.data.operators.IAccessible;
 import fp4g.exceptions.CannotEvalException;
-import fp4g.exceptions.NotAllowedOperatorException;
-import fp4g.log.info.CannotEval;
 
 /*
  * Una expresión que indica que se ha usado una variable.
@@ -26,27 +24,21 @@ public class VarId extends Expresion
 	{
 		if(!(container instanceof IAccessible))
 		{
-			throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Uno de los operandos de la expresión, no permite cierta operación get/getParent");
+			throw new CannotEvalException(CannotEvalException.Types.NotAllowedOperation,this,"Uno de los operandos de la expresión, no permite cierta operación get/getParent");
 		}
-		try
+		
+		IAccessible contenedor = (IAccessible)container;			
+		if(current == this)
 		{
-			IAccessible contenedor = (IAccessible)container;			
-			if(current == this)
+			return container;
+		}else
+		{
+			IValue<?> value = contenedor.get(varName);
+			if(value == null)
 			{
-				return container;
-			}else
-			{
-				IValue<?> value = contenedor.get(varName);
-				if(value == null)
-				{
-					throw new CannotEvalException(CannotEval.VarNameNotFound,this,String.format("No se encontró la variable \"%s\"",varName));
-				}
-				return value;
+				throw new CannotEvalException(CannotEvalException.Types.VarNameNotFound, this, String.format("No se encontró la variable \"%s\"",varName));
 			}
-		}
-		catch(NotAllowedOperatorException e)
-		{
-			throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Uno de los operandos de la expresión, no permite cierta operación",e);
-		}
+			return value;
+		}		
 	}
 }

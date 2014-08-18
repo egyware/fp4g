@@ -1,7 +1,7 @@
 package fp4g.data.define;
 
 import fp4g.data.Define;
-import fp4g.data.DefineType;
+import fp4g.data.DefineTypes;
 import fp4g.data.ILib;
 
 public class Asset extends Define
@@ -28,7 +28,7 @@ public class Asset extends Define
 	}
 	public Asset(Type assetType, ILib parent) 
 	{
-		super(DefineType.ASSET, assetType.name(), parent);
+		super(DefineTypes.ASSET, assetType.name(), parent);
 		this.assetType = assetType;
 	}
 	public final String getClassName() {

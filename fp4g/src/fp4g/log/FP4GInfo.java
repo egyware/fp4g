@@ -1,17 +1,17 @@
 package fp4g.log;
 
 
-public enum InfoType implements IMessageType
+public enum FP4GInfo implements IMessageType
 	{	
 		//NoValidTestType("NO VALIDO!")
 		;
 		
 		private String message;
-		private InfoType()
+		private FP4GInfo()
 		{
 			message = this.name();
 		}
-		private InfoType(String msg)		
+		private FP4GInfo(String msg)		
 		{		
 			message = msg;
 		}

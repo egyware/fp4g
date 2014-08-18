@@ -8,13 +8,12 @@ import java.util.Set;
 
 import fp4g.data.Code;
 import fp4g.data.DefineType;
+import fp4g.data.DefineTypes;
 import fp4g.data.IDefine;
 import fp4g.data.ILib;
 import fp4g.data.IValue;
-import fp4g.data.define.Game;
 import fp4g.data.expresion.IMap;
-import fp4g.exceptions.NotAllowedException;
-import fp4g.log.info.NotAllowed;
+import fp4g.exceptions.DefineNotFoundException;
 
 /**
  * Esta clase nos permite integrar las bibliotecas sin tener que "modificar tanto" codigo. (Mentira, ok no solo muchas refractorizaciones) 
@@ -27,15 +26,13 @@ import fp4g.log.info.NotAllowed;
  */
 public class Lib extends Code implements IMap,ILib
 {
-	private static final String GameName = "Game";
 	private final Map<DefineType,Map<String,? extends IDefine>> defines;
 	private final Map<String,IValue<?>> variables;
-	private final ILib parent;
-	private Game game;
+	private final ILib parent;	
 	
 	public Lib(ILib parent)
 	{			
-		defines = new HashMap<DefineType, Map<String, ? extends IDefine>>(DefineType.values().length,1);
+		defines = new HashMap<DefineType, Map<String, ? extends IDefine>>(DefineTypes.values().length,1);
 		variables = new HashMap<String,IValue<?>>();
 		this.parent = parent;
 	}
@@ -81,7 +78,7 @@ public class Lib extends Code implements IMap,ILib
 	
 	public final <T extends IDefine> T findDefine(String defineName) 
 	{
-		for(DefineType type: DefineType.values())
+		for(DefineType type: DefineTypes.values())
 		{
 			T define = findDefine(type,defineName);
 			if(define != null)
@@ -140,19 +137,7 @@ public class Lib extends Code implements IMap,ILib
 	@Override
 	public <T extends IDefine> void setDefine(T define)
 	{
-		final DefineType type = define.getType();
-		if(type == DefineType.GAME)
-		{
-			if(game != null)
-			{
-				throw new NotAllowedException(NotAllowed.NotExpectedGame,define, "No se permite otro Game");
-			}
-			else
-			{
-				game = (Game) define;
-				set(GameName,game);
-			}
-		}
+		final DefineType type = define.getType();	
 		Map<String,T> map = (Map<String, T>) defines.get(type);
 		if(map == null)
 		{
@@ -178,7 +163,7 @@ public class Lib extends Code implements IMap,ILib
 	}
 
 	@Override
-	public <T extends IDefine> T getDefine(DefineType defineType, String defineName)
+	public <T extends IDefine> T getDefine(DefineType defineType, String defineName) throws DefineNotFoundException
 	{
 		T define = findDefine(defineType, defineName);
 		if(define == null)
@@ -190,7 +175,7 @@ public class Lib extends Code implements IMap,ILib
 	}
 
 	@Override
-	public <T extends IDefine> T getDefine(String defineName) 
+	public <T extends IDefine> T getDefine(String defineName) throws DefineNotFoundException 
 	{
 		T define = findDefine(defineName);
 		if(define == null)
@@ -200,13 +185,7 @@ public class Lib extends Code implements IMap,ILib
 		return define;
 	}
 
-	@Override
-	public Game getGame() 
-	{		
-		return game;
-	}
-
-	@Override
+		@Override
 	public ILib getValue() 
 	{
 		return this;
@@ -227,7 +206,7 @@ public class Lib extends Code implements IMap,ILib
 			builder.append(entry.getValue());
 			builder.append('\n');
 		}
-		for(Map<String, ? extends IDefine> listDefines:defines.values())
+	for(Map<String, ? extends IDefine> listDefines:defines.values())
 		{
 			for(IDefine define:listDefines.values())
 			{

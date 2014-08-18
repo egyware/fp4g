@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import fp4g.data.DeclVar;
-import fp4g.data.DefineType;
+import fp4g.data.DefineTypes;
 import fp4g.data.Expresion;
 import fp4g.data.ICode;
 import fp4g.data.NameList;
@@ -27,7 +27,7 @@ import fp4g.generator.gdx.models.OnModel;
 import fp4g.generator.gdx.models.VarCodeModel;
 import fp4g.generator.gdx.models.WhenModel;
 import fp4g.generator.gdx.models.on.MethodHandlerModel;
-import fp4g.log.info.Error;
+import fp4g.log.FP4GError;
 import freemarker.template.Template;
 
 public class EntityGenerator extends JavaCodeGenerator
@@ -74,7 +74,7 @@ public class EntityGenerator extends JavaCodeGenerator
 		//agregar behaviors
 				
 		List<HashMap<String,Object>> behaviors = new LinkedList<HashMap<String, Object>>();
-		final Collection<AddDefine> entity_addBehaviors = entity.getAddDefines(DefineType.BEHAVIOR);
+		final Collection<AddDefine> entity_addBehaviors = entity.getAddDefines(DefineTypes.BEHAVIOR);
 		for(AddDefine addBhvr:entity_addBehaviors)
 		{
 			HashMap<String,Object> bhvr = new HashMap<String, Object>();			
@@ -110,7 +110,7 @@ public class EntityGenerator extends JavaCodeGenerator
 			{
 				if(on.message == null)
 				{
-					throw new FP4GRuntimeException(Error.MessageNotFound,String.format("No se encontró el mensaje %s para la instrucción ON", on.name));
+					throw new FP4GRuntimeException(FP4GError.MessageNotFound,String.format("No se encontró el mensaje %s para la instrucción ON", on.name));
 					//gracias a esta excepción aseguro que siempre on.message != null
 				}
 				

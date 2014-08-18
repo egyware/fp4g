@@ -1,7 +1,6 @@
 package fp4g.data.operators;
 
 import fp4g.data.IValue;
-import fp4g.exceptions.NotAllowedOperatorException;
 
 /**
  * @author Edgardo
@@ -9,5 +8,5 @@ import fp4g.exceptions.NotAllowedOperatorException;
  */
 public interface IAccessible
 {
-	public IValue<?> get(String key) throws NotAllowedOperatorException;	
+	public IValue<?> get(String key);	
 }

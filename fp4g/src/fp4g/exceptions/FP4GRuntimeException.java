@@ -1,7 +1,9 @@
 package fp4g.exceptions;
 
+import fp4g.data.ILine;
 import fp4g.log.IMessageType;
 
+//Nota: TODOS LOS ERRORES SON RUNTIMES
 public class FP4GRuntimeException extends RuntimeException 
 {
 	private static final long serialVersionUID = 1L;
@@ -16,6 +18,13 @@ public class FP4GRuntimeException extends RuntimeException
 	{
 		this(type, -1, reason, parent);
 	}
+	public FP4GRuntimeException(IMessageType type, ILine line,  String reason)
+	{	
+		super(type.getMessage());
+		this.type   = type;		
+		this.reason = reason;
+		this.line = line.getLine();
+	}	
 	public FP4GRuntimeException(IMessageType type, int line,  String reason)
 	{	
 		super(type.getMessage());

@@ -7,6 +7,8 @@ import org.antlr.v4.misc.Utils;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
 
+import fp4g.exceptions.CannotEvalException;
+
 public final class BeanAccess
 {
 	private final MethodAccess method;
@@ -43,7 +45,7 @@ public final class BeanAccess
 		}		
 		catch(IllegalArgumentException e)
 		{
-			//TODO ERROR ignorado
+			throw new CannotEvalException(CannotEvalException.Types.CannotSetProperty,thiz, key,value,e);
 		}
 	}
 	
@@ -62,7 +64,7 @@ public final class BeanAccess
 				return method.invoke(thiz,indexMethod);
 			}
 		}
-		return null; //TODO falta error aqui
+		throw new CannotEvalException(CannotEvalException.Types.CannotGetProperty,thiz, key);
 	}
 	
 	public String[] getProperties()

@@ -24,7 +24,6 @@ import fp4g.data.libs.LibContainer;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.exceptions.FP4GException;
-import fp4g.exceptions.GeneratorException;
 import fp4g.log.Log;
 import fp4g.parser.FP4GDataVisitor;
 import fp4g.parser.FP4GLexer;
@@ -38,8 +37,8 @@ import freemarker.template.Version;
 public abstract class Generator<M extends MetaSourceModel> 
 {	
 	protected abstract void initialize(File path,Options options,Configuration cfg);
-	protected abstract void generateCode(ILib local,File path) throws GeneratorException;
-	protected abstract void compileFiles(Collection<File> files) throws GeneratorException;
+	protected abstract void generateCode(ILib local,File path) throws FP4GException;
+	protected abstract void compileFiles(Collection<File> files) throws FP4GException;
 	protected abstract Collection<File> getRequiredFiles(File path,File file);
 	protected abstract void copyFiles(Collection<File> files);
 	
@@ -65,7 +64,7 @@ public abstract class Generator<M extends MetaSourceModel>
 		{
 			generateCode(gameData,path);
 		}
-		catch(GeneratorException ge)
+		catch(FP4GException ge)
 		{
 			Log.Exception(ge, 0);
 			return;
@@ -78,7 +77,7 @@ public abstract class Generator<M extends MetaSourceModel>
 		{
 			compileFiles(filesToCompile);
 		}
-		catch(GeneratorException ge)
+		catch(FP4GException ge)
 		{
 			Log.Exception(ge, 0);
 			return;
@@ -140,6 +139,7 @@ public abstract class Generator<M extends MetaSourceModel>
 	{
 		try
 		{
+			System.out.println(String.format("Leyendo biblioteca %s",libFileName));
 			Lib lib = new Lib(libContainer);
 			FP4GLexer lexer = new FP4GLexer(new ANTLRFileStream(libFileName));	
 			CommonTokenStream tokens = new CommonTokenStream(lexer);		

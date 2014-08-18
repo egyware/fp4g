@@ -35,101 +35,101 @@ public class Log {
 	
 	public static <T extends IMessageType> void Show(T type)
 	{
-		if(type instanceof WarnType)
+		if(type instanceof FP4GWarn)
 		{			
-			Warning((WarnType) type,0,null);				
+			Warning((FP4GWarn) type,0,null);				
 		}else
-		if(type instanceof InfoType)
+		if(type instanceof FP4GInfo)
 		{	
-			Info((InfoType) type,0,null);	
+			Info((FP4GInfo) type,0,null);	
 		}else
-		if(type instanceof ErrorType)
+		if(type instanceof FP4GError)
 		{	
-			Error((ErrorType) type,0,null);				
+			Error((FP4GError) type,0,null);				
 		}
 	}
 	
 	public static <T extends IMessageType> void Show(T type,ILine c,String more)
 	{
-		if(type instanceof WarnType)
+		if(type instanceof FP4GWarn)
 		{			
-			Warning((WarnType) type,c.getLine(),more);				
+			Warning((FP4GWarn) type,c.getLine(),more);				
 		}else
-		if(type instanceof InfoType)
+		if(type instanceof FP4GInfo)
 		{	
-			Info((InfoType) type,c.getLine(),more);	
+			Info((FP4GInfo) type,c.getLine(),more);	
 		}else
-		if(type instanceof ErrorType)
+		if(type instanceof FP4GError)
 		{	
-			Error((ErrorType) type,c.getLine(),more);				
+			Error((FP4GError) type,c.getLine(),more);				
 		}
 	}
 	
 	public static <T extends IMessageType> void Show(T type,ILine c)
 	{
-		if(type instanceof WarnType)
+		if(type instanceof FP4GWarn)
 		{			
-			Warning((WarnType) type,c.getLine(),null);				
+			Warning((FP4GWarn) type,c.getLine(),null);				
 		}else
-		if(type instanceof InfoType)
+		if(type instanceof FP4GInfo)
 		{	
-			Info((InfoType) type,c.getLine(),null);	
+			Info((FP4GInfo) type,c.getLine(),null);	
 		}else
-		if(type instanceof ErrorType)
+		if(type instanceof FP4GError)
 		{	
-			Error((ErrorType) type,c.getLine(),null);				
+			Error((FP4GError) type,c.getLine(),null);				
 		}
 	}
 	
 	public static <T extends IMessageType> void Show(T type,int line)
 	{
-		if(type instanceof WarnType)
+		if(type instanceof FP4GWarn)
 		{			
-			Warning((WarnType) type,line,null);				
+			Warning((FP4GWarn) type,line,null);				
 		}else
-		if(type instanceof InfoType)
+		if(type instanceof FP4GInfo)
 		{	
-			Info((InfoType) type,line,null);	
+			Info((FP4GInfo) type,line,null);	
 		}else
-		if(type instanceof ErrorType)
+		if(type instanceof FP4GError)
 		{	
-			Error((ErrorType) type,line,null);				
+			Error((FP4GError) type,line,null);				
 		}
 	}
 	
 	public static <T extends IMessageType> void Show(T type,int line,String more)
 	{
-		if(type instanceof WarnType)
+		if(type instanceof FP4GWarn)
 		{			
-			Warning((WarnType) type,line,more);				
+			Warning((FP4GWarn) type,line,more);				
 		}else
-		if(type instanceof InfoType)
+		if(type instanceof FP4GInfo)
 		{	
-			Info((InfoType) type,line,more);	
+			Info((FP4GInfo) type,line,more);	
 		}else
-		if(type instanceof ErrorType)
+		if(type instanceof FP4GError)
 		{	
-			Error((ErrorType) type,line,more);				
+			Error((FP4GError) type,line,more);				
 		}
 	}
 	
 	public static <T extends IMessageType> void Show(T type,String more)
 	{
-		if(type instanceof WarnType)
+		if(type instanceof FP4GWarn)
 		{			
-			Warning((WarnType) type,0,more);				
+			Warning((FP4GWarn) type,0,more);				
 		}else
-		if(type instanceof InfoType)
+		if(type instanceof FP4GInfo)
 		{	
-			Info((InfoType) type,0,more);	
+			Info((FP4GInfo) type,0,more);	
 		}else
-		if(type instanceof ErrorType)
+		if(type instanceof FP4GError)
 		{	
-			Error((ErrorType) type,0,more);				
+			Error((FP4GError) type,0,more);				
 		}
 	}
 	
-	private static void Info(final InfoType type,final int line,final String more) {		
+	private static void Info(final FP4GInfo type,final int line,final String more) {		
 		final int code = type.ordinal();		
 		final String message = type.getMessage();
 		if(more == null)
@@ -141,7 +141,7 @@ public class Log {
 			out.println(String.format(formatInfoMore,line, code,message,more));
 		}
 	}
-	private static void Warning(final WarnType type,final int line,final String more) 
+	private static void Warning(final FP4GWarn type,final int line,final String more) 
 	{
 		final int code = type.ordinal();		
 		final String message = type.getMessage();				
@@ -154,7 +154,7 @@ public class Log {
 			err.println(String.format(formatWarnMore,line, code,message,more));
 		}
 	}
-	private static void Error(final ErrorType type,final int line,final String more)
+	private static void Error(final FP4GError type,final int line,final String more)
 	{	
 		final int code = type.ordinal();		
 		final String message = type.getMessage();				

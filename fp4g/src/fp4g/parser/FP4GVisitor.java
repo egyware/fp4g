@@ -156,6 +156,13 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitOn(@NotNull FP4GParser.OnContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link FP4GParser#sets}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSets(@NotNull FP4GParser.SetsContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link FP4GParser#onFilters}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

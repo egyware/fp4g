@@ -4,8 +4,7 @@ import java.util.List;
 
 public class GameStateModel extends JavaSourceModel
 {
-	private List<ManagerModel> managers;
-	private GameFragment game;
+	private List<ManagerModel> managers;	
 	private List<String> builders;
 	private List<AssetModel> assets;
 	private boolean debug;
@@ -20,11 +19,7 @@ public class GameStateModel extends JavaSourceModel
 	public final List<ManagerModel> getManagers() 
 	{
 		return managers;
-	}
-	public final GameFragment getGame() 
-	{
-		return game;
-	}
+	}	
 	public final List<String> getBuilders() 
 	{
 		return builders;
@@ -39,10 +34,6 @@ public class GameStateModel extends JavaSourceModel
 		this.managers = managers;
 	}
 	
-	public final void setGame(GameFragment game) 
-	{
-		this.game = game;
-	}	
 	public final void setBuilders(List<String> builders) 
 	{
 		this.builders = builders;

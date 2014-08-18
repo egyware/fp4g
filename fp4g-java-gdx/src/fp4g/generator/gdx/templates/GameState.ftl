@@ -28,9 +28,11 @@ public final class ${source.name} extends GameState{
 	</#list>
 	</#if>
 	
-	public ${source.name}(GameManager manager)
+	private GameManager game;
+	public ${source.name}(GameManager game)
 	{
-		container = new WorldContainer(manager);		
+		this.game = game;
+		container = new WorldContainer(game);		
 	}
 	
 	@Override	
@@ -70,8 +72,8 @@ public final class ${source.name} extends GameState{
 	@Override
 	public boolean load()
 	{
-		final int w = ${game.name}.Width;
-		final int h = ${game.name}.Height;
+		final int w = game.getWidth();
+		final int h = game.getHeight();
 		
 		Gdx.input.setInputProcessor(container.getInputProcessor());
 		

@@ -21,13 +21,17 @@ package fp4g.parser;
 }
 
 // **** PARSER ****
-program : usings defines EOF;
+program : usings sets defines EOF;
 
-parseLib: usings gameLib EOF;
+parseLib: usings sets gameLib EOF;
 
 usings  : (using)*;
 
+sets    : (set DOTCOMA)*;
+
 defines : (game|define)*;
+
+gameLib:  (define)*;
 
 using
 returns
@@ -36,13 +40,13 @@ returns
 ]   
 		: USING 
 			(
-			   MANAGER  { $type = DefineType.MANAGER; }
-			 | STATE    { $type = DefineType.STATE;   }
-			 | BEHAVIOR { $type = DefineType.BEHAVIOR;}
-			 | ENTITY   { $type = DefineType.ENTITY;  }
-			 | GOAL     { $type = DefineType.GOAL;    }
-			 | MESSAGE  { $type = DefineType.MESSAGE; }
-			 | ID       { $type = DefineType.valueOf($ID.text);}
+			   MANAGER  { $type = DefineTypes.MANAGER; }
+			 | STATE    { $type = DefineTypes.STATE;   }
+			 | BEHAVIOR { $type = DefineTypes.BEHAVIOR;}
+			 | ENTITY   { $type = DefineTypes.ENTITY;  }
+			 | GOAL     { $type = DefineTypes.GOAL;    }
+			 | MESSAGE  { $type = DefineTypes.MESSAGE; }
+			 | ID       { $type = DefineTypes.getDefineTypeByName($ID.text);}
 			) 
 		  name = ID (DOTCOMA | ABRE_COR usingValues CIERRA_COR)		  
 		;
@@ -64,15 +68,10 @@ returns [String name]
 		 DEFINE GAME ID { $name = $ID.text; } 
 		 ABRE_COR gameValues CIERRA_COR		 
 		;
-
-gameLib:		
-			(gameValue|define)*
-		;
-
-gameValues
-		:
-		  (gameValue)* 
-		;
+		
+gameValues:
+	(gameValue)*
+;
 
 gameValue  
 		: 
@@ -83,7 +82,10 @@ gameValue
 		| on
 		| flag DOTCOMA
 		;
-		
+	
+
+
+
 set
 returns
 [ String key ]
@@ -123,11 +125,11 @@ returns
 ]
 :
 		 (
-			  	MANAGER  { $type = DefineType.MANAGER;  }			  	
-			  | STATE    { $type = DefineType.STATE;    }
-			  | BEHAVIOR { $type = DefineType.BEHAVIOR; }
-			  | ENTITY   { $type = DefineType.ENTITY;  }
-			  | GOAL     { $type = DefineType.GOAL;  }			  
+			  	MANAGER  { $type = DefineTypes.MANAGER;  }			  	
+			  | STATE    { $type = DefineTypes.STATE;    }
+			  | BEHAVIOR { $type = DefineTypes.BEHAVIOR; }
+			  | ENTITY   { $type = DefineTypes.ENTITY;  }
+			  | GOAL     { $type = DefineTypes.GOAL;  }			  
 		 )
 		 ID { $addName = $ID.text; }
 		 ( ABRE_PAR exprList? CIERRA_PAR )?
@@ -155,14 +157,14 @@ returns
 		: 
 		  DEFINE 
 		  	( 
-		  		 MANAGER    { $type = DefineType.MANAGER; }
-		  		| STATE     { $type = DefineType.STATE;   }
-		  		| BEHAVIOR  { $type = DefineType.BEHAVIOR;}
-		  		| ENTITY    { $type = DefineType.ENTITY;  }
-		  		| GOAL      { $type = DefineType.GOAL;    }
-		  		| MESSAGE   { $type = DefineType.MESSAGE; }		  		
-		  		| ASSET     { $type = DefineType.ASSET;   }
-		  		| ID        { $type = DefineType.valueOf($ID.text);}
+		  		 MANAGER    { $type = DefineTypes.MANAGER; }
+		  		| STATE     { $type = DefineTypes.STATE;   }
+		  		| BEHAVIOR  { $type = DefineTypes.BEHAVIOR;}
+		  		| ENTITY    { $type = DefineTypes.ENTITY;  }
+		  		| GOAL      { $type = DefineTypes.GOAL;    }
+		  		| MESSAGE   { $type = DefineTypes.MESSAGE; }		  		
+		  		| ASSET     { $type = DefineTypes.ASSET;   }
+		  		| ID        { $type = DefineTypes.getDefineTypeByName($ID.text);}
 		  	) 
 		  ID { $defName = $ID.text; } 
 		  ( ABRE_PAR nameList CIERRA_PAR )?		  
@@ -288,7 +290,7 @@ returns
 		 | INTEGER_TYPE  {$type = BasicType.Integer;}
 		 | DOUBLE_TYPE   {$type = BasicType.Double;}
 		 | FLOAT_TYPE    {$type = BasicType.Float;}
-		 | id = defineID {$type = new CustomType(($id.type != null)?DefineType.valueOf($id.type):DefineType.STRUCT, $id.name);} // solo Define del tipo Type
+		 | id = defineID {$type = new CustomType(($id.type != null)?DefineTypes.getDefineTypeByName($id.type):DefineTypes.STRUCT, $id.name);} // solo Define del tipo Type
         ;
 
 defineID

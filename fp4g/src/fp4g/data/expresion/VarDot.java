@@ -3,8 +3,6 @@ package fp4g.data.expresion;
 import fp4g.data.IValue;
 import fp4g.data.operators.IAccessible;
 import fp4g.exceptions.CannotEvalException;
-import fp4g.exceptions.NotAllowedOperatorException;
-import fp4g.log.info.CannotEval;
 
 /**
  * Esta clase corresponde a la operación Variable.propiedad.
@@ -26,27 +24,20 @@ public class VarDot extends VarId
 	{		
 		if(!(current instanceof IAccessible))
 		{
-			throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Uno de los operandos de la expresión, no permite cierta operación get/getParent");
+			throw new CannotEvalException(CannotEvalException.Types.NotAllowedOperation,this,"Uno de los operandos de la expresión, no permite cierta operación get/getParent");
 		}
-		try
-		{			
-			IValue<?> sub = null;			
-			if(VarDot.current == varName)
-			{
-				sub = current;
-			}else
-			{				
-				sub = ((IAccessible)current).get(varName);				
-			}
-			if(sub == null)
-			{			
-				throw new CannotEvalException(CannotEval.VarNameNotFound,this, String.format("No se encontro la variable \"%s\"",varName));
-			}
-			return property.eval(sub);
-		}
-		catch(NotAllowedOperatorException e)
+		IValue<?> sub = null;			
+		if(VarDot.current == varName)
 		{
-			throw new CannotEvalException(CannotEval.NotAllowedOperation,this,"Uno de los operandos de la expresión, no permite cierta operación",e);
+			sub = current;
+		}else
+		{				
+			sub = ((IAccessible)current).get(varName);				
 		}
+		if(sub == null)
+		{			
+			throw new CannotEvalException(CannotEvalException.Types.VarNameNotFound, this, String.format("No se encontró la variable \"%s\"",varName));
+		}
+		return property.eval(sub);		
 	}
 }

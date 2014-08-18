@@ -8,7 +8,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -30,7 +29,7 @@ import fp4g.Options;
 import fp4g.classes.DependResolvers;
 import fp4g.data.Code;
 import fp4g.data.Define;
-import fp4g.data.DefineType;
+import fp4g.data.DefineTypes;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
 import fp4g.data.ILib;
@@ -49,15 +48,13 @@ import fp4g.data.libs.LibContainer;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.exceptions.FP4GException;
-import fp4g.exceptions.GeneratorException;
+import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
 import fp4g.generator.StatementModel;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
-import fp4g.log.Log;
-import fp4g.log.info.GeneratorError;
-import fp4g.log.info.Warn;
+import fp4g.log.FP4GError;
 import freemarker.template.Configuration;
 
 public class JavaGenerator extends Generator<JavaMetaSourceModel> 
@@ -132,9 +129,8 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 		}
 		catch(IOException e)
 		{
-			Log.Show(Warn.IOException,e.getMessage());
-		}
-		return Collections.emptyList();
+			throw new FP4GRuntimeException(FP4GError.IOException,e.getMessage());
+		}		
 	}
 	
 	@Override	
@@ -172,10 +168,10 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 	}
 
 	@Override
-	protected void generateCode(ILib local, File path) throws GeneratorException 
+	protected void generateCode(ILib local, File path) 
 	{	
 		//solo hay uno, pero bueh
-		final Collection<Game> games = local.getDefines(DefineType.GAME);
+		final Collection<Game> games = local.getDefines(DefineTypes.GAME);
 		if(games != null)
 		{
 			for(Game game: games)
@@ -183,7 +179,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 				genDefine(game, path);
 			}
 		}
-		final Collection<Entity> game_entities = local.getDefines(DefineType.ENTITY);
+		final Collection<Entity> game_entities = local.getDefines(DefineTypes.ENTITY);
 		if(game_entities != null)
 		{
 			for(Entity entity: game_entities)
@@ -191,7 +187,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 				genDefine(entity, path);
 			}
 		}
-		final Collection<GameState> game_states = local.getDefines(DefineType.STATE);
+		final Collection<GameState> game_states = local.getDefines(DefineTypes.STATE);
 		if(game_states != null)
 		{
 			for(GameState state: game_states)
@@ -199,7 +195,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 				genDefine(state, path);
 			}
 		}
-		final Collection<Behavior> behaviors = local.getDefines(DefineType.BEHAVIOR);
+		final Collection<Behavior> behaviors = local.getDefines(DefineTypes.BEHAVIOR);
 		if(behaviors != null)
 		{
 			for(Behavior behavior: behaviors)
@@ -207,7 +203,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 				genDefine(behavior, path);
 			}
 		}
-		final Collection<Message> messages = local.getDefines(DefineType.MESSAGE);
+		final Collection<Message> messages = local.getDefines(DefineTypes.MESSAGE);
 		if(messages != null)
 		{
 			for(Message message: messages)
@@ -259,13 +255,12 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 		}
 		else
 		{
-			throw new GeneratorException(GeneratorError.CriticalErrorGeneratorNotFound, String.format("El generador para \"%s\" no se encontró",define.getClass().getSimpleName()));			
+			throw new FP4GRuntimeException(FP4GError.GeneratorNotFound, String.format("El generador para \"%s\" no se encontró",define.getClass().getSimpleName()));			
 		}		
 	}
 	
 	@Override
-	protected void compileFiles(Collection<File> files)
-	throws GeneratorException	
+	protected void compileFiles(Collection<File> files)	
 	{
 		final String path = packageDir.getAbsolutePath();
 		final int start = path.length()-packageNameDir.length();
@@ -290,7 +285,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 			javaCompiler = findJDK();
 			if(javaCompiler == null)
 			{	
-				throw new GeneratorException(GeneratorError.CompilerNotFound, "Compilador no encontrado");			
+				throw new FP4GRuntimeException(FP4GError.CompilerNotFound, "Compilador no encontrado");			
 			}
 
 		}

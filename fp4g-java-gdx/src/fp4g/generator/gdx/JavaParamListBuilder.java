@@ -13,11 +13,11 @@ import fp4g.data.vartypes.CustomType;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.DependResolverNotFoundException;
-import fp4g.exceptions.GeneratorException;
+import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.generator.gdx.models.VarCodeModel;
+import fp4g.log.FP4GError;
 import fp4g.log.Log;
-import fp4g.log.info.GeneratorError;
 
 
 
@@ -124,7 +124,7 @@ public class JavaParamListBuilder
 				name = "int";
 				break;		
 			default:
-				throw new GeneratorException(GeneratorError.IllegalState,"Estado no valido del generador");
+				throw new FP4GRuntimeException(FP4GError.IllegalState,"Estado no valido del generador");
 			}
 		}
 		else

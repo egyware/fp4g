@@ -13,7 +13,6 @@ import fp4g.data.expresion.FunctionCall;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.generator.FunctionGenerator;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
-import fp4g.log.info.CannotEval;
 
 /**
  * @author Edgardo
@@ -60,7 +59,7 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaMetaSourceModel
 		{
 			return fg.generate(generator, model, fc.params);
 		}
-		throw new CannotEvalException(CannotEval.FunctionNotFound,(Expresion)fc, String.format("La función \"%s\", no se ha encontrado.",fc.functionName));
+		throw new CannotEvalException(CannotEvalException.Types.FunctionNotFound,(Expresion)fc, String.format("La función \"%s\", no se ha encontrado.",fc.functionName));
 	}
 	
 }

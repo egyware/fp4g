@@ -9,8 +9,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import fp4g.exceptions.FP4GRuntimeException;
-import fp4g.log.info.Error;
-import fp4g.log.info.Warn;
+import fp4g.log.FP4GError;
+import fp4g.log.FP4GWarn;
 
 public final class Configuration implements Runnable
 {
@@ -53,7 +53,7 @@ public final class Configuration implements Runnable
 		}
 		catch (IOException e) 
 		{
-			throw new FP4GRuntimeException(Error.PropertiesCantLoad, "No se puede leer el archivo fp4g.properties");			
+			throw new FP4GRuntimeException(FP4GError.PropertiesCantLoad, "No se puede leer el archivo fp4g.properties");			
 		}		
 	}
 	
@@ -76,7 +76,7 @@ public final class Configuration implements Runnable
 		}
 		catch (IOException e) 
 		{
-			throw new FP4GRuntimeException(Warn.PropertiesCantSave,e.getMessage(),e);
+			throw new FP4GRuntimeException(FP4GWarn.PropertiesCantSave,e.getMessage(),e);
 		}		
 	}
 

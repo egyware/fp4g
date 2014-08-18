@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import fp4g.classes.MessageMethods;
 import fp4g.data.Define;
-import fp4g.data.DefineType;
+import fp4g.data.DefineTypes;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
@@ -25,8 +25,9 @@ import fp4g.data.statements.Destroy;
 import fp4g.data.statements.Send;
 import fp4g.data.statements.Subscribe;
 import fp4g.data.statements.Unsubscribe;
+import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.FP4GRuntimeException;
-import fp4g.log.info.Error;
+import fp4g.log.FP4GError;
 
 public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement> 
 {
@@ -53,7 +54,7 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 		}
 		catch(NullPointerException e)
 		{
-			throw new FP4GRuntimeException(Error.MessageMethodNotFound,"Los metodos para los mensajes no se encontrarón",e);
+			throw new FP4GRuntimeException(FP4GError.MessagesMethodNotFound,"Los metodos para los mensajes no se encontrarón",e);
 		}
 	}
 	
@@ -111,19 +112,35 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 		Subscribe subscribe;
 		//where=ID ON message=ID (DOUBLEDOT method=ID)?
 		String whereName = ctx.where.getText();
-		Instance whereType = Instance.Self;
+		Instance whereType = Instance.System;
 		String messageName = ctx.message.getText();
 		String methodName = (ctx.method != null)?ctx.method.getText():null;
 		
 		//obtener message
-		Message message = lib.getDefine(DefineType.MESSAGE, messageName);
+		Message message;
+		try
+		{
+			message = lib.getDefine(DefineTypes.MESSAGE, messageName);
+		}
+		catch(DefineNotFoundException e)
+		{
+			//imperdonable
+			throw new FP4GRuntimeException(FP4GError.DefineIsRequired, ctx.getStart().getLine(), String.format("El Define tipo MESSAGE %s es necesario", messageName), e);
+		}
 		//objetener  method
 		AddMethod method = message.getAddMethod(methodName);
 		
-		Define where = lib.getDefine(whereName);
-		
-		//identificar where que es
-		whereType = Instance.System;
+		Define where;
+		try 
+		{
+			where = lib.getDefine(whereName);
+		}
+		catch (DefineNotFoundException e) 
+		{
+			//imperdonable
+			throw new FP4GRuntimeException(FP4GError.DefineIsRequired, ctx.getStart().getLine(), String.format("El Define de nombre %s es necesario", messageName), e);
+		}
+
 		subscribe = new Subscribe(whereType, where, message, method);
 		
 		return subscribe;
@@ -135,19 +152,36 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 		Unsubscribe subscribe;
 		//where=ID ON message=ID (DOUBLEDOT method=ID)?
 		String whereName = ctx.where.getText();
-		Instance whereType = Instance.Self;
+		Instance whereType = Instance.System;
 		String messageName = ctx.message.getText();
 		String methodName = (ctx.method != null)?ctx.method.getText():null;
 		
 		//obtener message
-		Message message = lib.getDefine(DefineType.MESSAGE, messageName);
+		Message message;
+		try
+		{
+			message = lib.getDefine(DefineTypes.MESSAGE, messageName);
+		}
+		catch(DefineNotFoundException e)
+		{
+			//imperdonable
+			throw new FP4GRuntimeException(FP4GError.DefineIsRequired, ctx.getStart().getLine(), String.format("El Define tipo MESSAGE %s es necesario", messageName), e);
+		}
 		//objetener  method
 		AddMethod method = message.getAddMethod(methodName);
 		
-		Define where = lib.getDefine(whereName);
+		Define where;
+		try 
+		{
+			where = lib.getDefine(whereName);
+		}
+		catch (DefineNotFoundException e) 
+		{
+			//imperdonable
+			throw new FP4GRuntimeException(FP4GError.DefineIsRequired, ctx.getStart().getLine(), String.format("El Define de nombre %s es necesario", messageName), e);
+		}
 		
-		//identificar where que es
-		whereType = Instance.System;
+		//identificar where que es		
 		subscribe = new Unsubscribe(whereType, where, message, method);
 		
 		return subscribe;
@@ -159,7 +193,7 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 		AddMethod method = methods().getMessageMethod(ctx.messageMethodName);
 		if(method == null)
 		{
-			throw new FP4GRuntimeException(Error.FilterMethodMissing,"No se encontró un metodo para el filtro:  ".concat(ctx.messageMethodName));
+			throw new FP4GRuntimeException(FP4GError.FilterMethodMissing,"No se encontró un metodo para el filtro:  ".concat(ctx.messageMethodName));
 		}
 		Instance type = null;
 		String receiver = null;
@@ -185,7 +219,7 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 			receiver = ctx.receiverName;
 		//Behavior
 			//buscar en los add de la entidad.
-			List<AddDefine> behaviors = current.getAddDefines(DefineType.BEHAVIOR);
+			List<AddDefine> behaviors = current.getAddDefines(DefineTypes.BEHAVIOR);
 			for(AddDefine bhvr:behaviors)
 			{
 				//buscar de forma iterativa
@@ -202,7 +236,7 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 	    //System
 			
 			//buscar en los defines de sistemas.
-			Collection<IDefine> managers = lib.getDefines(DefineType.MANAGER);
+			Collection<IDefine> managers = lib.getDefines(DefineTypes.MANAGER);
 			for(IDefine manager:managers)
 			{
 				if(manager.getName().equals(receiver))
@@ -215,7 +249,7 @@ public class FP4GStatementVisitor extends FP4GBaseVisitor<Statement>
 					else
 					{
 						//lanzar error						
-						throw new FP4GRuntimeException(Error.ManagerIsNotAReceiver,String.format("El manager \"%s\" no puede recibir mensajes.",receiver));							 
+						throw new FP4GRuntimeException(FP4GError.ManagerIsNotAReceiver,String.format("El manager \"%s\" no puede recibir mensajes.",receiver));							 
 					}
 					break;
 				}
