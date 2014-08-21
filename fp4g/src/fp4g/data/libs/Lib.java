@@ -114,22 +114,8 @@ public class Lib extends Code implements IMap,ILib
 		{
 			return define;
 		}
-		IValue<?> ret = variables.get(key);
-		if(ret == null)
-		{
-			for(Map<String, ? extends IDefine> mapDefines:defines.values())
-			{
-				for(IDefine def : mapDefines.values())
-				{
-					ret = def.find(key);
-					if(ret != null)
-					{
-						return ret;
-					}
-				}
-			}
-		}
-		return ret;
+		//no debería seguir buscando hacia abajo, solo conformarse con encontrar una variable de biblioteca o un define
+		return variables.get(key);		
 	}
 	
 	

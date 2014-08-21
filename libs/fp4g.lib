@@ -170,7 +170,7 @@ DEFINE STRUCT Contact
 
 SET resolvers = 
 { 			
-	State = 
+	GameState = 
 	{
 		General =
 		{

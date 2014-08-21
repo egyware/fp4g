@@ -318,13 +318,6 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	}
 	
 	@Override
-	public ILine visitGameValues(FP4GParser.GameValuesContext ctx)
-	{
-		super.visitGameValues(ctx);		
-		return null;
-	}	
-	
-	@Override
 	public ILine visitDefineValues(FP4GParser.DefineValuesContext ctx)
 	{
 		FP4GParser.DefineContext define_ctx = (FP4GParser.DefineContext)ctx.parent;		

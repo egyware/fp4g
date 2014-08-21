@@ -54,8 +54,9 @@ public class GameStateGenerator extends JavaCodeGenerator
 	{
 		final GameState state = (GameState)codeData;
 		final ILib lib = state.lib;
-		final boolean isDebug = (Boolean) lib.get(ISDEBUG).getValue();
-		//Game game = (Game)state.lib.getGame();		
+		final boolean isDebug;
+		IValue<?> ret = lib.get(ISDEBUG);
+		isDebug = (ret != null)? ((Boolean)ret.getValue()):false;
 		
 		Template temp = generator.getTemplate("GameState.ftl");
 		
