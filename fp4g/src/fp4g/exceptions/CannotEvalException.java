@@ -13,7 +13,7 @@ public class CannotEvalException extends FP4GRuntimeException
 		NotAllowedOperation(FP4GError.NotAllowedOperation),
 		IncomplatibleTypes(FP4GError.IncomplatibleTypes), 
 		CannotSetProperty(FP4GError.CannotSetProperty),
-		CannotGetProperty(FP4GError.CannotGetProperty), 
+		CannotGetProperty(FP4GError.CannotGetProperty),
 		FunctionNotFound(FP4GError.FunctionNotFound), 
 		NotValidExpresion(FP4GError.NotValidExpresion), 
 		ExpresionGeneratorNotFound(FP4GError.ExpresionGeneratorNotFound),
@@ -56,17 +56,15 @@ public class CannotEvalException extends FP4GRuntimeException
 	}
 
 	public CannotEvalException(Types type, Object thiz, String key,	Object value, Throwable e) 
-	{
+	{		
 		super(type.error,String.format("No se puede establecer:  %s[%s] =  %s", thiz.getClass().getSimpleName(), key, value.toString()), e);
 		cannotEvalued = null;
 	}
-
 	public CannotEvalException(Types type, Object thiz, String key) 
 	{
-		super(type.error,String.format("No se puede obtener  %s[%s]", thiz.getClass().getSimpleName(), key));
+		super(type.error,String.format("No se puede obtener: %s[%s]", thiz.getClass().getSimpleName(), key));
 		cannotEvalued = null;
 	}
-
 	public Expresion getExpresion() {
 		return cannotEvalued;
 	}

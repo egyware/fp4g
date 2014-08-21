@@ -142,8 +142,8 @@ DEFINE ASSET Terrain2D
 ]
 DEFINE ASSET EntitySpawn
 [
-	SET className     = "EntitySpawn";
-	SET classParamter = "EntitySpawnParamter";
+	SET className      = "EntitySpawn";
+	SET classParameter = "EntitySpawnParamter";
 ]
 DEFINE ASSET Sound
 [

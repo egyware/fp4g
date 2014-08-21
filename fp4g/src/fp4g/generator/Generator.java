@@ -139,7 +139,7 @@ public abstract class Generator<M extends MetaSourceModel>
 	{
 		try
 		{
-			System.out.println(String.format("Leyendo biblioteca %s",libFileName));
+			System.out.println(String.format("Parsing lib: %s",libFileName));
 			Lib lib = new Lib(libContainer);
 			FP4GLexer lexer = new FP4GLexer(new ANTLRFileStream(libFileName));	
 			CommonTokenStream tokens = new CommonTokenStream(lexer);		

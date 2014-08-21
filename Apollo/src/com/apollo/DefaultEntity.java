@@ -12,25 +12,25 @@ import com.apollo.utils.Bag;
 public final class DefaultEntity extends Entity 
 {
 	private Bag<Behavior> components;
-	private Map<Class<? extends BaseBehavior>, BaseBehavior> componentsByType;	
+	private Map<Class<? extends Behavior>, Behavior> componentsByType;	
 	public DefaultEntity(WorldContainer world)
 	{
 		super(world);
 		
 		components = new Bag<Behavior>();
-		componentsByType = new LinkedHashMap<Class<? extends BaseBehavior>, BaseBehavior>();
+		componentsByType = new LinkedHashMap<Class<? extends Behavior>, Behavior>();
 	}
 
-	public void setBehavior(BaseBehavior component)
+	public void setBehavior(Behavior component)
 	{		
 		component.setOwner(this);
 		components.add(component);
 		componentsByType.put(component.getType(), component);		
 	}
 	
-	public void removeBehavior(Class<? extends BaseBehavior> clazz)
+	public void removeBehavior(Class<? extends Behavior> clazz)
 	{
-		BaseBehavior component = getBehavior(clazz);
+		Behavior component = getBehavior(clazz);
 		if(component!=null) {
 			removeBehavior(component);
 		}
@@ -40,7 +40,7 @@ public final class DefaultEntity extends Entity
 	 * Remove a Component
 	 * @param component to remove
 	 */
-	public void removeBehavior(BaseBehavior component)
+	public void removeBehavior(Behavior component)
 	{
 		components.remove(component);
 		componentsByType.remove(component);	

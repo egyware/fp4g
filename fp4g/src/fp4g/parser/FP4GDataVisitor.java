@@ -309,12 +309,12 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	}
 	
 	@Override
-	public ILine visitGameLib(FP4GParser.GameLibContext ctx)
+	public ILine visitParseLib(FP4GParser.ParseLibContext ctx)
 	{
 		//biblioteca
 		current = null;		
 		loadLib = true;
-		return super.visitGameLib(ctx);		
+		return super.visitParseLib(ctx);		
 	}
 	
 	@Override

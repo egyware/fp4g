@@ -17,7 +17,8 @@ import fp4g.log.FP4GError;
 public class Game extends Define
 {	
 	public int width = 640;
-	public int height = 480;	
+	public int height = 480;
+	
 	public GameState startState;
 	
 	public Game(ILib lc)
@@ -83,5 +84,11 @@ public class Game extends Define
 
 	public final void setHeight(int height) {
 		this.height = height;
+	}
+	
+	public void setName(String name)
+	{
+		//TODO esto puede traer problemas a futuro... 
+		this.name = name;
 	}
 }

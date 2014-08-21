@@ -181,14 +181,6 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitSets(@NotNull FP4GParser.SetsContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
 	@Override public T visitOnFilters(@NotNull FP4GParser.OnFiltersContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -214,14 +206,6 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitAccessVarName(@NotNull FP4GParser.AccessVarNameContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitGameLib(@NotNull FP4GParser.GameLibContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -309,14 +293,6 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitDefines(@NotNull FP4GParser.DefinesContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
 	@Override public T visitFlag(@NotNull FP4GParser.FlagContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -390,6 +366,22 @@ public class FP4GBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements F
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitEqualExpr(@NotNull FP4GParser.EqualExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitLibBody(@NotNull FP4GParser.LibBodyContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitProgramBody(@NotNull FP4GParser.ProgramBodyContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

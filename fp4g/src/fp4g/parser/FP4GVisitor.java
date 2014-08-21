@@ -156,13 +156,6 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitOn(@NotNull FP4GParser.OnContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#sets}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSets(@NotNull FP4GParser.SetsContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link FP4GParser#onFilters}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -189,13 +182,6 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAccessVarName(@NotNull FP4GParser.AccessVarNameContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link FP4GParser#gameLib}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGameLib(@NotNull FP4GParser.GameLibContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#gameValues}.
@@ -268,13 +254,6 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitVarNameOperator(@NotNull FP4GParser.VarNameOperatorContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#defines}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDefines(@NotNull FP4GParser.DefinesContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link FP4GParser#flag}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -343,6 +322,20 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitEqualExpr(@NotNull FP4GParser.EqualExprContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#libBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLibBody(@NotNull FP4GParser.LibBodyContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link FP4GParser#programBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProgramBody(@NotNull FP4GParser.ProgramBodyContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link FP4GParser#set}.

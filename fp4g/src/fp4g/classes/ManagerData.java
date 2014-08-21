@@ -87,6 +87,16 @@ public class ManagerData
 	public void setImports(ArrayList imports) {
 		this.imports = imports;
 	}
+	
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();		
+		builder.append("ManagerData");
+		builder.append(" { ... }");
+		
+		return builder.toString();
+	}
 
 	
 }

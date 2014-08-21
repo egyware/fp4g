@@ -21,17 +21,15 @@ package fp4g.parser;
 }
 
 // **** PARSER ****
-program : usings sets defines EOF;
+program : usings programBody EOF;
 
-parseLib: usings sets gameLib EOF;
+parseLib: usings libBody EOF;
 
 usings  : (using)*;
 
-sets    : (set DOTCOMA)*;
+libBody     : (set DOTCOMA | define)*;
 
-defines : (game|define)*;
-
-gameLib:  (define)*;
+programBody : (set DOTCOMA | game | define)*;
 
 using
 returns

@@ -92,5 +92,13 @@ public class ${source.name} extends GameManager
 	{		
 	}
 	
+	public int getWidth()
+	{
+		return Width;
+	}
+	public int getHeight()
+	{
+		return Height;
+	}	
 	
 }

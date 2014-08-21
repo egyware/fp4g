@@ -64,7 +64,9 @@ public final class BeanAccess
 				return method.invoke(thiz,indexMethod);
 			}
 		}
-		throw new CannotEvalException(CannotEvalException.Types.CannotGetProperty,thiz, key);
+		return null;
+		//regresa null si no existe, no se da ningún warning ni error critico ya que esto es un comportamiento deseable y no deseo cambiar todo para que quede "elegante la wea"
+		//throw new CannotEvalException(CannotEvalException.Types.CannotGetProperty,thiz, key);
 	}
 	
 	public String[] getProperties()

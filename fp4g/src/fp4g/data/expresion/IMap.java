@@ -8,7 +8,7 @@ import fp4g.data.IValue;
 public interface IMap
 {
 	public void set(String key, IValue<?> value);
-	public IValue<?> get(String key);
+	public IValue<?> get(String key);	
 	
 	public <V extends IValue<?>> Set<Map.Entry<String,V>> entrySet();
 	

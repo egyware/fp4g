@@ -67,7 +67,7 @@ public class UsingTest {
 			FP4GParser p = new FP4GParser(tokens);		
 			p.setBuildParseTree(true);			
 			
-			ParseTree tree = p.gameLib();			
+			ParseTree tree = p.parseLib();			
 			if(tree != null)
 			{
 				FP4GDataVisitor visitor = new FP4GDataVisitor(lib);
