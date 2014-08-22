@@ -62,7 +62,7 @@ public class ${source.name} implements EntityBuilder
 			//TODO Parche
 			public void onMessage(Message<? extends MessageHandler> message, Object... args) 
 			{
-				entity.onMessage(message,args);
+				message.dispatch(this, args);
 			}
 		};
 		<#list message.methodHandlers as method>		

@@ -52,7 +52,8 @@ public class OnModel
 		final JavaParamListBuilder paramBuilder = new JavaParamListBuilder(lib, generator);
 		OnModel onModel = new OnModel(on);
 		//agregar la interface 
-		model.addInterface(String.format("%sMessageHandler",on.name));
+		//se utilizará clases internas
+		//model.addInterface(String.format("%sMessageHandler",on.name));
 
 		//agregar los metodos, aunque están vacios y asumiento que todos son MessageMethod
 		HashMap<String,MethodHandlerModel> methods = new HashMap<String, MethodHandlerModel>();

@@ -121,8 +121,10 @@ public abstract class Entity implements MessageReceiver
 	public abstract 
 	void update(float delta);
 
-	protected abstract
-	void uninitialize();
+	protected void uninitialize()
+	{
+		handlersByEventType.clear();
+	}
 
 	protected abstract
 	void initialize();
@@ -133,6 +135,6 @@ public abstract class Entity implements MessageReceiver
 		for (Behavior component : getBehaviors()) 
 		{
 			ComponentInjector.applyAnnotations(component);
-		}
+		}		
 	}
 }

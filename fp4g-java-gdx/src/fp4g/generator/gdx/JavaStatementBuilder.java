@@ -115,8 +115,8 @@ public class JavaStatementBuilder {
 					}
 					break;
 				case Self:
-				default:
-					to = "this";
+				default:					
+					to = String.format("%s.this", model.getName());
 					message = String.format("%1$sMessage.on%2$s%1$s", msg.name,
 							Utils.capitalize(send.method.name));
 					direct = false;

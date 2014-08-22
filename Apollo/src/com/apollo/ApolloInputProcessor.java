@@ -143,8 +143,8 @@ public class ApolloInputProcessor implements InputProcessor,MessageReceiver
 		final int size = listeners.size();		
 		for(int i=0; i<size; i++)
 		{			
-			MessageHandler handler = listeners.get(i);			
-			message.dispatch(handler,args);			
+			MessageHandler handler = listeners.get(i);
+			handler.onMessage(message, args);					
 		}				
 	}	
 }

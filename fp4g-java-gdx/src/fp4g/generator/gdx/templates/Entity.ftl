@@ -82,10 +82,12 @@ implements <#list source.interfaces as interface>${interface}<#if interface_has_
 		ApolloInputProcessor inputProcessor = world.getInputProcessor();
 		</#if>		
 		<#list messages as message>				
-		<#assign messageName = message.name?cap_first />		
-		<#list message.methodHandlers as method>		
-		<#if method.sources?has_content>		
-		addEventHandler(${messageName}Message.on${method.name?cap_first}${messageName}, this);
+		<#assign messageName = message.name?cap_first />
+		<#assign umessageName = message.name?uncap_first />		
+		${messageName}Handler ${umessageName}Handler = new ${messageName}Handler();
+		<#list message.methodHandlers as method>				
+		<#if method.sources?has_content>
+		addEventHandler(${messageName}Message.on${method.name?cap_first}${messageName}, ${umessageName}Handler);
 		</#if>		
 		</#list>
 		
@@ -101,12 +103,14 @@ implements <#list source.interfaces as interface>${interface}<#if interface_has_
 		onMessage(EntityMessage.onInitEntity);	
 	}
 	
+	@Override
 	protected void uninitialize()
 	{
 		for (int i = 0, s = behaviors.size(); s > i; i++) {
 			behaviors.get(i).uninitialize();
 		}
 		onMessage(EntityMessage.onDeinitEntity);
+		super.uninitialize();
 	}
 	
 	protected void pack()
@@ -124,11 +128,20 @@ implements <#list source.interfaces as interface>${interface}<#if interface_has_
 		</#if>
 	}
 	
+	
 	<#if messages??>
 	<#list messages as message>
-	//Categoria ${message.name}
-	<@fp4g.on_message message=message />
-	</#list>	
+	//Handler para ${message.name}	
+	private class ${message.name}Handler implements ${message.name}MessageHandler
+	{
+		<@fp4g.on_message message=message />
+		@Override
+		public void onMessage(Message<? extends MessageHandler> message, Object... args) 
+		{
+			message.dispatch(this, args);		
+		}		
+	}
+	</#list>
 	</#if>
 	
 					
