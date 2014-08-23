@@ -63,7 +63,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 	static
 	{
 		Calendar now = Calendar.getInstance();
-		autodoc = String.format("/**\n  * Autogenerado por FP4G\n  * [NO MODIFICAR]\n  * %d:%d:%d\n  */",now.get(Calendar.HOUR),now.get(Calendar.MINUTE),now.get(Calendar.SECOND));
+		autodoc = String.format("/**\n  * Autogenerado por FP4G\n  * [NO MODIFICAR]\n  * %d:%d:%d\n  */",now.get(Calendar.HOUR_OF_DAY),now.get(Calendar.MINUTE),now.get(Calendar.SECOND));
 	}
 	public String packageName = "";
 	public String packageNameDir = "";

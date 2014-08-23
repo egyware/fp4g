@@ -393,8 +393,8 @@ public class FP4GParser extends Parser {
 		public TerminalNode MANAGER() { return getToken(FP4GParser.MANAGER, 0); }
 		public TerminalNode BEHAVIOR() { return getToken(FP4GParser.BEHAVIOR, 0); }
 		public TerminalNode GOAL() { return getToken(FP4GParser.GOAL, 0); }
-		public TerminalNode STATE() { return getToken(FP4GParser.STATE, 0); }
 		public TerminalNode CIERRA_COR() { return getToken(FP4GParser.CIERRA_COR, 0); }
+		public TerminalNode STATE() { return getToken(FP4GParser.STATE, 0); }
 		public UsingValuesContext usingValues() {
 			return getRuleContext(UsingValuesContext.class,0);
 		}
@@ -2776,19 +2776,6 @@ public class FP4GParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class MinusExprContext extends ExprContext {
-		public ExprContext op;
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public TerminalNode MINUS() { return getToken(FP4GParser.MINUS, 0); }
-		public MinusExprContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitMinusExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
 	public static class MoreThanExprContext extends ExprContext {
 		public ExprContext left;
 		public ExprContext right;
@@ -2803,6 +2790,19 @@ public class FP4GParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitMoreThanExpr(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class MinusExprContext extends ExprContext {
+		public ExprContext op;
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public TerminalNode MINUS() { return getToken(FP4GParser.MINUS, 0); }
+		public MinusExprContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FP4GVisitor ) return ((FP4GVisitor<? extends T>)visitor).visitMinusExpr(this);
 			else return visitor.visitChildren(this);
 		}
 	}
