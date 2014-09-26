@@ -42,7 +42,7 @@ public class Play extends GdxFunction
 		}		
 		model.addRequireSource("com.badlogic.gdx.audio.Sound");
 		
-		return new DirectCode(String.format("((Sound)assets.get(%s)).play()",generator.expresion(model, null, (Expresion)assetName)));
+		return new DirectCode(String.format("((Sound)container.gameManager.assets.get(%s)).play()",generator.expresion(model, null, (Expresion)assetName)));
 	}
 
 }

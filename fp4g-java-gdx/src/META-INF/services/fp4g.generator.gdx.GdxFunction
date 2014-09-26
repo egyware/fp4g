@@ -3,3 +3,6 @@ fp4g.generator.gdx.functions.Play # Play
 fp4g.generator.gdx.functions.Destroy     # Destroy
 fp4g.generator.gdx.functions.Subscribe   # Subscribe
 fp4g.generator.gdx.functions.Unsubscribe # Unsubscribe
+#--- funciones para expresiones ---
+fp4g.generator.gdx.functions.GetCamera   # Unsubscribe
+fp4g.generator.gdx.functions.GetSprite   # Unsubscribe

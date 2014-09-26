@@ -26,6 +26,7 @@ import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassList;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.DirectCode;
+import fp4g.data.expresion.FunctionCall;
 import fp4g.data.expresion.IList;
 import fp4g.data.expresion.IMap;
 import fp4g.data.expresion.Literal;
@@ -365,11 +366,19 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		String messageName = ctx.methodName.getText();
 		AddMethod method = methods().getMessageMethod(messageName);
 		
+		
 		pushStack();
 		ExprList exprList = getExprList(current,ctx.exprList()); //acá se crea un nuevo stack!
 		pop();
 		
-		return new MessageExpr(method,exprList);
+		if(method == null)
+		{
+			return new FunctionCall(current,messageName,exprList);
+		}
+		else
+		{		
+			return new MessageExpr(method,exprList);
+		}
 	}
 
 	//otros visitors

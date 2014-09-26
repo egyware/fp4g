@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="fp4g/generator/gdx/models/SubscribeStatementModel.java|fp4g/generator/gdx/functions/AddEntities.java|fp4g/generator/gdx/functions/CreateBox.java|fp4g/generator/gdx/functions/CreateCircle.java|fp4g/generator/gdx/functions/GetCamera.java|fp4g/generator/gdx/functions/GetMusic.java|fp4g/generator/gdx/functions/GetSound.java|fp4g/generator/gdx/functions/GetSprite.java|fp4g/generator/gdx/functions/GetTerrain2D.java|fp4g/generator/gdx/functions/GetTexture.java|fp4g/generator/gdx/functions/GetTiled.java" kind="src" path="src"/>
+	<classpathentry excluding="fp4g/generator/gdx/models/SubscribeStatementModel.java|fp4g/generator/gdx/functions/AddEntities.java|fp4g/generator/gdx/functions/CreateBox.java|fp4g/generator/gdx/functions/CreateCircle.java|fp4g/generator/gdx/functions/GetMusic.java|fp4g/generator/gdx/functions/GetSound.java|fp4g/generator/gdx/functions/GetTerrain2D.java|fp4g/generator/gdx/functions/GetTexture.java|fp4g/generator/gdx/functions/GetTiled.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/FP4G"/>
 	<classpathentry kind="lib" path="libs/freemarker.jar"/>
