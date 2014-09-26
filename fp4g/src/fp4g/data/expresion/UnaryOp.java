@@ -3,7 +3,7 @@ package fp4g.data.expresion;
 import fp4g.data.Expresion;
 import fp4g.data.IValue;
 
-public class UnaryOp extends Expresion
+public class UnaryOp implements Expresion
 {	
 	public static enum Type
 	{

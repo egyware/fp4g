@@ -7,7 +7,8 @@ import ${import};
 </#if>
 
 ${source.javadoc}
-public final class ${source.name} extends GameState{
+public final class ${source.name} extends GameState
+{
 	private final WorldContainer container;	
 	
 	//sistemas o manejadores
@@ -31,6 +32,7 @@ public final class ${source.name} extends GameState{
 	private GameManager game;
 	public ${source.name}(GameManager game)
 	{
+		super(game);
 		this.game = game;
 		container = new WorldContainer(game);		
 	}
@@ -95,12 +97,12 @@ public final class ${source.name} extends GameState{
 		${paramName}.${param.key} = ${param.value};		
 		<#assign counter = counter + 1 />
 		</#list>
-		Assets.loadAsset("${asset.resource}", ${asset.type}.class, ${paramName});
+		assets.load("${asset.resource}", ${asset.type}.class, ${paramName});
 		<#else>
-		Assets.loadAsset("${asset.resource}", ${asset.type}.class);
+		assets.load("${asset.resource}", ${asset.type}.class);
 		</#if>		
 		</#list>
-		Assets.loadAssets();
+		assets.finishLoading();
 		</#if>
 		
 		//managers

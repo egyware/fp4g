@@ -59,8 +59,7 @@ public class GameGenerator extends JavaCodeGenerator
 			List<String> imports = new LinkedList<String>();
 			String arrayImports[] = new String[]
 			{
-				"com.apollo.GameManager",
-				"com.apollo.Assets",
+				"com.apollo.GameManager",				
 				"java.util.HashMap"
 			};
 			//Arrays.sort(arrayImports);

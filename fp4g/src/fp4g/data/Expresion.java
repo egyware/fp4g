@@ -9,32 +9,8 @@ import fp4g.exceptions.CannotEvalException;
  * @author Edgardo
  *
  */
-public abstract class Expresion
+public interface Expresion
 {	
-	private boolean hasPar;
-	
-	/**
-	 * Indica si tiene parentesis esta expresión.
-	 * 
-	 * Util para la serialización de datos.
-	 * 
-	 * @return Devuelve si esta expresión usa parentesis. 
-	 */
-	public final boolean hasPar()
-	{
-		return hasPar;
-	}
-	
-	/**
-	 * Establece si esta expresión usa parentesis.
-	 * 
-	 * @param p un boolean indicando si tiene parentesis o no.
-	 */	
-	public final void setPar(boolean p)
-	{
-		hasPar = p;
-	}
-	
 	/**
 	 * Permite evualar esta expresión
 	 * 
@@ -42,5 +18,5 @@ public abstract class Expresion
 	 * @return Regresa el valor resultante de esta expresión
 	 * @throws CannotEvalException En caso que no se pueda evaluar la expresión
 	 */
-	public abstract IValue<?> eval(IValue<?> value) throws CannotEvalException;
+	public IValue<?> eval(IValue<?> value) throws CannotEvalException;
 }

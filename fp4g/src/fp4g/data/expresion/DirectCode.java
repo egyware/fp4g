@@ -10,7 +10,9 @@ import fp4g.data.IValue;
  * @author Edgardo
  *
  */
-public class DirectCode extends Expresion implements IValue<DirectCode> {
+public class DirectCode implements Expresion,  IValue<DirectCode> {
+	public static final DirectCode EMPTY = new DirectCode("");
+	
 	public final String code;
 	public DirectCode(String code)
 	{

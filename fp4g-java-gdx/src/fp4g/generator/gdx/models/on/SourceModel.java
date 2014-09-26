@@ -7,7 +7,6 @@ import fp4g.data.On;
 import fp4g.data.statements.Filter;
 import fp4g.data.statements.Source;
 import fp4g.exceptions.FP4GException;
-import fp4g.generator.StatementModel;
 import fp4g.generator.gdx.JavaGenerator;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.log.Log;
@@ -15,7 +14,7 @@ import fp4g.log.Log;
 public class SourceModel
 {
 	//El codigo
-	private List<StatementModel> statements;
+	private List<String> statements;
 	//Una lista de filtros (disyunción)
 	private List<FiltersD> filters;
 	
@@ -66,7 +65,7 @@ public class SourceModel
 		filters.add(current);
 	}
 
-	public final List<StatementModel> getStatements() {
+	public final List<String> getStatements() {
 		return statements;
 	}
 	

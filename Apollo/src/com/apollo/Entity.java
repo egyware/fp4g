@@ -9,16 +9,16 @@ import com.apollo.utils.ImmutableBag;
 
 public abstract class Entity implements MessageReceiver
 {
-	protected final WorldContainer world;
+	protected final WorldContainer container;
 	private Map<Message<?>,Bag<MessageHandler>> handlersByEventType;
 	private boolean deleted;
 
 	public Entity(WorldContainer world) {
-		this.world = world;
+		this.container = world;
 	}
 
 	public final WorldContainer getWorld() {
-		return world;
+		return container;
 	}
 
 	/**
@@ -42,7 +42,7 @@ public abstract class Entity implements MessageReceiver
 	 *  
 	 */
 	public final void addToWorld() {
-		world.addEntity(this);
+		container.addEntity(this);
 	}
 	
 	/**

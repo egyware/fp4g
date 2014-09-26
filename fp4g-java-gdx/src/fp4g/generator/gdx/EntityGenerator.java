@@ -19,7 +19,6 @@ import fp4g.data.define.Entity;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
-import fp4g.generator.StatementModel;
 import fp4g.generator.gdx.models.EntityBuilderModel;
 import fp4g.generator.gdx.models.EntityModel;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
@@ -67,7 +66,7 @@ public class EntityGenerator extends JavaCodeGenerator
 		//agregar parametros de entrada
 		if(entity.paramNameList != null)
 		{
-			List<VarCodeModel> pair = paramBuilder.build(entity.paramNameList, buildMeta);			
+			List<VarCodeModel> pair = paramBuilder.build(entity.paramNameList, null, buildMeta);			
 			buildModel.setParams(pair);
 		}
 		
@@ -90,7 +89,7 @@ public class EntityGenerator extends JavaCodeGenerator
 				List<String> params = new LinkedList<String>();
 				for(Expresion expr: addBhvr.params)
 				{
-					params.add(generator.expresion(buildMeta,expr));
+					params.add(generator.expresion(buildMeta, null, expr));
 				}
 				bhvr.put("params",params);				
 			}			
@@ -122,7 +121,7 @@ public class EntityGenerator extends JavaCodeGenerator
 				}
 				
 				OnModel onModel = OnModel.build(entity.lib, on, generator, entityMeta);
-				
+								
 				onList.add(onModel);
 			}
 			entityModel.setMessages(onList);
@@ -169,7 +168,7 @@ public class EntityGenerator extends JavaCodeGenerator
 			{
 				if(var.initValue != null)
 				{
-					flagsModel.add(new VarCodeModel(paramBuilder.translateType(var.type, entityMeta),var.name,generator.expresion(entityMeta, var.initValue)));
+					flagsModel.add(new VarCodeModel(paramBuilder.translateType(var.type, entityMeta),var.name,generator.expresion(entityMeta, null, var.initValue)));
 				}
 				else
 				{
@@ -186,8 +185,8 @@ public class EntityGenerator extends JavaCodeGenerator
 				//TODO null mala cuea xD (ojo hay que implementar una especie de container para funciones)
 				Statements statementsData = new Statements();
 				statementsData.add(when.statement);
-				List<StatementModel> statements = generator.generateStatements(entityMeta, null, statementsData);
-				whenList.add(new WhenModel(when.flag.name, generator.expresion(entityMeta, when.condition),statements));
+				List<String> statements = generator.generateStatements(entityMeta, null, statementsData);
+				whenList.add(new WhenModel(when.flag.name, generator.expresion(entityMeta, null, when.condition),statements));
 			}
 			entityModel.setWhenList(whenList);
 		}

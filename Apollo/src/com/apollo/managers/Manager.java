@@ -3,10 +3,13 @@ package com.apollo.managers;
 import java.lang.reflect.Field;
 
 import com.apollo.Entity;
+import com.apollo.Message;
+import com.apollo.MessageHandler;
+import com.apollo.MessageReceiver;
 import com.apollo.WorldContainer;
 import com.apollo.annotate.ManagerInjector;
 
-public abstract class Manager
+public abstract class Manager implements MessageReceiver
 {
 	protected WorldContainer world;
 		
@@ -39,5 +42,8 @@ public abstract class Manager
 		for (int i = 0; i < fields.length; i++) {
 			ManagerInjector.injectorManager.inject(this, fields[i]);
 		}
-	}
+	}	
+	
+	public abstract <T extends Message<?>> void addEventHandler(Message<?> messageType, MessageHandler listener);
+	public abstract <T extends Message<?>> void removeEventHandler(Message<?> messagetType, MessageHandler listener);
 }

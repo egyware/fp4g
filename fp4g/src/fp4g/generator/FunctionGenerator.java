@@ -3,6 +3,7 @@
  */
 package fp4g.generator;
 
+import fp4g.data.Container;
 import fp4g.data.Expresion;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.exceptions.CannotEvalException;
@@ -32,7 +33,7 @@ public abstract class FunctionGenerator <M extends MetaSourceModel, T extends Ge
 	 * @return una expresion, la cual puede ser codigo directo o algo...
 	 * @throws CannotEvalException 
 	 */
-	public abstract Expresion generate(M model,FunctionCall function) throws CannotEvalException;
+	public abstract Expresion generate(M model,FunctionCall function, Container container) throws CannotEvalException;
 	
 	
 }

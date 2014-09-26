@@ -6,6 +6,7 @@ package fp4g.data.add;
 import fp4g.data.Add;
 import fp4g.data.AddType;
 import fp4g.data.DeclVar;
+import fp4g.data.IDefine;
 import fp4g.data.NameList;
 import fp4g.data.define.Message;
 import fp4g.data.expresion.IMap;
@@ -24,14 +25,14 @@ public class AddMethod extends Add
 	
 	private Message message;
 	
-	public AddMethod(String name, NameList list)
+	public AddMethod(String name, NameList list, IDefine container)
 	{
-		this(name, list, null);
+		this(name, list, container, null);
 	}
 	
-	public AddMethod(String name, NameList list, IMap values) 
+	public AddMethod(String name, NameList list, IDefine container, IMap values) 
 	{	
-		super(name, AddType.AddMethod, values);		
+		super(name, AddType.AddMethod, container, values);		
 		this.nameList = list;
 	}
 	

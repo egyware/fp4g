@@ -20,6 +20,7 @@ import fp4g.data.expresion.literals.IntegerLiteral;
 import fp4g.data.expresion.literals.ObjectLiteral;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.data.vartypes.BasicType;
+import fp4g.exceptions.CannotEvalException;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.log.FP4GError;
 
@@ -301,4 +302,36 @@ public abstract class Define extends Code implements IDefine
 		}
 		whenList.add(new When(expresion, statement, flag));		
 	}
+	
+	@Override
+	public IValue<?> eval(IValue<?> value) throws CannotEvalException 
+	{
+		return this;
+	}
+
+	@Override
+	public Add findAddDefineByName(String name) 
+	{
+		Add found = addAssets.get(name);
+		if(found != null)
+		{
+			return found;
+		}
+		found = addMethods.get(name);
+		if(found != null)
+		{
+			return found;
+		}
+		for(List<AddDefine> list:addDefines.values())
+		{
+			for(AddDefine add:list)
+			{
+				if(add.name.compareTo(name) == 0)
+				{
+					return add;
+				}
+			}
+		}			
+		return null;
+	}	
 }

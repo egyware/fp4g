@@ -4,13 +4,14 @@ import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
 import fp4g.data.IValue;
+import fp4g.data.Statement;
 
-public class FunctionCall extends Expresion implements IValue<FunctionCall>
+public class FunctionCall extends Statement implements Expresion, IValue<FunctionCall>
 {
 	public final String functionName;
 	public final ExprList params;
 	public final IDefine current;	
-	public FunctionCall(String function, IDefine current, ExprList params)
+	public FunctionCall(IDefine current, String function, ExprList params)
 	{
 		this.functionName = function;
 		this.params = params;

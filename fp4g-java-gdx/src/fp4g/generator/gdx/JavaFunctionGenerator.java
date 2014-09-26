@@ -5,9 +5,9 @@ package fp4g.generator.gdx;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ServiceLoader;
 
-import org.antlr.v4.misc.Utils;
-
+import fp4g.data.Container;
 import fp4g.data.Expresion;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.exceptions.CannotEvalException;
@@ -25,39 +25,20 @@ public class JavaFunctionGenerator extends FunctionGenerator<JavaMetaSourceModel
 	{		
 		super(jg);
 		functions = new HashMap<String, GdxFunction>();
+		ServiceLoader<GdxFunction> _functions = ServiceLoader.load(GdxFunction.class);
+		for(GdxFunction fun: _functions)
+		{
+			functions.put(fun.getFunctionName(), fun);
+		}
 	}
 	
-	@Override
-	@SuppressWarnings("unchecked")	
-	public Expresion generate(JavaMetaSourceModel model,FunctionCall fc) throws CannotEvalException
+	@Override	
+	public Expresion generate(JavaMetaSourceModel model,FunctionCall fc, Container container) throws CannotEvalException
 	{
-		GdxFunction fg = functions.get(fc.functionName);
-		if(fg == null)
-		{
-			String className = "fp4g.generator.gdx.functions.".concat(Utils.capitalize(fc.functionName));
-			try 
-			{
-				//JavaFunctionGenerator.class.
-				Class<? extends GdxFunction> clazz = (Class<? extends GdxFunction>) Class.forName(className);
-				fg = clazz.newInstance();
-				functions.put(fc.functionName, fg);				
-			}
-			catch (ClassNotFoundException e) 
-			{
-				// TODO Auto-generated catch block
-			}
-			catch (InstantiationException e) 
-			{
-				// TODO Auto-generated catch block
-			}
-			catch (IllegalAccessException e) 
-			{
-				// TODO Auto-generated catch block			
-			}
-		}
+		GdxFunction fg = functions.get(fc.functionName);		
 		if(fg != null)
 		{
-			return fg.generate(generator, model, fc.params);
+			return fg.generate(generator, model, fc, fc.current, container, fc.params);
 		}
 		throw new CannotEvalException(CannotEvalException.Types.FunctionNotFound,(Expresion)fc, String.format("La función \"%s\", no se ha encontrado.",fc.functionName));
 	}

@@ -5,6 +5,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.apollo.Message;
+import com.apollo.MessageHandler;
+import com.apollo.utils.ImmutableBag;
+
 public class TeamManager extends Manager {
 	private Map<Team, Set<Player>> teams;
 	private Map<Player, Team> teamByPlayer;
@@ -39,6 +43,33 @@ public class TeamManager extends Manager {
 	
 	public boolean areTeamMates(Player player1, Player player2) {
 		return teamByPlayer.get(player1) == teamByPlayer.get(player2);
+	}
+
+	@Override
+	public ImmutableBag<MessageHandler> getMessageHandler(Message<?> message) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void onMessage(Message<? extends MessageHandler> message,
+			Object... args) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public <T extends Message<?>> void addEventHandler(Message<?> messageType,
+			MessageHandler listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public <T extends Message<?>> void removeEventHandler(
+			Message<?> messagetType, MessageHandler listener) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -4,6 +4,7 @@ import com.apollo.annotate.InjectComponent;
 import com.apollo.managers.graphics.Sprite;
 import com.apollo.messages.SequenceMessage;
 import com.apollo.messages.SequenceMessageHandler;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -29,7 +30,8 @@ implements SequenceMessageHandler
 	{
 		this.sprite = sprite;
 		o = sprite.origin();
-		current = sprite.getFirstAnimation();		
+		current = sprite.getFirstAnimation();
+		
 	}
 	
 	public void setAnimation(String id)
@@ -71,6 +73,8 @@ implements SequenceMessageHandler
 		{
 			frame.flip(false,true);
 		}
+		Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 		batch.draw(frame, getX() - frame.getRegionWidth()/2 - o.x, getY() - o.y);		
 	}
 	
@@ -81,6 +85,14 @@ implements SequenceMessageHandler
 	public void setFlipY(boolean b)
 	{
 		flipY = b;
+	}
+	public boolean isFlipX()
+	{
+		return flipX;
+	}
+	public boolean isFlipY()
+	{
+		return flipY;
 	}
 	
 	public static SpriteBehavior build(Sprite sprite)
@@ -112,5 +124,11 @@ implements SequenceMessageHandler
 	public boolean isEndedCurrentAnimation()
 	{
 		return (PlayMode.NORMAL == current.getPlayMode()) && current.isAnimationFinished(time);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("SpriteBehavior: {flip_x: %b, flip_x: %b}", flipX,flipY);
 	}
 }

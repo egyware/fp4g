@@ -9,20 +9,12 @@ MULTI_LINE_COMMENT: '/*' .*? '*/' -> skip;
 DEFINE     : 'DEFINE';
 ADD        : 'ADD';
 ON         : 'ON';
-SEND       : 'SEND';
-DESTROY    : 'DESTROY';
-GROUP      : 'GROUP';
-SUBSCRIBE  : 'SUBSCRIBE';
-UNSUBSCRIBE: 'UNSUBSCRIBE';
-RESUME     : 'RESUME';
-PAUSE      : 'PAUSE';
-USING      : 'USING'; 
-EXIT       : 'EXIT';
-SET        : 'SET';
+USING      : 'USING';
 START      : 'START';
 ASSETS     : 'ASSETS';
 FLAG       : 'FLAG';
 WHEN       : 'WHEN';
+SET        : 'SET'; 
 
 /* auxiliars keywords */
 MANAGER : 'MANAGER';
@@ -38,8 +30,9 @@ TO      : 'TO';
 SOURCE  : 'SOURCE';	
 AS		: 'AS';
 OTHER   : 'OTHER';
+SELF    : 'SELF';
 EMPTY   : 'EMPTY';
-THEN      : 'THEN';
+THEN    : 'THEN';
 
 /* separators */
 ABRE_COR  : '['; 

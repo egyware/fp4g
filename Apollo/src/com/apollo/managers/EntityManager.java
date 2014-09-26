@@ -114,5 +114,4 @@ public class EntityManager extends Manager implements MessageReceiver
 			}
 		}		
 	}
-	
 }

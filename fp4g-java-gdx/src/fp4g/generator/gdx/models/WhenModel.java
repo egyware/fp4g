@@ -2,17 +2,15 @@ package fp4g.generator.gdx.models;
 
 import java.util.List;
 
-import fp4g.generator.StatementModel;
-
 public class WhenModel 
 {
 	//flag name
 	public final String flagName;
 	public final String condition;
-	public final List<StatementModel> statements;
+	public final List<String> statements;
 	
 	
-	public WhenModel(String name, String condition, List<StatementModel> statements)
+	public WhenModel(String name, String condition, List<String> statements)
 	{
 		this.flagName = name;
 		this.condition = condition;
@@ -24,7 +22,7 @@ public class WhenModel
 	public final String getCondition() {
 		return condition;
 	}
-	public final List<StatementModel> getStatements() {
+	public final List<String> getStatements() {
 		return statements;
 	}
 

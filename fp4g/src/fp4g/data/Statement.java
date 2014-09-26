@@ -7,21 +7,8 @@ package fp4g.data;
  */
 public abstract class Statement extends Line
 {
-	public static enum Type 
-	{
-		Send,
-		Destroy,
-		Subscribe,
-		Unsubscribe,
-		Assignment,
-		
-		
-	}
-	public final Type statementType;
-	
-	public Statement(Type type)
-	{
-		statementType = type;
+	public Statement()
+	{	
 	}
 
 }

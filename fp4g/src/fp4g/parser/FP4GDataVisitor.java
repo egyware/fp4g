@@ -2,8 +2,8 @@ package fp4g.parser;
 
 import java.util.List;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
 
 import fp4g.data.Add;
 import fp4g.data.Define;
@@ -63,7 +63,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	public FP4GDataVisitor(final Lib lib)
 	{
 		this.container = lib;
-		exprVisitor = new FP4GExpresionVisitor();
+		exprVisitor = new FP4GExpresionVisitor(lib,this);
 		nameListVisitor = new FP4GNameListVisitor(exprVisitor);
 		statementVisitor = new FP4GStatementVisitor(lib, exprVisitor);
 	}
@@ -72,9 +72,9 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	public ILine visit(ParseTree tree)
 	{
 		ILine line = super.visit(tree);
-		if(line != null && tree instanceof TerminalNode)
+		if(line != null && tree instanceof ParserRuleContext)
 		{
-			line.setLine(((TerminalNode)tree).getSymbol().getLine());
+			line.setLine(((ParserRuleContext)tree).start.getLine());
 		}
 		return line;
 	}
@@ -142,38 +142,9 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 				visit(values);
 			}
 		}
+		current = null;
 		
 		return null;		
-	}
-	
-	@Override
-	public ILine visitStart(FP4GParser.StartContext ctx)
-	{
-		IDefine define = current;
-		
-		if(define instanceof Game)
-		{
-			final String stateName = ctx.state;			
-			GameState state;
-			try 
-			{
-				state = container.getDefine(DefineTypes.STATE, stateName);
-			} 
-			catch (DefineNotFoundException e) 
-			{				
-				Log.Exception(e, ctx.start.getLine());
-				//creo un elemento temporal para solucionar el state faltante, sin embargo no se generará
-				state = new GameState(ctx.state,container);
-				state.setLine(ctx.start.getLine());
-				state.setGenerable(false);
-			}			
-			((Game) define).setStart(state);
-			return state;
-		}
-		else
-		{
-			return null;
-		}				
 	}
 	
 	@Override
@@ -200,12 +171,12 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			try
 			{
 				message = container.getDefine(DefineTypes.MESSAGE,ctx.messageName);				
-				on = new On(message);
+				on = new On(current, message);
 			}
 			catch (DefineNotFoundException e) 
 			{
 				Log.Exception(e, ctx.start.getLine());
-				on = new On(ctx.messageName);
+				on = new On(current, ctx.messageName);
 			}
 
 			//solo si es nuevito, se agrega
@@ -277,7 +248,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 	@Override 
 	public ILine visitSet(FP4GParser.SetContext ctx)
 	{
-		Expresion expr = exprVisitor.getExpr(current, ctx.expr());		
+		Expresion expr = exprVisitor.getExpr(ctx.expr());		
 		if(current == null)
 		{
 			container.set(ctx.key, eval(container,expr));
@@ -428,7 +399,7 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		
 		final IMap map = getMap(ctx.exprParams,ctx.start.getLine());
 		
-		AddMethod add = new AddMethod(ctx.addName, list, map);
+		AddMethod add = new AddMethod(ctx.addName, list,current,  map);
 		
 		current.setAdd(add);
 		
@@ -446,14 +417,14 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 			IDefine  define = container.getDefine(ctx.type,ctx.addName);
 			ExprList list = exprVisitor.getExprList(current, ctx.exprList());
 			final IMap map = getMap(ctx.exprParams,ctx.start.getLine());
-			add = new AddDefine((Define)define,list, map);			
+			add = new AddDefine((Define)define,list, current, map);			
 			add.setLine(ctx.start.getLine());
 		}
 		catch (DefineNotFoundException e) 
 		{			
 			ExprList list = exprVisitor.getExprList(current, ctx.exprList());
 			final IMap map = getMap(ctx.exprParams,ctx.start.getLine());
-			add = new AddDefine(ctx.type,ctx.addName, list, map);
+			add = new AddDefine(ctx.type,ctx.addName, list, current, map);
 			add.setLine(ctx.start.getLine());
 			Log.Exception(e, ctx.start.getLine());		
 		}
@@ -514,11 +485,11 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		if(assetName == null)
 		{
 			//Asset asset, String resourceName, String resource, IMap values
-			assetAdd = new AddAsset(asset,assetName, assetPath, map);			
+			assetAdd = new AddAsset(asset,assetName, assetPath, current, map);			
 		}
 		else
 		{
-			assetAdd = new AddAsset(asset,assetName, assetPath, map);				
+			assetAdd = new AddAsset(asset,assetName, assetPath, current, map);				
 			//assetAdd = new Add(DefineType.ASSET,assetType.name(),assetName);
 		}
 		assetAdd.setLine(ctx.start.getLine());
@@ -546,4 +517,9 @@ public class FP4GDataVisitor extends FP4GBaseVisitor<ILine>
 		}
 		return map;
 	}	
+	
+	public IDefine current()
+	{
+		return current;
+	}
 }

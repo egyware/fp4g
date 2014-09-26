@@ -60,8 +60,24 @@ public class Lib extends Code implements IMap,ILib
 		if(map != null)
 		{
 			return map.containsKey(name);
-		}	
+		}		
 		return false;
+	}	
+	@Override
+	public final <T extends IDefine> boolean isGlobalSetDefine(DefineType type, String name) 
+	{
+		if(isSetDefine(type,name))
+		{
+			return true;
+		}
+		else if(parent != null)
+		{
+			return parent.isGlobalSetDefine(type, name);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -204,5 +220,7 @@ public class Lib extends Code implements IMap,ILib
 		builder.append("]\n");		
 		return builder.toString();
 	}
+
+	
 
 }

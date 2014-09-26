@@ -9,7 +9,7 @@ import fp4g.data.operators.IMultipliable;
 import fp4g.data.operators.ISubtractable;
 import fp4g.exceptions.CannotEvalException;
 
-public class BinaryOp extends Expresion
+public class BinaryOp implements Expresion
 {
 	public static enum OperatorType
 	{

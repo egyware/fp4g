@@ -2,10 +2,11 @@ package fp4g.data;
 import java.util.List;
 
 import fp4g.data.add.AddDefine;
+import fp4g.data.add.AddMethod;
 import fp4g.data.expresion.IMap;
 import fp4g.data.operators.IAccessible;
 
-public interface IDefine extends ICode, IMap, IValue<IDefine>, IAccessible
+public interface IDefine extends ICode, IMap, IValue<IDefine>, IAccessible, Expresion
 {
 	public DefineType getType();
 	/**
@@ -36,4 +37,6 @@ public interface IDefine extends ICode, IMap, IValue<IDefine>, IAccessible
 	public List<AddDefine> getAddDefines(DefineType behavior);
 	
 	public IValue<?> find(String key);
+	public Add findAddDefineByName(String name);
+	public AddMethod getAddMethod(String addName);
 }

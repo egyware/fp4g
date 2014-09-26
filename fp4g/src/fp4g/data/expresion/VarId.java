@@ -8,7 +8,7 @@ import fp4g.exceptions.CannotEvalException;
 /*
  * Una expresión que indica que se ha usado una variable.
  */
-public class VarId extends Expresion
+public class VarId implements Expresion
 {
 	public static final VarId parent = new VarId("parent");
 	public static final VarId current = new VarId("current");

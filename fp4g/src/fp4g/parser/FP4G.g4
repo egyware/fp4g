@@ -74,8 +74,7 @@ gameValues:
 gameValue  
 		: 
 		  add DOTCOMA
-		| set DOTCOMA
-		| start DOTCOMA
+		| set DOTCOMA		
 		| when DOTCOMA
 		| on
 		| flag DOTCOMA
@@ -89,22 +88,7 @@ returns
 [ String key ]
 		: SET ID { $key = $ID.text; } EQUAL expr 
 		;
-start
-returns
-[ String state ]
-	:
-	START ID { $state = $ID.text; }
-;
 
-subscribe
-    :
-    SUBSCRIBE where=ID ON message=ID (DOUBLEDOT method=ID)?
-;
-
-unsubscribe
-    :
-    UNSUBSCRIBE where=ID ON message=ID (DOUBLEDOT method=ID)?    
-;
 
 add 
 :	      	
@@ -192,39 +176,26 @@ statements:
 			(statement DOTCOMA) *
 		;		
 
-statement :
-			  send
-			| destroy
-			| subscribe
-			| unsubscribe
-			| assign
-			;
+statement
+		:
+		  functionCall
+		| assign
+		;
+
+functionCall 
+		:
+		name=ID //nombre de la funcion
+		functionExprList?
+		;
+functionExprList
+		:
+		expr+   //expresiones separadas por ESPACIOS
+		;
 
 assign
 :
 	varName = ID  EQUAL expr
 ;
-			
-destroy		:
-			DESTROY
-			;
-
-send
-returns
-[String messageMethodName,String receiverName, Instance receiverType]
-	:
-	{$receiverType = Instance.Self;}
-	SEND method=ID {$messageMethodName = $method.text;}
-	(ABRE_PAR exprList? CIERRA_PAR)?
-	(
-	 TO (
-	       receiver=OTHER {$receiverType = Instance.Other;}
-	     | receiver=GAME  {$receiverType = Instance.Game;}  
-	     | receiver=ID    {$receiverType = null;} //sin especificar todavía
-	 	)
-	 {$receiverName = $receiver.text;}
-	)?
-	;
 	
 //filtros separados por espacios, es en caso que se cumpla otra condición también
 onFilters
@@ -260,12 +231,12 @@ defineValues
 
 defineValue
 		:
-		  add DOTCOMA
+		  assets
+		| add DOTCOMA
 		| set DOTCOMA
 		| flag DOTCOMA
 		| when DOTCOMA
-		| on
-		| assets
+		| on		 
 		;
 
 exprList: expr (COMA expr)*;

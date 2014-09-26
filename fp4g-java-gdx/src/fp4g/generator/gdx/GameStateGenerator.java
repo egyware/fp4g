@@ -96,17 +96,17 @@ public class GameStateGenerator extends JavaCodeGenerator
 				IValue<?> extrasValue;
 				if(isDebug)
 				{
-					extrasValue = define.get(DEBUG);
+					extrasValue = define.find(DEBUG);
 					if(extrasValue == null)
 					{
-						extrasValue = define.get(EXTRA);
+						extrasValue = define.find(EXTRA);
 					}					
 				}
 				else
 				{
-					extrasValue = define.get(EXTRA);
+					extrasValue = define.find(EXTRA);
 				}
-				 
+
 				if(extrasValue != null)
 				{
 					extras = (ManagerData) extrasValue.getValue();
@@ -124,7 +124,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 					{
 						for(IValue<?> i:imports)
 						{
-							meta.addRequireSource(generator.expresion(meta, i));
+							meta.addRequireSource(generator.expresion(meta,null, i));
 						}
 					}					
 				}				
@@ -146,13 +146,13 @@ public class GameStateGenerator extends JavaCodeGenerator
 					{
 						for(IValue<?> value:dparams)
 						{
-							params.add(generator.expresion(meta, value));
+							params.add(generator.expresion(meta, null, value));
 						}
 					}
 				}
 				for(Expresion expr: manager.params)
 				{
-					params.add(generator.expresion(meta,expr));					
+					params.add(generator.expresion(meta, null, expr));					
 				}
 				managerModel.params = params;				
 			}
@@ -168,7 +168,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 						{
 							for(IValue<?> value:dparams)
 							{
-								params.add(generator.expresion(meta, value));
+								params.add(generator.expresion(meta, null, value));
 							}
 						}
 					}
@@ -206,7 +206,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 				List<String> params = new LinkedList<String>();
 				for(Expresion expr: entity.params)
 				{					
-					params.add(generator.expresion(meta,expr));					
+					params.add(generator.expresion(meta, null, expr));					
 				}
 				addEntity.params = params;
 			}
@@ -240,7 +240,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 				}
 				else
 				{
-					throw new CannotEvalException(CannotEvalException.Types.IncomplatibleTypes, add,"No se esperaba este asset en un grupo.");
+					throw new CannotEvalException(CannotEvalException.Types.IncomplatibleTypes, (Expresion)add,"No se esperaba este asset en un grupo.");
 				}
 			}
 			
@@ -248,7 +248,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 			{
 				for(Entry<String, IValue<?>> entry: add.values.entrySet())
 				{
-					params.put(entry.getKey(), generator.expresion(meta,entry.getValue()));				
+					params.put(entry.getKey(), generator.expresion(meta, null, entry.getValue()));				
 				}
 			}
 			AssetModel assetModel = new AssetModel(define, assetPath, params);
@@ -311,8 +311,6 @@ public class GameStateGenerator extends JavaCodeGenerator
 			meta.addRequireSource("com.badlogic.gdx.graphics.FPSLogger");
 		}
 		
-		meta.addRequireSource("com.apollo.Assets");
-		
 		generator.createFile(path,String.format("%s.java",state.name), temp, gameStateModel);
 
 	}
@@ -324,7 +322,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 			List<String> list = new LinkedList<String>();
 			for(IValue<?> value:arrayList)
 			{
-				list.add(generator.expresion(null, value));
+				list.add(generator.expresion(null, null, value));
 			}
 			return list;
 		}
@@ -338,7 +336,7 @@ public class GameStateGenerator extends JavaCodeGenerator
 			HashMap<String, String> _map = new HashMap<String, String>();
 			for(Entry<String, IValue<?>> entry:map.entrySet())
 			{
-				_map.put(entry.getKey(), generator.expresion(model, entry.getValue()));						
+				_map.put(entry.getKey(), generator.expresion(model, null, entry.getValue()));						
 				
 			}
 			return _map;

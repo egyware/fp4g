@@ -9,6 +9,7 @@ import com.apollo.messages.ContactMessage;
 import com.apollo.messages.ContactMessageHandler;
 import com.apollo.messages.PlatformMessage;
 import com.apollo.messages.PlatformMessageHandler;
+import com.apollo.utils.Bag;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 
 
@@ -24,7 +26,7 @@ import com.badlogic.gdx.physics.box2d.World;
  *
  */
 public class PlatformBodyBehavior extends PhysicsFamily
-implements PlatformMessageHandler, ContactMessageHandler
+implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback
 {
 	private Body box;
 	//initial values
@@ -35,6 +37,10 @@ implements PlatformMessageHandler, ContactMessageHandler
 	private Fixture bottonSensor;
 	private Fixture leftSensor;
 	private Fixture rightSensor;
+	
+	private int touchBotton;
+	private int touchLeft;
+	private int touchRight;
 		
 	public PlatformBodyBehavior(float x, float y, int width,  int height) 
 	{
@@ -51,6 +57,8 @@ implements PlatformMessageHandler, ContactMessageHandler
 		owner.removeEventHandler(PlatformMessage.onJumpPlatform, this);
 		owner.removeEventHandler(ContactMessage.onBeginContact, this);
 		owner.removeEventHandler(ContactMessage.onEndContact, this);
+		
+		box.getWorld().destroyBody(box);
 	}
 	
 	@Override	
@@ -92,13 +100,13 @@ implements PlatformMessageHandler, ContactMessageHandler
 		    sensorDef.density = 1;
 		    sensorDef.shape = boxShape;
 		    //sensor abajo
-		    boxShape.setAsBox(width_2*0.75f*SCALE, 4*SCALE,temp.set(0,-height_2*SCALE),0);
+		    boxShape.setAsBox(width_2*0.95f*SCALE, SCALE,temp.set(0,-height_2*SCALE-SCALE),0);
 		    bottonSensor = box.createFixture(sensorDef);		    
 		    //sensor izquierda
-		    boxShape.setAsBox(4*SCALE, height_2*0.75f*SCALE,temp.set(-width_2*SCALE,0),0);
+		    boxShape.setAsBox(SCALE, height_2*0.8f*SCALE,temp.set(-width_2*SCALE-SCALE,0),0);
 		    leftSensor = box.createFixture(sensorDef);		    
 		    //sensor derecha
-		    boxShape.setAsBox(4*SCALE, height_2*0.75f*SCALE,temp.set(width_2*SCALE,0),0);
+		    boxShape.setAsBox(SCALE, height_2*0.8f*SCALE,temp.set(width_2*SCALE+SCALE,0),0);
 		    rightSensor = box.createFixture(sensorDef);
 		    
 		    
@@ -207,15 +215,18 @@ implements PlatformMessageHandler, ContactMessageHandler
 		{
 			if(bottonSensor == ownFixture)
 			{
-				owner.onMessage(PlatformMessage.onBeginContactPlatform, PlatformMessage.GROUND);
+				touchBotton++;
+				owner.onMessage(PlatformMessage.onBeginContactPlatform, PlatformMessage.GROUND);				
 			}
 			if(leftSensor == ownFixture)
 			{
-				owner.onMessage(PlatformMessage.onBeginContactPlatform, PlatformMessage.LEFTWALL);
+				touchLeft++;
+				owner.onMessage(PlatformMessage.onBeginContactPlatform, PlatformMessage.LEFTWALL);				
 			}
 			if(rightSensor == ownFixture)
-			{
-				owner.onMessage(PlatformMessage.onBeginContactPlatform, PlatformMessage.RIGHTWALL);
+			{			
+				touchRight++;
+				owner.onMessage(PlatformMessage.onBeginContactPlatform, PlatformMessage.RIGHTWALL);				
 			}
 		}
 	}
@@ -226,15 +237,18 @@ implements PlatformMessageHandler, ContactMessageHandler
 		if(other == null) // que sea piso
 		{
 			if(bottonSensor == ownFixture)
-			{
+			{		
+				touchBotton--;
 				owner.onMessage(PlatformMessage.onEndContactPlatform, PlatformMessage.GROUND);
 			}
 			if(leftSensor == ownFixture)
-			{
+			{			
+				touchLeft--;
 				owner.onMessage(PlatformMessage.onEndContactPlatform, PlatformMessage.LEFTWALL);
 			}
 			if(rightSensor == ownFixture)
 			{
+				touchRight--;
 				owner.onMessage(PlatformMessage.onEndContactPlatform, PlatformMessage.RIGHTWALL);
 			}
 		}		
@@ -244,6 +258,52 @@ implements PlatformMessageHandler, ContactMessageHandler
 	{
 		return box.getLinearVelocity();
 	}
-
 	
+	
+	public boolean isTouchGround()
+	{
+		return touchBotton > 0;
+	}
+	
+	public boolean isTouchLeft()
+	{
+		return touchLeft > 0;
+	}
+	
+	public boolean isTouchRight()
+	{
+		return touchRight > 0;
+	}
+	
+	
+	@Override
+	public String toString()
+	{
+		return String.format("PlatformBodyBehavior: {desiredVelocity: %f, leftSensor: %d, rightSensor: %d, bottonSensor: %d}",desiredVelocity, touchLeft,touchRight,touchBotton);		 
+	}
+
+	private Bag<Entity> touched = new Bag<Entity>();	
+	@Override
+	public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) 
+	{
+		Object userData = fixture.getBody().getUserData();
+		if(!fixture.isSensor() &&  userData != null && userData instanceof Entity)
+		{
+			touched.add((Entity)userData);
+			return 1; //todos
+		}
+		else
+		{
+			return -1;
+		}		
+	}
+
+	public void rayCast(Bag<Entity> entities, Vector2 p1, Vector2 p2) 
+	{
+		this.touched = entities;
+		p1.scl(SCALE);
+		p2.scl(SCALE);
+		box.getWorld().rayCast(this, p1, p2);
+	}
+
 }

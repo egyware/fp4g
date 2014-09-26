@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.apollo.Message;
 import com.apollo.MessageHandler;
-import com.apollo.MessageReceiver;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
@@ -13,7 +12,7 @@ import com.apollo.utils.ImmutableBag;
  * @author Edgardo
  *
  */
-public class BroadcastManager extends Manager implements MessageReceiver
+public class BroadcastManager extends Manager
 {
 	private final Map<Message<?>,Bag<MessageHandler>> handlersByEventType;
 	public BroadcastManager()

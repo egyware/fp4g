@@ -22,6 +22,7 @@ public enum FP4GError implements IMessageType
 	ManagerIsNotAReceiver,
 	UnExpectedParams,
 	MessageNotFound,
+	ManagerNotFound,
 	
 	//Errores de evaluacion
 	CannotEvalExpresion,
@@ -38,7 +39,7 @@ public enum FP4GError implements IMessageType
 	DefineTypeNotFound, 
 	NotExceptedAdd, 
 	NotExpectedOn, 
-	DefineIsRequired,  
+	DefineIsRequired,   
 	   
 	
 	

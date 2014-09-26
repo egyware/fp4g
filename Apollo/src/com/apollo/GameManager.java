@@ -1,10 +1,20 @@
 package com.apollo;
 
+import com.apollo.managers.entity.EntitySpawn;
+import com.apollo.managers.entity.EntitySpawnLoader;
+import com.apollo.managers.graphics.Sprite;
+import com.apollo.managers.graphics.SpriteLoader;
+import com.apollo.managers.physics.Terrain2D;
+import com.apollo.managers.physics.Terrain2DLoader;
 import com.apollo.messages.LevelMessageHandler;
 import com.apollo.utils.ImmutableBag;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
 
 public abstract class GameManager implements ApplicationListener, MessageReceiver, LevelMessageHandler
@@ -16,9 +26,18 @@ public abstract class GameManager implements ApplicationListener, MessageReceive
 	public abstract int getWidth();
 	public abstract int getHeight();
 	
+	public final AssetManager assets; 
+	
 	public GameManager()
 	{
-		states = new Array<GameState>();		
+		states = new Array<GameState>();
+		
+		final InternalFileHandleResolver fileResolver = new InternalFileHandleResolver();
+		assets = new AssetManager();		
+		assets.setLoader(Sprite.class,new SpriteLoader(fileResolver));
+		assets.setLoader(TiledMap.class,new TmxMapLoader(fileResolver));
+		assets.setLoader(Terrain2D.class,new Terrain2DLoader(fileResolver));
+		assets.setLoader(EntitySpawn.class,new EntitySpawnLoader(fileResolver));
 	}
 	
 	public void start(GameState next)

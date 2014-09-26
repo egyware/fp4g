@@ -13,10 +13,10 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import fp4g.Options;
+import fp4g.data.Container;
 import fp4g.data.Define;
 import fp4g.data.Expresion;
 import fp4g.data.ILib;
-import fp4g.data.ILine;
 import fp4g.data.Statements;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.data.libs.Lib;
@@ -95,9 +95,9 @@ public abstract class Generator<M extends MetaSourceModel>
 	}
 	
 	
-	public abstract Expresion function(M model, FunctionCall fcall) throws CannotEvalException;
-	public abstract String   expresion(M model, Expresion expr) throws CannotEvalException;
-	public abstract List<StatementModel> generateStatements(M model, ILine container, Statements statements) throws FP4GException ;
+	public abstract Expresion function(M model, Container container, FunctionCall fcall) throws CannotEvalException;	
+	public abstract String   expresion(M model, Container container, Expresion expr) throws CannotEvalException;
+	public abstract List<String> generateStatements(M model, Container container, Statements statements) throws FP4GException ;
 	
 	
 	
@@ -165,6 +165,6 @@ public abstract class Generator<M extends MetaSourceModel>
 	}
 	
 	public abstract LibContainer loadLibs();	
-	protected abstract Depend resolveDependency(Define define) throws DependResolverNotFoundException;
+	protected abstract Depend resolveDependency(Define define) throws DependResolverNotFoundException;	
 	
 }

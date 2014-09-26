@@ -38,6 +38,7 @@ public interface ILib extends IMap, IValue<ILib>
 	 * @return
 	 */
 	public <T extends IDefine> boolean isSetDefine(DefineType type,String name);
+	public <T extends IDefine> boolean isGlobalSetDefine(DefineType type, String name);
 	
 	/**
 	 * Busca una variable localmente
@@ -61,5 +62,6 @@ public interface ILib extends IMap, IValue<ILib>
 
 	public <T extends IDefine> T getDefine(String whereName) throws DefineNotFoundException;
 
-	public <T extends IDefine> void setDefine(T define);	
+	public <T extends IDefine> void setDefine(T define);
+		
 }

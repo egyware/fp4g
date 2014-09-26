@@ -4,11 +4,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import fp4g.data.Container;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.add.AddMethod;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.generator.gdx.JavaExpresionGenerator;
+import fp4g.generator.gdx.models.JavaMetaSourceModel;
 
 public class FiltersD implements Iterable<String>
 {
@@ -52,7 +54,7 @@ public class FiltersD implements Iterable<String>
 	 * @param jeg Generador de Expresiones para Java
 	 * @throws CannotEvalException 
 	 */
-	public void add(AddMethod mm, ExprList list, JavaExpresionGenerator jeg) throws CannotEvalException 
+	public void add(AddMethod mm, ExprList list,JavaMetaSourceModel model, Container container, JavaExpresionGenerator jeg) throws CannotEvalException 
 	{
 		Iterator<Expresion> iterator = list.iterator();
 		if(iterator.hasNext())
@@ -61,17 +63,17 @@ public class FiltersD implements Iterable<String>
 			final String valueReplace = mm.getReplace();
 			if(valueReplace == null)
 			{
-				condiciones.add(jeg.generate(null, first));
+				condiciones.add(jeg.generate(null,null, first));
 			}
 			else
 			{
-				condiciones.add(String.format(valueReplace,jeg.generate(null, first)));
+				condiciones.add(String.format(valueReplace,jeg.generate(model, container, first)));
 			}
 		}
 		for(;iterator.hasNext();)
 		{
 			Expresion expr = iterator.next();
-			condiciones.add(jeg.generate(null, expr));
+			condiciones.add(jeg.generate(null,null, expr));
 		}
 	}	
 	

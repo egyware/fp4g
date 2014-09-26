@@ -26,8 +26,14 @@ public class ActionControllerBehavior extends BaseBehavior
 		}
 	}
 
-	public static ActionControllerBehavior build() 
+	public static ActionControllerBehavior build()	
 	{
 		return new ActionControllerBehavior();
+	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("ActionController: { doAction: %s}",(current!=null)?current.getClass().getSimpleName():"null");
 	}
 }

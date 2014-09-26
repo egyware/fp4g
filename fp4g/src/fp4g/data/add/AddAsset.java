@@ -5,6 +5,7 @@ package fp4g.data.add;
 
 import fp4g.data.Add;
 import fp4g.data.AddType;
+import fp4g.data.IDefine;
 import fp4g.data.define.Asset;
 import fp4g.data.expresion.IMap;
 
@@ -21,9 +22,9 @@ public class AddAsset extends Add
 	public final String resource;
 	private AddAsset assetParent;
 	
-	public AddAsset(Asset asset, String resourceName, String resource, IMap values) 
+	public AddAsset(Asset asset, String resourceName, String resource, IDefine container, IMap values) 
 	{	
-		super(resourceName, AddType.AddAsset, values);
+		super(resourceName, AddType.AddAsset, container, values);
 		this.asset = asset;
 		this.resourceName = resourceName;
 		this.resource = resource;				

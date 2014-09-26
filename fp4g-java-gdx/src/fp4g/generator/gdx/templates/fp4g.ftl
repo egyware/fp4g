@@ -1,33 +1,3 @@
-<#macro translate statement>
-<#switch statement.type>
-<#case 0><#-- Send MessageSender.instance().send(receiver, message); -->
-<#if statement.direct>	
-		${statement.to}.${statement.message}(<#if statement.params?has_content><@params p=statement.params /></#if>);
-<#else>
-		${statement.to}.onMessage(${statement.message}<#if statement.params?has_content>,<@params p=statement.params /></#if>);
-</#if>
-<#break>
-<#case 1><#-- delete owner -->			
-		getWorld().deleteEntity(this);
-<#break>
-<#case 2><#-- Subscribe -->
-	<#list statement.method as method>
-		${statement.attach}.getWorld().getManager(${statement.subscribeTo}.class).addEventHandler(${statement.message}Message.on${method?cap_first}${statement.message},${statement.attach});
-	</#list>
-<#break>
-<#case 3><#-- Unsubscribe -->
-	<#list statement.method as method>
-		${statement.attach}.getWorld().getManager(${statement.subscribeTo}.class).removeEventHandler(${statement.message}Message.on${method?cap_first}${statement.message},${statement.attach});
-	</#list>
-<#break>
-<#case 4>
-		${statement.varName} = (${statement.expresion});
-<#break>
-<#default>
-		//TODO No se reconoce la instrucción: "${statement.class.simpleName}"
-</#switch>
-</#macro>
-
 <#macro params p><#list p as param>${param}<#if param_has_next>,</#if></#list></#macro>
 
 <#macro flags list>
@@ -53,8 +23,8 @@
 		</#if>
 		{		
 		<#if source.statements?has_content>		
-		<#list source.statements as stmnt>						
-			<@fp4g.translate statement=stmnt />
+		<#list source.statements as stmnt>
+			${stmnt};
 		</#list>
 		<#else>
 			//TODO Recuerde añadir su codigo aqui...
@@ -63,7 +33,7 @@
 		<#else>		
 		<#if source.statements?has_content>		
 		<#list source.statements as stmnt>
-			<@fp4g.translate statement=stmnt />
+			${stmnt};
 		</#list>
 		<#else>
 			//TODO Recuerde añadir su codigo aqui...

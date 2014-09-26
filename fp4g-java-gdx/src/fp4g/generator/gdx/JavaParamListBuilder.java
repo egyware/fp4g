@@ -3,6 +3,7 @@ package fp4g.generator.gdx;
 import java.util.LinkedList;
 import java.util.List;
 
+import fp4g.data.Container;
 import fp4g.data.DeclVar;
 import fp4g.data.Define;
 import fp4g.data.ILib;
@@ -31,7 +32,7 @@ public class JavaParamListBuilder
 		this.generator = generator;
 	}
 	
-	public List<VarCodeModel> build(NameList nameList, JavaMetaSourceModel model) 
+	public List<VarCodeModel> build(NameList nameList, Container container, JavaMetaSourceModel model) 
 	throws DependResolverNotFoundException, CannotEvalException
 	{
 		//lo veo un poco consumidor de recursos, pero bueno...
@@ -42,7 +43,7 @@ public class JavaParamListBuilder
 			VarCodeModel param;
 			if(par.initValue != null)
 			{
-				param = new VarCodeModel(name, par.name,generator.expresion(model, par.initValue));					
+				param = new VarCodeModel(name, par.name,generator.expresion(model, container, par.initValue));					
 			}
 			else
 			{

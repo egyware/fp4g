@@ -8,6 +8,11 @@ DEFINE MANAGER EntityManager
 	}
 	AS ManagerData;
 ]
+DEFINE MANAGER AudioManager
+[
+	SET priority = 5;
+	SET receiver = true;	
+]
 DEFINE MANAGER BroadcastManager
 [
 	SET priority = 4;
@@ -30,13 +35,14 @@ DEFINE MANAGER PhysicsManager
 		fields        = 
 		{
 			@'OrthographicCamera debugCamera',
-			@'Box2DDebugRenderer debugRender = new Box2DDebugRenderer(true,true,true,true,true,true)',
+			@'Box2DDebugRenderer debugRender',
 			@'World world',
 		},
 		preInitialize = 
 		{
 			@'debugCamera = new OrthographicCamera()',
-			@'debugCamera.setToOrtho(false,w*SCALE,h*SCALE)'		
+			@'debugCamera.setToOrtho(false,w*SCALE,h*SCALE)',
+			@'debugRender = new Box2DDebugRenderer(true,true,true,true,true,true)',		
 		},
 		postInitialize = 
 		{
@@ -329,6 +335,10 @@ SET resolvers =
 		{
 			"com.apollo.managers.entity.EntitySpawn",
 			"com.apollo.managers.entity.EntitySpawnLoader.EntitySpawnParameter",
+		},
+		Sound = 
+		{
+			"com.badlogic.gdx.audio.Sound",
 		}
 	} AS DependResolver,
 	STRUCT =

@@ -1,7 +1,10 @@
 package com.apollo.managers;
 
 import com.apollo.Entity;
+import com.apollo.Message;
+import com.apollo.MessageHandler;
 import com.apollo.components.ActorBehavior;
+import com.apollo.utils.ImmutableBag;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -89,13 +92,36 @@ public class StageRenderManager extends Manager
 			mapRenderer.setView(camera);			
 			mapRenderer.render(back_layers);
 			stage.draw();			
-			mapRenderer.render(front_layers);
+//			mapRenderer.render(front_layers);
 		}
 	}	
 	
 	public Camera getCamera()
 	{
 		return camera;
+	}
+	@Override
+	public ImmutableBag<MessageHandler> getMessageHandler(Message<?> message) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void onMessage(Message<? extends MessageHandler> message,
+			Object... args) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public <T extends Message<?>> void addEventHandler(Message<?> messageType,
+			MessageHandler listener) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public <T extends Message<?>> void removeEventHandler(
+			Message<?> messagetType, MessageHandler listener) {
+		// TODO Auto-generated method stub
+		
 	}	
 	
 }

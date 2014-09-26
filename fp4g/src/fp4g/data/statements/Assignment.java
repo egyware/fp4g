@@ -10,7 +10,6 @@ public class Assignment extends Statement
 	
 	public Assignment(String varName, Expresion expresion)
 	{
-		super(Statement.Type.Assignment);
 		this.varName = varName;
 		this.expresion = expresion;
 	}

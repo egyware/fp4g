@@ -30,7 +30,6 @@ public class ${source.name} extends GameManager
 	public void create()
 	{		
 		super.create();
-		Assets.initialize();
 		
 		<#if startState??>
 		//iniciando el juego 
@@ -50,7 +49,7 @@ public class ${source.name} extends GameManager
 	@Override
 	public void dispose()
 	{
-		Assets.dispose();
+		assets.dispose();
 		super.dispose();		
 	}
 	

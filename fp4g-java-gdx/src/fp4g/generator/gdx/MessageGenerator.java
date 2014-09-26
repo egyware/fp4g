@@ -41,7 +41,7 @@ public class MessageGenerator extends JavaCodeGenerator
 		for(AddMethod method:message.getAddMethods())
 		{
 			List<VarCodeModel> enumArgList    = (method.nameList != null)?paramBuilder.buildForMessage(method.nameList, messageMeta):null;
-			List<VarCodeModel> handlerArgList = (method.nameList != null)?paramBuilder.build(method.nameList, messageMeta):null;
+			List<VarCodeModel> handlerArgList = (method.nameList != null)?paramBuilder.build(method.nameList, null, messageMeta):null;
 			MessageModel.Method m = new MessageModel.Method(method.name,enumArgList, handlerArgList);
 			methods.add(m);
 		}

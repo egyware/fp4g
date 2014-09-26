@@ -1,4 +1,13 @@
-:::0.1.29 (pendiente)
+:::0.1.30  (pendiente)
++ Se añadieron más expresiones y tipos ivalue para no sé, esto me confunde pero funciona... la cosa que IDefine es una expresion y si la usas importa automaticamente los imports necesarios.
++ Se agrego la clase Container para un control mejor de las variables disponibles en ON y WHEN.
++ Se reprogramaron las funciones para las instrucciones tipo ON o WHEN Destroy, Send, Subscribe/Unsubscribe y Play. Ahora se pueden añadir más aún extendiendo el poder del generador.
++ Se quito la clase Assets, pero se integro a GameManager hubieron cambios en la biblioteca de Apollo para apoyar tal cambio.
++ Todos los managers reciben mensajes, solo que algunos se hacen los sordos.
+B Cuando no encuentra un mensaje deberia abortar y no caerse.
+P Aún falta el código que permite usar los assets en los 
+P Debe quedar prueba de tontos II: Se ha vuelto mejorar el launcher esto es para cuando se lanze desde un jar no tener que modificarlo.
+:::0.1.29
 + Generador de Mensajes añadido
 + Se le quito la caracteristica "namespace"
 + Se le quito la caracteristica en donde se podia utilizar un define como un gran contenedor ahora esa caracteristica le pertenece a ILib

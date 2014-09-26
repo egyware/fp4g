@@ -9,6 +9,7 @@ import fp4g.data.ExprList;
 import fp4g.data.ILib;
 import fp4g.data.On;
 import fp4g.data.add.AddMethod;
+import fp4g.data.expresion.DirectCode;
 import fp4g.data.statements.Filter;
 import fp4g.data.statements.Source;
 import fp4g.exceptions.FP4GException;
@@ -47,10 +48,16 @@ public class OnModel
 		return methodHandlers;
 	}
 
-	public static OnModel build(ILib lib, On on, JavaGenerator generator,	JavaMetaSourceModel model) throws FP4GException
+	public static OnModel build(ILib lib, On on, JavaGenerator generator, JavaMetaSourceModel model) throws FP4GException
 	{
 		final JavaParamListBuilder paramBuilder = new JavaParamListBuilder(lib, generator);
 		OnModel onModel = new OnModel(on);
+		
+		//inyectar variables
+		//TODO pensar de forma dinamica QUE VARIABLES DEBEN IR AQUI
+		on.set("entity", new DirectCode("entity"));
+		
+		
 		//agregar la interface 
 		//se utilizará clases internas
 		//model.addInterface(String.format("%sMessageHandler",on.name));
@@ -60,7 +67,7 @@ public class OnModel
 		//TODO da un error cuando el mensaje está sin definir		
 		for(AddMethod entry: on.message.getAddMethods())
 		{	
-			List<VarCodeModel> params = (entry.nameList != null)?paramBuilder.build(entry.nameList, model):null;			
+			List<VarCodeModel> params = (entry.nameList != null)?paramBuilder.build(entry.nameList, null,  model):null;			
 			methods.put(entry.name, new MethodHandlerModel(entry, params));
 		}
 		
@@ -95,7 +102,7 @@ public class OnModel
 					if(exprList != null) //me aseguro que sea distinto de nulo, asi no agrega nada adicional
 					{
 						FiltersD filterD = sm.getCurrentFilterD(filter);									
-						filterD.add(method, exprList, generator.exprGen); //agrego el filtro actual
+						filterD.add(method, exprList,model, on, generator.exprGen); //agrego el filtro actual
 					}
 				}				
 				//ahora como agrego otra disyunción?

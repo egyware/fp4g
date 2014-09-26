@@ -28,12 +28,12 @@ import fp4g.IO;
 import fp4g.Options;
 import fp4g.classes.DependResolvers;
 import fp4g.data.Code;
+import fp4g.data.Container;
 import fp4g.data.Define;
 import fp4g.data.DefineTypes;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
 import fp4g.data.ILib;
-import fp4g.data.ILine;
 import fp4g.data.IValue;
 import fp4g.data.Statements;
 import fp4g.data.define.Behavior;
@@ -52,7 +52,6 @@ import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.generator.CodeGenerator;
 import fp4g.generator.Depend;
 import fp4g.generator.Generator;
-import fp4g.generator.StatementModel;
 import fp4g.generator.gdx.models.JavaMetaSourceModel;
 import fp4g.log.FP4GError;
 import freemarker.template.Configuration;
@@ -463,19 +462,20 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 	}
 
 	@Override
-	public Expresion function(JavaMetaSourceModel model, FunctionCall fcall) throws CannotEvalException
+	public Expresion function(JavaMetaSourceModel model, Container container, FunctionCall fcall) throws CannotEvalException
 	{		
-		return funcGen.generate(model,fcall);
+		return funcGen.generate(model,fcall,container);
 	}
 
 	@Override
-	public String expresion(JavaMetaSourceModel model,Expresion expr) throws CannotEvalException
+	public String expresion(JavaMetaSourceModel model, Container container, Expresion expr) throws CannotEvalException
 	{
-		return exprGen.generate(model,expr);
+		return exprGen.generate(model, container, expr);
 	}
-	public <CodeModel> String expresion(CodeModel model,IValue<?> expr) throws CannotEvalException
+	
+	public <CodeModel> String expresion(CodeModel model, Container container, IValue<?> expr) throws CannotEvalException
 	{
-		return exprGen.generate((JavaMetaSourceModel) model,expr);
+		return exprGen.generate((JavaMetaSourceModel) model, container, expr);
 	}
 	
 	public LibContainer loadLibs() 
@@ -524,7 +524,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 
 	//TODO por mientras lo vamos a llamar así...
 	@Override	
-	public List<StatementModel> generateStatements(JavaMetaSourceModel model, ILine container, Statements statements) throws FP4GException 
+	public List<String> generateStatements(JavaMetaSourceModel model, Container container, Statements statements) throws FP4GException 
 	{
 		return stmntBuilder.generateStatements(model,container, statements);
 	}	

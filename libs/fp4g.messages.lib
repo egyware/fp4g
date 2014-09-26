@@ -15,6 +15,12 @@ DEFINE MESSAGE Key
 	} AS MessageMethod;
 ]
 
+DEFINE MESSAGE AudioManager
+[
+	ADD playSound(String key);			
+	ADD playMusic(String key);
+]
+
 DEFINE MESSAGE Camera
 [
 	ADD follow(Entity entity);
@@ -108,4 +114,9 @@ DEFINE MESSAGE Level
 [
 	ADD change(String state);
 	ADD reload();
+]
+DEFINE MESSAGE Sequence
+[
+	ADD change(String state);
+	ADD end();
 ]

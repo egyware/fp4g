@@ -88,6 +88,12 @@ public class LibContainer extends Code implements ILib
 		}
 		return false;
 	}
+	
+	@Override
+	public <T extends IDefine> boolean isGlobalSetDefine(DefineType type,String name)
+	{
+		return isSetDefine(type,name);
+	}
 
 	
 	@Override
@@ -167,5 +173,4 @@ public class LibContainer extends Code implements ILib
 	{
 		return this;
 	}
-		
 }

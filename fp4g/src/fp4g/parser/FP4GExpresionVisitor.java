@@ -4,13 +4,21 @@
 package fp4g.parser;
 
 
+import java.util.Iterator;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import fp4g.classes.MessageMethods;
+import fp4g.data.Add;
+import fp4g.data.DefineTypes;
 import fp4g.data.ExprList;
 import fp4g.data.Expresion;
 import fp4g.data.IDefine;
+import fp4g.data.ILib;
+import fp4g.data.add.AddMethod;
+import fp4g.data.define.Message;
+import fp4g.data.expresion.AddExpr;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.ArrayMap;
 import fp4g.data.expresion.BinaryOp;
@@ -18,10 +26,11 @@ import fp4g.data.expresion.ClassMap;
 import fp4g.data.expresion.CustomClassList;
 import fp4g.data.expresion.CustomClassMap;
 import fp4g.data.expresion.DirectCode;
-import fp4g.data.expresion.FunctionCall;
 import fp4g.data.expresion.IList;
 import fp4g.data.expresion.IMap;
 import fp4g.data.expresion.Literal;
+import fp4g.data.expresion.MessageExpr;
+import fp4g.data.expresion.ToExpr;
 import fp4g.data.expresion.UnaryOp;
 import fp4g.data.expresion.VarDot;
 import fp4g.data.expresion.VarId;
@@ -30,8 +39,10 @@ import fp4g.data.expresion.literals.FloatLiteral;
 import fp4g.data.expresion.literals.IntegerLiteral;
 import fp4g.data.expresion.literals.StringLiteral;
 import fp4g.exceptions.CannotEvalException;
+import fp4g.exceptions.DefineNotFoundException;
 import fp4g.exceptions.FP4GRuntimeException;
 import fp4g.log.FP4GError;
+import fp4g.log.FP4GWarn;
 import fp4g.log.Log;
 
 /**
@@ -44,9 +55,30 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	private Stack<Expresion> stack;	
 	private final Stack<IMap> map_stack = new Stack<IMap>();
 	private final Stack<IList> list_stack = new Stack<IList>();
+	private final ILib lib;
+	private FP4GDataVisitor dataVisitor;
 	
-	public FP4GExpresionVisitor()
+	public FP4GExpresionVisitor(ILib lib, FP4GDataVisitor dataVisitor)
 	{	
+		this.lib = lib;
+		this.dataVisitor = dataVisitor;
+	}
+	
+	private MessageMethods methods;
+	private MessageMethods methods()
+	{
+		try
+		{
+			if(methods == null)
+			{
+				methods = (MessageMethods)lib.get(Message.METHODS).getValue();
+			}
+			return methods;
+		}
+		catch(NullPointerException e)
+		{
+			throw new FP4GRuntimeException(FP4GError.MessagesMethodNotFound,"Los metodos para los mensajes no se encontrarón",e);
+		}
 	}
 		
 	private void pushStack()
@@ -73,13 +105,50 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	}
 	
 	private IDefine current;
-	public Expresion getExpr(IDefine current, FP4GParser.ExprContext ctx)
+	@Override
+	public Expresion visit(ParseTree tree)
 	{
-		this.current = current;
+		current = dataVisitor.current();
+		return super.visit(tree);
+	}
+	
+	public Expresion getExpr(FP4GParser.ExprContext ctx)
+	{
+	
 		return visit(ctx);
 	}
 	
 	public ExprList getExprList(IDefine current, FP4GParser.ExprListContext ctx)
+	{
+		if(ctx == null) return null; //En cierto codigo aveces ExprList puede ser null porque no se escribio, asi que solo se regresa null. La comprobación se hace desde afuera si este es null o no.
+		this.current = current;
+		pushStack();		
+		
+		//visitamos los hijos personalmente, evitamos usar cada vez menos la pila. (realmente me confunde, le pierdo el paso)
+		int n = ctx.getChildCount();
+        for (int i=0; i<n; i++) 
+        {
+            ParseTree c = ctx.getChild(i);
+            Expresion childResult = c.accept(this);
+            if(childResult != null)
+            {
+           	 	stack.push(childResult);
+            }                     
+        }
+		
+        ExprList exprList = new ExprList(stack.size());
+		
+		//añadimos todas las expresiones				
+		while(!stack.isEmpty())
+		{
+			final Expresion expr = stack.pop();		
+			exprList.addFirst(expr);				
+		}	
+		pop();
+		return exprList;		
+	}
+	
+	public ExprList getExprListWithSpaces(IDefine current, FP4GParser.FunctionExprListContext ctx)
 	{
 		if(ctx == null) return null; //En cierto codigo aveces ExprList puede ser null porque no se escribio, asi que solo se regresa null. La comprobación se hace desde afuera si este es null o no.
 		this.current = current;
@@ -234,7 +303,8 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 	public Expresion visitParExpr(FP4GParser.ParExprContext ctx)
 	{		
 		Expresion expr = visit(ctx.op);
-		expr.setPar(true); //establecemos que esta expresión, lleva parentesis
+		//TODO debo habilitar de nuevo esta funcion?
+		//expr.setPar(true); //establecemos que esta expresión, lleva parentesis
 				
 		return expr;
 	}	
@@ -248,36 +318,61 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		return literal;
 	}
 	
-
 	@Override
-	public Expresion visitVarExpr(FP4GParser.VarExprContext ctx)
-	{		
-		//¿Para que era esto?
-		return super.visitVarExpr(ctx);		
+	public Expresion visitToExpr(FP4GParser.ToExprContext ctx)
+	{
+		//identificar primero si son las constantes GAME, SELF y OTHER
+		if(ctx.gameTo != null)
+		{
+			return ToExpr.GAME;
+		}else 
+		if(ctx.selfTo != null)
+		{
+			return ToExpr.SELF;
+		}else
+		if(ctx.otherTo != null)
+		{
+			return ToExpr.OTHER;
+		}
+		else //ctx.idTo
+		{
+			//regresamos el nombre sin comprobar ni nada, la comprobación de que si es sistema o no, se hará en tiempo de generación
+			return new ToExpr(ctx.idTo.getText());
+		}		
+	}
+	@Override
+	public Expresion visitDefineAddExpr(FP4GParser.DefineAddExprContext ctx)
+	{
+		try 
+		{
+			Message message  = lib.getDefine(DefineTypes.MESSAGE,ctx.defineName.getText());
+			AddMethod method = message.getAddMethod(ctx.addName.getText());
+			if(method == null)
+			{
+				throw new FP4GRuntimeException(FP4GWarn.MissingDefineAdd,String.format("No se encontró el Add %s en %s",ctx.addName.getText(),ctx.defineName.getText()));
+			}
+			return new AddExpr(method);
+		}
+		catch (DefineNotFoundException e) 
+		{
+			throw new FP4GRuntimeException(FP4GWarn.MissingDefineAdd,String.format("No se encontró el Add %s en %s",ctx.addName.getText(),ctx.defineName.getText()));
+		}				
 	}
 	
-	
-	
-	//otros visitors
 	@Override
-	public Expresion visitFunctionCallExpr(FP4GParser.FunctionCallExprContext ctx)
+	public Expresion visitMessageExpr(FP4GParser.MessageExprContext ctx)
 	{
-		//guardamos el actual stack!
+		String messageName = ctx.methodName.getText();
+		AddMethod method = methods().getMessageMethod(messageName);
+		
 		pushStack();
-		
-		String callName = ctx.functionName.getText();
-		
 		ExprList exprList = getExprList(current,ctx.exprList()); //acá se crea un nuevo stack!
-				
-		//le paso también el define donde se está invocando 01-03-2014
-		FunctionCall functionCall = new FunctionCall(callName, current, exprList);
-		exprList = null;		
+		pop();
 		
-		//restablecemos el stack anterior
-		pop();		
-				
-		return functionCall;
-	}	
+		return new MessageExpr(method,exprList);
+	}
+
+	//otros visitors
 		
 	@Override
 	public Expresion visitArray(FP4GParser.ArrayContext ctx)
@@ -454,52 +549,49 @@ public class FP4GExpresionVisitor extends FP4GBaseVisitor<Expresion>
 		return dc;
 	}
 	
-	@Override
-	public Expresion visitAccessVarName(FP4GParser.AccessVarNameContext ctx)
-	{
-		//devuelve el regreso de los nodos hijos. (las 2 siguientes funciones...)
-		return visit(ctx.var);
-	}
-	
-	@Override 
-	public Expresion visitVarCurrent(FP4GParser.VarCurrentContext ctx)
-	{
-		return VarId.current;
-	}
-	
-	@Override 
-	public Expresion visitVarName(FP4GParser.VarNameContext ctx)
-	{
-		return new VarId(ctx.varName.getText());
-	}
-	
-	
-	@Override 
-	public Expresion visitCurrentOperator(FP4GParser.CurrentOperatorContext ctx)
-	{
-		return VarId.current;
-	}
-	
-	@Override 
-	public Expresion visitVarNameOperator(FP4GParser.VarNameOperatorContext ctx)
-	{
-		return null;
-	}
 	
 	@Override
-	public Expresion visitAccessVarOperator(FP4GParser.AccessVarOperatorContext ctx)
+	public Expresion visitAccessOp(FP4GParser.AccessOpContext ctx)
 	{
-		VarId varId    = (VarId)visit(ctx.pVar);
-		VarId property = (VarId)visit(ctx.propertyAccess);
-		if(varId == VarId.current)
+		//primero revisar que tipo de operacion es
+		if(ctx.list.size() > 0) //si es mayor que 0, entonces, no podemos hacer referencia a un DEFINE...
 		{
-			VarDot var = new VarDot(VarDot.current, property);
-			return var;
+			VarId last = null;
+			for(Iterator<String> iterator = ctx.list.descendingIterator();iterator.hasNext();)
+			{
+				String varName = iterator.next();
+				if(last == null)
+				{					
+					last = new VarId(varName);	
+				}
+				else
+				{
+					last = new VarDot(varName, last);
+				}				
+			}
+			last = new VarDot(ctx.varName.getText(),last);
+			return last;
 		}
-		else
+		else //es igual a 0, podemos hacer referencia a un define cualquiera
 		{
-			VarDot var = new VarDot(ctx.pVar.name,property);
-			return var;
-		}	
+			String name = ctx.varName.getText();
+			if(current != null)
+			{
+				Add add = current.findAddDefineByName(name);
+				if(add != null)
+				{
+					return new AddExpr(add);
+				}
+			}
+			try
+			{
+				return lib.getDefine(name);						
+			}
+			catch(DefineNotFoundException e)
+			{
+				return new VarId(name);
+			}
+		}
 	}
+	
 }

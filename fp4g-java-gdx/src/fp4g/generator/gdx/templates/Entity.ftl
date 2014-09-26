@@ -59,8 +59,8 @@ implements <#list source.interfaces as interface>${interface}<#if interface_has_
 		if(check${when.flagName?cap_first} && !${when.flagName})
 		{
 			${when.flagName} = true;
-			<#list when.statements as stmnt>						
-				<@fp4g.translate statement=stmnt />
+			<#list when.statements as stmnt>		
+				${stmnt}
 			</#list>
 		}
 		else if(!check${when.flagName?cap_first} && ${when.flagName})	
@@ -79,7 +79,7 @@ implements <#list source.interfaces as interface>${interface}<#if interface_has_
 		
 		<#if messages??>
 		<#if hasAttachments>		
-		ApolloInputProcessor inputProcessor = world.getInputProcessor();
+		ApolloInputProcessor inputProcessor = container.getInputProcessor();
 		</#if>		
 		<#list messages as message>				
 		<#assign messageName = message.name?cap_first />
@@ -144,5 +144,21 @@ implements <#list source.interfaces as interface>${interface}<#if interface_has_
 	</#list>
 	</#if>
 	
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("${source.name}:\n");
+		builder.append("{");
+		for (int i = 0, s = behaviors.size(); s > i; i++) 
+		{
+			builder.append("\t");
+			builder.append(behaviors.get(i).toString());
+			builder.append(",\n");
+		}
+		builder.append("}");
+		
+		return builder.toString();
+	}
 					
 }

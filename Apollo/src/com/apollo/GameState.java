@@ -1,8 +1,12 @@
 package com.apollo;
 
+import com.badlogic.gdx.assets.AssetManager;
 
-public abstract class GameState {
-	private boolean is_load = false;
+
+public abstract class GameState 
+{
+	protected final AssetManager assets;
+	private boolean is_load = false;	
 	
 	protected abstract boolean load();
 	protected abstract void unload();
@@ -12,6 +16,10 @@ public abstract class GameState {
 	protected abstract void resume();
 	public abstract void update(float delta);
 	
+	public GameState(GameManager manager)
+	{
+		assets = manager.assets; 
+	}
 	
 	public final boolean loadState(){
 		if(!is_load){
