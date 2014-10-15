@@ -1,66 +1,74 @@
 package com.egysoft.fp4g.server;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 
-import com.egysoft.fp4g.server.db.Database;
-import com.egysoft.fp4g.server.db.User;
-import com.egysoft.fp4g.server.messages.ConnectMessage;
-import com.egysoft.fp4g.server.messages.ConnectResponseMessage;
+import java.util.HashMap;
+
+import com.egysoft.fp4g.net.IEngine;
+import com.egysoft.fp4g.net.IRoom;
+import com.egysoft.fp4g.net.IUser;
+import com.egysoft.fp4g.net.AuthSystem;
+import com.egysoft.fp4g.server.messages.LoginResponseMessage;
 import com.egysoft.fp4g.server.messages.DeltaMessage;
 import com.egysoft.fp4g.server.messages.EntityData;
 import com.egysoft.fp4g.server.messages.LoginMessage;
-import com.egysoft.fp4g.server.messages.LoginResponseMessage;
 import com.egysoft.fp4g.server.messages.Message;
 import com.egysoft.fp4g.server.messages.MessageBase;
 import com.egysoft.fp4g.server.messages.Reason;
 import com.egysoft.fp4g.server.messages.SnapshotMessage;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 
-public class FP4GServer 
+import static com.esotericsoftware.minlog.Log.*;
+
+public class FP4GServer implements IEngine 
 {
 	private final Server server;
 	private final Kryo kryo;
-	private final Database db;	
-	private final HashMap<Integer,Connection> unloggedClients;
-	private Keys keys;
-	//falta un mapa de id usuarios (posible sqlite)
+	private ServerListener listener;
 	private final int version;
+	private final HashMap<Connection,User> users;
 	
 	
 	public FP4GServer()
 	{
 		server = new Server();
-		kryo   = server.getKryo();
-		unloggedClients = new HashMap<Integer, Connection>();
+		kryo   = server.getKryo();		
 		version = Integer.parseInt(Configuration.getProperty(Configuration.VERSION));
-		db      = new Database(Configuration.getProperty(Configuration.DATABASE));		
+		users = new HashMap<Connection,User>();		
 	}
+	
+	public int version()
+	{
+		return version;
+	}
+	
+	public AuthSystem getAuthSystem() {
+		// TODO Auto-generated method stub
+		return null;
+	}	
+
 	
 	public void init()
 	{
-		server.addListener(new MessageListener(this));
+		server.addListener(new MessageListener());
 		kryo.register(Reason.class);		
 		kryo.register(Message.class);		
 		kryo.register(EntityData.class);		
 		kryo.register(MessageBase.class);
 		kryo.register(DeltaMessage.class);
 		kryo.register(LoginMessage.class);		
-		kryo.register(EntityData[].class);		
-		kryo.register(ConnectMessage.class);
+		kryo.register(EntityData[].class);
 		kryo.register(SnapshotMessage.class);
-		kryo.register(LoginResponseMessage.class);
-		kryo.register(ConnectResponseMessage.class);
+		kryo.register(LoginResponseMessage.class);		
 		
-		db.init();
-		keys = Keys.getInstance();
 	}
 	
 	public void start() throws IOException
-	{
+	{ 
 		int updPort = Integer.parseInt(Configuration.getProperty(Configuration.PORT_UDP));
 		int tcpPort = Integer.parseInt(Configuration.getProperty(Configuration.PORT_TCP));
 		server.start();
@@ -79,62 +87,51 @@ public class FP4GServer
 		{
 			e.printStackTrace();
 		}
-//		Database db = new Database("fp4g-server.db");
-//		db.init();
-//		List<User> list = db.select(User.class);
-//		for(User user:list)
-//		{
-//			System.out.println(user);
-//		}
-//		List<Usermeta> list2 = db.selectQuery(Usermeta.class, "SELECT Usermetas.* FROM Usermetas LEFT JOIN Users ON Usermetas.user = Users.id WHERE users.id = 1");
-//		for(Usermeta user:list2)
-//		{
-//			System.out.println(user);
-//		}
 	}
 
-	public void addClient(Connection con)
+
+
+	
+	public class MessageListener extends Listener
 	{
-		unloggedClients.put(con.getID(), con);
 		
-	}
-
-	public void removeClient(Connection con)
-	{
-		if(unloggedClients.remove(con.getID()) == null)
-		{
-			//loggedClients.remove();
-		}		
-	}
-
-	public void checkClient(Connection connection, ConnectMessage connect)
-	{
-		//revisar la versión del juego
-		if(connect.version != version)
-		{
-			server.sendToTCP(connection.getID(), ConnectResponseMessage.Outdated(version));
+		public void connected(Connection connection)
+		{			
+			User newUser = User.getAnonymousUser(0, connection);
+			users.put(connection, newUser);
+			if(listener == null) listener.connected(newUser);
 		}
-		//checkar si existe en la base de datos
-		List<User> users = db.selectQuery(User.class,"SELECT Users.* FROM Users WHERE user = ?", connect.name);
-		if(users == null || users.isEmpty())
-		{
-			server.sendToTCP(connection.getID(), ConnectResponseMessage.MustRegister());
-			return;
-		}			
-		server.sendToTCP(connection.getID(), ConnectResponseMessage.NiceVersion(keys.portablePublicKey()));
-	}
-
-	public boolean isLogged(Connection connection)
-	{
-		return true;
-//		if(unloggedClients.containsKey(connection.getID()))
-//		{
-//			return false;
-//		}
-//		else
-//		{
-//			return true;
-//		}	
 		
+		public void disconnected(Connection connection)
+		{				
+			IUser user = users.remove(connection);
+			for(IRoom room: user.getRooms())
+			{
+				room.leave(user);
+			}
+			if(listener == null) listener.disconnected(user);
+		}
+		
+		public void received(Connection connection, Object object)
+		{
+			IUser user = users.get(connection);
+			if(INFO) Log.trace(String.format("[Server] %s Recibido",object.getClass().getSimpleName()));
+			if(object instanceof MessageBase)
+			{
+				MessageBase message = (MessageBase)object;
+				message.processMessage(FP4GServer.this,user);				
+			}
+		}
+		
+		public void idle(Connection connection)
+		{
+			User user = users.get(connection);
+			user.setIdle(true);
+			for(IRoom room: user.getRooms())
+			{
+				room.idle(user);
+			}
+			if(listener == null) listener.idle(user);
+		}
 	}
 }

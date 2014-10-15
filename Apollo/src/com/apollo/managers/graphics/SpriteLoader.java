@@ -11,7 +11,6 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
@@ -104,15 +103,15 @@ public class SpriteLoader extends
 				final String region = animation.getString("region", name);				
 				final int duration = sequence.getInt("delay", DEFAULT_DURATION);
 				final String type = animation.getString("type","normal").toLowerCase();
-				final PlayMode loopType;
+				final int loopType;
 				if(type.equals("loop"))
 				{
-					loopType = PlayMode.LOOP;
+					loopType = Animation.LOOP;
 				}
 				//caso normal
 				else
 				{
-					loopType = PlayMode.NORMAL;
+					loopType = Animation.NORMAL;
 				}				
 				
 				Array<AtlasRegion> regions = atlas.findRegions(region);

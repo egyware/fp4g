@@ -17,9 +17,6 @@ public final class Configuration implements Runnable
 	public final static String PORT_TCP = "port.tcp";
 	public final static String VERSION  = "game.version";
 	public static final String DATABASE = "game.database";	
-	public static final String PUBLIC_KEY  = "key.public";
-	public static final String PRIVATE_KEY = "key.private";
-	
 	
 	private Configuration()
 	{		

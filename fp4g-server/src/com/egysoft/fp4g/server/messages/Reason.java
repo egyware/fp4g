@@ -1,10 +1,9 @@
 package com.egysoft.fp4g.server.messages;
 
 public enum Reason {
-	Ok, //ok
-	Deny, //denegar	
+	AuthOk, //ok	
 	Banned, //baneado	
 	Outdated, //desactualizado
 	UserNotFound, //debe registrarse
-	IncorrectPassword, //contraseña incorrecta
+	IncorrectPassword, UserLogged, //contraseña incorrecta
 }

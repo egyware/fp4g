@@ -1,7 +1,6 @@
 package com.apollo.managers.graphics;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.OrderedMap;
@@ -27,7 +26,7 @@ public class Sprite
 	{
 		return animations.get(first);		
 	}
-	public void addAnimation(String id, Animation s, PlayMode playMode ) 
+	public void addAnimation(String id, Animation s, int playMode ) 
 	{
 		animations.put(id, s);
 		s.setPlayMode(playMode);
