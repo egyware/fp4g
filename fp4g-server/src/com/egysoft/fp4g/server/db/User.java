@@ -1,7 +1,7 @@
 package com.egysoft.fp4g.server.db;
 
 /**
- * POJO para almacenar los datos de un usuario.
+ * POCO para almacenar los datos de un usuario.
  * @author Edgardo
  *
  */
