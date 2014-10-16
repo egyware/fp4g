@@ -3,18 +3,16 @@ package com.apollo.managers;
 import com.apollo.Entity;
 import com.apollo.Message;
 import com.apollo.MessageHandler;
-import com.apollo.managers.physics.Terrain2D;
+import com.apollo.managers.physics.SubTerrain;
+import com.apollo.managers.physics.Terrain;
 import com.apollo.messages.ContactMessage;
 import com.apollo.utils.ImmutableBag;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -44,34 +42,11 @@ public class PhysicsManager extends Manager implements ContactListener{
 		this(new Vector2(x,y));
 	}
 	
-	public void setTerrain(Terrain2D terrain)
+	public void setTerrain(Terrain terrain)
 	{
-		//TODO queda pendiente terrain
-		//solo hay cajas
-		PolygonShape shape = new PolygonShape();
-		BodyDef def = new BodyDef();
-		def.type = BodyDef.BodyType.StaticBody;		
-		for(Terrain2D.Box box:terrain.terrains)
+		for(SubTerrain subterrain:terrain.subterrains)
 		{
-			shape.setAsBox(box.w*0.5f*SCALE, box.h*0.5f*SCALE);
-			def.position.x =  (box.x + box.w*0.5f)*SCALE;
-			def.position.y =  (box.y + box.h*0.5f)*SCALE;
-			Body body = world.createBody(def);
-			body.createFixture(shape, 1);
-			
-//			float _x = (Integer.parseInt(r[0]))*tw*SCALE;
-//			float _y = (mh-Integer.parseInt(r[1]))*th*SCALE;
-//			float _w = Integer.parseInt(r[2])*tw*SCALE;
-//			float _h = Integer.parseInt(r[3])*th*SCALE;
-//		   		
-//			BodyDef def = new BodyDef();
-//			def.position.x = _x + _w/2;
-//		    def.position.y = _y - _h/2;
-//		    def.type = BodyDef.BodyType.StaticBody;
-//		    Body body = w.createBody(def);
-//		    		
-//		    PolygonShape shape = new PolygonShape();
-//		    shape.setAsBox(_w/2, _h/2);
+			subterrain.createBody(world);
 		}
 	}
 	

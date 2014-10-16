@@ -379,7 +379,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 				if(javaCompiler != null && jdkDir.exists())
 				{
 					fp4g.Configuration.setProperty("java.home",jdkDir.getCanonicalPath());
-				}
+				}				
 			}
 			catch (IOException e) 
 			{				
@@ -390,9 +390,7 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 				e.printStackTrace();
 			}
 		}
-		
-		
-		
+				
 		//sigue siendo null
 		if(javaCompiler == null)
 		{		
@@ -429,6 +427,8 @@ public class JavaGenerator extends Generator<JavaMetaSourceModel>
 			{			
 				e.printStackTrace();
 			}
+			
+			
 		}
 		
 		

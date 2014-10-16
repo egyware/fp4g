@@ -72,7 +72,7 @@ public interface FP4GVisitor<T> extends ParseTreeVisitor<T> {
 	T visitStringLiteral(@NotNull FP4GParser.StringLiteralContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link FP4GParser#add}.
+	 * Visit a parse tree produced by {@link FP4GParser#addMethod}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */

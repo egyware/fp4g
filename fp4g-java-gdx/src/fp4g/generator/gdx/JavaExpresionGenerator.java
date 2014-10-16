@@ -248,7 +248,7 @@ public class JavaExpresionGenerator extends ExpresionGenerator<JavaMetaSourceMod
 			}
 			if(SpecificLiterals.SELF == sl)
 			{
-				return empty;
+				return String.format(String.format("%s.%s",model.getName(),"this"));
 			}
 			if(SpecificLiterals.OTHER == sl)
 			{

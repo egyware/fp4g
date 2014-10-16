@@ -40,19 +40,19 @@ implements TransformMessageHandler
 		setPosition(x,y);
 	}	
 
-	public void move(float distance, float heading) {		
+	public void translate(float distance, float heading) {		
 		x += (float) (TrigLUT.cos(heading) * distance);
 		y += (float) (TrigLUT.sin(heading) * distance);
 		setPosition(x,y);
 	}
 
-	public void move(float distance) {
+	public void translate(float distance) {
 		x += (float) (TrigLUT.cos(rotation) * distance);
 		y += (float) (TrigLUT.sin(rotation) * distance);
 		setPosition(x,y);
 	}
 
-	public void addRotation(float angle) {
+	public void rotate(float angle) {
 		rotation = (rotation + angle) % 360;
 		setRotation(rotation);
 	}

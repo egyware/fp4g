@@ -5,8 +5,6 @@ import com.apollo.MessageHandler;
 
 public enum PlatformMessage implements  Message<PlatformMessageHandler>
 {
-	onMovePlatform,
-	onJumpPlatform,
 	onBeginContactPlatform, 
 	onEndContactPlatform,
 	;
@@ -20,12 +18,6 @@ public enum PlatformMessage implements  Message<PlatformMessageHandler>
 		PlatformMessageHandler h = (PlatformMessageHandler)handler;
 		switch(this)
 		{
-		case onMovePlatform:
-			h.onMovePlatform(((Number)args[0]).floatValue());
-			break;
-		case onJumpPlatform:
-			h.onJumpPlatform(((Number)args[0]).floatValue());
-			break;
 		case onBeginContactPlatform:
 			h.onBeginContactPlatform(((Number)args[0]).intValue());
 			break;

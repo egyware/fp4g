@@ -14,9 +14,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -26,12 +28,11 @@ import com.badlogic.gdx.physics.box2d.World;
  *
  */
 public class PlatformBodyBehavior extends PhysicsFamily
-implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback
+implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCallback
 {
 	private Body box;
-	//initial values
-	public int width = 5;
-	public int height = 5;	
+	public int width;
+	public int height;
 	
 	private float desiredVelocity = 0;	
 	private Fixture bottonSensor;
@@ -42,77 +43,32 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback
 	private int touchLeft;
 	private int touchRight;
 		
-	public PlatformBodyBehavior(float x, float y, int width,  int height) 
+	private PlatformBodyBehavior(float x, float y, int width, int height) 
 	{
 		this.x = x;
-		this.y = y;		
+		this.y = y;	
 		this.width = width;
 		this.height = height;
+		
+		
 	}
 
 	@Override
 	public void uninitialize()
 	{
-		owner.removeEventHandler(PlatformMessage.onMovePlatform, this);
-		owner.removeEventHandler(PlatformMessage.onJumpPlatform, this);
 		owner.removeEventHandler(ContactMessage.onBeginContact, this);
 		owner.removeEventHandler(ContactMessage.onEndContact, this);
 		
-		box.getWorld().destroyBody(box);
+		box.getWorld().destroyBody(box);		
 	}
 	
 	@Override	
 	public void initialize()
 	{	
-		owner.addEventHandler(PlatformMessage.onMovePlatform, this);
-		owner.addEventHandler(PlatformMessage.onJumpPlatform, this);
 		owner.addEventHandler(ContactMessage.onBeginContact, this);
 		owner.addEventHandler(ContactMessage.onEndContact, this);
 		
-		World world = owner.getWorld().getManager(PhysicsManager.class).getb2World();
-		final Vector2 position = new Vector2(x,y);
-		final Vector2 temp = new Vector2();
-		{
-			BodyDef def = new BodyDef();		
-			def.position.set(position.cpy().scl(SCALE));
-			def.type = BodyDef.BodyType.DynamicBody;
-			def.fixedRotation = true;		
-			box = world.createBody(def);
-			box.setUserData(owner);			
 		
-			final float width_2 = width*0.5f;
-			final float height_2 = height*0.5f;
-			//shape
-		    PolygonShape boxShape = new PolygonShape();
-		    boxShape.setAsBox(width_2*SCALE,height_2*SCALE);
-		    //FixtureDef fixtureDef = new FixtureDef();
-		    //fixtureDef.density = 1.0f; //!\todo puede ser un parametro
-		    //fixtureDef.friction = 1.0f;//!\todo puede ser un parametro
-	//	    fixtureDefA.filter.groupIndex = -1; //!\todo puede ser un parametro
-	//	    fixtureDefA.filter.categoryBits = 0x0101;
-	//	    fixtureDefA.filter.maskBits = 0x1101;
-		    //fixtureDef.shape = boxShape;
-		    //box.createFixture(fixtureDef);
-		    box.createFixture(boxShape, 1.0f);
-
-		    FixtureDef sensorDef = new FixtureDef();
-		    sensorDef.isSensor = true;
-		    sensorDef.density = 1;
-		    sensorDef.shape = boxShape;
-		    //sensor abajo
-		    boxShape.setAsBox(width_2*0.95f*SCALE, SCALE,temp.set(0,-height_2*SCALE-SCALE),0);
-		    bottonSensor = box.createFixture(sensorDef);		    
-		    //sensor izquierda
-		    boxShape.setAsBox(SCALE, height_2*0.8f*SCALE,temp.set(-width_2*SCALE-SCALE,0),0);
-		    leftSensor = box.createFixture(sensorDef);		    
-		    //sensor derecha
-		    boxShape.setAsBox(SCALE, height_2*0.8f*SCALE,temp.set(width_2*SCALE+SCALE,0),0);
-		    rightSensor = box.createFixture(sensorDef);
-		    
-		    
-		    
-		    boxShape.dispose(); //ya no la usaremos más
-		}
 	}
 	
 	/* (non-Javadoc)
@@ -135,11 +91,16 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback
 		box.applyLinearImpulse(impulse, 0, worldCenter.x,worldCenter.y,true);		
 	}
 	
-
-	private void jump(float jump) 
+	
+	public void move(float x)
 	{
+		desiredVelocity = x*SCALE;		
+	}
+
+	public void jump(float jump) 
+	{		
 		Vector2 worldCenter = box.getWorldCenter();
-		box.applyLinearImpulse(0, jump, worldCenter.x,worldCenter.y,true);		
+		box.applyLinearImpulse(0, jump*SCALE, worldCenter.x,worldCenter.y,true);		
 	}
 
 	
@@ -180,18 +141,6 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback
 	}
 	
 	@Override
-	public void onMovePlatform(float x)
-	{
-		desiredVelocity = x*SCALE;
-	}
-	
-	@Override
-	public void onJumpPlatform(float y)
-	{
-		jump(y*SCALE);
-	}
-	
-	@Override
 	public void onBeginContactPlatform(int value) 
 	{	
 	}
@@ -201,9 +150,73 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback
 	{	
 	}		
 	
-	public static PlatformBodyBehavior build(Number x, Number y, Number ratio, Number height)
+	public static PlatformBodyBehavior build(Entity owner, Number _x, Number _y, Number _width, Number _height)
 	{
-		PlatformBodyBehavior behavior = new PlatformBodyBehavior(x.floatValue(), y.floatValue(),ratio.intValue(),height.intValue());
+		return build(owner,_x,_y,_width,_height,null);
+	}
+	public static PlatformBodyBehavior build(Entity owner, Number _x, Number _y, Number _width, Number _height,Filter filter)
+	{
+		float x = _x.floatValue(), y = _y.floatValue();
+		int width = _width.intValue(), height = _height.intValue();
+		PlatformBodyBehavior behavior = new PlatformBodyBehavior(x,y,width,height);
+		
+		World world = owner.getWorld().getManager(PhysicsManager.class).getb2World();
+		final Vector2 position = new Vector2(x,y);
+		final Vector2 temp = new Vector2();
+		{
+			BodyDef def = new BodyDef();		
+			def.position.set(position.cpy().scl(SCALE));
+			def.type = BodyDef.BodyType.DynamicBody;
+			def.fixedRotation = true;		
+			Body box = world.createBody(def);
+			box.setUserData(owner);			
+		
+			final float width_2 = width*0.5f;
+			final float height_2 = height*0.5f;
+			//shape
+		    PolygonShape boxShape = new PolygonShape();
+		    boxShape.setAsBox(width_2*SCALE,height_2*SCALE);
+		    FixtureDef fixtureDef = new FixtureDef();
+		    fixtureDef.density = 1.0f; //!\todo puede ser un parametro
+		    //fixtureDef.friction = 1.0f;//!\todo puede ser un parametro
+		    if(filter != null)
+		    {
+		    	fixtureDef.filter.categoryBits = filter.categoryBits;
+		    	fixtureDef.filter.groupIndex   = filter.groupIndex;
+		    	fixtureDef.filter.maskBits     = filter.maskBits;		    	
+		    }		    
+		    fixtureDef.shape = boxShape;
+		    box.createFixture(fixtureDef);		    
+
+		    FixtureDef sensorDef = new FixtureDef();
+		    sensorDef.isSensor = true;
+		    sensorDef.density = 1;
+		    sensorDef.shape = boxShape;
+		    if(filter != null)
+		    {
+		    	sensorDef.filter.categoryBits = filter.categoryBits;
+		    	sensorDef.filter.groupIndex   = filter.groupIndex;
+		    	sensorDef.filter.maskBits     = filter.maskBits;
+		    }
+		    	
+		    //sensor abajo
+		    boxShape.setAsBox(width_2*0.9f*SCALE, SCALE,temp.set(0,-height_2*SCALE-SCALE),0);
+		    Fixture bottonSensor = box.createFixture(sensorDef);		    
+		    //sensor izquierda
+		    boxShape.setAsBox(SCALE, height_2*0.8f*SCALE,temp.set(-width_2*SCALE-SCALE,0),0);
+		    Fixture leftSensor = box.createFixture(sensorDef);		    
+		    //sensor derecha
+		    boxShape.setAsBox(SCALE, height_2*0.8f*SCALE,temp.set(width_2*SCALE+SCALE,0),0);
+		    Fixture rightSensor = box.createFixture(sensorDef);
+		    
+		    boxShape.dispose(); //ya no la usaremos más
+		    
+		    //guardamos los valores dentro del objeto
+		    behavior.box = box;
+		    behavior.bottonSensor = bottonSensor;
+		    behavior.leftSensor   = leftSensor;
+		    behavior.rightSensor  = rightSensor;
+		}
 		
 		return behavior;
 	}
@@ -283,21 +296,14 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback
 	}
 
 	private Bag<Entity> touched = new Bag<Entity>();	
-	@Override
-	public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) 
+	
+	
+	public void queryAABB(Bag<Entity> entities, float lowerX, float lowerY, float upperX, float upperY)
 	{
-		Object userData = fixture.getBody().getUserData();
-		if(!fixture.isSensor() &&  userData != null && userData instanceof Entity)
-		{
-			touched.add((Entity)userData);
-			return 1; //todos
-		}
-		else
-		{
-			return -1;
-		}		
+		this.touched = entities;
+		box.getWorld().QueryAABB(this, lowerX*SCALE, lowerY*SCALE, upperX*SCALE, upperY*SCALE);		  
 	}
-
+	
 	public void rayCast(Bag<Entity> entities, Vector2 p1, Vector2 p2) 
 	{
 		this.touched = entities;
@@ -305,5 +311,40 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback
 		p2.scl(SCALE);
 		box.getWorld().rayCast(this, p1, p2);
 	}
+
+	@Override
+	public boolean reportFixture(Fixture fixture) 
+	{
+		Object userData = fixture.getBody().getUserData();
+		if(!fixture.isSensor() &&  userData != null && userData instanceof Entity)
+		{
+			Entity e = (Entity)userData;
+			if(!touched.contains(e))
+			{
+				touched.add(e);
+			}			
+		}	
+		return true;
+	}
+	
+	@Override
+	public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) 
+	{
+		Object userData = fixture.getBody().getUserData();
+		if(!fixture.isSensor() &&  userData != null && userData instanceof Entity)
+		{
+			Entity e = (Entity)userData;
+			if(!touched.contains(e))
+			{
+				touched.add(e);
+			}
+			return 1; //todos
+		}
+		else
+		{
+			return -1;
+		}		
+	}
+	
 
 }

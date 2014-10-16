@@ -57,31 +57,42 @@ public class ${source.name} extends GameManager
 	{
 		try 
 		{
-			Class<?> state = Class.forName("${source.pckg}.".concat(level));
-			Constructor<?> constructor = state.getConstructor(GameManager.class);
-			GameState gameState = (GameState) constructor.newInstance(this);
+			Class<? extends GameState> state = gameStates.get(level);
+			if(state == null)
+			{
+				//TODO throw error
+			}			
+			Constructor<? extends GameState> constructor = state.getConstructor(GameManager.class);
+			GameState gameState = constructor.newInstance(this);
 			nextState(gameState);
 		} 
-		catch (ClassNotFoundException e) 
+		catch (SecurityException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SecurityException e) {
+		}
+		catch (NoSuchMethodException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
+		}
+		catch (IllegalArgumentException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
+		}
+		catch (InstantiationException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InstantiationException e) {
+		}
+		catch (IllegalAccessException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		}
+		catch (InvocationTargetException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

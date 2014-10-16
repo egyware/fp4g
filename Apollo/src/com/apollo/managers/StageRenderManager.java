@@ -92,7 +92,7 @@ public class StageRenderManager extends Manager
 			mapRenderer.setView(camera);			
 			mapRenderer.render(back_layers);
 			stage.draw();			
-//			mapRenderer.render(front_layers);
+			mapRenderer.render(front_layers);
 		}
 	}	
 	

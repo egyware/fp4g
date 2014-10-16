@@ -4,8 +4,8 @@ import com.apollo.managers.entity.EntitySpawn;
 import com.apollo.managers.entity.EntitySpawnLoader;
 import com.apollo.managers.graphics.Sprite;
 import com.apollo.managers.graphics.SpriteLoader;
-import com.apollo.managers.physics.Terrain2D;
-import com.apollo.managers.physics.Terrain2DLoader;
+import com.apollo.managers.physics.Terrain;
+import com.apollo.managers.physics.TerrainLoader;
 import com.apollo.messages.LevelMessageHandler;
 import com.apollo.utils.ImmutableBag;
 import com.badlogic.gdx.Application;
@@ -36,7 +36,7 @@ public abstract class GameManager implements ApplicationListener, MessageReceive
 		assets = new AssetManager();		
 		assets.setLoader(Sprite.class,new SpriteLoader(fileResolver));
 		assets.setLoader(TiledMap.class,new TmxMapLoader(fileResolver));
-		assets.setLoader(Terrain2D.class,new Terrain2DLoader(fileResolver));
+		assets.setLoader(Terrain.class,new TerrainLoader(fileResolver));
 		assets.setLoader(EntitySpawn.class,new EntitySpawnLoader(fileResolver));
 	}
 	

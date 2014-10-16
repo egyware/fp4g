@@ -141,9 +141,9 @@ DEFINE ASSET TileMap
 [
 	SET className      = "TiledMap";		
 ]
-DEFINE ASSET Terrain2D
+DEFINE ASSET Terrain
 [
-	SET className      = "Terrain2D";
+	SET className      = "Terrain";
 	SET classParameter = "TerrainParameter";
 ]
 DEFINE ASSET EntitySpawn
@@ -327,9 +327,9 @@ SET resolvers =
 		{
 			"com.badlogic.gdx.maps.tiled.TiledMap"
 		},
-		Terrain2D =
+		Terrain =
 		{
-			"com.apollo.managers.physics.Terrain2D"
+			"com.apollo.managers.physics.Terrain"
 		},
 		EntitySpawn =
 		{

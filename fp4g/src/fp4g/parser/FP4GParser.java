@@ -1693,44 +1693,44 @@ public class FP4GParser extends Parser {
 		try {
 			setState(335);
 			switch (_input.LA(1)) {
-			case ADD:
+			case ASSETS:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(321); add();
-				setState(322); match(DOTCOMA);
+				setState(321); assets();
+				}
+				break;
+			case ADD:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(322); add();
+				setState(323); match(DOTCOMA);
 				}
 				break;
 			case SET:
-				enterOuterAlt(_localctx, 2);
+				enterOuterAlt(_localctx, 3);
 				{
-				setState(324); set();
-				setState(325); match(DOTCOMA);
+				setState(325); set();
+				setState(326); match(DOTCOMA);
 				}
 				break;
 			case FLAG:
-				enterOuterAlt(_localctx, 3);
+				enterOuterAlt(_localctx, 4);
 				{
-				setState(327); flag();
-				setState(328); match(DOTCOMA);
+				setState(328); flag();
+				setState(329); match(DOTCOMA);
 				}
 				break;
 			case WHEN:
-				enterOuterAlt(_localctx, 4);
+				enterOuterAlt(_localctx, 5);
 				{
-				setState(330); when();
-				setState(331); match(DOTCOMA);
+				setState(331); when();
+				setState(332); match(DOTCOMA);
 				}
 				break;
 			case ON:
-				enterOuterAlt(_localctx, 5);
-				{
-				setState(333); on();
-				}
-				break;
-			case ASSETS:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(334); assets();
+				setState(334); on();
 				}
 				break;
 			default:
@@ -3498,12 +3498,12 @@ public class FP4GParser extends Parser {
 		"\2\u0138\u0139\3\2\2\2\u0139\u013a\3\2\2\2\u013a\u013c\7\"\2\2\u013b\u0136"+
 		"\3\2\2\2\u013b\u013c\3\2\2\2\u013c\61\3\2\2\2\u013d\u013f\5\64\33\2\u013e"+
 		"\u013d\3\2\2\2\u013f\u0142\3\2\2\2\u0140\u013e\3\2\2\2\u0140\u0141\3\2"+
-		"\2\2\u0141\63\3\2\2\2\u0142\u0140\3\2\2\2\u0143\u0144\5\32\16\2\u0144"+
-		"\u0145\7\'\2\2\u0145\u0152\3\2\2\2\u0146\u0147\5\30\r\2\u0147\u0148\7"+
-		"\'\2\2\u0148\u0152\3\2\2\2\u0149\u014a\5H%\2\u014a\u014b\7\'\2\2\u014b"+
-		"\u0152\3\2\2\2\u014c\u014d\5J&\2\u014d\u014e\7\'\2\2\u014e\u0152\3\2\2"+
-		"\2\u014f\u0152\5\"\22\2\u0150\u0152\5@!\2\u0151\u0143\3\2\2\2\u0151\u0146"+
-		"\3\2\2\2\u0151\u0149\3\2\2\2\u0151\u014c\3\2\2\2\u0151\u014f\3\2\2\2\u0151"+
+		"\2\2\u0141\63\3\2\2\2\u0142\u0140\3\2\2\2\u0143\u0152\5@!\2\u0144\u0145"+
+		"\5\32\16\2\u0145\u0146\7\'\2\2\u0146\u0152\3\2\2\2\u0147\u0148\5\30\r"+
+		"\2\u0148\u0149\7\'\2\2\u0149\u0152\3\2\2\2\u014a\u014b\5H%\2\u014b\u014c"+
+		"\7\'\2\2\u014c\u0152\3\2\2\2\u014d\u014e\5J&\2\u014e\u014f\7\'\2\2\u014f"+
+		"\u0152\3\2\2\2\u0150\u0152\5\"\22\2\u0151\u0143\3\2\2\2\u0151\u0144\3"+
+		"\2\2\2\u0151\u0147\3\2\2\2\u0151\u014a\3\2\2\2\u0151\u014d\3\2\2\2\u0151"+
 		"\u0150\3\2\2\2\u0152\65\3\2\2\2\u0153\u0158\5L\'\2\u0154\u0155\7$\2\2"+
 		"\u0155\u0157\5L\'\2\u0156\u0154\3\2\2\2\u0157\u015a\3\2\2\2\u0158\u0156"+
 		"\3\2\2\2\u0158\u0159\3\2\2\2\u0159\67\3\2\2\2\u015a\u0158\3\2\2\2\u015b"+

@@ -3,8 +3,6 @@ package fp4g.data.define;
 import fp4g.data.Define;
 import fp4g.data.DefineTypes;
 import fp4g.data.ILib;
-import fp4g.data.IValue;
-import fp4g.exceptions.CannotEvalException;
 
 public class Asset extends Define
 {
@@ -19,7 +17,7 @@ public class Asset extends Define
 		TileMap,
 		Sound,
 		Music,
-		Terrain2D,
+		Terrain,
 		EntitySpawn,
 	}
 	
