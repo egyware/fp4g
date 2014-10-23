@@ -1,14 +1,10 @@
 package com.egysoft.fp4g.server.messages;
 
-import com.egysoft.fp4g.net.IEngine;
 import com.egysoft.fp4g.net.IUser;
 
-public class LoginResponseMessage extends MessageBase
+public class LoginResponseMessage
 {
-	public LoginResponseMessage()
-	{
-		super(Message.ConnectResponseMessage);		
-	}
+	public IUser user; ///!< Usuario
 	public Reason reason; ///!< Razon de la respuesta
 	public String reasonText;///!< Texto de la respuesta	
 	
@@ -20,9 +16,10 @@ public class LoginResponseMessage extends MessageBase
 		return message;
 	}
 
-	public static LoginResponseMessage AuthOk() 
+	public static LoginResponseMessage AuthOk(IUser user) 
 	{
 		LoginResponseMessage message = new LoginResponseMessage();
+		message.user = user;
 		message.reason     = Reason.AuthOk;
 		message.reasonText = "Ah sido autentificado";		
 		return message;
@@ -58,12 +55,5 @@ public class LoginResponseMessage extends MessageBase
 		message.reason     = Reason.Banned;
 		message.reasonText = "Usuario baneado";		
 		return message;
-	}
-
-	@Override
-	public void processMessage(IEngine engine, IUser user)
-	{
-		// TODO dar error
-		
 	}
 }

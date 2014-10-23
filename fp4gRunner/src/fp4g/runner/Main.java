@@ -25,11 +25,12 @@ public class Main
 	    RunnerClassLoader loader = null;
 	    Properties properties = null;
 	    String gameClass = null;
+	    String[] classPath = null;	    	    
 		try 
 		{
 			URL urls[] = new URL[]
 			{
-				new File(args[0]).toURI().toURL(),				
+				new File(args[0]).toURI().toURL(),
 				new URL("file:libs/gdx.jar"),
 				new URL("file:libs/gdx-natives.jar"),				
 				new URL("file:libs/gdx-backend-lwjgl.jar"),				
@@ -38,7 +39,6 @@ public class Main
 				new URL("file:libs/gdx-box2d-natives.jar"),
 				new URL("file:libs/apollo-fp4g.jar")
 			};
-			
 			loader = new RunnerClassLoader(urls);
 			
 			//cargar propiedades
@@ -49,7 +49,13 @@ public class Main
 				{
 					properties = new Properties();
 					properties.load(in);
-					gameClass = properties.getProperty("game.class");
+					String cp = properties.getProperty("game.classpath");
+					if(cp != null) classPath = cp.split(File.pathSeparator);
+					for(String path: classPath)
+					{
+						loader.addURL(new URL(String.format("file:libs/%s",path)));
+					}
+					gameClass = properties.getProperty("game.class");					
 				}
 				catch (IOException e) 
 				{

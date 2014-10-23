@@ -6,6 +6,7 @@ import com.apollo.messages.SequenceMessage;
 import com.apollo.messages.SequenceMessageHandler;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -43,7 +44,7 @@ implements SequenceMessageHandler
 	public void act(float delta)
 	{
 		super.act(delta);		
-		if(!isEnded && current.getPlayMode() == Animation.NORMAL && current.isAnimationFinished(time))
+		if(!isEnded && current.getPlayMode() == PlayMode.NORMAL && current.isAnimationFinished(time))
 		{
 			isEnded = true;
 			owner.onMessage(SequenceMessage.onEndSequence);
@@ -122,7 +123,7 @@ implements SequenceMessageHandler
 
 	public boolean isEndedCurrentAnimation()
 	{
-		return (Animation.NORMAL == current.getPlayMode()) && current.isAnimationFinished(time);
+		return (PlayMode.NORMAL == current.getPlayMode()) && current.isAnimationFinished(time);
 	}
 	
 	@Override

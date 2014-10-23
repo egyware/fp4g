@@ -1,6 +1,7 @@
 package com.egysoft.fp4g.server;
 
 import java.util.Collection;
+import java.util.LinkedList;
 
 import com.egysoft.fp4g.net.IRoom;
 import com.egysoft.fp4g.net.IUser;
@@ -8,28 +9,45 @@ import com.esotericsoftware.kryonet.Connection;
 
 public final class User implements IUser
 {
-	private Connection connection;
-	private User(final Connection connection)
+	private final LinkedList<IRoom> rooms;
+	private final Connection connection;
+	
+	private String username;
+	private String nickname;
+	private int id;	
+	
+	public User(final Connection connection)
 	{
-		this.connection = connection; 
+		this.connection = connection;
+		rooms = new LinkedList<IRoom>();
 	}
-
-	@Override
+	
 	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
+		return username;
 	}
-
+	public void setUsername(String username)
+	{
+		this.username = username;		
+	}
+	
 	@Override
-	public String getNickname() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getNickname() 
+	{
+		return nickname;
 	}
-
+	public void setNickname(String nickname)
+	{
+		this.nickname = nickname;
+	}
+	
 	@Override
 	public int getId()
 	{
-		return connection.getID();
+		return id;
+	}
+	public void setId(int id) 
+	{
+		this.id = id;
 	}
 
 	@Override
@@ -42,25 +60,23 @@ public final class User implements IUser
 	public void sendTCP(Object object) 
 	{
 		connection.sendTCP(object);
-	}
-
-	@Override
-	public void sendUDP(Object object)
-	{
-		connection.sendUDP(object);	
-	}
-	
-	public static User getAnonymousUser(int id, Connection connection)
-	{
-		return new User(connection);
+		System.out.println(connection);
 	}
 
 	@Override
 	public Collection<IRoom> getRooms()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return rooms;
 	}
+	
+	public void join(IRoom room)
+	{
+		rooms.add(room);
+	}
+	public void leave(IRoom room)
+	{
+		rooms.remove(room);
+	}	
 
 	public void setIdle(boolean b) {
 		// TODO Auto-generated method stub
@@ -71,5 +87,26 @@ public final class User implements IUser
 	{
 		return connection;
 	}
+
+	@Override
+	public boolean isOnline() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public void sendUDP(Object object)
+	{
+		connection.sendUDP(object);	
+	}
+
+	@Override
+	public boolean isIdle() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	
 
 }

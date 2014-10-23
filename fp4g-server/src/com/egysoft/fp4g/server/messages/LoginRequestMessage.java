@@ -1,8 +1,6 @@
 package com.egysoft.fp4g.server.messages;
 
 import com.egysoft.fp4g.net.AuthSystem;
-import com.egysoft.fp4g.net.IEngine;
-import com.egysoft.fp4g.net.IUser;
 import com.egysoft.fp4g.server.FP4GServer;
 import com.egysoft.fp4g.server.User;
 import com.esotericsoftware.kryonet.Connection;
@@ -11,21 +9,16 @@ import com.esotericsoftware.kryonet.Connection;
  * Login Message
  * @author Edgardo
  */
-public class LoginMessage extends MessageBase
+public class LoginRequestMessage implements RequestMessageBase
 {
-	public LoginMessage()
-	{
-		super(Message.LoginMessage);
-	}
 	public int version;     ///!< Version de tu juego
 	public String username; ///!< Tu username
 	public byte[] password; ///!< password codificada en algo
 	
 	@Override
-	public void processMessage(IEngine engine, IUser iuser) 
+	public void processClientMessage(FP4GServer engine, User user) 
 	{
-		FP4GServer server = (FP4GServer)engine;
-		User user = (User)iuser;
+		FP4GServer server = (FP4GServer)engine;		
 		Connection connection = user.getConnection();
 		AuthSystem authSystem = server.getAuthSystem();
 		
@@ -53,9 +46,10 @@ public class LoginMessage extends MessageBase
 		case WrongPassword:
 			user.sendTCP(LoginResponseMessage.WrongPassword());
 			connection.close();
+			break;
 		case Ok:
-			user.sendTCP(LoginResponseMessage.AuthOk());
-			
+			user.sendTCP(LoginResponseMessage.AuthOk(user));
+			break;
 		default:
 			break;		
 		}
