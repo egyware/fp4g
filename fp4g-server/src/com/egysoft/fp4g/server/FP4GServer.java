@@ -3,23 +3,23 @@ package com.egysoft.fp4g.server;
 import static com.esotericsoftware.minlog.Log.INFO;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
 
-import com.egysoft.fp4g.net.AuthStatus;
 import com.egysoft.fp4g.net.AuthSystem;
 import com.egysoft.fp4g.net.FP4GSerialization;
 import com.egysoft.fp4g.net.IRoom;
 import com.egysoft.fp4g.net.IUser;
 import com.egysoft.fp4g.net.serializers.CollectionSerializer;
+import com.egysoft.fp4g.server.messages.CreateJoinRequestMessage;
 import com.egysoft.fp4g.server.messages.JoinRequestMessage;
 import com.egysoft.fp4g.server.messages.JoinResponseMessage;
 import com.egysoft.fp4g.server.messages.LoginRequestMessage;
 import com.egysoft.fp4g.server.messages.LoginResponseMessage;
 import com.egysoft.fp4g.server.messages.Reason;
 import com.egysoft.fp4g.server.messages.RequestMessageBase;
-import com.egysoft.fp4g.server.rooms.ChatRoom;
-import com.egysoft.fp4g.server.rooms.ChatRoomMessage;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
@@ -31,8 +31,8 @@ import com.esotericsoftware.minlog.Log;
 
 public class FP4GServer
 {
-	private final Server server;
-	private final Kryo kryo;	
+	protected final Kryo kryo;
+	private final Server server;		
 	private final int version;
 	private final HashMap<Connection,User> users;
 	private final HashMap<String, ServerRoom> rooms;	
@@ -113,10 +113,8 @@ public class FP4GServer
 		kryo.register(LoginRequestMessage.class);
 		kryo.register(LoginResponseMessage.class);
 		kryo.register(JoinRequestMessage.class);
+		kryo.register(CreateJoinRequestMessage.class);
 		kryo.register(JoinResponseMessage.class);
-		
-		//extras...
-		kryo.register(ChatRoomMessage.class);
 		
 	}
 	
@@ -128,58 +126,6 @@ public class FP4GServer
 		server.bind(tcpPort, updPort);				
 	}
 	
-	public static void main(final String ...args)
-	{	
-		FP4GServer server = new FP4GServer();
-		server.setAuthSystem(new AuthSystem()
-		{
-			private HashMap<Integer,User> users = new HashMap<Integer,User>();
-			
-			@Override
-			public AuthStatus auth(IUser iuser, String username, byte[] password) 
-			{
-				User user = (User)iuser;
-				user.setUsername(username);
-				user.setNickname(username);
-				return AuthStatus.Ok;
-			}
-
-			@Override
-			public boolean registerUser(IUser user, String username, byte[] password) 
-			{			
-				return true;
-			}
-
-			private int ids;
-			@Override
-			public User getAnonymousUser(Connection connection) 
-			{
-				int id = ++ids;
-				User user = new User(connection);
-				user.setId(id);
-				users.put(id, user);
-				return user;
-			}
-
-			@Override
-			public User getUserById(int id) 
-			{
-				return users.get(id);
-			}
-			
-		});		
-		server.init();
-		server.addRoom(new ChatRoom("ChatRoom"));
-		try 
-		{
-			server.start();			
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-	}
-	
 	public void addRoom(ServerRoom room) 
 	{					
 		rooms.put(room.getRoomName(), room);		
@@ -188,6 +134,43 @@ public class FP4GServer
 	public ServerRoom getRoomByName(String name) 
 	{
 		return rooms.get(name);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public ServerRoom createAndAddRoom(String name, String roomClass, int max_users) 
+	{		
+		try
+		{
+			Class<? extends ServerRoom> clazz = (Class<? extends ServerRoom>) getClass().getClassLoader().loadClass(roomClass);		
+			Constructor<? extends ServerRoom> constructor = clazz.getConstructor(String.class);
+			ServerRoom room = constructor.newInstance(name);
+			addRoom(room);
+			return room;
+		}
+		catch (ClassNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public class MessageListener extends Listener
@@ -246,6 +229,5 @@ public class FP4GServer
 			}
 		}
 	}
-
 	
 }

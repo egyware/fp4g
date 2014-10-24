@@ -10,7 +10,7 @@ import com.egysoft.fp4g.net.IUser;
 
 public class ClientMessageHandlers implements ClientMessageHandler,Iterable<ClientMessageHandler>
 {
-	private LinkedList<ClientMessageHandler> handlers;
+	private LinkedList<ClientMessageHandler> handlers = new LinkedList<ClientMessageHandler>();
 	public void add(ClientMessageHandler handler)
 	{
 		handlers.add(handler);

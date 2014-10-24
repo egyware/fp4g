@@ -11,10 +11,10 @@ import com.egysoft.fp4g.net.client.ClientMessageHandler;
 import com.egysoft.fp4g.net.client.NetEngine;
 import com.egysoft.fp4g.net.client.Room;
 
-public class NetworkManager extends Manager implements ClientMessageHandler
+public abstract class NetworkManager extends Manager implements ClientMessageHandler
 {	
-	private final Room room;	
-	private final NetEngine engine;	
+	protected final Room room;	
+	protected final NetEngine engine;	
 	
 	public NetworkManager(NetEngine engine, Room room)
 	{
@@ -24,9 +24,10 @@ public class NetworkManager extends Manager implements ClientMessageHandler
 	}
 	
 	public void update(float delta)
-	{		
+	{
 	}
 	
+
 	@Override
 	public ImmutableBag<MessageHandler> getMessageHandler(Message<?> message) 
 	{	
@@ -77,7 +78,7 @@ public class NetworkManager extends Manager implements ClientMessageHandler
 		//si es el mismo room =P
 		if(room == message.room)
 		{	
-			
+			System.out.println(message.getClass().getSimpleName());
 		}		
 	}
 }

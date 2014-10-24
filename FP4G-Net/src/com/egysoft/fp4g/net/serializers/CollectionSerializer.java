@@ -12,11 +12,14 @@ import com.esotericsoftware.kryo.io.Output;
 @SuppressWarnings("rawtypes")
 public class CollectionSerializer extends Serializer<Collection>
 {
+	public CollectionSerializer() 
+	{		
+	}
 
 	@Override
 	public void write(Kryo kryo, Output output, Collection list) 
 	{
-		output.writeInt(list.size());
+		output.writeInt(list.size());		
 		for(Object o:list)
 		{
 			kryo.writeClassAndObject(output, o);
@@ -27,7 +30,7 @@ public class CollectionSerializer extends Serializer<Collection>
 	public Collection read(Kryo kryo, Input input, Class<Collection> type) 
 	{
 		int size = input.readInt();
-		Object array[] = new Object[size];
+		Object array[] = new Object[size];		
 		for(int i=0;i<size;i++)
 		{
 			array[i] = kryo.readClassAndObject(input);

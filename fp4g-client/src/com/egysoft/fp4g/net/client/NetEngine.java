@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import com.egysoft.fp4g.client.messages.ChatRoomMessage;
+import com.egysoft.fp4g.client.messages.CreateJoinRequestMessage;
 import com.egysoft.fp4g.client.messages.IResponseMessage;
 import com.egysoft.fp4g.client.messages.JoinRequestMessage;
 import com.egysoft.fp4g.client.messages.JoinResponseMessage;
@@ -102,6 +103,7 @@ public class NetEngine
 		kryo.register(LoginRequestMessage.class);
 		kryo.register(LoginResponseMessage.class);
 		kryo.register(JoinRequestMessage.class);
+		kryo.register(CreateJoinRequestMessage.class);
 		kryo.register(JoinResponseMessage.class);
 		
 		//extras...
@@ -159,5 +161,14 @@ public class NetEngine
 	public void disconnect()
 	{
 		client.close();
+	}
+
+	public void sendTCP(Object object)
+	{
+		client.sendTCP(object);
+	}
+	public void sendUDP(Object object)
+	{
+		client.sendUDP(object);
 	}
 }
