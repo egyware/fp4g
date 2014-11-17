@@ -1,7 +1,7 @@
 package com.apollo.messages;
 
 import com.apollo.Message;
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
 public enum AudioManagerMessage implements Message<AudioManagerMessageHandler> 
 {
@@ -10,7 +10,7 @@ public enum AudioManagerMessage implements Message<AudioManagerMessageHandler>
 	;
 
 	@Override
-	public void dispatch(MessageHandler h, Object... args)
+	public void dispatch(MessageReciever h, Object... args)
 	{
 		final AudioManagerMessageHandler handler = (AudioManagerMessageHandler)h;
 		switch(this)

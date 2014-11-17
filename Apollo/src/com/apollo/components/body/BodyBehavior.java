@@ -3,14 +3,6 @@
  */
 package com.apollo.components.body;
 
-import static com.apollo.managers.PhysicsManager.INV_SCALE;
-import static com.apollo.managers.PhysicsManager.SCALE;
-
-import com.apollo.messages.MoveMessage;
-import com.apollo.messages.MoveMessageHandler;
-import com.apollo.messages.TransformMessage;
-import com.apollo.utils.TrigLUT;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
@@ -18,110 +10,50 @@ import com.badlogic.gdx.physics.box2d.Body;
  * @author Edgardo
  *
  */
-public abstract class BodyBehavior extends PhysicsFamily 
-implements MoveMessageHandler
+public class BodyBehavior extends PhysicsBehavior
 {
-	protected Body simpleBody;
+	private Vector2 position = new Vector2();
+	private Body body;	
+	
+	public BodyBehavior(Body body)
+	{
+		this.body = body;
+	}
 	
 	@Override
 	public void initialize()
 	{
-		owner.addEventHandler(TransformMessage.onTranslateTransform, this);		
-		owner.addEventHandler(TransformMessage.onRotateTransform, this);
-		owner.addEventHandler(MoveMessage.onSpeedMove, this);		
-		owner.addEventHandler(MoveMessage.onForwardMove, this);
-		owner.addEventHandler(MoveMessage.onAngularSpeedMove, this);
-		owner.addEventHandler(MoveMessage.onAngularSpeedMove, this);
-		simpleBody.setUserData(owner);	
+		super.initialize();
+		body.setUserData(owner);
 	}
-	
 	@Override
 	public void uninitialize()
 	{
-		owner.removeEventHandler(TransformMessage.onTranslateTransform, this);
-		owner.removeEventHandler(TransformMessage.onRotateTransform, this);
-		owner.removeEventHandler(MoveMessage.onSpeedMove, this);		
-		owner.removeEventHandler(MoveMessage.onForwardMove, this);
-		owner.removeEventHandler(MoveMessage.onAngularSpeedMove, this);
-		
-		simpleBody.setUserData(null);
-		simpleBody.getWorld().destroyBody(simpleBody);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.apollo.components.BodyBehavior#getBody()
-	 */
-	@Override
-	public Body getBody()
-	{
-		return simpleBody;
+		super.uninitialize();
+		body.setUserData(null);
+		body.getWorld().destroyBody(body);
+		body = null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.apollo.components.BodyBehavior#setPosition(float, float)
-	 */
 	@Override
-	public void setPosition(float x, float y)
+	protected Vector2 getPosition() 
 	{
-		simpleBody.setTransform(x*SCALE, y*SCALE, rotation);		
-		this.x = x*SCALE;
-		this.y = y*SCALE;
+		return position.set(body.getPosition());
 	}
 
-	/* (non-Javadoc)
-	 * @see com.apollo.components.BodyBehavior#setRotation(float)
-	 */
 	@Override
-	public void setRotation(float angleRadians) {
-		rotation = angleRadians;
-		simpleBody.setTransform(x*SCALE, y*SCALE, rotation);
+	protected float getAngle() 
+	{	
+		return body.getAngle();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.apollo.components.BodyBehavior#update(float)
-	 */
-	@Override
-	public void update(float dt) {
-		rotation = simpleBody.getAngle();
-		Vector2 position = simpleBody.getPosition();
-		x = position.x*INV_SCALE;
-		y = position.y*INV_SCALE;		
+	public void setPosition(float x, float y,float angle) 
+	{
+		body.setTransform(x, y, angle);		
 	}
 
-	/* (non-Javadoc)
-	 * @see com.apollo.components.BodyBehavior#getRawPosition()
-	 */
-	@Override
-	public Vector2 getRawPosition() {		
-		return simpleBody.getPosition();
-	}
-	
-	@Override
-	public void onTranslateTransform(float x, float y) 
+	public void setLinearVelocity(float vx, float vy)
 	{
-		simpleBody.setTransform((this.x + x)*SCALE, (this.y + y)*SCALE, rotation);		
-	}
-	
-	@Override
-	public void onSpeedMove(float vX, float vY) 
-	{		
-		simpleBody.setLinearVelocity(vX*SCALE, vY*SCALE);		
-	}
-	@Override
-	public void onRotateTransform(float grad) 
-	{
-		setRotation(grad*MathUtils.degreesToRadians);
-	}
-	@Override
-	public void onForwardMove(float units)
-	{
-		float vx = (float) (TrigLUT.cos(rotation+MathUtils.PI/2) * units);
-		float vy = (float) (TrigLUT.sin(rotation+MathUtils.PI/2) * units);		
-		simpleBody.setLinearVelocity(vx*SCALE, vy*SCALE);
-	}
-	@Override
-	public void onAngularSpeedMove(float w)
-	{		
-		simpleBody.setAngularVelocity(w*MathUtils.degreesToRadians);	
+		body.setLinearVelocity(vx, vy);		
 	}
 }

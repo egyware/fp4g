@@ -1,8 +1,8 @@
 package com.apollo.messages;
 
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
-public interface LevelMessageHandler extends MessageHandler 
+public interface LevelMessageHandler extends MessageReciever 
 {
 	public void onChangeLevel(String level);
 	public void onReloadLevel();

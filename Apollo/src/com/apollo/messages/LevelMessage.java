@@ -1,7 +1,7 @@
 package com.apollo.messages;
 
 import com.apollo.Message;
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
 public enum LevelMessage implements Message<LevelMessageHandler> {
 	onChangeLevel,
@@ -14,7 +14,7 @@ public enum LevelMessage implements Message<LevelMessageHandler> {
 	}
 
 	@Override
-	public void dispatch(MessageHandler h, Object... args) 
+	public void dispatch(MessageReciever h, Object... args) 
 	{
 		final LevelMessageHandler handler = (LevelMessageHandler)h;
 		switch(this)

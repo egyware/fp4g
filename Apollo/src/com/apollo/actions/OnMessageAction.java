@@ -1,9 +1,9 @@
 package com.apollo.actions;
 import com.apollo.Action;
 import com.apollo.Message;
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
-public class OnMessageAction extends Action implements MessageHandler
+public class OnMessageAction extends Action implements MessageReciever
 {
 	private Message<?> message;
 	private boolean received;
@@ -43,7 +43,7 @@ public class OnMessageAction extends Action implements MessageHandler
 	}
 
 	@Override
-	public void onMessage(Message<? extends MessageHandler> message, Object... args) 
+	public void onMessage(Message<? extends MessageReciever> message, Object... args) 
 	{
 		message.dispatch(this, args);
 	}

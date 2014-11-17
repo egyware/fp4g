@@ -6,3 +6,4 @@ fp4g.generator.gdx.functions.Unsubscribe # Unsubscribe
 #--- funciones para expresiones ---
 fp4g.generator.gdx.functions.GetCamera   # Unsubscribe
 fp4g.generator.gdx.functions.GetSprite   # Unsubscribe
+fp4g.generator.gdx.functions.GetTexture   # Unsubscribe

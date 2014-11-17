@@ -1,11 +1,9 @@
-package com.apollo;
+package com.egysoft.gdx;
 
-import com.badlogic.gdx.assets.AssetManager;
 
 
 public abstract class GameState 
 {
-	protected final AssetManager assets;
 	private boolean is_load = false;	
 	
 	protected abstract boolean load();
@@ -16,9 +14,8 @@ public abstract class GameState
 	protected abstract void resume();
 	public abstract void update(float delta);
 	
-	public GameState(GameManager manager)
-	{
-		assets = manager.assets; 
+	public GameState()
+	{		 
 	}
 	
 	public final boolean loadState(){

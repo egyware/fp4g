@@ -1,8 +1,8 @@
 package com.apollo.messages;
 
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
-public interface TimerMessageHandler extends MessageHandler 
+public interface TimerMessageHandler extends MessageReciever 
 {
 	void onActiveTimer(int index);
 	void onSetTimeTimer(int index, int time);

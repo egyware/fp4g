@@ -2,14 +2,14 @@ package com.apollo.actions;
 
 import com.apollo.Action;
 import com.apollo.Message;
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
 public class SubscribeMessageAction extends Action
 {
 	private Message<?> message;
-	private MessageHandler handler;
+	private MessageReciever handler;
 	
-	public void setMessageHandler(MessageHandler handler)
+	public void setMessageHandler(MessageReciever handler)
 	{
 		this.handler = handler;
 	}

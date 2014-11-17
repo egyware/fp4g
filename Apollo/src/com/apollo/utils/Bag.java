@@ -7,7 +7,8 @@ import java.util.Iterator;
  * entities, speedwise it is very good, especially suited for games.
  */
 
-public class Bag<E> implements ImmutableBag<E>,Iterable<E> {
+public class Bag<E> implements ImmutableBag<E> 
+{
 	private E[] data;
 	private int size = 0;
 
@@ -239,6 +240,24 @@ public class Bag<E> implements ImmutableBag<E>,Iterable<E> {
 		for (int i = 0; items.size() > i; i++) {
 			add(items.get(i));
 		}
+	}
+	
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append('[');
+		for(Iterator<E> it=iterator();it.hasNext();)
+		{
+			E e = it.next();
+			sb.append(e);
+			if(it.hasNext())
+			{
+				sb.append(", ");
+			}			
+		}
+		sb.append(']');
+		
+		return sb.toString();
 	}
 	
 	public Iterator<E> iterator() {

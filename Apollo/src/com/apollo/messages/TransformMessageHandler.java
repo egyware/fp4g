@@ -1,8 +1,8 @@
 package com.apollo.messages;
 
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
-public interface TransformMessageHandler extends MessageHandler
+public interface TransformMessageHandler extends MessageReciever
 {
 	public void onTranslateTransform(float x,float y);
 	public void onRotateTransform(float grad);

@@ -1,7 +1,7 @@
 package com.apollo.messages;
 
 import com.apollo.Message;
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
 public enum AutoGunMessage implements Message<AutoGunMessageHandler> 
 {
@@ -10,7 +10,7 @@ public enum AutoGunMessage implements Message<AutoGunMessageHandler>
 	;
 
 	@Override
-	public void dispatch(MessageHandler h, Object... args)
+	public void dispatch(MessageReciever h, Object... args)
 	{
 		final AutoGunMessageHandler handler = (AutoGunMessageHandler)h;
 		switch(this)

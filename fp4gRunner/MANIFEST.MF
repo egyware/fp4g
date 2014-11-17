@@ -1,4 +1,3 @@
 Manifest-Version: 1.0
-Class-Path: . libs/asm-4.0.jar libs/reflectasm-fp4g.jar
+Class-Path: . libs/asm-4.0.jar libs/reflectasm-1.09.jar
 Main-Class: fp4g.runner.Main
-

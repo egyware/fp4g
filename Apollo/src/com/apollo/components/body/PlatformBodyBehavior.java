@@ -1,6 +1,5 @@
 package com.apollo.components.body;
 
-import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
 import com.apollo.Entity;
@@ -27,9 +26,10 @@ import com.badlogic.gdx.physics.box2d.World;
  * @author egyware
  *
  */
-public class PlatformBodyBehavior extends PhysicsFamily
+public class PlatformBodyBehavior extends PhysicsBehavior
 implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCallback
 {
+	private Vector2 position = new Vector2();
 	private Body box;
 	public int width;
 	public int height;
@@ -43,10 +43,8 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 	private int touchLeft;
 	private int touchRight;
 		
-	private PlatformBodyBehavior(float x, float y, int width, int height) 
+	private PlatformBodyBehavior(int width, int height) 
 	{
-		this.x = x;
-		this.y = y;	
 		this.width = width;
 		this.height = height;
 		
@@ -71,16 +69,6 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 		
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.apollo.components.BodyBehavior#getBody()
-	 */
-	@Override
-	public Body getBody()
-	{		
-		return box;
-	}
-	
-	
 	public void moveHorizontal(float desiredVel)
 	{
 		//mantener velocidad
@@ -102,42 +90,11 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 		Vector2 worldCenter = box.getWorldCenter();
 		box.applyLinearImpulse(0, jump*SCALE, worldCenter.x,worldCenter.y,true);		
 	}
-
-	
-	@Override
-	public void setPosition(float x, float y)
-	{
-		// TODO Auto-generated method stub		
-	}
-	
-	public void setRotation(float angleRadians)
-	{
-		// TODO Auto-generated method stub
 		
-	}
 	public void update(float dt)
 	{
 		moveHorizontal(desiredVelocity);
-		
-		//actualizando transformación
-		Vector2 pos = box.getPosition();
-		x = pos.x * INV_SCALE;
-		y = pos.y * INV_SCALE;
-	}
-	@Override
-	public Vector2 getRawPosition()
-	{		
-		return box.getPosition();
-	}
-	@Override
-	public void onTranslateTransform(float x, float y)
-	{
-				
-	}
-	@Override
-	public void onRotateTransform(float grad)
-	{
-		// TODO Auto-generated method stub		
+		super.update(dt);		
 	}
 	
 	@Override
@@ -158,9 +115,9 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 	{
 		float x = _x.floatValue(), y = _y.floatValue();
 		int width = _width.intValue(), height = _height.intValue();
-		PlatformBodyBehavior behavior = new PlatformBodyBehavior(x,y,width,height);
+		PlatformBodyBehavior behavior = new PlatformBodyBehavior(width,height);
 		
-		World world = owner.getWorld().getManager(PhysicsManager.class).getb2World();
+		World world = owner.getEngine().getManager(PhysicsManager.class).getb2World();
 		final Vector2 position = new Vector2(x,y);
 		final Vector2 temp = new Vector2();
 		{
@@ -344,6 +301,18 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 		{
 			return -1;
 		}		
+	}
+
+	@Override
+	protected Vector2 getPosition()
+	{
+		return position.set(box.getPosition());
+	}
+
+	@Override
+	protected float getAngle() 
+	{		
+		return box.getAngle();
 	}
 	
 

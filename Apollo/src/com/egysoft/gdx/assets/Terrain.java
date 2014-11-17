@@ -1,4 +1,4 @@
-package com.apollo.managers.physics;
+package com.egysoft.gdx.assets;
 
 import java.util.Vector;
 

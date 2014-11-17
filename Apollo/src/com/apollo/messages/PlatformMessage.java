@@ -1,7 +1,7 @@
 package com.apollo.messages;
 
 import com.apollo.Message;
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
 public enum PlatformMessage implements  Message<PlatformMessageHandler>
 {
@@ -13,7 +13,7 @@ public enum PlatformMessage implements  Message<PlatformMessageHandler>
 	public final static int RIGHTWALL = 2;
 
 	@Override
-	public void dispatch(MessageHandler handler, Object... args) 
+	public void dispatch(MessageReciever handler, Object... args) 
 	{
 		PlatformMessageHandler h = (PlatformMessageHandler)handler;
 		switch(this)

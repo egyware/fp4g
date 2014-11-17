@@ -3,24 +3,25 @@ package com.apollo.components;
 import com.apollo.Behavior;
 import com.apollo.Entity;
 import com.apollo.Message;
-import com.apollo.MessageHandler;
-import com.apollo.WorldContainer;
+import com.apollo.MessageReciever;
+import com.apollo.Engine;
 import com.apollo.managers.EntityManager;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public abstract class ActorBehavior extends Actor implements Behavior, MessageHandler 
+public abstract class ActorBehavior extends Actor implements Behavior, MessageReciever 
 {
 	protected Entity owner;	
 	@Override
-	public WorldContainer getWorldContainer() 
+	public Engine getEngine() 
 	{		
-		return owner.getWorld();
+		return owner.getEngine();
 	}
 
 	@Override
 	public EntityManager getEntityManager() 
 	{	
-		return owner.getWorld().getEntityManager();
+		return owner.getEngine().getEntityManager();
 	}
 
 	@Override
@@ -63,7 +64,9 @@ public abstract class ActorBehavior extends Actor implements Behavior, MessageHa
 	{
 	}
 	
-	public void onMessage(Message<? extends MessageHandler> message, Object... args)
+	public abstract void draw(Batch batch, float parentAlpha);
+	
+	public void onMessage(Message<? extends MessageReciever> message, Object... args)
 	{
 		message.dispatch(this, args);				
 	}

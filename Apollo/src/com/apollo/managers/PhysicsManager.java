@@ -1,12 +1,7 @@
 package com.apollo.managers;
 
 import com.apollo.Entity;
-import com.apollo.Message;
-import com.apollo.MessageHandler;
-import com.apollo.managers.physics.SubTerrain;
-import com.apollo.managers.physics.Terrain;
 import com.apollo.messages.ContactMessage;
-import com.apollo.utils.ImmutableBag;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -15,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.egysoft.gdx.assets.SubTerrain;
+import com.egysoft.gdx.assets.Terrain;
 
 /**
  * Administrador de Fisica usando Box2D
@@ -23,7 +20,8 @@ import com.badlogic.gdx.physics.box2d.World;
  * @author egyware
  *
  */
-public class PhysicsManager extends Manager implements ContactListener{
+public class PhysicsManager extends Manager implements ContactListener
+{
 	public static final float SCALE = 0.01f;
 	public static final float INV_SCALE = 100.0f;
 	private final World world;
@@ -114,32 +112,4 @@ public class PhysicsManager extends Manager implements ContactListener{
 	public void deleteWorld() {
 		world.dispose();		
 	}
-
-	@Override
-	public ImmutableBag<MessageHandler> getMessageHandler(Message<?> message) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void onMessage(Message<? extends MessageHandler> message,
-			Object... args) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public <T extends Message<?>> void addEventHandler(Message<?> messageType,
-			MessageHandler listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public <T extends Message<?>> void removeEventHandler(
-			Message<?> messagetType, MessageHandler listener) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

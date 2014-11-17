@@ -1,7 +1,7 @@
 package com.apollo.messages;
 
 import com.apollo.Message;
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
 public enum KeyMessage implements Message<KeyMessageHandler> {
 	onPressKey,
@@ -14,7 +14,7 @@ public enum KeyMessage implements Message<KeyMessageHandler> {
 	}
 
 	@Override
-	public void dispatch(MessageHandler h, Object... args) {
+	public void dispatch(MessageReciever h, Object... args) {
 		final KeyMessageHandler handler = (KeyMessageHandler)h;
 		switch(this)
 		{

@@ -1,8 +1,8 @@
 package com.apollo.messages;
 
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
-public interface LifeMessageHandler extends MessageHandler 
+public interface LifeMessageHandler extends MessageReciever 
 {
 	public void onDamageLife(int damage);
 	public void onHealLife(int heal);

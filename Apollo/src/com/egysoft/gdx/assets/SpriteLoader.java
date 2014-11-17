@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.apollo.managers.graphics;
+package com.egysoft.gdx.assets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;

@@ -1,4 +1,4 @@
-package com.apollo.managers.physics;
+package com.egysoft.gdx.assets;
 
 import static com.apollo.managers.PhysicsManager.SCALE;
 

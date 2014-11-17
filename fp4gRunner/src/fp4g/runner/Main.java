@@ -1,6 +1,7 @@
 package fp4g.runner;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -15,13 +16,6 @@ public class Main
 {
 	public static void main(String[] args) 
 	{
-		if(args.length < 1)
-		{
-			System.out.println("Modo de uso: Runner path [class]");
-			return;
-		}		
-		
-		
 	    RunnerClassLoader loader = null;
 	    Properties properties = null;
 	    String gameClass = null;
@@ -30,7 +24,6 @@ public class Main
 		{
 			URL urls[] = new URL[]
 			{
-				new File(args[0]).toURI().toURL(),
 				new URL("file:libs/gdx.jar"),
 				new URL("file:libs/gdx-natives.jar"),				
 				new URL("file:libs/gdx-backend-lwjgl.jar"),				
@@ -40,9 +33,30 @@ public class Main
 				new URL("file:libs/apollo-fp4g.jar")
 			};
 			loader = new RunnerClassLoader(urls);
+			if(args.length>=1)
+			{
+				loader.addURL(new File(args[0]).toURI().toURL());
+			}
 			
+			InputStream in;
+			File file = new File("game.properties");
+			if(file.exists())
+			{
+				try
+				{
+					in = new FileInputStream(file);
+				}
+				catch(IOException ie)
+				{
+					//simplemente ignorar y probar con este
+					in = loader.getResourceAsStream("game.properties");
+				}
+			}
+			else
+			{
+				in = loader.getResourceAsStream("game.properties");
+			}
 			//cargar propiedades
-			InputStream in = loader.getResourceAsStream("game.properties");
 			if(in != null)
 			{
 				try 
@@ -50,7 +64,7 @@ public class Main
 					properties = new Properties();
 					properties.load(in);
 					String cp = properties.getProperty("game.classpath");
-					if(cp != null) classPath = cp.split(File.pathSeparator);
+					if(cp != null) classPath = cp.split(";");
 					for(String path: classPath)
 					{
 						loader.addURL(new URL(String.format("file:libs/%s",path)));
@@ -62,7 +76,7 @@ public class Main
 					System.err.println("Peligro: No se encontró game.properties");
 					properties = null;
 				}				
-			}
+			}			
 			//sobreescribe la propiedad
 			if(args.length >=2)
 			{

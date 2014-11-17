@@ -1,25 +1,26 @@
 package com.apollo.messages;
 
+import com.apollo.Entity;
 import com.apollo.Message;
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
 public enum EntityMessage implements Message<EntityMessageHandler> 
 {
-	onInitEntity,
-	onDeinitEntity,	
+	onAddedEntity,
+	onRemovedEntity,	
 	;
 
 	@Override
-	public void dispatch(MessageHandler h, Object... args)
+	public void dispatch(MessageReciever h, Object... args)
 	{
 		final EntityMessageHandler handler = (EntityMessageHandler)h;
 		switch(this)
 		{		
-		case onInitEntity:
-			handler.onInitEntity();
+		case onAddedEntity:
+			handler.onAddedEntity((Entity)args[0]);
 			break;
-		case onDeinitEntity:
-			handler.onDeinitEntity();
+		case onRemovedEntity:
+			handler.onRemovedEntity((Entity)args[0]);
 			break;	
 		}		
 	}

@@ -5,7 +5,7 @@ package com.apollo.components;
 
 import com.apollo.BaseBehavior;
 import com.apollo.Entity;
-import com.apollo.WorldContainer;
+import com.apollo.Engine;
 import com.apollo.annotate.InjectComponent;
 import com.apollo.messages.AutoGunMessage;
 import com.apollo.messages.AutoGunMessageHandler;
@@ -20,8 +20,8 @@ import com.badlogic.gdx.math.MathUtils;
 public final class GunBehavior extends BaseBehavior implements GunMessageHandler, AutoGunMessageHandler
 {
 	@InjectComponent
-	private TransformFamily transform;
-	private WorldContainer world;	
+	private TransformBehavior transform;
+	private Engine world;	
 	private int ammo;
 	private String entity;
 	private boolean enableAutoGun;
@@ -89,7 +89,7 @@ public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 		owner.addEventHandler(AutoGunMessage.onSetDelayShotAutoGun,this);
 		owner.addEventHandler(AutoGunMessage.onSetShotAutoGun,this);	
 		
-		world = owner.getWorld();		
+		world = owner.getEngine();		
 	}
 	
 	@Override

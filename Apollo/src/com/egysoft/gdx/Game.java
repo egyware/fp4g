@@ -1,24 +1,35 @@
-package com.apollo;
+package com.egysoft.gdx;
 
-import com.apollo.managers.entity.EntitySpawn;
-import com.apollo.managers.entity.EntitySpawnLoader;
-import com.apollo.managers.graphics.Sprite;
-import com.apollo.managers.graphics.SpriteLoader;
-import com.apollo.managers.physics.Terrain;
-import com.apollo.managers.physics.TerrainLoader;
-import com.apollo.messages.LevelMessageHandler;
-import com.apollo.utils.ImmutableBag;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
+import com.egysoft.gdx.assets.EntitySpawn;
+import com.egysoft.gdx.assets.EntitySpawnLoader;
+import com.egysoft.gdx.assets.Sprite;
+import com.egysoft.gdx.assets.SpriteLoader;
+import com.egysoft.gdx.assets.Terrain;
+import com.egysoft.gdx.assets.TerrainLoader;
+import com.egysoft.utils.StringUtils;
 
-public abstract class GameManager implements ApplicationListener, MessageReceiver, LevelMessageHandler
+public abstract class Game implements ApplicationListener, InputProcessor
 {
+	public static Game instance;	
+	public static int Width;
+	public static int Height;
+	
+	public static void init(Game game)
+	{
+		Game.instance = game;		
+		Width  = game.getWidth();
+		Height = game.getHeight();
+	}
+	
 	private GameState next;
 	private GameState current;
 	private final Array<GameState> states;
@@ -28,7 +39,7 @@ public abstract class GameManager implements ApplicationListener, MessageReceive
 	
 	public final AssetManager assets; 
 	
-	public GameManager()
+	public Game()
 	{
 		states = new Array<GameState>();
 		
@@ -43,7 +54,7 @@ public abstract class GameManager implements ApplicationListener, MessageReceive
 	public void start(GameState next)
 	{
 		this.next = null;
-		Gdx.app.log("GameCycleLife", String.format("start: %s",next.getClass().getSimpleName()));
+		Gdx.app.log("GameCycleLife", StringUtils.format("start: {0}",next.getClass().getSimpleName()));
 		current = states.size > 0?states.peek():null;
 		if(current != null)
 		{
@@ -73,7 +84,7 @@ public abstract class GameManager implements ApplicationListener, MessageReceive
 	
 	public void nextState(GameState _next)
 	{
-		Gdx.app.log("GameCycleLife", String.format("next: %s",_next.getClass().getSimpleName()));
+		Gdx.app.log("GameCycleLife", StringUtils.format("next: {0}",_next.getClass().getSimpleName()));
 		next = _next;
 	}
 	
@@ -83,7 +94,7 @@ public abstract class GameManager implements ApplicationListener, MessageReceive
 	 */
 	public void pauseState(GameState next)
 	{
-		Gdx.app.log("GameCycleLife", String.format("pause: %s",next.getClass().getSimpleName()));
+		Gdx.app.log("GameCycleLife", StringUtils.format("pause: {0}",next.getClass().getSimpleName()));
 		//se asume que existe un contexto actual y guardado en  states...
 		if(current != null)
 		{
@@ -108,7 +119,7 @@ public abstract class GameManager implements ApplicationListener, MessageReceive
 	
 	public void resumeState()
 	{
-		Gdx.app.log("GameCycleLife", String.format("resume"));
+		Gdx.app.log("GameCycleLife", "resume");
 		//se asume que existe un contexto actual y guardado en  states...
 		if(current != null)
 		{
@@ -124,7 +135,9 @@ public abstract class GameManager implements ApplicationListener, MessageReceive
 	}
 
 	@Override
-	public void create() {
+	public void create() 
+	{
+		Game.init(this);
 		Gdx.app.setLogLevel(Application.LOG_INFO);
 		Gdx.app.log("AppCycleLife", "create");
 	}
@@ -178,25 +191,44 @@ public abstract class GameManager implements ApplicationListener, MessageReceive
 			current.resume();			
 		}
 	}
-
-	
 	@Override
-	public ImmutableBag<MessageHandler> getMessageHandler(Message<?> message) 
-	{		
-		return null;
+	public boolean keyDown(int arg0) {
+		// TODO Auto-generated method stub
+		return false;
 	}
-
 	@Override
-	public void onMessage(Message<? extends MessageHandler> message,Object... args) 
-	{
-		//TODO por ahora solo aceptaré mensajes tipo LevelMessageHandler
-		if(message.getClassHandler() == LevelMessageHandler.class)
-		{
-			message.dispatch(this, args);
-		}
-		else
-		{
-			Gdx.app.error("OnMessage", "No se puede recibir este mensaje");
-		}
+	public boolean keyTyped(char arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean keyUp(int arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean mouseMoved(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean scrolled(int arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean touchDragged(int arg0, int arg1, int arg2) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean touchUp(int arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

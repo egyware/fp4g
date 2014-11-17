@@ -1,4 +1,4 @@
-package com.apollo.managers.entity;
+package com.egysoft.gdx.assets;
 
 //TODO esta clase permitirá hacer que los personajes reaparescan según vaya avanzando el personaje, por ahora solo mantiene una lista con los datos.
 public class EntitySpawn 

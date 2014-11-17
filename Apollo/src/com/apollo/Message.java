@@ -5,10 +5,10 @@ package com.apollo;
  * @author egyware
  *
  */
-public interface Message<Handler extends MessageHandler> 
+public interface Message<Handler extends MessageReciever> 
 {
 	
-	public void dispatch(MessageHandler handler, Object ...args);
+	public void dispatch(MessageReciever handler, Object ...args);
 	
 	public Class<Handler> getClassHandler();
 	

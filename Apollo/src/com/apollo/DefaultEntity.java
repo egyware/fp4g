@@ -13,7 +13,7 @@ public final class DefaultEntity extends Entity
 {
 	private Bag<Behavior> components;
 	private Map<Class<? extends Behavior>, Behavior> componentsByType;	
-	public DefaultEntity(WorldContainer world)
+	public DefaultEntity(Engine world)
 	{
 		super(world);
 		

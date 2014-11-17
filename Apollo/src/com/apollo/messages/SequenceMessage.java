@@ -1,7 +1,7 @@
 package com.apollo.messages;
 
 import com.apollo.Message;
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 import com.apollo.messages.SequenceMessageHandler;
 
 public enum SequenceMessage implements Message<SequenceMessageHandler>
@@ -16,7 +16,7 @@ public enum SequenceMessage implements Message<SequenceMessageHandler>
 	}
 
 	@Override
-	public void dispatch(MessageHandler h, Object... args) 
+	public void dispatch(MessageReciever h, Object... args) 
 	{
 		SequenceMessageHandler handler = (SequenceMessageHandler)h;
 		switch(this)

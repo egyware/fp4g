@@ -1,8 +1,8 @@
 package com.apollo.messages;
 
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
-public interface PlatformMessageHandler extends MessageHandler 
+public interface PlatformMessageHandler extends MessageReciever 
 {	
 	public void onBeginContactPlatform(int value);
 	public void onEndContactPlatform(int intValue);

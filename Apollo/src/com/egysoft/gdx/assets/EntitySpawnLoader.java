@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.apollo.managers.entity;
+package com.egysoft.gdx.assets;
 
 import java.util.LinkedList;
 

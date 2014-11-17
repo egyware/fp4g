@@ -3,7 +3,7 @@ package com.apollo.messages;
 import java.util.Arrays;
 
 import com.apollo.Message;
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
 public enum CreateEntityMessage implements Message<CreateEntityMessageHandler> {
 	onCreateEntity;
@@ -15,7 +15,7 @@ public enum CreateEntityMessage implements Message<CreateEntityMessageHandler> {
 	}
 
 	@Override
-	public void dispatch(MessageHandler h, Object... args) {
+	public void dispatch(MessageReciever h, Object... args) {
 		final CreateEntityMessageHandler handler = (CreateEntityMessageHandler)h;
 		switch(this)
 		{

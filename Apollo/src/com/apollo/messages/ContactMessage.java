@@ -2,7 +2,7 @@ package com.apollo.messages;
 
 import com.apollo.Entity;
 import com.apollo.Message;
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
@@ -16,7 +16,7 @@ public enum ContactMessage implements Message<ContactMessageHandler> {
 	}
 
 	@Override
-	public void dispatch(MessageHandler h, Object... args) {
+	public void dispatch(MessageReciever h, Object... args) {
 		final ContactMessageHandler handler = (ContactMessageHandler)h;
 		switch(this)
 		{

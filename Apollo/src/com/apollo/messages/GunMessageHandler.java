@@ -1,8 +1,8 @@
 package com.apollo.messages;
 
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
-public interface GunMessageHandler extends MessageHandler 
+public interface GunMessageHandler extends MessageReciever 
 {
 	void onReloadGun(int ammo);
 	void onShotGun(float rot, float dist, float vel);

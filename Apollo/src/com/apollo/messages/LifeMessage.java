@@ -1,7 +1,7 @@
 package com.apollo.messages;
 
 import com.apollo.Message;
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
 public enum LifeMessage implements Message<LifeMessageHandler> 
 {
@@ -16,7 +16,7 @@ public enum LifeMessage implements Message<LifeMessageHandler>
 	}
 
 	@Override
-	public void dispatch(MessageHandler h, Object... args) {
+	public void dispatch(MessageReciever h, Object... args) {
 		final LifeMessageHandler handler = (LifeMessageHandler)h;
 		switch(this)
 		{

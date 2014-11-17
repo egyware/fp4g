@@ -1,4 +1,4 @@
-package com.apollo.managers.graphics;
+package com.egysoft.gdx.assets;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;

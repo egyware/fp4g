@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.apollo.managers.physics;
+package com.egysoft.gdx.assets;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;

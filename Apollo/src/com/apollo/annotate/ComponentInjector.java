@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import com.apollo.ApolloException;
+import com.apollo.BaseBehavior;
 import com.apollo.Behavior;
 import com.apollo.Entity;
 import com.apollo.managers.Manager;
@@ -40,7 +41,7 @@ public abstract class ComponentInjector<T>
 		@Override
 		@SuppressWarnings("unchecked")
 		Manager getInjectionObject(Behavior component, Field field) {
-			return component.getWorldContainer().getManager(Class.class.cast(field.getType()));
+			return component.getEngine().getManager(Class.class.cast(field.getType()));
 		}
 	};
 	
@@ -49,7 +50,7 @@ public abstract class ComponentInjector<T>
 		Entity getInjectionObject(Behavior component, Field field) {
 			InjectTaggedEntity annotation = field.getAnnotation(InjectTaggedEntity.class);
 			String tag = annotation.value();
-			TagManager tagManager = component.getWorldContainer().getManager(TagManager.class);
+			TagManager tagManager = component.getEngine().getManager(TagManager.class);
 			Entity entity = null;
 			if(tagManager != null)
 			{
@@ -100,7 +101,7 @@ public abstract class ComponentInjector<T>
 				ComponentInjector.injectorTaggedEntity.inject(fields[i], instance);
 			}
 			clazz = clazz.getSuperclass();
-		} while (clazz.isInstance(Behavior.class));
+		} while (Behavior.class.isAssignableFrom(clazz) && clazz != BaseBehavior.class);
 	}
 	
 	abstract T getInjectionObject(Behavior component, Field field);

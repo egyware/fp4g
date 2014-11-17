@@ -1,7 +1,7 @@
 package com.apollo.messages;
 
 import com.apollo.Message;
-import com.apollo.MessageHandler;
+import com.apollo.MessageReciever;
 
 public enum MouseMessage implements Message<MouseMessageHandler> {
 	onPressButtonMouse,
@@ -17,7 +17,7 @@ public enum MouseMessage implements Message<MouseMessageHandler> {
 	}
 
 	@Override
-	public void dispatch(MessageHandler h, Object... args) {
+	public void dispatch(MessageReciever h, Object... args) {
 		final MouseMessageHandler handler = (MouseMessageHandler)h;
 		switch(this)
 		{

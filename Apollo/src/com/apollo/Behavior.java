@@ -4,7 +4,7 @@ import com.apollo.managers.EntityManager;
 
 public interface Behavior
 {
-	public abstract WorldContainer getWorldContainer();
+	public abstract Engine getEngine();
 
 	public abstract EntityManager getEntityManager();
 

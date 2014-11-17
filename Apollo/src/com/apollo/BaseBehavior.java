@@ -2,7 +2,7 @@ package com.apollo;
 
 import com.apollo.managers.EntityManager;
 
-public abstract class BaseBehavior implements Behavior, MessageHandler
+public abstract class BaseBehavior implements Behavior, MessageReciever
 {
 	protected Entity owner;
 							
@@ -10,9 +10,9 @@ public abstract class BaseBehavior implements Behavior, MessageHandler
 	 * @see com.apollo.Behavior#getWorld()
 	 */
 	@Override
-	public WorldContainer getWorldContainer()
+	public Engine getEngine()
 	{
-		return owner.getWorld();
+		return owner.getEngine();
 	}
 
 	/* (non-Javadoc)
@@ -21,7 +21,7 @@ public abstract class BaseBehavior implements Behavior, MessageHandler
 	@Override
 	public EntityManager getEntityManager()
 	{
-		return owner.getWorld().getEntityManager();
+		return owner.getEngine().getEntityManager();
 	}
 
 	/* (non-Javadoc)
@@ -84,7 +84,7 @@ public abstract class BaseBehavior implements Behavior, MessageHandler
 	{
 	}
 	
-	public void onMessage(Message<? extends MessageHandler> message, Object... args)
+	public void onMessage(Message<? extends MessageReciever> message, Object... args)
 	{
 		message.dispatch(this, args);				
 	}

@@ -1,14 +1,14 @@
 package com.apollo.messages;
 
-import com.apollo.MessageHandler;
+import com.apollo.Entity;
+import com.apollo.MessageReciever;
 
 /**
- * TODO recategorizar este mensaje
  * @author Edgardo
  *
  */
-public interface EntityMessageHandler extends MessageHandler 
+public interface EntityMessageHandler extends MessageReciever 
 {
-	void onInitEntity();
-	void onDeinitEntity();	
+	void onAddedEntity(Entity e);
+	void onRemovedEntity(Entity e);	
 }
