@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
@@ -24,6 +25,42 @@ public class PhysicsManager extends Manager implements ContactListener
 {
 	public static final float SCALE = 0.01f;
 	public static final float INV_SCALE = 100.0f;
+	
+	public static final short CATEGORY_SCENARY   = 0x0001;
+	public static final short CATEGORY_PLAYER    = 0x0002;
+	public static final short CATEGORY_ENEMY     = 0x0004;
+	public static final short CATEGORY_ITEM      = 0x0008;
+	
+	
+	public static final short MASK_PLAYER =  CATEGORY_ENEMY  | CATEGORY_ITEM | CATEGORY_SCENARY;
+	public static final short MASK_ENEMY = CATEGORY_PLAYER | CATEGORY_SCENARY; 
+	public static final short MASK_SCENERY = -1;
+	public static final short MASK_ITEM = CATEGORY_PLAYER | CATEGORY_SCENARY; 
+			
+	public static final Filter FILTER_PLAYER = new Filter()
+	{{
+		categoryBits = CATEGORY_PLAYER;
+		maskBits     = MASK_PLAYER;
+	}};	
+	
+	public static final Filter FILTER_ENEMY = new Filter()
+	{{
+		categoryBits = CATEGORY_ENEMY;
+		maskBits     = MASK_ENEMY;
+	}};
+	
+	public static final Filter FILTER_SCENARY = new Filter()
+	{{
+		categoryBits = CATEGORY_SCENARY;
+		maskBits     = MASK_SCENERY;
+	}};
+	
+	public static final Filter FILTER_ITEM = new Filter()
+	{{
+		categoryBits = CATEGORY_ITEM;
+		maskBits     = MASK_ITEM;
+	}};
+	
 	private final World world;
 	public PhysicsManager()
 	{

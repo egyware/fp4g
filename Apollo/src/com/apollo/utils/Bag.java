@@ -176,7 +176,8 @@ public class Bag<E> implements ImmutableBag<E>
 	 * @param o
 	 *            element to be added to this list
 	 */
-	public void add(E o) {
+	public void add(E o)
+	{
 		// is size greater than capacity increase capacity
 		if (size == data.length) {
 			grow();
@@ -184,7 +185,7 @@ public class Bag<E> implements ImmutableBag<E>
 
 		data[size++] = o;
 	}
-
+	
 	/**
 	 * Set element at specified index in the bag.
 	 * 

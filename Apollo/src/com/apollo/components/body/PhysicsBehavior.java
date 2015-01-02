@@ -3,8 +3,6 @@
  */
 package com.apollo.components.body;
 
-import static com.apollo.managers.PhysicsManager.INV_SCALE;
-
 import com.apollo.BaseBehavior;
 import com.apollo.annotate.InjectComponent;
 import com.apollo.components.TransformBehavior;
@@ -21,8 +19,8 @@ public abstract class PhysicsBehavior extends BaseBehavior
 	
 	public void update(float delta)
 	{
-		//TODO incluir interpolacion
-		transform.setPosition(getPosition().scl(INV_SCALE));
+		//TODO incluir interpolacion, interpolación de que?
+		transform.setPosition(getPosition());
 		transform.setRotation(getAngle()); 
 	}
 	

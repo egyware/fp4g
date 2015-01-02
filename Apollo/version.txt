@@ -1,0 +1,8 @@
+====ApolloModificado====
+:::0.1 
++ Inicio de registro
++ Adición de mensajes usando enumeraciones en vez de eventos utilizando strings como identificadores.
++ Cambio de nombre de componente a Behavior.
++ Se añadio el CameraManager/CameraBehavior a Apollo
++ Filtros de colisiones añadidos en PhysicsManager, listos para usarlos.
+P Se debe añadir un filtro para recibir el daño en LifeBehavior.

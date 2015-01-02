@@ -1,20 +1,33 @@
 package com.apollo;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.apollo.annotate.ComponentInjector;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
-public abstract class Entity implements MessageSender
+public final class Entity implements MessageSender
 {
 	protected final Engine engine;
-	private Map<Message<?>,Bag<MessageReciever>> handlersByEventType;	
+	private Map<Message<?>,Bag<MessageReciever>> handlersByEventType;
+	private final Bag<Behavior> behaviors;
+	private final Map<Class<? extends Behavior>, Behavior> componentsByType;	
 	private boolean deleted;
 
-	public Entity(Engine engine) {
-		this.engine = engine;
+	public Entity(Engine engine)
+	{
+		this.engine = engine;		
+		behaviors = new Bag<Behavior>();
+		componentsByType = new LinkedHashMap<Class<? extends Behavior>, Behavior>();
+	}
+	
+	public Entity(Engine engine, int n) 
+	{
+		this.engine = engine;		
+		behaviors = new Bag<Behavior>(n);
+		componentsByType = new LinkedHashMap<Class<? extends Behavior>, Behavior>(n,1);
 	}
 
 	public final Engine getEngine() {
@@ -112,23 +125,30 @@ public abstract class Entity implements MessageSender
 		listeners.remove(listener);
 	}
 
-	public abstract 
-	ImmutableBag<Behavior> getBehaviors();
-
-	public abstract <T extends Behavior>  
-	T getBehavior(Class<T> type);
-
-	public abstract 
-	void update(float delta);
-
-	protected void uninitialize()
-	{
-		handlersByEventType.clear();
+	public void setBehavior(Behavior component)
+	{		
+		component.setOwner(this);
+		behaviors.add(component);
+		componentsByType.put(component.getType(), component);		
 	}
-
-	protected abstract
-	void initialize();
-
+	
+	public void removeBehavior(Class<? extends Behavior> clazz)
+	{
+		Behavior component = getBehavior(clazz);
+		if(component!=null) {
+			removeBehavior(component);
+		}
+	}
+	
+	/**
+	 * Remove a Component
+	 * @param component to remove
+	 */
+	public void removeBehavior(Behavior component)
+	{
+		behaviors.remove(component);
+		componentsByType.remove(component);	
+	}
 
 	public void applyComponentAnnotations() 
 	{
@@ -136,5 +156,58 @@ public abstract class Entity implements MessageSender
 		{
 			ComponentInjector.applyAnnotations(component);
 		}		
+	}
+	
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("Entity:\n");
+		builder.append("{");
+		for (int i = 0, s = behaviors.size(); s > i; i++) 
+		{
+			builder.append("\t");
+			builder.append(behaviors.get(i).toString());
+			builder.append(",\n");
+		}
+		builder.append("}");
+		
+		return builder.toString();
+	}
+	
+
+	/** 
+	 * Initialize all the component
+	 */	
+	protected void initialize()
+	{
+		for (int i = 0, s = behaviors.size(); s > i; i++) {
+			behaviors.get(i).initialize();
+		}
+	}
+	
+	protected void uninitialize() 
+	{
+		handlersByEventType.clear();
+		for (int i = 0, s = behaviors.size(); s > i; i++) {
+			behaviors.get(i).uninitialize();
+		}
+	}
+
+	public void update(float delta)
+	{
+		for (int i = 0, s = behaviors.size(); s > i; i++) {
+			behaviors.get(i).update(delta);
+		}
+	}
+
+	public <T extends Behavior> T getBehavior(Class<T> type) 
+	{
+		return type.cast(componentsByType.get(type));
+	}
+	
+	public Bag<Behavior> getBehaviors() 
+	{
+		return behaviors;
 	}
 }

@@ -16,23 +16,15 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class StageRenderManager extends Manager 
 {
 	private final Stage stage;
-	private final com.badlogic.gdx.scenes.scene2d.Group backgroundLayer;
-	private final com.badlogic.gdx.scenes.scene2d.Group actorLayer;
-	private final com.badlogic.gdx.scenes.scene2d.Group frontLayer;
+	private final com.badlogic.gdx.scenes.scene2d.Group layer;	
 	private OrthographicCamera camera;	
 	private Map map;
-	private MapRenderer mapRenderer;
-	private final int back_layers[] = {0,1};
-    private final int front_layers[] = {2,3};
+	private MapRenderer mapRenderer;	
 	private StageRenderManager(Stage stage)
 	{
-		this.stage = stage;
-		backgroundLayer = new com.badlogic.gdx.scenes.scene2d.Group();
-		actorLayer  = new com.badlogic.gdx.scenes.scene2d.Group();
-		frontLayer  = new com.badlogic.gdx.scenes.scene2d.Group();
-		stage.addActor(backgroundLayer);
-		stage.addActor(actorLayer);
-		stage.addActor(frontLayer);
+		this.stage = stage;		
+		layer  = new com.badlogic.gdx.scenes.scene2d.Group();
+		stage.addActor(layer);		
 		camera = (OrthographicCamera) stage.getCamera();
 	}
 	public StageRenderManager()
@@ -47,7 +39,7 @@ public class StageRenderManager extends Manager
 	{
 		this(new Stage(viewport, batch));
 		this.map = map;
-		this.mapRenderer = new OrthogonalTiledMapRenderer(map,batch); //asumiré que es Tiled (y lo será por mucho tiempo)		
+		this.mapRenderer = new OrthogonalTiledMapRenderer(map,batch);
 	}
 	
 	public void setStageMap(TiledMap map)
@@ -61,7 +53,7 @@ public class StageRenderManager extends Manager
 		ActorBehavior ab = e.getBehavior(ActorBehavior.class);
 		if(ab != null)
 		{
-			actorLayer.addActor(ab);
+			layer.addActor(ab);
 		}
 	}
 	
@@ -76,22 +68,21 @@ public class StageRenderManager extends Manager
 	
 	public void update(float delta)
 	{		
-		if(map == null) //solo uso un jump y pero a costo de agregar unas cuentas lineas de codigo :P
-		{		
-			stage.act(delta);
-			stage.draw();
-		}
-		else
+		stage.act(delta);
+		camera.update();
+		if(mapRenderer != null)
 		{
-			
-			stage.act(delta);
-			camera.update();
 			mapRenderer.setView(camera);			
-			mapRenderer.render(back_layers);
-			stage.draw();			
-			mapRenderer.render(front_layers);
+			mapRenderer.render();
 		}
+		stage.draw();			
+				
 	}	
+	
+	public Map getMap()
+	{
+		return map;
+	}
 	
 	public Camera getCamera()
 	{

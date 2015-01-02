@@ -1,6 +1,7 @@
 package com.apollo.managers;
 
 import com.apollo.Entity;
+import com.apollo.messages.EntityMessage;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 import com.egysoft.gdx.assets.EntitySpawn;
@@ -19,10 +20,10 @@ public class EntityManager extends Manager
 		//agregamos todas las entidades		
 		for(int i=0; i < spawner.lenght; i++)
 		{
-			Entity entity = world.createEntity(spawner.entities[i], spawner.params[i]);
+			Entity entity = engine.createEntity(spawner.entities[i], spawner.params[i]);
 			if(entity != null)
 			{
-				world.addEntity(entity);
+				engine.addEntity(entity);
 			}
 		}		
 	}
@@ -36,12 +37,14 @@ public class EntityManager extends Manager
 	public void added(Entity entity) 
 	{
 		entities.add(entity);
+		engine.onMessage(EntityMessage.onAddedEntity, entity);
 	}
 	
 	@Override
 	public void removed(Entity entity) 
 	{
 		entities.remove(entity);
+		engine.onMessage(EntityMessage.onRemovedEntity, entity);
 	}
 
 	@Override

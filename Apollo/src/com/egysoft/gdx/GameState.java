@@ -2,17 +2,18 @@ package com.egysoft.gdx;
 
 
 
-public abstract class GameState 
+
+public abstract class GameState
 {
 	private boolean is_load = false;	
 	
 	protected abstract boolean load();
-	protected abstract void unload();
-	protected abstract void enter();
-	protected abstract void exit();
+	protected abstract void dispose();
+	
 	protected abstract void pause();
 	protected abstract void resume();
-	public abstract void update(float delta);
+	
+	public abstract void render(float delta);
 	
 	public GameState()
 	{		 
@@ -23,11 +24,14 @@ public abstract class GameState
 			is_load = load();
 		}
 		return is_load;
-	}
-	public final void unloadState(){
+	}	
+	
+	public final void disposeState()
+	{
 		is_load = false;
-		unload();		
+		dispose();
 	}
+	
 	public final boolean isLoad(){
 		return is_load;
 	}

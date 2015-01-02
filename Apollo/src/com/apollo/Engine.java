@@ -90,7 +90,8 @@ public class Engine implements MessageSender
 		return entityBuildersByType.get(builderType);
 	}
 	
-	public Entity createEntity(String builderType,Object ...args) {
+	public Entity createEntity(String builderType,Object ...args) 
+	{
 		EntityBuilder entityBuilder = getEntityBuilder(builderType);
 		if(entityBuilder != null) {
 			return entityBuilder.buildEntity(this,args);
@@ -129,9 +130,9 @@ public class Engine implements MessageSender
 			for(Manager mgr : managersBag){
 				mgr.removed(e);
 			}
-			
+				
 			e.uninitialize();
-			
+					
 			e.setDeleted(true);
 		}
 		deleted.clear();
@@ -201,7 +202,7 @@ public class Engine implements MessageSender
 			for(int i=0; i<size; i++)
 			{
 				MessageReciever handler = listeners.get(i);
-				handler.onMessage(message, args);			
+				handler.onMessage(message, args);
 			}
 		}		
 	}

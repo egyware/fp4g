@@ -3,12 +3,12 @@ package com.egysoft.gdx;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.utils.Array;
 import com.egysoft.gdx.assets.EntitySpawn;
 import com.egysoft.gdx.assets.EntitySpawnLoader;
 import com.egysoft.gdx.assets.Sprite;
@@ -17,7 +17,7 @@ import com.egysoft.gdx.assets.Terrain;
 import com.egysoft.gdx.assets.TerrainLoader;
 import com.egysoft.utils.StringUtils;
 
-public abstract class Game implements ApplicationListener, InputProcessor
+public abstract class Game implements ApplicationListener
 {
 	public static Game instance;	
 	public static int Width;
@@ -32,8 +32,8 @@ public abstract class Game implements ApplicationListener, InputProcessor
 	
 	private GameState next;
 	private GameState current;
-	private final Array<GameState> states;
-	
+	private InputMultiplexer multiplexer;
+		
 	public abstract int getWidth();
 	public abstract int getHeight();
 	
@@ -41,29 +41,27 @@ public abstract class Game implements ApplicationListener, InputProcessor
 	
 	public Game()
 	{
-		states = new Array<GameState>();
-		
 		final InternalFileHandleResolver fileResolver = new InternalFileHandleResolver();
 		assets = new AssetManager();		
 		assets.setLoader(Sprite.class,new SpriteLoader(fileResolver));
 		assets.setLoader(TiledMap.class,new TmxMapLoader(fileResolver));
 		assets.setLoader(Terrain.class,new TerrainLoader(fileResolver));
 		assets.setLoader(EntitySpawn.class,new EntitySpawnLoader(fileResolver));
+		multiplexer = new InputMultiplexer();
 	}
 	
-	public void start(GameState next)
+	public void start(GameState state)
 	{
-		this.next = null;
-		Gdx.app.log("GameCycleLife", StringUtils.format("start: {0}",next.getClass().getSimpleName()));
-		current = states.size > 0?states.peek():null;
+		next = state;
+		performScreenChange();
+	}
+	
+	public void performScreenChange()
+	{
+		Gdx.app.log("GameCycleLife", StringUtils.format("start {0}",next.getClass().getSimpleName()));		
 		if(current != null)
 		{
-			current.exit();
-			if(current.isLoad())
-			{
-				current.unloadState();
-			}
-			states.pop();
+			current.dispose();			
 		}	
 		current = next;
 		if(!current.isLoad())
@@ -75,11 +73,10 @@ public abstract class Game implements ApplicationListener, InputProcessor
 			}
 			else
 			{
-				//TODO [egyware] error, de que? no se que...
+				Gdx.app.log("GameCycleLife", StringUtils.format("No se pudo cargar {0}",current.getClass().getSimpleName()));
 			}
 		}
-		current.enter();
-		states.add(current);
+		this.next = null;
 	}
 	
 	public void nextState(GameState _next)
@@ -88,46 +85,10 @@ public abstract class Game implements ApplicationListener, InputProcessor
 		next = _next;
 	}
 	
-	/**
-	 * Pausa el actual contexto y le da prioridad a este
-	 * @param next
-	 */
-	public void pauseState(GameState next)
-	{
-		Gdx.app.log("GameCycleLife", StringUtils.format("pause: {0}",next.getClass().getSimpleName()));
-		//se asume que existe un contexto actual y guardado en  states...
-		if(current != null)
-		{
-			current.pause();
-		}
-		current = next;
-		if(!current.isLoad())
-		{
-			boolean result = current.load();
-			if(result)
-			{
-				current.setLoad(true);
-			}
-			else
-			{
-				//TODO error
-			}
-		}
-		current.enter();
-		states.add(current);	
-	}
-	
 	public void resumeState()
 	{
 		Gdx.app.log("GameCycleLife", "resume");
 		//se asume que existe un contexto actual y guardado en  states...
-		if(current != null)
-		{
-			current.exit();
-			current.unloadState();
-			states.pop(); //retiro
-		}		
-		current = states.size > 0?states.peek():null;
 		if(current != null)
 		{
 			current.resume();
@@ -137,7 +98,8 @@ public abstract class Game implements ApplicationListener, InputProcessor
 	@Override
 	public void create() 
 	{
-		Game.init(this);
+		Game.init(this);		
+		Gdx.input.setInputProcessor(multiplexer);
 		Gdx.app.setLogLevel(Application.LOG_INFO);
 		Gdx.app.log("AppCycleLife", "create");
 	}
@@ -147,11 +109,8 @@ public abstract class Game implements ApplicationListener, InputProcessor
 		Gdx.app.log("AppCycleLife", "dispose");	
 		if(current != null)
 		{
-			current.exit();
-			current.unloadState();
+			current.dispose();			
 		}
-		//TODO [egyware] revisar si existen más estados cargados
-
 	}
 
 	@Override
@@ -164,16 +123,18 @@ public abstract class Game implements ApplicationListener, InputProcessor
 	}
 
 	@Override
-	public void render() {		
-		if(current != null)
-		{			
-			current.update(Gdx.graphics.getDeltaTime());			
+	public void render() 
+	{		
+		float deltaTime = Gdx.graphics.getDeltaTime();		
+		
+		if (current != null) {
+			current.render(deltaTime);
 		}
+		
 		if(next != null)
 		{
-			start(next);			
+			performScreenChange();			
 		}
-
 	}
 
 	@Override
@@ -190,45 +151,19 @@ public abstract class Game implements ApplicationListener, InputProcessor
 		{
 			current.resume();			
 		}
+	}	
+	public InputMultiplexer getMultiplexer()
+	{
+		return  multiplexer;
 	}
-	@Override
-	public boolean keyDown(int arg0) {
-		// TODO Auto-generated method stub
-		return false;
+	
+	public void addInputProcessor(InputProcessor input) 
+	{
+		multiplexer.addProcessor(input);
 	}
-	@Override
-	public boolean keyTyped(char arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean keyUp(int arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean mouseMoved(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean scrolled(int arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean touchDragged(int arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean touchUp(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
-		return false;
+	
+	public void removeInputProcessor(InputProcessor input) 
+	{
+		multiplexer.removeProcessor(input);
 	}
 }

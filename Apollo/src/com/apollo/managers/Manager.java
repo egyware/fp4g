@@ -8,7 +8,7 @@ import com.apollo.annotate.ManagerInjector;
 
 public abstract class Manager
 {
-	protected Engine world;
+	protected Engine engine;
 	
 	/**
 	 * Inicializa el Manager
@@ -26,11 +26,11 @@ public abstract class Manager
 	}
 
 	public void setWorldContainer(Engine world) {
-		this.world = world;
+		this.engine = world;
 	}
 
 	public Engine getWorldContainer() {
-		return world;
+		return engine;
 	}
 
 	public void applyAnnotations()

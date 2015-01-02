@@ -1,6 +1,8 @@
 package com.apollo.components.body;
 
+
 import static com.apollo.managers.PhysicsManager.SCALE;
+import static com.apollo.managers.PhysicsManager.INV_SCALE;
 
 import com.apollo.Entity;
 import com.apollo.managers.PhysicsManager;
@@ -31,8 +33,6 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 {
 	private Vector2 position = new Vector2();
 	private Body box;
-	public int width;
-	public int height;
 	
 	private float desiredVelocity = 0;	
 	private Fixture bottonSensor;
@@ -43,12 +43,8 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 	private int touchLeft;
 	private int touchRight;
 		
-	private PlatformBodyBehavior(int width, int height) 
-	{
-		this.width = width;
-		this.height = height;
-		
-		
+	private PlatformBodyBehavior() 
+	{	
 	}
 
 	@Override
@@ -113,16 +109,18 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 	}
 	public static PlatformBodyBehavior build(Entity owner, Number _x, Number _y, Number _width, Number _height,Filter filter)
 	{
-		float x = _x.floatValue(), y = _y.floatValue();
-		int width = _width.intValue(), height = _height.intValue();
-		PlatformBodyBehavior behavior = new PlatformBodyBehavior(width,height);
+		float x = _x.floatValue()*SCALE;
+		float y = _y.floatValue()*SCALE;
+		float width = _width.floatValue()*SCALE;
+		float height = _height.floatValue()*SCALE;
+		PlatformBodyBehavior behavior = new PlatformBodyBehavior();
 		
 		World world = owner.getEngine().getManager(PhysicsManager.class).getb2World();
 		final Vector2 position = new Vector2(x,y);
 		final Vector2 temp = new Vector2();
 		{
 			BodyDef def = new BodyDef();		
-			def.position.set(position.cpy().scl(SCALE));
+			def.position.set(position);
 			def.type = BodyDef.BodyType.DynamicBody;
 			def.fixedRotation = true;		
 			Body box = world.createBody(def);
@@ -132,7 +130,7 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 			final float height_2 = height*0.5f;
 			//shape
 		    PolygonShape boxShape = new PolygonShape();
-		    boxShape.setAsBox(width_2*SCALE,height_2*SCALE);
+		    boxShape.setAsBox(width_2,height_2);
 		    FixtureDef fixtureDef = new FixtureDef();
 		    fixtureDef.density = 1.0f; //!\todo puede ser un parametro
 		    //fixtureDef.friction = 1.0f;//!\todo puede ser un parametro
@@ -157,13 +155,13 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 		    }
 		    	
 		    //sensor abajo
-		    boxShape.setAsBox(width_2*0.9f*SCALE, SCALE,temp.set(0,-height_2*SCALE-SCALE),0);
+		    boxShape.setAsBox(width_2*0.9f, 0.01f,temp.set(0,-height_2-0.01f),0);
 		    Fixture bottonSensor = box.createFixture(sensorDef);		    
 		    //sensor izquierda
-		    boxShape.setAsBox(SCALE, height_2*0.8f*SCALE,temp.set(-width_2*SCALE-SCALE,0),0);
+		    boxShape.setAsBox(0.01f, height_2*0.8f,temp.set(-width_2-0.01f,0),0);
 		    Fixture leftSensor = box.createFixture(sensorDef);		    
 		    //sensor derecha
-		    boxShape.setAsBox(SCALE, height_2*0.8f*SCALE,temp.set(width_2*SCALE+SCALE,0),0);
+		    boxShape.setAsBox(0.01f, height_2*0.8f,temp.set(width_2+0.01f,0),0);
 		    Fixture rightSensor = box.createFixture(sensorDef);
 		    
 		    boxShape.dispose(); //ya no la usaremos más
@@ -263,10 +261,8 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 	
 	public void rayCast(Bag<Entity> entities, Vector2 p1, Vector2 p2) 
 	{
-		this.touched = entities;
-		p1.scl(SCALE);
-		p2.scl(SCALE);
-		box.getWorld().rayCast(this, p1, p2);
+		this.touched = entities;		
+		box.getWorld().rayCast(this, p1.scl(SCALE), p2.scl(SCALE));
 	}
 
 	@Override
@@ -304,9 +300,9 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 	}
 
 	@Override
-	protected Vector2 getPosition()
+	public Vector2 getPosition()
 	{
-		return position.set(box.getPosition());
+		return position.set(box.getPosition()).scl(INV_SCALE);
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package com.apollo.managers;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.apollo.DefaultEntity;
 import com.apollo.Entity;
 import com.apollo.utils.Bag;
 
@@ -25,7 +24,7 @@ public class GroupManager extends Manager {
 		return bag;
 	}
 	
-	public void setGroup(DefaultEntity e, Group group) {
+	public void setGroup(Entity e, Group group) {
 		removeIfPresent(e);
 		insertToGroup(e, group);
 	}
