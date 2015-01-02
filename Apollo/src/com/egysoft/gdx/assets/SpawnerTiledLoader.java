@@ -22,30 +22,32 @@ import com.badlogic.gdx.utils.Array;
  * @author egyware
  * 
  */
-public class EntitySpawnLoader extends SynchronousAssetLoader<EntitySpawn, EntitySpawnLoader.EntitySpawnParameter> 
+public class SpawnerTiledLoader extends SynchronousAssetLoader<Spawner, SpawnerTiledLoader.SpawnerTiledParameter> 
 {
-	public EntitySpawnLoader(FileHandleResolver resolver) 
+	public SpawnerTiledLoader(FileHandleResolver resolver) 
 	{
 		super(resolver);	
 	}
 
+	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override	
-	public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, EntitySpawnParameter parameter) 
+	public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, SpawnerTiledParameter parameter) 
 	{
 		Array<AssetDescriptor> deps = new Array<AssetDescriptor>();
 		if (parameter == null) 
 		{
 			deps.add(new AssetDescriptor(file.pathWithoutExtension() + ".tmx", TiledMap.class));
-		} else {
-			deps.add(new AssetDescriptor(parameter.tiledMapPath,	TiledMap.class));
+		}
+		else
+		{
+			deps.add(new AssetDescriptor(parameter.tiledMapPath, TiledMap.class));
 		}
 		return deps;
 	}
 
 	
 	@Override
-	public EntitySpawn load(AssetManager assetManager, String fileName, FileHandle file,	EntitySpawnParameter parameter) 
+	public Spawner load(AssetManager assetManager, String fileName, FileHandle file,	SpawnerTiledParameter parameter) 
 	{
 		String tiledMapPath;
 		if (parameter == null)
@@ -70,7 +72,7 @@ public class EntitySpawnLoader extends SynchronousAssetLoader<EntitySpawn, Entit
 				}
 			}
 		}		
-		EntitySpawn entitySpawn = new EntitySpawn(list.size());
+		Spawner entitySpawn = new Spawner(list.size());
 		
 		int index = 0;
 		for(RectangleMapObject rmo: list)
@@ -90,10 +92,8 @@ public class EntitySpawnLoader extends SynchronousAssetLoader<EntitySpawn, Entit
 		return entitySpawn;
 	}
 
-	public static class EntitySpawnParameter extends AssetLoaderParameters<EntitySpawn> 
+	public static class SpawnerTiledParameter extends AssetLoaderParameters<Spawner> 
 	{
-		public String tiledMapPath;
-		public EntitySpawnParameter()	{ }
-		
+		public String tiledMapPath;		
 	}
 }

@@ -9,12 +9,12 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.egysoft.gdx.assets.EntitySpawn;
-import com.egysoft.gdx.assets.EntitySpawnLoader;
+import com.egysoft.gdx.assets.Spawner;
+import com.egysoft.gdx.assets.SpawnerTiledLoader;
 import com.egysoft.gdx.assets.Sprite;
 import com.egysoft.gdx.assets.SpriteLoader;
-import com.egysoft.gdx.assets.Terrain;
-import com.egysoft.gdx.assets.TerrainLoader;
+import com.egysoft.gdx.assets.Ground;
+import com.egysoft.gdx.assets.GroundLoader;
 import com.egysoft.utils.StringUtils;
 
 public abstract class Game implements ApplicationListener
@@ -45,8 +45,8 @@ public abstract class Game implements ApplicationListener
 		assets = new AssetManager();		
 		assets.setLoader(Sprite.class,new SpriteLoader(fileResolver));
 		assets.setLoader(TiledMap.class,new TmxMapLoader(fileResolver));
-		assets.setLoader(Terrain.class,new TerrainLoader(fileResolver));
-		assets.setLoader(EntitySpawn.class,new EntitySpawnLoader(fileResolver));
+		assets.setLoader(Ground.class,new GroundLoader(fileResolver));
+		assets.setLoader(Spawner.class,new SpawnerTiledLoader(fileResolver));
 		multiplexer = new InputMultiplexer();
 	}
 	

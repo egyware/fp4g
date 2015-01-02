@@ -16,32 +16,32 @@ import com.badlogic.gdx.utils.Json;
  * @author egyware
  * 
  */
-public class TerrainLoader extends SynchronousAssetLoader<Terrain, TerrainLoader.Terrain2DParameter> 
+public class GroundLoader extends SynchronousAssetLoader<Ground, GroundLoader.GroundParameter> 
 {
-	public TerrainLoader(FileHandleResolver resolver) 
+	public GroundLoader(FileHandleResolver resolver) 
 	{
 		super(resolver);		
 	}
 	
 	@Override
 	@SuppressWarnings("rawtypes")
-	public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, Terrain2DParameter parameter) 
+	public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, GroundParameter parameter) 
 	{
 		return null;
 	}
 	
 	@Override
-	public Terrain load(AssetManager assetManager, String fileName, FileHandle file, Terrain2DParameter parameter) 
+	public Ground load(AssetManager assetManager, String fileName, FileHandle file, GroundParameter parameter) 
 	{
 		Json json = new Json();
 		json.addClassTag("Box", Box.class);		
 		
-		Terrain terrain = json.fromJson(Terrain.class, file);		
+		Ground terrain = json.fromJson(Ground.class, file);		
 
 		return terrain;
 	}
 
-	public static class Terrain2DParameter extends AssetLoaderParameters<Terrain> 
+	public static class GroundParameter extends AssetLoaderParameters<Ground> 
 	{
 		//TODO nada todavía por diseñar :D
 	}

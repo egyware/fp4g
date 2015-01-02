@@ -1,29 +1,12 @@
 package com.egysoft.gdx.assets;
 
-import java.util.Vector;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.World;
 
+public abstract class Terrain 
+{
+	public Filter filter;
+	public abstract Body createBody(World world);
 
-/**
- * Esta clase contiene todos los objetos estaticos.
- * 
- * Esta clase se encarga de almacenar todos los objetos estaticos de box2D o de algún motor fisico 2D.
- * 
- * 
- * @author Edgardo
- *
- */
-public class Terrain
-{	
-	public int tile_rows;
-	public int tile_columns;
-	public int tile_width;
-	public int tile_height;
-	
-	public Vector<SubTerrain> subterrains = new Vector<SubTerrain>(); 
-	
-	public Terrain()
-	{	
-	}
-	
-	
 }
