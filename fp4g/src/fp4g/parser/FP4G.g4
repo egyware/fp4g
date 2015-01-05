@@ -19,20 +19,20 @@ import java.util.LinkedList;
 
 @parser::members
 {
-private ILib lib; 
+	private ILib lib; 
 
-public void setValue(Object o, String key, Object value)
-{
-	if(value instanceof Expresion)
+	public void setValue(Object o, String key, Object value)
 	{
-		value = ((Expresion)value).eval(lib);
+		if(value instanceof Expresion)
+		{
+			value = ((Expresion)value).eval(lib);
+		}
+		if(value instanceof IValue)
+		{
+			value = ((IValue)value).getValue();
+		}
+		BeanAccess.setValue(o,key,value);
 	}
-	if(value instanceof IValue)
-	{
-		value = ((IValue)value).getValue();
-	}
-	BeanAccess.setValue(o,key,value);
-}
 }
 
 @lexer::header
@@ -47,11 +47,9 @@ program : programBody EOF;
 
 parseLib: libBody EOF;
 
-usings  : (using)*;
-
 libBody     : (set[lib] DOTCOMA | define)*;
 
-programBody : (set[lib] DOTCOMA | game | define)*;
+programBody : (set[lib] DOTCOMA | define)*;
 
 type
 returns
@@ -62,42 +60,59 @@ returns
 		TYPE ABRE_PAR typeName=ID CIERRA_PAR { $value = lib.getType($typeName.text); }
 		;
 
-define
-		:
-		DEFINE 
-		(		
-			TYPE typeName=ID { Type t = new Type(); t.setName($typeName.text); lib.registerType(t); } |				
-			MODEL modelName=ID ABRE_PAR modelClass=STRING_LITERAL CIERRA_PAR { Model m = new Model(); m.setName($modelName.text); m.setModel($modelClass.text); lib.registerModel(m); } |
-			CONTROLLER controllerName=ID ABRE_PAR controllerClass=STRING_LITERAL CIERRA_PAR { Controller c = new Controller(); lib.registerContronller(c); } |
-			VIEW viewName=ID ABRE_PAR viewPath=STRING_LITERAL CIERRA_PAR  { View v = new View(); lib.registerView(v); } 	
-		)
-		;
-		
-resolver
-returns
-[
-	Resolver r;
-]
+define returns [Define value]
 locals
 [
-	Type t;
+	String defName;
+	DefineType t;
+]
+@after 
+{
+	value = t.createInstance($defName);
+}
+		: 
+		  DEFINE ID { $t = DefineTypes.getDefineTypeByName($ID.text);}		  	 
+		  name = ID { defName = $name.text; }
+          ABRE_COR (defineValue[value])* CIERRA_COR                   
+        ;
+        
+ 
+defineValue[Define d]
+		:		
+		  set[d] DOTCOMA
+		| modifiers[d] DOTCOMA				 
+		;
+
+modifiers[Define d]
+		:
+		instantiator [d]
+		on  
+		;
+		
+resolver returns[Resolver r]
+locals
+[
+	Type t
 ]
 @init
 { 
 	List<String> imports = new LinkedList<String>(); 
 }
-@after 
+//la proxima vez que weebees con este codigo probablemente no sepas que pasa aqui
+// por alguna razon, solo se permite un after por gramatica, lo cual no tiene mucho sentido
+// y no existe solucion (todavia) asi que averigua una alternativa para esto.
+@after
 {
+	$r = new Resolver($t);
 	$r.setSources(imports);
 	lib.registerResolver($t, $r);
 }
 			: 
-			RESOLVER name=ID { $r = new Resolver(lib.getType($name.text)); lib.registerResolver($r); }
+			RESOLVER type { $t = $type.value; }
 			ABRE_COR
 				(set[$r] DOTCOMA)*
 				(string=STRING_LITERAL COMA { imports.add($string.text); })* (string2=STRING_LITERAL { imports.add($string2.text); })?  DOTCOMA
-			CIERRA_COR
-			FOR type {$t = $type.value; }
+			CIERRA_COR			 
 			;
 
 // SET llave = 5
@@ -106,118 +121,11 @@ set[ Object object ]
 			SET key=ID EQUAL expr { setValue($object,$key.text,$expr.value); } 
 			;
 
-using
-returns
-[
-	DefineType type3 = null,
-]   
-		: USING 
-			(
-			   MANAGER  { $type3 = DefineTypes.MANAGER; }
-			 | STATE    { $type3 = DefineTypes.STATE;   }
-			 | BEHAVIOR { $type3 = DefineTypes.BEHAVIOR;}
-			 | ENTITY   { $type3 = DefineTypes.ENTITY;  }
-			 | GOAL     { $type3 = DefineTypes.GOAL;    }
-			 | MESSAGE  { $type3 = DefineTypes.MESSAGE; }
-			 | ID       { $type3 = DefineTypes.getDefineTypeByName($ID.text);}
-			) 
-		  name = ID (DOTCOMA | ABRE_COR usingValues CIERRA_COR)		  
-		;
-		
-usingValues
-:
-	(usingValue)*
-;
-
-usingValue
-:
-	  add DOTCOMA
-	| set[null] DOTCOMA			
-;
-
-game 
-returns [String name]  
-		:
-		 DEFINE GAME ID { $name = $ID.text; } 
-		 ABRE_COR gameValues CIERRA_COR		 
-		;
-		
-gameValues:
-	(gameValue)*
-;
-
-gameValue  
-		: 
-		  add DOTCOMA
-		| set[null] DOTCOMA		
-		| when DOTCOMA
-		| on
-		| flag DOTCOMA
-		;
-	
-
-add 
+//BEHAVIOR add
+instantiator[Define d] 
 :	      	
-	  ADD
-	  (
-	   addDefine |
-	   addMethod
-	  ) 
+	  id=ID { lib.getType($id.text) != null }? id=ID name=ID ( ABRE_PAR exprList? CIERRA_PAR )? ( exprParams = array )?	  
 ;
-
-addDefine
-returns
-[
-	DefineType type3 = null,
-	String addName = null	
-]
-:
-		 (
-			  	MANAGER  { $type3 = DefineTypes.MANAGER;  }			  	
-			  | STATE    { $type3 = DefineTypes.STATE;    }
-			  | BEHAVIOR { $type3 = DefineTypes.BEHAVIOR; }
-			  | ENTITY   { $type3 = DefineTypes.ENTITY;  }
-			  | GOAL     { $type3 = DefineTypes.GOAL;  }			  
-		 )
-		 ID { $addName = $ID.text; }
-		 ( ABRE_PAR exprList? CIERRA_PAR )?
-		 ( exprParams = array )?
-;	
-
-addMethod
-returns
-[
-	String addName = null	
-]
-:
-	 ID { $addName = $ID.text; }
-	 ABRE_PAR nameList? CIERRA_PAR
-	 ( exprParams = array )?
-;
-
-define2  
-returns
-[
-	
-	DefineType type3 = null,
-	String defName = null
-]
-		: 
-		  DEFINE 
-		  	( 
-		  		 MANAGER    { $type3 = DefineTypes.MANAGER; }
-		  		| STATE     { $type3 = DefineTypes.STATE;   }
-		  		| BEHAVIOR  { $type3 = DefineTypes.BEHAVIOR;}
-		  		| ENTITY    { $type3 = DefineTypes.ENTITY;  }
-		  		| GOAL      { $type3 = DefineTypes.GOAL;    }
-		  		| MESSAGE   { $type3 = DefineTypes.MESSAGE; }		  		
-		  		| ASSET     { $type3 = DefineTypes.ASSET;   }
-		  		| ID        { $type3 = DefineTypes.getDefineTypeByName($ID.text);}
-		  	) 
-		  ID { $defName = $ID.text; } 
-		  ( ABRE_PAR nameList CIERRA_PAR )?		  
-          ABRE_COR defineValues CIERRA_COR         
-        ;
 
 on
 returns
@@ -286,23 +194,6 @@ locals
 		:
 		ID {$filterName = $ID.text;}
 		( ABRE_PAR exprList? CIERRA_PAR )?
-		;
-
-
- 
-defineValues
-	    :
-	      (defineValue)* 
-	    ;
-
-defineValue
-		:
-		  assets
-		| add DOTCOMA
-		| set[null] DOTCOMA
-		| flag DOTCOMA
-		| when DOTCOMA
-		| on		 
 		;
 
 exprList: expr (COMA expr)*;
