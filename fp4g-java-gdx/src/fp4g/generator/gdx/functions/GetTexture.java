@@ -1,7 +1,7 @@
 package fp4g.generator.gdx.functions;
+import fp4g.core.Expresion;
 import fp4g.data.Container;
 import fp4g.data.ExprList;
-import fp4g.data.Expresion;
 import fp4g.data.IDefine;
 import fp4g.data.expresion.DirectCode;
 import fp4g.data.expresion.FunctionCall;

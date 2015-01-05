@@ -1,7 +1,7 @@
 package fp4g.data.expresion;
 
-import fp4g.data.Expresion;
-import fp4g.data.IValue;
+import fp4g.core.Expresion;
+import fp4g.core.IValue;
 import fp4g.data.operators.IAccessible;
 import fp4g.exceptions.CannotEvalException;
 

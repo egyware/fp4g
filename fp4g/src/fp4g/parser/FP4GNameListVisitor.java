@@ -2,10 +2,10 @@ package fp4g.parser;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import fp4g.core.Expresion;
+import fp4g.core.IValue;
 import fp4g.data.DeclVar;
-import fp4g.data.Expresion;
 import fp4g.data.IDefine;
-import fp4g.data.IValue;
 import fp4g.data.NameList;
 import fp4g.data.VarType;
 import fp4g.exceptions.CannotEvalException;

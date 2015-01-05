@@ -2,12 +2,12 @@ package fp4g.generator.gdx.functions;
 
 import org.antlr.v4.misc.Utils;
 
+import fp4g.core.Expresion;
+import fp4g.core.IValue;
 import fp4g.data.Add;
 import fp4g.data.Container;
 import fp4g.data.ExprList;
-import fp4g.data.Expresion;
 import fp4g.data.IDefine;
-import fp4g.data.IValue;
 import fp4g.data.On;
 import fp4g.data.define.Manager;
 import fp4g.data.define.Message;

@@ -1,7 +1,7 @@
 package fp4g.data.statements;
 
+import fp4g.core.Line;
 import fp4g.data.ExprList;
-import fp4g.data.Line;
 import fp4g.data.add.AddMethod;
 
 public final class Filter extends Line

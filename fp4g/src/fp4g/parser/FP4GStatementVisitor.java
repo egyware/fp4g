@@ -4,8 +4,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import fp4g.core.Expresion;
 import fp4g.data.ExprList;
-import fp4g.data.Expresion;
 import fp4g.data.IDefine;
 import fp4g.data.ILib;
 import fp4g.data.Statement;

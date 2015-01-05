@@ -1,10 +1,10 @@
 package fp4g.data.expresion;
 
+import fp4g.core.Expresion;
+import fp4g.core.IValue;
 import fp4g.data.DefineTypes;
-import fp4g.data.Expresion;
 import fp4g.data.IDefine;
 import fp4g.data.ILib;
-import fp4g.data.IValue;
 import fp4g.data.define.Manager;
 import fp4g.data.expresion.literals.SpecificLiterals;
 import fp4g.exceptions.CannotEvalException;

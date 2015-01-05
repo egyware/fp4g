@@ -2,7 +2,7 @@ package fp4g.log;
 
 import java.io.PrintStream;
 
-import fp4g.data.ILine;
+import fp4g.core.ILine;
 import fp4g.exceptions.FP4GException;
 import fp4g.exceptions.FP4GRuntimeException;
 

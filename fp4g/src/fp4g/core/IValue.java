@@ -1,4 +1,4 @@
-package fp4g.data;
+package fp4g.core;
 
 /**
  * Esta interface encapsula un valor cualesquiera en FP4G.

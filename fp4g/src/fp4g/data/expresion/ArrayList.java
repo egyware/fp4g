@@ -2,7 +2,7 @@ package fp4g.data.expresion;
 
 import java.util.Iterator;
 
-import fp4g.data.IValue;
+import fp4g.core.IValue;
 
 public final class ArrayList extends Literal<IList> implements IList
 {

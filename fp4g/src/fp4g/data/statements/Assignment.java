@@ -1,6 +1,6 @@
 package fp4g.data.statements;
 
-import fp4g.data.Expresion;
+import fp4g.core.Expresion;
 import fp4g.data.Statement;
 
 public class Assignment extends Statement

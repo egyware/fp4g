@@ -1,5 +1,7 @@
 package fp4g.data;
 
+import fp4g.core.ILine;
+
 
 /**
  * Especifica si la clase se puede generar o debe usar un archivo externo. 

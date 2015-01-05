@@ -3,6 +3,9 @@
  */
 package fp4g.data;
 
+import fp4g.core.Expresion;
+import fp4g.core.IValue;
+import fp4g.core.Line;
 import fp4g.data.expresion.IMap;
 import fp4g.exceptions.CannotEvalException;
 

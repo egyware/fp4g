@@ -1,6 +1,6 @@
 package fp4g.exceptions;
 
-import fp4g.data.ILine;
+import fp4g.core.ILine;
 import fp4g.log.FP4GWarn;
 import fp4g.log.IMessageType;
 

@@ -1,6 +1,6 @@
 package fp4g.data.expresion.literals;
 
-import fp4g.data.IValue;
+import fp4g.core.IValue;
 import fp4g.data.expresion.Literal;
 import fp4g.data.operators.IAddable;
 import fp4g.data.operators.IComparable;

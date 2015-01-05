@@ -3,8 +3,8 @@ package fp4g.generator.gdx;
 import java.util.LinkedList;
 import java.util.List;
 
+import fp4g.core.Expresion;
 import fp4g.data.Container;
-import fp4g.data.Expresion;
 import fp4g.data.Statement;
 import fp4g.data.Statements;
 import fp4g.data.expresion.FunctionCall;

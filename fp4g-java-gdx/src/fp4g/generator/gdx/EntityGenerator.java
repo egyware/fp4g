@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import fp4g.core.Expresion;
 import fp4g.data.DeclVar;
 import fp4g.data.DefineTypes;
-import fp4g.data.Expresion;
 import fp4g.data.ICode;
 import fp4g.data.NameList;
 import fp4g.data.On;

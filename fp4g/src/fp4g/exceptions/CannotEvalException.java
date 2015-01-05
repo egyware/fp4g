@@ -1,7 +1,7 @@
 package fp4g.exceptions;
 
-import fp4g.data.Expresion;
-import fp4g.data.IValue;
+import fp4g.core.Expresion;
+import fp4g.core.IValue;
 import fp4g.log.FP4GError;
 
 public class CannotEvalException extends FP4GRuntimeException 

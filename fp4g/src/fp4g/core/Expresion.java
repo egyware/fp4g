@@ -1,4 +1,4 @@
-package fp4g.data;
+package fp4g.core;
 
 import fp4g.exceptions.CannotEvalException;
 
@@ -18,5 +18,5 @@ public interface Expresion
 	 * @return Regresa el valor resultante de esta expresión
 	 * @throws CannotEvalException En caso que no se pueda evaluar la expresión
 	 */
-	public IValue<?> eval(IValue<?> value) throws CannotEvalException;
+	public IValue<?> eval(IValue<?> value) throws CannotEvalException;	
 }

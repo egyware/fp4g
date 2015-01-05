@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import com.esotericsoftware.reflectasm.ConstructorAccess;
 
-import fp4g.data.IValue;
+import fp4g.core.IValue;
 
 public class CustomClassList extends Literal<IList> implements IList 
 {

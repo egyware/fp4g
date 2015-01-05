@@ -2,6 +2,8 @@ package fp4g.data;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import fp4g.core.IValue;
+
 public class NameList implements Iterable<DeclVar>
 {
 	private final LinkedList<DeclVar> nameVars;

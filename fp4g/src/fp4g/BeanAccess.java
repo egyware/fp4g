@@ -86,5 +86,13 @@ public final class BeanAccess
 		}
 		return ba;
 	}
+	public static BeanAccess getBeanAccess(Object object)
+	{
+		return getBeanAccess(object.getClass());
+	}
+	public static void setValue(Object thizz, String key, Object value)
+	{
+		getBeanAccess(thizz).set(thizz, key, value);
+	}
 
 }

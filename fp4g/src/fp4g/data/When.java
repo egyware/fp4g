@@ -1,5 +1,8 @@
 package fp4g.data;
 
+import fp4g.core.Expresion;
+import fp4g.core.Line;
+
 /**
  * @author Edgardo
  *

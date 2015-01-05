@@ -3,7 +3,7 @@ package fp4g.data.expresion;
 import java.util.Map;
 import java.util.Set;
 
-import fp4g.data.IValue;
+import fp4g.core.IValue;
 
 public interface IMap
 {

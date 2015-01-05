@@ -6,12 +6,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import fp4g.core.IValue;
 import fp4g.data.Code;
 import fp4g.data.DefineType;
 import fp4g.data.DefineTypes;
 import fp4g.data.IDefine;
 import fp4g.data.ILib;
-import fp4g.data.IValue;
 import fp4g.data.expresion.IMap;
 import fp4g.exceptions.DefineNotFoundException;
 

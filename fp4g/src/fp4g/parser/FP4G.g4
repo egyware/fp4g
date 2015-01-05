@@ -7,12 +7,32 @@ package fp4g.parser;
 
 import static fp4g.log.Log.*;
 
+import fp4g.core.*;
 import fp4g.data.*;
 import fp4g.data.statements.*;
 import fp4g.data.define.*;
 import fp4g.data.vartypes.*;
 
 import java.util.LinkedList;
+
+}
+
+@parser::members
+{
+private ILib lib; 
+
+public void setValue(Object o, String key, Object value)
+{
+	if(value instanceof Expresion)
+	{
+		value = ((Expresion)value).eval(lib);
+	}
+	if(value instanceof IValue)
+	{
+		value = ((IValue)value).getValue();
+	}
+	BeanAccess.setValue(o,key,value);
+}
 }
 
 @lexer::header
@@ -20,31 +40,86 @@ import java.util.LinkedList;
 package fp4g.parser;
 }
 
-// **** PARSER ****
-program : usings programBody EOF;
 
-parseLib: usings libBody EOF;
+
+// **** PARSER ****
+program : programBody EOF;
+
+parseLib: libBody EOF;
 
 usings  : (using)*;
 
-libBody     : (set DOTCOMA | define)*;
+libBody     : (set[lib] DOTCOMA | define)*;
 
-programBody : (set DOTCOMA | game | define)*;
+programBody : (set[lib] DOTCOMA | game | define)*;
+
+type
+returns
+[
+	Type value;
+]
+   		:
+		TYPE ABRE_PAR typeName=ID CIERRA_PAR { $value = lib.getType($typeName.text); }
+		;
+
+define
+		:
+		DEFINE 
+		(		
+			TYPE typeName=ID { Type t = new Type(); t.setName($typeName.text); lib.registerType(t); } |				
+			MODEL modelName=ID ABRE_PAR modelClass=STRING_LITERAL CIERRA_PAR { Model m = new Model(); m.setName($modelName.text); m.setModel($modelClass.text); lib.registerModel(m); } |
+			CONTROLLER controllerName=ID ABRE_PAR controllerClass=STRING_LITERAL CIERRA_PAR { Controller c = new Controller(); lib.registerContronller(c); } |
+			VIEW viewName=ID ABRE_PAR viewPath=STRING_LITERAL CIERRA_PAR  { View v = new View(); lib.registerView(v); } 	
+		)
+		;
+		
+resolver
+returns
+[
+	Resolver r;
+]
+locals
+[
+	Type t;
+]
+@init
+{ 
+	List<String> imports = new LinkedList<String>(); 
+}
+@after 
+{
+	$r.setSources(imports);
+	lib.registerResolver($t, $r);
+}
+			: 
+			RESOLVER name=ID { $r = new Resolver(lib.getType($name.text)); lib.registerResolver($r); }
+			ABRE_COR
+				(set[$r] DOTCOMA)*
+				(string=STRING_LITERAL COMA { imports.add($string.text); })* (string2=STRING_LITERAL { imports.add($string2.text); })?  DOTCOMA
+			CIERRA_COR
+			FOR type {$t = $type.value; }
+			;
+
+// SET llave = 5
+set[ Object object ]
+			:
+			SET key=ID EQUAL expr { setValue($object,$key.text,$expr.value); } 
+			;
 
 using
 returns
 [
-	DefineType type = null,
+	DefineType type3 = null,
 ]   
 		: USING 
 			(
-			   MANAGER  { $type = DefineTypes.MANAGER; }
-			 | STATE    { $type = DefineTypes.STATE;   }
-			 | BEHAVIOR { $type = DefineTypes.BEHAVIOR;}
-			 | ENTITY   { $type = DefineTypes.ENTITY;  }
-			 | GOAL     { $type = DefineTypes.GOAL;    }
-			 | MESSAGE  { $type = DefineTypes.MESSAGE; }
-			 | ID       { $type = DefineTypes.getDefineTypeByName($ID.text);}
+			   MANAGER  { $type3 = DefineTypes.MANAGER; }
+			 | STATE    { $type3 = DefineTypes.STATE;   }
+			 | BEHAVIOR { $type3 = DefineTypes.BEHAVIOR;}
+			 | ENTITY   { $type3 = DefineTypes.ENTITY;  }
+			 | GOAL     { $type3 = DefineTypes.GOAL;    }
+			 | MESSAGE  { $type3 = DefineTypes.MESSAGE; }
+			 | ID       { $type3 = DefineTypes.getDefineTypeByName($ID.text);}
 			) 
 		  name = ID (DOTCOMA | ABRE_COR usingValues CIERRA_COR)		  
 		;
@@ -57,7 +132,7 @@ usingValues
 usingValue
 :
 	  add DOTCOMA
-	| set DOTCOMA			
+	| set[null] DOTCOMA			
 ;
 
 game 
@@ -74,21 +149,12 @@ gameValues:
 gameValue  
 		: 
 		  add DOTCOMA
-		| set DOTCOMA		
+		| set[null] DOTCOMA		
 		| when DOTCOMA
 		| on
 		| flag DOTCOMA
 		;
 	
-
-
-
-set
-returns
-[ String key ]
-		: SET ID { $key = $ID.text; } EQUAL expr 
-		;
-
 
 add 
 :	      	
@@ -102,16 +168,16 @@ add
 addDefine
 returns
 [
-	DefineType type = null,
+	DefineType type3 = null,
 	String addName = null	
 ]
 :
 		 (
-			  	MANAGER  { $type = DefineTypes.MANAGER;  }			  	
-			  | STATE    { $type = DefineTypes.STATE;    }
-			  | BEHAVIOR { $type = DefineTypes.BEHAVIOR; }
-			  | ENTITY   { $type = DefineTypes.ENTITY;  }
-			  | GOAL     { $type = DefineTypes.GOAL;  }			  
+			  	MANAGER  { $type3 = DefineTypes.MANAGER;  }			  	
+			  | STATE    { $type3 = DefineTypes.STATE;    }
+			  | BEHAVIOR { $type3 = DefineTypes.BEHAVIOR; }
+			  | ENTITY   { $type3 = DefineTypes.ENTITY;  }
+			  | GOAL     { $type3 = DefineTypes.GOAL;  }			  
 		 )
 		 ID { $addName = $ID.text; }
 		 ( ABRE_PAR exprList? CIERRA_PAR )?
@@ -129,24 +195,24 @@ returns
 	 ( exprParams = array )?
 ;
 
-define  
+define2  
 returns
 [
 	
-	DefineType type = null,
+	DefineType type3 = null,
 	String defName = null
 ]
 		: 
 		  DEFINE 
 		  	( 
-		  		 MANAGER    { $type = DefineTypes.MANAGER; }
-		  		| STATE     { $type = DefineTypes.STATE;   }
-		  		| BEHAVIOR  { $type = DefineTypes.BEHAVIOR;}
-		  		| ENTITY    { $type = DefineTypes.ENTITY;  }
-		  		| GOAL      { $type = DefineTypes.GOAL;    }
-		  		| MESSAGE   { $type = DefineTypes.MESSAGE; }		  		
-		  		| ASSET     { $type = DefineTypes.ASSET;   }
-		  		| ID        { $type = DefineTypes.getDefineTypeByName($ID.text);}
+		  		 MANAGER    { $type3 = DefineTypes.MANAGER; }
+		  		| STATE     { $type3 = DefineTypes.STATE;   }
+		  		| BEHAVIOR  { $type3 = DefineTypes.BEHAVIOR;}
+		  		| ENTITY    { $type3 = DefineTypes.ENTITY;  }
+		  		| GOAL      { $type3 = DefineTypes.GOAL;    }
+		  		| MESSAGE   { $type3 = DefineTypes.MESSAGE; }		  		
+		  		| ASSET     { $type3 = DefineTypes.ASSET;   }
+		  		| ID        { $type3 = DefineTypes.getDefineTypeByName($ID.text);}
 		  	) 
 		  ID { $defName = $ID.text; } 
 		  ( ABRE_PAR nameList CIERRA_PAR )?		  
@@ -233,7 +299,7 @@ defineValue
 		:
 		  assets
 		| add DOTCOMA
-		| set DOTCOMA
+		| set[null] DOTCOMA
 		| flag DOTCOMA
 		| when DOTCOMA
 		| on		 
@@ -250,26 +316,26 @@ varType
 returns
 [
 	
-	VarType type = null
+	VarType type3 = null
 ]
 		:
-		   NUMBER_TYPE   {$type = BasicType.Number;}
-		 | BOOL_TYPE     {$type = BasicType.Bool;}		 
-		 | STRING_TYPE   {$type = BasicType.String;}
-		 | INTEGER_TYPE  {$type = BasicType.Integer;}
-		 | DOUBLE_TYPE   {$type = BasicType.Double;}
-		 | FLOAT_TYPE    {$type = BasicType.Float;}
-		 | id = defineID {$type = new CustomType(($id.type != null)?DefineTypes.getDefineTypeByName($id.type):DefineTypes.STRUCT, $id.name);} // solo Define del tipo Type
+		   NUMBER_TYPE   {$type3 = BasicType.Number;}
+		 | BOOL_TYPE     {$type3 = BasicType.Bool;}		 
+		 | STRING_TYPE   {$type3 = BasicType.String;}
+		 | INTEGER_TYPE  {$type3 = BasicType.Integer;}
+		 | DOUBLE_TYPE   {$type3 = BasicType.Double;}
+		 | FLOAT_TYPE    {$type3 = BasicType.Float;}
+		 | id = defineID {$type3 = new CustomType(($id.type3 != null)?DefineTypes.getDefineTypeByName($id.type3):DefineTypes.STRUCT, $id.name);} // solo Define del tipo Type
         ;
 
 defineID
 returns
 [
-	String type,
+	String type3,
 	String name
 ]
        :
-       (defineType = ID DOUBLEDOT {$type = $defineType.text;})?
+       (defineType = ID DOUBLEDOT {$type3 = $defineType.text;})?
        defineName = ID {$name = $defineName.text;}
        ; 
 assets:

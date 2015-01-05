@@ -10,10 +10,10 @@ import java.util.Stack;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import fp4g.classes.MessageMethods;
+import fp4g.core.Expresion;
 import fp4g.data.Add;
 import fp4g.data.DefineTypes;
 import fp4g.data.ExprList;
-import fp4g.data.Expresion;
 import fp4g.data.IDefine;
 import fp4g.data.ILib;
 import fp4g.data.add.AddMethod;

@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import fp4g.core.IValue;
 import fp4g.data.Define;
-import fp4g.data.IValue;
 import fp4g.data.expresion.ArrayList;
 import fp4g.data.expresion.IList;
 import fp4g.generator.Depend;

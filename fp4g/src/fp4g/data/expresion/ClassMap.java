@@ -9,7 +9,7 @@ import org.antlr.v4.misc.Utils;
 import com.esotericsoftware.reflectasm.ConstructorAccess;
 import com.esotericsoftware.reflectasm.MethodAccess;
 
-import fp4g.data.IValue;
+import fp4g.core.IValue;
 import fp4g.data.expresion.literals.BoolLiteral;
 import fp4g.data.expresion.literals.FloatLiteral;
 import fp4g.data.expresion.literals.IntegerLiteral;

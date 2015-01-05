@@ -1,8 +1,8 @@
 package fp4g.classes;
 
+import fp4g.core.IValue;
 import fp4g.data.Define;
 import fp4g.data.DefineTypes;
-import fp4g.data.IValue;
 import fp4g.data.add.AddDefine;
 import fp4g.data.define.Behavior;
 import fp4g.data.define.Entity;

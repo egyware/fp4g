@@ -1,7 +1,7 @@
 package fp4g.data.expresion.literals;
 
-import fp4g.data.Expresion;
-import fp4g.data.IValue;
+import fp4g.core.Expresion;
+import fp4g.core.IValue;
 import fp4g.data.expresion.BinaryOp;
 import fp4g.data.expresion.Literal;
 import fp4g.data.operators.IAddable;

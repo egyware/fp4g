@@ -1,6 +1,6 @@
 package fp4g.data.operators;
 
-import fp4g.data.IValue;
+import fp4g.core.IValue;
 import fp4g.data.expresion.literals.BoolLiteral;
 
 public interface IComparable

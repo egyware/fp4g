@@ -3,11 +3,11 @@ package fp4g.generator.gdx;
 import java.util.HashMap;
 import java.util.Map;
 
+import fp4g.core.Expresion;
+import fp4g.core.IValue;
 import fp4g.data.Add;
 import fp4g.data.Container;
 import fp4g.data.Define;
-import fp4g.data.Expresion;
-import fp4g.data.IValue;
 import fp4g.data.add.AddAsset;
 import fp4g.data.define.Manager;
 import fp4g.data.expresion.BinaryOp;

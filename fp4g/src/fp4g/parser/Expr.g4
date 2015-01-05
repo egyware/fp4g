@@ -1,6 +1,10 @@
 parser grammar Expr;
 
 expr  
+returns
+[
+	Expresion value
+]
 		 :
 		   array                              #arrayExpr
 		 | NOT op=expr                        #notExpr

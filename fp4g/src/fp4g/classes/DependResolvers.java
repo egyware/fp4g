@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import fp4g.core.IValue;
 import fp4g.data.Define;
-import fp4g.data.IValue;
 import fp4g.data.expresion.IMap;
 import fp4g.exceptions.DependResolverNotFoundException;
 import fp4g.generator.Depend;

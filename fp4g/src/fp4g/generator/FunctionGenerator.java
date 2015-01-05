@@ -3,8 +3,8 @@
  */
 package fp4g.generator;
 
+import fp4g.core.Expresion;
 import fp4g.data.Container;
-import fp4g.data.Expresion;
 import fp4g.data.expresion.FunctionCall;
 import fp4g.exceptions.CannotEvalException;
 

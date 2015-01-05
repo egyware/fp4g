@@ -6,7 +6,14 @@ MULTI_LINE_COMMENT: '/*' .*? '*/' -> skip;
 
 /* keywords */
 
+TYPE       : 'TYPE';
+RESOLVER   : 'RESOLVER';
 DEFINE     : 'DEFINE';
+MODEL      : 'MODEL';
+CONTROLLER : 'CONTROLLER';
+VIEW       : 'VIEW';
+SET        : 'SET'; 
+
 ADD        : 'ADD';
 ON         : 'ON';
 USING      : 'USING';
@@ -14,9 +21,11 @@ START      : 'START';
 ASSETS     : 'ASSETS';
 FLAG       : 'FLAG';
 WHEN       : 'WHEN';
-SET        : 'SET'; 
+
 
 /* auxiliars keywords */
+FOR		: 'FOR';
+
 MANAGER : 'MANAGER';
 GAME    : 'GAME';
 STATE   : 'STATE';

@@ -2,9 +2,9 @@ package fp4g.data.expresion;
 
 import org.antlr.v4.misc.Utils;
 
+import fp4g.core.Expresion;
+import fp4g.core.IValue;
 import fp4g.data.ExprList;
-import fp4g.data.Expresion;
-import fp4g.data.IValue;
 import fp4g.data.add.AddMethod;
 import fp4g.data.define.Message;
 import fp4g.exceptions.CannotEvalException;

@@ -1,5 +1,8 @@
 package fp4g.data;
 
+import fp4g.core.IValue;
+import fp4g.core.Line;
+
 public class DeclVar extends Line 
 {
 	public final VarType type;

@@ -1,8 +1,9 @@
 package fp4g.data;
 
 import java.util.Iterator;
-
 import java.util.Vector;
+
+import fp4g.core.Expresion;
 
 /**
  * Clase utilitaria para almacenar expresión y aumentar la semantica del código.

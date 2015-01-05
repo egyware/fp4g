@@ -1,6 +1,6 @@
 package fp4g.data.expresion;
 
-import fp4g.data.IValue;
+import fp4g.core.IValue;
 
 public interface IList extends Iterable<IValue<?>> 
 {	

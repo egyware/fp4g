@@ -2,6 +2,8 @@ package fp4g.data;
 
 import java.util.HashMap;
 
+import fp4g.core.IValue;
+import fp4g.core.Line;
 import fp4g.data.operators.IAccessible;
 
 /**

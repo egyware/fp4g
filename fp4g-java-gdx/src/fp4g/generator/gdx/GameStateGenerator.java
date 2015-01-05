@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import fp4g.classes.ManagerData;
+import fp4g.core.Expresion;
+import fp4g.core.IValue;
 import fp4g.data.DefineTypes;
-import fp4g.data.Expresion;
 import fp4g.data.ICode;
 import fp4g.data.ILib;
-import fp4g.data.IValue;
 import fp4g.data.add.AddAsset;
 import fp4g.data.add.AddDefine;
 import fp4g.data.define.Asset;

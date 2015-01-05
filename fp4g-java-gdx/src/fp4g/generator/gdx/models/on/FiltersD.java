@@ -4,9 +4,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import fp4g.core.Expresion;
 import fp4g.data.Container;
 import fp4g.data.ExprList;
-import fp4g.data.Expresion;
 import fp4g.data.add.AddMethod;
 import fp4g.exceptions.CannotEvalException;
 import fp4g.generator.gdx.JavaExpresionGenerator;

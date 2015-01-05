@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.esotericsoftware.reflectasm.ConstructorAccess;
 
-import fp4g.data.IValue;
+import fp4g.core.IValue;
 
 public final class CustomClassMap extends Literal<IMap> implements IMap
 {	

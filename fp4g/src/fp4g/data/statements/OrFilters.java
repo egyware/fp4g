@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import fp4g.data.Line;
+import fp4g.core.Line;
 
 public class OrFilters extends Line implements Iterable<Filter> 
 {

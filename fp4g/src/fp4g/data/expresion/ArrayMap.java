@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import fp4g.data.IValue;
+import fp4g.core.IValue;
 
 // también deberia ser literal
 public final class ArrayMap extends Literal<IMap> implements IMap
