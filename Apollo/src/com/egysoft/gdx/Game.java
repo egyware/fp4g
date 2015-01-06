@@ -9,6 +9,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.egysoft.gdx.assets.GroundTiledLoader;
 import com.egysoft.gdx.assets.Spawner;
 import com.egysoft.gdx.assets.SpawnerTiledLoader;
 import com.egysoft.gdx.assets.Sprite;
@@ -45,7 +46,7 @@ public abstract class Game implements ApplicationListener
 		assets = new AssetManager();		
 		assets.setLoader(Sprite.class,new SpriteLoader(fileResolver));
 		assets.setLoader(TiledMap.class,new TmxMapLoader(fileResolver));
-		assets.setLoader(Ground.class,new GroundLoader(fileResolver));
+		assets.setLoader(Ground.class,new GroundTiledLoader(fileResolver));
 		assets.setLoader(Spawner.class,new SpawnerTiledLoader(fileResolver));
 		multiplexer = new InputMultiplexer();
 	}

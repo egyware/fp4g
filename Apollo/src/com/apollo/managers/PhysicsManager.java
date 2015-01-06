@@ -34,7 +34,7 @@ public class PhysicsManager extends Manager implements ContactListener
 	
 	public static final short MASK_PLAYER =  CATEGORY_ENEMY  | CATEGORY_ITEM | CATEGORY_SCENARY;
 	public static final short MASK_ENEMY = CATEGORY_PLAYER | CATEGORY_SCENARY; 
-	public static final short MASK_SCENERY = -1;
+	public static final short MASK_SCENERY = -1;	
 	public static final short MASK_ITEM = CATEGORY_PLAYER | CATEGORY_SCENARY; 
 			
 	public static final Filter FILTER_PLAYER = new Filter()
@@ -53,6 +53,11 @@ public class PhysicsManager extends Manager implements ContactListener
 	{{
 		categoryBits = CATEGORY_SCENARY;
 		maskBits     = MASK_SCENERY;
+	}};
+	
+	public static final Filter FILTER_SCENARY_ENEMY = new Filter()
+	{{
+		maskBits = CATEGORY_ENEMY;		
 	}};
 	
 	public static final Filter FILTER_ITEM = new Filter()
