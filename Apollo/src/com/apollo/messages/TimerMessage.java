@@ -1,9 +1,9 @@
 package com.apollo.messages;
 
-import com.apollo.Message;
-import com.apollo.MessageReciever;
+import com.apollo.IMessage;
+import com.apollo.IMessageReceiver;
 
-public enum TimerMessage implements Message<AutoGunMessageHandler> 
+public enum TimerMessage implements IMessage<AutoGunMessageHandler> 
 {
 	onActiveTimer,
 	onSetTimeTimer,
@@ -11,7 +11,7 @@ public enum TimerMessage implements Message<AutoGunMessageHandler>
 	;
 
 	@Override
-	public void dispatch(MessageReciever h, Object... args)
+	public void dispatch(IMessageReceiver h, Object... args)
 	{
 		final TimerMessageHandler handler = (TimerMessageHandler)h;
 		switch(this)

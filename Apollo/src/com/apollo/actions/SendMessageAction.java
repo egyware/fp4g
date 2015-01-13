@@ -1,22 +1,22 @@
 package com.apollo.actions;
 
 import com.apollo.Action;
-import com.apollo.Message;
+import com.apollo.IMessage;
 
 public class SendMessageAction extends Action
 {
-	private Message<?> message;
+	private IMessage<?> message;
 	private Object[] args;
 	
 	public void setArgs(Object ...args)
 	{
 		this.args = args;
 	}
-	public void setMessage(Message<?> message)
+	public void setMessage(IMessage<?> message)
 	{
 		this.message = message;
 	}	
-	public void setMessage(Message<?> message, Object ...args)
+	public void setMessage(IMessage<?> message, Object ...args)
 	{
 		this.message = message;
 		this.args = args;

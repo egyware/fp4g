@@ -1,4 +1,4 @@
-package com.apollo.components.body;
+package com.apollo.behaviors.body;
 
 
 import static com.apollo.managers.PhysicsManager.SCALE;
@@ -50,8 +50,8 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 	@Override
 	public void uninitialize()
 	{
-		owner.removeEventHandler(ContactMessage.onBeginContact, this);
-		owner.removeEventHandler(ContactMessage.onEndContact, this);
+		owner.removeMessageHandler(ContactMessage.onBeginContact, this);
+		owner.removeMessageHandler(ContactMessage.onEndContact, this);
 		
 		box.getWorld().destroyBody(box);		
 	}
@@ -59,8 +59,8 @@ implements PlatformMessageHandler, ContactMessageHandler,RayCastCallback,QueryCa
 	@Override	
 	public void initialize()
 	{	
-		owner.addEventHandler(ContactMessage.onBeginContact, this);
-		owner.addEventHandler(ContactMessage.onEndContact, this);
+		owner.addMessageHandler(ContactMessage.onBeginContact, this);
+		owner.addMessageHandler(ContactMessage.onEndContact, this);
 		
 		
 	}

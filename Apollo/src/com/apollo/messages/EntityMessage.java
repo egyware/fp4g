@@ -1,17 +1,17 @@
 package com.apollo.messages;
 
 import com.apollo.Entity;
-import com.apollo.Message;
-import com.apollo.MessageReciever;
+import com.apollo.IMessage;
+import com.apollo.IMessageReceiver;
 
-public enum EntityMessage implements Message<EntityMessageHandler> 
+public enum EntityMessage implements IMessage<EntityMessageHandler> 
 {
 	onAddedEntity,
 	onRemovedEntity,	
 	;
 
 	@Override
-	public void dispatch(MessageReciever h, Object... args)
+	public void dispatch(IMessageReceiver h, Object... args)
 	{
 		final EntityMessageHandler handler = (EntityMessageHandler)h;
 		switch(this)

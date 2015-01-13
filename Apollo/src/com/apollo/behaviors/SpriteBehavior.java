@@ -1,4 +1,4 @@
-package com.apollo.components;
+package com.apollo.behaviors;
 
 import com.apollo.annotate.InjectComponent;
 import com.apollo.messages.SequenceMessage;
@@ -102,12 +102,12 @@ implements SequenceMessageHandler
 	
 	public void initialize()
 	{
-		owner.addEventHandler(SequenceMessage.onChangeSequence, this);
+		owner.addMessageHandler(SequenceMessage.onChangeSequence, this);
 	}
 	
 	public void deinitialize()
 	{
-		owner.removeEventHandler(SequenceMessage.onChangeSequence, this);
+		owner.removeMessageHandler(SequenceMessage.onChangeSequence, this);
 	}
 
 	@Override

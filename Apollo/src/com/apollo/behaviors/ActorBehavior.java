@@ -1,15 +1,15 @@
-package com.apollo.components;
+package com.apollo.behaviors;
 
 import com.apollo.Behavior;
 import com.apollo.Entity;
-import com.apollo.Message;
-import com.apollo.MessageReciever;
+import com.apollo.IMessage;
+import com.apollo.IMessageReceiver;
 import com.apollo.Engine;
 import com.apollo.managers.EntityManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public abstract class ActorBehavior extends Actor implements Behavior, MessageReciever 
+public abstract class ActorBehavior extends Actor implements Behavior, IMessageReceiver 
 {
 	protected Entity owner;	
 	@Override
@@ -66,7 +66,7 @@ public abstract class ActorBehavior extends Actor implements Behavior, MessageRe
 	
 	public abstract void draw(Batch batch, float parentAlpha);
 	
-	public void onMessage(Message<? extends MessageReciever> message, Object... args)
+	public void onMessage(IMessage<? extends IMessageReceiver> message, Object... args)
 	{
 		message.dispatch(this, args);				
 	}

@@ -1,9 +1,5 @@
-package com.apollo.components;
+package com.apollo.behaviors;
 import com.apollo.BaseBehavior;
-import com.apollo.managers.StageRenderManager;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.egysoft.gdx.Game;
 
@@ -47,15 +43,6 @@ public class CameraBehavior extends BaseBehavior
 		}		
 	}	
 	
-	
-	private Camera camera;
-	private ShapeRenderer shapeRenderer;
-	public void initialize()
-	{
-		camera = getOwner().getEngine().getManager(StageRenderManager.class).getCamera();
-		shapeRenderer = new ShapeRenderer();
-		
-	}
 	public void update(float x)
 	{
 //		shapeRenderer.setProjectionMatrix(camera.combined);

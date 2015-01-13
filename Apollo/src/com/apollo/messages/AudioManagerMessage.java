@@ -1,16 +1,16 @@
 package com.apollo.messages;
 
-import com.apollo.Message;
-import com.apollo.MessageReciever;
+import com.apollo.IMessage;
+import com.apollo.IMessageReceiver;
 
-public enum AudioManagerMessage implements Message<AudioManagerMessageHandler> 
+public enum AudioManagerMessage implements IMessage<AudioManagerMessageHandler> 
 {
 	onPlaySoundAudioManager,	
 	onPlayMusicAudioManager,	
 	;
 
 	@Override
-	public void dispatch(MessageReciever h, Object... args)
+	public void dispatch(IMessageReceiver h, Object... args)
 	{
 		final AudioManagerMessageHandler handler = (AudioManagerMessageHandler)h;
 		switch(this)

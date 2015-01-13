@@ -1,4 +1,4 @@
-package com.apollo.components;
+package com.apollo.behaviors;
 
 
 public class MovableBehavior extends TransformBehavior

@@ -5,13 +5,10 @@ package com.apollo;
  * @author egyware
  *
  */
-public interface Message<Handler extends MessageReciever> 
+public interface IMessageFilter<Handler extends IMessageFilterReceiver> 
 {
 	
-	public void dispatch(MessageReciever handler, Object ...args);
-	
-	public Class<Handler> getClassHandler();
-	
+	public boolean dispatch(IMessageFilterReceiver handler, Object ...args);	
 	/**
 	 * Funcion de utilidad para hacer calzar con la función name de enum
 	 * @return

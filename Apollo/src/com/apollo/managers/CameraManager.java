@@ -1,8 +1,8 @@
 package com.apollo.managers;
 
 import com.apollo.Entity;
-import com.apollo.components.CameraBehavior;
-import com.apollo.components.TransformBehavior;
+import com.apollo.behaviors.CameraBehavior;
+import com.apollo.behaviors.TransformBehavior;
 import com.apollo.utils.Bag;
 import com.badlogic.gdx.math.Vector2;
 

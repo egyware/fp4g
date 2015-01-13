@@ -1,9 +1,9 @@
 package com.apollo.messages;
 
-import com.apollo.Message;
-import com.apollo.MessageReciever;
+import com.apollo.IMessage;
+import com.apollo.IMessageReceiver;
 
-public enum MoveMessage implements Message<MoveMessageHandler>
+public enum MoveMessage implements IMessage<MoveMessageHandler>
 {
 	onAngularSpeedMove,
 	onSpeedMove,	
@@ -16,7 +16,7 @@ public enum MoveMessage implements Message<MoveMessageHandler>
 	}
 
 	@Override
-	public void dispatch(MessageReciever h, Object... args) {
+	public void dispatch(IMessageReceiver h, Object... args) {
 		final MoveMessageHandler handler = (MoveMessageHandler)h;	
 		switch(this)
 		{

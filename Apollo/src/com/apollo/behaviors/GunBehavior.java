@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.apollo.components;
+package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
 import com.apollo.Entity;
@@ -83,11 +83,11 @@ public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 	@Override
 	public void initialize()
 	{
-		owner.addEventHandler(GunMessage.onChangeBulletGun, this);
-		owner.addEventHandler(GunMessage.onReloadGun, this);
-		owner.addEventHandler(GunMessage.onShotGun, this);	
-		owner.addEventHandler(AutoGunMessage.onSetDelayShotAutoGun,this);
-		owner.addEventHandler(AutoGunMessage.onSetShotAutoGun,this);	
+		owner.addMessageHandler(GunMessage.onChangeBulletGun, this);
+		owner.addMessageHandler(GunMessage.onReloadGun, this);
+		owner.addMessageHandler(GunMessage.onShotGun, this);	
+		owner.addMessageHandler(AutoGunMessage.onSetDelayShotAutoGun,this);
+		owner.addMessageHandler(AutoGunMessage.onSetShotAutoGun,this);	
 		
 		world = owner.getEngine();		
 	}

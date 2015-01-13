@@ -1,11 +1,11 @@
 package com.apollo.actions;
 import com.apollo.Action;
-import com.apollo.Message;
-import com.apollo.MessageReciever;
+import com.apollo.IMessage;
+import com.apollo.IMessageReceiver;
 
-public class OnMessageAction extends Action implements MessageReciever
+public class OnMessageAction extends Action implements IMessageReceiver
 {
-	private Message<?> message;
+	private IMessage<?> message;
 	private boolean received;
 	
 	public void restart()
@@ -19,7 +19,7 @@ public class OnMessageAction extends Action implements MessageReciever
 		this.received = received;
 	}
 	
-	public void setMessage(Message<?> message)
+	public void setMessage(IMessage<?> message)
 	{
 		this.message = message;		
 	}
@@ -27,13 +27,13 @@ public class OnMessageAction extends Action implements MessageReciever
 	@Override
 	public void begin()
 	{
-		entity.addEventHandler(message, this);
+		entity.addMessageHandler(message, this);
 	}
 	
 	@Override
 	public void end()
 	{
-		entity.removeEventHandler(message, this);
+		entity.removeMessageHandler(message, this);
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public class OnMessageAction extends Action implements MessageReciever
 	}
 
 	@Override
-	public void onMessage(Message<? extends MessageReciever> message, Object... args) 
+	public void onMessage(IMessage<? extends IMessageReceiver> message, Object... args) 
 	{
 		message.dispatch(this, args);
 	}

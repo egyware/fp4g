@@ -1,4 +1,4 @@
-package com.apollo.components;
+package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
 import com.apollo.utils.TrigLUT;

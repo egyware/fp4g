@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.apollo.components;
+package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
 import com.apollo.messages.TimerMessage;
@@ -59,15 +59,15 @@ public final class TimerBehavior extends BaseBehavior implements TimerMessageHan
 	@Override
 	public void initialize()
 	{
-		owner.addEventHandler(TimerMessage.onSetTimeTimer, this);
-		owner.addEventHandler(TimerMessage.onCancelTimer, this);		
+		owner.addMessageHandler(TimerMessage.onSetTimeTimer, this);
+		owner.addMessageHandler(TimerMessage.onCancelTimer, this);		
 	}
 	
 	@Override
 	public void uninitialize()
 	{
-		owner.removeEventHandler(TimerMessage.onSetTimeTimer, this);
-		owner.removeEventHandler(TimerMessage.onCancelTimer, this);		
+		owner.removeMessageHandler(TimerMessage.onSetTimeTimer, this);
+		owner.removeMessageHandler(TimerMessage.onCancelTimer, this);		
 	}
 	
 	@Override

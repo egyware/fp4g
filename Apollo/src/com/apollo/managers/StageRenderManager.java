@@ -1,7 +1,7 @@
 package com.apollo.managers;
 
 import com.apollo.Entity;
-import com.apollo.components.ActorBehavior;
+import com.apollo.behaviors.ActorBehavior;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

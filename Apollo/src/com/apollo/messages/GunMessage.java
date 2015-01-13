@@ -1,9 +1,9 @@
 package com.apollo.messages;
 
-import com.apollo.Message;
-import com.apollo.MessageReciever;
+import com.apollo.IMessage;
+import com.apollo.IMessageReceiver;
 
-public enum GunMessage implements Message<GunMessageHandler> 
+public enum GunMessage implements IMessage<GunMessageHandler> 
 {
 	onShotGun,
 	onReloadGun,
@@ -11,7 +11,7 @@ public enum GunMessage implements Message<GunMessageHandler>
 	;
 
 	@Override
-	public void dispatch(MessageReciever h, Object... args)
+	public void dispatch(IMessageReceiver h, Object... args)
 	{
 		final GunMessageHandler handler = (GunMessageHandler)h;
 		switch(this)

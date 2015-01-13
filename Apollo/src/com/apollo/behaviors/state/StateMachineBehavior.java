@@ -1,4 +1,4 @@
-package com.apollo.components.state;
+package com.apollo.behaviors.state;
 
 import com.apollo.BaseBehavior;
 import com.apollo.utils.Bag;

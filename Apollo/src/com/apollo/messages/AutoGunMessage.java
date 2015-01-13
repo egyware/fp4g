@@ -1,16 +1,16 @@
 package com.apollo.messages;
 
-import com.apollo.Message;
-import com.apollo.MessageReciever;
+import com.apollo.IMessage;
+import com.apollo.IMessageReceiver;
 
-public enum AutoGunMessage implements Message<AutoGunMessageHandler> 
+public enum AutoGunMessage implements IMessage<AutoGunMessageHandler> 
 {
 	onSetDelayShotAutoGun,
 	onSetShotAutoGun	
 	;
 
 	@Override
-	public void dispatch(MessageReciever h, Object... args)
+	public void dispatch(IMessageReceiver h, Object... args)
 	{
 		final AutoGunMessageHandler handler = (AutoGunMessageHandler)h;
 		switch(this)

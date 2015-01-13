@@ -1,4 +1,4 @@
-package com.apollo.components;
+package com.apollo.behaviors;
 
 import com.apollo.annotate.InjectComponent;
 import com.badlogic.gdx.graphics.Texture;

@@ -9,13 +9,12 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.egysoft.gdx.assets.Ground;
 import com.egysoft.gdx.assets.GroundTiledLoader;
 import com.egysoft.gdx.assets.Spawner;
 import com.egysoft.gdx.assets.SpawnerTiledLoader;
 import com.egysoft.gdx.assets.Sprite;
 import com.egysoft.gdx.assets.SpriteLoader;
-import com.egysoft.gdx.assets.Ground;
-import com.egysoft.gdx.assets.GroundLoader;
 import com.egysoft.utils.StringUtils;
 
 public abstract class Game implements ApplicationListener

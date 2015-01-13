@@ -2,8 +2,8 @@ package com.apollo.actions;
 
 
 import com.apollo.Action;
-import com.apollo.components.ActorBehavior;
-import com.apollo.components.SpriteBehavior;
+import com.apollo.behaviors.ActorBehavior;
+import com.apollo.behaviors.SpriteBehavior;
 
 public class SetAnimationAction extends Action 
 {

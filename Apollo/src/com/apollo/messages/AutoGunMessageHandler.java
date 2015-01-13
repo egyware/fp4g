@@ -1,8 +1,8 @@
 package com.apollo.messages;
 
-import com.apollo.MessageReciever;
+import com.apollo.IMessageReceiver;
 
-public interface AutoGunMessageHandler extends MessageReciever 
+public interface AutoGunMessageHandler extends IMessageReceiver 
 {
 	void onSetDelayShotAutoGun(int intValue);
 	void onSetShotAutoGun(float rot, float dist, float vel);
