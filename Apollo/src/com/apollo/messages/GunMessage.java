@@ -28,11 +28,4 @@ public enum GunMessage implements IMessage<GunMessageHandler>
 		}
 		
 	}
-
-	@Override
-	public Class<GunMessageHandler> getClassHandler() 
-	{
-		return GunMessageHandler.class;		
-	}
-
 }

@@ -38,11 +38,4 @@ public enum AudioManagerMessage implements IMessage<AudioManagerMessageHandler>
 		}
 		
 	}
-
-	@Override
-	public Class<AudioManagerMessageHandler> getClassHandler() 
-	{
-		return AudioManagerMessageHandler.class;		
-	}
-
 }

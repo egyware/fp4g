@@ -10,12 +10,6 @@ public enum SequenceMessage implements IMessage<SequenceMessageHandler>
 	onEndSequence;
 
 	@Override
-	public Class<SequenceMessageHandler> getClassHandler() 
-	{		
-		return SequenceMessageHandler.class;
-	}
-
-	@Override
 	public void dispatch(IMessageReceiver h, Object... args) 
 	{
 		SequenceMessageHandler handler = (SequenceMessageHandler)h;

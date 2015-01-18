@@ -24,11 +24,4 @@ public enum AutoGunMessage implements IMessage<AutoGunMessageHandler>
 		}
 		
 	}
-
-	@Override
-	public Class<AutoGunMessageHandler> getClassHandler() 
-	{
-		return AutoGunMessageHandler.class;		
-	}
-
 }

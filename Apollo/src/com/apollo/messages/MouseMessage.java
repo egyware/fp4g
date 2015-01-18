@@ -7,14 +7,7 @@ public enum MouseMessage implements IMessage<MouseMessageHandler> {
 	onPressButtonMouse,
 	onReleaseButtonMouse,
 	onMoveMouse,
-	onDraggedMouse;
-	
-
-	@Override
-	public Class<MouseMessageHandler> getClassHandler() 
-	{		
-		return MouseMessageHandler.class;
-	}
+	onDraggedMouse;	
 
 	@Override
 	public void dispatch(IMessageReceiver h, Object... args) {

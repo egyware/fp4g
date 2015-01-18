@@ -9,6 +9,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.egysoft.gdx.assets.EntityBuilder;
+import com.egysoft.gdx.assets.EntityBuilderLoader;
 import com.egysoft.gdx.assets.Ground;
 import com.egysoft.gdx.assets.GroundTiledLoader;
 import com.egysoft.gdx.assets.Spawner;
@@ -43,10 +45,11 @@ public abstract class Game implements ApplicationListener
 	{
 		final InternalFileHandleResolver fileResolver = new InternalFileHandleResolver();
 		assets = new AssetManager();		
-		assets.setLoader(Sprite.class,new SpriteLoader(fileResolver));
-		assets.setLoader(TiledMap.class,new TmxMapLoader(fileResolver));
-		assets.setLoader(Ground.class,new GroundTiledLoader(fileResolver));
-		assets.setLoader(Spawner.class,new SpawnerTiledLoader(fileResolver));
+		assets.setLoader(Sprite.class,        new SpriteLoader(fileResolver));		
+		assets.setLoader(Ground.class,        new GroundTiledLoader(fileResolver));
+		assets.setLoader(Spawner.class,       new SpawnerTiledLoader(fileResolver));
+		assets.setLoader(TiledMap.class,      new TmxMapLoader(fileResolver));
+		assets.setLoader(EntityBuilder.class, new EntityBuilderLoader(fileResolver));
 		multiplexer = new InputMultiplexer();
 	}
 	

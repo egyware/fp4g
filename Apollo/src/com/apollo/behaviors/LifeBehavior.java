@@ -1,11 +1,11 @@
 package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
-import com.apollo.filters.LifeMessageFilter;
-import com.apollo.filters.LifeMessageFilterHandler;
+import com.apollo.messages.LifeMessage;
+import com.apollo.messages.LifeMessageHandler;
 
 public class LifeBehavior extends BaseBehavior 
-implements LifeMessageFilterHandler
+implements LifeMessageHandler
 {	
 	public int hp;
 	public LifeBehavior(int hp)
@@ -15,14 +15,14 @@ implements LifeMessageFilterHandler
 	
 	public void initialize()
 	{
-		owner.addMessageFilter(LifeMessageFilter.onDamageLife, this);
-		owner.addMessageFilter(LifeMessageFilter.onHealLife, this);
+		owner.addMessageHandler(LifeMessage.onDamageLife, this);
+		owner.addMessageHandler(LifeMessage.onHealLife, this);
 	}
 	
 	public void uninitialize()
 	{
-		owner.removeMessageFilter(LifeMessageFilter.onDamageLife, this);
-		owner.removeMessageFilter(LifeMessageFilter.onHealLife, this);
+		owner.removeMessageHandler(LifeMessage.onDamageLife, this);
+		owner.removeMessageHandler(LifeMessage.onHealLife, this);
 	}
 
 	@Override
@@ -31,7 +31,7 @@ implements LifeMessageFilterHandler
 		hp -= damage;
 		if(hp <= 0)
 		{
-			owner.onMessage(LifeMessageFilter.onDeathLife);
+			owner.onMessage(LifeMessage.onDeathLife);
 		}		
 		return false;
 	}

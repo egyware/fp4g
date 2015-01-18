@@ -28,11 +28,4 @@ public enum TimerMessage implements IMessage<AutoGunMessageHandler>
 		}
 		
 	}
-
-	@Override
-	public Class<AutoGunMessageHandler> getClassHandler() 
-	{
-		return AutoGunMessageHandler.class;		
-	}
-
 }

@@ -1,5 +1,7 @@
 package com.apollo.behaviors;
 
+import com.apollo.Behavior;
+import com.apollo.BehaviorTemplate;
 import com.apollo.annotate.InjectComponent;
 import com.apollo.messages.SequenceMessage;
 import com.apollo.messages.SequenceMessageHandler;
@@ -10,11 +12,23 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.egysoft.gdx.Game;
 import com.egysoft.gdx.assets.Sprite;
 
 public class SpriteBehavior extends ActorBehavior
 implements SequenceMessageHandler
 {
+	public static class Template implements BehaviorTemplate
+	{
+		String sprite;
+
+		@Override
+		public Behavior createBehavior()
+		{
+			Sprite s = Game.instance.assets.get(sprite);
+			return new SpriteBehavior(s);
+		}		
+	}
 	private Animation current;
 	private Sprite sprite;
 	private Vector2 o;		

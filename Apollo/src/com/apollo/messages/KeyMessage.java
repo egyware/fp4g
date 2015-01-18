@@ -8,12 +8,6 @@ public enum KeyMessage implements IMessage<KeyMessageHandler> {
 	onReleaseKey;
 
 	@Override
-	public Class<KeyMessageHandler> getClassHandler() 
-	{		
-		return KeyMessageHandler.class;
-	}
-
-	@Override
 	public void dispatch(IMessageReceiver h, Object... args) {
 		final KeyMessageHandler handler = (KeyMessageHandler)h;
 		switch(this)

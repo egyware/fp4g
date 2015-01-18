@@ -8,13 +8,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 
 public enum ContactMessage implements IMessage<ContactMessageHandler> {
 	onBeginContact,onEndContact;
-
-	@Override
-	public Class<ContactMessageHandler> getClassHandler() 
-	{		
-		return ContactMessageHandler.class;
-	}
-
+	
 	@Override
 	public void dispatch(IMessageReceiver h, Object... args) {
 		final ContactMessageHandler handler = (ContactMessageHandler)h;

@@ -1,16 +1,31 @@
 package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
+import com.apollo.Behavior;
+import com.apollo.BehaviorTemplate;
 import com.apollo.utils.TrigLUT;
 import com.apollo.utils.Utils;
 import com.badlogic.gdx.math.Vector2;
 
-public class TransformBehavior extends BaseBehavior
+public class TransformBehavior extends BaseBehavior 
 {	
 	//estos campos deben ser actualizados por los hijos para asegurar maxima compatibilidad
 	public float x;
 	public float y;
 	public float rotation;
+	
+	public static class Template  implements BehaviorTemplate
+	{
+		public float x;
+		public float y;
+		public float rotation;
+		@Override
+		public Behavior createBehavior() 
+		{
+			return new TransformBehavior(x,y,rotation);
+		}
+		
+	}
 	
 	public TransformBehavior() {
 	}

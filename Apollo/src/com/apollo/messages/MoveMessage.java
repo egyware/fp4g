@@ -10,12 +10,6 @@ public enum MoveMessage implements IMessage<MoveMessageHandler>
 	onForwardMove;
 
 	@Override
-	public Class<MoveMessageHandler> getClassHandler() 
-	{		
-		return MoveMessageHandler.class;
-	}
-
-	@Override
 	public void dispatch(IMessageReceiver h, Object... args) {
 		final MoveMessageHandler handler = (MoveMessageHandler)h;	
 		switch(this)

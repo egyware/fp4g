@@ -8,7 +8,7 @@ import com.apollo.annotate.ComponentInjector;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
-public final class Entity implements IMessageSender, IMessageFilterSender
+public final class Entity implements IMessageSender
 {
 	protected final Engine engine;
 	private Map<IMessage<?>,Bag<IMessageReceiver>> handlersByEventType;
@@ -84,10 +84,6 @@ public final class Entity implements IMessageSender, IMessageFilterSender
 		}
 		listeners.add(listener);
 	}
-	public <T extends IMessage<?>> void    addMessageFilter(IMessageFilter<?> messageType, IMessageFilterReceiver listener) 
-	{
-		//TODO por hacer aùn
-	}
 	
 	/**
 	  * Caso general de envio de mensajes.
@@ -107,18 +103,6 @@ public final class Entity implements IMessageSender, IMessageFilterSender
 				handler.onMessage(message, args);						
 			}
 		}
-	}
-	
-	@Override
-	public boolean onMessage(IMessageFilter<? extends IMessageFilterReceiver> message, Object... args) 
-	{
-		//TODO por hacer aun
-		return false;
-	}
-	
-	public <T extends IMessage<?>> void removeMessageFilter(IMessageFilter<?> messagetType, IMessageFilterReceiver listener)
-	{
-		//TODO por hacer
 	}
 	
 	/**

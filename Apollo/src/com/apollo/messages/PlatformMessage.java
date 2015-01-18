@@ -26,10 +26,4 @@ public enum PlatformMessage implements  IMessage<PlatformMessageHandler>
 			break;
 		}		
 	}
-
-	@Override
-	public Class<PlatformMessageHandler> getClassHandler()
-	{
-		return PlatformMessageHandler.class;
-	}
 }

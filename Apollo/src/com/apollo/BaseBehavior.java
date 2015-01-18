@@ -2,7 +2,7 @@ package com.apollo;
 
 import com.apollo.managers.EntityManager;
 
-public abstract class BaseBehavior implements Behavior, IMessageReceiver, IMessageFilterReceiver
+public abstract class BaseBehavior implements Behavior, IMessageReceiver
 {
 	protected Entity owner;
 							
@@ -87,11 +87,6 @@ public abstract class BaseBehavior implements Behavior, IMessageReceiver, IMessa
 	public void onMessage(IMessage<? extends IMessageReceiver> message, Object... args)
 	{
 		message.dispatch(this, args);				
-	}
-	
-	public boolean onMessage(IMessageFilter<? extends IMessageFilterReceiver> message, Object... args)
-	{
-		return message.dispatch(this, args);				
-	}
+	}	
 
 }

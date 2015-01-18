@@ -8,12 +8,6 @@ public enum LevelMessage implements IMessage<LevelMessageHandler> {
 	onReloadLevel;
 
 	@Override
-	public Class<LevelMessageHandler> getClassHandler() 
-	{
-		return LevelMessageHandler.class;
-	}
-
-	@Override
 	public void dispatch(IMessageReceiver h, Object... args) 
 	{
 		final LevelMessageHandler handler = (LevelMessageHandler)h;

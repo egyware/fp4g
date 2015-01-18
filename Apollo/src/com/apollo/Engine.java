@@ -22,7 +22,7 @@ public class Engine implements IMessageSender
 	private Map<Class<? extends Manager>, Manager> managers;
 	private Bag<Manager> managersBag;
 	
-	private Map<String,EntityBuilder> entityBuildersByType;
+	private Map<String,IEntityBuilder> entityBuildersByType;
 	
 	public Engine() 
 	{			
@@ -33,7 +33,7 @@ public class Engine implements IMessageSender
 		managers = new LinkedHashMap<Class<? extends Manager>, Manager>();
 		managersBag = new Bag<Manager>();	
 		
-		entityBuildersByType = new HashMap<String, EntityBuilder>();		
+		entityBuildersByType = new HashMap<String, IEntityBuilder>();		
 	}
 
 	public EntityManager getEntityManager() 
@@ -78,21 +78,21 @@ public class Engine implements IMessageSender
 		return (T) manager;
 	}
 	
-	public void setEntityBuilder(String builderType, EntityBuilder entityBuilder) {
+	public void setEntityBuilder(String builderType, IEntityBuilder entityBuilder) {
 		entityBuildersByType.put(builderType, entityBuilder);
 	}
-	public void setEntityBuilder(EntityBuilder entityBuilder) {
+	public void setEntityBuilder(IEntityBuilder entityBuilder) {
 		entityBuildersByType.put(entityBuilder.getEntityBuilderName(), entityBuilder);
 	}
 
 	
-	public EntityBuilder getEntityBuilder(String builderType) {
+	public IEntityBuilder getEntityBuilder(String builderType) {
 		return entityBuildersByType.get(builderType);
 	}
 	
 	public Entity createEntity(String builderType,Object ...args) 
 	{
-		EntityBuilder entityBuilder = getEntityBuilder(builderType);
+		IEntityBuilder entityBuilder = getEntityBuilder(builderType);
 		if(entityBuilder != null) {
 			return entityBuilder.buildEntity(this,args);
 		}

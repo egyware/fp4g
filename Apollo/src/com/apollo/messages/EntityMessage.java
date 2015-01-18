@@ -24,11 +24,4 @@ public enum EntityMessage implements IMessage<EntityMessageHandler>
 			break;	
 		}		
 	}
-
-	@Override
-	public Class<EntityMessageHandler> getClassHandler() 
-	{
-		return EntityMessageHandler.class;		
-	}
-
 }

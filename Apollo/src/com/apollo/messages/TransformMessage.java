@@ -9,12 +9,6 @@ public enum TransformMessage implements IMessage<TransformMessageHandler>
 	onRotateTransform;
 
 	@Override
-	public Class<TransformMessageHandler> getClassHandler() 
-	{		
-		return TransformMessageHandler.class;
-	}
-
-	@Override
 	public void dispatch(IMessageReceiver h, Object... args) {
 		final TransformMessageHandler handler = (TransformMessageHandler)h;
 		switch(this)

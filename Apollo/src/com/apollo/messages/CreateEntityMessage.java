@@ -7,13 +7,7 @@ import com.apollo.IMessageReceiver;
 
 public enum CreateEntityMessage implements IMessage<CreateEntityMessageHandler> {
 	onCreateEntity;
-
-	@Override
-	public Class<CreateEntityMessageHandler> getClassHandler() 
-	{
-		return CreateEntityMessageHandler.class;
-	}
-
+	
 	@Override
 	public void dispatch(IMessageReceiver h, Object... args) {
 		final CreateEntityMessageHandler handler = (CreateEntityMessageHandler)h;
