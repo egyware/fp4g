@@ -5,9 +5,8 @@ import com.apollo.IMessageReceiver;
 
 public enum LifeMessage implements IMessage<LifeMessageHandler> 
 {
-	onDamageLife, 
-	onHealLife,
-	onDeathLife;
+	onDamage, 
+	onHeal;
 
 	@Override
 	public void dispatch(IMessageReceiver h, Object... args) 
@@ -15,15 +14,12 @@ public enum LifeMessage implements IMessage<LifeMessageHandler>
 		final LifeMessageHandler handler = (LifeMessageHandler)h;
 		switch(this)
 		{
-		case onDamageLife:
-			handler.onDamageLife(((Number)args[0]).intValue());
+		case onDamage:
+			handler.onDamage(((Number)args[0]).intValue());
 			break;
-		case onHealLife:
-			handler.onHealLife(((Number)args[0]).intValue());
-			break;
-		case onDeathLife:
-			handler.onDeathLife();
-			break;
+		case onHeal:
+			handler.onHeal(((Number)args[0]).intValue());
+			break;	
 		}		
 	}
 }

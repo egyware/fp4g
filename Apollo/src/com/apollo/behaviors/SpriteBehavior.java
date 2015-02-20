@@ -2,6 +2,7 @@ package com.apollo.behaviors;
 
 import com.apollo.Behavior;
 import com.apollo.BehaviorTemplate;
+import com.apollo.Engine;
 import com.apollo.annotate.InjectComponent;
 import com.apollo.messages.SequenceMessage;
 import com.apollo.messages.SequenceMessageHandler;
@@ -23,7 +24,7 @@ implements SequenceMessageHandler
 		String sprite;
 
 		@Override
-		public Behavior createBehavior()
+		public Behavior createBehavior(final Engine engine)
 		{
 			Sprite s = Game.instance.assets.get(sprite);
 			return new SpriteBehavior(s);
@@ -70,26 +71,12 @@ implements SequenceMessageHandler
 	
 	public void draw(Batch batch, float parentAlpha)
 	{	
-		TextureRegion frame = sprite.getKeyFrame(current,time);
-		if(flipX && !frame.isFlipX())
-		{
-			frame.flip(true, false);
-		}
-		else if(!flipX && frame.isFlipX())
-		{
-			frame.flip(true, false);
-		}
-		if(flipY && !frame.isFlipY())
-		{
-			frame.flip(false,true);
-		}
-		else if(!flipY && frame.isFlipY())
-		{
-			frame.flip(false,true);
-		}
+		TextureRegion frame = sprite.getKeyFrame(current,time);	
 		Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-		batch.draw(frame, getX() - frame.getRegionWidth()/2 - o.x, getY() - o.y);		
+        final int fh = frame.getRegionHeight();
+        final int fw = frame.getRegionWidth();
+		batch.draw(frame, getX() - fw/2 - o.x, getY() - o.y, fw/2, fh/2, fw, fh, flipX?-1:1, flipY?-1:1, getRotation());
 	}
 	
 	public void setFlipX(boolean b)

@@ -4,42 +4,31 @@ import com.apollo.Entity;
 import com.apollo.behaviors.ActorBehavior;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 
-public class StageRenderManager extends Manager 
+public class RenderManager extends Manager 
 {
 	private final Stage stage;
-	private final com.badlogic.gdx.scenes.scene2d.Group layer;	
-	private OrthographicCamera camera;	
+	private final com.badlogic.gdx.scenes.scene2d.Group layer;
 	private Map map;
 	private MapRenderer mapRenderer;	
-	private StageRenderManager(Stage stage)
+	protected OrthographicCamera camera;
+	
+	public RenderManager(Stage stage)
 	{
 		this.stage = stage;		
 		layer  = new com.badlogic.gdx.scenes.scene2d.Group();
 		stage.addActor(layer);		
 		camera = (OrthographicCamera) stage.getCamera();
 	}
-	public StageRenderManager()
+	public RenderManager()
 	{
 		this(new Stage());
-	}
-	public StageRenderManager(Viewport viewport, SpriteBatch batch)
-	{
-		this(new Stage(viewport, batch));		
-	}
-	public StageRenderManager(Viewport viewport, SpriteBatch batch, TiledMap map)
-	{
-		this(new Stage(viewport, batch));
-		this.map = map;
-		this.mapRenderer = new OrthogonalTiledMapRenderer(map,batch);
 	}
 	
 	public void setStageMap(TiledMap map)
@@ -68,15 +57,13 @@ public class StageRenderManager extends Manager
 	
 	public void update(float delta)
 	{		
-		stage.act(delta);
-		camera.update();
+		stage.act(delta);		
 		if(mapRenderer != null)
 		{
 			mapRenderer.setView(camera);			
 			mapRenderer.render();
 		}
-		stage.draw();			
-				
+		stage.draw();		
 	}	
 	
 	public Map getMap()

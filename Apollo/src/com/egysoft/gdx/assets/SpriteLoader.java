@@ -25,7 +25,7 @@ import com.badlogic.gdx.utils.JsonValue;
  */
 public class SpriteLoader extends
 		SynchronousAssetLoader<Sprite, SpriteLoader.AnimationParameter> {
-	public static final int DEFAULT_DURATION = 200; //100 ms
+	public static final int DEFAULT_DELAY = 200; //100 ms
 	private Json json;		
 	private SpriteSerializer serializer;
 
@@ -100,36 +100,52 @@ public class SpriteLoader extends
 				JsonValue sequence = animation.get("sequence");
 				AtlasRegion array[] = null;
 				String name = animation.getString("name");
-				//esto sirve para utilizar una región personalizada, si no existe se utilizará name como nombre de región				
-				final String region = animation.getString("region", name);				
-				final int duration = sequence.getInt("delay", DEFAULT_DURATION);
-				final String type = animation.getString("type","normal").toLowerCase();
+				//esto sirve para utilizar una región personalizada, si no existe se utilizará name como nombre de región
+				final String region = animation.getString("region", name);
+				final int duration;
 				final PlayMode loopType;
-				if(type.equals("loop"))
-				{
-					loopType = PlayMode.LOOP;
-				}
-				//caso normal
-				else
-				{
-					loopType = PlayMode.NORMAL;
-				}				
-				
-				Array<AtlasRegion> regions = atlas.findRegions(region);
-				if(sequence.hasChild("data"))
-				{
-					JsonValue framesArray = sequence.get("data");
-					array = new AtlasRegion[framesArray.size];
-					for (int i = 0; i < framesArray.size; i++) {
-						array[i] = regions.get(framesArray.getInt(i)); 
+				//corrigiendo un bug, si no existe sequence
+				if(sequence != null)
+				{				
+					duration = sequence.getInt("delay", DEFAULT_DELAY);
+					final String type = animation.getString("type","normal").toLowerCase();					
+					if(type.equals("loop"))
+					{
+						loopType = PlayMode.LOOP;
+					}
+					//caso normal
+					else
+					{
+						loopType = PlayMode.NORMAL;
+					}				
+					
+					Array<AtlasRegion> regions = atlas.findRegions(region);
+					if(sequence.hasChild("data"))
+					{
+						JsonValue framesArray = sequence.get("data");
+						array = new AtlasRegion[framesArray.size];
+						for (int i = 0; i < framesArray.size; i++) {
+							array[i] = regions.get(framesArray.getInt(i)); 
+						}
+					}
+					if (array == null) {
+						array = new AtlasRegion[regions.size];
+						for (int i = 0; i < regions.size; i++) {
+							array[i] = regions.get(i);
+						}
 					}
 				}
-				if (array == null) {
+				else
+				{
+					duration = DEFAULT_DELAY;
+					loopType = PlayMode.NORMAL;
+					//considero todos los frames
+					Array<AtlasRegion> regions = atlas.findRegions(region);
 					array = new AtlasRegion[regions.size];
 					for (int i = 0; i < regions.size; i++) {
 						array[i] = regions.get(i);
 					}
-				}				
+				}
 				// ya ahora están listos los datos :D
 				sprite.addAnimation(name, new Animation(duration * 0.001f, array), loopType);
 			}

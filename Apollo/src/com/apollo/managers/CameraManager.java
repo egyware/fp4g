@@ -17,7 +17,7 @@ public class CameraManager extends Manager
 			
 	public void initialize()
 	{
-		camera = engine.getManager(StageRenderManager.class).getCamera();	
+		camera = engine.getManager(RenderManager.class).getCamera();	
 		current = new Vector2(camera.position.x, camera.position.y);
 	}
 	

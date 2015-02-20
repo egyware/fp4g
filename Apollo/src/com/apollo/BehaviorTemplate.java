@@ -2,5 +2,5 @@ package com.apollo;
 
 public interface BehaviorTemplate 
 {
-	Behavior createBehavior();
+	Behavior createBehavior(final Engine engine);
 }

@@ -7,45 +7,41 @@ import com.apollo.messages.LifeMessageHandler;
 public class LifeBehavior extends BaseBehavior 
 implements LifeMessageHandler
 {	
-	public int hp;
-	public LifeBehavior(int hp)
+	public int hp;	
+	public int hp_max;
+	public LifeBehavior(int hp_max)
+	{
+		this(hp_max, hp_max);
+	}
+	public LifeBehavior(int hp, int hp_max)
 	{		
 		this.hp = hp;
+		this.hp_max = hp_max;
 	}
 	
 	public void initialize()
 	{
-		owner.addMessageHandler(LifeMessage.onDamageLife, this);
-		owner.addMessageHandler(LifeMessage.onHealLife, this);
+		owner.addMessageHandler(LifeMessage.onDamage, this);
+		owner.addMessageHandler(LifeMessage.onHeal, this);
 	}
 	
 	public void uninitialize()
 	{
-		owner.removeMessageHandler(LifeMessage.onDamageLife, this);
-		owner.removeMessageHandler(LifeMessage.onHealLife, this);
+		owner.removeMessageHandler(LifeMessage.onDamage, this);
+		owner.removeMessageHandler(LifeMessage.onHeal, this);
 	}
 
 	@Override
-	public boolean onDamageLife(int damage) 
+	public void onDamage(int damage) 
 	{
-		hp -= damage;
-		if(hp <= 0)
-		{
-			owner.onMessage(LifeMessage.onDeathLife);
-		}		
-		return false;
+		if(hp > damage) hp -= damage;
+		else hp = 0;		
 	}
 
 	@Override
-	public boolean onHealLife(int heal) 
+	public void onHeal(int heal) 
 	{			
-		hp += heal;
-		return false;
+		if(hp + heal < hp_max) hp += heal;
+		else hp = hp_max;		
 	}
-
-	@Override
-	public boolean onDeathLife() 
-	{			
-		return false;
-	}		
 }

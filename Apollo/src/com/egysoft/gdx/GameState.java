@@ -12,6 +12,7 @@ public abstract class GameState
 	
 	protected abstract void pause();
 	protected abstract void resume();
+	protected abstract void resize(int w, int h);
 	
 	public abstract void render(float delta);
 	
@@ -40,6 +41,7 @@ public abstract class GameState
 	{
 		is_load = b;
 	}
+
 	
 	
 }

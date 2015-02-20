@@ -3,8 +3,20 @@
  */
 package com.apollo.behaviors.body;
 
+import static com.apollo.managers.PhysicsManager.INV_SCALE;
+import static com.apollo.managers.PhysicsManager.SCALE;
+
+import com.apollo.Behavior;
+import com.apollo.BehaviorTemplate;
+import com.apollo.Engine;
+import com.apollo.managers.PhysicsManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * @author Edgardo
@@ -12,6 +24,79 @@ import com.badlogic.gdx.physics.box2d.Body;
  */
 public class BodyBehavior extends PhysicsBehavior
 {
+	public abstract static class ShapeTemplate
+	{
+		protected abstract Shape createShape();
+	}
+	public static class FixtureTemplate
+	{
+		public ShapeTemplate shape;
+		private float density;
+		private float friction;
+		private float restitution;
+		private boolean isSensor;
+		//private Filter filter; //TODO por ahora lo dejaré comentado esto...
+		protected void createFixture(final Body body)
+		{
+			Shape s = shape.createShape();
+			FixtureDef fdef = new FixtureDef();			
+			fdef.density = density;
+			fdef.friction = friction;
+			fdef.restitution = restitution;
+			fdef.isSensor = isSensor;
+//			if(filter != null)
+//			{
+//				fdef.filter.categoryBits = filter.categoryBits;
+//				fdef.filter.groupIndex   = filter.groupIndex;
+//				fdef.filter.maskBits     = filter.maskBits;
+//			}
+			fdef.shape = s;
+			
+			body.createFixture(fdef);
+			
+			s.dispose();			
+		}
+	}
+	public static class BoxShapeTemplate extends ShapeTemplate
+	{		
+		public int w;
+		public int h;
+		
+		@Override
+		protected Shape createShape() 
+		{
+			PolygonShape shape = new PolygonShape();			
+			shape.setAsBox(w*SCALE, h*SCALE);
+			return shape;
+		}
+		
+	}
+	public static class Template implements BehaviorTemplate
+	{
+		public int x;
+		public int y;
+		public FixtureTemplate fixtures[];
+		
+		@Override
+		public Behavior createBehavior(final Engine engine) 
+		{
+			World world = engine.getManager(PhysicsManager.class).getb2World();
+			
+			BodyDef def = new BodyDef();
+			def.type = BodyDef.BodyType.DynamicBody;
+			def.position.x = x*SCALE;
+			def.position.y = y*SCALE;
+			Body body = world.createBody(def);
+			
+			for(FixtureTemplate f:fixtures)
+			{
+				f.createFixture(body);
+			}
+			
+			return new BodyBehavior(body);
+		}
+		
+	}
 	private Vector2 position = new Vector2();
 	private Body body;	
 	
@@ -38,7 +123,7 @@ public class BodyBehavior extends PhysicsBehavior
 	@Override
 	protected Vector2 getPosition() 
 	{
-		return position.set(body.getPosition());
+		return position.set(body.getPosition()).scl(INV_SCALE);
 	}
 
 	@Override

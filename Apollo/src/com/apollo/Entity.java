@@ -201,6 +201,12 @@ public final class Entity implements IMessageSender
 		return type.cast(componentsByType.get(type));
 	}
 	
+
+	public <T extends Behavior> boolean hasBehavior(Class<T> type) 
+	{
+		return componentsByType.containsKey(type);
+	}
+	
 	public Bag<Behavior> getBehaviors() 
 	{
 		return behaviors;

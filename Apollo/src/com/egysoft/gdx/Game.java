@@ -141,9 +141,13 @@ public abstract class Game implements ApplicationListener
 	}
 
 	@Override
-	public void resize(int x,int y) 
+	public void resize(int w,int h) 
 	{
 		Gdx.app.log("AppCycleLife", "resize");
+		if(current != null)
+		{
+			current.resize(w,h);
+		}
 	}
 
 	@Override

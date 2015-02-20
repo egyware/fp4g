@@ -7,7 +7,9 @@ package com.apollo.behaviors.state;
  */
 public interface State 
 {
-	public int priority();
 
-	public String name();
+	void update(float dt);
+
+	void activeState();
+	
 }

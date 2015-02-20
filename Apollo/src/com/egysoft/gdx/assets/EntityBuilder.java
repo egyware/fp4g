@@ -18,7 +18,7 @@ public class EntityBuilder implements IEntityBuilder
 		Entity entity = new Entity(engine, behaviors.length);
 		for(BehaviorTemplate template:behaviors)
 		{
-			Behavior behavior = template.createBehavior();
+			Behavior behavior = template.createBehavior(engine);
 			entity.setBehavior(behavior);
 		}		
 		

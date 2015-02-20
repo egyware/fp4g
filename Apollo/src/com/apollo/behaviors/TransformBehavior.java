@@ -3,6 +3,7 @@ package com.apollo.behaviors;
 import com.apollo.BaseBehavior;
 import com.apollo.Behavior;
 import com.apollo.BehaviorTemplate;
+import com.apollo.Engine;
 import com.apollo.utils.TrigLUT;
 import com.apollo.utils.Utils;
 import com.badlogic.gdx.math.Vector2;
@@ -20,7 +21,7 @@ public class TransformBehavior extends BaseBehavior
 		public float y;
 		public float rotation;
 		@Override
-		public Behavior createBehavior() 
+		public Behavior createBehavior(final Engine engine) 
 		{
 			return new TransformBehavior(x,y,rotation);
 		}
