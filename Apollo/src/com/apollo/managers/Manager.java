@@ -1,10 +1,10 @@
 package com.apollo.managers;
 
-import java.lang.reflect.Field;
-
 import com.apollo.Engine;
 import com.apollo.Entity;
 import com.apollo.annotate.ManagerInjector;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Field;
 
 public abstract class Manager
 {
@@ -35,8 +35,8 @@ public abstract class Manager
 
 	public void applyAnnotations()
 	{
-		Class<? extends Manager> clazz = this.getClass();
-		Field[] fields = clazz.getDeclaredFields();
+		Class<? extends Manager> clazz = this.getClass();		
+		Field[] fields = ClassReflection.getFields(clazz);
 		for (int i = 0; i < fields.length; i++) {
 			ManagerInjector.injectorManager.inject(this, fields[i]);
 		}

@@ -74,5 +74,6 @@ public class RenderManager extends Manager
 	public Camera getCamera()
 	{
 		return camera;
-	}	
+	}
+	
 }

@@ -1,24 +1,24 @@
 package com.apollo.annotate;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
-import com.apollo.ApolloException;
 import com.apollo.BaseBehavior;
 import com.apollo.Behavior;
 import com.apollo.Entity;
 import com.apollo.managers.Manager;
 import com.apollo.managers.TagManager;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.reflect.Annotation;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Field;
 
 public abstract class ComponentInjector<T> 
 {
-	private final Class<? extends Annotation> clazz;
+	private final Class<? extends java.lang.annotation.Annotation> clazz;
 	
 	public static ComponentInjector<Behavior> injectorComponent = new ComponentInjector<Behavior>(InjectComponent.class) {
 		@Override		
 		@SuppressWarnings("unchecked")
 		Behavior getInjectionObject(Behavior component, Field field) {
-			InjectComponent inject = field.getAnnotation(InjectComponent.class);
+			InjectComponent inject = field.getDeclaredAnnotation(InjectComponent.class).getAnnotation(InjectComponent.class);
 			Class<? extends Behavior> clazz = inject.value(); //familia
 			Class<? extends Behavior> fieldClazz = Class.class.cast(field.getType());
 			if(clazz == Behavior.class)
@@ -29,7 +29,7 @@ public abstract class ComponentInjector<T>
 			{
 				if(!clazz.isAssignableFrom(fieldClazz))
 				{
-					System.out.println("Warning! Autoinjection " + field.getName() + " field class " + field.getDeclaringClass() + " is not assignable fromm family class "+clazz);
+					throw new GdxRuntimeException("Warning! Autoinjection " + field.getName() + " field class " + field.getDeclaringClass() + " is not assignable fromm family class "+clazz);					
 				}
 				return component.getComponentFromOwner(clazz);						
 			}
@@ -48,7 +48,7 @@ public abstract class ComponentInjector<T>
 	public static ComponentInjector<Entity> injectorTaggedEntity = new ComponentInjector<Entity>(InjectTaggedEntity.class) {
 		@Override
 		Entity getInjectionObject(Behavior component, Field field) {
-			InjectTaggedEntity annotation = field.getAnnotation(InjectTaggedEntity.class);
+			InjectTaggedEntity annotation = field.getDeclaredAnnotation(InjectTaggedEntity.class).getAnnotation(InjectTaggedEntity.class);
 			String tag = annotation.value();
 			TagManager tagManager = component.getEngine().getManager(TagManager.class);
 			Entity entity = null;
@@ -58,7 +58,7 @@ public abstract class ComponentInjector<T>
 			}
 			else
 			{
-				System.out.println("Warning! Autoinjection didn't find tag manager when attempting to inject entity by tag. "+ field.getDeclaringClass() + " for " + field.getName());
+				throw new GdxRuntimeException("Warning! Autoinjection didn't find tag manager when attempting to inject entity by tag. "+ field.getDeclaringClass() + " for " + field.getName());
 			}
 			return entity;
 		}
@@ -66,25 +66,29 @@ public abstract class ComponentInjector<T>
 	
 	
 
-	public ComponentInjector(Class<? extends Annotation> clazz)
+	public ComponentInjector(Class<? extends java.lang.annotation.Annotation> clazz)
 	{
 		this.clazz = clazz;
 	}
 	
-	public void inject(Field field, Behavior component) {
-		Annotation annotation = field.getAnnotation(clazz);
-		if(annotation!=null && clazz.isAssignableFrom(clazz)) {
+	public void inject(Field field, Behavior component) 
+	{
+		Annotation annotation = field.getDeclaredAnnotation(clazz);
+		if(annotation!=null)
+		{
 			T object = getInjectionObject(component, field);
 			if(object==null) {
 				//This will just inject a null object, but that is likely a problem in the code
-				System.out.println("Warning! Autoinjection didn't find an object to inject! "+ field.getDeclaringClass() + " for " + field.getName());
+				throw new GdxRuntimeException("Warning! Autoinjection didn't find an object to inject! "+ field.getDeclaringClass() + " for " + field.getName());
 			}
-			try {
+			try
+			{
 				field.setAccessible(true);
 				field.set(component, object);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new ApolloException("Failed to inject.", e);
+			}
+			catch (Exception e) 
+			{				
+				throw new GdxRuntimeException("Failed to inject.", e);
 			}
 		}
 	}
@@ -93,7 +97,7 @@ public abstract class ComponentInjector<T>
 	{	
 		Class<?> clazz = instance.getClass();
 		do {
-			Field[] fields = clazz.getDeclaredFields();
+			Field[] fields = ClassReflection.getDeclaredFields(clazz);
 			for (int i = 0; i < fields.length; i++) 
 			{
 				ComponentInjector.injectorComponent.   inject(fields[i], instance);
