@@ -8,8 +8,8 @@ import com.badlogic.gdx.utils.OrderedMap;
 
 public class Sprite
 {	
-	private final Vector2 origin;	
-	private final OrderedMap<String,Animation> animations;
+	public Vector2 origin;	
+	public OrderedMap<String,Animation> animations;
 	private String first;
 	
 	public Sprite()
@@ -17,11 +17,6 @@ public class Sprite
 		animations = new OrderedMap<String,Animation>();
 		origin = new Vector2();
 	}
-	
-	public Vector2 origin()
-	{
-		return origin;
-	}	
 	
 	public Animation getFirstAnimation()
 	{

@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.ObjectMap;
 
 /**
  * @author Edgardo
@@ -78,7 +79,7 @@ public class BodyBehavior extends PhysicsBehavior
 		public FixtureTemplate fixtures[];
 		
 		@Override
-		public Behavior createBehavior(final Engine engine) 
+		public Behavior createBehavior(final Engine engine, final int x, final int y, final int w, final int h,final ObjectMap<String,Object> map) 
 		{
 			World world = engine.getManager(PhysicsManager.class).getb2World();
 			
@@ -94,8 +95,7 @@ public class BodyBehavior extends PhysicsBehavior
 			}
 			
 			return new BodyBehavior(body);
-		}
-		
+		}		
 	}
 	private Vector2 position = new Vector2();
 	private Body body;	

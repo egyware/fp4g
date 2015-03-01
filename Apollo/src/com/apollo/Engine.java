@@ -8,10 +8,11 @@ import com.apollo.managers.EntityManager;
 import com.apollo.managers.Manager;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
-import com.egysoft.utils.StringUtils;
+import com.badlogic.gdx.utils.ObjectMap;
 
 public class Engine implements IMessageSender
 {
+	private static ObjectMap<String, Object> empty = new ObjectMap<String,Object>();
 	private Map<IMessage<?>,Bag<IMessageReceiver>> handlersByEventType;
 	private EntityManager entityManager;
 	
@@ -73,7 +74,7 @@ public class Engine implements IMessageSender
 		final Manager manager = managers.get(managerType);
 		if(manager == null)
 		{
-			throw new RuntimeException(StringUtils.format("{0} no puede ser null",managerType.getSimpleName()));
+			throw new RuntimeException(String.format("%s no puede ser null",managerType.getSimpleName()));
 		}
 		return (T) manager;
 	}
@@ -90,11 +91,30 @@ public class Engine implements IMessageSender
 		return entityBuildersByType.get(builderType);
 	}
 	
-	public Entity createEntity(String builderType,Object ...args) 
+	public Entity createEntity(final String builderType, final int x, final int y) 
 	{
-		IEntityBuilder entityBuilder = getEntityBuilder(builderType);
-		if(entityBuilder != null) {
-			return entityBuilder.buildEntity(this,args);
+		final IEntityBuilder entityBuilder = getEntityBuilder(builderType);
+		if(entityBuilder != null) 
+		{
+			return entityBuilder.buildEntity(this,x,y,0,0, empty);
+		}
+		return null;
+	}
+	public Entity createEntity(final String builderType, final int x, final int y, final int w, final int h) 
+	{
+		final IEntityBuilder entityBuilder = getEntityBuilder(builderType);
+		if(entityBuilder != null) 
+		{
+			return entityBuilder.buildEntity(this,x,y,w,h, empty);
+		}
+		return null;
+	}
+	public Entity createEntity(final String builderType, final int x, final int y, final int w, final int h,final ObjectMap<String,Object> map) 
+	{
+		final IEntityBuilder entityBuilder = getEntityBuilder(builderType);
+		if(entityBuilder != null) 
+		{
+			return entityBuilder.buildEntity(this,x,y,w,h, map);
 		}
 		return null;
 	}

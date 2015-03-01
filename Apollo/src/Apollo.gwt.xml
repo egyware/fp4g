@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit trunk//EN" "http://google-web-toolkit.googlecode.com/svn/trunk/distro-source/core/src/gwt-module.dtd">
 <module>
-	<source path="com/apollo" />
+	<source path="com/apollo" />	
+	<source path="com/egysoft">
+		<include name="gdx/ApolloInputProcessor.java" />
+		<include name="gdx/Game.java" />
+		<include name="gdx/GameState.java" />
+		<!-- assets -->
+		<include name="gdx/assets/Box.java" />
+		<include name="gdx/assets/Edge.java" />
+		<include name="gdx/assets/EntityBuilder.java" />
+		<include name="gdx/assets/EntityBuilderLoader.java" />
+		<include name="gdx/assets/Ground.java" />
+		<include name="gdx/assets/GroundLoader.java" />
+		<include name="gdx/assets/GroundTiledLoader.java" />
+		<include name="gdx/assets/Spawner.java" />
+		<include name="gdx/assets/SpawnerTiledLoader.java" />
+		<include name="gdx/assets/Sprite.java" />
+		<include name="gdx/assets/SpriteLoader.java" />
+		<include name="gdx/assets/Terrain.java" />		
+		<!-- map -->
+		<include name="map/IMap.java" />
+		<!-- utils -->
+		<include name="utils/StringUtils.java" />
+	</source>
+	
+	<extend-configuration-property name="gdx.reflect.include" value="com.egysoft.gdx.assets" />	
+	<extend-configuration-property name="gdx.reflect.include" value="com.egysoft.gdx.assets.EntityBuilder" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.apollo.behaviors" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.apollo.behaviors.TransformBehavior" />	
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g2d.Animation" />
 </module>

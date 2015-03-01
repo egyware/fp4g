@@ -106,7 +106,7 @@ public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 			float r = transform.rotation + rot*MathUtils.degreesToRadians;			
 			final float sin = MathUtils.sin(r);
 			final float cos = MathUtils.cos(r);
-			Entity gunEnt = world.createEntity(entity,transform.x + dist*cos,transform.y +dist*sin, vel*cos, vel*sin);
+			Entity gunEnt = world.createEntity(entity,(int)(transform.x + dist*cos),(int)(transform.y +dist*sin),(int)(vel*cos), (int)(vel*sin));
 			world.addEntity(gunEnt);
 
 			ammo -=1;

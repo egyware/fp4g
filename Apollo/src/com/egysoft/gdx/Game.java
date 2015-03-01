@@ -10,14 +10,15 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.egysoft.gdx.assets.EntityBuilder;
-import com.egysoft.gdx.assets.EntityBuilderLoader;
-import com.egysoft.gdx.assets.Ground;
-import com.egysoft.gdx.assets.GroundTiledLoader;
+import com.egysoft.gdx.assets.CollisionMap;
+import com.egysoft.gdx.assets.Level;
 import com.egysoft.gdx.assets.Spawner;
-import com.egysoft.gdx.assets.SpawnerTiledLoader;
 import com.egysoft.gdx.assets.Sprite;
-import com.egysoft.gdx.assets.SpriteLoader;
-import com.egysoft.utils.StringUtils;
+import com.egysoft.gdx.assets.loaders.EntityBuilderLoader;
+import com.egysoft.gdx.assets.loaders.CollisionTiledLoader;
+import com.egysoft.gdx.assets.loaders.LevelLoader;
+import com.egysoft.gdx.assets.loaders.SpawnerTiledLoader;
+import com.egysoft.gdx.assets.loaders.SpriteLoader;
 
 public abstract class Game implements ApplicationListener
 {
@@ -46,10 +47,11 @@ public abstract class Game implements ApplicationListener
 		final InternalFileHandleResolver fileResolver = new InternalFileHandleResolver();
 		assets = new AssetManager();		
 		assets.setLoader(Sprite.class,        new SpriteLoader(fileResolver));		
-		assets.setLoader(Ground.class,        new GroundTiledLoader(fileResolver));
+		assets.setLoader(CollisionMap.class,        new CollisionTiledLoader(fileResolver));
 		assets.setLoader(Spawner.class,       new SpawnerTiledLoader(fileResolver));
 		assets.setLoader(TiledMap.class,      new TmxMapLoader(fileResolver));
 		assets.setLoader(EntityBuilder.class, new EntityBuilderLoader(fileResolver));
+		assets.setLoader(Level.class, new LevelLoader(fileResolver));
 		multiplexer = new InputMultiplexer();
 	}
 	
@@ -61,7 +63,7 @@ public abstract class Game implements ApplicationListener
 	
 	public void performScreenChange()
 	{
-		Gdx.app.log("GameCycleLife", StringUtils.format("start {0}",next.getClass().getSimpleName()));		
+		Gdx.app.log("GameCycleLife", String.format("start %s",next.getClass().getSimpleName()));		
 		if(current != null)
 		{
 			current.dispose();			
@@ -76,7 +78,7 @@ public abstract class Game implements ApplicationListener
 			}
 			else
 			{
-				Gdx.app.log("GameCycleLife", StringUtils.format("No se pudo cargar {0}",current.getClass().getSimpleName()));
+				Gdx.app.log("GameCycleLife", String.format("No se pudo cargar %s",current.getClass().getSimpleName()));
 			}
 		}
 		this.next = null;
@@ -84,7 +86,7 @@ public abstract class Game implements ApplicationListener
 	
 	public void nextState(GameState _next)
 	{
-		Gdx.app.log("GameCycleLife", StringUtils.format("next: {0}",_next.getClass().getSimpleName()));
+		Gdx.app.log("GameCycleLife", String.format("next: %s",_next.getClass().getSimpleName()));
 		next = _next;
 	}
 	

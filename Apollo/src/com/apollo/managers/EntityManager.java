@@ -4,6 +4,7 @@ import com.apollo.Entity;
 import com.apollo.messages.EntityMessage;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
+import com.egysoft.gdx.assets.Spawn;
 import com.egysoft.gdx.assets.Spawner;
 
 public class EntityManager extends Manager 
@@ -18,9 +19,9 @@ public class EntityManager extends Manager
 	public void setEntities(Spawner spawner)
 	{
 		//agregamos todas las entidades		
-		for(int i=0; i < spawner.lenght; i++)
+		for(Spawn spawn:spawner.entities)
 		{
-			Entity entity = engine.createEntity(spawner.entities[i], spawner.params[i]);
+			Entity entity = engine.createEntity(spawn.entity, spawn.x, spawn.y, spawn.w, spawn.h, spawn.map);
 			if(entity != null)
 			{
 				engine.addEntity(entity);

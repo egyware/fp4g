@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Edge extends Terrain
+public class Edge extends Collision
 {
 	public int x0;
 	public int y0;

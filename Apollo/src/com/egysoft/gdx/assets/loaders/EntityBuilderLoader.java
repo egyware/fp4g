@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.egysoft.gdx.assets;
+package com.egysoft.gdx.assets.loaders;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.egysoft.gdx.assets.EntityBuilder;
 
 /**
  * @author egyware

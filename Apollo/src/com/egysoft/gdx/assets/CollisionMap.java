@@ -12,12 +12,12 @@ import java.util.Vector;
  * @author Edgardo
  *
  */
-public class Ground
+public class CollisionMap
 {	
 	public String name;	
-	public Vector<Terrain> terrains = new Vector<Terrain>(); 
+	public Vector<Collision> terrains = new Vector<Collision>(); 
 	
-	public Ground()
+	public CollisionMap()
 	{	
 	}
 	

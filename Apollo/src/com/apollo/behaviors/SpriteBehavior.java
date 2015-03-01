@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.egysoft.gdx.Game;
 import com.egysoft.gdx.assets.Sprite;
 
@@ -24,7 +25,7 @@ implements SequenceMessageHandler
 		String sprite;
 
 		@Override
-		public Behavior createBehavior(final Engine engine)
+		public Behavior createBehavior(final Engine engine, final int x, final int y, final int w, final int h,final ObjectMap<String, Object> map)
 		{
 			Sprite s = Game.instance.assets.get(sprite);
 			return new SpriteBehavior(s);
@@ -44,7 +45,7 @@ implements SequenceMessageHandler
 	public SpriteBehavior(Sprite sprite)
 	{
 		this.sprite = sprite;
-		o = sprite.origin();
+		o = sprite.origin;
 		current = sprite.getFirstAnimation();
 		
 	}

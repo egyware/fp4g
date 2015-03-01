@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.egysoft.gdx.assets;
+package com.egysoft.gdx.assets.loaders;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
@@ -11,14 +11,16 @@ import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.egysoft.gdx.assets.Box;
+import com.egysoft.gdx.assets.CollisionMap;
 
 /**
  * @author egyware
  * 
  */
-public class GroundLoader extends SynchronousAssetLoader<Ground, GroundLoader.GroundParameter> 
+public class CollisionLoader extends SynchronousAssetLoader<CollisionMap, CollisionLoader.GroundParameter> 
 {
-	public GroundLoader(FileHandleResolver resolver) 
+	public CollisionLoader(FileHandleResolver resolver) 
 	{
 		super(resolver);		
 	}
@@ -31,17 +33,17 @@ public class GroundLoader extends SynchronousAssetLoader<Ground, GroundLoader.Gr
 	}
 	
 	@Override
-	public Ground load(AssetManager assetManager, String fileName, FileHandle file, GroundParameter parameter) 
+	public CollisionMap load(AssetManager assetManager, String fileName, FileHandle file, GroundParameter parameter) 
 	{
 		Json json = new Json();
 		json.addClassTag("Box", Box.class);		
 		
-		Ground terrain = json.fromJson(Ground.class, file);		
+		CollisionMap terrain = json.fromJson(CollisionMap.class, file);		
 
 		return terrain;
 	}
 
-	public static class GroundParameter extends AssetLoaderParameters<Ground> 
+	public static class GroundParameter extends AssetLoaderParameters<CollisionMap> 
 	{
 		//TODO nada todavía por diseñar :D
 	}

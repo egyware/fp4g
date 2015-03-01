@@ -1,9 +1,11 @@
 /**
  * 
  */
-package com.egysoft.gdx.assets;
+package com.egysoft.gdx.assets.loaders;
 
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.regex.Pattern;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
@@ -13,10 +15,14 @@ import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.egysoft.gdx.assets.Spawn;
+import com.egysoft.gdx.assets.Spawner;
 
 /**
  * @author egyware
@@ -45,7 +51,7 @@ public class SpawnerTiledLoader extends SynchronousAssetLoader<Spawner, SpawnerT
 		return deps;
 	}
 
-	
+	private static Pattern isBool = Pattern.compile("^([Tt]rue)|([Ff]alse)$");	
 	@Override
 	public Spawner load(AssetManager assetManager, String fileName, FileHandle file,	SpawnerTiledParameter parameter) 
 	{
@@ -82,10 +88,34 @@ public class SpawnerTiledLoader extends SynchronousAssetLoader<Spawner, SpawnerT
 			if(type.equalsIgnoreCase("entity"))
 			{
 				type = rmo.getName();
-			}			
-			entitySpawn.entities[index] = type;
-			entitySpawn.params[index] = new Object[] {r, rmo.getProperties()}; 
-			index ++;
+			}
+			final ObjectMap<String, Object> map = new ObjectMap<String, Object>();
+			MapProperties mp = rmo.getProperties();			
+			for(Iterator<String> it = mp.getKeys(); it.hasNext();)
+			{
+				final String key = it.next();
+				if(!key.equalsIgnoreCase("type")) //no es necesario tener esta propiedad
+				{
+					final Object value = mp.get(key);
+					if(value instanceof String)
+					{
+						final String s = (String)value;
+						if(isBool.matcher(s).find())
+						{
+							map.put(key,Boolean.parseBoolean(s));
+						}
+						else
+						{
+							map.put(key, value);					
+						}
+					}
+					else
+					{
+						map.put(key, value);					
+					}
+				}
+			}
+			entitySpawn.entities[index++] = new Spawn(type, (int)r.x, (int)r.y, (int)r.width, (int)r.height, map);
 		}
 		
 

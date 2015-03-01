@@ -5,6 +5,7 @@ import com.apollo.BehaviorTemplate;
 import com.apollo.Engine;
 import com.apollo.Entity;
 import com.apollo.IEntityBuilder;
+import com.badlogic.gdx.utils.ObjectMap;
 
 
 public class EntityBuilder implements IEntityBuilder
@@ -13,12 +14,12 @@ public class EntityBuilder implements IEntityBuilder
 	public BehaviorTemplate behaviors[];
 	
 	
-	public Entity buildEntity(final Engine engine, final Object ...args)
+	public Entity buildEntity(final Engine engine, final int x, final int y, final int w, final int h,final ObjectMap<String, Object> map)
 	{
 		Entity entity = new Entity(engine, behaviors.length);
 		for(BehaviorTemplate template:behaviors)
 		{
-			Behavior behavior = template.createBehavior(engine);
+			Behavior behavior = template.createBehavior(engine,x,y,w,h,map);
 			entity.setBehavior(behavior);
 		}		
 		

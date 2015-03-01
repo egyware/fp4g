@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.egysoft.gdx.assets;
+package com.egysoft.gdx.assets.loaders;
 
 import com.apollo.managers.PhysicsManager;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -15,13 +15,15 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.utils.Array;
-import com.egysoft.map.IMap;
+import com.egysoft.gdx.assets.Edge;
+import com.egysoft.gdx.assets.CollisionMap;
+import com.egysoft.utils.IMap;
 
 /**
  * @author egyware
  * 
  */
-public class GroundTiledLoader extends SynchronousAssetLoader<Ground, GroundTiledLoader.GroundTiledParameter> 
+public class CollisionTiledLoader extends SynchronousAssetLoader<CollisionMap, CollisionTiledLoader.GroundTiledParameter> 
 {
 	private static final byte[] tabla = new byte[]
 	{
@@ -37,7 +39,7 @@ public class GroundTiledLoader extends SynchronousAssetLoader<Ground, GroundTile
 	private static final byte RIGHT  = 0x8;
 	private static final String PHYSICS_LAYER = "fisica";
 
-	public GroundTiledLoader(FileHandleResolver resolver) 
+	public CollisionTiledLoader(FileHandleResolver resolver) 
 	{
 		super(resolver);		
 	}
@@ -59,7 +61,7 @@ public class GroundTiledLoader extends SynchronousAssetLoader<Ground, GroundTile
 	}
 	
 	@Override
-	public Ground load(AssetManager assetManager, String fileName, FileHandle file, GroundTiledParameter parameter) 
+	public CollisionMap load(AssetManager assetManager, String fileName, FileHandle file, GroundTiledParameter parameter) 
 	{
 		String tiledMapPath;
 		if (parameter == null)
@@ -68,7 +70,7 @@ public class GroundTiledLoader extends SynchronousAssetLoader<Ground, GroundTile
 		} else {
 			tiledMapPath = parameter.tiledMapPath;
 		}
-		Ground ground = new Ground();
+		CollisionMap ground = new CollisionMap();
 		ground.name = file.nameWithoutExtension();
 		
 		final TiledMap tiled = assetManager.get(tiledMapPath,	TiledMap.class);
@@ -130,7 +132,7 @@ public class GroundTiledLoader extends SynchronousAssetLoader<Ground, GroundTile
 	
 	
 	
-	private void createEdgeFor(int value, IMap map, Ground ground, Filter filter)
+	private void createEdgeFor(int value, IMap map, CollisionMap ground, Filter filter)
 	{
 		final int w = map.getWidth();
 		final int h = map.getHeight();
@@ -172,7 +174,7 @@ public class GroundTiledLoader extends SynchronousAssetLoader<Ground, GroundTile
 		
 	}
 
-	private void createVEdges(Ground ground,int offv, int w, int h,int tw,int th, byte[] array, Filter filter) 
+	private void createVEdges(CollisionMap ground,int offv, int w, int h,int tw,int th, byte[] array, Filter filter) 
 	{
 		int x0=0,y0=0,x1=0,y1=0;
 		boolean active = false;
@@ -224,7 +226,7 @@ public class GroundTiledLoader extends SynchronousAssetLoader<Ground, GroundTile
 		}		
 	}
 	
-	private void createHEdges(Ground ground,int offh, int w, int h,int tw,int th, byte[] array, Filter filter) 
+	private void createHEdges(CollisionMap ground,int offh, int w, int h,int tw,int th, byte[] array, Filter filter) 
 	{
 		int x0=0,y0=0,x1=0,y1=0;
 		boolean active = false;
@@ -278,7 +280,7 @@ public class GroundTiledLoader extends SynchronousAssetLoader<Ground, GroundTile
 
 
 
-	public static class GroundTiledParameter extends AssetLoaderParameters<Ground> 
+	public static class GroundTiledParameter extends AssetLoaderParameters<CollisionMap> 
 	{
 		public String tiledMapPath;
 	}

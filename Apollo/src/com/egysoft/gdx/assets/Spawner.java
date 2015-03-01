@@ -1,17 +1,21 @@
 package com.egysoft.gdx.assets;
 
-//TODO esta clase permitirá hacer que los personajes reaparescan según vaya avanzando el personaje, por ahora solo mantiene una lista con los datos.
+
+/**
+ * 
+ * @author Edgardo
+ *
+ */
 public class Spawner 
 {
 	public final int lenght;
-	public final String[] entities;
-	public final Object[][] params;
+	public final Spawn[] entities;
 	
 	public Spawner(int n)
 	{
 		lenght = n;
-		entities = new String[n];
-		params = new Object[n][];
+		entities = new Spawn[n];	
 	}
 }
+
 

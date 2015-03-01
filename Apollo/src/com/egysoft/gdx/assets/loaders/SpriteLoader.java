@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.egysoft.gdx.assets;
+package com.egysoft.gdx.assets.loaders;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -18,15 +18,16 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializer;
 import com.badlogic.gdx.utils.JsonValue;
+import com.egysoft.gdx.assets.Sprite;
 
 /**
  * @author egyware
  * 
  */
-public class SpriteLoader extends
-		SynchronousAssetLoader<Sprite, SpriteLoader.AnimationParameter> {
+public class SpriteLoader extends SynchronousAssetLoader<Sprite, SpriteLoader.AnimationParameter> 
+{
 	public static final int DEFAULT_DELAY = 200; //100 ms
-	private Json json;		
+	private Json json;
 	private SpriteSerializer serializer;
 
 	public SpriteLoader(FileHandleResolver resolver) {

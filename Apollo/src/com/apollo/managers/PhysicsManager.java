@@ -11,8 +11,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
-import com.egysoft.gdx.assets.Terrain;
-import com.egysoft.gdx.assets.Ground;
+import com.egysoft.gdx.assets.Collision;
+import com.egysoft.gdx.assets.CollisionMap;
 
 /**
  * Administrador de Fisica usando Box2D
@@ -82,9 +82,9 @@ public class PhysicsManager extends Manager implements ContactListener
 		this(new Vector2(x,y));
 	}
 	
-	public void setTerrain(Ground terrain)
+	public void setTerrain(CollisionMap terrain)
 	{
-		for(Terrain subterrain:terrain.terrains)
+		for(Collision subterrain:terrain.terrains)
 		{
 			subterrain.createBody(world);
 		}
