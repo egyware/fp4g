@@ -1,33 +1,23 @@
 package com.apollo.managers;
 
+import java.util.HashMap;
+
 import com.apollo.Entity;
-import com.apollo.messages.EntityMessage;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
-import com.egysoft.gdx.assets.Spawn;
-import com.egysoft.gdx.assets.Spawner;
 
-public class EntityManager extends Manager 
+public class EntityManager extends Manager
 {
-	private final Bag<Entity> entities;	
+	private final HashMap<Long, Entity> entitiesById;
+	private final Bag<Entity> entities;
+	private long freeId;
 		
 	public EntityManager()
 	{
-		entities = new Bag<Entity>();		
+		entities = new Bag<Entity>();
+		entitiesById = new HashMap<Long, Entity>();
 	}
-	
-	public void setEntities(Spawner spawner)
-	{
-		//agregamos todas las entidades		
-		for(Spawn spawn:spawner.entities)
-		{
-			Entity entity = engine.createEntity(spawn.entity, spawn.x, spawn.y, spawn.w, spawn.h, spawn.map);
-			if(entity != null)
-			{
-				engine.addEntity(entity);
-			}
-		}		
-	}
+
 	
 	public ImmutableBag<Entity> getEntities() 
 	{
@@ -35,24 +25,34 @@ public class EntityManager extends Manager
 	}
 
 	@Override
-	public void added(Entity entity) 
+	public void added(Entity entity)
 	{
+		long next = ++freeId;
+		entity.setId(next);
+		entitiesById.put(next, entity);
 		entities.add(entity);
-		engine.onMessage(EntityMessage.onAddedEntity, entity);
 	}
 	
 	@Override
-	public void removed(Entity entity) 
+	public void removed(Entity entity)
 	{
-		entities.remove(entity);
-		engine.onMessage(EntityMessage.onRemovedEntity, entity);
+		long id = entity.getId();
+		entitiesById.remove(id);				
+		entities.remove(entity);		
 	}
 
 	@Override
-	public void update(float delta) {		
-		for (int i = 0, s = entities.size(); s > i; i++) {
+	public void update(float delta)
+	{		
+		for (int i = 0, s = entities.size(); s > i; i++) 
+		{
 			Entity entity = entities.get(i);
 			entity.update(delta);
 		}
+	}
+
+	public Entity getEntityById(long id) 
+	{
+		return entitiesById.get(id);
 	}
 }

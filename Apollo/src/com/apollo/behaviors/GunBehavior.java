@@ -4,7 +4,6 @@
 package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
-import com.apollo.Entity;
 import com.apollo.Engine;
 import com.apollo.annotate.InjectComponent;
 import com.apollo.messages.AutoGunMessage;
@@ -106,8 +105,8 @@ public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 			float r = transform.rotation + rot*MathUtils.degreesToRadians;			
 			final float sin = MathUtils.sin(r);
 			final float cos = MathUtils.cos(r);
-			Entity gunEnt = world.createEntity(entity,(int)(transform.x + dist*cos),(int)(transform.y +dist*sin),(int)(vel*cos), (int)(vel*sin));
-			world.addEntity(gunEnt);
+//			Entity gunEnt = world.createEntity(entity,(int)(transform.x + dist*cos),(int)(transform.y +dist*sin),(int)(vel*cos), (int)(vel*sin));
+//			world.addEntity(gunEnt);
 
 			ammo -=1;
 		}

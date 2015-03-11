@@ -1,12 +1,8 @@
 package com.apollo;
 
-import com.apollo.managers.EntityManager;
-
 public interface Behavior
 {
 	public abstract Engine getEngine();
-
-	public abstract EntityManager getEntityManager();
 
 	public abstract void setOwner(Entity owner);
 

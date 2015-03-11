@@ -1,6 +1,5 @@
 package com.apollo;
 
-import com.apollo.managers.EntityManager;
 
 public abstract class BaseBehavior implements Behavior, IMessageReceiver
 {
@@ -13,15 +12,6 @@ public abstract class BaseBehavior implements Behavior, IMessageReceiver
 	public Engine getEngine()
 	{
 		return owner.getEngine();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.apollo.Behavior#getEntityManager()
-	 */
-	@Override
-	public EntityManager getEntityManager()
-	{
-		return owner.getEngine().getEntityManager();
 	}
 
 	/* (non-Javadoc)
@@ -70,7 +60,6 @@ public abstract class BaseBehavior implements Behavior, IMessageReceiver
 	/* (non-Javadoc)
 	 * @see com.apollo.Behavior#getComponentFromOwner(java.lang.Class)
 	 */
-	@Override
 	public <T extends Behavior> T getComponentFromOwner(Class<T> family) 
 	{
 		return owner.getBehavior(family);

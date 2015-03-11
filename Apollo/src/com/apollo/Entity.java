@@ -8,11 +8,11 @@ import com.apollo.annotate.ComponentInjector;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
-public final class Entity implements IMessageSender
+public class Entity implements IMessageSender
 {
 	protected final Engine engine;
+	private long id;
 	private Map<IMessage<?>,Bag<IMessageReceiver>> handlersByEventType;
-	//private Map<IMessageFilter<?>, Queue<IMessageFilterReceiver>> filtersByEventType;
 	private final Bag<Behavior> behaviors;
 	private final Map<Class<? extends Behavior>, Behavior> componentsByType;	
 	private boolean deleted;
@@ -196,18 +196,18 @@ public final class Entity implements IMessageSender
 		}
 	}
 
-	public <T extends Behavior> T getBehavior(Class<T> type) 
+	public final <T extends Behavior> T getBehavior(Class<T> type) 
 	{
 		return type.cast(componentsByType.get(type));
 	}
 	
 
-	public <T extends Behavior> boolean hasBehavior(Class<T> type) 
+	public final <T extends Behavior> boolean hasBehavior(Class<T> type) 
 	{
 		return componentsByType.containsKey(type);
 	}
 	
-	public Bag<Behavior> getBehaviors() 
+	public final Bag<Behavior> getBehaviors() 
 	{
 		return behaviors;
 	}
@@ -217,6 +217,16 @@ public final class Entity implements IMessageSender
 		if(handlersByEventType == null)
 			return null;		
 		return handlersByEventType.get(messageType);		 
+	}
+	
+	public final long getId()
+	{
+		return id;
+	}
+	
+	public final void setId(long id)
+	{
+		this.id = id;
 	}
 
 }

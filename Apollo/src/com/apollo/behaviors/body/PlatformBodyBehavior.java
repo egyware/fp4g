@@ -29,7 +29,6 @@ import com.badlogic.gdx.physics.box2d.World;
 public class PlatformBodyBehavior extends PhysicsBehavior
 implements ContactMessageHandler,RayCastCallback,QueryCallback
 {
-	private Vector2 position = new Vector2();
 	private Body box;
 	private PolygonShape boxShape;
 	private World world;
@@ -236,9 +235,9 @@ implements ContactMessageHandler,RayCastCallback,QueryCallback
 		}		
 	}
 
-	public Vector2 getVelocity() 
+	public Vector2 getLinearVelocity() 
 	{
-		return box.getLinearVelocity();
+		return box.getLinearVelocity().cpy().scl(INV_SCALE);
 	}
 	
 	public boolean isTouchTop()
@@ -320,7 +319,7 @@ implements ContactMessageHandler,RayCastCallback,QueryCallback
 	@Override
 	public Vector2 getPosition()
 	{
-		return position.set(box.getPosition()).scl(INV_SCALE).cpy();
+		return box.getPosition().cpy().scl(INV_SCALE);
 	}
 
 	@Override

@@ -96,8 +96,7 @@ public class BodyBehavior extends PhysicsBehavior
 			
 			return new BodyBehavior(body);
 		}		
-	}
-	private Vector2 position = new Vector2();
+	}	
 	private Body body;	
 	
 	public BodyBehavior(Body body)
@@ -121,9 +120,9 @@ public class BodyBehavior extends PhysicsBehavior
 	}
 
 	@Override
-	protected Vector2 getPosition() 
+	public Vector2 getPosition() 
 	{
-		return position.set(body.getPosition()).scl(INV_SCALE);
+		return body.getPosition().cpy().scl(INV_SCALE);
 	}
 
 	@Override
@@ -140,5 +139,14 @@ public class BodyBehavior extends PhysicsBehavior
 	public void setLinearVelocity(float vx, float vy)
 	{
 		body.setLinearVelocity(vx, vy);		
+	}
+	
+	/**
+	 * Devuelve la velocidad linear del objecto en pixeles por segundo
+	 * @return
+	 */
+	public Vector2 getLinearVelocity() 
+	{
+		return body.getLinearVelocity().cpy().scl(INV_SCALE);		
 	}
 }

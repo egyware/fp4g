@@ -8,18 +8,16 @@ import com.apollo.managers.EntityManager;
 import com.apollo.managers.Manager;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
-import com.badlogic.gdx.utils.ObjectMap;
 
 public class Engine implements IMessageSender
 {
-	private static ObjectMap<String, Object> empty = new ObjectMap<String,Object>();
 	private Map<IMessage<?>,Bag<IMessageReceiver>> handlersByEventType;
 	private EntityManager entityManager;
 	
-	private Bag<Entity> added;
-	private Bag<Manager> addedManagers;
-	private Bag<Entity> deleted;
-
+	private final Bag<Entity> added;
+	private final Bag<Manager> addedManagers;
+	private final Bag<Entity> deleted;
+	
 	private Map<Class<? extends Manager>, Manager> managers;
 	private Bag<Manager> managersBag;
 	
@@ -28,40 +26,36 @@ public class Engine implements IMessageSender
 	public Engine() 
 	{			
 		addedManagers = new Bag<Manager>();
-		added   = new Bag<Entity>();		
-		deleted = new Bag<Entity>();
-		
+		added    = new Bag<Entity>();		
+		deleted  = new Bag<Entity>();
+				
 		managers = new LinkedHashMap<Class<? extends Manager>, Manager>();
 		managersBag = new Bag<Manager>();	
 		
 		entityBuildersByType = new HashMap<String, IEntityBuilder>();		
 	}
 
-	public EntityManager getEntityManager() 
+	public void addEntity(Entity e) 
 	{
-		return entityManager;
-	}
-		
-	public void addEntity(Entity e) {
 		added.add(e);
 	}
 	
-	public void deleteEntity(Entity e) {
-		if(!deleted.contains(e)) {
+	public void deleteEntity(Entity e) 
+	{
+		if(!deleted.contains(e)) 
+		{
 			deleted.add(e);
 		}
 	}
-
+	
 	public void setEntityManager(EntityManager manager)
 	{
-		if(manager == null)
-		{
-			throw new RuntimeException("EntityManager no puede ser null");
-		}
 		entityManager = manager;
-		setManager(entityManager);		
+		setManager(manager);
 	}
-	public void setManager(Manager manager) {		
+	
+	public void setManager(Manager manager) 
+	{		
 		managers.put(manager.getClass(), manager);
 		managersBag.add(manager);
 		addedManagers.add(manager);
@@ -87,52 +81,31 @@ public class Engine implements IMessageSender
 	}
 
 	
-	public IEntityBuilder getEntityBuilder(String builderType) {
-		return entityBuildersByType.get(builderType);
-	}
-	
-	public Entity createEntity(final String builderType, final int x, final int y) 
+	@SuppressWarnings("unchecked")
+	public <T extends IEntityBuilder> T  getEntityBuilder(final String builderType)
 	{
-		final IEntityBuilder entityBuilder = getEntityBuilder(builderType);
-		if(entityBuilder != null) 
-		{
-			return entityBuilder.buildEntity(this,x,y,0,0, empty);
-		}
-		return null;
-	}
-	public Entity createEntity(final String builderType, final int x, final int y, final int w, final int h) 
-	{
-		final IEntityBuilder entityBuilder = getEntityBuilder(builderType);
-		if(entityBuilder != null) 
-		{
-			return entityBuilder.buildEntity(this,x,y,w,h, empty);
-		}
-		return null;
-	}
-	public Entity createEntity(final String builderType, final int x, final int y, final int w, final int h,final ObjectMap<String,Object> map) 
-	{
-		final IEntityBuilder entityBuilder = getEntityBuilder(builderType);
-		if(entityBuilder != null) 
-		{
-			return entityBuilder.buildEntity(this,x,y,w,h, map);
-		}
-		return null;
+		return (T)entityBuildersByType.get(builderType);
 	}
 	
 	private void addEntities() {
-		for(int i = 0; added.size() > i; i++) {
+		final int size = added.size();
+		for(int i = 0;  size > i; i++) 
+		{
 			Entity e = added.get(i);
 
-			for(Manager mgr : managers.values()) {
+			for(Manager mgr : managers.values()) 
+			{
 				mgr.added(e);
-			}
+			}	
+			
 		}
-		for(int i = 0; added.size() > i; i++) {
+		for(int i = 0; size > i; i++) 
+		{
 			Entity e = added.get(i);
 			e.applyComponentAnnotations();
 			e.initialize();
 		}
-		added.clear();
+		added.clear();		
 	}
 	
 	private void initManagers() {
@@ -144,23 +117,24 @@ public class Engine implements IMessageSender
 	}
 
 	private void deleteEntities() {
-		for(int i = 0; deleted.size() > i; i++) {
+		for(int i = 0; deleted.size() > i; i++) 
+		{
 			Entity e = deleted.get(i);
 			
-			for(Manager mgr : managersBag){
+			for(Manager mgr : managersBag)
+			{
 				mgr.removed(e);
 			}
 				
 			e.uninitialize();
 					
-			e.setDeleted(true);
+			e.setDeleted(true);			
 		}
 		deleted.clear();
 	}
 	
-	public void deleteAllEntities() {
-		ImmutableBag<Entity> entities = entityManager.getEntities();
-		deleted.addAll(entities);
+	public void deleteAllEntities()
+	{
 		deleteEntities();
 	}
 	
@@ -176,6 +150,7 @@ public class Engine implements IMessageSender
 		if(!added.isEmpty()) {
 			addEntities();
 		}
+
 	}	
 	
 	private Bag<IMessageReceiver> getMessageHandler(IMessage<?> messageType) 
@@ -225,5 +200,10 @@ public class Engine implements IMessageSender
 				handler.onMessage(message, args);
 			}
 		}		
+	}
+	
+	public ImmutableBag<Entity> getEntities()
+	{
+		return entityManager.getEntities();
 	}
 }

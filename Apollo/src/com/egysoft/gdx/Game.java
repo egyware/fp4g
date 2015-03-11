@@ -5,6 +5,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -33,6 +34,7 @@ public abstract class Game implements ApplicationListener
 		Height = game.getHeight();
 	}
 	
+	
 	private GameState next;
 	private GameState current;
 	private InputMultiplexer multiplexer;
@@ -40,6 +42,7 @@ public abstract class Game implements ApplicationListener
 	public abstract int getWidth();
 	public abstract int getHeight();
 	
+	public Preferences preferences;
 	public final AssetManager assets; 
 	
 	public Game()
@@ -53,6 +56,7 @@ public abstract class Game implements ApplicationListener
 		assets.setLoader(EntityBuilder.class, new EntityBuilderLoader(fileResolver));
 		assets.setLoader(Level.class, new LevelLoader(fileResolver));
 		multiplexer = new InputMultiplexer();
+		
 	}
 	
 	public void start(GameState state)
@@ -103,7 +107,8 @@ public abstract class Game implements ApplicationListener
 	@Override
 	public void create() 
 	{
-		Game.init(this);		
+		Game.init(this);
+		preferences = Gdx.app.getPreferences("Game");
 		Gdx.input.setInputProcessor(multiplexer);
 		Gdx.app.setLogLevel(Application.LOG_INFO);
 		Gdx.app.log("AppCycleLife", "create");
