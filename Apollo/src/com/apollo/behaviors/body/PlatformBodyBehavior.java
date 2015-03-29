@@ -6,8 +6,8 @@ import static com.apollo.managers.PhysicsManager.SCALE;
 
 import com.apollo.Entity;
 import com.apollo.managers.PhysicsManager;
-import com.apollo.messages.ContactMessage;
-import com.apollo.messages.ContactMessageHandler;
+import com.apollo.messages.ContactMessageType;
+import com.apollo.messages.ContactMessageType;
 import com.apollo.utils.Bag;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -61,8 +61,8 @@ implements ContactMessageHandler,RayCastCallback,QueryCallback
 	@Override
 	public void uninitialize()
 	{
-		owner.removeMessageHandler(ContactMessage.onBeginContact, this);
-		owner.removeMessageHandler(ContactMessage.onEndContact, this);
+		owner.removeMessageHandler(ContactMessageType.onBeginContact, this);
+		owner.removeMessageHandler(ContactMessageType.onEndContact, this);
 		
 		box.getWorld().destroyBody(box);		
 	}
@@ -70,8 +70,8 @@ implements ContactMessageHandler,RayCastCallback,QueryCallback
 	@Override	
 	public void initialize()
 	{	
-		owner.addMessageHandler(ContactMessage.onBeginContact, this);
-		owner.addMessageHandler(ContactMessage.onEndContact, this);
+		owner.addMessageHandler(ContactMessageType.onBeginContact, this);
+		owner.addMessageHandler(ContactMessageType.onEndContact, this);
 		
 	}
 	
@@ -343,6 +343,16 @@ implements ContactMessageHandler,RayCastCallback,QueryCallback
 			fraction = 1;			
 		}
 		
+	}
+
+	public void setPosition(float x, float y,float angle) 
+	{
+		box.setTransform(x*SCALE, y*SCALE, angle);		
+	}
+
+	public void setLinearVelocity(float vx, float vy)
+	{
+		box.setLinearVelocity(vx*SCALE, vy*SCALE);		
 	}
 
 }

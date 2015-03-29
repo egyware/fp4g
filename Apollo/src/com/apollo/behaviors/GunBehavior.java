@@ -5,18 +5,15 @@ package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
 import com.apollo.Engine;
+import com.apollo.Entity;
 import com.apollo.annotate.InjectComponent;
-import com.apollo.messages.AutoGunMessage;
-import com.apollo.messages.AutoGunMessageHandler;
-import com.apollo.messages.GunMessage;
-import com.apollo.messages.GunMessageHandler;
 import com.badlogic.gdx.math.MathUtils;
 
 /**
  * @author Edgardo
  *
  */
-public final class GunBehavior extends BaseBehavior implements GunMessageHandler, AutoGunMessageHandler
+public final class GunBehavior extends BaseBehavior
 {
 	@InjectComponent
 	private TransformBehavior transform;
@@ -82,9 +79,9 @@ public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 	@Override
 	public void initialize()
 	{
-		owner.addMessageHandler(GunMessage.onChangeBulletGun, this);
-		owner.addMessageHandler(GunMessage.onReloadGun, this);
-		owner.addMessageHandler(GunMessage.onShotGun, this);	
+		owner.addMessageHandler(GunMessageType.onChangeBulletGun, this);
+		owner.addMessageHandler(GunMessageType.onReloadGun, this);
+		owner.addMessageHandler(GunMessageType.onShotGun, this);	
 		owner.addMessageHandler(AutoGunMessage.onSetDelayShotAutoGun,this);
 		owner.addMessageHandler(AutoGunMessage.onSetShotAutoGun,this);	
 		
@@ -105,8 +102,8 @@ public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 			float r = transform.rotation + rot*MathUtils.degreesToRadians;			
 			final float sin = MathUtils.sin(r);
 			final float cos = MathUtils.cos(r);
-//			Entity gunEnt = world.createEntity(entity,(int)(transform.x + dist*cos),(int)(transform.y +dist*sin),(int)(vel*cos), (int)(vel*sin));
-//			world.addEntity(gunEnt);
+			Entity gunEnt = world.createEntity(entity,(int)(transform.x + dist*cos),(int)(transform.y +dist*sin),(int)(vel*cos), (int)(vel*sin));
+			world.addEntity(gunEnt);
 
 			ammo -=1;
 		}
@@ -117,7 +114,6 @@ public final class GunBehavior extends BaseBehavior implements GunMessageHandler
 	public void onChangeBulletGun(String entityName)
 	{
 		this.entity = entityName;
-		
 	}
 	
 	@Override

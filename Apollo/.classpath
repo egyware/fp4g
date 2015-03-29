@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/libgdx-1.5.4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/libgdx-1.5.4 box2d"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/luaj-3.0"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

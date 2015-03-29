@@ -4,15 +4,24 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.luaj.vm2.Globals;
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.jse.CoerceJavaToLua;
+import org.luaj.vm2.lib.jse.JsePlatform;
+
 import com.apollo.managers.EntityManager;
 import com.apollo.managers.Manager;
+import com.apollo.messages.ContactMessageType;
+import com.apollo.scripting.EngineLib;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
+import com.badlogic.gdx.utils.ObjectMap;
 
 public class Engine implements IMessageSender
 {
-	private Map<IMessage<?>,Bag<IMessageReceiver>> handlersByEventType;
+	private Map<MessageType, Bag<MessageHandler>> handlersByEventType;
 	private EntityManager entityManager;
+	private Globals globals;
 	
 	private final Bag<Entity> added;
 	private final Bag<Manager> addedManagers;
@@ -32,7 +41,19 @@ public class Engine implements IMessageSender
 		managers = new LinkedHashMap<Class<? extends Manager>, Manager>();
 		managersBag = new Bag<Manager>();	
 		
-		entityBuildersByType = new HashMap<String, IEntityBuilder>();		
+		entityBuildersByType = new HashMap<String, IEntityBuilder>();
+		
+		//TODO por mientras, mas adelante se filtrará el uso de esta api haciendolo mas exclusivo
+		globals = JsePlatform.standardGlobals();
+		globals.load(new EngineLib(this));	
+		globals.set("Contact", CoerceJavaToLua.coerce(ContactMessageType.class));
+		globals.set("entity", CoerceJavaToLua.coerce(new Entity(this)));
+	}
+	
+	public void runScript(String script)
+	{
+		LuaValue chunk = globals.load(script);
+		LuaValue v = chunk.call();
 	}
 
 	public void addEntity(Entity e) 
@@ -80,11 +101,9 @@ public class Engine implements IMessageSender
 		entityBuildersByType.put(entityBuilder.getEntityBuilderName(), entityBuilder);
 	}
 
-	
-	@SuppressWarnings("unchecked")
-	public <T extends IEntityBuilder> T  getEntityBuilder(final String builderType)
+	public IEntityBuilder getEntityBuilder(final String builderType)
 	{
-		return (T)entityBuildersByType.get(builderType);
+		return entityBuildersByType.get(builderType);
 	}
 	
 	private void addEntities() {
@@ -153,17 +172,17 @@ public class Engine implements IMessageSender
 
 	}	
 	
-	private Bag<IMessageReceiver> getMessageHandler(IMessage<?> messageType) 
+	private Bag<MessageHandler> getMessageHandler(MessageType messageType) 
 	{
 		if(handlersByEventType == null)	return null;		
 		return handlersByEventType.get(messageType); 
 	}
 	
-	public <T extends IMessage<?>> void removeMessageHandler(IMessage<?> messagetType, IMessageReceiver listener) 
+	public void removeMessageHandler(MessageType messagetType, MessageHandler listener) 
 	{
 		if(handlersByEventType != null)
 		{				
-			Bag<IMessageReceiver> listeners = getMessageHandler(messagetType);
+			Bag<MessageHandler> listeners = getMessageHandler(messagetType);
 			if(listeners != null) 
 			{				
 				listeners.remove(listener);
@@ -175,29 +194,29 @@ public class Engine implements IMessageSender
 	 * @param messageType Class of Message Type
 	 * @param listener
 	 */	
-	public <T extends IMessage<?>> void addMessageHandler(IMessage<?> messageType, IMessageReceiver listener) {
+	public void addMessageHandler(MessageType messageType, MessageHandler listener) {
 		if(handlersByEventType == null)
-			handlersByEventType = new HashMap<IMessage<?>,Bag<IMessageReceiver>>();
+			handlersByEventType = new HashMap<MessageType, Bag<MessageHandler>>();
 		
-		Bag<IMessageReceiver> listeners = handlersByEventType.get(messageType);
+		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
 		if(listeners == null) {
-			listeners = new Bag<IMessageReceiver>();
+			listeners = new Bag<MessageHandler>();
 			handlersByEventType.put(messageType,listeners);
 		}
 		listeners.add(listener);
 	}
 
 	@Override
-	public void onMessage(IMessage<? extends IMessageReceiver> message, Object... args) 
+	public void onMessage(Object sender, Message message) 
 	{
-		ImmutableBag<IMessageReceiver> listeners = getMessageHandler(message);
+		ImmutableBag<MessageHandler> listeners = getMessageHandler(message.type);
 		if(listeners != null)
 		{
 			final int size = listeners.size();
 			for(int i=0; i<size; i++)
 			{
-				IMessageReceiver handler = listeners.get(i);
-				handler.onMessage(message, args);
+				MessageHandler handler = listeners.get(i);
+				handler.onMessage(sender, message);
 			}
 		}		
 	}
@@ -206,4 +225,48 @@ public class Engine implements IMessageSender
 	{
 		return entityManager.getEntities();
 	}
+	
+	public Entity getEntityById(long id) 
+	{
+		return entityManager.getEntityById(id);
+	}
+	
+	public Entity createEntity(final String entity, final int x, final int y, final int w, final int h) 
+	{
+		IEntityBuilder builder = getEntityBuilder(entity);
+		if(builder != null)
+		{
+			return builder.buildEntity(this, x, y, w, h, null);
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public Entity createEntity(final String entity, final int x, final int y) 
+	{
+		IEntityBuilder builder = getEntityBuilder(entity);
+		if(builder != null)
+		{
+			return builder.buildEntity(this, x, y, 0, 0, null);
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public Entity createEntity(final String entity, final int x, final int y, final int w, final int h,final ObjectMap<String, Object> map) 
+	{
+		IEntityBuilder builder = getEntityBuilder(entity);
+		if(builder != null)
+		{
+			return builder.buildEntity(this, x, y, w, h, map);
+		}
+		else
+		{
+			return null;
+		}
+	}	
 }

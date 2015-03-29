@@ -1,7 +1,7 @@
 package com.apollo;
 
 
-public abstract class BaseBehavior implements Behavior, IMessageReceiver
+public abstract class BaseBehavior implements Behavior
 {
 	protected Entity owner;
 							
@@ -71,11 +71,5 @@ public abstract class BaseBehavior implements Behavior, IMessageReceiver
 	@Override
 	public void uninitialize() 
 	{
-	}
-	
-	public void onMessage(IMessage<? extends IMessageReceiver> message, Object... args)
-	{
-		message.dispatch(this, args);				
 	}	
-
 }

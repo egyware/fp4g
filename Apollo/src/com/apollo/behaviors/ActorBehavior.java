@@ -3,12 +3,10 @@ package com.apollo.behaviors;
 import com.apollo.Behavior;
 import com.apollo.Engine;
 import com.apollo.Entity;
-import com.apollo.IMessage;
-import com.apollo.IMessageReceiver;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public abstract class ActorBehavior extends Actor implements Behavior, IMessageReceiver 
+public abstract class ActorBehavior extends Actor implements Behavior 
 {
 	protected Entity owner;	
 	@Override
@@ -57,10 +55,5 @@ public abstract class ActorBehavior extends Actor implements Behavior, IMessageR
 	{
 	}
 	
-	public abstract void draw(Batch batch, float parentAlpha);
-	
-	public void onMessage(IMessage<? extends IMessageReceiver> message, Object... args)
-	{
-		message.dispatch(this, args);				
-	}
+	public abstract void draw(Batch batch, float parentAlpha);	
 }

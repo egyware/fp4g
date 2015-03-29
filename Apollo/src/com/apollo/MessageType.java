@@ -5,17 +5,12 @@ package com.apollo;
  * @author egyware
  *
  */
-public interface IMessage<Handler extends IMessageReceiver> 
+public interface MessageType 
 {
-	
-	public void dispatch(IMessageReceiver handler, Object ...args);
-	
 	/**
 	 * Funcion de utilidad para hacer calzar con la función name de enum
 	 * @return
 	 */
 	public String name();
-
-
 	
 }

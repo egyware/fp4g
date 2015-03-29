@@ -1,7 +1,7 @@
 package com.apollo.managers;
 
 import com.apollo.Entity;
-import com.apollo.messages.ContactMessage;
+import com.apollo.messages.ContactMessageType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -111,11 +111,11 @@ public class PhysicsManager extends Manager implements ContactListener
 		Entity b = (Entity)fixB.getBody().getUserData();
 		if(a != null)
 		{				
-			a.onMessage(ContactMessage.onBeginContact, b, fixB, fixA, contact);			
+			a.onMessage(ContactMessageType.onBeginContact, b, fixB, fixA, contact);			
 		}
 		if(b != null)
 		{			
-			b.onMessage(ContactMessage.onBeginContact, a, fixA, fixB, contact);
+			b.onMessage(ContactMessageType.onBeginContact, a, fixA, fixB, contact);
 			
 		}
 	}
@@ -129,11 +129,11 @@ public class PhysicsManager extends Manager implements ContactListener
 		Entity b = (Entity)fixB.getBody().getUserData();
 		if(a != null)
 		{
-			a.onMessage(ContactMessage.onEndContact, b, fixB, fixA, contact);
+			a.onMessage(ContactMessageType.onEndContact, b, fixB, fixA, contact);
 		}
 		if(b != null)
 		{
-			b.onMessage(ContactMessage.onEndContact, a, fixA, fixB, contact);
+			b.onMessage(ContactMessageType.onEndContact, a, fixA, fixB, contact);
 		}		
 	}
 

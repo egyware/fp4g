@@ -31,11 +31,4 @@ public class EntityBuilder implements IEntityBuilder
 		return name;
 	}
 
-	@Override
-	@SuppressWarnings("unchecked")	
-	public Entity buildEntity(Engine engine, Object... args) 
-	{
-		return buildEntity(engine, (Integer)args[0], (Integer)args[1], (Integer)args[2], (Integer)args[3], (ObjectMap<String, Object>)args[4]);
-	}
-
 }

@@ -1,8 +1,8 @@
 package com.apollo;
 
 
-public interface IMessageSender extends IMessageReceiver
+public interface IMessageSender extends MessageHandler
 {
-	public <T extends IMessage<?>> void    addMessageHandler(IMessage<?> messageType, IMessageReceiver listener); 
-	public <T extends IMessage<?>> void removeMessageHandler(IMessage<?> messagetType, IMessageReceiver listener);	
+	public void    addMessageHandler(MessageType messageType, MessageHandler listener); 
+	public void removeMessageHandler(MessageType messageType, MessageHandler listener);	
 }

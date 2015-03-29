@@ -1,7 +1,7 @@
 package com.egysoft.gdx;
 
 import com.apollo.Engine;
-import com.apollo.messages.KeyMessage;
+import com.apollo.messages.KeyMessageType;
 import com.apollo.messages.MouseMessage;
 import com.badlogic.gdx.InputProcessor;
 
@@ -16,14 +16,14 @@ public class ApolloInputProcessor implements InputProcessor
 	@Override
 	public boolean keyDown(int key) 
 	{		
-		engine.onMessage(KeyMessage.onPressKey,key);		
+		engine.onMessage(KeyMessageType.onPressKey,key);		
 		return true;
 	}
 
 	@Override
 	public boolean keyUp(int key) 
 	{		
-		engine.onMessage(KeyMessage.onReleaseKey,key);
+		engine.onMessage(KeyMessageType.onReleaseKey,key);
 		return true;
 	}
 	

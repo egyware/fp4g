@@ -1,11 +1,13 @@
 package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
+import com.apollo.Message;
+import com.apollo.MessageHandler;
 import com.apollo.messages.LifeMessage;
-import com.apollo.messages.LifeMessageHandler;
+import com.apollo.messages.LifeMessage;
 
-public class LifeBehavior extends BaseBehavior 
-implements LifeMessageHandler
+public class LifeBehavior extends BaseBehavior
+implements MessageHandler
 {	
 	public int hp;	
 	public int hp_max;
@@ -31,17 +33,30 @@ implements LifeMessageHandler
 		owner.removeMessageHandler(LifeMessage.onHeal, this);
 	}
 
-	@Override
 	public void onDamage(int damage) 
 	{
 		if(hp > damage) hp -= damage;
 		else hp = 0;		
 	}
-
-	@Override
+	
 	public void onHeal(int heal) 
 	{			
 		if(hp + heal < hp_max) hp += heal;
 		else hp = hp_max;		
+	}
+	
+	@Override
+	public void onMessage(Object sender, Message message) 
+	{
+		final LifeMessage lifeMessage = (LifeMessage)message;
+		switch(lifeMessage.type)
+		{
+		case onDamage:
+			break;
+		case onHeal:
+			break;
+		default:
+			break;			
+		}
 	}
 }
