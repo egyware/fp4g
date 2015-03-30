@@ -11,15 +11,15 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 
 import com.apollo.managers.EntityManager;
 import com.apollo.managers.Manager;
-import com.apollo.messages.ContactMessageType;
+import com.apollo.messages.BeginContactMessage;
 import com.apollo.scripting.EngineLib;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 import com.badlogic.gdx.utils.ObjectMap;
 
-public class Engine implements IMessageSender
+public class Engine implements MessageSender
 {
-	private Map<MessageType, Bag<MessageHandler>> handlersByEventType;
+	private Map<Class<? extends Message>, Bag<MessageReceiver>> handlersByEventType;
 	private EntityManager entityManager;
 	private Globals globals;
 	
@@ -46,7 +46,7 @@ public class Engine implements IMessageSender
 		//TODO por mientras, mas adelante se filtrará el uso de esta api haciendolo mas exclusivo
 		globals = JsePlatform.standardGlobals();
 		globals.load(new EngineLib(this));	
-		globals.set("Contact", CoerceJavaToLua.coerce(ContactMessageType.class));
+		globals.set("Contact", CoerceJavaToLua.coerce(BeginContactMessage.class));
 		globals.set("entity", CoerceJavaToLua.coerce(new Entity(this)));
 	}
 	
@@ -172,36 +172,39 @@ public class Engine implements IMessageSender
 
 	}	
 	
-	private Bag<MessageHandler> getMessageHandler(MessageType messageType) 
+	private Bag<MessageReceiver> getMessageHandler(Class<? extends Message> type) 
 	{
 		if(handlersByEventType == null)	return null;		
-		return handlersByEventType.get(messageType); 
+		return handlersByEventType.get(type); 
 	}
 	
-	public void removeMessageHandler(MessageType messagetType, MessageHandler listener) 
+	public void removeMessageHandler(Class<? extends Message> type, MessageReceiver listener) 
 	{
 		if(handlersByEventType != null)
 		{				
-			Bag<MessageHandler> listeners = getMessageHandler(messagetType);
+			Bag<MessageReceiver> listeners = getMessageHandler(type);
 			if(listeners != null) 
 			{				
 				listeners.remove(listener);
 			}
 		}
 	}
+	
 	/**
 	 * 
 	 * @param messageType Class of Message Type
 	 * @param listener
-	 */	
-	public void addMessageHandler(MessageType messageType, MessageHandler listener) {
+	 */
+	public void addMessageHandler(Class<? extends Message> type, MessageReceiver listener) 
+	{
 		if(handlersByEventType == null)
-			handlersByEventType = new HashMap<MessageType, Bag<MessageHandler>>();
+			handlersByEventType = new HashMap<Class<? extends Message>,Bag<MessageReceiver>>();
 		
-		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
-		if(listeners == null) {
-			listeners = new Bag<MessageHandler>();
-			handlersByEventType.put(messageType,listeners);
+		Bag<MessageReceiver> listeners = handlersByEventType.get(type);
+		if(listeners == null) 
+		{
+			listeners = new Bag<MessageReceiver>();
+			handlersByEventType.put(type, listeners);
 		}
 		listeners.add(listener);
 	}
@@ -209,13 +212,13 @@ public class Engine implements IMessageSender
 	@Override
 	public void onMessage(Object sender, Message message) 
 	{
-		ImmutableBag<MessageHandler> listeners = getMessageHandler(message.type);
+		ImmutableBag<MessageReceiver> listeners = getMessageHandler(message.getType());
 		if(listeners != null)
 		{
 			final int size = listeners.size();
 			for(int i=0; i<size; i++)
 			{
-				MessageHandler handler = listeners.get(i);
+				MessageReceiver handler = listeners.get(i);
 				handler.onMessage(sender, message);
 			}
 		}		
@@ -268,5 +271,6 @@ public class Engine implements IMessageSender
 		{
 			return null;
 		}
-	}	
+	}
+
 }

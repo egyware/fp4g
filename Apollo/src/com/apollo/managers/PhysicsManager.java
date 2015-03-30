@@ -1,7 +1,8 @@
 package com.apollo.managers;
 
 import com.apollo.Entity;
-import com.apollo.messages.ContactMessageType;
+import com.apollo.messages.BeginContactMessage;
+import com.apollo.messages.EndContactMessage;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -110,13 +111,24 @@ public class PhysicsManager extends Manager implements ContactListener
 		Entity a = (Entity)fixA.getBody().getUserData();
 		Entity b = (Entity)fixB.getBody().getUserData();
 		if(a != null)
-		{				
-			a.onMessage(ContactMessageType.onBeginContact, b, fixB, fixA, contact);			
+		{
+			//TODO pooled message
+			BeginContactMessage message = new BeginContactMessage();
+			message.contact = contact;
+			message.other = b;
+			message.ownFixture = fixA;
+			message.otherFixture = fixB;			
+			a.onMessage(this, message);
 		}
 		if(b != null)
-		{			
-			b.onMessage(ContactMessageType.onBeginContact, a, fixA, fixB, contact);
-			
+		{
+			//TODO pooled message
+			BeginContactMessage message = new BeginContactMessage();
+			message.contact = contact;
+			message.other = a;
+			message.ownFixture = fixB;
+			message.otherFixture = fixA;			
+			b.onMessage(this, message);			
 		}
 	}
 
@@ -126,14 +138,26 @@ public class PhysicsManager extends Manager implements ContactListener
 		Fixture fixA = contact.getFixtureA();
 		Fixture fixB = contact.getFixtureB();		
 		Entity a = (Entity)fixA.getBody().getUserData();
-		Entity b = (Entity)fixB.getBody().getUserData();
+		Entity b = (Entity)fixB.getBody().getUserData();		
 		if(a != null)
 		{
-			a.onMessage(ContactMessageType.onEndContact, b, fixB, fixA, contact);
+			//TODO pooled message
+			EndContactMessage message = new EndContactMessage();
+			message.contact = contact;
+			message.other = b;
+			message.ownFixture = fixA;
+			message.otherFixture = fixB;			
+			a.onMessage(this, message);
 		}
 		if(b != null)
 		{
-			b.onMessage(ContactMessageType.onEndContact, a, fixA, fixB, contact);
+			//TODO pooled message
+			EndContactMessage message = new EndContactMessage();
+			message.contact = contact;
+			message.other = a;
+			message.ownFixture = fixB;
+			message.otherFixture = fixA;			
+			b.onMessage(this, message);			
 		}		
 	}
 

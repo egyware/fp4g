@@ -1,8 +1,13 @@
 package com.apollo;
 
 
-public abstract class BaseBehavior implements Behavior
+
+public abstract class BaseBehavior 
+implements Behavior
 {
+	/**
+	 * Entidad a quien pertenece este behavior
+	 */
 	protected Entity owner;
 							
 	/* (non-Javadoc)
@@ -71,5 +76,10 @@ public abstract class BaseBehavior implements Behavior
 	@Override
 	public void uninitialize() 
 	{
-	}	
+	}		
+	
+	protected void onMessage(Message message) 
+	{
+		owner.onMessage(owner, message);		
+	}
 }

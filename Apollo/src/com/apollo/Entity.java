@@ -8,11 +8,11 @@ import com.apollo.annotate.ComponentInjector;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
-public class Entity implements IMessageSender
+public class Entity implements MessageSender
 {
 	protected final Engine engine;
 	private long id;
-	private Map<MessageType,Bag<MessageHandler>> handlersByEventType;
+	private Map<Class<? extends Message>, Bag<MessageReceiver>> handlersByEventType;
 	private final Bag<Behavior> behaviors;
 	private final Map<Class<? extends Behavior>, Behavior> componentsByType;	
 	private boolean deleted;
@@ -63,7 +63,8 @@ public class Entity implements IMessageSender
 	 * 
 	 * @return
 	 */
-	public Map<MessageType, Bag<MessageHandler>> getAllEventHandlers() {
+	public Map<Class<? extends Message>, Bag<MessageReceiver>> getAllEventHandlers() 
+	{
 		return handlersByEventType;
 	}
 	
@@ -72,15 +73,15 @@ public class Entity implements IMessageSender
 	 * @param messageType Class of Message Type
 	 * @param listener
 	 */	
-	public void addMessageHandler(MessageType messageType, MessageHandler listener) 
+	public void addMessageHandler(Class<? extends Message> type, MessageReceiver listener) 
 	{
 		if(handlersByEventType == null)
-			handlersByEventType = new HashMap<MessageType,Bag<MessageHandler>>();
+			handlersByEventType = new HashMap<Class<? extends Message>, Bag<MessageReceiver>>();
 		
-		Bag<MessageHandler> listeners = handlersByEventType.get(messageType);
+		Bag<MessageReceiver> listeners = handlersByEventType.get(type);
 		if(listeners == null) {
-			listeners = new Bag<MessageHandler>();
-			handlersByEventType.put(messageType,listeners);
+			listeners = new Bag<MessageReceiver>();
+			handlersByEventType.put(type,listeners);
 		}
 		listeners.add(listener);
 	}
@@ -91,15 +92,15 @@ public class Entity implements IMessageSender
 	  * @param args Argumentos del mensaje.
 	  */
 	@Override
-	public void onMessage(Object sender, Message message) 
+	public void onMessage(MessageSender sender, Message message) 
 	{		
-		ImmutableBag<MessageHandler> listeners = getMessageHandler(message.type);
+		ImmutableBag<MessageReceiver> listeners = getMessageHandler(message);
 		if(listeners != null)
 		{
 			final int size = listeners.size();
 			for(int i=0; i<size; i++)
 			{
-				MessageHandler handler = listeners.get(i);
+				MessageReceiver handler = listeners.get(i);
 				handler.onMessage(sender, message);						
 			}
 		}
@@ -108,13 +109,15 @@ public class Entity implements IMessageSender
 	/**
 	 * 
 	 */	
-	public void removeMessageHandler(MessageType messagetType, MessageHandler listener) {
+	public void removeMessageHandler(Class<? extends Message> type, MessageReceiver listener)
+	{
 		if(handlersByEventType == null)
 		{
 			return;
 		}		
-		Bag<MessageHandler> listeners = handlersByEventType.get(messagetType);
-		if(listeners == null) {
+		Bag<MessageReceiver> listeners = handlersByEventType.get(type);
+		if(listeners == null) 
+		{
 			return;
 		}
 		listeners.remove(listener);
@@ -212,11 +215,11 @@ public class Entity implements IMessageSender
 		return behaviors;
 	}
 	
-	private ImmutableBag<MessageHandler> getMessageHandler(MessageType messageType)
+	private ImmutableBag<MessageReceiver> getMessageHandler(Message message)
 	{
 		if(handlersByEventType == null)
 			return null;		
-		return handlersByEventType.get(messageType);		 
+		return handlersByEventType.get(message);		 
 	}
 	
 	public final long getId()

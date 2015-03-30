@@ -3,7 +3,8 @@ package com.apollo.managers;
 import java.util.HashMap;
 
 import com.apollo.Entity;
-import com.apollo.messages.EntityMessageType;
+import com.apollo.messages.AddedEntityMessage;
+import com.apollo.messages.RemovedEntityMessage;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 import com.egysoft.gdx.assets.Spawn;
@@ -34,7 +35,11 @@ public class EntityManager extends Manager
 		entity.setId(next);
 		entitiesById.put(next, entity);
 		entities.add(entity);
-		engine.onMessage(EntityMessageType.onAddedEntity, entity);
+		
+		//TODO pooled message
+		AddedEntityMessage message = new AddedEntityMessage();
+		message.entity = entity;
+		engine.onMessage(this, message);
 	}
 	
 	@Override
@@ -43,7 +48,10 @@ public class EntityManager extends Manager
 		long id = entity.getId();
 		entitiesById.remove(id);
 		entities.remove(entity);
-		engine.onMessage(EntityMessageType.onRemovedEntity, entity);
+		//TODO pooled message
+		RemovedEntityMessage message = new RemovedEntityMessage();
+		message.entity = entity;
+		engine.onMessage(this, message);
 	}
 
 	@Override
