@@ -92,7 +92,7 @@ public class Entity implements MessageSender
 	  * @param args Argumentos del mensaje.
 	  */
 	@Override
-	public void onMessage(MessageSender sender, Message message) 
+	public void onMessage(Object sender, Message message) 
 	{		
 		ImmutableBag<MessageReceiver> listeners = getMessageHandler(message);
 		if(listeners != null)

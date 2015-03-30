@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="com/apollo/messages/PhysicsMessage.java|com/apollo/Assets.java" kind="src" path="src"/>
+	<classpathentry excluding="com/apollo/messages/PhysicsMessage.java|com/apollo/Assets.java|com/apollo/messages/LevelMessage.java|com/apollo/behaviors/GunBehavior.java|com/apollo/messages/AutoGunMessage.java|com/apollo/messages/GunMessage.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/libgdx-1.5.4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/libgdx-1.5.4 box2d"/>

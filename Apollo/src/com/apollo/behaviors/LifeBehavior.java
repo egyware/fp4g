@@ -2,12 +2,13 @@ package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
 import com.apollo.Message;
-import com.apollo.MessageHandler;
-import com.apollo.messages.LifeMessage;
-import com.apollo.messages.LifeMessage;
+import com.apollo.MessageReceiver;
+import com.apollo.messages.DamageLifeMessage;
+import com.apollo.messages.HealLifeMessage;
+
 
 public class LifeBehavior extends BaseBehavior
-implements MessageHandler
+implements MessageReceiver
 {	
 	public int hp;	
 	public int hp_max;
@@ -23,40 +24,39 @@ implements MessageHandler
 	
 	public void initialize()
 	{
-		owner.addMessageHandler(LifeMessage.onDamage, this);
-		owner.addMessageHandler(LifeMessage.onHeal, this);
+		owner.addMessageHandler(HealLifeMessage.class, this);
+		owner.addMessageHandler(DamageLifeMessage.class, this);
 	}
 	
 	public void uninitialize()
 	{
-		owner.removeMessageHandler(LifeMessage.onDamage, this);
-		owner.removeMessageHandler(LifeMessage.onHeal, this);
+		owner.removeMessageHandler(HealLifeMessage.class, this);
+		owner.removeMessageHandler(DamageLifeMessage.class, this);
 	}
 
-	public void onDamage(int damage) 
+	public void damage(int damage) 
 	{
 		if(hp > damage) hp -= damage;
 		else hp = 0;		
 	}
 	
-	public void onHeal(int heal) 
+	public void heal(int heal) 
 	{			
 		if(hp + heal < hp_max) hp += heal;
 		else hp = hp_max;		
 	}
 	
 	@Override
-	public void onMessage(Object sender, Message message) 
+	public void onMessage(Object sender, Message m) 
 	{
-		final LifeMessage lifeMessage = (LifeMessage)message;
-		switch(lifeMessage.type)
+		if(m instanceof HealLifeMessage)
 		{
-		case onDamage:
-			break;
-		case onHeal:
-			break;
-		default:
-			break;			
+			heal(((HealLifeMessage) m).amount);
 		}
+		if(m instanceof DamageLifeMessage)
+		{
+			damage(((DamageLifeMessage) m).amount);
+		}	
+		
 	}
 }

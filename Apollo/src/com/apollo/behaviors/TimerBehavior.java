@@ -1,17 +1,15 @@
-/**
- * 
- */
 package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
-import com.apollo.messages.TimerMessage;
-import com.apollo.messages.TimerMessageHandler;
+import com.apollo.messages.TimerActivedMessage;
+import com.apollo.messages.TimerCanceledMessage;
+
 
 /**
  * @author Edgardo
  *
  */
-public final class TimerBehavior extends BaseBehavior implements TimerMessageHandler
+public final class TimerBehavior extends BaseBehavior
 {
 	public final float timers[]; 
 	public TimerBehavior()
@@ -45,7 +43,10 @@ public final class TimerBehavior extends BaseBehavior implements TimerMessageHan
 				time -= delta;
 				if(time <= 0)
 				{
-					owner.onMessage(TimerMessage.onActiveTimer, index);
+					//TODO poolable
+					TimerActivedMessage message = new TimerActivedMessage();
+					message.timer = index;
+					onMessage(message);
 					timers[index] = 0;
 				}
 				else
@@ -56,36 +57,19 @@ public final class TimerBehavior extends BaseBehavior implements TimerMessageHan
 		}
 	}
 	
-	@Override
-	public void initialize()
-	{
-		owner.addMessageHandler(TimerMessage.onSetTimeTimer, this);
-		owner.addMessageHandler(TimerMessage.onCancelTimer, this);		
-	}
-	
-	@Override
-	public void uninitialize()
-	{
-		owner.removeMessageHandler(TimerMessage.onSetTimeTimer, this);
-		owner.removeMessageHandler(TimerMessage.onCancelTimer, this);		
-	}
-	
-	@Override
-	public void onActiveTimer(int index) 
-	{
-		// DO NOTHING
-	}
-	
-	@Override
-	public void onSetTimeTimer(int index, int time)
+	public void setTimer(int index, int time)
 	{
 		index = (index<0)?0:(index >= timers.length)?timers.length-1:index;
 		timers[index] = time * 0.001f;
 	}
-	@Override
-	public void onCancelTimer(int index) 
+		
+	public void cancelTimer(int index) 
 	{
 		index = (index<0)?0:(index >= timers.length)?timers.length-1:index;
 		timers[index] = 0;	
+		//TODO poolable
+		TimerCanceledMessage message = new TimerCanceledMessage();
+		message.timer = index;
+		onMessage(message);
 	}
 }

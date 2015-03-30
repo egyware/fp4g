@@ -79,11 +79,11 @@ public final class GunBehavior extends BaseBehavior
 	@Override
 	public void initialize()
 	{
-		owner.addMessageHandler(GunMessageType.onChangeBulletGun, this);
-		owner.addMessageHandler(GunMessageType.onReloadGun, this);
-		owner.addMessageHandler(GunMessageType.onShotGun, this);	
-		owner.addMessageHandler(AutoGunMessage.onSetDelayShotAutoGun,this);
-		owner.addMessageHandler(AutoGunMessage.onSetShotAutoGun,this);	
+//		owner.addMessageHandler(GunMessage.onChangeBulletGun, this);
+//		owner.addMessageHandler(GunMessage.onReloadGun, this);
+//		owner.addMessageHandler(GunMessagee.onShotGun, this);	
+//		owner.addMessageHandler(AutoGunMessage.onSetDelayShotAutoGun,this);
+//		owner.addMessageHandler(AutoGunMessage.onSetShotAutoGun,this);	
 		
 		world = owner.getEngine();		
 	}

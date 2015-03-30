@@ -1,9 +1,9 @@
 package com.apollo.messages;
 
-import com.apollo.IMessage;
+import com.apollo.Message;
 import com.apollo.IMessageReceiver;
 
-public enum GunMessage implements IMessage<GunMessageHandler> 
+public enum GunMessage implements Message<GunMessageHandler> 
 {
 	onShotGun,
 	onReloadGun,

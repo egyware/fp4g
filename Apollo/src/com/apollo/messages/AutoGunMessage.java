@@ -1,9 +1,9 @@
 package com.apollo.messages;
 
-import com.apollo.IMessage;
+import com.apollo.Message;
 import com.apollo.IMessageReceiver;
 
-public enum AutoGunMessage implements IMessage<AutoGunMessageHandler> 
+public enum AutoGunMessage implements Message<AutoGunMessageHandler> 
 {
 	onSetDelayShotAutoGun,
 	onSetShotAutoGun	

@@ -5,9 +5,11 @@ import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
 import com.apollo.Entity;
+import com.apollo.Message;
+import com.apollo.MessageReceiver;
 import com.apollo.managers.PhysicsManager;
-import com.apollo.messages.ContactMessageType;
-import com.apollo.messages.ContactMessageType;
+import com.apollo.messages.BeginContactMessage;
+import com.apollo.messages.EndContactMessage;
 import com.apollo.utils.Bag;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -27,7 +29,7 @@ import com.badlogic.gdx.physics.box2d.World;
  *
  */
 public class PlatformBodyBehavior extends PhysicsBehavior
-implements ContactMessageHandler,RayCastCallback,QueryCallback
+implements MessageReceiver, RayCastCallback,QueryCallback
 {
 	private Body box;
 	private PolygonShape boxShape;
@@ -61,8 +63,7 @@ implements ContactMessageHandler,RayCastCallback,QueryCallback
 	@Override
 	public void uninitialize()
 	{
-		owner.removeMessageHandler(ContactMessageType.onBeginContact, this);
-		owner.removeMessageHandler(ContactMessageType.onEndContact, this);
+		owner.removeMessageHandler(BeginContactMessage.class, this);
 		
 		box.getWorld().destroyBody(box);		
 	}
@@ -70,8 +71,7 @@ implements ContactMessageHandler,RayCastCallback,QueryCallback
 	@Override	
 	public void initialize()
 	{	
-		owner.addMessageHandler(ContactMessageType.onBeginContact, this);
-		owner.addMessageHandler(ContactMessageType.onEndContact, this);
+		owner.addMessageHandler(BeginContactMessage.class, this);	
 		
 	}
 	
@@ -203,38 +203,6 @@ implements ContactMessageHandler,RayCastCallback,QueryCallback
 		boxShape.setAsBox(w*SCALE*0.5f, h*SCALE*0.5f, center.scl(SCALE), 0);	
 	}
 
-	@Override
-	public void onBeginContact(Entity other, Fixture otherFixture,	Fixture ownFixture, Contact contact) 
-	{
-		if(other == null) // que sea piso
-		{
-			if(leftSensor == ownFixture && contact.isTouching())
-			{
-				touchLeft++;								
-			}
-			if(rightSensor == ownFixture && contact.isTouching())
-			{			
-				touchRight++;								
-			}
-		}
-	}
-
-	@Override
-	public void onEndContact(Entity other, Fixture otherFixture, Fixture ownFixture, Contact contact) 
-	{
-		if(other == null) // que sea piso
-		{
-			if(leftSensor == ownFixture)
-			{			
-				touchLeft--;				
-			}
-			if(rightSensor == ownFixture)
-			{
-				touchRight--;				
-			}
-		}		
-	}
-
 	public Vector2 getLinearVelocity() 
 	{
 		return box.getLinearVelocity().cpy().scl(INV_SCALE);
@@ -353,6 +321,48 @@ implements ContactMessageHandler,RayCastCallback,QueryCallback
 	public void setLinearVelocity(float vx, float vy)
 	{
 		box.setLinearVelocity(vx*SCALE, vy*SCALE);		
+	}
+
+	@Override
+	public void onMessage(Object sender, Message m) 
+	{
+		if(m instanceof BeginContactMessage)
+		{
+			final BeginContactMessage message = (BeginContactMessage)m;
+			final Entity other       = message.other;
+			final Fixture ownFixture = message.ownFixture;
+			final Contact contact    = message.contact;
+		
+			if(other == null) // que sea piso
+			{
+				if(leftSensor == ownFixture && contact.isTouching())
+				{
+					touchLeft++;								
+				}
+				if(rightSensor == ownFixture && contact.isTouching())
+				{			
+					touchRight++;								
+				}
+			}
+		}
+		if(m instanceof EndContactMessage)
+		{
+			final BeginContactMessage message = (BeginContactMessage)m;
+			final Entity other       = message.other;
+			final Fixture ownFixture = message.ownFixture;			
+		
+			if(other == null) // que sea piso
+			{
+				if(leftSensor == ownFixture)
+				{			
+					touchLeft--;				
+				}
+				if(rightSensor == ownFixture)
+				{
+					touchRight--;				
+				}
+			}		
+		}
 	}
 
 }

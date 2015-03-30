@@ -4,8 +4,7 @@ import com.apollo.Behavior;
 import com.apollo.BehaviorTemplate;
 import com.apollo.Engine;
 import com.apollo.annotate.InjectComponent;
-import com.apollo.messages.SequenceMessage;
-import com.apollo.messages.SequenceMessageHandler;
+import com.apollo.messages.EndSequenceMessage;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
@@ -18,7 +17,6 @@ import com.egysoft.gdx.Game;
 import com.egysoft.gdx.assets.Sprite;
 
 public class SpriteBehavior extends ActorBehavior
-implements SequenceMessageHandler
 {
 	public static class Template implements BehaviorTemplate
 	{
@@ -63,7 +61,9 @@ implements SequenceMessageHandler
 		if(!isEnded && current.getPlayMode() == PlayMode.NORMAL && current.isAnimationFinished(time))
 		{
 			isEnded = true;
-			owner.onMessage(SequenceMessage.onEndSequence);
+			//TODO pooled message
+			EndSequenceMessage message = new EndSequenceMessage();			
+			owner.onMessage(this, message);
 		}
 		time += delta;		
 		setPosition(transform.x,transform.y);
@@ -102,27 +102,6 @@ implements SequenceMessageHandler
 		return new SpriteBehavior(sprite);
 	}
 	
-	public void initialize()
-	{
-		owner.addMessageHandler(SequenceMessage.onChangeSequence, this);
-	}
-	
-	public void deinitialize()
-	{
-		owner.removeMessageHandler(SequenceMessage.onChangeSequence, this);
-	}
-
-	@Override
-	public void onChangeSequence(String sequence) 
-	{
-		 setAnimation(sequence);
-	}
-
-	@Override
-	public void onEndSequence() 
-	{		
-	}
-
 	public boolean isEndedCurrentAnimation()
 	{
 		return (PlayMode.NORMAL == current.getPlayMode()) && current.isAnimationFinished(time);
