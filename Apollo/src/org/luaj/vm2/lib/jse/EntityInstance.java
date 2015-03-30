@@ -11,6 +11,8 @@ import org.luaj.vm2.lib.jse.CoerceJavaToLua.Coercion;
 import com.apollo.Behavior;
 import com.apollo.Entity;
 import com.apollo.Message;
+import com.apollo.MessageReceiver;
+import com.apollo.utils.Bag;
 
 /**
  * LuaValue that represents a Java instance.
@@ -85,16 +87,19 @@ public class EntityInstance extends LuaUserdata
 				@Override
 				public LuaValue call(LuaValue arg1, LuaValue arg2, LuaValue arg3) 
 				{
-					Entity entity = (Entity)arg1.checkuserdata(Entity.class);
-					Message message = (Message)arg2.checkuserdata(Message.class);
-					LuaFunction function = arg3.checkfunction();
+					Entity entity                 = (Entity)arg1.checkuserdata(Entity.class);
+					Class<? extends Message> type = (Class<? extends Message>)arg2.checkuserdata(Message.class);
+					LuaFunction function          = arg3.checkfunction();
 					
 					//como chucha creo una instancia de la clase handler del mensaje
 					//1.- No tengo referencia de la clase handler del mensaje
 					//2.- Si la tuviese, no puedo crear herencias de esa clase al vuelo.
 					//3.- Podria acceder a utilizar un adaptador, por cada clase. Uff que flojera.
+					//4.- [29-03-2015] Se cambio el sistema de mensajes asi que ahora puede ser implementado sin problemas
 					
-					return null;
+					entity.addMessageHandler(type, new MessageReceiverLuaAdapter(function));
+					
+					return LuaValue.NONE; //void
 				}
 				
 			});
@@ -103,13 +108,32 @@ public class EntityInstance extends LuaUserdata
 				@Override
 				public LuaValue call(LuaValue arg1, LuaValue arg2, LuaValue arg3) 
 				{
-					Entity entity = (Entity)arg1.checkuserdata(Entity.class);
-					Message message = (Message)arg2.checkuserdata(Message.class);
-					LuaFunction function = arg3.checkfunction();
+					Entity entity                 = (Entity)arg1.checkuserdata(Entity.class);
+					Class<? extends Message> type = (Class<? extends Message>)arg2.checkuserdata(Message.class);
+					LuaFunction function          = arg3.checkfunction();
 					
-					return null;
-				}
-				
+					//como borro un handler?
+					//simple, una busqueda simple
+					MessageReceiver finded = null;
+					Bag<MessageReceiver> bag = entity.getAllEventHandlers().get(type);
+					if(bag != null)
+					{
+						for(MessageReceiver r:bag)
+						{
+							if(r instanceof MessageReceiverLuaAdapter)
+							{
+								if(((MessageReceiverLuaAdapter) r).function == function)
+								{
+									finded = r;
+									break;
+								}
+							}
+						}
+						if(finded != null)
+							bag.remove(finded); //tengo los datos directos, asi que puedo borrarlo directamente de su propia bolsa
+					}
+					return LuaValue.NONE; //void
+				}				
 			});			
 			
 		}
