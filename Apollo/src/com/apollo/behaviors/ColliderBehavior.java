@@ -1,7 +1,4 @@
-/**
- * 
- */
-package com.apollo.behaviors.body;
+package com.apollo.behaviors;
 
 import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
@@ -23,7 +20,7 @@ import com.badlogic.gdx.utils.ObjectMap;
  * @author Edgardo
  *
  */
-public class BodyBehavior extends PhysicsBehavior
+public class ColliderBehavior extends PhysicsBehavior
 {
 	public abstract static class ShapeTemplate
 	{
@@ -94,12 +91,12 @@ public class BodyBehavior extends PhysicsBehavior
 				f.createFixture(body);
 			}
 			
-			return new BodyBehavior(body);
+			return new ColliderBehavior(body);
 		}		
 	}	
 	private Body body;	
 	
-	public BodyBehavior(Body body)
+	public ColliderBehavior(Body body)
 	{
 		this.body = body;
 	}

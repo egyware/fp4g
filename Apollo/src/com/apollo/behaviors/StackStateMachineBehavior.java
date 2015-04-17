@@ -1,4 +1,4 @@
-package com.apollo.behaviors.state;
+package com.apollo.behaviors;
 
 import java.util.Stack;
 

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.egysoft.gdx.assets.loaders;
 
 import com.apollo.BehaviorTemplate;
@@ -66,6 +63,7 @@ public class EntityBuilderLoader extends SynchronousAssetLoader<EntityBuilder, E
 		public EntityBuilder read(Json json, JsonValue jsonData, Class type)
 		{
 			EntityBuilder entityBuilder = new EntityBuilder();
+			json.readField(entityBuilder, "defaultValue", jsonData);
 			json.readField(entityBuilder, "name", jsonData);
 			
 			JsonValue behaviorsData = jsonData.get("behaviors");

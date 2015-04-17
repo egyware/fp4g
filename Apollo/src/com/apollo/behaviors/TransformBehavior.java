@@ -18,8 +18,6 @@ public class TransformBehavior extends BaseBehavior
 	
 	public static class Template  implements BehaviorTemplate
 	{
-		public float x;
-		public float y;
 		public float rotation;
 		@Override
 		public Behavior createBehavior(final Engine engine, final int x, final int y, final int w, final int h,final ObjectMap<String, Object> map) 

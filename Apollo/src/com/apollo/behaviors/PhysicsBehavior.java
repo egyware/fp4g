@@ -1,11 +1,10 @@
 /**
  * 
  */
-package com.apollo.behaviors.body;
+package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
 import com.apollo.annotate.InjectComponent;
-import com.apollo.behaviors.TransformBehavior;
 import com.badlogic.gdx.math.Vector2;
 
 /**

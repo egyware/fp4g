@@ -7,12 +7,27 @@ import com.apollo.Entity;
 import com.apollo.IEntityBuilder;
 import com.badlogic.gdx.utils.ObjectMap;
 
-
+/**
+ * Clase encargada de crear entidades.
+ * 
+ * Esta clase se encarga de guardar los datos provinientes de un archivo json.
+ * @author Edgardo
+ *
+ */
 public class EntityBuilder implements IEntityBuilder
 {
+	public static class DefaultValue 
+	{
+		public int x;
+		public int y;
+		public int w;
+		public int h;
+		public ObjectMap<String, Object> parameters;
+	}
+
 	public String name;
 	public BehaviorTemplate behaviors[];
-	
+	public DefaultValue defaultValue;
 	
 	public Entity buildEntity(final Engine engine, final int x, final int y, final int w, final int h,final ObjectMap<String, Object> map)
 	{

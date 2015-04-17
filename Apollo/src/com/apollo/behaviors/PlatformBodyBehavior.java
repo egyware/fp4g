@@ -1,4 +1,4 @@
-package com.apollo.behaviors.body;
+package com.apollo.behaviors;
 
 
 import static com.apollo.managers.PhysicsManager.INV_SCALE;

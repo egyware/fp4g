@@ -4,112 +4,99 @@ import com.apollo.Behavior;
 import com.apollo.BehaviorTemplate;
 import com.apollo.Engine;
 import com.apollo.annotate.InjectComponent;
-import com.apollo.messages.EndSequenceMessage;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.egysoft.gdx.Game;
-import com.egysoft.gdx.assets.Sprite;
 
 public class SpriteBehavior extends ActorBehavior
 {
 	public static class Template implements BehaviorTemplate
 	{
-		String sprite;
+		public String atlasName;
+		public String regionName;
+		public int index;
+		
 
 		@Override
 		public Behavior createBehavior(final Engine engine, final int x, final int y, final int w, final int h,final ObjectMap<String, Object> map)
 		{
-			Sprite s = Game.instance.assets.get(sprite);
-			return new SpriteBehavior(s);
+			TextureAtlas atlas = Game.instance.assets.get(atlasName);
+			if(regionName != null)
+			{
+				return new SpriteBehavior(atlas, regionName, index);
+			}
+			else
+			{
+				return new SpriteBehavior();
+			}
+		
+			
 		}		
 	}
-	private Animation current;
 	private Sprite sprite;
-	private Vector2 o;		
-	private float time;
-	private boolean isEnded = false;
-	private boolean flipX;
-	private boolean flipY;
+	
 	
 	@InjectComponent
 	private TransformBehavior transform;
 	
-	public SpriteBehavior(Sprite sprite)
+	public SpriteBehavior(TextureAtlas atlas, String spriteName, int index)
 	{
-		this.sprite = sprite;
-		o = sprite.origin;
-		current = sprite.getFirstAnimation();
-		
+		sprite = atlas.createSprite(spriteName);
 	}
-	
-	public void setAnimation(String id)
+	public SpriteBehavior()
 	{
-		current = sprite.getAnimation(id);
-		time = 0;
-		isEnded = false;
+		sprite = new Sprite();
 	}
 	
 	public void act(float delta)
 	{
-		super.act(delta);		
-		if(!isEnded && current.getPlayMode() == PlayMode.NORMAL && current.isAnimationFinished(time))
-		{
-			isEnded = true;
-			//TODO pooled message
-			EndSequenceMessage message = new EndSequenceMessage();			
-			owner.onMessage(this, message);
-		}
-		time += delta;		
+		super.act(delta);
 		setPosition(transform.x,transform.y);
-		setRotation(transform.rotation * MathUtils.radiansToDegrees);		
+		setRotation(transform.rotation * MathUtils.radiansToDegrees);
+		//pasandole las weas a sprite
+		sprite.setPosition(getX(), getY());
+	    sprite.setOrigin(getOriginX(), getOriginY());
+	    sprite.setRotation(getRotation());
+	    sprite.setScale(getScaleX(), getScaleY());
 	}
 	
 	public void draw(Batch batch, float parentAlpha)
 	{	
-		TextureRegion frame = sprite.getKeyFrame(current,time);	
 		Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        final int fh = frame.getRegionHeight();
-        final int fw = frame.getRegionWidth();
-		batch.draw(frame, getX() - fw/2 - o.x, getY() - o.y, fw/2, fh/2, fw, fh, flipX?-1:1, flipY?-1:1, getRotation());
+        sprite.draw(batch);
 	}
 	
 	public void setFlipX(boolean b)
 	{
-		flipX = b;
+		sprite.setFlip(b, sprite.isFlipY());
 	}
 	public void setFlipY(boolean b)
 	{
-		flipY = b;
+		sprite.setFlip(sprite.isFlipX(), b);
 	}
 	public boolean isFlipX()
 	{
-		return flipX;
+		return sprite.isFlipX();
 	}
 	public boolean isFlipY()
 	{
-		return flipY;
+		return sprite.isFlipY();
 	}
 	
-	public static SpriteBehavior build(Sprite sprite)
+	
+	public void setRegion(TextureRegion region) 
 	{
-		return new SpriteBehavior(sprite);
+		sprite.setRegion(region);		
 	}
-	
-	public boolean isEndedCurrentAnimation()
-	{
-		return (PlayMode.NORMAL == current.getPlayMode()) && current.isAnimationFinished(time);
-	}
-	
 	@Override
 	public String toString()
 	{
-		return String.format("SpriteBehavior: {flip_x: %b, flip_x: %b}", flipX,flipY);
+		return String.format("SpriteBehavior: {}");
 	}
 }

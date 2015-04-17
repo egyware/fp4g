@@ -82,7 +82,8 @@ public class SpriteLoader extends SynchronousAssetLoader<Sprite, SpriteLoader.An
 
 		@SuppressWarnings("rawtypes")
 		@Override
-		public void write(Json json, Sprite object, Class knownType) {
+		public void write(Json json, Sprite object, Class knownType) 
+		{
 			// TODO Auto-generated method stub
 
 		}

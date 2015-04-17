@@ -1,4 +1,4 @@
-package com.apollo.behaviors.state;
+package com.apollo.behaviors;
 
 /**
  * Interfaz común para los estados
