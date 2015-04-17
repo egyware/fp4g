@@ -8,7 +8,7 @@ import com.apollo.annotate.ComponentInjector;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
 
-public class Entity implements MessageSender
+public final class Entity implements MessageSender
 {
 	protected final Engine engine;
 	private long id;

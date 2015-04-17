@@ -34,7 +34,7 @@ public class EngineLib extends LibFunction
 			{
 				if(!value.isnumber())
 				{
-					argerror(1, "Debe ser numero");					
+					argerror(1, "Se esperaba un numero");					
 				}
 				long id = value.tolong();
 				return CoerceJavaToLua.coerce(engine.getEntityById(id));

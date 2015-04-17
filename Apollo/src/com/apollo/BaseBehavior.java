@@ -43,7 +43,7 @@ implements Behavior
 	@Override
 	public Class<? extends BaseBehavior> getType()
 	{
-		return this.getClass();
+		return getClass();
 	}
 
 	/* (non-Javadoc)
