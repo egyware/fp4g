@@ -19,11 +19,6 @@ public class DebugRenderManager extends RenderManager
 	private boolean debug = true;
 	private World world;	
 	
-	
-	public DebugRenderManager()
-	{	
-	}
-	
 	public DebugRenderManager(Stage stage)
 	{
 		super(stage);	

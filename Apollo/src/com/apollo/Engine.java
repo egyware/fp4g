@@ -44,10 +44,13 @@ public class Engine implements MessageSender
 		entityBuildersByType = new HashMap<String, IEntityBuilder>();
 		
 		//TODO por mientras, mas adelante se filtrará el uso de esta api haciendolo mas exclusivo
+				
 		globals = JsePlatform.standardGlobals();
 		globals.load(new EngineLib(this));	
 		globals.set("Contact", CoerceJavaToLua.coerce(BeginContactMessage.class));
 		globals.set("entity", CoerceJavaToLua.coerce(new Entity(this)));
+		runScript("return Contact");
+		runScript("entity:addMessageHandler(Contact, function(x) return x*x end)");
 	}
 	
 	public void runScript(String script)
@@ -128,7 +131,8 @@ public class Engine implements MessageSender
 	}
 	
 	private void initManagers() {
-		for(Manager manager : addedManagers) {
+		for(Manager manager : addedManagers)
+		{
 			manager.applyAnnotations();
 			manager.initialize();
 		}

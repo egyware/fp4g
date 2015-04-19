@@ -35,7 +35,7 @@ public abstract class Manager
 
 	public void applyAnnotations()
 	{
-		Class<? extends Manager> clazz = this.getClass();		
+		Class<? extends Manager> clazz = getClass();		
 		Field[] fields = ClassReflection.getFields(clazz);
 		for (int i = 0; i < fields.length; i++) {
 			ManagerInjector.injectorManager.inject(this, fields[i]);

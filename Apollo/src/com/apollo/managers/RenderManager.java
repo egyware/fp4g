@@ -1,6 +1,5 @@
 package com.apollo.managers;
 
-import java.util.Iterator;
 import java.util.regex.Pattern;
 
 import com.apollo.Entity;
@@ -11,95 +10,159 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.MapRenderer;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
-import com.badlogic.gdx.utils.reflect.Method;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 
 public class RenderManager extends Manager 
 {
-	private final Stage stage;
+	private static final String _TAG = "RENDER";
+	private final Stage gameStage;
 	private final com.badlogic.gdx.scenes.scene2d.Group layer;	
 	private MapRenderer tiledMapRenderer;	
 	private TiledMap tiledMap;
 	protected OrthographicCamera camera;
-		
-	private MapLayers tiledMapLayers;
-	private MapLayer actorsLayer;
+	private CameraController cameraController;	
+	private MapLayers bottomMapLayers;
+	private MapLayers topMapLayers;
 	
 	static boolean debug;
 	
 	
 	public RenderManager(Stage stage)
 	{
-		this.stage = stage;		
+		this.gameStage = stage;
 		layer  = new com.badlogic.gdx.scenes.scene2d.Group();
-		stage.addActor(layer);		
+		gameStage.addActor(layer);		
 		camera = (OrthographicCamera) stage.getCamera();
-	}
-	public RenderManager()
-	{
-		this(new Stage());
 	}
 	
 	private static final Pattern regex = Pattern.compile(" ");
 	public void setStageMap(TiledMap map)
 	{	
 		tiledMap = map;
-		tiledMapRenderer = new CustomTiledRenderer(tiledMap, stage.getBatch());
-		tiledMapLayers = map.getLayers(); //valor inicial
+		tiledMapRenderer = new CustomTiledRenderer(tiledMap, gameStage.getBatch());
+		bottomMapLayers = map.getLayers(); //valor inicial
 		
+		String cameraLayer = "camaras";
 		//establecer propiedades
 		final MapProperties properties = map.getProperties();
-		for(final Iterator<String> it = properties.getKeys();it.hasNext();)
+		//topLayer
 		{
-			final String key = it.next();
-			final Object value = properties.get(key);
-			try 
-			{
-				Method method = ClassReflection.getDeclaredMethod(getClass(), String.format("set%c%s",Character.toUpperCase(key.charAt(0)),key.substring(1)), value.getClass());
-				method.invoke(this, value);
-			}
-			catch (ReflectionException e) 
-			{
-				Gdx.app.log("RenderManager", String.format("Propiedad %s no encontrada", key));
-			}		
+			final String value = (String)properties.get("top");
+			if(value != null) setTopLayers(regex.split(value));
+		}
+		{
+			final String value = (String)properties.get("bottom");
+			if(value != null) setBottomLayers(regex.split(value));
 		}		
+		{
+			final String value = (String)properties.get("camera-controller");
+			if(value != null)
+			{
+				try 
+				{
+					Class<?> cameraControllerClass = ClassReflection.forName(value);
+					setCameraController((CameraController) cameraControllerClass.newInstance());
+				}
+				catch (ReflectionException e) 
+				{
+					Gdx.app.log(_TAG, "Controllador de Camara no encontrado");
+				}
+				catch (InstantiationException e) 
+				{
+					Gdx.app.log(_TAG, "Controllador de Camara no se pudo inicializar");
+				}
+				catch (IllegalAccessException e) 
+				{
+					Gdx.app.log(_TAG, "Controllador de Camara no es accesible");
+				}
+			}
+		}
+		{
+			final String value = (String)properties.get("camera-layer");
+			if(value != null)
+			{
+				cameraLayer = value;
+			}			
+		}
+		if(cameraController != null)
+		{
+			MapLayer layer = tiledMap.getLayers().get(cameraLayer);
+			if(layer != null)
+			{
+				final MapObjects objects = layer.getObjects();
+				for(MapObject a:objects)
+				{
+					if(a instanceof RectangleMapObject)
+					{
+						cameraController.addControlZone(((RectangleMapObject) a).getRectangle());						
+					}
+				}
+				final String value = (String)properties.get("camera-first");
+				if(value != null)
+				{
+					MapObject first = layer.getObjects().get(value);
+					if(first != null && first instanceof RectangleMapObject)
+					{
+						cameraController.setCamera(((RectangleMapObject) first).getRectangle());
+					}
+					else
+					{
+						Gdx.app.log(_TAG, "Primera camara no encontrada o no compatible");
+					}
+				}
+			}
+			else
+			{
+				Gdx.app.log(_TAG, String.format("La capa de camaras \"%s\" especificada no existe", cameraLayer));
+			}
+		}
 	}
 	
-	public void setActors(String value)
+	public void setCameraController(CameraController newInstance) 
 	{
-		actorsLayer = tiledMap.getLayers().get(value); 
+		cameraController = newInstance;
+		cameraController.setRenderManager(this);		
 	}
-	
-	public void setLayers(String ...values)
+
+	public void setTopLayers(String ...values)
 	{
 		final MapLayers mapLayers = tiledMap.getLayers();
-		tiledMapLayers = new MapLayers();			
+		topMapLayers = new MapLayers();			
 		for(final String l:values)
 		{
 			MapLayer layer = mapLayers.get(l);
 			if(layer != null)
 			{
-				tiledMapLayers.add(layer);
+				topMapLayers.add(layer);
+			}
+		}
+	}
+	public void setBottomLayers(String ...values)
+	{
+		final MapLayers mapLayers = tiledMap.getLayers();
+		bottomMapLayers = new MapLayers();			
+		for(final String l:values)
+		{
+			MapLayer layer = mapLayers.get(l);
+			if(layer != null)
+			{
+				topMapLayers.add(layer);
 			}
 		}
 	}
 	
-	public void setLayers(String value)
-	{
-		final String layers[] = regex.split(value);
-		setLayers(layers);
-	}
-	
-		
 	public void added(Entity e) 
 	{
 		ActorBehavior ab = e.getBehavior(ActorBehavior.class);
@@ -120,7 +183,8 @@ public class RenderManager extends Manager
 	
 	public void update(float delta)
 	{		
-		stage.act(delta);				
+		gameStage.act(delta);
+		if(cameraController != null) cameraController.update(delta);
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
 	}	
@@ -142,8 +206,8 @@ public class RenderManager extends Manager
 		public void render()
 		{
 			beginRender();			
-			for (MapLayer layer : tiledMapLayers) 
-			{			
+			for (MapLayer layer : bottomMapLayers) 
+			{		
 				if (layer.isVisible()) 
 				{					
 					if (layer instanceof TiledMapTileLayer) 
@@ -158,19 +222,34 @@ public class RenderManager extends Manager
 					if(debug)
 					{
 						renderObjects(layer);
-					}
-					if(layer == actorsLayer)
-					{
-						endRender();
-						stage.draw();
-						beginRender();
+					}					
+				}
+			}
+			endRender();
+			gameStage.draw();			
+			if(topMapLayers != null)
+			{
+				beginRender();
+				for (MapLayer layer : topMapLayers) 
+				{		
+					if (layer.isVisible()) 
+					{					
+						if (layer instanceof TiledMapTileLayer) 
+						{
+							renderTileLayer((TiledMapTileLayer)layer);
+						}					
+						if (layer instanceof TiledMapImageLayer) 
+						{
+							renderImageLayer((TiledMapImageLayer)layer);
+						}
+						else
+						if(debug)
+						{
+							renderObjects(layer);
+						}					
 					}
 				}
-			}			
-			endRender();
-			if(actorsLayer == null)
-			{
-				stage.draw();
+				endRender();
 			}
 		}
 		

@@ -44,6 +44,10 @@ public class SpriteBehavior extends ActorBehavior
 	@InjectComponent
 	private TransformBehavior transform;
 	
+	public SpriteBehavior(TextureAtlas atlas, String spriteName)
+	{
+		sprite = atlas.createSprite(spriteName);
+	}	
 	public SpriteBehavior(TextureAtlas atlas, String spriteName, int index)
 	{
 		sprite = atlas.createSprite(spriteName);
