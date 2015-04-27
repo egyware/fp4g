@@ -1,4 +1,4 @@
-package com.apollo.behaviors;
+package com.apollo.utils;
 
 /**
  * Interfaz común para los estados
@@ -7,9 +7,6 @@ package com.apollo.behaviors;
  */
 public interface State 
 {
-
+	void enter();
 	void update(float dt);
-
-	void activeState();
-	
 }

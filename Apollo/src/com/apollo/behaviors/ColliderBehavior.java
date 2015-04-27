@@ -78,7 +78,7 @@ public class ColliderBehavior extends PhysicsBehavior
 		@Override
 		public Behavior createBehavior(final Engine engine, final int x, final int y, final int w, final int h,final ObjectMap<String,Object> map) 
 		{
-			World world = engine.getManager(PhysicsManager.class).getb2World();
+			final World world = engine.getManager(PhysicsManager.class).getb2World();
 			
 			BodyDef def = new BodyDef();
 			def.type = BodyDef.BodyType.DynamicBody;

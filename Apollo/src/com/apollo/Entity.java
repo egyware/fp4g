@@ -11,6 +11,7 @@ import com.apollo.utils.ImmutableBag;
 public final class Entity implements MessageSender
 {
 	protected final Engine engine;
+	private Family family;
 	private long id;
 	private Map<Class<? extends Message>, Bag<MessageReceiver>> handlersByEventType;
 	private final Bag<Behavior> behaviors;
@@ -29,6 +30,15 @@ public final class Entity implements MessageSender
 		this.engine = engine;		
 		behaviors = new Bag<Behavior>(n);
 		componentsByType = new LinkedHashMap<Class<? extends Behavior>, Behavior>(n,1);
+	}
+	
+	public final Family getFamily()
+	{
+		return family;
+	}
+	public final void setFamily(Family f)
+	{
+		family = f;
 	}
 
 	public final Engine getEngine() {
@@ -94,7 +104,7 @@ public final class Entity implements MessageSender
 	@Override
 	public void onMessage(Object sender, Message message) 
 	{		
-		ImmutableBag<MessageReceiver> listeners = getMessageHandler(message);
+		ImmutableBag<MessageReceiver> listeners = getMessageHandler(message.getType());
 		if(listeners != null)
 		{
 			final int size = listeners.size();
@@ -215,11 +225,11 @@ public final class Entity implements MessageSender
 		return behaviors;
 	}
 	
-	private ImmutableBag<MessageReceiver> getMessageHandler(Message message)
+	private ImmutableBag<MessageReceiver> getMessageHandler(Class<? extends Message> type)
 	{
 		if(handlersByEventType == null)
 			return null;		
-		return handlersByEventType.get(message);		 
+		return handlersByEventType.get(type);		 
 	}
 	
 	public final long getId()

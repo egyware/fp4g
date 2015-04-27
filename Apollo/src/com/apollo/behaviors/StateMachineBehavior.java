@@ -1,6 +1,7 @@
 package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
+import com.apollo.utils.State;
 
 /**
  * 
@@ -28,7 +29,7 @@ public abstract class StateMachineBehavior extends BaseBehavior
 	{
 		if (currentState != state)
 	    {
-			state.activeState();
+			state.enter();
 			currentState = state;
 	    }
 	}	

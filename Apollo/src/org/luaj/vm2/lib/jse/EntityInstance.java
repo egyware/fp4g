@@ -50,17 +50,12 @@ public class EntityInstance extends LuaUserdata
 	public LuaValue get(LuaValue key) 
 	{
 		Behavior behavior = getBehavior(key);
-		if(behavior != null)
-		{
-			return CoerceJavaToLua.coerce(behavior);
-		}
+		if(behavior != null) return CoerceJavaToLua.coerce(behavior);		
+		
 		LuaFunction method = getMethod(key);
-		if(method != null)
-		{
-			return method;
-		}
+		if(method != null) return method;		
+		
 		return super.get(key);
-
 	}
 
 	private Behavior getBehavior(LuaValue key) 
@@ -88,7 +83,7 @@ public class EntityInstance extends LuaUserdata
 				public LuaValue call(LuaValue arg1, LuaValue arg2, LuaValue arg3) 
 				{
 					Entity entity                 = (Entity)arg1.checkuserdata(Entity.class);
-					Class<? extends Message> type = (Class<? extends Message>)arg2.checkuserdata(Message.class);
+					Class<? extends Message> type = (Class<? extends Message>)arg2.checkuserdata(Class.class);
 					LuaFunction function          = arg3.checkfunction();
 					
 					//como chucha creo una instancia de la clase handler del mensaje
@@ -134,10 +129,9 @@ public class EntityInstance extends LuaUserdata
 					}
 					return LuaValue.NONE; //void
 				}				
-			});			
-			
+			});
 		}
-		return null;
+		return methods.get(key);		
 	}
 
 	public void set(LuaValue key, LuaValue value) 

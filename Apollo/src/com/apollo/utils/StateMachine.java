@@ -1,25 +1,22 @@
-package com.apollo.behaviors;
+package com.apollo.utils;
 
 import java.util.Stack;
-
-import com.apollo.BaseBehavior;
 
 /**
  * 
  * @author Edgardo
  *
  */
-public abstract class StackStateMachineBehavior extends BaseBehavior 
+public class StateMachine 
 {
 	private Stack<State> stack;
 	
-    public StackStateMachineBehavior()    
+    public StateMachine()    
     {
         this.stack = new Stack<State>();
     }
 
-    @Override
-	public void update(float dt)
+    public void update(float dt)
     {
 	   State currentState = getCurrentState();
 	   if (currentState != null) 
@@ -34,7 +31,7 @@ public abstract class StackStateMachineBehavior extends BaseBehavior
 		State current = getCurrentState();
 		if(current != null)
 		{
-			current.activeState();
+			current.enter();
 		}
 		return pop;
 	}
@@ -44,7 +41,7 @@ public abstract class StackStateMachineBehavior extends BaseBehavior
 		final State current = getCurrentState();
 		if (current != state)
 	    {
-			state.activeState();
+			state.enter();
 	    	stack.push(state);
 	    }
 	}
@@ -54,4 +51,8 @@ public abstract class StackStateMachineBehavior extends BaseBehavior
 	  return stack.size() > 0 ? stack.peek() : null;
 	}
 	
+	public boolean isStackEmpty()
+	{
+		return stack.isEmpty();
+	}
 }
