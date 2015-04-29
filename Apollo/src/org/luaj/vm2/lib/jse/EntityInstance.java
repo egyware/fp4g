@@ -66,7 +66,14 @@ public class EntityInstance extends LuaUserdata
 			behaviors = new HashMap<LuaValue, Behavior>();		
 			for(Behavior bhvr:entity.getBehaviors())
 			{
-				behaviors.put(LuaValue.valueOf(bhvr.getType().getSimpleName()), bhvr);
+				Class<? extends Behavior> classBehavior = bhvr.getClass();
+				Class<? extends Behavior> typeBehavior= bhvr.getType();
+				behaviors.put(LuaValue.valueOf(typeBehavior.getSimpleName()), bhvr);
+				if(classBehavior != typeBehavior)
+				{
+					behaviors.put(LuaValue.valueOf(classBehavior.getSimpleName()), bhvr);
+				}
+				
 			}
 		}
 		return behaviors.get(key);

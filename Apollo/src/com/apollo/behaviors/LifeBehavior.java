@@ -1,15 +1,29 @@
 package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
+import com.apollo.Behavior;
+import com.apollo.BehaviorTemplate;
+import com.apollo.Engine;
 import com.apollo.Message;
 import com.apollo.MessageReceiver;
 import com.apollo.messages.DamageLifeMessage;
 import com.apollo.messages.HealLifeMessage;
+import com.badlogic.gdx.utils.ObjectMap;
 
 
 public class LifeBehavior extends BaseBehavior
 implements MessageReceiver
 {	
+	public static class Template implements BehaviorTemplate
+	{
+		public int hp;
+
+		@Override
+		public Behavior createBehavior(Engine engine, int x, int y, int w,	int h, ObjectMap<String, Object> map) 
+		{
+			return new LifeBehavior(hp);
+		}		
+	}
 	public int hp;	
 	public int hp_max;
 	public LifeBehavior(int hp_max)

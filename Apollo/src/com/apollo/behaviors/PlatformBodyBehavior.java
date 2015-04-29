@@ -4,6 +4,9 @@ package com.apollo.behaviors;
 import static com.apollo.managers.PhysicsManager.INV_SCALE;
 import static com.apollo.managers.PhysicsManager.SCALE;
 
+import com.apollo.Behavior;
+import com.apollo.BehaviorTemplate;
+import com.apollo.Engine;
 import com.apollo.Entity;
 import com.apollo.Message;
 import com.apollo.MessageReceiver;
@@ -15,13 +18,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.ObjectMap;
 
 
 /**
@@ -30,7 +33,80 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public class PlatformBodyBehavior extends PhysicsBehavior
 implements MessageReceiver, RayCastCallback,QueryCallback
-{
+{	
+	public static class Template implements BehaviorTemplate
+	{
+		public int width;
+		public int height;
+		@Override
+		public Behavior createBehavior(Engine engine, int _x, int _y, int w, int h, ObjectMap<String, Object> map) 
+		{
+			float x = _x*SCALE;
+			float y = _y*SCALE;
+			float width  = this.width*SCALE;
+			float height = this.height*SCALE;
+			PlatformBodyBehavior behavior = new PlatformBodyBehavior();
+			
+			World world = engine.getManager(PhysicsManager.class).getb2World();
+			final Vector2 position = new Vector2(x,y);
+			final Vector2 temp = new Vector2();
+			{
+				BodyDef def = new BodyDef();		
+				def.position.set(position);
+				def.type = BodyDef.BodyType.DynamicBody;
+				def.fixedRotation = true;		
+				Body box = world.createBody(def);				
+			
+				final float width_2 = width*0.5f;
+				final float height_2 = height*0.5f;
+				//shape
+			    PolygonShape boxShape = new PolygonShape();
+			    boxShape.setAsBox(width_2,height_2);
+			    FixtureDef fixtureDef = new FixtureDef();
+			    fixtureDef.density = 1.0f; //!\todo puede ser un parametro
+			    //fixtureDef.friction = 1.0f;//!\todo puede ser un parametro
+//			    if(filter != null)
+//			    {
+//			    	fixtureDef.filter.categoryBits = filter.categoryBits;
+//			    	fixtureDef.filter.groupIndex   = filter.groupIndex;
+//			    	fixtureDef.filter.maskBits     = filter.maskBits;		    	
+//			    }		    
+			    fixtureDef.shape = boxShape;
+			    Fixture bodyFix = box.createFixture(fixtureDef);		    
+
+			    FixtureDef sensorDef = new FixtureDef();
+			    sensorDef.isSensor = true;
+			    sensorDef.density = 1;
+			    sensorDef.shape = boxShape;
+//			    if(filter != null)
+//			    {
+//			    	sensorDef.filter.categoryBits = filter.categoryBits;
+//			    	sensorDef.filter.groupIndex   = filter.groupIndex;
+//			    	sensorDef.filter.maskBits     = filter.maskBits;
+//			    }
+			    	
+			    //sensor izquierda
+			    boxShape.setAsBox(0.01f, height_2*0.8f,temp.set(-width_2-0.01f,0),0);
+			    Fixture leftSensor = box.createFixture(sensorDef);		    
+			    //sensor derecha
+			    boxShape.setAsBox(0.01f, height_2*0.8f,temp.set(width_2+0.01f,0),0);
+			    Fixture rightSensor = box.createFixture(sensorDef);
+			    
+			    boxShape.dispose(); //ya no la usaremos más
+			    
+			    //guardamos los valores dentro del objeto
+			    behavior.box = box;		    
+			    behavior.leftSensor   = leftSensor;
+			    behavior.rightSensor  = rightSensor;
+			    behavior.boxShape     = (PolygonShape)bodyFix.getShape();
+			    behavior.w = this.width;
+			    behavior.h = this.height;
+			    behavior.world = world;
+			    return behavior;
+			}
+		}		
+	}
+	
 	private Body box;
 	private PolygonShape boxShape;
 	private World world;
@@ -71,8 +147,8 @@ implements MessageReceiver, RayCastCallback,QueryCallback
 	@Override	
 	public void initialize()
 	{	
-		owner.addMessageHandler(BeginContactMessage.class, this);	
-		
+		box.setUserData(owner);
+		owner.addMessageHandler(BeginContactMessage.class, this);
 	}
 	
 	public void moveHorizontal(float desiredVel)
@@ -120,79 +196,6 @@ implements MessageReceiver, RayCastCallback,QueryCallback
 		p1.set(p.x+w/2, p.y-h/2-1); p2.set(p1.x, p1.y-2); world.rayCast(bottonRight,  p1.scl(SCALE), p2.scl(SCALE));
 		
 		super.update(dt);		 
-	}
-	
-	public static PlatformBodyBehavior build(Entity owner, Number _x, Number _y, Number _width, Number _height)
-	{
-		return build(owner,_x,_y,_width,_height,null);
-	}
-	public static PlatformBodyBehavior build(Entity owner, Number _x, Number _y, Number _width, Number _height,Filter filter)
-	{
-		float x = _x.floatValue()*SCALE;
-		float y = _y.floatValue()*SCALE;
-		float width = _width.floatValue()*SCALE;
-		float height = _height.floatValue()*SCALE;
-		PlatformBodyBehavior behavior = new PlatformBodyBehavior();
-		
-		World world = owner.getEngine().getManager(PhysicsManager.class).getb2World();
-		final Vector2 position = new Vector2(x,y);
-		final Vector2 temp = new Vector2();
-		{
-			BodyDef def = new BodyDef();		
-			def.position.set(position);
-			def.type = BodyDef.BodyType.DynamicBody;
-			def.fixedRotation = true;		
-			Body box = world.createBody(def);
-			box.setUserData(owner);			
-		
-			final float width_2 = width*0.5f;
-			final float height_2 = height*0.5f;
-			//shape
-		    PolygonShape boxShape = new PolygonShape();
-		    boxShape.setAsBox(width_2,height_2);
-		    FixtureDef fixtureDef = new FixtureDef();
-		    fixtureDef.density = 1.0f; //!\todo puede ser un parametro
-		    //fixtureDef.friction = 1.0f;//!\todo puede ser un parametro
-		    if(filter != null)
-		    {
-		    	fixtureDef.filter.categoryBits = filter.categoryBits;
-		    	fixtureDef.filter.groupIndex   = filter.groupIndex;
-		    	fixtureDef.filter.maskBits     = filter.maskBits;		    	
-		    }		    
-		    fixtureDef.shape = boxShape;
-		    Fixture bodyFix = box.createFixture(fixtureDef);		    
-
-		    FixtureDef sensorDef = new FixtureDef();
-		    sensorDef.isSensor = true;
-		    sensorDef.density = 1;
-		    sensorDef.shape = boxShape;
-		    if(filter != null)
-		    {
-		    	sensorDef.filter.categoryBits = filter.categoryBits;
-		    	sensorDef.filter.groupIndex   = filter.groupIndex;
-		    	sensorDef.filter.maskBits     = filter.maskBits;
-		    }
-		    	
-		    //sensor izquierda
-		    boxShape.setAsBox(0.01f, height_2*0.8f,temp.set(-width_2-0.01f,0),0);
-		    Fixture leftSensor = box.createFixture(sensorDef);		    
-		    //sensor derecha
-		    boxShape.setAsBox(0.01f, height_2*0.8f,temp.set(width_2+0.01f,0),0);
-		    Fixture rightSensor = box.createFixture(sensorDef);
-		    
-		    boxShape.dispose(); //ya no la usaremos más
-		    
-		    //guardamos los valores dentro del objeto
-		    behavior.box = box;		    
-		    behavior.leftSensor   = leftSensor;
-		    behavior.rightSensor  = rightSensor;
-		    behavior.boxShape     = (PolygonShape)bodyFix.getShape();
-		    behavior.w = _width.intValue();
-		    behavior.h = _height.intValue();
-		    behavior.world = world;
-		}
-		
-		return behavior;
 	}
 	
 	public void setBoxSize(int w, int h, Vector2 center)

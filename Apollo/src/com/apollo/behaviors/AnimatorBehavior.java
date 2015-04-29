@@ -37,6 +37,14 @@ public class AnimatorBehavior extends BaseBehavior
 	}
 	public static class Template implements BehaviorTemplate, Serializable 
 	{
+		private static String script[] = {
+			"local entity = ...",
+			"local self = {}",
+			"self.sprite   = entity.SpriteBehavior",
+			"self.animator = entity.AnimatorBehavior",
+			"function self:enter() %s end",
+			"return self"
+		};
 		public static final int DEFAULT_DURATION = 200;		
 		public String atlasName;
 		public String regionName;		
@@ -84,7 +92,7 @@ public class AnimatorBehavior extends BaseBehavior
 					}
 				}
 				
-				// ya ahora están listos los datos :D				
+				// ya ahora están listos los datos :D			
 				animations.put(animation.name, new Animation(duration * 0.001f, array,loopType));
 			}
 			// Los states tienen 3 valores
@@ -101,8 +109,13 @@ public class AnimatorBehavior extends BaseBehavior
 					String animationName = state.getString("animation");					
 					Animation animation = animations.get(animationName);
 					String action    = state.getString("action", null); //action, pertenece a state
-					
-					states.put(state.name, new AnimatorStateTemplate(animation, action));
+					StringBuilder sb = new StringBuilder();
+					for(String s:script)
+					{
+						sb.append(s);
+						sb.append('\n');
+					}
+					states.put(state.name, new AnimatorStateTemplate(animation, String.format(sb.toString(), action)));
 				}
 			}
 		}
@@ -166,20 +179,12 @@ public class AnimatorBehavior extends BaseBehavior
 	@Override
 	public void initialize()
 	{
-		final Engine engine = getEngine();
-		LuaValue _class = getEngine().getGlobals().get("animatorState");
-		if(_class == LuaValue.NIL)
-		{
-			engine.getGlobals().get("require").call("animations");
-			_class = engine.getGlobals().get("animatorState");
-		}
 		for(AnimatorState state:states.values())
 		{
 			//se almacena temporalmente la funcion de action (enter) en el estado y luego se inicializa acá.
 			if(state.action != null)
 			{
-				LuaValue action = _class.get("new").call(CoerceJavaToLua.coerce(owner), state.action);
-				state.action = action;
+				state.action = state.action.call(CoerceJavaToLua.coerce(owner));				 
 			}			
 		}		
 	}
@@ -200,9 +205,12 @@ public class AnimatorBehavior extends BaseBehavior
 	{
 		//revisar las condiciones
 		stateMachine.update(delta);
-		stateTime += delta; 
-		TextureRegion region = currentAnimation.getKeyFrame(stateTime);
-		spriteBehavior.setRegion(region);		
+		if(currentAnimation != null)
+		{
+			stateTime += delta; 
+			TextureRegion region = currentAnimation.getKeyFrame(stateTime);			
+			spriteBehavior.setRegion(region);
+		}
 	}
 	
 	public void setAnimation(String newAnimation)
@@ -256,19 +264,22 @@ public class AnimatorBehavior extends BaseBehavior
 		public void enter() 
 		{	
 			setAnimation(animation);
-			if(action != null) action.get("enter").call();
+			if(action != null) action.get("enter").call(action);
 		}
 
 		@Override
 		public void update(float dt) 
 		{	
 			//revisar condiciones
-			for(Condition c:conditions)
+			if(conditions != null)
 			{
-				if(c.isActive())
+				for(Condition c:conditions)
 				{
-					stateMachine.popState();
-					stateMachine.pushState(c.getNext());
+					if(c.isActive())
+					{
+						stateMachine.popState();
+						stateMachine.pushState(c.getNext());
+					}
 				}
 			}
 		}		

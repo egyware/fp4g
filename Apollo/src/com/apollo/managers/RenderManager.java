@@ -182,11 +182,11 @@ public class RenderManager extends Manager
 	}
 	
 	public void update(float delta)
-	{		
+	{	
 		gameStage.act(delta);
-		if(cameraController != null) cameraController.update(delta);
+		if(cameraController != null) cameraController.update(delta);		
 		tiledMapRenderer.setView(camera);
-		tiledMapRenderer.render();
+		tiledMapRenderer.render();		
 	}	
 	
 	public Camera getCamera()
@@ -226,7 +226,7 @@ public class RenderManager extends Manager
 				}
 			}
 			endRender();
-			gameStage.draw();			
+			gameStage.draw();
 			if(topMapLayers != null)
 			{
 				beginRender();
