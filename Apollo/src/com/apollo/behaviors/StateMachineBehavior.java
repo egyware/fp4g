@@ -1,7 +1,6 @@
 package com.apollo.behaviors;
 
 import com.apollo.BaseBehavior;
-import com.apollo.utils.State;
 
 /**
  * 

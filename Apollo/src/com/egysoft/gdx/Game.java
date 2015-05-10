@@ -1,5 +1,7 @@
 package com.egysoft.gdx;
 
+import org.luaj.vm2.Prototype;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -18,6 +20,7 @@ import com.egysoft.gdx.assets.Sprite;
 import com.egysoft.gdx.assets.loaders.EntityBuilderLoader;
 import com.egysoft.gdx.assets.loaders.CollisionTiledLoader;
 import com.egysoft.gdx.assets.loaders.LevelLoader;
+import com.egysoft.gdx.assets.loaders.PrototypeLoader;
 import com.egysoft.gdx.assets.loaders.SpawnerTiledLoader;
 import com.egysoft.gdx.assets.loaders.SpriteLoader;
 
@@ -50,11 +53,12 @@ public abstract class Game implements ApplicationListener
 		final InternalFileHandleResolver fileResolver = new InternalFileHandleResolver();
 		assets = new AssetManager();		
 		assets.setLoader(Sprite.class,        new SpriteLoader(fileResolver));		
-		assets.setLoader(CollisionMap.class,        new CollisionTiledLoader(fileResolver));
+		assets.setLoader(CollisionMap.class,  new CollisionTiledLoader(fileResolver));
 		assets.setLoader(Spawner.class,       new SpawnerTiledLoader(fileResolver));
 		assets.setLoader(TiledMap.class,      new TmxMapLoader(fileResolver));
 		assets.setLoader(EntityBuilder.class, new EntityBuilderLoader(fileResolver));
-		assets.setLoader(Level.class, new LevelLoader(fileResolver));
+		assets.setLoader(Level.class,		  new LevelLoader(fileResolver));
+		assets.setLoader(Prototype.class,     new PrototypeLoader(fileResolver));
 		multiplexer = new InputMultiplexer();
 		
 	}

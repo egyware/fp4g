@@ -1,5 +1,7 @@
 package com.egysoft.gdx.assets.loaders;
 
+import org.luaj.vm2.Prototype;
+
 import com.apollo.BehaviorTemplate;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
@@ -9,11 +11,11 @@ import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.SerializationException;
 import com.badlogic.gdx.utils.Json.Serializer;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.SerializationException;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import com.badlogic.gdx.utils.JsonValue;
 import com.egysoft.gdx.assets.EntityBuilder;
 
 /**
@@ -33,10 +35,20 @@ public class EntityBuilderLoader extends SynchronousAssetLoader<EntityBuilder, E
 	}
 	
 	@Override
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, EntityBuilderParameter parameter) 
 	{
-		return null;
+		Array<AssetDescriptor> dependencies = new Array<AssetDescriptor>();
+		FileHandle script;
+		if(parameter != null)
+			script = resolve(parameter.scriptName);
+		else
+			script = resolve(String.format("%s.lua", file.pathWithoutExtension()));
+		if(script.exists())
+		{
+			dependencies.add(new AssetDescriptor(script, Prototype.class));
+		}
+		return dependencies;
 	}
 	
 	@Override
@@ -47,7 +59,7 @@ public class EntityBuilderLoader extends SynchronousAssetLoader<EntityBuilder, E
 
 	public static class EntityBuilderParameter extends AssetLoaderParameters<EntityBuilder> 
 	{
-		//TODO nada todavía por diseñar :D
+		public String scriptName;
 	}
 
 	

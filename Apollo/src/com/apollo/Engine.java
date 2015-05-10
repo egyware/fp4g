@@ -5,13 +5,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
 import com.apollo.managers.EntityManager;
 import com.apollo.managers.Manager;
-import com.apollo.messages.BeginContactMessage;
+import com.apollo.scripting.AnimatorLib;
 import com.apollo.scripting.EngineLib;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
@@ -48,16 +46,15 @@ public class Engine implements MessageSender
 		globals = JsePlatform.standardGlobals();
 		
 		
-		globals.load(new EngineLib(this));	
-		globals.set("Contact", CoerceJavaToLua.coerce(BeginContactMessage.class));
-		globals.set("entity", CoerceJavaToLua.coerce(new Entity(this)));	
-	}
+		globals.load(new EngineLib(this));
+		globals.load(new AnimatorLib());
 		
-	public LuaValue loadScript(String script)
-	{
-		return globals.load(script);
 	}
-
+	
+	public Globals getGlobals()
+	{
+		return globals;
+	}
 
 	public void addEntity(Entity e) 
 	{
@@ -276,10 +273,4 @@ public class Engine implements MessageSender
 			return null;
 		}
 	}
-
-	public Globals getGlobals() 
-	{
-		return globals;
-	}
-
 }

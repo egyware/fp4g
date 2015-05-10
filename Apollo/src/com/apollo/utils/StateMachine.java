@@ -1,6 +1,7 @@
 package com.apollo.utils;
 
-import java.util.Stack;
+import com.apollo.behaviors.AnimatorState;
+import com.apollo.behaviors.State;
 
 /**
  * 
@@ -9,13 +10,8 @@ import java.util.Stack;
  */
 public class StateMachine 
 {
-	private Stack<State> stack;
+	private State currentState;
 	
-    public StateMachine()    
-    {
-        this.stack = new Stack<State>();
-    }
-
     public void update(float dt)
     {
 	   State currentState = getCurrentState();
@@ -25,34 +21,17 @@ public class StateMachine
 	   }
     }
 	 
-	public State popState() 
-	{
-		State pop = stack.pop();
-		State current = getCurrentState();
-		if(current != null)
-		{
-			current.enter();
-		}
-		return pop;
-	}
-	 
-	public void pushState(State state) 
-	{
-		final State current = getCurrentState();
-		if (current != state)
-	    {
-			state.enter();
-	    	stack.push(state);
-	    }
-	}
-	 
 	public State getCurrentState()
 	{
-	  return stack.size() > 0 ? stack.peek() : null;
+		return currentState;
 	}
-	
-	public boolean isStackEmpty()
-	{
-		return stack.isEmpty();
+
+	public void setCurrentState(AnimatorState next) 
+	{	
+		if (currentState != next)
+	    {
+			currentState = next;
+			currentState.enter();	    	
+	    }
 	}
 }

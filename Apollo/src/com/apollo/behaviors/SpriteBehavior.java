@@ -73,17 +73,16 @@ public class SpriteBehavior extends ActorBehavior
 	public void draw(Batch batch, float parentAlpha)
 	{	
 		Color color = getColor();
-        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        final float tw = texture.getRegionWidth();
-        final float th = texture.getRegionHeight();
-        batch.draw(texture, getX()-offsetX, getY()-offsetY, tw/2,th/2, tw, th, getScaleX(),getScaleY(),getRotation());
-        batch.setColor(color.r, color.g, color.b, color.a);        
+		batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+		final float tw = texture.getRegionWidth();
+		final float th = texture.getRegionHeight();
+		batch.draw(texture, getX()-offsetX, getY()-offsetY, tw/2,th/2, tw, th, getScaleX(),getScaleY(),getRotation());
+		batch.setColor(color.r, color.g, color.b, color.a);		
 	}
 	
 	public void flipX(boolean b)
 	{		
-		setScaleX((b?-1:1)*Math.abs(getScaleX()));
-		System.out.println(getScaleX());
+		setScaleX((b?-1:1)*Math.abs(getScaleX()));		
 	}
 	public void flipY(boolean b)
 	{
