@@ -54,7 +54,19 @@ public class EntityBuilderLoader extends SynchronousAssetLoader<EntityBuilder, E
 	@Override
 	public EntityBuilder load(AssetManager assetManager, String fileName, FileHandle file, EntityBuilderParameter parameter) 
 	{
-		return json.fromJson(EntityBuilder.class, file);
+		final String scriptName = String.format("%s.lua", file.pathWithoutExtension());
+		final Prototype prototype;
+		if(assetManager.isLoaded(scriptName))
+		{
+			prototype = assetManager.get(scriptName);	
+		}
+		else
+		{
+			prototype = null;			
+		}		
+		EntityBuilder builder = json.fromJson(EntityBuilder.class, file);
+		builder.prototype = prototype;
+		return builder;
 	}
 
 	public static class EntityBuilderParameter extends AssetLoaderParameters<EntityBuilder> 

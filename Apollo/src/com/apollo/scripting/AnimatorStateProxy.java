@@ -19,6 +19,10 @@ public class AnimatorStateProxy extends AnimatorState
 	public void enter() 
 	{
 		super.enter();
-		self.get("enter").call(self);
-	}		
+		LuaValue enter = self.get("enter");
+		if(LuaValue.NIL != enter)
+		{
+			enter.call(self);
+		}		
+	}			
 }

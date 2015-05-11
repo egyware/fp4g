@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.ObjectMap;
  * @author Edgardo
  *
  */
-public class ColliderBehavior extends PhysicsBehavior
+public class PhysicsMovementBehavior extends MovementBehavior
 {
 	public abstract static class ShapeTemplate
 	{
@@ -91,14 +91,24 @@ public class ColliderBehavior extends PhysicsBehavior
 				f.createFixture(body);
 			}
 			
-			return new ColliderBehavior(body);
+			return new PhysicsMovementBehavior(body);
 		}		
 	}	
 	private Body body;	
 	
-	public ColliderBehavior(Body body)
+	public PhysicsMovementBehavior(Body body)
 	{
 		this.body = body;
+	}
+	
+	@Override 
+	public void update(float dt)
+	{
+		position.set(body.getPosition()).scl(INV_SCALE);
+		velocity.set(getLinearVelocity()).scl(INV_SCALE);
+		angle = body.getAngle();
+		
+		super.update(dt);
 	}
 	
 	@Override
@@ -115,19 +125,7 @@ public class ColliderBehavior extends PhysicsBehavior
 		body.getWorld().destroyBody(body);
 		body = null;
 	}
-
-	@Override
-	public Vector2 getPosition() 
-	{
-		return body.getPosition().cpy().scl(INV_SCALE);
-	}
-
-	@Override
-	protected float getAngle() 
-	{	
-		return body.getAngle();
-	}
-
+	
 	public void setPosition(float x, float y,float angle) 
 	{
 		body.setTransform(x, y, angle);		

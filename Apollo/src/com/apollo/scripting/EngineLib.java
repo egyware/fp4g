@@ -38,7 +38,7 @@ public class EngineLib extends LibFunction
 				long id = value.tolong();
 				return CoerceJavaToLua.coerce(engine.getEntityById(id));
 			}
-		});		
+		});	
 		env.set( "Engine", library );
 		return library;
 	}

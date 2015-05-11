@@ -68,15 +68,25 @@ public class EntityInstance extends LuaUserdata
 			{
 				Class<? extends Behavior> classBehavior = bhvr.getClass();
 				Class<? extends Behavior> typeBehavior= bhvr.getType();
-				behaviors.put(LuaValue.valueOf(typeBehavior.getSimpleName()), bhvr);
+				behaviors.put(LuaValue.valueOf(prettify(typeBehavior.getSimpleName())), bhvr);
 				if(classBehavior != typeBehavior)
 				{
-					behaviors.put(LuaValue.valueOf(classBehavior.getSimpleName()), bhvr);
+					behaviors.put(LuaValue.valueOf(prettify(classBehavior.getSimpleName())), bhvr);
 				}
 				
 			}
 		}
 		return behaviors.get(key);
+	}
+	
+	private static String prettify(String ugly)
+	{
+		if(ugly.endsWith("Behavior"))
+		{
+			String pretty = ugly.substring(0,ugly.length()-8);			
+			return pretty;
+		}
+		return ugly;
 	}
 	
 	private static LuaFunction getMethod(LuaValue key)

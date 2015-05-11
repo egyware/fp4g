@@ -17,6 +17,11 @@ public class AnimatorTransitionProxy extends AnimatorTransition
 	@Override
 	public boolean isActive() 
 	{
-		return self.get("isActive").call(self).checkboolean();
+		LuaValue isActive = self.get("isActive");
+		if(LuaValue.NIL != isActive)
+		{
+			return isActive.call(self).checkboolean();	
+		}		
+		return false;
 	}	
 }

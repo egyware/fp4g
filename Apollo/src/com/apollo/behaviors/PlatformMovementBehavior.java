@@ -31,7 +31,7 @@ import com.badlogic.gdx.utils.ObjectMap;
  * @author egyware
  *
  */
-public class PlatformBodyBehavior extends PhysicsBehavior
+public class PlatformMovementBehavior extends MovementBehavior
 implements MessageReceiver, RayCastCallback,QueryCallback
 {	
 	public static class Template implements BehaviorTemplate
@@ -45,7 +45,7 @@ implements MessageReceiver, RayCastCallback,QueryCallback
 			float y = _y*SCALE;
 			float width  = this.width*SCALE;
 			float height = this.height*SCALE;
-			PlatformBodyBehavior behavior = new PlatformBodyBehavior();
+			PlatformMovementBehavior behavior = new PlatformMovementBehavior();
 			
 			World world = engine.getManager(PhysicsManager.class).getb2World();
 			final Vector2 position = new Vector2(x,y);
@@ -127,7 +127,7 @@ implements MessageReceiver, RayCastCallback,QueryCallback
 	private ClosestRaycastCallback topLeft;
 	private ClosestRaycastCallback topRight;
 		
-	private PlatformBodyBehavior() 
+	private PlatformMovementBehavior() 
 	{	
 		bottonLeft = new ClosestRaycastCallback();		
 		bottonRight = new ClosestRaycastCallback();
@@ -181,7 +181,12 @@ implements MessageReceiver, RayCastCallback,QueryCallback
 	public void update(float dt)
 	{
 		moveHorizontal(desiredVelocity);
-		Vector2 p = getPosition().add(center);
+		
+		position.set(box.getPosition()).scl(INV_SCALE);
+		velocity.set(getLinearVelocity()).scl(INV_SCALE);
+		angle = box.getAngle();		
+		
+		Vector2 c = position.cpy().add(center);
 		
 		bottonLeft.reset();		
 		bottonRight.reset();
@@ -189,13 +194,14 @@ implements MessageReceiver, RayCastCallback,QueryCallback
 		topLeft.reset();
 		topRight.reset();
 		
-		p1.set(p.x-w/2, p.y+h/2+1); p2.set(p1.x, p1.y+2); world.rayCast(topLeft,   p1.scl(SCALE), p2.scl(SCALE));
-		p1.set(p.x+w/2, p.y+h/2+1); p2.set(p1.x, p1.y+2); world.rayCast(topRight,  p1.scl(SCALE), p2.scl(SCALE));
+		p1.set(c.x-w/2, c.y+h/2+1); p2.set(p1.x, p1.y+2); world.rayCast(topLeft,   p1.scl(SCALE), p2.scl(SCALE));
+		p1.set(c.x+w/2, c.y+h/2+1); p2.set(p1.x, p1.y+2); world.rayCast(topRight,  p1.scl(SCALE), p2.scl(SCALE));
 		
-		p1.set(p.x-w/2, p.y-h/2-1); p2.set(p1.x, p1.y-2); world.rayCast(bottonLeft,   p1.scl(SCALE), p2.scl(SCALE));
-		p1.set(p.x+w/2, p.y-h/2-1); p2.set(p1.x, p1.y-2); world.rayCast(bottonRight,  p1.scl(SCALE), p2.scl(SCALE));
+		p1.set(c.x-w/2, c.y-h/2-1); p2.set(p1.x, p1.y-2); world.rayCast(bottonLeft,   p1.scl(SCALE), p2.scl(SCALE));
+		p1.set(c.x+w/2, c.y-h/2-1); p2.set(p1.x, p1.y-2); world.rayCast(bottonRight,  p1.scl(SCALE), p2.scl(SCALE));
 		
-		super.update(dt);		 
+		
+		super.update(dt);
 	}
 	
 	public void setBoxSize(int w, int h, Vector2 center)
@@ -286,19 +292,6 @@ implements MessageReceiver, RayCastCallback,QueryCallback
 			return -1;
 		}		
 	}
-
-	@Override
-	public Vector2 getPosition()
-	{
-		return box.getPosition().cpy().scl(INV_SCALE);
-	}
-
-	@Override
-	protected float getAngle() 
-	{		
-		return box.getAngle();
-	}
-	
 	
 	private class ClosestRaycastCallback implements RayCastCallback
 	{

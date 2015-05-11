@@ -39,4 +39,9 @@ public abstract class AnimatorState implements State
 			}
 		}
 	}	
+	
+	public final void setState()
+	{
+		animator.setState(this);
+	}
 }

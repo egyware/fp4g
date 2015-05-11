@@ -1,5 +1,11 @@
 package com.egysoft.gdx.assets;
 
+import org.luaj.vm2.Globals;
+import org.luaj.vm2.LuaClosure;
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.Prototype;
+import org.luaj.vm2.lib.jse.CoerceJavaToLua;
+
 import com.apollo.Behavior;
 import com.apollo.BehaviorTemplate;
 import com.apollo.Engine;
@@ -28,6 +34,7 @@ public class EntityBuilder implements IEntityBuilder
 	public String name;
 	public BehaviorTemplate behaviors[];
 	public DefaultValue defaultValue;
+	public Prototype prototype;
 	
 	public Entity buildEntity(final Engine engine, final int x, final int y, final int w, final int h,final ObjectMap<String, Object> map)
 	{
@@ -36,6 +43,19 @@ public class EntityBuilder implements IEntityBuilder
 		{
 			Behavior behavior = template.createBehavior(engine,x,y,w,h,map);
 			entity.setBehavior(behavior);
+		}
+		//instalar el script
+		if(prototype != null)
+		{
+			Globals _G = engine.getGlobals();
+			LuaValue entityScript = _G.get(name);
+			if(entityScript == LuaValue.NIL)
+			{
+				LuaClosure closure = new LuaClosure(prototype, engine.getGlobals());
+				closure.call(); //instala el script
+				entityScript = _G.get(name); //ahora debe existir
+			}
+			entityScript.get("OnCreate").invoke(new LuaValue[]{entityScript, CoerceJavaToLua.coerce(entity), LuaValue.valueOf(x), LuaValue.valueOf(y)});
 		}		
 		
 		return entity;

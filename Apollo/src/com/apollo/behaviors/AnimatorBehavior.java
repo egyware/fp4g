@@ -167,5 +167,6 @@ public class AnimatorBehavior extends BaseBehavior
 	public void addState(String name, AnimatorState state)
 	{
 		states.put(name, state);		
-	}	
+	}
+ 
 }

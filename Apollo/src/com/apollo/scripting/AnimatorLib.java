@@ -2,6 +2,7 @@ package com.apollo.scripting;
 
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.LibFunction;
+import org.luaj.vm2.lib.OneArgFunction;
 import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
@@ -11,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 public class AnimatorLib extends LibFunction 
 {
 	public AnimatorLib()
-	{		
+	{
 	}
 	
 	public LuaValue call(LuaValue modname, LuaValue env) 
@@ -24,12 +25,13 @@ public class AnimatorLib extends LibFunction
 			{
 				AnimatorBehavior animator;
 				Animation animation;
-				if(!arg2.isstring()) argerror("Se esperaba un String");
+				if(!arg2.isstring()) argerror("String");
 				animator = (AnimatorBehavior) arg1.checkuserdata(AnimatorBehavior.class);
 				animation = animator.getAnimation(arg2.tojstring());
-				if(animation == null) argerror("La animación debe existir");
+				if(animation == null) error("La animación debe existir");
 
 				//no me gusta como quedará, pero bueno...
+				//TODO talvez a futuro cambie esto añadiendo una metatable
 				LuaValue self = tableOf();				
 				final AnimatorStateProxy proxy = new AnimatorStateProxy(animator, animation, self);
 				self.set("instance", CoerceJavaToLua.coerce(proxy));
@@ -45,6 +47,16 @@ public class AnimatorLib extends LibFunction
 						return tself;
 					}					
 				});	
+				self.set("setState", new OneArgFunction()
+				{
+					@Override
+					public LuaValue call(LuaValue sef) 
+					{
+						proxy.setState();
+						return null;
+					}
+					
+				});
 				animator.addState(proxy.toString(),proxy);
 				
 				return self;
