@@ -48,7 +48,7 @@ public class AnimatorBehavior extends BaseBehavior
 			for (JsonValue animation : animationsData)
 			{
 				if(regionName == null) regions = atlas.findRegions(animation.name);				
-				JsonValue data = animation.get("data");												
+				JsonValue data = animation.get("frames");												
 				final int duration = animation.getInt("duration", DEFAULT_DURATION);
 				Array<TextureRegion> array = null;
 				final String playModeName = animation.getString("playMode", "NORMAL").toUpperCase();
@@ -91,7 +91,6 @@ public class AnimatorBehavior extends BaseBehavior
 			animator.setAnimation(ani);
 			return animator;			
 		}
-		
 	}
 	@InjectComponent(ActorBehavior.class)
 	private SpriteBehavior spriteBehavior;

@@ -5,9 +5,9 @@ package com.egysoft.gdx;
 
 public abstract class GameState
 {
-	private boolean is_load = false;	
+	protected final String groupName;
 	
-	protected abstract boolean load();
+	protected abstract void create();
 	protected abstract void dispose();
 	
 	protected abstract void pause();
@@ -16,32 +16,15 @@ public abstract class GameState
 	
 	public abstract void render(float delta);
 	
-	public GameState()
+	public GameState(String groupName)
 	{		 
+		this.groupName = groupName;
 	}
 	
-	public final boolean loadState(){
-		if(!is_load){
-			is_load = load();
-		}
-		return is_load;
-	}	
-	
-	public final void disposeState()
+	public String getGroupName()
 	{
-		is_load = false;
-		dispose();
+		return groupName;
 	}
-	
-	public final boolean isLoad(){
-		return is_load;
-	}
-	
-	void setLoad(boolean b)
-	{
-		is_load = b;
-	}
-
 	
 	
 }

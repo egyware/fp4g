@@ -24,7 +24,6 @@ public class TransformBehavior extends BaseBehavior
 		{
 			return new TransformBehavior(x,y,rotation);
 		}
-		
 	}
 	
 	public TransformBehavior() {

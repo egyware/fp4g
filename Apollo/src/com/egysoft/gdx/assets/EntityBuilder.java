@@ -34,7 +34,7 @@ public class EntityBuilder implements IEntityBuilder
 	public String name;
 	public BehaviorTemplate behaviors[];
 	public DefaultValue defaultValue;
-	public Prototype prototype;
+	public Prototype prototype; //no leido desde json
 	
 	public Entity buildEntity(final Engine engine, final int x, final int y, final int w, final int h,final ObjectMap<String, Object> map)
 	{
@@ -44,9 +44,9 @@ public class EntityBuilder implements IEntityBuilder
 			Behavior behavior = template.createBehavior(engine,x,y,w,h,map);
 			entity.setBehavior(behavior);
 		}
-		//instalar el script
 		if(prototype != null)
 		{
+			//instalar el script
 			Globals _G = engine.getGlobals();
 			LuaValue entityScript = _G.get(name);
 			if(entityScript == LuaValue.NIL)

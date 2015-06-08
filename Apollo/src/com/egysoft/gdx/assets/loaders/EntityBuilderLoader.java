@@ -6,8 +6,8 @@ import com.apollo.BehaviorTemplate;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
@@ -22,7 +22,7 @@ import com.egysoft.gdx.assets.EntityBuilder;
  * @author egyware
  * 
  */
-public class EntityBuilderLoader extends SynchronousAssetLoader<EntityBuilder, EntityBuilderLoader.EntityBuilderParameter> 
+public class EntityBuilderLoader extends AsynchronousAssetLoader<EntityBuilder, EntityBuilderLoader.EntityBuilderParameter> 
 {
 	public static Json json = new Json();	
 	static
@@ -48,26 +48,33 @@ public class EntityBuilderLoader extends SynchronousAssetLoader<EntityBuilder, E
 		{
 			dependencies.add(new AssetDescriptor(script, Prototype.class));
 		}
+
 		return dependencies;
 	}
 	
+	private EntityBuilder builder;
 	@Override
-	public EntityBuilder load(AssetManager assetManager, String fileName, FileHandle file, EntityBuilderParameter parameter) 
+	public void loadAsync(AssetManager manager, String fileName, FileHandle file, EntityBuilderParameter parameter) 
 	{
 		final String scriptName = String.format("%s.lua", file.pathWithoutExtension());
 		final Prototype prototype;
-		if(assetManager.isLoaded(scriptName))
+		if(manager.isLoaded(scriptName))
 		{
-			prototype = assetManager.get(scriptName);	
+			prototype = manager.get(scriptName);	
 		}
 		else
 		{
 			prototype = null;			
-		}		
-		EntityBuilder builder = json.fromJson(EntityBuilder.class, file);
-		builder.prototype = prototype;
-		return builder;
+		}
+		builder = json.fromJson(EntityBuilder.class, file);
+		builder.prototype = prototype;		
 	}
+
+	@Override
+	public EntityBuilder loadSync(AssetManager manager, String fileName, FileHandle file, EntityBuilderParameter parameter) 
+	{
+		return builder;
+	}	
 
 	public static class EntityBuilderParameter extends AssetLoaderParameters<EntityBuilder> 
 	{
@@ -111,5 +118,4 @@ public class EntityBuilderLoader extends SynchronousAssetLoader<EntityBuilder, E
 			return entityBuilder;
 		}		
 	}
-	
 }

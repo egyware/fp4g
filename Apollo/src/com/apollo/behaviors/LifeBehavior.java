@@ -22,7 +22,7 @@ implements MessageReceiver
 		public Behavior createBehavior(Engine engine, int x, int y, int w,	int h, ObjectMap<String, Object> map) 
 		{
 			return new LifeBehavior(hp);
-		}		
+		}
 	}
 	public int hp;	
 	public int hp_max;

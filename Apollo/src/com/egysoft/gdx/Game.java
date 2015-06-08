@@ -1,31 +1,20 @@
 package com.egysoft.gdx;
 
-import org.luaj.vm2.Prototype;
-
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.egysoft.gdx.assets.EntityBuilder;
-import com.egysoft.gdx.assets.CollisionMap;
-import com.egysoft.gdx.assets.Level;
-import com.egysoft.gdx.assets.Spawner;
-import com.egysoft.gdx.assets.Sprite;
-import com.egysoft.gdx.assets.loaders.EntityBuilderLoader;
-import com.egysoft.gdx.assets.loaders.CollisionTiledLoader;
-import com.egysoft.gdx.assets.loaders.LevelLoader;
-import com.egysoft.gdx.assets.loaders.PrototypeLoader;
-import com.egysoft.gdx.assets.loaders.SpawnerTiledLoader;
-import com.egysoft.gdx.assets.loaders.SpriteLoader;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
 
 public abstract class Game implements ApplicationListener
 {
+	private static final String TAG = "Game";
+	private static final String COMMON_GROUP = "common";
 	public static Game instance;	
 	public static int Width;
 	public static int Height;
@@ -34,74 +23,87 @@ public abstract class Game implements ApplicationListener
 	{
 		Game.instance = game;		
 		Width  = game.getWidth();
-		Height = game.getHeight();
-	}
+		Height = game.getHeight();		
+	}	
 	
-	
-	private GameState next;
+	private GameState next;	
 	private GameState current;
+	private final GameLoader loader;
 	private InputMultiplexer multiplexer;
 		
 	public abstract int getWidth();
 	public abstract int getHeight();
 	
 	public Preferences preferences;
-	public final AssetManager assets; 
+	public final Assets assets;
 	
+	public Game(GameLoader loader, FileHandleResolver fileResolver)
+	{
+		assets = new Assets(fileResolver);			
+		multiplexer = new InputMultiplexer();
+		this.loader = loader;
+	}
+	public Game(GameLoader loader)
+	{
+		this(loader, new InternalFileHandleResolver());
+	}
 	public Game()
 	{
-		final InternalFileHandleResolver fileResolver = new InternalFileHandleResolver();
-		assets = new AssetManager();		
-		assets.setLoader(Sprite.class,        new SpriteLoader(fileResolver));		
-		assets.setLoader(CollisionMap.class,  new CollisionTiledLoader(fileResolver));
-		assets.setLoader(Spawner.class,       new SpawnerTiledLoader(fileResolver));
-		assets.setLoader(TiledMap.class,      new TmxMapLoader(fileResolver));
-		assets.setLoader(EntityBuilder.class, new EntityBuilderLoader(fileResolver));
-		assets.setLoader(Level.class,		  new LevelLoader(fileResolver));
-		assets.setLoader(Prototype.class,     new PrototypeLoader(fileResolver));
-		multiplexer = new InputMultiplexer();
-		
+		this(new GameLoader(), new InternalFileHandleResolver());
+	}
+	public Game(FileHandleResolver fileResolver)
+	{
+		this(new GameLoader(), fileResolver);
 	}
 	
 	public void start(GameState state)
 	{
-		next = state;
-		performScreenChange();
+		Gdx.app.log(TAG, String.format("start %s",ClassReflection.getSimpleName(state.getClass())));
+		current = state;
+		if(current.groupName == null) throw new GdxRuntimeException("El nombre de los grupos no puede ser null");
+		assets.loadGroup(current.groupName);
+		assets.finishLoading();
+		current.create();
 	}
 	
-	public void performScreenChange()
+	protected void switchGameState(GameState next)
 	{
-		Gdx.app.log("GameCycleLife", String.format("start %s",next.getClass().getSimpleName()));		
+		current = next;
+	}
+	
+	public void nextState(GameState next)
+	{
+		Gdx.app.log(TAG, String.format("next: %s",ClassReflection.getSimpleName(next.getClass())));
+		this.next = next;
+	}
+
+	@Override
+	public void create() 
+	{
+		Game.init(this);
+		assets.loadGroups("assets.json");		
+		if(assets.containsGroup(COMMON_GROUP)) assets.loadGroup(COMMON_GROUP);
+		loader.create();
+		preferences = Gdx.app.getPreferences("Game");		
+		Gdx.input.setInputProcessor(multiplexer);
+		Gdx.app.setLogLevel(Application.LOG_INFO);
+		Gdx.app.log(TAG, "create");		
+	}
+
+	@Override
+	public void dispose() {	
+		Gdx.app.log(TAG, "dispose");	
 		if(current != null)
 		{
 			current.dispose();			
-		}	
-		current = next;
-		if(!current.isLoad())
-		{
-			boolean result = current.load();
-			if(result)
-			{
-				current.setLoad(true);
-			}
-			else
-			{
-				Gdx.app.log("GameCycleLife", String.format("No se pudo cargar %s",current.getClass().getSimpleName()));
-			}
 		}
-		this.next = null;
+		loader.dispose();
 	}
 	
-	public void nextState(GameState _next)
-	{
-		Gdx.app.log("GameCycleLife", String.format("next: %s",_next.getClass().getSimpleName()));
-		next = _next;
-	}
 	
 	public void resumeState()
 	{
-		Gdx.app.log("GameCycleLife", "resume");
-		//se asume que existe un contexto actual y guardado en  states...
+		Gdx.app.log(TAG, "resume");
 		if(current != null)
 		{
 			current.resume();
@@ -109,27 +111,9 @@ public abstract class Game implements ApplicationListener
 	}
 
 	@Override
-	public void create() 
-	{
-		Game.init(this);
-		preferences = Gdx.app.getPreferences("Game");
-		Gdx.input.setInputProcessor(multiplexer);
-		Gdx.app.setLogLevel(Application.LOG_INFO);
-		Gdx.app.log("AppCycleLife", "create");
-	}
-
-	@Override
-	public void dispose() {	
-		Gdx.app.log("AppCycleLife", "dispose");	
-		if(current != null)
-		{
-			current.dispose();			
-		}
-	}
-
-	@Override
-	public void pause() {	
-		Gdx.app.log("AppCycleLife", "pause");	
+	public void pause()
+	{	
+		Gdx.app.log(TAG, "pause");	
 		if(current != null)
 		{
 			current.pause();			
@@ -141,20 +125,25 @@ public abstract class Game implements ApplicationListener
 	{		
 		float deltaTime = Gdx.graphics.getDeltaTime();		
 		
-		if (current != null) {
+		if (current != null) 
+		{
 			current.render(deltaTime);
 		}
-		
+		//hay un siguiente nivel a cargar
 		if(next != null)
 		{
-			performScreenChange();			
+			assets.unloadGroup(current.groupName);
+			current.dispose();
+			current = loader;
+			loader.load(next);
+			next = null;
 		}
 	}
 
 	@Override
 	public void resize(int w,int h) 
 	{
-		Gdx.app.log("AppCycleLife", "resize");
+		Gdx.app.log(TAG, "resize");
 		if(current != null)
 		{
 			current.resize(w,h);
@@ -164,7 +153,7 @@ public abstract class Game implements ApplicationListener
 	@Override
 	public void resume() 
 	{
-		Gdx.app.log("AppCycleLife", "resume");
+		Gdx.app.log(TAG, "resume");
 		if(current != null)
 		{
 			current.resume();			
