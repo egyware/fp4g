@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Apollo"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LibGDX 1.5.4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/libgdx-1.5.4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/libgdx-1.5.4 desktop"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,14 @@
+Roadmap Ceditor
+
+Iteración 1:
+- Ground Actor
+- Editor de Ground Actor
+- Posibilidad de cargar mapas
+- Que el personaje pueda saltar.
+- Que no atraviese bloques.
+
+Iteración 2:
+- Background Actor
+- Editor de Background Actor
+- Botones de Play/Stop/Pause
+ 
