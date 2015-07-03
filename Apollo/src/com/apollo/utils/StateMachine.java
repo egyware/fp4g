@@ -1,6 +1,5 @@
 package com.apollo.utils;
 
-import com.apollo.behaviors.AnimatorState;
 import com.apollo.behaviors.State;
 
 /**
@@ -26,7 +25,7 @@ public class StateMachine
 		return currentState;
 	}
 
-	public void setCurrentState(AnimatorState next) 
+	public void setCurrentState(State next) 
 	{	
 		if (currentState != next)
 	    {

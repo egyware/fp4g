@@ -34,7 +34,7 @@ public abstract class ActorBehavior extends Actor implements Behavior
 	}
 	
 	@Override
-	public <T extends Behavior> T getComponentFromOwner(Class<T> family) 
+	public <T extends Behavior> T getBehaviorFromOwner(Class<T> family) 
 	{
 		return owner.getBehavior(family);
 	}

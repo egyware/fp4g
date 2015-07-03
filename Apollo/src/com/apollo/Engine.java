@@ -9,7 +9,7 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 
 import com.apollo.managers.EntityManager;
 import com.apollo.managers.Manager;
-import com.apollo.scripting.AnimatorLib;
+//import com.apollo.scripting.AnimatorLib;
 import com.apollo.scripting.EngineLib;
 import com.apollo.utils.Bag;
 import com.apollo.utils.ImmutableBag;
@@ -47,7 +47,7 @@ public class Engine implements MessageSender
 		
 		
 		globals.load(new EngineLib(this));
-		globals.load(new AnimatorLib());
+		//globals.load(new AnimatorLib());
 		
 	}
 	

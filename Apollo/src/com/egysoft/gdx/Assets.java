@@ -24,12 +24,12 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.egysoft.gdx.assets.CollisionMap;
 import com.egysoft.gdx.assets.EntityBuilder;
-import com.egysoft.gdx.assets.Level;
+import com.egysoft.gdx.assets.Stage;
 import com.egysoft.gdx.assets.Spawner;
 import com.egysoft.gdx.assets.Sprite;
 import com.egysoft.gdx.assets.loaders.CollisionTiledLoader;
 import com.egysoft.gdx.assets.loaders.EntityBuilderLoader;
-import com.egysoft.gdx.assets.loaders.LevelLoader;
+import com.egysoft.gdx.assets.loaders.StageLoader;
 import com.egysoft.gdx.assets.loaders.PrototypeLoader;
 import com.egysoft.gdx.assets.loaders.SpawnerTiledLoader;
 import com.egysoft.gdx.assets.loaders.SpriteLoader;
@@ -54,12 +54,13 @@ public class Assets implements Disposable, AssetErrorListener, Comparator<AssetD
 		manager.setLoader(Spawner.class,       new SpawnerTiledLoader(fileResolver));
 		manager.setLoader(TiledMap.class,      new TmxMapLoader(fileResolver));
 		manager.setLoader(EntityBuilder.class, new EntityBuilderLoader(fileResolver));
-		manager.setLoader(Level.class,		  new LevelLoader(fileResolver));
+		manager.setLoader(Stage.class,		  new StageLoader(fileResolver));
 		manager.setLoader(Prototype.class,     new PrototypeLoader(fileResolver));
 		//manager.setErrorListener(this);
 		groups = new ObjectMap<String, Array<AssetDescriptor<?>>>();
 		values = new ObjectMap<Class<?>, Integer>();
 		values.put(EntityBuilder.class, 2);
+		values.put(Stage.class, 3);
 	}
 
 	public void loadGroup(String groupName) 
@@ -71,7 +72,7 @@ public class Assets implements Disposable, AssetErrorListener, Comparator<AssetD
 		{
 			for (AssetDescriptor<?> asset : assets) 
 			{
-				manager.load(asset);
+				manager.load(asset);				
 			}
 		}
 		else 

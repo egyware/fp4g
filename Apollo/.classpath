@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="com/apollo/messages/PhysicsMessage.java|com/apollo/Assets.java|com/apollo/messages/LevelMessage.java|com/apollo/behaviors/GunBehavior.java|com/apollo/messages/AutoGunMessage.java|com/apollo/messages/GunMessage.java" kind="src" path="src"/>
+	<classpathentry excluding="com/apollo/messages/PhysicsMessage.java|com/apollo/Assets.java|com/apollo/messages/LevelMessage.java|com/apollo/behaviors/GunBehavior.java|com/apollo/messages/AutoGunMessage.java|com/apollo/messages/GunMessage.java|com/apollo/behaviors/ActorBehavior.java|com/apollo/behaviors/AnimatorBehavior.java|com/apollo/behaviors/AnimatorState.java|com/apollo/behaviors/AnimatorTransition.java|com/apollo/behaviors/SpriteBehavior.java|com/apollo/behaviors/TextureBehavior.java|com/apollo/scripting/AnimatorLib.java|com/apollo/scripting/AnimatorStateProxy.java|com/apollo/scripting/AnimatorTransitionProxy.java|com/apollo/managers/RenderManager.java|com/apollo/managers/CameraController.java|com/apollo/managers/DebugRenderManager.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/libgdx-1.5.4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/libgdx-1.5.4 box2d"/>

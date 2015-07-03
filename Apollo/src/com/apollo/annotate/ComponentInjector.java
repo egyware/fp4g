@@ -23,7 +23,7 @@ public abstract class ComponentInjector<T>
 			Class<? extends Behavior> fieldClazz = Class.class.cast(field.getType());
 			if(clazz == Behavior.class)
 			{
-				return component.getComponentFromOwner(fieldClazz);
+				return component.getBehaviorFromOwner(fieldClazz);
 			}
 			else
 			{
@@ -31,7 +31,7 @@ public abstract class ComponentInjector<T>
 				{
 					throw new GdxRuntimeException("Warning! Autoinjection " + field.getName() + " field class " + field.getDeclaringClass() + " is not assignable fromm family class "+clazz);					
 				}
-				return component.getComponentFromOwner(clazz);						
+				return component.getBehaviorFromOwner(clazz);						
 			}
 		}
 

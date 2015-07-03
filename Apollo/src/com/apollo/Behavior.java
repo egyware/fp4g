@@ -14,7 +14,7 @@ public interface Behavior
 
 	public abstract void update(float delta);
 
-	public abstract <T extends Behavior> T getComponentFromOwner(Class<T> family);
+	public abstract <T extends Behavior> T getBehaviorFromOwner(Class<T> family);
 
 	public abstract void uninitialize();
 

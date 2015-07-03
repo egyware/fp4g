@@ -65,7 +65,7 @@ implements Behavior
 	/* (non-Javadoc)
 	 * @see com.apollo.Behavior#getComponentFromOwner(java.lang.Class)
 	 */
-	public <T extends Behavior> T getComponentFromOwner(Class<T> family) 
+	public <T extends Behavior> T getBehaviorFromOwner(Class<T> family) 
 	{
 		return owner.getBehavior(family);
 	}

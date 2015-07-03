@@ -1,3 +1,4 @@
+
 package com.egysoft.gdx.assets.loaders;
 
 import com.badlogic.gdx.assets.AssetDescriptor;

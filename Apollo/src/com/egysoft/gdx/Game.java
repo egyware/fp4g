@@ -7,14 +7,11 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 
 public abstract class Game implements ApplicationListener
 {
-	private static final String TAG = "Game";
-	private static final String COMMON_GROUP = "common";
+	private static final String TAG = "Game";	
 	public static Game instance;	
 	public static int Width;
 	public static int Height;
@@ -28,7 +25,6 @@ public abstract class Game implements ApplicationListener
 	
 	private GameState next;	
 	private GameState current;
-	private final GameLoader loader;
 	private InputMultiplexer multiplexer;
 		
 	public abstract int getWidth();
@@ -37,32 +33,16 @@ public abstract class Game implements ApplicationListener
 	public Preferences preferences;
 	public final Assets assets;
 	
-	public Game(GameLoader loader, FileHandleResolver fileResolver)
-	{
-		assets = new Assets(fileResolver);			
-		multiplexer = new InputMultiplexer();
-		this.loader = loader;
-	}
-	public Game(GameLoader loader)
-	{
-		this(loader, new InternalFileHandleResolver());
-	}
-	public Game()
-	{
-		this(new GameLoader(), new InternalFileHandleResolver());
-	}
 	public Game(FileHandleResolver fileResolver)
 	{
-		this(new GameLoader(), fileResolver);
+		assets = new Assets(fileResolver);			
+		multiplexer = new InputMultiplexer();		
 	}
 	
 	public void start(GameState state)
 	{
 		Gdx.app.log(TAG, String.format("start %s",ClassReflection.getSimpleName(state.getClass())));
-		current = state;
-		if(current.groupName == null) throw new GdxRuntimeException("El nombre de los grupos no puede ser null");
-		assets.loadGroup(current.groupName);
-		assets.finishLoading();
+		current = state;				
 		current.create();
 	}
 	
@@ -81,9 +61,7 @@ public abstract class Game implements ApplicationListener
 	public void create() 
 	{
 		Game.init(this);
-		assets.loadGroups("assets.json");		
-		if(assets.containsGroup(COMMON_GROUP)) assets.loadGroup(COMMON_GROUP);
-		loader.create();
+		assets.loadGroups("assets.json");
 		preferences = Gdx.app.getPreferences("Game");		
 		Gdx.input.setInputProcessor(multiplexer);
 		Gdx.app.setLogLevel(Application.LOG_INFO);
@@ -91,13 +69,13 @@ public abstract class Game implements ApplicationListener
 	}
 
 	@Override
-	public void dispose() {	
+	public void dispose()
+	{	
 		Gdx.app.log(TAG, "dispose");	
 		if(current != null)
 		{
 			current.dispose();			
-		}
-		loader.dispose();
+		}		
 	}
 	
 	
@@ -132,10 +110,9 @@ public abstract class Game implements ApplicationListener
 		//hay un siguiente nivel a cargar
 		if(next != null)
 		{
-			assets.unloadGroup(current.groupName);
 			current.dispose();
-			current = loader;
-			loader.load(next);
+			current = next;
+			current.create();
 			next = null;
 		}
 	}
@@ -164,13 +141,19 @@ public abstract class Game implements ApplicationListener
 		return  multiplexer;
 	}
 	
-	public void addInputProcessor(InputProcessor input) 
+	public void addInputProcessor(InputProcessor ...inputs) 
 	{
-		multiplexer.addProcessor(input);
+		for(InputProcessor input:inputs)
+		{
+			multiplexer.addProcessor(input);
+		}
 	}
 	
-	public void removeInputProcessor(InputProcessor input) 
+	public void removeInputProcessor(InputProcessor ...inputs) 
 	{
-		multiplexer.removeProcessor(input);
+		for(InputProcessor input:inputs)
+		{
+			multiplexer.removeProcessor(input);
+		}
 	}
 }
